@@ -5,7 +5,6 @@
 # PARAMETER chiptype: chiptype TYPE [empty: empty, human: human, mouse: mouse, rat: rat] DEFAULT empty ()
 # PARAMETER summary.feature: summary.feature TYPE [gene: gene, exon: exon] DEFAULT gene (Output summary type)
 
-
 # Affymetrix normalization
 # JTT 8.6.2006
 # Changes to column naming on 29.6.2006
@@ -85,6 +84,8 @@ if(chiptype!="empty" & class(a)!="try-error") {
 		
 		# Fixes an issue introduced in BioC2.4 where the "#" character is introduced in some gene names
 		genename <- gsub("#", "", genename)
+		symbols <- gsub("'", "", symbols)
+		genenames <- gsub("'", "", genenames)
 		
 		# Writes the results into a file
 		write.table(data.frame(symbol, description=genename, dat2), file="normalized.tsv", col.names=T, quote=F, sep="\t", row.names=T)
