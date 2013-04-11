@@ -3,12 +3,12 @@ package fi.csc.chipster.tools.ngs;
 import java.io.File;
 
 import fi.csc.microarray.analyser.java.JavaAnalysisJobBase;
-import fi.csc.microarray.client.visualisation.methods.gbrowser.stack.BedLineParser;
+import fi.csc.microarray.client.visualisation.methods.gbrowser.stack.VcfLineParser;
 import fi.csc.microarray.client.visualisation.methods.gbrowser.util.ChromosomeNormaliser;
 import fi.csc.microarray.client.visualisation.methods.gbrowser.util.TsvSorter;
 import fi.csc.microarray.messaging.JobState;
 
-public class SortBed extends JavaAnalysisJobBase {
+public class SortVcf extends JavaAnalysisJobBase {
 
 	public static final ChromosomeNormaliser CHROMOSOME_NORMALISER = new ChromosomeNormaliser() {
 
@@ -28,9 +28,9 @@ public class SortBed extends JavaAnalysisJobBase {
 	
 	@Override
 	public String getSADL() {
-		return 	"TOOL SortBed.java: \"Sort BED\" (Sort a BED file by chromosome and start position.)" + "\n" +
-				"INPUT regions.bed: \"BED file\" TYPE GENERIC" + "\n" +
-				"OUTPUT sorted.bed: \"Sorted BED file\"" + "\n"; 
+		return 	"TOOL SortVcf.java: \"Sort VCF\" (Sort a VCF file by chromosome and position.)" + "\n" +
+				"INPUT unsorted.vcf: \"VCF file\" TYPE GENERIC" + "\n" +
+				"OUTPUT sorted.vcf: \"Sorted VCF file\"" + "\n"; 
 
 	}
 	
@@ -46,10 +46,10 @@ public class SortBed extends JavaAnalysisJobBase {
 			File outputFile = new File(jobWorkDir, analysis.getOutputFiles().get(0).getFileName().getID()); 
 
 			// run sort
-			//BEDParser increments coordinates by one, but it's not a problem because only its column order is used
 			new TsvSorter().sort(
-					inputFile, outputFile, CHROMOSOME_NORMALISER,
-					BedLineParser.Column.CHROMOSOME.ordinal(), BedLineParser.Column.START.ordinal(), new BedLineParser(false));
+					inputFile, outputFile, CHROMOSOME_NORMALISER, 
+					VcfLineParser.Column.CHROM.ordinal(), 
+					VcfLineParser.Column.POS.ordinal(), new VcfLineParser());
 
 		} catch (Exception e) {
 			updateState(JobState.FAILED, e.getMessage());
@@ -59,3 +59,4 @@ public class SortBed extends JavaAnalysisJobBase {
 		updateStateToClient(JobState.RUNNING, "sorting finished");
 	}
 }
+
