@@ -1,4 +1,4 @@
-# TOOL dea-deseq.R: "Differential expression using DESeq" (Differential expression analysis using the DESeq Bioconductor package. You can create the input count table and phenodata file by the tool Utilities - Define NGS experiment.)
+# TOOL dea-deseq.R: "Differential expression using DESeq" (Differential expression analysis using the DESeq Bioconductor package. You can create the input count table and phenodata file using the tool \"Utilities - Define NGS experiment\".)
 # INPUT data.tsv TYPE GENERIC
 # INPUT phenodata.tsv TYPE GENERIC
 # OUTPUT OPTIONAL de-list-deseq.tsv
@@ -7,39 +7,24 @@
 # OUTPUT OPTIONAL dispersion-plot-deseq.pdf
 # OUTPUT OPTIONAL p-value-plot-deseq.pdf
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
-# PARAMETER normalization: "Apply normalization" TYPE [yes, no] DEFAULT yes (Should effective library size be estimated. This corrects for RNA composition bias. Note that if you have supplied library size in phenodata, size factors are calculated based on the library size total, and composition bias is not corrected.)
-# PARAMETER replicates: "Disregard replicates" TYPE [yes, no] DEFAULT no (You need to have biological replicates of each experiment condition in order to estimate the biological and experimental variability. If biological replicates are available for only one condition, DESeq will estimate variability using the replicates of that single condition. However, this is only an approximation and reduces the reliability of the results. If there are no replicates at all, the variance is estimated using the samples from the different conditions as replicates. This approximation is even less reliable and affects results accordingly.)
-# PARAMETER fitting_method: "Use fitted dispersion values" TYPE [maximum: "when higher than original values", fit-only: "always"] DEFAULT maximum (Should the dispersion of counts for a gene be replaced with the fitted value from the dispersion model always, or only when the fitted value is larger? The latter option is more conservative and minimizes false positives. Replacing always optimises the balance between false positives and false negatives.)
-# PARAMETER dispersion_estimate:"Dispersion estimate" TYPE [parametric: "parametric", local: "local"] DEFAULT local (The dispersion can be estimated either using a local fit, which is suitable in most cases - including when there are no biological independent replicate samples - or using a two-coefficient parametric model, which may be preferable under certain circumstances.)
-# PARAMETER p.value.adjustment.method: "Multiple testing correction" TYPE [none, bonferroni: "Bonferroni", holm: "Holm", hochberg: "Hochberg", BH: "BH", BY: "BY"] DEFAULT BH (Multiple testing correction method.)
-# PARAMETER p.value.cutoff: "P-value cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for statistical significance.)
-# PARAMETER image_width: "Plot width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image.)
-# PARAMETER image_height: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image.)
+# PARAMETER OPTIONAL normalization: "Apply normalization" TYPE [yes, no] DEFAULT yes (Should effective library size be estimated. This corrects for RNA composition bias. Note that if you have supplied library size in phenodata, size factors are calculated based on the library size total, and composition bias is not corrected.)
+# PARAMETER OPTIONAL replicates: "Disregard replicates" TYPE [yes, no] DEFAULT no (You need to have biological replicates of each experiment condition in order to estimate the biological and experimental variability. If biological replicates are available for only one condition, DESeq will estimate variability using the replicates of that single condition. However, this is only an approximation and reduces the reliability of the results. If there are no replicates at all, the variance is estimated using the samples from the different conditions as replicates. This approximation is even less reliable and affects results accordingly.)
+# PARAMETER OPTIONAL fitting_method: "Use fitted dispersion values" TYPE [maximum: "when higher than original values", fit-only: "always"] DEFAULT maximum (Should the dispersion of counts for a gene be replaced with the fitted value from the dispersion model always, or only when the fitted value is larger? The latter option is more conservative and minimizes false positives. Replacing always optimises the balance between false positives and false negatives.)
+# PARAMETER OPTIONAL dispersion_estimate:"Dispersion estimate" TYPE [parametric: "parametric", local: "local"] DEFAULT local (The dispersion can be estimated either using a local fit, which is suitable in most cases - including when there are no biological independent replicate samples - or using a two-coefficient parametric model, which may be preferable under certain circumstances.)
+# PARAMETER OPTIONAL p.value.adjustment.method: "Multiple testing correction" TYPE [none, bonferroni: "Bonferroni", holm: "Holm", hochberg: "Hochberg", BH: "BH", BY: "BY"] DEFAULT BH (Multiple testing correction method.)
+# PARAMETER OPTIONAL p.value.cutoff: "P-value cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for statistical significance.)
+# PARAMETER OPTIONAL image_width: "Plot width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image.)
+# PARAMETER OPTIONAL image_height: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image.)
 
+                                                          
+# MG 7.2.2012                                             
+# EK 6.5.2012, clarified texts
+# EK 12.5.2012, fixed the fitting method parameter
+# EK 30.4.2013, added BED sorting, made genomic location info optional so that external count tables can be used
 
-############################################################
-#                                                          
-# Analysis workflow using DESeq for normalization and     
-# statistical testing for finding differentially expressed genes                                           
-#                                                          
-# MG, 7.2.2012                                             
-# EK, 6.5.2012, clarified texts
-# EK, 12.5.2013, fixed the fitting method parameter
-############################################################
 
 # Loads the libraries
 library(DESeq)
-
-# Set parameters for testing
-# column <- "group"
-# replicates <- "yes"
-# normalization <- "yes"
-# fitting_method <- "maximum"
-# dispersion_estimate <- "parametric"
-# p.value.adjustment.method <- "BH"
-# p.value.cutoff <- 0.1
-# image_height <- 600
-# image_width <- 600
 
 # Loads the counts data
 file <- c("data.tsv")
@@ -68,7 +53,7 @@ if (length(unique(groups))==1 | length(unique(groups))>=3) {
 }
 # if no biological replicates, force blind mode in dispersion estimation
 if (number_samples == 2 && replicates == "no")  {
-	stop("CHIPSTER-NOTE: You need to have independent biological replicates for at least one of the experiment conditions in order to reliably estimate dispersion. Alternatively, run the analysis with the disregard replicates parameter set to yes, but note that statistical power may be significantly reduced and the false positive rate may increase.")
+	stop("CHIPSTER-NOTE: You need to have biological replicates in order to estimate dispersion. If this is not the case, you can still run the analysis by setting the Disregard replicates -parameter to yes, but this is not recommended.")
 }
 if (number_samples == 2 && replicates == "yes")  {
 	blind_dispersion <- TRUE
@@ -141,15 +126,21 @@ if (dim(significant_table)[1] > 0) {
 	write.table(significant_table, file="de-list-deseq.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 }
 
-# Also output a BED file for visualization and region matching tools
-if (dim(significant_table)[1] > 0) {
-	empty_column <- character(length(significant_table[1]))
-	bed_output <- significant_table [,c("chr","start","end")]
-	bed_output <- cbind(bed_output,empty_column)
-	bed_output <- cbind(bed_output, significant_table[,"log2FoldChange"])
-	write.table(bed_output, file="de-list-deseq.bed", sep="\t", row.names=F, col.names=F, quote=F)
+# If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
+source(file.path(chipster.common.path, "bed-utils.R"))
+these.colnames <- colnames(significant_table)
+if("chr" %in% these.colnames) {
+	if (dim(significant_table)[1] > 0) {
+		empty_column <- character(length(significant_table[1]))
+		bed_output <- significant_table [,c("chr","start","end")]
+		bed_output <- cbind(bed_output,empty_column)
+		bed_output <- cbind(bed_output, significant_table[,"log2FoldChange"])
+		bed_output <- sort.bed(bed_output)
+		write.table(bed_output, file="de-list-deseq.bed", sep="\t", row.names=F, col.names=F, quote=F)
+	}
 }
 
+ 
 # Make histogram of p-values with overlaid significance cutoff and uniform distribution
 pdf (file="p-value-plot-deseq.pdf")
 hist(output_table$pval, breaks=100, col="blue",
