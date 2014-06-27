@@ -1,9 +1,8 @@
-# TOOL dexseq-exoncount.R: "Count aligned reads per exons for DEXSeq" (Given mapped reads in a BAM file, this tool counts the reads that fall into each non-overlapping exonic part using the script dexseq-count.py. In order to use the output in DEXSeq, you need to select all samples and run the tool \"Utilities - Define NGS experiment\".)
+# TOOL dexseq-exoncount-own-gtf.R: "Count aligned reads per exons for DEXSeq using own GTF" (Given mapped reads in a BAM file, this tool counts the reads that fall into each non-overlapping exonic part using the script dexseq-count.py. In order to use the output in DEXSeq, you need to select all samples and run the tool \"Utilities - Define NGS experiment\".)
 # INPUT alignment.bam: "BAM alignment file" TYPE GENERIC
+# INPUT annotation.gtf: "GTF annotation file" TYPE GENERIC
 # OUTPUT exon-counts.tsv
 # OUTPUT OPTIONAL exon-counts-info.txt
-# PARAMETER organism: "Organism" TYPE [Homo_sapiens.GRCh37.75.DEXseq.gtf: "Human (hg19.75)", Mus_musculus.GRCm38.75.DEXseq.gtf: "Mouse (mm10.75)", Rattus_norvegicus.Rnor_5.0.75.DEXseq.gtf: "Rat (rn5.75)"] DEFAULT Homo_sapiens.GRCh37.75.DEXseq.gtf (Which organism is your data from.)
-# PARAMETER chr: "Chromosome names in the BAM file look like" TYPE [chr1: "chr1",1: "1"] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference annotation. Check your BAM and choose accordingly.)
 # PARAMETER paired: "Does the BAM file contain paired-end data" TYPE [yes, no] DEFAULT no (Does the alignment data contain paired end or single end reads?)
 # PARAMETER stranded: "Was the data produced with a strand-specific protocol" TYPE [yes, no, reverse] DEFAULT no (Select no if your data was not produced with a strand-specific RNA-seq protocol, so that a read is considered overlapping with a feature regardless of whether it is mapped to the same or the opposite strand as the feature. If you select yes, the read has to be mapped to the same strand as the feature.)
 # PARAMETER OPTIONAL mode: "Mode to handle reads overlapping more than one feature" TYPE [union, intersection-strict, intersection-nonempty] DEFAULT union (How to deal with reads that overlap more than one gene or exon?)
@@ -23,21 +22,14 @@ if(paired == "yes"){
 	bam<-"alignment.bam"
 }
 
-# If chromosome names in BAM have chr, we make a temporary copy of gtf with chr names
-annotation.gtf <- file.path(chipster.tools.path, "genomes", "gtf", organism)
-if(chr == "chr1"){
-	source(file.path(chipster.common.path, "gtf-utils.R"))
-	addChrToGtf(annotation.gtf, "annotation_chr.gtf") 
-	gtf <- paste("annotation_chr.gtf")
-}
-if(chr == "1"){
-	gtf <- paste(annotation.gtf)
-}
-
+# User provided GTF need to be preprocessed
+prepare.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_prepare_annotation.py")
+prepare.command <- paste("python", prepare.binary, "annotation.gtf annotation.dexseq.gtf")
+system(prepare.command)
 
 # counts reads per non-overlapping exonic regions
 dexseq.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_count.py")
-dexseq.command <- paste("python", dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, gtf, bam, "exon-counts-out.tsv")
+dexseq.command <- paste("python", dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, "annotation.dexseq.gtf", bam, "exon-counts-out.tsv")
 system(dexseq.command)
 
 # separate result file
