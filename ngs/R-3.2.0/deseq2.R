@@ -4,6 +4,7 @@
 # OUTPUT OPTIONAL de-list-deseq2.tsv
 # OUTPUT OPTIONAL summary.txt
 # OUTPUT OPTIONAL deseq2_report.pdf
+# OUTPUT OPTIONAL de-list-deseq2.bed
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
 # PARAMETER OPTIONAL ad_factor: "Column describing additional experimental factor" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing an additional experimental factor. If given, p-values in the output table are from a likelihood ratio test of a model including the experimental groups and experimental factor, vs a model which only includes the experimental factor.)
 # PARAMETER OPTIONAL p.value.cutoff: "Cutoff for the adjusted P-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for Benjamini-Hochberg adjusted p-value.)
@@ -14,6 +15,7 @@
 # EK 1.7.2014, clarified the script before moving it to production, and fixed a bug that disabled DESeq2's automatic independent filtering 
 # EK 9.2.2015, updated to R3.1.2, changed the MA plot, added summary
 # AMS 7.4.2015, Join pdf outputs to one
+# ML 25.6.2015, Fixed some problems with S4vectors
 
 #column <-"group"
 #ad_factor<-"EMPTY"
@@ -54,8 +56,14 @@ results_name <- NULL
 if (length(unique(groups)) == 2) {
 	dds <- DESeq(dds)
 	res <- results(nbinomWaldTest(dds))
-	sig <- cbind(dat, res)[res$padj <= p.value.cutoff, ]
+	
+	sig <- cbind(dat, res)
+	sig <- as.data.frame(sig)
+	#sig <- sig[! (is.na(sig$padj)), ]
+	sig <- sig[sig$padj <= p.value.cutoff, ]
+	
 	sig <- sig[! (is.na(sig$padj)), ]
+
 	sig <- sig[ order(sig$padj), ]
 	# Open pdf file for output
 	pdf(file="deseq2_report.pdf") 
@@ -106,6 +114,7 @@ rownames(output_table) <- make.names(rep(rownames(res), length(grep("baseMean$",
 if("chr" %in% colnames(dat)) {
 	if (dim(sig)[1] > 0) {
 		bed <- output_table[,c("chr","start","end")]
+		bed <- as.data.frame(bed)
 		if(is.null(results_name)) {
 			gene_names <- rownames(res)
 		} else {
@@ -116,6 +125,7 @@ if("chr" %in% colnames(dat)) {
 		bed <- bed[(output_table$padj <= p.value.cutoff & (! (is.na(output_table$padj)))), ]
 		bed <- sort.bed(bed)
 		write.table(bed, file="de-list-deseq2.bed", sep="\t", row.names=F, col.names=F, quote=F)
+		
 	}
 }
 
