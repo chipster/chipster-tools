@@ -77,7 +77,7 @@ if(chiptype=="Human-Whole-Genome(4112a)") {
 	chiptype<-c("hgug4112a")
 }
 if(chiptype=="Human-Whole-Genome(4851a)") {
-	chiptype<-c("hgug4851a.db")
+	chiptype<-c("hgug4851a")
 }
 if(chiptype=="Mouse(4104a)") {
 	chiptype<-c("mgug4104a")
@@ -92,7 +92,7 @@ if(chiptype=="Mouse(4122a)") {
 	chiptype<-c("mgug4122a")
 }
 if (chiptype=="Mouse-Whole-Genome(4852a)"){
-	chiptype <- c("mgug4852a.db")
+	chiptype <- c("mgug4852a")
 }
 if(chiptype=="Rat(4105a)") {
 	chiptype<-c("rgug4105a")
