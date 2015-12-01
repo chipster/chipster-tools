@@ -9,7 +9,7 @@
 	<h2>CNA-seq / Define CNA-seq experiment</h2>
 	
 	<h3>Description</h3>
-	<p>This tool takes as input a number of files with binned read counts, combines them into a single table and generates the phenodata table required for further analyses.</p>
+	<p>This tool takes as input a number of BAM files, produces binned read counts for each sample, combines the results into a single table, and generates the phenodata table required for further analyses.</p>
 	
 	<h3>Parameters</h3>
 	<ul>
@@ -23,7 +23,7 @@
 	</ul>
 	
 	<h3>Details</h3>
-	<p>Takes as input a number of bam files, divides the specified genome build into bins of the specified size, and counts the number of reads in each bin. The implemented package is QDNAseq.</p>
+	<p>Takes as input a number of BAM files, divides the specified genome build into bins of the specified size, and counts the number of reads in each bin. The implemented package is QDNAseq.</p>
 	<h3>Output</h3>
 	<p>Data table with read counts per sample and accompanying phenodata table.</p>
 	

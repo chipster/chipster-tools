@@ -1,0 +1,28 @@
+apply plugin: 'distribution'
+
+defaultTasks 'distTar'
+String[] executables = [ '**/*.sh', '**/*.py', '**/*.bash' ] 
+
+
+distributions {
+	main {
+		contents {
+			into('modules') {
+				from('modules') {
+					exclude executables
+					fileMode 0644
+				}
+
+				from('modules') {
+					include executables
+					fileMode 0755
+				}
+			}
+
+			into('manual') {
+				from('manual')
+			}
+		}
+	}
+}
+
