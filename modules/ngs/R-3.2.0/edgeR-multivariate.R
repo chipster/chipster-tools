@@ -115,6 +115,9 @@ if(main.effect3!="EMPTY" & interactions=="nested") {
 	phenodata <- tmp
 
 }
+if(main.effect3=="EMPTY" & interactions=="nested") {
+	stop("CHIPSTER-NOTE: For nested-option, you need to specify all three effects. See manual page for more information!")
+}
 
 design<-with(phenodata, model.matrix(as.formula(formula)))
 # remove zero columns:
