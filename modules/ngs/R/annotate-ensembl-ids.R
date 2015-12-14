@@ -25,6 +25,10 @@ if(!is.na(pmatch("ENS",  rownames(dat)[2] ))) {
 	genes <- rownames(dat)
 }
 
+if(is.na(pmatch("ENS", dat[2,1])) &&  is.na(pmatch("ENS",  rownames(dat)[2] ))) {
+	stop("CHIPSTER-NOTE: You can only annotate Ensembl IDs with this tool. The IDs need to be either rownames or in the first column of the table.")
+}
+
 # Fetch the gene symbols and descriptions from ENSEMBL using biomaRt
 if (species=="human") {
 	dataset <- "hsapiens_gene_ensembl"
