@@ -1,6 +1,7 @@
 # TOOL trimmomatic.R: "Trim reads with Trimmomatic" (This tool performs a variety of trimming tasks for Illumina paired end and single end data. This tool is based on the Trimmomatic package.)
 # INPUT reads1.fastaq: "Read file 1" TYPE GENERIC
 # INPUT OPTIONAL reads2.fastaq: "Read file 2" TYPE GENERIC
+# INPUT OPTIONAL adapters.fa: "Adapter file" TYPE GENERIC
 # OUTPUT OPTIONAL trimmed.fq.gz
 # OUTPUT OPTIONAL trimmed_reads1_paired.fq.gz
 # OUTPUT OPTIONAL trimmed_reads1_unpaired.fq.gz
@@ -67,6 +68,12 @@ if (adapter.file != "none") {
 		stop("CHIPSTER-NOTE: You need to provide the required parameters for the adapter clipping to work.")
 	}
 	step.params <- paste(c(step.params, " ILLUMINACLIP:", adapter.path, ":", illuminaclip), collapse="")
+}
+if (file.exists("reads2.fastaq")){
+	if (!nchar(illuminaclip) > 0) {
+		stop("CHIPSTER-NOTE: You need to provide the required parameters for the adapter clipping to work.")
+	}
+	step.params <- paste(c(step.params, " ILLUMINACLIP:", adapters.fa, ":", illuminaclip), collapse="")
 }
 if (!is.na(leading)) {
 	step.params <- paste(c(step.params, " LEADING:",  leading), collapse="")
