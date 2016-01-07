@@ -1,10 +1,10 @@
-# TOOL deseq2-pca-heatmap.R: "PCA and heatmap of samples with DESeq2" (Creates PCA and heatmap plots for samples using the DESeq2 Bioconductor package. Visualizing similarities and dissimilarities between samples can help you to perform experiment level quality control. This tool takes as input a table of raw counts. The count table has to be associated with a phenodata file describing the experimental groups. You can create the count table and phenodata file using the tool \"Utilities - Define NGS experiment\". You can distunguish the samples belonging to different sample groups based on different colors and/or shapes.)
+# TOOL deseq2-pca-heatmap.R: "PCA and heatmap of samples with DESeq2" (Creates PCA and heatmap plots for samples using the DESeq2 Bioconductor package. Visualizing similarities and dissimilarities between samples can help you to perform experiment level quality control. This tool takes as input a table of raw counts. The count table has to be associated with a phenodata file describing the experimental groups. You can create the count table and phenodata file using the tool \"Utilities - Define NGS experiment\". You can distinguish the samples belonging to different sample groups based on different colors and/or shapes.)
 # INPUT data.tsv: "Count table" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata file" TYPE GENERIC
 # OUTPUT OPTIONAL PCA_and_heatmap_deseq2.pdf
 # PARAMETER column: "Phenodata column for coloring samples in PCA plot" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column by which the samples will be colored in the PCA plot.)
-# PARAMETER OPTIONAL show.names: "Show sample names in PCA plot" TYPE [yes, no] DEFAULT yes (You can add sample names to the PCA plot from the description column of the phenodata file. In more copmplex cases this may make the plot too cluttered.)
 # PARAMETER OPTIONAL second.column: "Phenodata column for the shape of samples in PCA plot" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column by which the samples will be shaped in the PCA plot.)
+# PARAMETER OPTIONAL show.names: "Show sample names in PCA plot" TYPE [yes, no] DEFAULT yes (You can add sample names to the PCA plot from the description column of the phenodata file. In more complex cases this may make the plot too cluttered.)
 
 # EK 3.2.2015 
 # AMS 22.4.2015 Added option for sample names in plot
