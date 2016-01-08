@@ -46,7 +46,8 @@ Only the trimming steps with user specified parameters are performed. The steps 
 </p>
 <p>
 Adapter clipping is best performed first, as other clipping functions may remove parts of adapter sequence and thus make adapters more 
-difficult to find. Minimum length filtering should be done last, or additional clipping may produce reads shorter than the minimum 
+difficult to find. You can use the adapter sets available in Chipster (the Trimmomatic basic set of adapters) or your own adapter file in .fa -format.
+ Minimum length filtering should be done last, or additional clipping may produce reads shorter than the minimum 
 length specified. Other steps are less sensitive to the order they are performed, but if you wish to run the steps in a specific order 
 that differs from the default order, you have to run each step separately.
 </p>
