@@ -12,9 +12,11 @@
 <h3>Parameters</h3>
 
 <ul>
+<li>Probe identifier (Probe_ID, Array_Address_ID) [Probe_ID]</li>
 <li>Transformation (none, vst, log2) [log2]</li>
-<li>Normalize genes (none, rsn, loess, quantile, vsn) [quantile]</li>
-<li>Chip type (empty, ....) [empty]</li>
+<li>Background correction (none, bgAdjust.affy) [none]</li>
+<li>Normalize chips (none, rsn, loess, quantile, vsn) [quantile]</li>
+<li>Chiptype (empty, Human, Mouse, Rat) [empty]</li>
 </ul>
 
 <h3>Details</h3>
@@ -23,9 +25,18 @@
 
 <p>Note that you have to enter the chiptype.</p>
 
+<p>If you have a BeadSummaryData that reports the probe identifiers as Array_Address_Id (for example 4900685) instead of 
+Probe_Id (for example ILMN_2607609), change the setting for the parameter Probe identifier. 
+Please note that processing the data with Array_Address_Id is slow and the normalization therefore takes a bit longer time 
+than with the Probe_IDs.</p>
+
+<p>You can choose to do log2 -transformation (default), vst-transformation or none. 
+You can either skip the background correction (default: usually BeadStudio output data has already been background corrected), 
+or use ’bgAdjust.affy’, which will call the bg.adjust function in affy package.  </p>
+
 <p>Within array normalization methods offer basic options: no normalization,
-robust spline normalization (combines features of loess and quantile normalizations), loess,
-quantile and variance stabilizing normalization.
+robust spline normalization (rsn, combines features of loess and quantile normalizations), loess,
+quantile and variance stabilizing normalization (vsn).
 </p>
 
 <h3>Output</h3>

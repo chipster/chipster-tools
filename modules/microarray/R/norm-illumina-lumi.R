@@ -1,4 +1,4 @@
-# TOOL norm-illumina-lumi.R: "Illumina - lumi pipeline" (Illumina normalization using BeadSummaryData files, and using lumi methodology. If you have a BeadSummaryData that reports the probe identifiers as Array_Address_Id, for example 4900685, instead of Probe_Id, for example ILMN_2607609, change the setting for the parameter probe.identifier. Please note that processing the data with Array_Address_Id is slow and the normalization therefore takes a bit longer time than with the Probe_IDs. TO USE THIS TOOL, YOU NEED TO IMPORT THE BeadSummaryData FILE DIRECTLY, NOT USING THE IMPORT TOOL.)
+# TOOL norm-illumina-lumi.R: "Illumina - lumi pipeline" (Illumina normalization using BeadSummaryData files, and using lumi methodology. TO USE THIS TOOL, YOU NEED TO IMPORT THE BeadSummaryData FILE DIRECTLY, NOT USING THE IMPORT TOOL.)
 # INPUT chip.tsv: chip.tsv TYPE GENERIC 
 # OUTPUT normalized.tsv: normalized.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 

@@ -13,7 +13,8 @@ Given a table of read counts for an experiment, this tool performs principal com
 <h3>Parameters</h3>
 
 <ul>
-<li> Column describing groups [group]</li>
+<li> Phenodata column for coloring samples in PCA plot [group]</li>
+<li> Phenodata column for the shape of samples in PCA plot  [EMPTY]</li>
 <li> Show names in plot (yes, no) [yes]
 </ul>
 
@@ -40,6 +41,7 @@ The median of these ratios is the size factor for that sample.
 
 <p>The analysis output consists of a PCA plot and a sample heatmap with dendrograms. 
 The PCA plot shows the first two principal components and the amount of variance explained by each component. The samples are colored according to their experimental group. 
+You can also choose to use different shapes to visualise another sample group that you have determined in the phenodata-file.
 Ideally the groups separate along the first component.
 The heatmap shows the Euclidean distances between the samples. 
 Similar samples get darker color, and the samples are ordered according to the dendrogram. Sample names are taken from the Description column of the phenodata.
