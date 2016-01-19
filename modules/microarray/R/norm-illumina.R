@@ -1,11 +1,11 @@
 # TOOL norm-illumina.R: Illumina (Normalization of Illumina data. The data needs to be imported to Chipster using the Import tool, which produces one file for each sample. YOU HAVE TO SPECIFY THE CHIPTYPE.)
 # INPUT microarray{...}.tsv: microarray{...}.tsv TYPE CDNA 
 # OUTPUT normalized.tsv: normalized.tsv 
-# OUTPUT META phenodata.tsv: phenodata.tsv 
-# PARAMETER normalize.chips: "Normalization method" TYPE [none: none, scale: scale, quantile: quantile, vsn: vsn] DEFAULT quantile (Between arrays normalization method)
-# PARAMETER beadstudio.version: "Illumina software version" TYPE [3: "GenomeStudio or BeadStudio 3", 2: "BeadStudio 2", 1: "BeadStudio 1"] DEFAULT 3 (Illumina software version)
+# OUTPUT META phenodata.tsv: phenodata.tsv
 # PARAMETER chiptype: "Chip type" TYPE [empty: empty, Human-6v1: Human-6v1, HumanRef-8v1: HumanRef-8v1, Human-6v2: Human-6v2, HumanRef-8v2: HumanRef-8v2, Human-6v3: Human-6v3, HumanRef-8v3: HumanRef-8v3, Human-HT12: Human-HT12, Human-HT12v4: Human-HT12v4, Mouse-6v1.0a: Mouse-6v1.0a, MouseRef-8v1.0a: MouseRef-8v1.0a, Mouse-6v1.1: Mouse-6v1.1, MouseRef-8v1.1: MouseRef-8v1.1, Mouse-6v2: Mouse-6v2, MouseRef-8v2: MouseRef-8v2, RatRef-12: RatRef-12] DEFAULT empty ()
-# PARAMETER id.type: "Identifier type" TYPE [TargetID: TargetID, ProbeID: ProbeID] DEFAULT ProbeID (Which identifiers to use)
+# PARAMETER beadstudio.version: "Illumina software version" TYPE [3: "GenomeStudio or BeadStudio 3", 2: "BeadStudio 2", 1: "BeadStudio 1"] DEFAULT 3 (Illumina software version)
+# PARAMETER OPTIONAL normalize.chips: "Normalization method" TYPE [none: none, scale: scale, quantile: quantile, vsn: vsn] DEFAULT quantile (Between arrays normalization method)
+# PARAMETER OPTIONAL id.type: "Identifier type" TYPE [TargetID: TargetID, ProbeID: ProbeID] DEFAULT ProbeID (Which identifiers to use)
 # PARAMETER OPTIONAL produce.flags: "Produce flags" TYPE [yes: yes, no: no] DEFAULT no (Automatic recording of Detection values as flags)
 # PARAMETER OPTIONAL annotations: "Include original annotations" TYPE [yes: yes, no: no] DEFAULT no (Include the original Illumina probe annotations. Note that these might be very outdated.)
 
