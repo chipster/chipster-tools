@@ -15,6 +15,30 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 14.1.2016: What is new in Chipster 3.7</h2>
+
+ 	<p>
+		<b>Summary:</b> This version enables users to save analysis sessions on the server side. 
+		Please note that this cloud session functionality is still at a beta version stage, meaning that it might have unexpected problems. Therefore we strongly advice you to save an extra copy of your session also locally. 
+	</p>
+	<ul>
+		<li><div class=header-item>Technical improvements</div>
+			<ul>
+				<li>You can now store analysis sessions on the server. Use the File menu in the upper panel to save, open and manage cloud sessions.</li>
+			</ul>
+		</li>	 
+		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+			<ul>
+				<li>Reference genomes and GTFs have been updated to Ensembl version 83. Rice genome has been added and Yersinia tuberculosis genome has been changed to Yersinia pseudotuberculosis IP32953 GCA_000834295.</li>
+				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a> now allows visualizing two factors simultaneously in the PCA plot using shapes in addition to colors.</li>
+				<li><a href="trimmomatic.html">Preprocessing / Trim reads with Trimmomatic</a> now accepts an input file containing user's own adapter sequences.</li>
+				<li><a href="vcftools.html">Variants / Filter variants</a> now preserves the AC and DP4 fields in the INFO column of a VCF file when filtering.</li>
+				</ul>
+		</li>		
+	</ul>
+	<hr />
+
+
 <h2>Version update 2.10.2015: What is new in Chipster 3.6</h2>
 
  	<p>
@@ -44,6 +68,7 @@ div.header-item {
 				<li><a href="ngs-dea-edger-RNA.html">RNA-seq / Differential expression using edgeR</a> uses now the estimateDisp function to estimate dispersions.</li>
 <!--  			<li><a href="ngs-dea-edger-RNA.html">RNA-seq / Differential expression using edgeR</a> and <a href="edgeR-multivariate.html">Differential expression using edgeR for multivariate experiments</a> uses now the estimateDisp function to estimate dispersions.</li>-->
 			</ul>
+		</li>
 		<li><div class=header-item>New sequence analysis tools in Misc</div>
 			<ul>
 				<li><a href="cdhit.html">Sequence utilities / Remove redundant sequences</a> clusters the given sequences and creates a non-redundant sequence set using the CDhit tool.</li>
@@ -90,6 +115,7 @@ div.header-item {
 				<li><a href="select_columns.html">Variants / Annotate variants</a> has been migrated to R3.2.0.</li>
 				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a> allows adding sample names to the PCA plot.</li>
 			</ul>
+		</li>
 		<li><div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
 				<li><a href="norm-illumina-backgroundcorr.html">Normalization / Illumina with normexp background correction</a> accepts now also TargetIDs.</li>
@@ -117,6 +143,7 @@ div.header-item {
 				<li><a href="htseq-count-own-gtf.html">RNA-seq / Count aligned reads per genes with HTSeq using own GTF</a> now accepts also GTF files, where the tag for gene identifier is ID or GeneID.</li>
 				<li><a href="select_columns.html">Utilities / Table converter</a> accepts now also tables with rownames (meaning that the first column does not have a title).</li>
 			</ul>
+		</li>
 		<li><div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
 				<li><a href="norm-illumina.html">Normalization / Illumina</a> now allows you to add the original Illumina annotations to the data, in addition to the ones provided by Bioconductor.</li>
@@ -149,6 +176,7 @@ div.header-item {
 				<li>edgeR tools: Result columns are better described in the manual.</li>
 				<li><a href="import-ngs.html">Manual page for NGS data import</a> has been added.</li>
 			</ul>
+		</li>
 		<li><div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
 				<li>Linear modeling tools: Phenodata column names which share a word are allowed thanks to Oliver Heil, DKFZ.</li>
@@ -179,6 +207,7 @@ div.header-item {
 				<li><a href="fastqc.html">Read quality with FastQC</a>: The output figures have been combined to one pdf file.</li>
 				<li><a href="trimmomatic.html">Trim reads with Trimmomatic</a>: The problem with missing output file for paired end runs has been fixed.</li>
 			</ul>
+		</li>
 		<li><div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
 				<li><a href="cluster-hierarchical.html">Hierarchical clustering</a>: The dummy image when no bootstrapping is performed has been removed.</li>
@@ -229,6 +258,7 @@ div.header-item {
 				<li><a href="ngs-find-peaks-fseq.html">ChIP-seq and DNase-seq / Find peaks using F-seq</a>: Mappability parameter has been added.</li>
 				<li>The <a href="MEDIPS.html">MeDIP-seq tool</a>has been made available again after updating the MEDIPS package to R3.</li>
 			</ul>
+		</li>
 		<li><div class=header-item>Technical improvements</div>
 			<ul>
 				<li>SSL support is extended to payload of file transfers, so that not only file metadata (name, ownership, etc.) is transmitted encrypted,
@@ -281,13 +311,12 @@ div.header-item {
 				MACS has been updated to v1.4.2 and v2.0 can be chosen with a parameter.</li>
 				<li>All GTF files have been updated to Ensembl 75.</li>
 				<li>HTSeq has been updated to version 0.6.1.</li>
-				<li>The MeDIP-seq tool category has been temporarily removed for updating.</li>
-				
+				<li>The MeDIP-seq tool category has been temporarily removed for updating.</li>	
 			</ul>
-			
+		</li>	
 		<li><div class=header-item>Updates to microarray analysis tools</div>		
 			<ul>
-				<li><a ordination-pca.html">Statistics / PCA</a>: Component loadings are reported.</li>
+				<li><a href="ordination-pca.html">Statistics / PCA</a>: Component loadings are reported.</li>
 			</ul>
 		</li>
 
@@ -350,8 +379,6 @@ div.header-item {
 				<li><u>Other tools</u> contains for example a tool for retrieving specified columns from a table.</li>
 			</ul>
 		</li>
-
-
 		<li><div class=header-item>Improvements to visualizations</div>
 			<ul>
 				<li>You can create subsets of VCF, GTF and BED files in the spreadsheet view. As for TSV files, select the rows, right-click and select "Create dataset".</li>
@@ -361,7 +388,6 @@ div.header-item {
 				<li>Phenodata editor doesn't allow spaces in column names and changes them to underscores.</li>
 			</ul>
 		</li>
-
 		<li><div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="dimontdata.html">ChIP-seq / Dimont sequence extractor</a>: Extracts genomic regions in the annotated FastA format required by Dimont.</li>
@@ -374,7 +400,6 @@ div.header-item {
 				<li><a href="select_columns.html">Utilities / Table converter</a>: Extracts and renames table columns.</li>
 			</ul>
 		</li>
-
 		<li><div class=header-item>Updates to NGS analysis tools</div>		
 			<ul>
 				<li><b>The tool category Filtering has been renamed to Preprocessing</b> and it contains tools for trimming and filtering reads. Tool package names have been added for clarity, as the next release will contain also Trimmomatic tools.
@@ -391,7 +416,6 @@ div.header-item {
 				<li>DEXSeq read counting uses updated Python scripts.</li>
 			</ul>
 		</li>
-
 		<li><div class=header-item>Updates to microarray data analysis tools</div>
 			<ul>
 				<li><a href="norm-affy-gene.html">Normalization / Affymetrix gene arrays</a>: Normalization to genes uses now custom CDFs. Support for the following arrays has been added: PrimeView, Drosophila 1.1, Caenorhabditis elegans, Canis familiaris, Oryza sativa (rice - ricegene1.1st), 
@@ -410,7 +434,6 @@ div.header-item {
 				<li><a href="acgh-convert-from-probes-to-genes.html">Copy number aberrations / Detect genes from called copy number data</a>: Now uses gene list from Bioconductor instead of CanGEM.</li>
 			</ul>
 		</li>
-
 		<li><div class=header-item>Removed analysis tools</div>
 			<ul>
 				<li>Several PRINSEQ tools have been combined to tools "Filter reads for several criteria with PRINSEQ" and "Trim reads for several criteria with PRINSEQ" for more efficient analysis.</li>
@@ -444,8 +467,8 @@ div.header-item {
 				<li>R scripts have a new variable chipster.threads.max, which defines the number of threads
 					for parallel tools. This centralized configuration according to available CPU resources
 					provides shorter run times for analysis tools.</li>
-			</ul></li>
-
+			</ul>
+		</li>
 		<li><div class="header-item">Improvements to genome browser</div>
 			<ul>
 				<li>You can select features in visualized BED, VCF and tsv files by clicking on them.
@@ -458,14 +481,14 @@ div.header-item {
 		<li><div class=header-item>Improvements to other visualizations</div>
 			<ul>
 				<li>The chiptype column can now be edited in the Phenodata editor.</li>
-			</ul></li>
-
+			</ul>
+		</li>
 		<li><div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="bedtools-fastafrombed.html">Utilities / FASTA from BED</a>: Extracts sequences
 					from a FASTA file for each of the intervals defined in a BED file.</li>
-			</ul></li>
-
+			</ul>
+		</li>
 		<li><div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
 				<li>BWA, Tophat2, Tophat, Bowtie2, Bowtie, Cufflinks, Cuffmerge and Cuffdiff tools: The
@@ -486,8 +509,8 @@ div.header-item {
 				<li>SAMtools has been updated to version 0.1.19.</li>
 				<li>VCFtools has been updated to version 0.1.11.</li>
 				<li>edgeR-based tools have been updated to version 3.4.0.</li>
-			</ul></li>
-
+			</ul>
+		</li>
 		<li><div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li><a href="plot-annoheatmap.html">Visualization / Annotated heatmap</a>: Generates
@@ -496,8 +519,8 @@ div.header-item {
 					Heatmap tool, which will become obsolete in the next Chipster version.</li>
 				<li><a href="merge-pheno-and-data.html">Utilities / Merge expression and phenodata</a>:
 					Integrates expression and phenodata tables to a single output file that can be opened in Excel.</li>
-			</ul></li>
-
+			</ul>
+		</li>
 		<li><div class=header-item>Improvements to microarray data analysis tools</div>
 			<ul>
 				<li><a href="annotate-cpdb.html">Pathways / Hypergeometric test for ConsensusPathDB</a>:
@@ -513,9 +536,8 @@ div.header-item {
 					Updated to use the latest version of Database of Genomic Variants.</li>
 				<li><a href="acgh-segment.html">aCGH / Segment copy number data</a>: Significance threshold
 					parameter for accepting change points has been added.</li>
-
-			</ul></li>
-
+			</ul>
+		</li>
 		<li><div class=header-item>Removed analysis tools</div>
 			<ul>
 				<li>Pathways / IntAct and Reactome tools have been removed as EBI has discontinued the
