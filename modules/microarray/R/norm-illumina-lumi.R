@@ -1,4 +1,4 @@
-# TOOL norm-illumina-lumi.R: "Illumina - lumi pipeline" (Illumina normalization using BeadSummaryData files and the lumi methodology. To use this tool, you need to IMPORT the BeadSummaryData FILE DIRECTLY, not using the import tool.)
+# TOOL norm-illumina-lumi.R: "Illumina - lumi pipeline" (Illumina normalization using BeadSummaryData files and the lumi methodology. To use this tool, you need to IMPORT DIRECTLY the BeadSummaryData file, don't use the Import tool. All the samples need to be in one file, and certain columns need to be present for each smaple, please see the manual for details.)
 # INPUT chip.tsv: chip.tsv TYPE GENERIC 
 # OUTPUT normalized.tsv: normalized.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 

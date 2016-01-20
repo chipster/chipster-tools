@@ -2,12 +2,12 @@
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC
 # OUTPUT two-sample.tsv: two-sample.tsv 
-# PARAMETER column: "Column" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test)
-# PARAMETER OPTIONAL pairing: "Pairing" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing which samples form pairs. This option should be used if you have, for example, monitored your samples before and after treatment, have patient-matched data or you have expression data at multiple tissue sites from the same individuals, etc. LPE, F-test and fast-t-test do not support pairing information.)
-# PARAMETER test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type)
-# PARAMETER p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, Bonferroni: Bonferroni, Holm: Holm, Hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
-# PARAMETER p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off \\(0.05\)for significant results)
-# PARAMETER show.na: "Show NA" TYPE [yes: yes, no:no] DEFAULT no (include results where p-value is NA)
+# PARAMETER column: "Column with group information" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test)
+# PARAMETER OPTIONAL pairing: "Column with pairing information" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing which samples form pairs. This option should be used if you have samples from the same individual, for example before and after treatment. Note that the tests LPE, F-test and fast-t-test do not support pairing.)
+# PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type)
+# PARAMETER OPTIONAL p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, Bonferroni: Bonferroni, Holm: Holm, Hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
+# PARAMETER OPTIONAL p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off \\(0.05\)for significant results)
+# PARAMETER OPTIONAL show.na: "Include genes whose p-value is NA" TYPE [yes: yes, no:no] DEFAULT no (Include results where p-value is NA)
 
 # Two-group parametric and non-parametric tests
 # JTT 4.7.2006
