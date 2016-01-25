@@ -53,6 +53,7 @@ allowing you to view reads and results in their genomic context.</p>
 <li> <a href="select_columns.html">Table converter</a></li>
 <li> <a href="sort_and_select_columns.html">Sort table by column</a></li>
 <li> <a href="join_tsv_files.html">Join tables</a></li>
+<li> <a href="general_file_processing.html">Modify text</a></li>
 <li> <a href="process-preprocessed-counts.html">Preprocess count table </a> </li>
 <li> <a href="normalise-counts.html">Normalize count table </a> </li>
 <li> <a href="annotate-ensembl-ids.html">Annotate Ensembl identifiers </a> </li>
@@ -63,8 +64,9 @@ allowing you to view reads and results in their genomic context.</p>
 <li> <a href="samtools-convert-SAMtoBAM-sort-index.html">Convert SAM to BAM, sort and index</a> </li>
 <li> <a href="samtools-subset.html">Make a subset of BAM  </a> </li>
 <li> <a href="samtools-merge.html">Merge BAM </a> </li>
-<li> <a href="samtools-idxstats.html">Statistics for BAM </a> </li>
-<li> <a href="samtools-count.html">Count alignments in BAM  </a> </li>
+<li> <a href="samtools-idxstats.html">Count alignments per chromosome in BAM</a> </li>
+<li> <a href="samtools-alignment-statistics.html">Count alignment statistics for BAM </a> </li>
+<li> <a href="samtools-count.html">Count alignments in BAM </a> </li>
 <li> <a href="samtools-rmdup.html">Remove duplicate reads from BAM </a> </li>
 <li> <a href="samtools-consensus.html">Create consensus sequence from BAM </a> </li>
 <li> <a href="unique-alignments-from-bam.html"> Retrieve unique alignments from BAM</a></li>
@@ -130,8 +132,11 @@ allowing you to view reads and results in their genomic context.</p>
 <br>
 <b><a name="variants">Variants</a></b>
 <li><a href="samtools-snp-indel-single.html"> Call SNPs and short INDELs</a></li>
-<li><a href="vcftools.html">Filter and analyze variants</a></li>
+<li><a href="vcftools.html">Filter variants</a></li>
 <li><a href="annotate-variant.html">Annotate variants</a></li>
+<li><a href="vep.html">Ensembl variant effector predictor</a></li>
+<li><a href="bcftools-intersect-vcf.html">Intersect VCF files</a></li>
+<li><a href="vcftools-reports.html">Calculate statistics on VCF file</a></li>
 <br>
 <br>
 <b><a name="RNA">RNA-seq</a></b>
@@ -141,14 +146,16 @@ allowing you to view reads and results in their genomic context.</p>
 <li><a href="dexseq-exoncount.html">Count aligned reads per exons for DEXSeq</a></li>
 <li><a href="dexseq-exoncount-own-gtf.html">Count aligned reads per exons for DEXSeq using own GTF</a></li>
 <li><a href="express.html">Count reads per transcripts using eXpress</a></li>
-<li><a href="ngs-dea-edger-RNA.html"> Differential expression using edgeR</a></li>
-<li><a href="edgeR-multivariate.html"> Differential expression using edgeR for multivariate experiments</a></li>
+<li><a href="deseq2-transform.html.html">Transform read counts</a></li>
 <li><a href="deseq2.html">Differential expression using DESeq2</a></li>
 <li><a href="dea-deseq.html">Differential expression using DESeq</a></li>
+<li><a href="ngs-dea-edger-RNA.html"> Differential expression using edgeR</a></li>
+<li><a href="edgeR-multivariate.html"> Differential expression using edgeR for multivariate experiments</a></li>
 <li><a href="DEXSeq.html">Differential exon expression using DEXSeq</a></li>
 <li><a href="cufflinks2.html">Assemble reads into transcripts using Cufflinks</a></li>
 <li><a href="cuffmerge2.html">Merge transcript assemblies with Cuffmerge</a></li>
 <li><a href="cuffdiff2.html">Differential expression using Cuffdiff</a></li>
+<li><a href="pathways-hypergeometric-cpdb.html">Hypergeometric test for ConsensusPathDB</a> </li>
 <br>
 <br>
 <b><a name="miRNA">miRNA-seq</a></b>
@@ -180,7 +187,7 @@ allowing you to view reads and results in their genomic context.</p>
 <li> <a href="dimont-extract-data-custom.html">Dimont sequence extractor using own genome</a></li>
 <li> <a href="dimont.html">Find motifs with Dimont</a></li>
 <li> <a href="dimont-predictor.html">DimontPredictor</a></li>
-<li> <a href="MEDIPS.html">MEDIPS -methylation analysis </a> </li>			
+<li> <a href="MEDIPS.html">MEDIPS - methylation analysis </a> </li>			
 <br>
 <br>
 <b><a name="CNA">CNA-seq</a></b>
