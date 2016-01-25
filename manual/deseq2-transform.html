@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Transform read counts</h2>
+
+<h3>Description</h3>
+
+Transforms raw read counts using the DESeq2 Bioconductor package. The input file has to contain all the genes, not just differentially expressed ones. 
+Note that you can use the resulting transformed values only for visualization and clustering, <b>not for differential expression analysis</b> which needs raw counts. 
+
+<br>
+<br>
+<h3>Parameters</h3>
+
+<ul>
+<li> Transformation method (variance stabilizing transformation, regularized log transformation, no transformation - only DESeq2 normalization) [variance stabilizing transformation]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>This tool takes as input a table of raw counts. The count table has to be associated with a phenodata file 
+describing the experimental groups. These files are best created by the tool "Utilities / Define NGS experiment", 
+which combines count files for different samples to one table, and creates a phenodata file for it.
+</p>
+Both variance stabilizing transformation (VST) and regularized log transformation (rlog) aim to remove the dependence of the variance on the mean. 
+In particular, genes with low expression level and therefore low read counts tend to have high variance, which is not removed efficiently by the ordinary logarithmic transformation.
+VST and rlog remove the experiment-wide trend of variance over mean calculated by the DESeq2 method. This dispersion calculation does not take into account the group information, 
+and the transformation is therefore said to be blind. It is very important that the input file contains counts for all genes, so that the majority of the genes don't have large differences
+in counts due to experimental groups. If you need to obtain transformed counts for differentially expressed genes, you have to perform the transformation first on the whole count table
+and then use the interactive Venn diagram to intersect the transformed count table with the list of differentially expressed genes.
+<p>
+VST runs faster than rlog. If the library size of the samples and therefore their size factors vary widely, the rlog transformation is a better option than VST. 
+Both options produce log2 scale data which has been normalized by the DESeq2 method with respect to library size. You can also choose to skip the transformation and just obtain normalized data. 
+</p>
+
+<h3>Output</h3>
+
+Depending on the transformation method chosen, the one of the following result files is produced. 
+<ul>
+<li>vst-transformed-counts.tsv</li>
+<li>rlog-transformed-counts.tsv</li>
+<li>normalized-counts.tsv</li>
+</ul>
+
+<h3><br>References</h3>
+
+<p>This tool uses the DESeq2 package. Please read the following article for more detailed information:</p>
+
+<p> M Love, W Huber and S Anders: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/">Moderated estimation of fold change and
+dispersion for RNA-Seq data with DESeq2.</a> Genome Biol. 2014 15:550</p> 
+
+</body>

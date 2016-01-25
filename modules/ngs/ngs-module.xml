@@ -342,8 +342,11 @@
 			<resource>express.R</resource>
 		</tool>
 		<tool runtime="R-3.2.0">
+			<resource>deseq2-transform.R</resource>
+		</tool>
+		<tool runtime="R-3.2.0">
 			<resource>deseq2.R</resource>
-		</tool>	
+		</tool>		
 		<tool runtime="R">
 			<resource>dea-deseq.R</resource>
 		</tool>
