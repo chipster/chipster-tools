@@ -24,17 +24,28 @@ Note that you can use the resulting transformed values only for visualization an
 describing the experimental groups. These files are best created by the tool "Utilities / Define NGS experiment", 
 which combines count files for different samples to one table, and creates a phenodata file for it.
 </p>
+<p>
 Both variance stabilizing transformation (VST) and regularized log transformation (rlog) aim to remove the dependence of the variance on the mean. 
 In particular, genes with low expression level and therefore low read counts tend to have high variance, which is not removed efficiently by the ordinary logarithmic transformation.
 VST and rlog remove the experiment-wide trend of variance over mean calculated by the DESeq2 method. This dispersion calculation does not take into account the group information, 
-and the transformation is therefore said to be blind. It is very important that the input file contains counts for all genes, so that the majority of the genes don't have large differences
-in counts due to experimental groups. If you need to obtain transformed counts for differentially expressed genes, you have to perform the transformation first on the whole count table
-and then use the interactive Venn diagram to intersect the transformed count table with the list of differentially expressed genes.
+and the transformation is therefore said to be blind. 
+</p>
 <p>
 VST runs faster than rlog. If the library size of the samples and therefore their size factors vary widely, the rlog transformation is a better option than VST. 
 Both options produce log2 scale data which has been normalized by the DESeq2 method with respect to library size. You can also choose to skip the transformation and just obtain normalized data. 
 </p>
-
+<p>
+It is very important that the majority of the input genes don't have large differences in counts due to experimental groups. 
+Therefore the input file should contain all the genes, not just the differentially expressed ones. 
+If you need to obtain transformed counts for differentially expressed genes, you have to perform the transformation first on the whole count table,
+and then use the interactive Venn diagram to intersect the transformed count table with the list of differentially expressed genes:
+</p>
+<ol> 
+<li>perform the transformation on the whole count table containing all the genes.</li> 
+<li>select both the transformed table and the list of differentially expressed genes (use ctrl/cmd to select multiple files).</li> 
+<li>select the interactive Venn diagram as a visualization method.</li>
+<li>click on the intersection area in the graph, go to the Selected tab, and click on the button Create dataset from selected.</li>
+</ol>
 <h3>Output</h3>
 
 Depending on the transformation method chosen, the one of the following result files is produced. 
