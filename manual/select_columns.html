@@ -8,17 +8,17 @@
 <h3>Description</h3>
 
 <p>
-This tool selects and renames the defined columns from a table. It can also be used to convert text files into tables.
+This tool selects, reorders and renames table columns. It can also be used to convert text files into tables.
 </p>
 
 <h3>Parameters</h3>
 
-<li><b>Column list</b>: Selects columns to be printed. Use comma separated lists of column numbers like <i>3,1,5</i> </li>
-<li><b>New column names</b>: Add new header row for the selected columns. Use comma separated lists of column names like <i>source,date,name</i>. By default the first imported row is used as a header row. </li>
+<li><b>Column list</b>: Selects columns to be printed. You can use comma separated lists of column numbers (like 3,1,5), and ranges of column numbers (like 9-14). </li>
+<li><b>New column names</b>: Add new header row for the selected columns. Use comma separated lists of column names (like source,date,name). By default the first imported row is used as a header row. </li>
 <li><b>Column separator</b>: Chipster uses tabulator as a column separator. 
 If you wish to convert a text file into a Chipster table, you can change other column separators such as space, semicolon (;), colon (:), comma (,) and pipe (|) to tabulator.
 <li><b>First row to read</b>: Skip the first few lines of the input file. Note that in table files, the header row is considered as the first row.
-<li><b>First column has rownames</b>: Choose Yes if the first column does not have a title.
+<li><b>Does the first column of the input file have a title</b>: Choose No if the first column does not have a title (this is typical for tables produced by the R-based tools in Chipster).
 
 <h3>Details</h3>
 
