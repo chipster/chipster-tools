@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<module name="Kielipankki">
+<module name="kielipankki">
 		
 	<category name="Text search" color="#d5c796">
 		<tool runtime="python"><resource>test-data-in-out.py</resource></tool>
