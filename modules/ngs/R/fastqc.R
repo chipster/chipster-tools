@@ -1,4 +1,4 @@
-# TOOL fastqc.R: "Read quality with FastQC" (Generates plots for per base quality score and sequence content, read GC and N content, length distribution, duplication levels, overrepresented sequences and Kmer content.
+# TOOL fastqc.R: "Read quality with FastQC" (Generates an html report containing plots for base quality and composition, read GC and N content, length distribution, duplication levels, over-represented sequences, etc. Please note that you have to select the visualization option \"Open in external browser\" for viewing the result file.)
 # This tool is based on the FastQC package by Simon Andrews et al.)
 # INPUT reads TYPE GENERIC
 # OUTPUT reads_fastqc.html
