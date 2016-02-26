@@ -1,12 +1,12 @@
-# TOOL norm-illumina-lumi.R: "Illumina - lumi pipeline" (Illumina normalization using BeadSummaryData files, and using lumi methodology. TO USE THIS TOOL, YOU NEED TO IMPORT THE BeadSummaryData FILE DIRECTLY, NOT USING THE IMPORT TOOL.)
+# TOOL norm-illumina-lumi.R: "Illumina - lumi pipeline" (Illumina normalization using BeadSummaryData files and the lumi methodology. To use this tool, you need to IMPORT DIRECTLY the BeadSummaryData file, don't use the Import tool. All the samples need to be in one file, and certain columns need to be present for each smaple, please see the manual for details.)
 # INPUT chip.tsv: chip.tsv TYPE GENERIC 
 # OUTPUT normalized.tsv: normalized.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 
+# PARAMETER chiptype: "Organism" TYPE [empty: empty, Human: Human, Mouse: Mouse, Rat: Rat] DEFAULT empty ()
 # PARAMETER probe.identifier: "Probe identifier" TYPE [Probe_ID: Probe_ID, Array_Address_ID: Array_Address_ID] DEFAULT Probe_ID (What type of identifiers you do have)
-# PARAMETER transformation: "Transformation" TYPE [none: none, vst: vst, log2: log2] DEFAULT log2 (How to transform the data)
-# PARAMETER background.correction: "Background correction" TYPE [none: none, bgAdjust.affy: bgAdjust.affy] DEFAULT none (Should background adjustment be applied)
-# PARAMETER normalize.chips: "Normalize chips" TYPE [none: none, rsn: rsn, loess: loess, quantile: quantile, vsn: vsn] DEFAULT quantile (Between arrays normalization method)
-# PARAMETER chiptype: "Chiptype" TYPE [empty: empty, Human: Human, Mouse: Mouse, Rat: Rat] DEFAULT empty ()
+# PARAMETER OPTIONAL normalize.chips: "Normalize chips" TYPE [none: none, rsn: rsn, loess: loess, quantile: quantile, vsn: vsn] DEFAULT quantile (Between arrays normalization method)
+# PARAMETER OPTIONAL transformation: "Transformation" TYPE [none: none, vst: vst, log2: log2] DEFAULT log2 (How to transform the data)
+# PARAMETER OPTIONAL background.correction: "Background correction" TYPE [none: none, bgAdjust.affy: bgAdjust.affy] DEFAULT none (Should background adjustment be applied)
 
 # Illumina data preprocessing and normalization for BeadSummaryData that
 # uses Array_Address_Id instead of Probe_Id 
