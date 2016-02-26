@@ -1,16 +1,18 @@
-# TOOL combine-probes-to-genes.R: "Combine probes to genes" (Calculates an average for probes or probesets for each gene in the dataset. The data file has to have a symbol column for this to work correctly.)
+# TOOL combine-probes-to-genes.R: "Combine probes to genes" (Calculates an average for probes or probesets for each gene in the dataset. The data file has to have a symbol column for this to work correctly. Please note that summarizing multiple probes for a given gene is not recommended as a routine procedure by any of the Bioconductor software developers.)
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # OUTPUT combined.tsv: combined.tsv 
-# PARAMETER produce.identifiers: "Produce identifiers" TYPE [no: no, yes: yes] DEFAULT no (Should approximate identifiers for the gene be returned)
 
 
 # Combine probes or probeset to genes
 # 18.12.2008 JTT
-#
 # modified 3.3.2010, MG, to include symbol and description columns in the output
 # if present in the input data table
 #
 # modified 15.4.2010 MG to make the script compatible with output from "Add annotations to data" tool
+# 25.2.2016 ML removed produce identifiers -option
+# PARAMETER produce.identifiers: "Produce identifiers" TYPE [no: no, yes: yes] DEFAULT no (Should approximate identifiers for the gene be returned)
+
+
 
 # Parameter settings (default) for testing purposes
 #produce.identifiers<-"no"

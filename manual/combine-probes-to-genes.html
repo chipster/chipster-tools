@@ -14,18 +14,25 @@ single estimate of expression.</p>
 <h3>Parameters</h3>
 
 <ul>
-<li>Produce identifiers (no, yes) [no]</li>
+<li>-</li>
 </ul>
 
 <h3>Details</h3>
 
-<p>By default, gene names are used as identifiers after combination. This can be changed by adjusting the
-parameter to the setting 'yes'. Using this setting, every gene is identified by one of the original
-identifiers. After that, all normal analyses requiring annotation information can be used (not so with gene names).</p>
+<p>Please note, that summarizing multiple probes for a given gene (or
+multiple probe-sets for an Affy array) is <a href="https://support.bioconductor.org/p/44161/">not recommended</a>  as a routine
+procedure by any of the Bioconductor software developers. 
+By combining the expression information you lose the probe/probeset wise information resulting for example
+from different isoforms being present in the samples. </p>
+
+<p>Note that some of the pathway analysis tools require the probe IDs to work 
+-you can however use "Hypergeometric test 
+for ConsensusPathDB" as it supports any data with gene symbols.</p>
+
 
 <h3>Output</h3>
 
-<p>A new, smaller dataset
+<p>A new, smaller dataset with only one expression value per gene per sample.
 
 </body>
 
