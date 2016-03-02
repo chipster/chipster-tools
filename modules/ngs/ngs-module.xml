@@ -192,7 +192,13 @@
 		</tool>
 		<tool runtime="python">
 			<resource>test-data-in-out.py</resource>
-		</tool> 
+		</tool>
+		<tool runtime="python3">
+			<resource>test-data-in-out3.py</resource>
+		</tool>
+		<tool runtime="python">
+			<resource>test-phenodata-input.py</resource>
+		</tool>
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
