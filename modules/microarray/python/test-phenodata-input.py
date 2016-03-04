@@ -5,4 +5,3 @@
 import shutil
 
 shutil.copyfile('phenodata.tsv', 'output.tsv')
-
