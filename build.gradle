@@ -4,6 +4,15 @@ defaultTasks 'distTar'
 String[] executables = [ '**/*.sh', '**/*.py', '**/*.bash' ] 
 
 
+version='3.6.3'
+
+distTar { 
+
+	// to get .tar.gz instead of .tgz		
+     extension = "tar.gz" 
+     compression = Compression.GZIP 
+} 
+
 distributions {
 	main {
 		contents {

@@ -7,31 +7,43 @@
 
 <h3>Description</h3>
 
-<p>Normalize Illumina arrays to remove systematic bias. Please note that in order to use the lumi normalization, your raw data must be in one file. The filename must end with ".txt", and you should NOT use the Import tool for bringing the data into Chipster (in the Import files -window change the action to "Import directly").</p>
+<p>Normalizes Illumina arrays to remove systematic bias using the lumi method.</p>
 
 <h3>Parameters</h3>
 
 <ul>
+<li>Organism (empty, Human, Mouse, Rat) [empty]</li>
+<li>Probe identifier (Probe_ID, Array_Address_ID) [Probe_ID]</li>
+<li>Normalize chips (none, rsn, loess, quantile, vsn) [quantile]</li>
 <li>Transformation (none, vst, log2) [log2]</li>
-<li>Normalize genes (none, rsn, loess, quantile, vsn) [quantile]</li>
-<li>Chip type (empty, ....) [empty]</li>
+<li>Background correction (none, bgAdjust.affy) [none]</li>
 </ul>
 
 <h3>Details</h3>
 
-<p>This tool normalizes Illumina BeadSummaryData files.</p>
+<p>This tool normalizes Illumina BeadSummaryData files. Please note that all the samples must be in one file. 
+In addition to the identifier column (preferably ProbeID), the file must contain the following columns for each sample: AVG, BEAD_STDERR, Avg_NBEADS and DetectionPval.
+The filename must end with ".txt", and you should NOT use the Import tool for bringing the data into Chipster (in the Import files -window change the action to "Import directly"). </p>
 
-<p>Note that you have to enter the chiptype.</p>
+<p>Note that you have to enter the organism of the sample.</p>
 
-<p>Within array normalization methods offer basic options: no normalization,
-robust spline normalization (combines features of loess and quantile normalizations), loess,
-quantile and variance stabilizing normalization.
+<p>If you have a BeadSummaryData that reports the probe identifiers as Array_Address_Id (for example 4900685) instead of 
+Probe_Id (for example ILMN_2607609), change the setting for the parameter Probe identifier. 
+Please note that processing the data with Array_Address_Id is slower.</p>
+
+<p>Normalization methods include quantile normalization, loess,
+robust spline normalization (rsn) which combines features of loess and quantile normalizations,
+and variance stabilizing normalization (vsn).
 </p>
+
+<p>The default transformation is log2, but you can also select variance stabilizing transformation (vst). 
+You can either skip the background correction (usually BeadStudio output data has already been background corrected), 
+or use the option bgAdjust.affy, which will call the bg.adjust function in affy package.  </p>
+
 
 <h3>Output</h3>
 
-<p>A tab-delimited text file containing gene names and expression estimates. 
-This file is suitable for all further analyses.</p>
+<p>A tab-delimited text file containing gene names and expression estimates.</p>
 
 <h3>References</h3>
 

@@ -12,10 +12,10 @@
 <h3>Parameters</h3>
 
 <ul>
-<li>Normalization method (none, scale, quantile, vsn) [quantile]</li>
-<li>Illumina software version (GenomeStudio or BeadStudio3, BeadStudio 2, BeadStudio 1) [GenomeStudio or BeadStudio3]</li>
 <li>Chip type (empty, ...) [empty]</li>
+<li>Illumina software version (GenomeStudio or BeadStudio3, BeadStudio 2, BeadStudio 1) [GenomeStudio or BeadStudio3]</li>
 <li>Identifier type (TargetID, ProbeID) [ProbeID]</li>
+<li>Normalization method (none, scale, quantile, vsn) [quantile]</li>
 <li>Produce flags (yes, no) [no]</li>
 <li>Include original annotations (yes, no) [no]</li>
 </ul>
@@ -26,7 +26,7 @@
 This tool splits BeadSummaryData into separate "chips", which allows the user to select which chips
 to normalize together, or to exclude from the analysis.</p>
 
-<p>Within array normalization methods offer basic options, such as scaling the chips to the same
+<p>Normalization methods include scaling the chips to the same
 median, quantile normalizing the chips to make the expression value follow the same distribution on
 all chips, and variance stabilizing normalization. Please note that during normalization the data is also log2-transformed.</p>
 

@@ -3,7 +3,7 @@
 # INPUT META phenodata.tsv: "Phenodata file" TYPE GENERIC
 # OUTPUT OPTIONAL normalized_counts.pdf
 # PARAMETER gene.name: "Gene name" TYPE STRING (Gene name.)
-# PARAMETER OPTIONAL show.names: "Show names in plot" TYPE [yes, no] DEFAULT no (Show sample names in plot. In more cpmplex cases this may make the plot too cluttered.)
+# PARAMETER OPTIONAL show.names: "Show names in plot" TYPE [yes, no] DEFAULT no (Show sample names in plot. In more complex cases this may make the plot too cluttered.)
 
 # AMS 21.4.2015 
 

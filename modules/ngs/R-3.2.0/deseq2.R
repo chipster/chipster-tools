@@ -16,6 +16,7 @@
 # EK 9.2.2015, updated to R3.1.2, changed the MA plot, added summary
 # AMS 7.4.2015, Join pdf outputs to one
 # ML 25.6.2015, Fixed some problems with S4vectors
+# EK 10.2.2016, Added alpha to results()
 
 #column <-"group"
 #ad_factor<-"EMPTY"
@@ -55,7 +56,7 @@ results_name <- NULL
 # Calculate statistic for differential expression, merge with original data table, keep significant DEGs, remove NAs and sort by FDR. If there are more than 2 groups, get pairwise results for each comparison.
 if (length(unique(groups)) == 2) {
 	dds <- DESeq(dds)
-	res <- results(dds)
+	res <- results(dds,alpha=p.value.cutoff)
 	
 	sig <- cbind(dat, res)
 	sig <- as.data.frame(sig)
