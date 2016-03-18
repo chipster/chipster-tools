@@ -28,8 +28,7 @@ if (optimize != "empty"){
 	if ( (optimize == "minlength" && !is.na(minlength)) || (optimize == "start" && !is.na(start)) || (optimize == "end" && !is.na(end))){
 		stop('CHIPSTER-NOTE: You cant determine minlenght and choose to optimize according the same criteria: choose only one of these!')
 	}
-}
-	
+}	
 	
 if (!is.na(minlength)){
 	screenseqs.options <- paste(screenseqs.options, ", minlength=", minlength, sep="")
@@ -44,7 +43,6 @@ if (optimize != "empty"){
 	screenseqs.options <- paste(screenseqs.options, ", optimize=", optimize, sep="")
 	screenseqs.options <- paste(screenseqs.options, ", criteria=", criteria, sep="")
 }
-
 
 screenseqs.options <- paste(screenseqs.options, ")", sep="")
 
@@ -72,14 +70,8 @@ command <- paste(binary, "summary.mth", "> log_raw.txt")
 # run
 system(command)
 
-## Make reads.trim.unique.qual
-#if (file.exists("reads.trim.qual")){
-#	system("grep '>' reads.trim.unique.fasta | cut -c 2- > reads.trim.unique.list")
-#	system("perl -ne 'if(/^>(\\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' reads.trim.unique.list reads.trim.qual > reads.trim.unique.qual")
-#}
-#
 # Postprocess output files
-system("grep -A 9 Start log_raw.txt > summary.trim.screen.tsv")
-#system("mv reads.trim.names reads.trim.names.txt")
-#system("mv reads.groups reads.groups.txt")
+system("grep -A 9 Start log_raw.txt > summary.trim.screen2.tsv")
+# Remove one tab to get the column naming look nice:
+system("sed 's/^		/	/' summary.trim.screen2.tsv > summary.trim.screen.tsv")
 
