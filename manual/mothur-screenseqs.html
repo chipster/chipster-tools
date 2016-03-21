@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Metagenomics / Screen sequences with Mothur</h2>
+
+<h3>Description</h3>
+
+<p>
+Screen out sequences that do not fulfill certain user defined criteria.
+</p>
+
+<h3>Parameters</h3>
+<li>Minimum length of the sequences </li>
+<li>End position</li>
+<li>Start position </li>
+<li>Optimize by (empty, minlength, start, end) [empty]</li>
+<li>Criteria (0:100) </li>
+
+<h3>Details</h3>
+<p>
+Screen out sequences based on their length, ending or starting position. 
+You can either choose the cut-off yourself (first three parameters), or use the optimization based on these.
+If you choose to use the optimization, remember to determine the criteria: 
+for example 85 means that mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.
+<p>
+This tool is based on the <a href="http://www.mothur.org/wiki/Screen.seqs">screen.seqs</a> command of the Mothur package.
+</p>
+
+
+</p>
+
+<h3>Output</h3>
+
+<p>The analysis output consists of the following:</p>
+<ul>
+<li>reads.good.groups: A two column list with the first column indicating the sequence names in the input file and the second column the group that it came from.</li>
+<li>reads.trim.good.names: A list of the selected sequences and the redundant sequences corresponding to each.</li>
+<li>reads.trim.unique.good.fasta: A FASTA-formatted sequence file with the screened reads.</li>
+<li>summary.trim.screen.tsv: Summary statistics for the sequences</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>Schloss PD, Westcott SL, Ryabin T, Hall JR, Hartmann M, Hollister EB, Lesniewski RA, Oakley BB, Parks DH, Robinson CJ, Sahl JW, Stres B, Thallinger GG, Van Horn DJ, Weber CF.
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2786419/">Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.</a> 
+</p>
+
+</body>
+
