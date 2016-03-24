@@ -40,4 +40,6 @@ command2 <- paste(binary, "summary.mth", "> log_raw.txt")
 system(command2)
 
 # Post process output
-system("grep -A 9 Start log_raw.txt > preclustered-summary.tsv")
+system("grep -A 9 Start log_raw.txt > preclustered-summary2.tsv")
+# Remove one tab to get the column naming look nice:
+system("sed 's/^		/	/' preclustered-summary2.tsv > preclustered-summary.tsv")
