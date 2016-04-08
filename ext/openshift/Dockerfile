@@ -10,4 +10,5 @@ RUN cd /opt; git clone --branch ${TOOLS_BRANCH:-openshift} https://github.com/ch
 
 WORKDIR /opt/chipster-web-server  
 
-CMD java -cp lib/*: fi.csc.chipster.toolbox.ToolboxService
+CMD java -cp lib/*: ${JAVA_CLASS}
+
