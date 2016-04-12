@@ -94,7 +94,7 @@ if (file.exists("reads.trim.qual")){
 }
 
 # Postprocess output files
-system("grep -A 9 Start log_raw.txt > summary.trim.unique2.tsv")
+system("grep -A 10 Start log_raw.txt > summary.trim.unique2.tsv")
 # Remove one tab to get the column naming look nice:
 system("sed 's/^		/	/' summary.trim.unique2.tsv > summary.trim.unique.tsv")
 

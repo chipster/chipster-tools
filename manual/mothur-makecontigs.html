@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Metagenomics / Combine fastq files to one fasta and qual -files with Mothur</h2>
+
+<h3>Description</h3>
+
+<p>
+Combine the paired end reads for each sample and then the data from all samples. Extract the sequence and quality score data from fastq files. 
+</p>
+
+<h3>Parameters</h3>
+<-
+
+<h3>Details</h3>
+<p>
+The tool reads a forward fastq file and a reverse fastq file and outputs new fasta and report files.
+It extracts the sequence and quality data from the fastq files, creates a reverse complement of the reverse read and joins the reads into contigs.
+The algorithm aligns the pair of sequences, and then identifies possible positions where the two reads disagree. 
+If one of the disagreeing bases has a quality score 6 or more points higher than the other, that base is reported. 
+If not, that base is set to N. If one of the reads suggest a gap, 
+the other read has to have a base with quality score over 25 to be considered real.
+
+ <br> 
+As input you give the paired end fastq files and a list of these files in .files-format. 
+In this .files file you have 3 columns: in first column you list the sample names, in second column the forward fastq file name (read 1),
+and in the third column the name of the reverse fastq file (read 1). So it should look something like this: <br>
+sample1	sample1_L001_R1_001.fastq sample1_L001_R2_001.fastq <br>
+sample2 sample2_L001_R1_001.fastq sample2_L001_R2_001.fastq <br>
+sample3 sample3_L001_R1_001.fastq sample3_L001_R2_001.fastq <br>
+etc.
+<p>
+This tool is based on the <a href="http://www.mothur.org/wiki/Make.contigs">make.contigs</a> command of the Mothur package.
+</p>
+
+
+</p>
+
+<h3>Output</h3>
+
+<p>The analysis output consists of the following:</p>
+<ul>
+<li>fastq.trim.contigs.qual: Quality values for the reads</li>
+<li>fastq.trim.contigs.fasta: A FASTA-formatted sequence file with the combined reads.</li>
+<li>fastq-summary.tsv: Summary statistics for the sequences</li>
+<li>fastq.groups: A two column list with the first column indicating the sequence names in the input file and the second column the group that it came from.</li>
+
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>Schloss PD, Westcott SL, Ryabin T, Hall JR, Hartmann M, Hollister EB, Lesniewski RA, Oakley BB, Parks DH, Robinson CJ, Sahl JW, Stres B, Thallinger GG, Van Horn DJ, Weber CF.
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2786419/">Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.</a> 
+</p>
+
+</body>
+

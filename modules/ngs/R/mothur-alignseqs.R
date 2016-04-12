@@ -1,5 +1,6 @@
-# TOOL mothur-alignseqs.R: "Align sequences with Mothur" (Given a fasta file of 16S rRNA sequences, aligns them to the Silva reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment, which penalizes the same amount for opening and extending a gap. This tool is based on the Mothur package.)
+# TOOL mothur-alignseqs.R: "Align sequences with Mothur" (Given a fasta file of 16S rRNA sequences, aligns them to the Silva reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment, which penalizes the same amount for opening and extending a gap. This tool is based on the Mothur package. You can give a customized reference fasta. If you do so, make sure the files are correctly assigned in the parameters section! )
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
+# INPUT OPTIONAL reference.fasta: "custom reference FASTA file" TYPE FASTA
 # OUTPUT aligned.fasta
 # OUTPUT aligned-summary.tsv
 
@@ -15,7 +16,11 @@ data.path <- c(file.path(chipster.tools.path, "mothur-data"))
 template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 
 # batch file
+if (file.exists("reference.fasta")){
+	write(paste("align.seqs(fasta=reads.fasta, reference=reference.fasta)", sep=""), "batch.mth", append=F)
+}else {
 write(paste("align.seqs(fasta=reads.fasta, template=", template.path, ")", sep=""), "batch.mth", append=F)
+}
 
 # command
 command <- paste(binary, "batch.mth")
