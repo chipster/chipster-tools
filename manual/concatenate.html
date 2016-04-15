@@ -3,12 +3,23 @@
 <head><title></title></head>
 <body>
 
-<h2>Concatenate two files</h2>
+<h2>Concatenate files</h2>
 
 <h3>Description</h3>
 
-<p>This tool writes the content of the two selected files into one new file. 
-The input and output files are treated as plain text files.
+<p>This tool writes the content of the selected files into one new file. 
+The input and output files are treated as text files that are just dumped into
+one result file. No data processing or format conversion is done.
+</p><p>
+Note that there are several file formats that are not compatible with this 
+kind of direct file merging (e.g. pdf, bam and index files). If you set the
+file extension explicitly, you can enforce the concatenation for any file 
+types but the resulting file may not be usable for other Chipster tools.
+</p>
+<p>
+Note that you can use this too for just one file too to change the name 
+extension of the file.
+
 </p>
 
 
