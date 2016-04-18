@@ -65,6 +65,10 @@ command.start <- paste("bash -c '", set.path, tophat.binary)
 # command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
 command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits)
 
+if (mismatches > 2){
+	command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
+}
+
 if ( quality.format == "phred64") {
 	command.parameters <- paste(command.parameters, "--phred64-quals")
 }

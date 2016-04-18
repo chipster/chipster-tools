@@ -35,4 +35,6 @@ command2 <- paste(binary, "summary.mth", "> log_raw.txt")
 system(command2)
 
 # Post process output
-system("grep -A 9 Start log_raw.txt > aligned-summary.tsv")
+system("grep -A 9 Start log_raw.txt > aligned-summary2.tsv")
+# Remove one tab to get the column naming look nice:
+system("sed 's/^		/	/' aligned-summary2.tsv > aligned-summary.tsv")

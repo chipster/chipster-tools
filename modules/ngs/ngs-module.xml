@@ -183,16 +183,7 @@
 		</tool>	
 		<tool runtime="R">
 			<resource>a5-miseq.R</resource>
-		</tool>	
-	    <tool runtime="R">
-			<resource>test-data-in.R</resource>
-		</tool>	
-        <tool runtime="R">
-			<resource>test-data-in-out.R</resource>
 		</tool>
-		<tool runtime="python">
-			<resource>test-data-in-out.py</resource>
-		</tool> 
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
@@ -506,9 +497,8 @@
 	</category>
 
 	<category name="Metagenomics" color="#83010b">
-		<tool runtime="R">
-      		<resource>mothur-sffinfo.R</resource>
-    	</tool>
+		<tool runtime="R"><resource>mothur-screenseqs.R</resource></tool>
+		<tool runtime="R"><resource>mothur-sffinfo.R</resource></tool>
     	<tool runtime="R">
       		<resource>merge-fasta-qual.R</resource>		
 		</tool>

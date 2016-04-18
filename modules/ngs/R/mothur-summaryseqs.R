@@ -23,5 +23,8 @@ system(command)
 
 # Post process output
 # system("mv reads.summary summary.tsv")
-system("grep -A 9 Start log_raw.txt > summary.tsv")
+# Choose the summary lines:
+system("grep -A 9 Start log_raw.txt > summary_2.tsv")
+# Remove one tab to get the column naming look nice:
+system("sed 's/^		/	/' summary_2.tsv > summary.tsv")
 

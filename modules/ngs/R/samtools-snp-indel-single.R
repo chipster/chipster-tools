@@ -4,6 +4,7 @@
 # OUTPUT variants.vcf
 # PARAMETER organism: "Reference sequence" TYPE [other, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP5, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gasterosteus_aculeatus.BROADS1, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38, Homo_sapiens.NCBI36.54, mature, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT other (Reference sequence.)
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference sequence. Check your BAM and choose accordingly. This only applies to provided reference genomes.)
+# PARAMETER ploidy: "Ploidy" TYPE [haploid, diploid] DEFAULT diploid (Ploidy.)
 # PARAMETER OPTIONAL mpileup.ui: "Call only SNPs, INDELs not considered" TYPE [yes, no] DEFAULT no (Do not perform INDEL calling.)
 # PARAMETER OPTIONAL vcfutils.d: "Minimum read depth" TYPE INTEGER DEFAULT 2 (Minimum read depth.)
 # PARAMETER OPTIONAL vcfutils.ud: "Maximum read depth" TYPE INTEGER DEFAULT 1000 (Maximum read depth. Should be adjusted to about twice the average read depth.)
@@ -81,7 +82,12 @@ if (mpileup.ui == "yes") {
 
 
 # bcftools options
-bcftools.options <- paste("call -vmO z")
+bcftools.options <- paste("call --variants-only --multiallelic-caller --output-type z")
+
+if (ploidy == "haploid"){
+	system("for n in $( ls *.bam ); do printf \"${n}\t1\n\" >> samplefile.txt; done")
+	bcftools.options <- paste(bcftools.options, "-S samplefile.txt")
+}
 
 # vcfutils options
 vcfutils.options <- paste("varFilter", "-d", vcfutils.d,"-D", vcfutils.ud)
@@ -109,4 +115,3 @@ for (i in 1:nrow(input.names)) {
 	sed.command <- paste("s/", input.names[i,1], "/", input.names[i,2], "/", sep="")
 	system(paste("sed -i", sed.command, "variants.vcf"))
 }
-

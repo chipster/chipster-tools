@@ -15,6 +15,40 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 22.3.2016: What is new in Chipster 3.8</h2>
+
+ 	<p>
+		<b>Summary:</b> This version contains improvements to several analysis tools. 
+	</p>
+	<ul>
+		<li><div class=header-item>General improvements</div>
+			<ul>
+				<li>Each result file contains information about the Chipster version that produced it.</li>
+			</ul>
+		</li>
+		<li><div class=header-item>New NGS analysis tools</div>		
+			<ul>
+				<li><a href="deseq2-transform.html">RNA-seq / Transform read counts</a> transforms read counts for visualization purposes using the DESeq2 package.</li>
+			</ul> 
+		</li>	 
+		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+			<ul>
+				<li>TopHat tools: If user sets the parameter "Number of mismatches allowed in final alignment" to a value higher than 2, Chipster automatically sets the internal parameter --read-edit-dist parameter to the same value.</li>
+				<li>Mothur tools: The summary tables show properly when visualized as spreadsheets.</li>
+				<li><a href="samtools-snp-indel-single.html">Variants / Call SNPs and short INDELs</a> now has a parameter "Ploidy".</li>
+				<li><a href="select_columns.html">Utilities / Table converter</a> now allows you to define ranges of columns.</li>
+			</ul> 
+		</li>
+				<li><div class=header-item>Improvements to microarray analysis tools</div>		
+			<ul>
+				<li><a href="plot-corrgram.html">Visualization / Correlogram</a> now allows you to choose png output instead of pdf.</li>
+				<li><a href="combine-probes-to-genes.html">Utilities / Combine probes to genes</a>: the option to produce identifiers has been removed, as it produced confusing results.</li>
+			</ul> 
+		</li>		
+	</ul>
+	<hr />
+
+
 <h2>Version update 14.1.2016: What is new in Chipster 3.7</h2>
 
  	<p>
