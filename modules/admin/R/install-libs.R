@@ -17,7 +17,7 @@ script.basename <- normalizePath(script.basename)
 source(paste(script.basename, "/smip.R", sep=""));
 
 # Configure paths and repos (change if you need)
-repo.cran <- "http://ftp.sunet.se/pub/lang/CRAN"
+repo.cran <- "http://ftp.acc.umu.se/mirror/CRAN"
 repo.bioc <- "http://www.bioconductor.org"
 
 #check where this script resides
