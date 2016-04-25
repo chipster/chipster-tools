@@ -1,11 +1,12 @@
 apply plugin: 'distribution'
 
-defaultTasks 'distTar'
-//defaultTasks 'toolsZip', 'manualZip'
+//defaultTasks 'distTar'
+defaultTasks 'toolsZip', 'manualZip'
+
+
 String[] executables = [ '**/*.sh', '**/*.py', '**/*.bash' ] 
 
-
-version='3.6.3'
+//version='3.6.3'
 
 distTar { 
 
@@ -15,6 +16,7 @@ distTar {
 } 
 
 task toolsZip(type: Zip) {
+	archiveName = 'modules.zip'
 	into('modules') {
 		from('modules') {
 			exclude executables
