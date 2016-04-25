@@ -44,6 +44,7 @@
 # AMS 11.11.2013 Added thread support
 # AMS 2014.06.18 Changed the handling of GTF files
 # AMS 04.07.2014 New genome/gtf/index locations & names
+# AMS 15.04.2016 Fixed "bias" parameter
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -82,7 +83,7 @@ if (bias == "yes") {
 			refseq <- paste(internal.fa)
 		}
 	}	
-	cufflinks.options <- paste(cufflinks.options, "-b", refseq)
+	cuffdiff.options <- paste(cuffdiff.options, "-b", refseq)
 }
 
 # If user has provided a GTF, we use it
