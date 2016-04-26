@@ -103,10 +103,34 @@
 		</tool>	
 	</category>
 	
+	<category name="Tests" color="#d59f45">
+		<tool runtime="R">
+			<resource>test-data-in.R</resource>
+		</tool>	
+        <tool runtime="R">
+			<resource>test-data-in-out.R</resource>
+		</tool>
+		<tool runtime="python">
+			<resource>test-data-in-out.py</resource>
+		</tool>
+		<tool runtime="python3">
+			<resource>test-data-in-out3.py</resource>
+		</tool>
+		<tool runtime="python">
+			<resource>test-phenodata-input.py</resource>
+		</tool>
+		<tool runtime="python">
+			<resource>test-phenodata2-input.py</resource>
+		</tool>
+		<tool runtime="python">
+			<resource>test-phenodata-output.py</resource>
+		</tool>
+		<tool runtime="python">
+			<resource>test-phenodata2-output.py</resource>
+		</tool>
+	</category>	
 
 <!-- 
-	<category name="Something" color="#d59f45">
-	</category>	
 	
 	<category name="Filtering" color="#e7df70">
 	</category>
