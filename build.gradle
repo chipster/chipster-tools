@@ -1,8 +1,6 @@
 apply plugin: 'distribution'
 
-//defaultTasks 'distTar'
 defaultTasks 'toolsZip', 'manualZip'
-
 
 String[] executables = [ '**/*.sh', '**/*.py', '**/*.bash' ] 
 
@@ -16,7 +14,7 @@ distTar {
 } 
 
 task toolsZip(type: Zip) {
-	archiveName = 'modules.zip'
+	archiveName = 'tools.zip'
 	into('modules') {
 		from('modules') {
 			exclude executables
@@ -31,7 +29,7 @@ task toolsZip(type: Zip) {
 }
 
 task manualZip(type: Zip) {
-	baseName = 'chipster-manual'
+	baseName = 'manual'
 	into 'manual'
 	from 'manual'
 	fileMode 0644
