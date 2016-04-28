@@ -15,13 +15,13 @@ distTar {
 
 task toolsZip(type: Zip) {
 	baseName = 'tools'
-	into('modules') {
-		from('modules') {
+	into('tools') {
+		from('tools') {
 			exclude executables
 			fileMode 0644
 		}
 
-		from('modules') {
+		from('tools') {
 			include executables
 			fileMode 0755
 		}
