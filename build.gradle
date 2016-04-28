@@ -14,7 +14,7 @@ distTar {
 } 
 
 task toolsZip(type: Zip) {
-	archiveName = 'tools.zip'
+	baseName = 'tools'
 	into('modules') {
 		from('modules') {
 			exclude executables
