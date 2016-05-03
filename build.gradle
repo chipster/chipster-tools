@@ -1,10 +1,10 @@
 apply plugin: 'distribution'
 
-defaultTasks 'distTar'
+defaultTasks 'toolsZip', 'manualZip'
+
 String[] executables = [ '**/*.sh', '**/*.py', '**/*.bash' ] 
 
-
-version='3.6.3'
+//version='3.6.3'
 
 distTar { 
 
@@ -12,6 +12,29 @@ distTar {
      extension = "tar.gz" 
      compression = Compression.GZIP 
 } 
+
+task toolsZip(type: Zip) {
+	baseName = 'tools'
+	into('tools') {
+		from('tools') {
+			exclude executables
+			fileMode 0644
+		}
+
+		from('tools') {
+			include executables
+			fileMode 0755
+		}
+	}
+}
+
+task manualZip(type: Zip) {
+	baseName = 'manual'
+	into 'manual'
+	from 'manual'
+	fileMode 0644
+}
+
 
 distributions {
 	main {
