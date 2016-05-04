@@ -8,7 +8,6 @@
 # OUTPUT OPTIONAL reads.good.groups
 # OUTPUT OPTIONAL reads.trim.good.names
 # OUTPUT OPTIONAL summary.trim.screen.tsv
-# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL reads.good.count
 # PARAMETER OPTIONAL minlength: "Minimum length of the sequences" TYPE INTEGER (What is the minimum lenght of the sequences?)
 # PARAMETER OPTIONAL maxlength: "Maximum length of the sequences" TYPE INTEGER (What is the maximum lenght of the sequences?)
