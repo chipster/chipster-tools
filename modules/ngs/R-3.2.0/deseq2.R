@@ -17,6 +17,7 @@
 # AMS 7.4.2015, Join pdf outputs to one
 # ML 25.6.2015, Fixed some problems with S4vectors
 # EK 10.2.2016, Added alpha to results()
+# ML 4.5.2016, Changed the direction of the comparison when more than 2 groups
 
 #column <-"group"
 #ad_factor<-"EMPTY"
@@ -78,9 +79,10 @@ if (length(unique(groups)) == 2) {
 	dds <- estimateDispersions(dds)
 	test_results <- nbinomWaldTest(dds)
 	res <- NULL
+	# going through all the pairwise comparisons (i vs j)
 	for (i in levels(colData(test_results)$condition)[-(length(levels(colData(test_results)$condition)))]) {
 		for (j in levels(colData(test_results)$condition)[-(1:i)]) {
-			pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",i,j)))
+			pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j,i))) # note: j,i => j-i
 			if(is.null(res)) res <- pairwise_results else  res <- cbind(res, pairwise_results)
 			results_name <- c(results_name, paste(i,"_vs_", j, sep=""))
 		}
