@@ -87,12 +87,18 @@ if (second.column=="EMPTY") {
 	}
 }
 if (second.column!="EMPTY") {
+	if (show.names == "yes"){
 	ggplot(data, aes(PC1, PC2, color=condition, shape=condition2)) +
 		geom_point(size=6) +
 		geom_text(aes(label=desc),hjust=0, vjust=1.7, color="black", size=4) +
 		xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-		ylab(paste0("PC2: ",percentVar[2],"% variance")
-		)
+		ylab(paste0("PC2: ",percentVar[2],"% variance"))
+}else{
+	ggplot(data, aes(PC1, PC2, color=condition, shape=condition2)) +
+			geom_point(size=6) +
+			xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+			ylab(paste0("PC2: ",percentVar[2],"% variance"))
+	}
 }
 dev.off()
 

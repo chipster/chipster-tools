@@ -50,7 +50,7 @@ if (ad_factor == "EMPTY") {
 } else if (ad_factor != "EMPTY") {
 	dds <- DESeqDataSetFromMatrix(countData=dat2, colData=design, design = ~ exp_factor + condition)
 }
-	
+
 # Vector / variable that holds comparison names
 results_name <- NULL 
 
@@ -65,7 +65,7 @@ if (length(unique(groups)) == 2) {
 	sig <- sig[sig$padj <= p.value.cutoff, ]
 	
 	sig <- sig[! (is.na(sig$padj)), ]
-
+	
 	sig <- sig[ order(sig$padj), ]
 	# Open pdf file for output
 	pdf(file="deseq2_report.pdf") 
