@@ -6,5 +6,5 @@
 # using this function guarantees that sorted files are compatible with it.    
 #
 sort.tsv <- function(input, output, chr) {
-	system(paste("java -cp  '", chipster.module.path, "/../../../shared/lib/*' fi.csc.chipster.tools.ngs.SortTsv ", input, " ", output, " ", chr, sep = ""))
+	system(paste("java -cp  '", chipster.java.libs.path, "/*' fi.csc.chipster.tools.ngs.SortTsv ", input, " ", output, " ", chr, sep = ""))
 }
