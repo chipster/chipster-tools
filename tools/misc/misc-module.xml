@@ -104,10 +104,10 @@
 	</category>
 	
 	<category name="Tests" color="#d59f45">
-		<tool runtime="R">
+		<tool runtime="R-3.2.3">
 			<resource>test-data-in.R</resource>
 		</tool>	
-        <tool runtime="R">
+        <tool runtime="R-3.2.3">
 			<resource>test-data-in-out.R</resource>
 		</tool>
 		<tool runtime="python">
