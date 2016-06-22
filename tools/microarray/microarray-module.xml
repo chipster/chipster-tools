@@ -37,16 +37,16 @@
 	</category>
 	
 	<category name="Preprocessing" color="#d59f45">
-		<tool runtime="R-3.0.2"><resource>filter-expression.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-flags.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-sd.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-iqr.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-cv.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-by-column-term.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-by-column-value.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>impute.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>na-omitted.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>dichotomize-continious-data.R</resource></tool>
+		<tool runtime="R"><resource>filter-expression.R</resource></tool>
+		<tool runtime="R"><resource>filter-flags.R</resource></tool>
+		<tool runtime="R"><resource>filter-sd.R</resource></tool>
+		<tool runtime="R"><resource>filter-iqr.R</resource></tool>
+		<tool runtime="R"><resource>filter-cv.R</resource></tool>
+		<tool runtime="R"><resource>filter-by-column-term.R</resource></tool>
+		<tool runtime="R"><resource>filter-by-column-value.R</resource></tool>
+		<tool runtime="R"><resource>impute.R</resource></tool>
+		<tool runtime="R"><resource>na-omitted.R</resource></tool>
+		<tool runtime="R"><resource>dichotomize-continious-data.R</resource></tool>
 	</category>
 	
 	<category name="Statistics" color="#e7881c">
@@ -136,29 +136,29 @@
 	</category>
 
 	<category name="Visualisation" color="#a49900">
-		<tool runtime="R-3.0.2"><resource>plot-idiogram.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-chrom-pos.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-volcano.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-volcano-data-exists.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-boxplot.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-dendrogram.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-histogram.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-corrgram.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-heatmap.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>plot-annoheatmap.R</resource></tool>
+		<tool runtime="R"><resource>plot-idiogram.R</resource></tool>
+		<tool runtime="R"><resource>plot-chrom-pos.R</resource></tool>
+		<tool runtime="R"><resource>plot-volcano.R</resource></tool>
+		<tool runtime="R"><resource>plot-volcano-data-exists.R</resource></tool>
+		<tool runtime="R"><resource>plot-boxplot.R</resource></tool>
+		<tool runtime="R"><resource>plot-dendrogram.R</resource></tool>
+		<tool runtime="R"><resource>plot-histogram.R</resource></tool>
+		<tool runtime="R"><resource>plot-corrgram.R</resource></tool>
+		<tool runtime="R"><resource>plot-heatmap.R</resource></tool>
+		<tool runtime="R"><resource>plot-annoheatmap.R</resource></tool>
 	</category>
 
 	<category name="Utilities" color="#83010b">
 		<tool runtime="R-3.0.2"><resource>search-correlation.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>search-queryword.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>search-coordinates.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-by-column-term.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>filter-by-column-value.R</resource></tool>
+		<tool runtime="R"><resource>filter-by-column-term.R</resource></tool>
+		<tool runtime="R"><resource>filter-by-column-value.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>delete-columns.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>delete-and-subtract-columns.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>merge-tables.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>merge-datasets.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>merge-pheno-and-data.R</resource></tool>
+		<tool runtime="R"><resource>merge-tables.R</resource></tool>
+		<tool runtime="R"><resource>merge-datasets.R</resource></tool>
+		<tool runtime="R"><resource>merge-pheno-and-data.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>extract-genes-from-clustering.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>extract-genes-from-go.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>extract-genes-from-kegg.R</resource></tool>
