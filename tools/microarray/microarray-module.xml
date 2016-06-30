@@ -3,27 +3,27 @@
 <module name="microarray">
 		
 	<category name="Normalisation" color="#d5c796">
-		<tool runtime="R-3.0.2"><resource>norm-affy.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-affy-exon.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-affy-gene.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-affy-snp.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-agilent-one-color.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-agilent.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-agilent-miRNA.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-cdna.R</resource></tool>
+		<tool runtime="R"><resource>norm-affy.R</resource></tool>
+		<tool runtime="R"><resource>norm-affy-exon.R</resource></tool>
+		<tool runtime="R"><resource>norm-affy-gene.R</resource></tool>
+		<tool runtime="R"><resource>norm-affy-snp.R</resource></tool>
+		<tool runtime="R"><resource>norm-agilent-one-color.R</resource></tool>
+		<tool runtime="R"><resource>norm-agilent.R</resource></tool>
+		<tool runtime="R"><resource>norm-agilent-miRNA.R</resource></tool>
+		<tool runtime="R"><resource>norm-cdna.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>norm-illumina.R</resource></tool>
 		<tool runtime="R-3.2.0"><resource>norm-illumina-backgroundcorr.R</resource></tool>	
 		<tool runtime="R-3.0.2"><resource>norm-illumina-lumi.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>norm-illumina-methylumi.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>norm-illumina-SNP.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-prenormalized.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-prenormalized-affy.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-lme.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-combat.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-chip-average.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-gene-average.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-specific-samples.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-specific-genes.R</resource></tool>
+		<tool runtime="R"><resource>norm-prenormalized.R</resource></tool>
+		<tool runtime="R"><resource>norm-prenormalized-affy.R</resource></tool>
+		<tool runtime="R"><resource>norm-lme.R</resource></tool>
+		<tool runtime="R"><resource>norm-combat.R</resource></tool>
+		<tool runtime="R"><resource>norm-chip-average.R</resource></tool>
+		<tool runtime="R"><resource>norm-gene-average.R</resource></tool>
+		<tool runtime="R"><resource>norm-specific-samples.R</resource></tool>
+		<tool runtime="R"><resource>norm-specific-genes.R</resource></tool>
 	</category>
 	
 	<category name="Quality control" color="#e7df70">
