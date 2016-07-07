@@ -9,6 +9,7 @@
 # PARAMETER OPTIONAL filter.maxalleles: "Maximum number of alleles" TYPE INTEGER DEFAULT 0 (Maximum number of alleles. 0 value means option is ignored.)
 # PARAMETER OPTIONAL filter.minquality: "Minimum quality" TYPE DECIMAL DEFAULT 0 (Include only sites with quality above this threshold. 0 value means option is ignored.)
 # PARAMETER OPTIONAL filter.flag: "Filter by flags" TYPE [yes, no] DEFAULT no (Removes all sites with a FILTER flag other than PASS.)
+# PARAMETER OPTIONAL output.recodeinfo: "INFO fields to keep" TYPE [none, concise, all] DEFAULT concise (The default is to keep only the essential INFO fields for ease of reading. You can also choose to show none or all of the fields. Please note the INFO values may be invalidated by the filtering, e.g. the total depth may need to be recalculated if individuals are removed.)
 # PARAMETER OPTIONAL output.filtered: "List removed sites" TYPE [yes, no] DEFAULT no (Creates a file listing sites that have been removed after filtering. Default is to list kept files only.)
 
 # AMS 14.9.2012
@@ -48,10 +49,18 @@ if (filter.flag == "yes"){
 }
 
 # command
-# command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--recode", "--recode-INFO-all", "2> vcftools.log")
-command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--recode", "--recode-INFO AC", "--recode-INFO DP", "--recode-INFO DP4", "2> vcftools.log")
+command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--recode")
+# Add INFO sields as requested. Program default is to add none 
+if (output.recodeinfo == "concise"){
+	command <- paste(command, "--recode-INFO INDEL --recode-INFO AC --recode-INFO DP --recode-INFO DP4")
+}
+if (output.recodeinfo == "all"){
+	command <- paste(command, "--recode-INFO-all")
+}
+command <- paste(command, "2> vcftools.log")
 system(command)
 
+# List removed sites
 if (output.filtered == "yes"){
 	command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--removed-sites", "2>> vcftools.log")
 	system(command)
