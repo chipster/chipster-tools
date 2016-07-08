@@ -25,10 +25,10 @@
 		<tool runtime="R-3.0.2">
 			<resource>ngs-create-experiment.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-filter-annotations.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-filter-results-column.R</resource>
 		</tool>
 		<tool runtime="R-3.0.2">
@@ -52,13 +52,13 @@
 		<tool runtime="R-3.0.2">
 			<resource>process-preprocessed-counts.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>normalise-counts.R</resource>
 		</tool>
 		<tool runtime="R-3.2.0">
 			<resource>deseq2-normalized-counts-for-gene.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>annotate-ensembl-ids.R</resource>
 		</tool>		
 		<tool runtime="R-3.0.2">
@@ -88,7 +88,7 @@
 		<tool runtime="R-3.0.2">
 			<resource>samtools-rmdup.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>picard-markduplicates.R</resource>
 		</tool>
 		<tool runtime="R-3.0.2">
@@ -278,7 +278,7 @@
 		<tool runtime="python" module="common">
 			<resource>vep.py</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bcftools-intersect-vcf.R</resource>
 		</tool>	
 		<tool runtime="R-3.0.2">
