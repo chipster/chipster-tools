@@ -22,7 +22,7 @@
 	</category>
 
 	<category name="Utilities" color="#d59f45">
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-create-experiment.R</resource>
 		</tool>
 		<tool runtime="R">
@@ -49,7 +49,7 @@
 		<tool runtime="R-3.0.2" module="common">
 			<resource>general_file_processing.R</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>process-preprocessed-counts.R</resource>
 		</tool>
 		<tool runtime="R">
@@ -151,7 +151,7 @@
 		<tool runtime="python" module="common">
 			<resource>gunzip.py</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>a5-miseq.R</resource>
 		</tool>
 	</category>
@@ -287,19 +287,19 @@
 	</category>
 	
 	<category name="RNA-seq" color="#0177b7">
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>htseq-count.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>htseq-count-own-gtf.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dexseq-exoncount.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dexseq-exoncount-own-gtf.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>express.R</resource>
 		</tool>
 		<tool runtime="R-3.2.0">
@@ -308,7 +308,7 @@
 		<tool runtime="R-3.2.0">
 			<resource>deseq2.R</resource>
 		</tool>		
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dea-deseq.R</resource>
 		</tool>
 		<tool runtime="R-3.2.0">
@@ -403,7 +403,7 @@
 		<tool runtime="R-3.0.2">
 			<resource>ngs-find-peaks-macs-two.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-find-peaks-fseq.R</resource>
 		</tool>		
 		<tool runtime="R-3.0.2">
@@ -418,16 +418,16 @@
 		<tool runtime="R-3.0.2">
 			<resource>ngs-find-motifs-jaspar.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dimont-extract-data.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dimont-extract-data-custom.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dimont.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dimont-predictor.R</resource>
 		</tool>
 		<!--<tool runtime="R-3.0.2">
