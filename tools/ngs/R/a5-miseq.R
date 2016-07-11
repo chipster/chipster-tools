@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL a5_assembly.final.scaffolds.fasta: "Final a5 scaffolds." (Final a5 scaffolds.)
 # OUTPUT OPTIONAL a5_assembly.final.scaffolds.qvl: "Final a5 scaffolds." (Final a5 scaffolds.)
 # OUTPUT OPTIONAL a5_assembly.contigs.fasta: a5_assembly.contigs.fasta (a5_assembly.contigs.fasta)
-# OUTPUT OPTIONAL a5_assembly.assembly_stats.tsv: a5_assembly.assembly_stats.tsv (a5_assembly.assembly_stats.tsv)
+# OUTPUT OPTIONAL a5_assembly_stats.tsv: a5_assembly_stats.tsv (a5_assembly_stats.tsv)
 # OUTPUT OPTIONAL a5.log
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
@@ -45,7 +45,7 @@ echo.command <- paste('echo "',command.full, ' "> a5.log' )
 system(echo.command)
 
 system(command.full)
-system ("mv a5_assembly.assembly_stats.csv a5_assembly.assembly_stats.tsv")
+system ("mv a5_assembly.assembly_stats.csv a5_assembly_stats.tsv")
 system ("ls -l >> a5.log ")
 
 if ( save_log == "no") {

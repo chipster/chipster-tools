@@ -14,8 +14,8 @@
 sequence data generated on the Illumina sequencing platform. There are many 
 situations where A5-miseq is not the right tool for the job. In order to 
 produce accurate results, A5-miseq requires Illumina data with certain characteristics. 
-A5-miseq will likely not work well with Illumina reads shorter than around 80nt, or reads 
-where the base qualities are low in all or most reads before 60nt. A5-miseq 
+A5-miseq will likely not work well with Illumina reads shorter than around 80 nt, or reads 
+where the base qualities are low in all or most reads before 60 nt. A5-miseq 
 assumes it is assembling homozygous haploid genomes. Use a different 
 assembler for metagenomes and heterozygous diploid or polyploid organisms. 
 Use a different assembler if a tool like FastQC reports your data quality is 
@@ -25,17 +25,23 @@ dubious.
 The tool needs a pair of fastq formatted paired-end reads files.
 </p>
 <p>
-For more details, please check the <a href="http://code.google.com/p/ngopt/wiki/A5PipelineREADME">home page of A5-miseq pipeline</a>
+For more details, please check the <a href="https://sourceforge.net/p/ngopt/wiki/A5PipelineREADME/">home page of A5-miseq pipeline</a>
 and the <a href="http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0042304">PLOS One article about the A5 miseq pipeline</a>.
 </p>
 
 
 <h3>Output</h3>
 
-<p>
-Output is a PNG, SVG or PDF formatted image file.
-</p>
-
+<ul>
+<li>a5_assembly.contigs.fasta: Contigs</li>
+<li>a5_assembly.final.scaffolds.fasta: Final scaffolds (checked for misassemblies, and rescaffolded).</li>
+<li>a5_assembly.final.scaffolds.fastq: Final scaffolds in FastQ format with base call qualities.</li>
+<li>a5_assembly.final.scaffolds.qvl: Quality values for the final scaffolds in QVL format for submission to NCBI.</li>
+<li>a5_assembly_stats.csv: A tab-separated file with assembly summary statistics.</li>
+<!--  <li>a5_assembly.ec.fastq.gz              // Error corrected reads</li>
+<li>a5_assembly.crude.scaffolds.fasta    // Crude scaffolds:  Not checked for misassemblies</li>
+<li>a5_assembly.broken.scaffolds.fasta   // Broken scaffolds: Checked for misassemblies, but not rescaffolded</li>-->
+</ul>
 
 </body>
 
