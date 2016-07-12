@@ -284,6 +284,15 @@
 		<tool runtime="R-3.0.2">
 			<resource>vcftools-reports.R</resource>
 		</tool>
+		<tool runtime="R">
+			<resource>gatk_haplotypecaller.R</resource>
+		</tool>
+		<tool runtime="R">
+			<resource>gatk_genotypegvcfs.R</resource>
+		</tool>
+		<tool runtime="R">
+			<resource>no_gatk_example.R</resource>
+		</tool>		
 	</category>
 	
 	<category name="RNA-seq" color="#0177b7">
