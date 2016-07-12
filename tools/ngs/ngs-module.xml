@@ -341,10 +341,10 @@
 	</category>
 
 	<category name="miRNA-seq" color="#629a9b">
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>convert-bam-to-edger.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>convert-miRBase-bam-to-edger.R</resource>
 		</tool>
 		<!--
@@ -355,7 +355,7 @@
 		<tool runtime="R-3.2.0">
 			<resource>deseq2.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>dea-deseq.R</resource>
 		</tool>
 		<tool runtime="R-3.2.0">
@@ -364,7 +364,7 @@
 		<tool runtime="R-3.2.0">
 			<resource>edgeR-multivariate.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-annotate-miRNA-targets.R</resource>
 		</tool> 
 		<tool runtime="R-3.0.2" module="common">
@@ -373,16 +373,16 @@
 		<tool runtime="R-3.0.2" module="common">
 			<resource>pathways-mirna-hyperg-kegg.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>miRNA_RNA-seq_integration.R</resource>
 		</tool>
 		<tool runtime="R-3.0.2">
 			<resource>ngs-correlation-analysis-mirna.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-up-down-analysis-mirna.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>ngs-extract-target-gene-expression.R</resource>
 		</tool>
 	</category>
