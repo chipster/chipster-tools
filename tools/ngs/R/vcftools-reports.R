@@ -27,6 +27,9 @@ vcftools.binary <- c(file.path(chipster.tools.path, "vcftools", "bin", "vcftools
 vcftools.io.options <- paste("--vcf input.vcf", "--out vcftools")
 
 # statistics options
+if ((statistics.freq == "no") && (statistics.pvalue == "no") && (statistics.ld == "no") && (statistics.snpdensity == "0")) {
+	stop(paste('CHIPSTER-NOTE: ', "Please select at least one statistic to calculate"))
+}
 
 if (statistics.freq == "yes"){
 	command <- paste(vcftools.binary, vcftools.io.options, "--freq", "2>> vcftools.log")
@@ -49,9 +52,12 @@ if (statistics.snpdensity != "0"){
 
 # Fix last column on .frq and .frq.count to be Chipster tsv compatible
 awk.command <- paste("| awk \'{printf $1\"\\t\"$2\"\\t\"$3\"\\t\"$4\"\\t\"$5; for(i=6;i<=NF;i++){printf \",%s\", $i} printf \"\\n\"}\'")
-system(paste("cat vcftools.frq", awk.command, "> vcftools.frq.tsv"))
-system(paste("cat vcftools.frq.count", awk.command, "> vcftools.frq.count.tsv"))
-
+if (file.exists("vcftools.frq")){
+	system(paste("cat vcftools.frq", awk.command, "> vcftools.frq.tsv"))
+}
+if (file.exists("vcftools.frq.count")){
+	system(paste("cat vcftools.frq.count", awk.command, "> vcftools.frq.count.tsv"))
+}
 # rename result files
 system("mv vcftools.hwe vcftools.hwe.tsv")
 system("mv vcftools.geno.ld vcftools.geno.ld.tsv")
