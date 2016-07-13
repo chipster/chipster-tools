@@ -6,7 +6,7 @@
 		<tool runtime="R-3.0.2"><resource>prinseq-statistics.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>rseqc.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>picard-collectmultiplemetrics.R</resource></tool>
-		<tool runtime="R-3.2.0"><resource>deseq2-pca-heatmap.R</resource></tool>		
+		<tool runtime="R"><resource>deseq2-pca-heatmap.R</resource></tool>		
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
@@ -55,7 +55,7 @@
 		<tool runtime="R">
 			<resource>normalise-counts.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>deseq2-normalized-counts-for-gene.R</resource>
 		</tool>
 		<tool runtime="R">
@@ -302,19 +302,19 @@
 		<tool runtime="R">
 			<resource>express.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>deseq2-transform.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>deseq2.R</resource>
 		</tool>		
 		<tool runtime="R">
 			<resource>dea-deseq.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>ngs-dea-edger-RNA.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>edgeR-multivariate.R</resource>
 		</tool>
 		<tool runtime="R-3.0.2">
@@ -352,16 +352,16 @@
 			<resource>fi.csc.chipster.tools.ngs.regions.FindOverlappingDatabaseTool</resource>
 		</tool>
 		-->
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>deseq2.R</resource>
 		</tool>
 		<tool runtime="R">
 			<resource>dea-deseq.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>ngs-dea-edger-RNA.R</resource>
 		</tool>
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>edgeR-multivariate.R</resource>
 		</tool>
 		<tool runtime="R">
