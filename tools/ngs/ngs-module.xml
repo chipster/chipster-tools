@@ -1,24 +1,24 @@
 <module name="ngs">
 
 	<category name="Quality control" color="#d5c796">
-		<tool runtime="R-3.0.2"><resource>fastqc.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>fastx-statistics.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>prinseq-statistics.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>rseqc.R</resource></tool>
+		<tool runtime="R"><resource>fastqc.R</resource></tool>
+		<tool runtime="R"><resource>fastx-statistics.R</resource></tool>
+		<tool runtime="R"><resource>prinseq-statistics.R</resource></tool>
+		<tool runtime="R"><resource>rseqc.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>picard-collectmultiplemetrics.R</resource></tool>
 		<tool runtime="R"><resource>deseq2-pca-heatmap.R</resource></tool>		
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
-		<tool runtime="R-3.0.2"><resource>prinseq-filter.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>fastx-clipper.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>fastx-quality-filter.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>prinseq-trimmer.R</resource></tool>	
-		<tool runtime="R-3.0.2"><resource>trimmomatic.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>fastx-trimmer.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>tagcleaner-trim.R</resource></tool>	
-		<tool runtime="R-3.0.2"><resource>tagcleaner-predict.R</resource></tool>	
-		<tool runtime="R-3.0.2"><resource>tagcleaner-statistics.R</resource></tool>
+		<tool runtime="R"><resource>prinseq-filter.R</resource></tool>
+		<tool runtime="R"><resource>fastx-clipper.R</resource></tool>
+		<tool runtime="R"><resource>fastx-quality-filter.R</resource></tool>
+		<tool runtime="R"><resource>prinseq-trimmer.R</resource></tool>	
+		<tool runtime="R"><resource>trimmomatic.R</resource></tool>
+		<tool runtime="R"><resource>fastx-trimmer.R</resource></tool>
+		<tool runtime="R"><resource>tagcleaner-trim.R</resource></tool>	
+		<tool runtime="R"><resource>tagcleaner-predict.R</resource></tool>	
+		<tool runtime="R"><resource>tagcleaner-statistics.R</resource></tool>
 	</category>
 
 	<category name="Utilities" color="#d59f45">
@@ -31,7 +31,7 @@
 		<tool runtime="R">
 			<resource>ngs-filter-results-column.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>filter-bed-value.R</resource>
 		</tool>
 		<tool runtime="R-3.0.2" module="common">
@@ -61,58 +61,58 @@
 		<tool runtime="R">
 			<resource>annotate-ensembl-ids.R</resource>
 		</tool>		
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-index.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-sort-index-BAM.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-convert-SAMtoBAM-sort-index.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-subset.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-merge.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-idxstats.R</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-alignment-statistics.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-count.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-rmdup.R</resource>
 		</tool>
 		<tool runtime="R">
 			<resource>picard-markduplicates.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-consensus.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>unique-alignments-from-bam.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-bamtobed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>fastx-fastq-to-fasta.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>subset-fastq.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-index-fasta.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>fastx-renamer.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>fastx-collapser.R</resource>
 		</tool>
 		<tool runtime="java">
@@ -127,10 +127,10 @@
 		<tool runtime="java">
 			<resource>fi.csc.chipster.tools.ngs.SortVcf</resource>
 		</tool>		
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>extract-features-from-BED.R</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-fastafrombed.R</resource>
 		</tool>
 		<tool runtime="R-3.0.2" module="common">
@@ -169,105 +169,105 @@
 			<resource>fi.csc.chipster.tools.ngs.regions.CombineRegionsTool
 			</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-subtractbed.R</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-intersectbed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-closestbed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-windowbed.R</resource>
 		</tool>
 		<!-- 
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-mergebed.R</resource>
 		</tool>
 		-->
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-coveragebed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-genomecoveragebed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-overlap.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-slopbed.R</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-pairtobed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bedtools-pairtopair.R</resource>
 		</tool>	
 	</category>
 
 	<category name="Alignment" color="#d53833">
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie2.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie2-paired-end.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie2-with-index-building.R</resource>
 		</tool>
-	    <tool runtime="R-3.0.2">
+	    <tool runtime="R">
 			<resource>bowtie2-paired-end-with-index-building.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>tophat2.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>tophat2-single-end.R</resource>
 		</tool>
-	    <tool runtime="R-3.0.2">
+	    <tool runtime="R">
 			<resource>tophat2-with-index-building.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>tophat2-single-end-with-index-building.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bwa-mem.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bwa-mem-with-index-building.R</resource>
 		</tool>
-	    <tool runtime="R-3.0.2">
+	    <tool runtime="R">
 			<resource>bwa.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bwa-paired-end.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bwa-with-index-building.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bwa-paired-end-with-index-building.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie-paired-end.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie-with-index-building.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>bowtie-paired-end-with-index-building.R</resource>
 		</tool>
 	</category>
 	
 	<category name="Variants" color="#80a3b7">
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>samtools-snp-indel-single.R</resource>
 		</tool> 
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>vcftools.R</resource>
 		</tool>
 		
@@ -281,7 +281,7 @@
 		<tool runtime="R">
 			<resource>bcftools-intersect-vcf.R</resource>
 		</tool>	
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>vcftools-reports.R</resource>
 		</tool>
 	</category>
@@ -320,16 +320,16 @@
 		<tool runtime="R-3.0.2">
 			<resource>DEXseq.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>cufflinks2.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>cuffmerge2.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>cuffcompare2.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2">
+		<tool runtime="R">
 			<resource>cuffdiff2.R</resource>
 		</tool>
 <!-- 	<tool runtime="R-2.12">
