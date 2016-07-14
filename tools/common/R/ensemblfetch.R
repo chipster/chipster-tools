@@ -11,7 +11,7 @@
 # K.M 28.10.2013
 
 # enseblfecth settings
-ensemblfetch.binary <- file.path("/opt/chipster/comp/modules/admin/shell", "ensemblfetch.sh ")
+ensemblfetch.binary <- file.path("/opt/chipster/toolbox/tools/admin/shell", "ensemblfetch.sh ")
 
 #remove spaces from sepcies name
 species <- gsub(" ", "_", species)
