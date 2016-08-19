@@ -86,7 +86,7 @@
 		<tool runtime="R"><resource>annotate-add-to-data.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>add-locations-to-data.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>annotate-miRNA-targets.R</resource></tool> 
-		<tool runtime="R"><resource>annotaten-agilent-miRNA.R</resource></tool> 
+		<tool runtime="R"><resource>annotate-agilent-miRNA.R</resource></tool> 
 	</category>
 	
 	<category name="Pathways" color="#0177b7">
