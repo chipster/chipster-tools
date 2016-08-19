@@ -18,6 +18,7 @@
 <li>Maximum number of alleles (Integer) [0]</li>
 <li>Minimum quality (Decimal) [0]</li>
 <li>Filter by flags (yes, no) [no]</li>
+<li>INFO fields to keep (none, concise, all) [concise]</li>
 <li>List removed sites (yes, no) [no]</li>
 </ul>
 
@@ -33,6 +34,10 @@ Filters VCF files by various criteria.
 <p>
 Output is a VCF file. You can view VCF files in Chipster as text (which includes the header) or spreadsheet (which can be sorted). 
 The location column in the spreadsheet can be used in Chipster genome browser to navigate quickly through a list of variants.
+</p>
+<p>
+Please note the INFO values may be invalidated by the filtering, e.g. the total depth may need to be recalculated if individuals 
+are removed. You have the option to discard all INFO values, keep all or keep a concise set for ease of reading (default option).
 </p>
 
 

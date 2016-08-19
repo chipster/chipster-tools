@@ -287,4 +287,4 @@ db.custom.packages <- smart.install.scavenge.web.packages("http://brainarray.mbn
 db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp", list.only=1))
 db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype="ex", list.only=1))
 db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype="hta", list.only=1))
-check.affy.customnames(script.basename, db.custom.packages)
+#check.affy.customnames(script.basename, db.custom.packages)
