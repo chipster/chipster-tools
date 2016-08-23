@@ -67,7 +67,7 @@ cranPackages = c(
 		"gplots"
 )
 
-for (packge in cranPackages) {
+for (package in cranPackages) {
 	smart.install.packages(package=package, mirror=repo.cran)
 	library(package)
 	detach("package:" + package, unload=TRUE)
