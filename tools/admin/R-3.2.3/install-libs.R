@@ -69,8 +69,8 @@ cranPackages = c(
 
 for (package in cranPackages) {
 	smart.install.packages(package=package, mirror=repo.cran)
-	library(package)
-	detach("package:" + package, unload=TRUE)
+	library(package, character.only = TRUE)
+	detach(paste("package:", package), unload=TRUE)
 }
 
 
