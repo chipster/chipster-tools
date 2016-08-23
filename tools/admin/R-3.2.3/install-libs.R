@@ -198,8 +198,8 @@ bioconductorPackages = c(
 )
 for (package in bioconductorPackages) {
 	smart.install.packages(bioconductor.package=package, mirror=repo.bioc)
-	library(package, character.only = TRUE)
-	detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
 }
 
 
@@ -226,8 +226,8 @@ nonRepoPackages = c(
 
 for (package in nonRepoPackages) {
 	smart.install.packages(url.package=package)
-	library(package, character.only = TRUE)
-	detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
 }
 
 
@@ -247,8 +247,8 @@ illuminaAnnotationPackages = c(
 
 for (package in illuminaAnnotationPackages) {
 	smart.install.packages(url.package=package);
-	library(package, character.only = TRUE)
-	detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
 }
 
 
@@ -275,8 +275,8 @@ illuminaAnnotationBioconductorPackages = c(
 
 for (package in illuminaAnnotationBioconductorPackages) {
 	smart.install.packages(bioconductor.package=package, mirror=repo.bioc)
-	library(package, character.only = TRUE)
-	detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
 }
 
 
