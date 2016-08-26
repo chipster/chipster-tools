@@ -124,7 +124,7 @@ system("ls -l >> blast.log")
 
 
 if (species == "None"){
-	ensemblfetch.binary <- file.path("/opt/chipster/comp/modules/admin/shell", "ensemblfetch.sh ")	
+	ensemblfetch.binary <- file.path(chipster.module.path, "../admin/shell/ensemblfetch.sh ")	
 	command.to_run <- paste(ensemblfetch.binary, " -names >> blast.log")
 	system(command.to_run)
 	save_log <- paste("yes")
