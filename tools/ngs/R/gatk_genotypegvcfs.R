@@ -1,10 +1,10 @@
-# TOOL gatk_genotypegvcfs.R: "Perform joint genotyping on gVCF files with GATK" (This tool is based on the GATK package. Please note GATK is licensed for acadeioc use only.)
-# INPUT reference.fasta: "Reference genome" TYPE GENERIC
+# TOOL gatk_genotypegvcfs.R: "Perform joint genotyping on gVCF files with GATK" (This tool is based on the GATK package. Please note GATK is licensed for academic use only.)
 # INPUT alignment{...}.g.vcf: "gVCF files" TYPE GENERIC
+# INPUT reference.fasta: "Reference genome" TYPE GENERIC
 # OUTPUT OPTIONAL jointcalls.vcf
 # OUTPUT OPTIONAL gatk_log.txt
 # PARAMETER gatk.ploidy: "Ploidy" TYPE INTEGER DEFAULT 2 (Ploidy (number of chromosomes\) per sample. For pooled data, set to (Number of samples in each pool * Sample Ploidy\).)
-# PARAMETER OPTIONAL gatk.interval: "genomic intervals" TYPE STRING (One or more genomic intervals over which to operate. Format chromosome:begin-end, e.g. 20:10,000,000-10,200,00)
+# PARAMETER OPTIONAL gatk.interval: "genomic intervals" TYPE STRING (One or more genomic intervals over which to operate. Format chromosome:begin-end, e.g. 20:10,000,000-10,200,000)
 # PARAMETER OPTIONAL gatk.padding: "Interval padding" TYPE INTEGER DEFAULT 0 (Amount of padding in bp to add to each interval.)
 
 # AMS 12.07.2016
