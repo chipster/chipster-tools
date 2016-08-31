@@ -1,20 +1,54 @@
 #!/bin/bash 
 #
-#Automatic index cheking and indexing toold for bwa indexes
+#Automatic index cheking and indexing tool for bwa indexes
 #NOTE! Does not do color space indexes
-#K.M. 12.1. 2012
+#K.M. 29.8. 2016
 
+
+if [[ "$1" == "" ]]
+then
+   echo "check_bwa_index.sh command line syntax:"
+   echo "  check_bwa_index.sh genome_file.fasta -bwa_path <path> -index_path <path> -compress"
+   exit 1
+fi
+
+#set defaults
+compress=(0)
 bwa_path=("/opt/chipster/tools/bwa")
-
-
 if [ -d "/tmp" ]; then
-   mkdir -p "/tmp/bwa_indexes/tmp"
+  mkdir -p "/tmp/bwa_indexes/tmp"
    index_path=("/tmp/bwa_indexes/tmp")
 else
    index_path=("./")
 fi
 
-genome=($1)
+
+while [[ $# -ge 1 ]]
+do
+  case "$1" in
+              '-bwa_path')
+              bwa_path=$2
+              shift
+              shift
+              ;; 
+              '-index_path')
+              index_path=$2
+              shift
+              shift
+              ;; 
+              '-compress')
+              compress=(1)
+              shift
+              ;;
+              *)
+              genome=($1)
+              shift
+              ;;
+       esac
+done
+
+
+
 size=(`ls -l $genome | awk '{print $5}' `)
 checksum=(`md5sum $genome | awk '{print $1}'`)
 location=(`pwd`)
@@ -60,6 +94,10 @@ else
          exit 1
        fi
    done
+   if [[ compress -eq 1 ]]
+   then 
+      tar zcvf ${genome}_bwa_index.tgz $genome*  
+   fi
    echo "$genome_dir $size $checksum" > size_and_md5
    cd $location
 fi
@@ -67,4 +105,8 @@ fi
 echo "The bwa_indexes are in directory:"
 echo "$index_path/$genome_dir"
 exit 
+
+
+
+
 
