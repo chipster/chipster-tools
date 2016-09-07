@@ -21,11 +21,6 @@
 # 19.6.2014 AMS changed handling of GTFs
 # AMS 04.07.2014 New genome/gtf/index locations & names
 
-# bash wrapping
-python.path <- paste(sep="", "PYTHONPATH=", file.path(chipster.tools.path, "lib", "python2.7", "site-packages"), ":$PYTHONPATH")
-command.start <- paste("bash -c '", python.path, ";")
-command.end <- "'"
-
 # sort bam if the data is paired-end
 samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
 if(paired == "yes"){
@@ -52,11 +47,10 @@ if(chr == "1"){
 	annotation.file <- paste("internal_chr.gtf")
 }
 
-
 htseq <- paste(htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, annotation.file, " > htseq-counts-out.txt")
 
-htseq.command <- paste(command.start, htseq, command.end)
-system(htseq.command)
+# run
+system(htseq)
 
 # separate result file
 system("head -n -5 htseq-counts-out.txt > htseq-counts.tsv")
@@ -91,5 +85,3 @@ outputnames[1,] <- c("htseq-counts.tsv", paste(basename, ".tsv", sep =""))
 write_output_definitions(outputnames)
 
 # EOF
-
-

@@ -21,11 +21,6 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("features.gtf")
 
-# bash wrapping
-python.path <- paste(sep="", "PYTHONPATH=", file.path(chipster.tools.path, "lib", "python2.7", "site-packages"), ":$PYTHONPATH")
-command.start <- paste("bash -c '", python.path, ";")
-command.end <- "'"
-
 # sort bam if the data is paired-end
 samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
 if(paired == "yes"){
@@ -45,8 +40,7 @@ if(print.coord == "no") {
 htseq <- paste(htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, "features.gtf > htseq-counts-out.txt")
 
 # run
-htseq.command <- paste(command.start, htseq, command.end)
-system(htseq.command)
+system(htseq)
 
 # separate result file
 system("head -n -5 htseq-counts-out.txt > htseq-counts.tsv")
@@ -79,5 +73,4 @@ outputnames[1,] <- c("htseq-counts.tsv", paste(basename, ".tsv", sep =""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
-# EOF
 # EOF
