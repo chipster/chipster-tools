@@ -109,7 +109,8 @@ if (organism == "other"){
 cuffdiff.options <- paste(cuffdiff.options, annotation.file)
 
 # command
-command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "treatment1.bam", "control1.bam")
+# command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "treatment1.bam", "control1.bam")
+command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "control1.bam", "treatment1.bam")
 
 # run
 #stop(paste('CHIPSTER-NOTE: ', command))
