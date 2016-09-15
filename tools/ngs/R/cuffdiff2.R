@@ -45,6 +45,7 @@
 # AMS 2014.06.18 Changed the handling of GTF files
 # AMS 04.07.2014 New genome/gtf/index locations & names
 # AMS 15.04.2016 Fixed "bias" parameter
+# EK 14.09.2016 Changed the order of control and treatment BAM so that FC is shown as expected
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -109,7 +110,6 @@ if (organism == "other"){
 cuffdiff.options <- paste(cuffdiff.options, annotation.file)
 
 # command
-# command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "treatment1.bam", "control1.bam")
 command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "control1.bam", "treatment1.bam")
 
 # run
