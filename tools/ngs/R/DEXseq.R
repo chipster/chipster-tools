@@ -7,12 +7,12 @@
 # OUTPUT OPTIONAL dexseq-dispersion-plot.pdf: dexseq-dispersion-plot.pdf
 # PARAMETER OPTIONAL organism: "Reference organism" TYPE [Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1.83, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1.83, Drosophila_melanogaster.BDGP5.78, Drosophila_melanogaster.BDGP6.83, Felis_catus.Felis_catus_6.2.83, Gallus_gallus.Galgal4.83, Gasterosteus_aculeatus.BROADS1.83, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.83, Homo_sapiens.NCBI36.54, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38.83, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1.83, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.83, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2.83, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT Homo_sapiens.GRCh38.83 (Which organism is your data from.)
 # PARAMETER pvalue: "Threshold for adjusted p-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Threshold for BH adjusted p-values. If a gene has at least one exon below this p-value, all its exons will be included in the result list.)
-# PARAMETER OPTIONAL dispersion: "Common dispersion" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0.1 (If dispersions can not be estimated, this common dispersion value is used for all exons. In this case no graphical output is generated.)
 
 # 18.07.2013 JTT, Created
 # 25.04.2014 MK, Modified for R-3.0
 # 04.07.2014 AMS, New genome/gtf/index locations & names
 # 08.07.2015 EK, Removed dexseq-all-genes.tsv from the results.
+# 15.07.2016 ML, switched tools to newer versions
 
 # Loads the library 
 library(DEXSeq)
@@ -37,74 +37,55 @@ d<-read.table("countfile.tsv", header=TRUE, sep="\t")
 d2<-d[,grep("chip", colnames(d))]
 cn<-substr(colnames(d2), 6, nchar(colnames(d2)))
 for(i in 1:ncol(d2)) {
-   v<-d2[,i, drop=F]
-   rownames(v)<-rownames(d2)
-   write.table(v, paste(cn[i], ".jtt", sep=""), col.names=FALSE, row.names=TRUE, sep="\t", quote=FALSE)
+	v<-d2[,i, drop=F]
+	rownames(v)<-rownames(d2)
+	write.table(v, paste(cn[i], ".jtt", sep=""), col.names=FALSE, row.names=TRUE, sep="\t", quote=FALSE)
 }
 
-ecs = read.HTSeqCounts(countfiles = dir(pattern="jtt"), design = pd, flattenedfile = gtf)
-sampleNames(ecs)<-phenodata$original_name
+
+sampleTable = data.frame(
+		row.names = phenodata$sample,
+		condition = as.factor(phenodata$group))
+
+ecs = DEXSeqDataSetFromHTSeq(countfiles = dir(pattern="jtt"), sampleData=sampleTable, design = ~ sample + exon + condition:exon, flattenedfile = gtf)
+
 
 # Normalization
 ecs<-estimateSizeFactors(ecs)
 
 # Estimate dispersion
-####formuladispersion <- count ~ sample + condition * exon
-####ecs<-estimateDispersions(ecs, formula = formuladispersion)
-####ecs.fdf<-try(fitDispersionFunction(ecs), silent=TRUE)
-ecs<-estimateDispersions(ecs)
-ecs.fdf<-try(fitDispersionFunction(ecs), silent=TRUE)
 
-if(class(ecs.fdf)=="try-error") {
-   fData(ecs)$dispersion <- dispersion 
-   doplot<-FALSE
-} else {
-   ecs<-ecs.fdf
-   doplot<-TRUE
-}
+ecs<-estimateDispersions(ecs)
 
 # Testing for differential exon usage
-####formula0<-count ~ sample + condition + exon
-####formula1<-count ~ sample + condition * I(exon==exonID) 
 ecs <- testForDEU(ecs)
-ecs <- estimatelog2FoldChanges(ecs)
-res <- DEUresultTable(ecs)
+ecs = estimateExonFoldChanges(ecs, fitExpToVar="condition")
+res <- DEXSeqResults(ecs)
 
-siggenes<-as.character(unique(res$geneID[res$padjust<pvalue]))
-res2<-res[as.character(res$geneID) %in% siggenes,]
+siggenes<-as.character(unique(res$groupID[res$padj<pvalue]))
+res2<-res[as.character(res$groupID) %in% siggenes,]
 
-# write.table(res, "dexseq-all-genes.tsv", col.names=TRUE, row.names=TRUE, sep="\t", quote=FALSE)
 write.table(res2, "dexseq-genes-with-significant-exons.tsv", col.names=TRUE, row.names=TRUE, sep="\t", quote=FALSE)
 
 # Visualization
-if(doplot & nrow(res2)>0) {
-   genes<-unique(as.character(res[which(res$padjust<=pvalue),]$geneID))
-   pdf("dexseq-exons.pdf", width=297/25.4, height=210/25.4)
-   for(i in 1:length(genes)) {
-      plottry<-try(plotDEXSeq(ecs, genes[i], displayTranscripts = FALSE, cex.axis = 1.2, cex = 1.3, lwd = 2, legend = TRUE))
-      if(class(plottry)=="try-error") {
-         plot(x=1, y=1, xlab="", ylab="", axes=F, type="")
-         title(main=genes[i])
-         text(x=1, y=1, "No results to plot for this gene")
-      }
-   }
-   dev.off()
+# Note: as many pages of PDF as there are DEgenes.
+if(nrow(res2)>0) {
+	genes<-unique(as.character(res[which(res$padj<=pvalue),]$groupID))
+	pdf("dexseq-exons.pdf", width=297/25.4, height=210/25.4)
+	for(i in 1:length(genes)) {
+		plottry<-try(plotDEXSeq(res, genes[i], displayTranscripts = FALSE, cex.axis = 1.2, cex = 1.3, lwd = 2, legend = TRUE))
+		if(class(plottry)=="try-error") {
+			plot(x=1, y=1, xlab="", ylab="", axes=F, type="")
+			title(main=genes[i])
+			text(x=1, y=1, "No results to plot for this gene")
+		}
+	}
+	dev.off()
 }
-
 if(nrow(res)>0) {
-   pdf("dexseq-MAplot.pdf", width=297/25.4, height=210/25.4)
-   plot(x=log2(res[,6]), y=res[,7], xlab="mean of normalized counts (log2)", ylab="log2 fold change", type="n")
-
-   nonsig <- data.frame(x=log2(res[res[,5]>pvalue,6]), y=res[res[,5]>pvalue,7])
-   nonsig <- unique(nonsig)
-   points(x=nonsig$x, y=nonsig$y, col="black", pch=16, cex=0.5)
-
-   sig <- data.frame(x=log2(res[res[,5]<=pvalue,6]), y=res[res[,5]<=pvalue,7])
-   sig <- unique(sig)
-   points(x=sig$x, y=sig$y,, col="#CC0000", pch=16, cex=0.5)
-
-   legend(x="topright", legend=c("significant", "unsignificant"), col=c("#CC0000", "black"), cex=1, pch=16)
-   dev.off()
+	pdf("dexseq-MAplot.pdf", width=297/25.4, height=210/25.4)
+	plotMA(res)
+	dev.off()
 }
 
 #plotDispEsts = function( cds, ymin, linecol="#ff000080",
@@ -127,8 +108,8 @@ if(nrow(res)>0) {
 #}
 
 pdf("dexseq-dispersion-plot.pdf", width=297/25.4, height=210/25.4)
-#plotDispEsts(ecs)
 plotDispEsts(ecs, cex=0.2)
 title(main="Dispersion plot")
 legend(x="topright", legend="fitted dispersion", col="red", cex=1, pch="-")
 dev.off()
+

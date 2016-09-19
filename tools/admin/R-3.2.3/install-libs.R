@@ -32,244 +32,255 @@ repo.bioc <- "http://www.bioconductor.org"
 #Unlike R, RScript does not seem to load the method-package, why some try-catches can crash
 library(methods)
 
-# Install packages, and their dependencies, from CRAN
-smart.install.packages(package="amap", mirror=repo.cran)
-smart.install.packages(package="ape", mirror=repo.cran)
-smart.install.packages(package="flexclust", mirror=repo.cran)
-smart.install.packages(package="kohonen", mirror=repo.cran)
-smart.install.packages(package="e1071", mirror=repo.cran)
-smart.install.packages(package="fastICA", mirror=repo.cran)
-smart.install.packages(package="aplpack", mirror=repo.cran)
-smart.install.packages(package="corrgram", mirror=repo.cran)
-smart.install.packages(package="deal", mirror=repo.cran)
-smart.install.packages(package="outliers", mirror=repo.cran)
-smart.install.packages(package="pvclust", mirror=repo.cran)
-smart.install.packages(package="zoo", mirror=repo.cran)
-smart.install.packages(package="scrime", mirror=repo.cran)
-smart.install.packages(package="XML", mirror=repo.cran)
-smart.install.packages(package="R2HTML", mirror=repo.cran)
-smart.install.packages(package="moments", mirror=repo.cran)
-smart.install.packages(package="snowfall", mirror=repo.cran)
-smart.install.packages(package="sm", mirror=repo.cran)
-smart.install.packages(package="rda", mirror=repo.cran)
-smart.install.packages(package="flexmix", mirror=repo.cran) ## required by WECCA
-smart.install.packages(package="MKmisc", mirror=repo.cran)
-#smart.install.packages(package="multicore", mirror=repo.cran) # required by zinba. Deprecated. Use package parallel
-smart.install.packages(package="parallel", mirror=repo.cran)
-smart.install.packages(package="doMC", mirror=repo.cran) # required by zinba
-smart.install.packages(package="foreach", mirror=repo.cran) # required by zinba
-smart.install.packages(package="quantreg", mirror=repo.cran) # required by zinba
-smart.install.packages(package="R.utils", mirror=repo.cran) # required by zinba
-smart.install.packages(package="tcltk", mirror=repo.cran)
-smart.install.packages(package="ipred", mirror=repo.cran)
-smart.install.packages(package="prodlim", mirror=repo.cran)
-smart.install.packages(package="png", mirror=repo.cran)
-smart.install.packages(package="gplots", mirror=repo.cran)
+# CRAN packages and their dependencies
+cranPackages = c(
+		"amap", 
+		"ape",
+		"flexclust",
+		"kohonen",
+		"e1071",
+		"fastICA",
+		"aplpack",
+		"corrgram",
+		"deal",
+		"outliers",
+		"pvclust",
+		"zoo",
+		"scrime",
+		"XML",
+		"R2HTML",
+		"moments",
+		"snowfall",
+		"sm",
+		"rda",
+		"flexmix", ## required by WECCA
+		"MKmisc",
+		"parallel",
+		"doMC", # required by zinba
+		"foreach", # required by zinba
+		"quantreg", # required by zinba
+		"R.utils", # required by zinba
+		"tcltk",
+		"ipred",
+		"prodlim",
+		"png",
+		"gplots"
+)
 
-# Install packages, and their dependencies, from Bioconductor
-smart.install.packages(bioconductor.package="RankProd", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="Biobase", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="IRanges", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="AnnotationDbi", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="affy", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="affydata", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="affyPLM", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="affyQCReport", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="annaffy", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="annotate", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="biomaRt", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="DynDoc", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="gcrma", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="genefilter", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="geneplotter", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="hgu95av2.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="limma", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="marray", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="multtest", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="vsn", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="xtable", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="ctc", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="oligo", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="ssize", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="LPE", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="graph", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GlobalAncova", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="impute", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="idiogram", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GOstats", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="beadarray", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="simpleaffy", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="globaltest", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="locfit", mirror=repo.bioc) # required by hdrcde 
-smart.install.packages(bioconductor.package="ash", mirror=repo.bioc) # required by hdrcde
-smart.install.packages(bioconductor.package="ks", mirror=repo.bioc) # required by hdrcde
-smart.install.packages(bioconductor.package="hdrcde", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="lumi", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="prada", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="siggenes", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="plier", mirror=repo.bioc)
-#smart.install.packages(bioconductor.package="cosmo", mirror=repo.bioc) # missing
-smart.install.packages(bioconductor.package="beadarraySNP", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GEOquery", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="ArrayExpress", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GeneCycle", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GeneNet", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GenomeGraphs", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="MLInterfaces", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="PAnnBuilder", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="oligoClasses", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="statmod", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="vegan", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="safe", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="CGHbase", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="CGHcall", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="CGHregions", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="DNAcopy", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="MEDIPS", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="microRNA", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="RmiR", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="ChIPpeakAnno", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="rGADEM", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="MotIV", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="PICS", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="seqLogo", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="GenomicRanges", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="Biostrings", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="chipseq", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="Rsamtools", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="ShortRead", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="lumiHumanIDMapping", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="lumiMouseIDMapping", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="lumiRatIDMapping", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="edgeR", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="rtracklayer", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="maSigPro", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="qvalue", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="DESeq", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="DESeq2", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="DEXSeq", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="RPA", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="methylumi", mirror=repo.bioc)
-#smart.install.packages(bioconductor.package="IlluminaHumanMethylation450k.db", mirror=repo.bioc) # annotation package, not needed if all annotation packages from the repository are installed. Deprecated
-smart.install.packages(bioconductor.package="IlluminaHumanMethylation27k.db", mirror=repo.bioc) # annotation package, not needed if all annotation packages from the repository are installed
-smart.install.packages(bioconductor.package="VariantAnnotation", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="TxDb.Hsapiens.UCSC.hg19.knownGene", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="BSgenome.Hsapiens.UCSC.hg19", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="rich", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="BiodiversityR", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pegas", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="labdsv", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="sva", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="Mfuzz", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="WGCNA", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="Heatplus", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="RmiR.Hs.miRNA", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="QDNAseq", mirror=repo.bioc)
-
-# SNP 5.0 / 6.0
-smart.install.packages(bioconductor.package="crlmm", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pd.mapping50k.hind240", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pd.mapping50k.xba240", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pd.mapping250k.nsp", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pd.mapping250k.sty", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pd.genomewidesnp.5", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="pd.genomewidesnp.6", mirror=repo.bioc)
-
-smart.install.packages(bioconductor.package="genomewidesnp6Crlmm", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="genomewidesnp5Crlmm", mirror=repo.bioc)
-
-smart.install.packages(bioconductor.package="human1mduov3bCrlmm", mirror=repo.bioc)          #Illumina
-smart.install.packages(bioconductor.package="human1mv1cCrlmm", mirror=repo.bioc)             #Illumina
-smart.install.packages(bioconductor.package="human370quadv3cCrlmm", mirror=repo.bioc)        #Illumina
-smart.install.packages(bioconductor.package="human370v1cCrlmm", mirror=repo.bioc)            #Illumina
-smart.install.packages(bioconductor.package="human550v3bCrlmm", mirror=repo.bioc)            #Illumina
-smart.install.packages(bioconductor.package="human610quadv1bCrlmm", mirror=repo.bioc)        #Illumina
-smart.install.packages(bioconductor.package="human650v3aCrlmm", mirror=repo.bioc)            #Illumina
-smart.install.packages(bioconductor.package="human660quadv1aCrlmm", mirror=repo.bioc)        #Illumina
-smart.install.packages(bioconductor.package="humanomni1quadv1bCrlmm", mirror=repo.bioc)      #Illumina
-smart.install.packages(bioconductor.package="humanomniexpress12v1bCrlmm", mirror=repo.bioc)  #Illumina
+for (package in cranPackages) {
+	smart.install.packages(package=package, mirror=repo.cran)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+}
 
 
-# Install non-repo packages
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/NoWaves_0.4.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/FruitFlyAgilent.db.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/hgug4851a.db.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtest_1.1.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtestpar_0.0.tar.gz")
-smart.install.packages(url.package="http://addictedtor.free.fr/packages/fpc_1.1-5.tar.gz")
-smart.install.packages(url.package="http://www.math.utu.fi/projects/software/bio/ROTS_1.1.1.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/A2R_0.0-4.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/exon.pmcdf_1.1.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mouseexonpmcdf_1.1.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/ratexonpmcdf_1.1.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/intCNGEan_0.55.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CORNA_1.2.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/WECCA_0.40.tar.gz")
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/zinba_2.02.03.tar.gz")
-#smart.install.packages("QDNAseq", mirror="http://www.bioconductor.org/packages/2.14/bioc", update=1) # This package is in Bioconductor only since version 2.14 (which is for R-3.1), hence the "forced" install instead of regular Bioconductor installation (which for R-3.0 uses Bioconductor 2.13).
-smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mgug4852a.db_1.0.0.tar.gz")
+# Bioconductor packages and their dependencies
+bioconductorPackages = c(
+		"RankProd",
+		"Biobase",
+		"IRanges",
+		"AnnotationDbi",
+		"affy",
+		"affydata",
+		"affyPLM",
+		"affyQCReport",
+		"annaffy",
+		"annotate",
+		"biomaRt",
+		"DynDoc",
+		"gcrma",
+		"genefilter",
+		"geneplotter",
+		"hgu95av2.db",
+		"limma",
+		"marray",
+		"multtest",
+		"vsn",
+		"xtable",
+		"ctc",
+		"oligo",
+		"ssize",
+		"LPE",
+		"graph",
+		"GlobalAncova",
+		"impute",
+		"idiogram",
+		"GOstats",
+		"beadarray",
+		"simpleaffy",
+		"globaltest",
+		"locfit", # required by hdrcde 
+		"ash", # required by hdrcde
+		"ks", # required by hdrcde
+		"hdrcde",
+		"lumi",
+		"prada",
+		"siggenes",
+		"plier",
+		"beadarraySNP",
+		"GEOquery",
+		"ArrayExpress",
+		"GeneCycle",
+		"GeneNet",
+		"GenomeGraphs",
+		"MLInterfaces",
+		"PAnnBuilder",
+		"oligoClasses",
+		"statmod",
+		"vegan",
+		"safe",
+		"CGHbase",
+		"CGHcall",
+		"CGHregions",
+		"DNAcopy",
+		"MEDIPS",
+		"microRNA",
+		"RmiR",
+		"ChIPpeakAnno",
+		"rGADEM",
+		"MotIV",
+		"PICS",
+		"seqLogo",
+		"GenomicRanges",
+		"Biostrings",
+		"chipseq",
+		"Rsamtools",
+		"ShortRead",
+		"lumiHumanIDMapping",
+		"lumiMouseIDMapping",
+		"lumiRatIDMapping",
+		"edgeR",
+		"rtracklayer",
+		"maSigPro",
+		"qvalue",
+		"DESeq",
+		"DESeq2",
+		"DEXSeq",
+		"RPA",
+		"methylumi",
+		"IlluminaHumanMethylation27k.db", # annotation package, not needed if all annotation packages from the repository are installed
+		"VariantAnnotation",
+		"TxDb.Hsapiens.UCSC.hg19.knownGene",
+		"BSgenome.Hsapiens.UCSC.hg19",
+		"rich",
+		"BiodiversityR",
+		"pegas",
+		"labdsv",
+		"sva",
+		"Mfuzz",
+		"WGCNA",
+		"Heatplus",
+		"RmiR.Hs.miRNA",
+		"QDNAseq",
+		
+		# SNP 5.0 / 6.0
+		"crlmm",
+		"pd.mapping50k.hind240",
+		"pd.mapping50k.xba240",
+		"pd.mapping250k.nsp",
+		"pd.mapping250k.sty",
+		"pd.genomewidesnp.5",
+		"pd.genomewidesnp.6",
+		
+		"genomewidesnp6Crlmm",
+		"genomewidesnp5Crlmm",
+		
+		"human1mduov3bCrlmm",          #Illumina
+		"human1mv1cCrlmm",             #Illumina
+		"human370quadv3cCrlmm",        #Illumina
+		"human370v1cCrlmm",            #Illumina
+		"human550v3bCrlmm",            #Illumina
+		"human610quadv1bCrlmm",        #Illumina
+		"human650v3aCrlmm",            #Illumina
+		"human660quadv1aCrlmm",        #Illumina
+		"humanomni1quadv1bCrlmm",      #Illumina
+		"humanomniexpress12v1bCrlmm"  #Illumina
+)
+for (package in bioconductorPackages) {
+	smart.install.packages(bioconductor.package=package, mirror=repo.bioc)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+}
 
 
-# affy_20 for R-2.12"		
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene11stattairgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene11stattairgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene10stattairgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene10stattairgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/hugene20sthsentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/hugene20sthsentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/hugene21sthsentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/hugene21sthsentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene10statentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene10statentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene11statentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/aragene11statentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/ragene20strnentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/ragene20strnentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/ragene21strnentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/ragene21strnentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/mogene20stmmentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/mogene20stmmentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/mogene21stmmentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/mogene21stmmentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/zebgene10stdrentrezgcdf_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/zebgene10stdrentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/zebgene11stdrentrezgprobe_17.0.0.tar.gz")
-#smart.install.packages(url.package="http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/affy_20/zebgene11stdrentrezgcdf_17.0.0.tar.gz")
 
-# Install Illumina annotation packages. 
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaMousev1BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaMousev2BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaMousev1p1BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaRatv1BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv1BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv2BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv3BeadID.db_1.8.0.tar.gz");
-#smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv4BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev2BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1p1BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaRatv1BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv1BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv2BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv3BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package="ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv4BeadID.db_1.8.0.tar.gz");
-smart.install.packages(bioconductor.package="illuminaHumanv1.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaHumanv2.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaHumanv3.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaHumanv4.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaMousev1.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaMousev1p1.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaMousev2.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="illuminaRatv1.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="org.Hs.eg.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="org.Mm.eg.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="org.Rn.eg.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="org.Cf.eg.db", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="TxDb.Hsapiens.UCSC.hg38.knownGene", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="BSgenome.Hsapiens.UCSC.hg38", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="BSgenome.Cfamiliaris.UCSC.canFam2", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="BSgenome.Cfamiliaris.UCSC.canFam3", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="PolyPhen.Hsapiens.dbSNP131", mirror=repo.bioc)
+# Non-repo packages
+nonRepoPackages = c(
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/NoWaves_0.4.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/FruitFlyAgilent.db.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/hgug4851a.db.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtest_1.1.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtestpar_0.0.tar.gz",
+		"http://addictedtor.free.fr/packages/fpc_1.1-5.tar.gz",
+		"http://www.math.utu.fi/projects/software/bio/ROTS_1.1.1.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/A2R_0.0-4.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/exon.pmcdf_1.1.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mouseexonpmcdf_1.1.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/ratexonpmcdf_1.1.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/intCNGEan_0.55.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CORNA_1.2.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/WECCA_0.40.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/zinba_2.02.03.tar.gz",
+		"http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mgug4852a.db_1.0.0.tar.gz"
+)
+
+for (package in nonRepoPackages) {
+	smart.install.packages(url.package=package)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+}
+
+
+
+
+# Illumina annotation packages 
+illuminaAnnotationPackages = c(
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev2BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1p1BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaRatv1BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv1BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv2BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv3BeadID.db_1.8.0.tar.gz",
+		"ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv4BeadID.db_1.8.0.tar.gz"
+)
+
+for (package in illuminaAnnotationPackages) {
+	smart.install.packages(url.package=package);
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+}
+
+
+# Illumina annotation packages from bioconductor 
+illuminaAnnotationBioconductorPackages = c(
+		"illuminaHumanv1.db",
+		"illuminaHumanv2.db",
+		"illuminaHumanv3.db",
+		"illuminaHumanv4.db",
+		"illuminaMousev1.db",
+		"illuminaMousev1p1.db",
+		"illuminaMousev2.db",
+		"illuminaRatv1.db",
+		"org.Hs.eg.db",
+		"org.Mm.eg.db",
+		"org.Rn.eg.db",
+		"org.Cf.eg.db",
+		"TxDb.Hsapiens.UCSC.hg38.knownGene",
+		"BSgenome.Hsapiens.UCSC.hg38",
+		"BSgenome.Cfamiliaris.UCSC.canFam2",
+		"BSgenome.Cfamiliaris.UCSC.canFam3",
+		"PolyPhen.Hsapiens.dbSNP131"
+)
+
+for (package in illuminaAnnotationBioconductorPackages) {
+	smart.install.packages(bioconductor.package=package, mirror=repo.bioc)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+}
+
+
+
 
 # Install the whole annotation repository from Bioconductor
 smart.install.bioconductor.repo(repo.index = 3, mirror=repo.bioc) # for R 3.0.0, repo number 3 is annotations (might change)
@@ -277,6 +288,7 @@ smart.install.bioconductor.repo(repo.index = 3, mirror=repo.bioc) # for R 3.0.0,
 # Install BrainArray custom CDF's. 
 smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp", update=1)
 smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp", update=1)
+
 # Install exon arrays from BrainArray. Parameter chiptype can be used to grep files with a certain substring. 
 smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype="ex", update=1)
 smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype="hta", update=1)

@@ -152,7 +152,7 @@ if (dim(significant_results)[1] > 0) {
 pdf(file="01-ma-plot-edger.pdf", width=w/72, height=h/72)	
 # significant_indices <- rownames (significant_results)
 plotSmear(dge_list, de.tags = significant_indices, main = "MA plot")
-abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2)
+abline(h = 0, col = "red", lwd = 2)
 legend (x="topleft", legend=c("significantly differentially expressed","not significant"), col=c("red","black"),cex=1, pch=19)
 dev.off()
 

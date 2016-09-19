@@ -1,7 +1,7 @@
-# TOOL MEDIPS.R: "MEDIPS - methylation analysis" (Methylation analysis for sequencing data. This tool can be used to analyze a single condition, or also of treatment vs. control, in which case the differences between the two conditions are tested using edgeR and resulting p-values returned. Additionally, an optional input sequencing data file can be provided as well.)
-# INPUT treatment.bam: "BAM data file for the treatment" TYPE GENERIC
-# INPUT OPTIONAL control.bam: "Optional BAM data file for the control" TYPE GENERIC
-# INPUT OPTIONAL input.bam: "Optional BAM data file for the input" TYPE GENERIC
+# TOOL MEDIPS.R: "Differential coverage analysis with MEDIPS" (Given BAM files, this tool performs differential coverage analysis of sequencing data from DNA immunoprecipitation experiments. In addition to comparing samples such as treatment vs. control, it can be used also to analyze a single condition. You can provide an optional BAM file for input DNA as well.)
+# INPUT treatment.bam: "BAM file for the treatment" TYPE GENERIC
+# INPUT OPTIONAL control.bam: "Optional BAM file for the control" TYPE GENERIC
+# INPUT OPTIONAL input.bam: "Optional BAM file for the input DNA" TYPE GENERIC
 # OUTPUT methylation.tsv: "Enrichment data"
 # OUTPUT saturation.pdf: "Saturation plot"
 # OUTPUT coverage.pdf: "Coverage plot"

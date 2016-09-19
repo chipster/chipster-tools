@@ -8,6 +8,7 @@
 
 # ComBat batch correction analysis
 # MK 25.06.2013
+# ML 24.08.2016 Fixed (batch as.numeric)
 
 # Loading libraries
 library(sva)
@@ -34,6 +35,7 @@ if(batch3 != "EMPTY") {
 	batch <- cbind(batch, phenodata[,pmatch(batch3,colnames(phenodata))]);
 }
 
+batch <- as.numeric(batch)
 dat2  <- as.matrix(dat[,grep("chip", names(dat))])
 combat_edata = ComBat(dat=dat2, batch=batch, mod=NULL)
 

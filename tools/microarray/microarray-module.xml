@@ -11,7 +11,7 @@
 		<tool runtime="R"><resource>norm-agilent.R</resource></tool>
 		<tool runtime="R"><resource>norm-agilent-miRNA.R</resource></tool>
 		<tool runtime="R"><resource>norm-cdna.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>norm-illumina.R</resource></tool>
+		<tool runtime="R"><resource>norm-illumina.R</resource></tool>
 		<tool runtime="R-3.2.0"><resource>norm-illumina-backgroundcorr.R</resource></tool>	
 		<tool runtime="R-3.0.2"><resource>norm-illumina-lumi.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>norm-illumina-methylumi.R</resource></tool>
@@ -77,7 +77,7 @@
 		<tool runtime="R"><resource>cluster-kmeans.R</resource></tool>
 		<tool runtime="R"><resource>cluster-kmeans-testK.R</resource></tool>
 		<tool runtime="R"><resource>cluster-qt.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>cluster-som.R</resource></tool>
+		<!-- <tool runtime="R-3.0.2"><resource>cluster-som.R</resource></tool> -->
 		<tool runtime="R"><resource>classification.R</resource></tool>
 	</category>
 	
@@ -86,7 +86,7 @@
 		<tool runtime="R"><resource>annotate-add-to-data.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>add-locations-to-data.R</resource></tool>
 		<tool runtime="R-3.0.2"><resource>annotate-miRNA-targets.R</resource></tool> 
-		<tool runtime="R"><resource>annotaten-agilent-miRNA.R</resource></tool> 
+		<tool runtime="R"><resource>annotate-agilent-miRNA.R</resource></tool> 
 	</category>
 	
 	<category name="Pathways" color="#0177b7">
