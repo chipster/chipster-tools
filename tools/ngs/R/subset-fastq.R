@@ -25,3 +25,17 @@ command <- paste(seqtk.binary, "sample", seed.option, "reads.fastq", n.seq, "> s
 #stop(paste('CHIPSTER-NOTE: ', command))
 system(command)
 system("gzip subset.fastq")
+
+# Handle output names
+source(file.path(chipster.common.path, "tool-utils.R"))
+
+# read input names
+inputnames <- read_input_definitions()
+base <- strip_name(inputnames$reads.fastq)
+
+# Make a matrix of output names
+outputnames <- matrix(NA, nrow=1, ncol=2)
+outputnames[1,] <- c("subset.fastq.gz", paste(base, "_subset.fq.gz", sep =""))
+
+# Write output definitions file
+write_output_definitions(outputnames)
