@@ -8,18 +8,18 @@
 <h3>Description</h3>
 
 <p>
-Given mapped reads in a BAM file, this tool counts how many reads map to each gene using Ensembl annotations.
+Given mapped reads in a BAM file, this tool counts how many reads map to each gene using Ensembl gene location information.
 </p>
 
 <h3>Parameters</h3>
 
 <ul>
-<li>Organism (human hg19.68, mouse mm9.68, rn4.68) [human hg19.68]</li>
-<li>Chromosome names in my BAM file look like (chr1, 1) [chr1]</li>
+<li>Reference organism (...) [homo sapiens]</li>
+<li>Chromosome names in my BAM file look like (chr1, 1) [1]</li>
 <li>Does the alignment file contain paired-end data (yes, no) [no]</li>
-<li>Was the data produced with a strand-specific RNA-seq protocol (yes, no, reverse) [no]</li>
+<li>Is the data stranded and how (yes, no, reverse) [no]</li>
 <li>Mode to handle reads overlapping more than one gene (union, intersection-strict, intersection-nonempty) [union]</li>
-<li>Minimum mapping quality (0-100) [0]</li>
+<li>Minimum mapping quality (0-100) [10]</li>
 <li>Feature type to count (exon, CDS) [exon]</li>
 <li>Feature ID to use (gene_id, transcript_id, gene_name, transcript_name, protein_name) [gene_id]</li>
 <li>Add chromosomal coordinates to the count table (yes, no) [yes]</li>
@@ -27,17 +27,21 @@ Given mapped reads in a BAM file, this tool counts how many reads map to each ge
 
 <h3>Details</h3>
 
-<p>  
-You can use splicing-aware aligner such as TopHat when making the BAM file for RNA-seq data, because HTSeq makes full use of the information in the CIGAR field of BAM.
-</p>
 <p>
-By default the GFF attribute gene-id is used as a feature ID. Several GFF lines (e.g. exons) with the same feature ID will be considered as parts of the same feature,
+By default the GFF attribute gene_id is used as a feature ID. Several GFF lines (e.g. exons) with the same feature ID will be considered as parts of the same feature,
 and the feature ID is used to identify the counts in the output table. In other words, a gene is considered as a union of all its exons.
 There are three different modes to handle reads which overlap with more than one gene.
  These are illustrated in the <a href="http://www-huber.embl.de/users/anders/HTSeq/doc/count.html">HTSeq manual</a>.
 </p>
 <p>
-By default all aligned reads are mapped to genes, but users can choose to filter them by mapping quality.
+If your RNA-seq data was produced with a stranded protocol, it is important that you select the correct strandedness option in the parameter "Is the data stranded and how", as this affects the counting: 
+<ul>
+<li>If you select NO, a read will be counted for a gene regardless of which strand it maps to.</li>
+<li>If you select YES and you have single end data, the read has to map to the same strand as the gene. For paired end data, the first read of a pair has to map to the same strand as the gene, and the second read has to map to the opposite strand.</li>
+<li>If you select REVERSE and you have paired end data, the second read has to map to the same strand as the gene, and the first read has to map to the opposite strand.</li>
+</ul>
+If your paired end data was produced with an Illumina TruSeq Stranded kit, you have to select REVERSE here. 
+You also have to make sure before that when you map the reads to the reference genome with TopHat, you set the parameter "Library type" to "fr-firststrand". 
 </p>
 <p>
 You can add genomic location information to the count table. This enables the edgeR and DESeq tools to create a BED file of the differentially expressed genes, which allows you to visualize them easily in the genome browser.
@@ -46,12 +50,18 @@ You can add genomic location information to the count table. This enables the ed
 <h3>Output</h3>
 
 <p>
-Output is a table with counts for each gene. In order to use the output in edgeR, you need to select all samples and run the tool "Utilities - Define NGS experiment".
+Output is a table with counts for each gene. In order to use the output for differential expression analysis in edgeR or DESeq, you need to select all the samples and run the tool "Utilities - Define NGS experiment".
 </p>
 <p>
 The tool also generates a separate text file (htseq-count-info.txt) 
-listing how many reads could not be assigned to any gene (no_feature), mapped to several genes and were hence not counted (ambiguous),
-had too low alignment quality (too_low_aQual), were not aligned (not_aligned), or had more than one alignment (alignment_not_unique).
+listing how many reads 
+<ul>
+<li>could not be assigned to any gene (no_feature)</li>
+<li>mapped to a location containing several genes and were hence not counted (ambiguous)</li>
+<li>had too low alignment quality (too_low_aQual)</li>
+<li>were not aligned (not_aligned)</li>
+<li>had more than one alignment (alignment_not_unique)</li>
+</ul>
 </p>
 
 <h3>References</h3>
