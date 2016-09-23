@@ -40,8 +40,9 @@ If your RNA-seq data was produced with a stranded protocol, it is important that
 <li>If you select YES and you have single end data, the read has to map to the same strand as the gene. For paired end data, the first read of a pair has to map to the same strand as the gene, and the second read has to map to the opposite strand.</li>
 <li>If you select REVERSE and you have paired end data, the second read has to map to the same strand as the gene, and the first read has to map to the opposite strand.</li>
 </ul>
-If your paired end data was produced with an Illumina TruSeq Stranded kit, you have to select REVERSE here. 
+For example, if your paired end data was produced with an Illumina TruSeq Stranded kit, you have to select REVERSE here. 
 You also have to make sure before that when you map the reads to the reference genome with TopHat, you set the parameter "Library type" to "fr-firststrand". 
+Correspondingly, if you used  "fr-secondstrand" as "Library type" in TopHat, select YES here. For "fr-unstranded" in TopHat, use NO here.
 </p>
 <p>
 You can add genomic location information to the count table. This enables the edgeR and DESeq tools to create a BED file of the differentially expressed genes, which allows you to visualize them easily in the genome browser.
