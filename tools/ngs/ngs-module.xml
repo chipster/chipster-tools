@@ -128,6 +128,9 @@
 		<tool runtime="R">
 			<resource>a5-miseq.R</resource>
 		</tool>
+		<tool runtime="R" module="common">
+			<resource>make_namelist.R</resource>
+		</tool>
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
@@ -305,6 +308,9 @@
 		</tool>
 		<tool runtime="R">
 			<resource>cuffdiff2.R</resource>
+		</tool>
+		<tool runtime="R">
+			<resource>cuffdiff2_with_replicates.R</resource>
 		</tool>
 <!-- 	<tool runtime="R-2.12">
 			<resource>dea-cufflinks.R</resource>

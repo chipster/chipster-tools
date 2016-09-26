@@ -56,10 +56,44 @@ strip_name <- function(name){
 #
 paired_name <- function(name1, name2){
 	if (grepl("_1$", name1) && grepl("_2$", name2)){
-			return(remove_postfix(name1, "_1"))
+		return(remove_postfix(name1, "_1"))
 	}
 	if (grepl("_2$", name1) && grepl("_1$", name2)){
-			return(remove_postfix(name1, "_2"))
+		return(remove_postfix(name1, "_2"))
 	}
 	return(name1)
+}
+
+# Takes as an argument a file name of a list of input names. It Goes through the list and compares 
+# it to chipster-inputs.tsv. Returns a vector of internal input names or gives an error message, 
+# if a listed input file is missing.
+#
+make_input_list <-function(listfile){
+	
+	# read list file
+	name.list <- scan(listfile, what="", sep="\n")
+	
+	# read input names
+	input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+	
+	# Check for duplicated etries
+	if (anyDuplicated(name.list)){
+		message <- paste("Input file list contains one or more duplicated entries:\n", name.list[duplicated(name.list)], "\nFilenames must be unique so they can be correctly assigned.")
+		stop(paste('CHIPSTER-NOTE: ', message ))
+	}
+	
+	# Check that inputs exist
+	sdf <- setdiff(name.list, input.names[,2])
+	if (identical(sdf, character(0))){
+		input.list <- vector(mode="character", length=0)
+		for (i in 1:length(name.list)) {
+			input.list <- c(input.list, paste(input.names[grep(paste("^", name.list[i], "$", sep =""), input.names[,2]), 1]))
+		}
+		
+	}else{
+		message <- paste("Input file list includes one or more files that has not been selected:", sdf)
+		stop(paste('CHIPSTER-NOTE: ', message))
+		
+	}
+	return(input.list)
 }
