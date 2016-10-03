@@ -1,6 +1,7 @@
 # TOOL tophat2.R: "TopHat2 for paired end reads" (Aligns paired end Illumina RNA-seq reads to a genome in order to identify exon-exon splice junctions. The alignment process consists of several steps. If annotation is available as a GTF file, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that remain still unmapped are split into shorter segments, which are then aligned to the genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.)
-# INPUT reads1.fq: "Read file 1" TYPE GENERIC
-# INPUT reads2.fq: "Read file 2 with mates in matching order" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT OPTIONAL reads1.txt: "List of files with left reads" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of files with right reads" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL tophat.bam
 # OUTPUT OPTIONAL tophat.bam.bai
@@ -42,8 +43,12 @@
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads1.fq")
-unzipIfGZipFile("reads2.fq")
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
+
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 options(scipen = 10)
 # max.intron.length <- formatC(max.intron.length, "f", digits = 0)
@@ -79,20 +84,22 @@ if (no.mixed == "yes"){
 	command.parameters <- paste(command.parameters, "--no-mixed")
 }
 
-# Options --no-novel-juncs and --transcriptome-idex are only valid when -G (use.gtf) option is selected
-if (use.gtf == "yes") {
-	if (file.exists("annotation.gtf")){
-		# If user has provided a gtf we use that
-		annotation.file <- "annotation.gtf"
-	}else{
-		# If not, we use the internal one.
-		annotation.file <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, "*.gtf" ,sep="" ,collapse=""))
-	}
-	command.parameters <- paste(command.parameters, "-G", annotation.file)
+# Determine whether GTF file or internal transcriptome index should be used.
+# Option --no-novel-juncs is only valid when -G or --transcriptome-index option is used.
+nnj.usable <- FALSE
+if (file.exists("genes.gtf")){
+	# If user has provided a gtf we use it
+	command.parameters <- paste(command.parameters, "-G genes.gtf")
+	nnj.usable <- TRUE
+}else if (use.gtf == "yes") {
+	# if no GTF file is provided, but use.gtf is selected, use an internal transcriptome index
+	command.parameters <- paste(command.parameters, "--transcriptome-index", path.tophat.index)
+	nnj.usable <- TRUE
+}
+if (nnj.usable) {
 	if (no.novel.juncs == "yes") {
 		command.parameters <- paste(command.parameters, "--no-novel-juncs")
-	}
-	command.parameters <- paste(command.parameters, "--transcriptome-index", path.tophat.index)
+	}	
 }
 
 # library type: fr-unstranded, fr-firststrand, fr-secondstrand
@@ -104,8 +111,30 @@ if (library.type == "fr-unstranded") {
 	command.parameters <- paste(command.parameters, "--library-type fr-secondstrand")
 }
 
+# Input files
+if (file.exists("reads1.txt") && file.exists("reads2.txt")){
+	# Case: list files exist
+	reads1.list <- make_input_list("reads1.txt")
+	reads2.list <- make_input_list("reads2.txt")
+	if (identical(intersect(reads1.list, reads2.list), character(0))){
+		reads1 <- paste(reads1.list, sep="", collapse=",")
+		reads2 <- paste(reads2.list, sep="", collapse=",")
+	}else{
+		stop(paste('CHIPSTER-NOTE: ', "One or more files is listed in both lists."))
+	}
+}else if (file.exists("reads002.fq") && !file.exists("reads003.fq")){
+	# Case: no list file, but only two fastq inputs
+	in.sorted <- input.names[order(input.names[,2]),]
+	reads <- grep("reads", in.sorted[,1], value = TRUE)
+	reads1 <- reads[1]
+	reads2 <- reads[2]
+}else{
+	# Case: no list files, more than two fastq inputs
+	stop(paste('CHIPSTER-NOTE: ', "List file is missing. You need to provide a list of read files for both directions."))
+}
+
 # command ending
-command.end <- paste(path.bowtie.index, "reads1.fq reads2.fq 2>> tophat.log'")
+command.end <- paste(path.bowtie.index, reads1, reads2, "2>> tophat.log'")
 
 # run tophat
 command <- paste(command.start, command.parameters, command.end)
@@ -113,7 +142,6 @@ command <- paste(command.start, command.parameters, command.end)
 echo.command <- paste("echo '",command ,"' 2>> tophat.log " )
 system(echo.command)
 system("echo >> tophat.log")
-#stop(paste('CHIPSTER-NOTE: ', command))
 
 system(command)
 
@@ -173,14 +201,17 @@ if (!(file.exists("tophat-summary.txt"))){
 
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
 
 # Determine base name
-base1 <- strip_name(inputnames$reads1.fq)
-base2 <- strip_name(inputnames$reads2.fq)
+name1 <- unlist(strsplit(reads1, ","))
+base1 <- strip_name(inputnames[[name1[1]]])
+
+name2 <- unlist(strsplit(reads2, ","))
+base2 <- strip_name(inputnames[[name2[1]]])
+
 basename <- paired_name(base1, base2)
 
 # Make a matrix of output names
