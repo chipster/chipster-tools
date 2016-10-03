@@ -25,8 +25,10 @@ command.start <- paste("bash -c '", bwa.binary)
 print("Indexing the genome...")
 system("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
-genome.dir <- system(check.command, intern = TRUE)
-bwa.genome <- file.path( genome.dir , "genome.txt")
+
+#genome.dir <- system(check.command, intern = TRUE)
+#bwa.genome <- file.path( genome.dir , "genome.txt")
+bwa.genome <- system(check.command, intern = TRUE)
 
 mode.parameters <- ifelse(mode == "pacbio", "-x pacbio", "")
 

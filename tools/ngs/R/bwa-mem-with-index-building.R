@@ -43,8 +43,9 @@ bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh
 print("Indexing the genome...")
 system("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
-genome.dir <- system(check.command, intern = TRUE)
-bwa.genome <- file.path( genome.dir , "genome.txt")
+#genome.dir <- system(check.command, intern = TRUE)
+#bwa.genome <- file.path( genome.dir , "genome.txt")
+bwa.genome <- system(check.command, intern = TRUE)
 
 # bwa
 command.start <-(bwa.binary)
