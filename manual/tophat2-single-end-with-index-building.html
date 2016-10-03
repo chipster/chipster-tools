@@ -46,6 +46,14 @@ TopHat2 will ignore donor-acceptor pairs which are closer than the minimum intro
 
 <p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
 
+<p>
+If your RNA-seq data was produced with a stranded/directional protocol, it is important that you select the correct strandedness option in the parameter "Library type":
+<ul>
+<li>fr-unstranded	(Standard Illumina) Reads from the left-most end of the fragment (in transcript coordinates) map to the transcript strand, and the right-most end maps to the opposite strand.</li>
+<li>fr-firststrand	(dUTP, NSR, NNSR) Same as above except we enforce the rule that the right-most end of the fragment (in transcript coordinates) is the first sequenced (or only sequenced for single-end reads). Equivalently, it is assumed that only the strand generated during first strand synthesis is sequenced. For example Illumina TruSeq Stranded Total RNA Sample Prep Kit is a dUTP method.</li>
+<li>fr-secondstrand	(Ligation, Standard SOLiD) Same as above except we enforce the rule that the left-most end of the fragment (in transcript coordinates) is the first sequenced (or only sequenced for single-end reads). Equivalently, it is assumed that only the strand generated during second strand synthesis is sequenced.</li>
+</ul>
+</p>
 
 <h3>Output</h3>
 <p>
