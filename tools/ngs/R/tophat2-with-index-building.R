@@ -1,7 +1,7 @@
-# TOOL tophat2-with-index-building.R: "TopHat2 for paired end reads and own genome" (Aligns paired end Illumina RNA-seq reads to a genome in order to identify exon-exon splice junctions. The alignment process consists of several steps. If annotation is available as a GTF file, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that remain still unmapped are split into shorter segments, which are then aligned to the genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser. You will need to provide a list of filenames of FASTQ/FASTA files for each direction. It is critical that order of the files in the two lists is the same. You can use the tool \"Make a list of filenames\" to generate the lists.)
+# TOOL tophat2-with-index-building.R: "TopHat2 for paired end reads and own genome" (Aligns paired end RNA-seq reads to a genome. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction \(e.g. 1files.txt and 2files.txt\). You can generate the lists with the tool \"Utilities \\\ Make a list of filenames\". Note that if you have stranded data, you need to set the \"Library type\" parameter accordingly. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed  in Chipster genome browser.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
-# INPUT OPTIONAL reads1.txt: "List of files with left reads" TYPE GENERIC
-# INPUT OPTIONAL reads2.txt: "List of files with right reads" TYPE GENERIC
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL tophat.bam
