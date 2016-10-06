@@ -36,6 +36,7 @@
 # PARAMETER OPTIONAL fdr: "Allowed false discovery rate" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (FDR-adjusted p-values (q-values\) are calculated. The concise output files include only those genes or transcripts which have a q-value lower than the given FDR. The value of the Significant-column is adjusted accordingly (yes/no\) in all output files.) 
 # PARAMETER OPTIONAL mmread: "Enable multi-mapped read correction" TYPE [yes, no] DEFAULT no (By default, Cufflinks will uniformly divide each multi-mapped read to all of the positions it maps to. If multi-mapped read correction is enabled, Cufflinks will re-estimate the transcript abundances dividing each multi-mapped read probabilistically based on the initial abundance estimation, the inferred fragment length and fragment bias, if bias correction is enabled.)
 # PARAMETER OPTIONAL bias: "Correct for sequence-specific bias" TYPE [yes, no] DEFAULT no (Cuffdiff can detect sequence-specific bias and correct for it in abundance estimation. You will need to supply a reference genome as a FASTA file if you are not using one of the provided reference organisms.)
+# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 
 # AMS 21.1.2013
 # check column renaming when replicates are enabled
@@ -61,6 +62,8 @@ cuffdiff.binary <- c(file.path(chipster.tools.path, "cufflinks2", "cuffdiff"))
 # options
 cuffdiff.options <- ""
 cuffdiff.options <- paste(cuffdiff.options, "-p", chipster.threads.max, "-FDR", fdr)
+
+
 # if (normalize == "yes") {
 #	cuffdiff.options <- paste(cuffdiff.options, "-N")
 # }
@@ -90,6 +93,15 @@ if (bias == "yes") {
 	cuffdiff.options <- paste(cuffdiff.options, "-b", refseq)
 }
 
+# library type: fr-unstranded, fr-firststrand, fr-secondstrand
+if (library.type == "fr-unstranded") {
+	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-unstranded")
+}else if (library.type == "fr-firststrand") {
+	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-firststrand")	
+}else if (library.type == "fr-secondstrand") {	
+	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-secondstrand")
+}
+
 # If user has provided a GTF, we use it
 if (organism == "other"){
 	# If user has provided a GTF, we use it
@@ -112,12 +124,19 @@ if (organism == "other"){
 }	
 cuffdiff.options <- paste(cuffdiff.options, annotation.file)
 
+# Labels. Use names of list files.
+inputnames <- read_input_definitions()
+label1 <- strip_name(inputnames$sample1.txt)
+label2 <- strip_name(inputnames$sample2.txt)
+labels <- paste(label1, label2, sep=",")
+cuffdiff.options <- paste(cuffdiff.options, "-labels", labels)
+
 # Input files
 if (file.exists("sample1.txt") && file.exists("sample2.txt")){
 	sample1.list <- make_input_list("sample1.txt")
 	sample2.list <- make_input_list("sample2.txt")
 }else{
-	stop(paste('CHIPSTER-NOTE: ', "Replicate list missing. You need to provide a list of replicates for both samples."))
+	stop(paste('CHIPSTER-NOTE: ', "Replicate list missing. You need to provide a list of replicates for both groups."))
 }
 
 if (identical(intersect(sample1.list, sample2.list), character(0))){
@@ -132,6 +151,7 @@ if (identical(intersect(sample1.list, sample2.list), character(0))){
 command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, sample1, sample2)
 
 # run
+#stop(paste('CHIPSTER-NOTE: ', command))
 system(command)
 
 # The following code copied from dea-cufflinks.R
