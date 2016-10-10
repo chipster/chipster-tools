@@ -12,9 +12,9 @@ we try to clarify this issue a bit here.</p>
 method was used when generating your data.  In general, there are three types of library preps: 
 <ul> 
 <li>un-stranded </li>
-<li>directional, where the first read of the read pair 
+<li>"second-strand" = directional, where the first read of the read pair 
 (or in case of single end reads, the only read) is from the transcript strand  </li>
-<li>directional, where the first read (or the only read in case of SE) is from the opposite strand. 
+<li>"first-strand" = directional, where the first read (or the only read in case of SE) is from the opposite strand. 
 </li> </ul>
 </p>
 
@@ -44,7 +44,8 @@ run TopHat with the different parameters to a small part of the data and then co
 </p>
 
 <p>Below we list some common library preparation kits and their corresponding parameters 
-in different tools.</p>
+in different tools. <b>PLEASE NOTE</b> that the kits are listed in the different categories based 
+on our best understanding, so please inform us if you discover something more.</p>
 
 <p><b><u> Unstranded: </u></b><br>
 Information regarding the strand is not conserved 
@@ -55,9 +56,9 @@ TruSeq RNA Sample Prep kit <br>
 TopHat / Cufflinks / Cuffdiff: library-type fr-unstranded <br>
 HTSeq: stranded -- no <br> </p>
 
-<p><b><u>Directional, reverse-forward / first strand:</u></b><br>
+<p><b><u>Directional, first strand:</u></b><br>
 The second read (read 2) is from the original RNA strand/template, first read (read 1) is from the 
-opposing stand.
+opposite strand.
 The information of the strand is preserved as the original RNA strand is degradated due to the 
 dUTPs incorporated in the second synthesis step.<br>
 <b>Kits:</b> <br>
@@ -65,19 +66,19 @@ All dUTP methods, NSR, NNSR<br>
 TruSeq Stranded Total RNA Sample Prep Kit<br>
 TruSeq Stranded mRNA Sample Prep Kit<br>
 NEB Ultra Directional RNA Library Prep Kit <br>
-Agilent SureSelect Strand-Specific <br>
+Agilent SureSelect Strand-Specific (as far as we understand) <br>
 <b>Parameters:</b><br>
 TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
 HTSeq: stranded -- reverse<br> </p>
 
-<p><b><u>Directional, forward-reverse / second strand:</u></b><br>
+<p><b><u>Directional, second strand:</u></b><br>
 The first read (read 1) is from the original RNA strand/template, second read (read 2) is from the 
-opposing stand.
-The directionality is preserved, as different adapters are ligated to different ends of the fragment. ??<br>
+opposite strand.
+The directionality is preserved, as different adapters are ligated to different ends of the fragment. <br>
 <b>Kits:</b><br>
 Directional Illumina (Ligation), Standard SOLiD<br>
-ScriptSeq v2 RNA-Seq Library Preparation Kit<br>
-Encore® Complete RNA-Seq Library Systems<br>
+ScriptSeq v2 RNA-Seq Library Preparation Kit (as far as we understand)<br>
+Encore® Complete RNA-Seq Library Systems (as far as we understand)<br>
 <b>Parameters:</b><br>
 TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
 HTSeq: stranded -- yes<br></p>
