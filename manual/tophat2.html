@@ -23,7 +23,7 @@ file (<i>e.g.</i>1files.txt and 2files.txt). These lists can be generated with t
 pairs must be ordered identically in both lists.
 </p>
 <p>
-Supplying a GTF file is optional but recommended, because using annotation information improves the alignment process. 
+Chipster has GTF files for the genomes offered, but you can also provide your own. In general using a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
 <p>
 
 <h3>Parameters</h3> 
@@ -76,7 +76,7 @@ If your RNA-seq data was produced with a stranded/directional protocol, it is im
 <li>fr-firststrand	(dUTP, NSR, NNSR) Same as above except we enforce the rule that the right-most end of the fragment (in transcript coordinates) is the first sequenced (or only sequenced for single-end reads). Equivalently, it is assumed that only the strand generated during first strand synthesis is sequenced. For example Illumina TruSeq Stranded Total RNA Sample Prep Kit is a dUTP method.</li>
 <li>fr-secondstrand	(Ligation, Standard SOLiD) Same as above except we enforce the rule that the left-most end of the fragment (in transcript coordinates) is the first sequenced (or only sequenced for single-end reads). Equivalently, it is assumed that only the strand generated during second strand synthesis is sequenced.</li>
 </ul>
-Please check that you have assigned the files correctly, as this parameter assumes that Read1 is listed before Read2!
+Please check that you have assigned the files correctly, as this parameter assumes that Read1 is listed before Read2! You can read more about stranded data <a href="library-type-summary.html">here</a>.
 </p>
 
 <p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
