@@ -35,6 +35,7 @@
 # PARAMETER OPTIONAL fdr: "Allowed false discovery rate" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (FDR-adjusted p-values (q-values\) are calculated. The concise output files include only those genes or transcripts which have a q-value lower than the given FDR. The value of the Significant-column is adjusted accordingly (yes/no\) in all output files.) 
 # PARAMETER OPTIONAL mmread: "Enable multi-mapped read correction" TYPE [yes, no] DEFAULT no (By default, Cufflinks will uniformly divide each multi-mapped read to all of the positions it maps to. If multi-mapped read correction is enabled, Cufflinks will re-estimate the transcript abundances dividing each multi-mapped read probabilistically based on the initial abundance estimation, the inferred fragment length and fragment bias, if bias correction is enabled.)
 # PARAMETER OPTIONAL bias: "Correct for sequence-specific bias" TYPE [yes, no] DEFAULT no (Cuffdiff can detect sequence-specific bias and correct for it in abundance estimation. You will need to supply a reference genome as a FASTA file if you are not using one of the provided reference organisms.)
+# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 
 # AMS 21.1.2013
 # check column renaming when replicates are enabled
@@ -45,6 +46,7 @@
 # AMS 2014.06.18 Changed the handling of GTF files
 # AMS 04.07.2014 New genome/gtf/index locations & names
 # AMS 15.04.2016 Fixed "bias" parameter
+# EK 14.09.2016 Changed the order of control and treatment BAM so that FC is shown as expected
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -86,6 +88,15 @@ if (bias == "yes") {
 	cuffdiff.options <- paste(cuffdiff.options, "-b", refseq)
 }
 
+# library type: fr-unstranded, fr-firststrand, fr-secondstrand
+if (library.type == "fr-unstranded") {
+	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-unstranded")
+}else if (library.type == "fr-firststrand") {
+	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-firststrand")	
+}else if (library.type == "fr-secondstrand") {	
+	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-secondstrand")
+}
+
 # If user has provided a GTF, we use it
 if (organism == "other"){
 	# If user has provided a GTF, we use it
@@ -109,7 +120,7 @@ if (organism == "other"){
 cuffdiff.options <- paste(cuffdiff.options, annotation.file)
 
 # command
-command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "treatment1.bam", "control1.bam")
+command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "control1.bam", "treatment1.bam")
 
 # run
 #stop(paste('CHIPSTER-NOTE: ', command))

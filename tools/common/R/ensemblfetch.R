@@ -13,8 +13,9 @@
 # enseblfecth settings
 ensemblfetch.binary <- file.path(chipster.module.path, "../admin/shell/ensemblfetch.sh ")
 
-#remove spaces from sepcies name
+#remove spaces from sepcies name and convert all letters to lower keys
 species <- gsub(" ", "_", species)
+species <- tolower(species)
 
 if ( names == "yes" || names == "nonbac" || nchar(species) < 3 ) {
   if ( names == "nonbac" ) {	

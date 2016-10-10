@@ -1,6 +1,6 @@
 # TOOL tophat2-single-end-with-index-building.R: "TopHat2 for single end reads and own genome" (Aligns Illumina RNA-seq reads to a genome in order to identify exon-exon splice junctions. The alignment process consists of several steps. If annotation is available as a GTF file, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that still remain unmapped are split into shorter segments, which are then aligned to the genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.)
-# INPUT reads1.fq: "Reads" TYPE GENERIC
-# INPUT genome.txt: "Genome to align against" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL tophat.bam
 # OUTPUT OPTIONAL tophat.bam.bai
@@ -15,7 +15,7 @@
 # PARAMETER OPTIONAL splice.mismatches: "Maximum number of mismatches allowed in the anchor" TYPE INTEGER FROM 0 TO 2 DEFAULT 0 (The maximum number of mismatches that may appear in the anchor region of a spliced alignment.)
 # PARAMETER OPTIONAL min.intron.length: "Minimum intron length" TYPE INTEGER FROM 10 TO 1000 DEFAULT 70 (TopHat2 will ignore donor-acceptor pairs closer than this many bases apart.)
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1000 TO 1000000 DEFAULT 500000 (TopHat2 will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
-# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use.)
+# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the reads map to the opposite, non-coding strand, choose fr-firststrand. If the reads map to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 
 # EK 17.4.2012 added -G and -g options
 # MG 24.4.2012 added ability to use gtf files from Chipster server
@@ -34,9 +34,11 @@
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads1.fq")
-unzipIfGZipFile("genome.txt")
-unzipIfGZipFile("genes.gtf")
+
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
 
 options(scipen = 10)
 # max.intron.length <- formatC(max.intron.length, "f", digits = 0)
@@ -61,8 +63,6 @@ bowtie2.genome <- file.path( genome.dir , "genome.txt")
 command.start <- paste("bash -c '", set.path, tophat.binary)
 
 # parameters
-#command.parameters <- paste("--bowtie1 -r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
-# command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
 command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits)
 
 if (mismatches > 2){
@@ -91,9 +91,11 @@ if (library.type == "fr-unstranded") {
 	command.parameters <- paste(command.parameters, "--library-type fr-secondstrand")
 }
 
+# Input fastq names
+reads1 <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
+
 # command ending
-#command.end <- paste(path.bowtie.index, "reads1.fq reads2.fq >> tophat2.log '")
-command.end <- paste(bowtie2.genome, "reads1.fq 2>>tophat.log'")
+command.end <- paste(bowtie2.genome, reads1, "2>> tophat.log'")
 
 # run tophat
 command <- paste(command.start, command.parameters, command.end)
@@ -166,7 +168,7 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 # Determine base name
-basename <- strip_name(inputnames$reads1.fq)
+basename <- strip_name(inputnames$reads001.fq)
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)

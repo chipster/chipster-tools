@@ -1,13 +1,13 @@
 # TOOL tophat2-single-end.R: "TopHat2 for single end reads" (Aligns Illumina RNA-seq reads to a genome in order to identify exon-exon splice junctions. The alignment process consists of several steps. If annotation is available as a GTF file, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that still remain unmapped are split into shorter segments, which are then aligned to the genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.)
-# INPUT reads1.fq: "Reads to align" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL tophat.bam
 # OUTPUT OPTIONAL tophat.bam.bai
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL tophat-summary.txt
 # OUTPUT OPTIONAL tophat2.log
-# PARAMETER organism: "Genome" TYPE [Arabidopsis_thaliana.TAIR10.32, Bos_taurus.UMD3.1.85, Canis_familiaris.CanFam3.1.85, Drosophila_melanogaster.BDGP6.85, Felis_catus.Felis_catus_6.2.85, Gallus_gallus.Galgal4.85, Gasterosteus_aculeatus.BROADS1.85, Halorubrum_lacusprofundi_atcc_49239.ASM2220v1.32, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.85, Medicago_truncatula.MedtrA17_4.0.32, Mus_musculus.GRCm38.85, Oryza_sativa.IRGSP-1.0.32, Ovis_aries.Oar_v3.1.85, Populus_trichocarpa.JGI2.0.32, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.85, Schizosaccharomyces_pombe.ASM294v2.32, Solanum_tuberosum.SolTub_3.0.32, Sus_scrofa.Sscrofa10.2.85, Vitis_vinifera.IGGP_12x.32, Yersinia_enterocolitica_subsp_palearctica_y11.ASM25317v1.32, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.ASM83429v1.32] DEFAULT Homo_sapiens.GRCh38.85 (Genome or transcriptome that you would like to align your reads against.)
-# PARAMETER OPTIONAL use.gtf: "Use annotation GTF" TYPE [yes, no] DEFAULT yes (If this option is provided, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that did map on the transcriptome will be converted to genomic mappings (spliced as needed\) and merged with the novel mappings and junctions in the final TopHat output. If no GTF file is provided by user, internal annotation file will be used.)
+# PARAMETER organism: "Genome" TYPE [Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1.83, Canis_familiaris.CanFam3.1.83, Drosophila_melanogaster.BDGP6.83, Felis_catus.Felis_catus_6.2.83, Gallus_gallus.Galgal4.83, Gasterosteus_aculeatus.BROADS1.83, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.83, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38.83, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1.83, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.83, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2.83, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT Homo_sapiens.GRCh38.83 (Genome or transcriptome that you would like to align your reads against.)
+# PARAMETER OPTIONAL use.gtf: "Use internal annotation GTF" TYPE [yes, no] DEFAULT yes (If this option is selected, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that did map on the transcriptome will be converted to genomic mappings (spliced as needed\) and merged with the novel mappings and junctions in the final TopHat output. If user provides a GTF file it is used instead of the internal annotation.)
 # PARAMETER OPTIONAL no.novel.juncs: "When GTF file is used, ignore novel junctions" TYPE [yes, no] DEFAULT no (Only look for reads across junctions indicated in the supplied GTF file.)
 # PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
 # PARAMETER OPTIONAL max.multihits: "How many hits is a read allowed to have" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 20 (Instructs TopHat to allow up to this many alignments to the reference for a given read.)
@@ -16,7 +16,7 @@
 # PARAMETER OPTIONAL splice.mismatches: "Maximum number of mismatches allowed in the anchor" TYPE INTEGER FROM 0 TO 2 DEFAULT 0 (The maximum number of mismatches that may appear in the anchor region of a spliced alignment.)
 # PARAMETER OPTIONAL min.intron.length: "Minimum intron length" TYPE INTEGER FROM 10 TO 1000 DEFAULT 70 (TopHat will ignore donor-acceptor pairs closer than this many bases apart.)
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1000 TO 1000000 DEFAULT 500000 (TopHat will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
-# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use.)
+# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the reads map to the opposite, non-coding strand, choose fr-firststrand. If the reads map to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 
 # EK 17.4.2012 added -G and -g options
 # MG 24.4.2012 added ability to use gtf files from Chipster server
@@ -33,7 +33,11 @@
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads1.fq")
+
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
 
 options(scipen = 10)
 # max.intron.length <- formatC(max.intron.length, "f", digits = 0)
@@ -62,20 +66,22 @@ if ( quality.format == "phred64") {
 	command.parameters <- paste(command.parameters, "--phred64-quals")
 }
 
-# Options --no-novel-juncs and --transcriptome-idex are only valid when -G (use.gtf) option is selected
-if (use.gtf == "yes") {
-	if (file.exists("annotation.gtf")){
-		# If user has provided a gtf we use that
-		annotation.file <- "annotation.gtf"
-	}else{
-		# If not, we use the internal one.
-		annotation.file <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, "*.gtf" ,sep="" ,collapse=""))
-	}
-	command.parameters <- paste(command.parameters, "-G", annotation.file)
+# Determine whether GTF file or internal transcriptome index should be used.
+# Option --no-novel-juncs is only valid when -G or --transcriptome-index option is used.
+nnj.usable <- FALSE
+if (file.exists("genes.gtf")){
+	# If user has provided a gtf we use it
+	command.parameters <- paste(command.parameters, "-G genes.gtf")
+	nnj.usable <- TRUE
+}else if (use.gtf == "yes") {
+	# if no GTF file is provided, but use.gtf is selected, use an internal transcriptome index
+	command.parameters <- paste(command.parameters, "--transcriptome-index", path.tophat.index)
+	nnj.usable <- TRUE
+}
+if (nnj.usable) {
 	if (no.novel.juncs == "yes") {
 		command.parameters <- paste(command.parameters, "--no-novel-juncs")
-	}
-	command.parameters <- paste(command.parameters, "--transcriptome-index", path.tophat.index)
+	}	
 }
 
 # library type: fr-unstranded, fr-firststrand, fr-secondstrand
@@ -87,8 +93,11 @@ if (library.type == "fr-unstranded") {
 	command.parameters <- paste(command.parameters, "--library-type fr-secondstrand")
 }
 
+# Input fastq names
+reads1 <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
+
 # command ending
-command.end <- paste(path.bowtie.index, "reads1.fq 2>> tophat.log'")
+command.end <- paste(path.bowtie.index, reads1, "2>> tophat.log'")
 
 # run tophat
 command <- paste(command.start, command.parameters, command.end)
@@ -162,7 +171,7 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 # Determine base name
-basename <- strip_name(inputnames$reads1.fq)
+basename <- strip_name(inputnames$reads001.fq)
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)
