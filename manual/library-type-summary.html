@@ -1,0 +1,99 @@
+<html>
+<body>
+
+<h2>Directional RNA-seq data -which parameters to choose? </h2>
+
+<p>Directional RNA-seq methods are gaining popularity.  Several protocols and products are available 
+for the library preparation step, and different tools and softwares have different options to take 
+these into account.  Since this has caused a lot of confusion due to incoherent parameter naming, 
+we try to clarify this issue a bit here.</p>
+
+<p>To be able to select the right parameters for your data, first you need to know which library prep 
+method was used when generating your data.  In general, there are three types of library preps: 
+<ul> 
+<li>un-stranded </li>
+<li>directional, where the first read of the read pair 
+(or in case of single end reads, the only read) is from the transcript strand  </li>
+<li>directional, where the first read (or the only read in case of SE) is from the opposite strand. 
+</li> </ul>
+</p>
+
+<img src="library-type-pic1.png"> <br>
+<b><i>Summary of library type protocols </b>
+<br>(borrowed from: 
+<a href="http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html"
+>http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html</a>)</i>
+
+<p><b>Be extra careful to assign the files correctly in TopHat!</b> Using these parameters assumes you are giving the 
+files in specific order: read1, read2. In Chipster always check from the parameters window that your 
+files are assigned correctly. 
+</p>
+
+<p><b>Why is this so important? </b>If you use wrong directionality parameter, in the read counting step 
+the reads are considered to be from the wrong strand. This means that in the cases where there 
+are no genes on that other strand, you won't get any hits, and if there are genes in the same 
+location on the other strand, your reads are counted for that wrong gene. 
+</p>
+
+<p><b>How can I check I chose correctly? </b>It's a good idea to check that!  <br>
+<b>In Tophat:</b> Check the mapping rate after the TopHat alignment (in Chipster, open file tophat-summary.txt). 
+Note that you can 
+run TopHat with the different parameters to a small part of the data and then compare the results. <br>
+<b>In HTSeq:</b> Check the number of reads that are not counted for any gene (=the "no-feature reads").  
+(In Chipster, open file htseq-count-info.txt). 
+</p>
+
+<p>Below we list some common library preparation kits and their corresponding parameters 
+in different tools.</p>
+
+<p><b><u> Unstranded: </u></b><br>
+Information regarding the strand is not conserved 
+(it is lost during the amplification of the mRNA fragments). <br>
+<b>Kits: </b> <br>
+TruSeq RNA Sample Prep kit <br>
+<b>Parameters:</b> <br>
+TopHat / Cufflinks / Cuffdiff: library-type fr-unstranded <br>
+HTSeq: stranded -- no <br> </p>
+
+<p><b><u>Directional, reverse-forward / first strand:</u></b><br>
+The second read (read 2) is from the original RNA strand/template, first read (read 1) is from the 
+opposing stand.
+The information of the strand is preserved as the original RNA strand is degradated due to the 
+dUTPs incorporated in the second synthesis step.<br>
+<b>Kits:</b> <br>
+All dUTP methods, NSR, NNSR<br>
+TruSeq Stranded Total RNA Sample Prep Kit<br>
+TruSeq Stranded mRNA Sample Prep Kit<br>
+NEB Ultra Directional RNA Library Prep Kit <br>
+Agilent SureSelect Strand-Specific <br>
+<b>Parameters:</b><br>
+TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
+HTSeq: stranded -- reverse<br> </p>
+
+<p><b><u>Directional, forward-reverse / second strand:</u></b><br>
+The first read (read 1) is from the original RNA strand/template, second read (read 2) is from the 
+opposing stand.
+The directionality is preserved, as different adapters are ligated to different ends of the fragment. ??<br>
+<b>Kits:</b><br>
+Directional Illumina (Ligation), Standard SOLiD<br>
+ScriptSeq v2 RNA-Seq Library Preparation Kit<br>
+Encore® Complete RNA-Seq Library Systems<br>
+<b>Parameters:</b><br>
+TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
+HTSeq: stranded -- yes<br></p>
+
+<p>Note also that the --fr/--rf/--ff or "Order of mates to align" parameter in Bowtie has similar 
+sounding parameter options: [--fr: "Forward/reverse", --rf: "Reverse/Forward", --ff: "Forward/forward"]. 
+However, these parameters are a bit different story, as they explain how the paired end reads are 
+oriented towards each other (-> <-, -> -> or <- ->).  The default (--fr, -> <-) is appropriate for 
+Illumina's paired-end reads: it means that read 1 appears upstream of the reverse complement of read 2, 
+or vice versa.  When running TopHat, the library-type parameter is delivered to Bowtie, so the 
+user doesn't have to worry about that too much.</p>
+
+
+
+
+
+</body>
+
+</html>
