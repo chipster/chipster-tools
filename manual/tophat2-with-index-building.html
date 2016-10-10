@@ -9,8 +9,9 @@
 
 <p>
 Aligns paired end Illumina RNA-seq reads to a genome provided as a FASTA file in order to identify exon-exon splice junctions. 
-You need to supply the reads in FASTQ files. You also need two list files to assign the FASTQ files to each direction. 
-Supplying a GTF file is optional but recommended, because using annotation information improves the alignment process. 
+</p>
+<p> You need to supply the reads in two or more FASTQ files. Files can be compressed with gzip. You may also need two list files to assign the 
+FASTQ files to each direction. 
 </p>
 <p>List files are optional if you provide just two FASTQ files. Chipster will try to assign the files to directions based on file names. 
 This assumes the files are named so that the beginning of the name is identical and the directions are specified with _1 and _2, 
@@ -21,6 +22,9 @@ correctly.
 file (<i>e.g.</i>1files.txt and 2files.txt). These lists can be generated with the tool <strong>Utilities / Make a list of file names.</strong> The read 
 pairs must be ordered identically in both lists.
 </p>
+<p>
+Supplying a GTF file is optional but recommended, because using annotation information improves the alignment process. 
+<p>
 
 <h3>Parameters</h3> 
 
