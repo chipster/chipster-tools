@@ -65,7 +65,10 @@ if(meth=="empiricalBayes") {
 	#sort of groups should not matter (like in other methods)
 	#  the calls to as.factor and factor makes the lexical group order relevant
 	#  to avoid this we reorder the groups to be always in alphanumeric order
-	groups<-groups[c(which(groups==sort(unique(groups))[1]),which(groups==sort(unique(groups))[2]))]
+	gsorted=groups
+	gsorted[which(groups==unique(groups)[1])]=sort(unique(groups))[1]
+	gsorted[which(groups==unique(groups)[2])]=sort(unique(groups))[2]
+	groups=gsorted
 	if(pairing=="EMPTY") {
 		design<-model.matrix(~as.factor(groups))
 	} else {
