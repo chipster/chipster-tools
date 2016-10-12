@@ -62,6 +62,8 @@ if(length(unique(groups))==1 | length(unique(groups))>=3) {
 # Empirical Bayes
 if(meth=="empiricalBayes") {
 	library(limma)
+	#
+	groups<-groups[c(which(groups==sort(unique(groups))[1]),which(groups==sort(unique(groups))[2]))]
 	if(pairing=="EMPTY") {
 		design<-model.matrix(~as.factor(groups))
 	} else {
