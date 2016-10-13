@@ -65,10 +65,6 @@ if(meth=="empiricalBayes") {
 	#sort of groups should not matter (like in other methods)
 	#  the calls to as.factor and factor makes the lexical group order relevant
 	#  to avoid this we reorder the groups to be always in alphanumeric order
-	gsorted=groups
-	gsorted[which(groups==unique(groups)[1])]=sort(unique(groups))[1]
-	gsorted[which(groups==unique(groups)[2])]=sort(unique(groups))[2]
-	groups=gsorted
 	if(pairing=="EMPTY") {
 		design<-model.matrix(~as.factor(groups))
 	} else {
@@ -95,10 +91,10 @@ if(meth=="empiricalBayes") {
 
 if(meth=="RankProd") {
 	library(RankProd)
+
+	dat2.1 <-dat2[,which(groups==sort(unique(groups))[1])]
+	dat2.2 <-dat2[,which(groups==sort(unique(groups))[2])]
 	
-	dat2.1 <-dat2[,groups==unique(groups)[1]]
-	dat2.2 <-dat2[,groups==unique(groups)[2]]
-			
 	if(pairing =="EMPTY") {
 		group_vec <- c(rep(0, ncol(dat2.1)), rep(1, ncol(dat2.1)));
 		dat.rp <- cbind(dat2.1, dat2.2);
@@ -127,7 +123,7 @@ if(meth=="RankProd") {
 		dat2.2 <- dat2.2[,match(pairs.1, pairs.2)]
 		
 		if(ncol(dat2.1) != ncol(dat2.2)) { stop("Paired RankProd error: matrices differn in column number")}
-		dat.rp <- dat2.1 - dat2.2;
+		dat.rp <- dat2.2 - dat2.1;
 		group_vec <- rep(0, ncol(dat.rp));
 
 		rp.fold.change <- apply(dat.rp, 1, mean, na.rm=T)
