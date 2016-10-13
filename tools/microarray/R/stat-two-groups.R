@@ -102,7 +102,7 @@ if(meth=="RankProd") {
 	if(pairing =="EMPTY") {
 		group_vec <- c(rep(0, ncol(dat2.1)), rep(1, ncol(dat2.1)));
 		dat.rp <- cbind(dat2.1, dat2.2);
-		rp.fold.change <- apply(dat2.1, 1, mean, na.rm=T) - apply(dat2.2, 1, mean, na.rm=T)
+		rp.fold.change <- apply(dat2.2, 1, mean, na.rm=T) - apply(dat2.1, 1, mean, na.rm=T)
 	} else {
 		pairs.1 <-pairs[groups==unique(groups)[1]]
 		pairs.2 <-pairs[groups==unique(groups)[2]]
