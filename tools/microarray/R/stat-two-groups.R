@@ -62,9 +62,6 @@ if(length(unique(groups))==1 | length(unique(groups))>=3) {
 # Empirical Bayes
 if(meth=="empiricalBayes") {
 	library(limma)
-	#sort of groups should not matter (like in other methods)
-	#  the calls to as.factor and factor makes the lexical group order relevant
-	#  to avoid this we reorder the groups to be always in alphanumeric order
 	if(pairing=="EMPTY") {
 		design<-model.matrix(~as.factor(groups))
 	} else {
