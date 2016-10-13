@@ -56,7 +56,9 @@ command.start <- paste("bash -c '", set.path, tophat.binary)
 
 # parameters
 #command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
-command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits)
+command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
+# command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits)
+
 
 if (mismatches > 2){
 	command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
@@ -84,14 +86,6 @@ if (nnj.usable) {
 	}	
 }
 
-# library type: fr-unstranded, fr-firststrand, fr-secondstrand
-if (library.type == "fr-unstranded") {
-	command.parameters <- paste(command.parameters, "--library-type fr-unstranded")
-}else if (library.type == "fr-firststrand") {
-	command.parameters <- paste(command.parameters, "--library-type fr-firststrand")	
-}else if (library.type == "fr-secondstrand") {	
-	command.parameters <- paste(command.parameters, "--library-type fr-secondstrand")
-}
 
 # Input fastq names
 reads1 <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
