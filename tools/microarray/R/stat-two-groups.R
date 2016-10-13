@@ -62,6 +62,13 @@ if(length(unique(groups))==1 | length(unique(groups))>=3) {
 # Empirical Bayes
 if(meth=="empiricalBayes") {
 	library(limma)
+	#sort of groups should not matter (like in other methods)
+	#  the calls to as.factor and factor makes the lexical group order relevant
+	#  to avoid this we reorder the groups to be always in alphanumeric order
+	gsorted=groups
+	gsorted[which(groups==unique(groups)[1])]=sort(unique(groups))[1]
+	gsorted[which(groups==unique(groups)[2])]=sort(unique(groups))[2]
+	groups=gsorted
 	if(pairing=="EMPTY") {
 		design<-model.matrix(~as.factor(groups))
 	} else {
@@ -95,7 +102,7 @@ if(meth=="RankProd") {
 	if(pairing =="EMPTY") {
 		group_vec <- c(rep(0, ncol(dat2.1)), rep(1, ncol(dat2.1)));
 		dat.rp <- cbind(dat2.1, dat2.2);
-		rp.fold.change <- apply(dat2.1, 1, mean, na.rm=T) - apply(dat2.2, 1, mean, na.rm=T)
+		rp.fold.change <- apply(dat2.2, 1, mean, na.rm=T) - apply(dat2.1, 1, mean, na.rm=T)
 	} else {
 		pairs.1 <-pairs[groups==unique(groups)[1]]
 		pairs.2 <-pairs[groups==unique(groups)[2]]
