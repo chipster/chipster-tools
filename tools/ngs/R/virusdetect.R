@@ -17,10 +17,11 @@
 # OUTPUT OPTIONAL blastx_matches.bam.bai
 # OUTPUT OPTIONAL blastn_matches.tsv 
 # OUTPUT OPTIONAL blastx_matches.tsv 
-# OUTPUT OPTIONAL hostgenome_bwa_index.tgz
+# OUTPUT OPTIONAL hostgenome_bwa_index.tar
+# OUTPUT OPTIONAL {...}.pdf
 # OUTPUT OPTIONAL vd.log
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hostorg:  TYPE [none, other, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP5, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gasterosteus_aculeatus.BROADS1, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38, Homo_sapiens.NCBI36.54, mature, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT none (Reference sequence.)
+# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, other, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP5, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gasterosteus_aculeatus.BROADS1, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38, Homo_sapiens.NCBI36.54, mature, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT none (Reference sequence.)
 # PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cuttoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
 # PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequences by assembled virus contigs. )
 # PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference)  
@@ -58,12 +59,12 @@ if (hostorg == "none" ){
 
 
 if (hostorg != "none" ){
-	#If host host sequence subtraction is used, then we need to cerate a temporary copy of virus detect
+	#If host sequence subtraction is used, then we need to cerate a temporary copy of virus detect
 	#vdpath <-  c(file.path("/opt/chipster/tools_local", "virusdetect"))
-	vdpath <-  c(file.path(chipster.tools.path, "virusdetect"))
-	cp.command <- paste("cp -r ",  vdpath , "./")
-	system(cp.command)
-	vd.binary <- c(file.path("./virusdetect", "virus_detect.pl"))
+	#vdpath <-  c(file.path(chipster.tools.path, "virusdetect"))
+	#cp.command <- paste("cp -r ",  vdpath , "./")
+	#system(cp.command)
+	#vd.binary <- c(file.path("./virusdetect", "virus_detect.pl"))
 	
 	if (hostorg == "other"){
 		if (file.exists("hostgenome")){
@@ -160,6 +161,7 @@ if (file.exists("result_inputseq/blastn.html")){
 	system("echo '<html>' > blastn_matching_references.html")
 	system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/blastn.html >> blastn_matching_references.html")
 	system("echo '</html>' >> blastn_matching_references.html")
+    system(" for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); weasyprint $file ${bln}.bn.pdf; done;")
 }
 
 #blastx_matching_references.html
@@ -167,6 +169,8 @@ if (file.exists("result_inputseq/blastx.html")){
 	system("echo '<html>' > blastx_matching_references.html")
 	system ("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/blastx.html >> blastx_matching_references.html")
 	system("echo '</html>' >> blastx_matching_references.html")
+	system(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); weasyprint $file ${bln}.bx.pdf; done;")
+	
 }
 
 

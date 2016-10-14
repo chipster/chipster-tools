@@ -4,7 +4,8 @@
 # INPUT genome.txt: "Reference genome" TYPE GENERIC
 # OUTPUT bwa.bam 
 # OUTPUT bwa.bam.bai 
-# OUTPUT bwa.log 
+# OUTPUT OPTIONAL bwa.log 
+# OUTPUT OPTIONAL genome_bwa_index.tar
 # PARAMETER seed.length: "Length of the seed region" TYPE INTEGER DEFAULT 32 (How many bases of the left, good quality part of the read should be used as the seed region. If the seed length is longer than the reads, the seeding will be disabled. Corresponds to the command line parameter -l.) 
 # PARAMETER seed.edit: "Maximum number of of differences in the seed region" TYPE INTEGER DEFAULT 2 (Maximum number of differences such as mismatches or indels in the seed region. Corresponds to the command line parameter -k.)
 # PARAMETER total.edit: "Maximum edit distance for the whole read" TYPE DECIMAL DEFAULT 0.04 ( Maximum edit distance if the value is more than one. If the value is between 1 and 0 then it defines the fraction of missing alignments given 2% uniform base error rate. In the latter case, the maximum edit distance is automatically chosen for different read lengths. Corresponds to the command line parameter -n.)
@@ -26,6 +27,12 @@
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
+
+# Handle output names
+source(file.path(chipster.common.path, "tool-utils.R"))
+# read input names
+inputnames <- read_input_definitions()
+
 unzipIfGZipFile("reads.txt")
 unzipIfGZipFile("genome.txt")
 
@@ -36,6 +43,34 @@ command.start <- paste("bash -c '", bwa.binary)
 
 
 # Do indexing
+if (file.exists("genome.txt")){
+	bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
+	genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
+	
+	# case 1. Ready calculated indexes in tar format
+	if (genome.filetype == "tar"){
+		check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
+		bwa.genome <- system(check.command, intern = TRUE)		
+		# case 2. Fasta file
+	}else{
+		check.command <- paste ( bwa.index.binary, "genome.txt -tar| tail -1 ")
+		bwa.genome <- system(check.command, intern = TRUE)
+		cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./genome_bwa_index.tar ", sep ="")
+		system(cp.command)
+		hg_ifn <- strip_name(inputnames$genome.txt)
+		# Make a matrix of output names
+		outputnames <- matrix(NA, nrow=1, ncol=2)
+		outputnames[1,] <- c("genome_bwa_index.tar", paste(hg_ifn, "_bwa_index.tar", sep =""))
+		# Write output definitions file
+		write_output_definitions(outputnames)
+	}
+}else{
+	stop(paste('CHIPSTER-NOTE: ', "Reference genome not found."))
+} 
+
+
+
+
 print("Indexing the genome...")
 system("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")

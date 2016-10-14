@@ -3,7 +3,7 @@
 #
 #
 pblogfile=("./pb_blast_log")
-pbtmproot=("/tmp")
+pbtmproot=$(pwd)
 start_time=$(date)
 user=$(whoami)
 

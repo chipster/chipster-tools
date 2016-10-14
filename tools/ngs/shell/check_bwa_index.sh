@@ -61,6 +61,7 @@ then
     gen_name=$(tar -tf $genome | grep -E ".amb$")
     gen_name=$(basename $gen_name .amb)
     tar xvf $genome
+    index_path=$(pwd)
     echo "The location of bwa_indexes:"
     echo "$index_path/$gen_name"
     exit 0
