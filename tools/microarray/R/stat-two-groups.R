@@ -1,10 +1,10 @@
-# TOOL stat-two-groups.R: "Two groups tests" (Tests for comparing the mean gene expression of two groups. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered. Other than empiricalBayes might be slow, if run on unfiltered data.)
+# TOOL stat-two-groups.R: "Two groups tests" (Tests for comparing the mean gene expression of two groups. Mark both groups in the phenodata file with numbers, and use smaller number for the control\/baseline group. Other than empiricalBayes might be slow, if run on unfiltered data. )
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC
 # OUTPUT two-sample.tsv: two-sample.tsv 
 # PARAMETER column: "Column with group information" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test)
 # PARAMETER OPTIONAL pairing: "Column with pairing information" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing which samples form pairs. This option should be used if you have samples from the same individual, for example before and after treatment. Note that the tests LPE, F-test and fast-t-test do not support pairing.)
-# PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type)
+# PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered.)
 # PARAMETER OPTIONAL p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, Bonferroni: Bonferroni, Holm: Holm, Hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
 # PARAMETER OPTIONAL p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off \\(0.05\)for significant results)
 # PARAMETER OPTIONAL show.na: "Include genes whose p-value is NA" TYPE [yes: yes, no:no] DEFAULT no (Include results where p-value is NA)
@@ -15,6 +15,7 @@
 # EK, 8.1.2012
 # JT, 28.11.2012, fixed Wilcoxon test, sped up other tests
 # MK, 05.02.2013, added paired tests for limma, t-test and Wilcox
+# ML, 14.10.2016, FC direction fixes by oheil + RankProd fixes
 
 # Loads the libraries
 library(multtest)
@@ -93,7 +94,7 @@ if(meth=="RankProd") {
 	dat2.2 <-dat2[,which(groups==sort(unique(groups))[2])]
 	
 	if(pairing =="EMPTY") {
-		group_vec <- c(rep(0, ncol(dat2.1)), rep(1, ncol(dat2.1)));
+		group_vec <- c(rep(0, ncol(dat2.1)), rep(1, ncol(dat2.2)));
 		dat.rp <- cbind(dat2.1, dat2.2);
 		rp.fold.change <- apply(dat2.2, 1, mean, na.rm=T) - apply(dat2.1, 1, mean, na.rm=T)
 	} else {
@@ -119,7 +120,7 @@ if(meth=="RankProd") {
 		#sort columns so that samples have the same order
 		dat2.2 <- dat2.2[,match(pairs.1, pairs.2)]
 		
-		if(ncol(dat2.1) != ncol(dat2.2)) { stop("Paired RankProd error: matrices differn in column number")}
+		if(ncol(dat2.1) != ncol(dat2.2)) { stop("Paired RankProd error: matrices differ in column number")}
 		dat.rp <- dat2.2 - dat2.1;
 		group_vec <- rep(0, ncol(dat.rp));
 
@@ -291,23 +292,21 @@ if(meth=="RankProd") {
 		p.adjusted[, 1] <- p.adjust(p.raw[, 1], method=adj.method)
 		p.adjusted[, 2] <- p.adjust(p.raw[, 2], method=adj.method)
 	}
+	
+	p.adjusted <- apply(p.adjusted,1,min)
+	tmp <- data.frame(dat, p.adjusted=p.adjusted, FC=rp.fold.change)
+	
 	if( show.p.na == "yes" ) {
-		dat <- dat[which(apply(p.adjusted,1,min)<=p.cut|is.na(apply(p.adjusted,1,min))),]   
-		p.adjusted <- p.adjusted[which(apply(p.adjusted,1,min)<=p.cut|is.na(apply(p.adjusted,1,min))), ]
-		p.adjusted <- apply(p.adjusted,1,min)
-
-		rp.fold.change<-rp.fold.change[which(p.adjusted<=p.cut|is.na(p.adjusted))]  
+		tmp <- tmp[(tmp$p.adjusted <=p.cut)|is.na(tmp$p.adjusted),]
 	} else {
-		dat <- dat[which(apply(p.adjusted,1,min)<=p.cut),]   
-		p.adjusted <- p.adjusted[which(apply(p.adjusted,1,min)<=p.cut), ]
-		p.adjusted <- apply(p.adjusted,1,min)
-
-		rp.fold.change<-rp.fold.change[which(p.adjusted<=p.cut)]
+		tmp <- tmp[tmp$p.adjusted <=p.cut,]
 	}
 	
-	write.table(data.frame(dat, p.adjusted=round(p.adjusted, digits=6), FC=round(rp.fold.change, digits=2)),
-			file="two-sample.tsv", sep="\t", row.names=TRUE,
-			col.names=TRUE, quote=FALSE)
+	tmp$p.adjusted <- round(tmp$p.adjusted, digits=6)
+	tmp$FC <- round(tmp$FC, digits=2)
+
+	write.table(tmp, file="two-sample.tsv", sep="\t", row.names=TRUE, col.names=TRUE, quote=FALSE)
+
 }
 	
 if(meth=="LPE") {
