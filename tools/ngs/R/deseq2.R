@@ -18,6 +18,7 @@
 # ML 25.6.2015, Fixed some problems with S4vectors
 # EK 10.2.2016, Added alpha to results()
 # ML 4.5.2016, Changed the direction of the comparison when more than 2 groups
+# ML+SS 18.10.2016, Fixed plotting & rounding and formatting when more than 2 groups
 
 #column <-"group"
 #ad_factor<-"EMPTY"
@@ -54,18 +55,16 @@ if (ad_factor == "EMPTY") {
 # Vector / variable that holds comparison names
 results_name <- NULL 
 
+dds <- DESeq(dds)
+
 # Calculate statistic for differential expression, merge with original data table, keep significant DEGs, remove NAs and sort by FDR. If there are more than 2 groups, get pairwise results for each comparison.
 if (length(unique(groups)) == 2) {
-	dds <- DESeq(dds)
 	res <- results(dds,alpha=p.value.cutoff)
-	
 	sig <- cbind(dat, res)
 	sig <- as.data.frame(sig)
 	#sig <- sig[! (is.na(sig$padj)), ]
 	sig <- sig[sig$padj <= p.value.cutoff, ]
-	
 	sig <- sig[! (is.na(sig$padj)), ]
-	
 	sig <- sig[ order(sig$padj), ]
 	# Open pdf file for output
 	pdf(file="deseq2_report.pdf") 
@@ -74,14 +73,20 @@ if (length(unique(groups)) == 2) {
 	summary(res, alpha=p.value.cutoff)
 	sink()
 	
+	# Output significant DEGs
+	if (dim(sig)[1] > 0) {
+		ndat <- ncol(dat)
+		nmax <- ncol(sig)
+		write.table(cbind(sig[,1:ndat], round(sig[, (ndat+1):(nmax-2)], digits=2), format(sig[, (nmax-1):nmax], digits=4, scientific=T)), file="de-list-deseq2.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+	}
+	
 } else if (length(unique(groups)) > 2){
-	dds <- estimateSizeFactors(dds)
-	dds <- estimateDispersions(dds)
-	test_results <- nbinomWaldTest(dds)
+	test_results <- dds
 	res <- NULL
 	# going through all the pairwise comparisons (i vs j)
-	for (i in levels(colData(test_results)$condition)[-(length(levels(colData(test_results)$condition)))]) {
-		for (j in levels(colData(test_results)$condition)[-(1:i)]) {
+	conditions <- colData(test_results)$condition 
+	for (i in levels(conditions)[-(nlevels(conditions))])  {
+		for (j in levels(conditions)[-(1:i)]) {
 			pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j,i))) # note: j,i => j-i
 			if(is.null(res)) res <- pairwise_results else  res <- cbind(res, pairwise_results)
 			results_name <- c(results_name, paste(i,"_vs_", j, sep=""))
@@ -94,15 +99,31 @@ if (length(unique(groups)) == 2) {
 	sig <- sig[! (is.na(sig$min_padj)), ]
 	sig <- sig[ order(sig$min_padj), ] 
 	sig <- sig[, -grep("min_padj", colnames(sig))]
+	
+	# Open pdf file for output
+	pdf(file="deseq2_report.pdf") 
+	plotMA(dds,alpha=p.value.cutoff,main=c("DESeq2 MA-plot, FDR =", p.value.cutoff),ylim=c(-2,2))
+	sink("summary.txt")
+	summary(res, alpha=p.value.cutoff)
+	sink()
+	
+	# Output significant DEGs
+	if (dim(sig)[1] > 0) {
+		ndat <- ncol(dat)
+		npairdat <-  ncol(pairwise_results) # number of columns in one comparison
+		ncomp <- choose(nlevels(conditions),2) # number of comparisons
+		rounded_sig <- sig
+		for (i in 1:ncomp) {
+			skip <- ndat+ (i-1)*npairdat  # how many columns to skip
+			round2 <- skip +1:(npairdat-2) # everything except the last two columns (p-value & padj), beginning after skipped cols
+			round4 <- skip +(npairdat-1):npairdat # the last two columns (p-value & padj), beginning after skipped cols
+			rounded_sig[,round2] <- round(rounded_sig[,round2], digits=2) # round to 2 digits everything except p-value & padj
+			rounded_sig[,round4] <- format(rounded_sig[,round4], digits=4, scientific=T) # round to 4 digits p-value & padj
+			}
+		write.table(rounded_sig, file="de-list-deseq2.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+	}
 } 
 
-
-# Output significant DEGs
-if (dim(sig)[1] > 0) {
-	ndat <- ncol(dat)
-	nmax <- ncol(sig)
-	write.table(cbind(sig[,1:ndat], round(sig[, (ndat+1):(nmax-2)], digits=2), format(sig[, (nmax-1):nmax], digits=4, scientific=T)), file="de-list-deseq2.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-}
 
 # Create a template output table for plotting. If having N genes and 3 comparisons, this conversion results in a data matrix that has Nx3 rows 
 output_table <- NULL
