@@ -54,7 +54,7 @@ columnnames<-c()
 dat3<-matrix(nrow=nrow(dat2), ncol=length(unique(groups)), NA)
 #for(i in 1:length(unique(groups))) {
 index=1
-for( i in unique(groups) ) {
+for( i in sort(unique(groups)) ) {
 	dat3[,index]<-rowSums(data.frame(dat2[,which(groups==i)]))/ncol(data.frame(dat2[,which(groups==i)]))
 	columnnames<-c(columnnames, paste("group", i, sep=""))
 	index=index+1

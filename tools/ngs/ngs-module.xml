@@ -26,11 +26,11 @@
 		<tool runtime="R"><resource>ngs-filter-annotations.R</resource></tool>
 		<tool runtime="R"><resource>ngs-filter-results-column.R</resource></tool>
 		<tool runtime="R"><resource>filter-bed-value.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>extract-samples-from-dataset.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>select_columns.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>sort_and_select_columns.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>join_tsv_files.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>general_file_processing.R</resource></tool>	
+		<tool runtime="R" module="common"><resource>extract-samples-from-dataset.R</resource></tool>
+		<tool runtime="R" module="common"><resource>select_columns.R</resource></tool>
+		<tool runtime="R" module="common"><resource>sort_and_select_columns.R</resource></tool>
+		<tool runtime="R" module="common"><resource>join_tsv_files.R</resource></tool>
+		<tool runtime="R" module="common"><resource>general_file_processing.R</resource></tool>	
 		<tool runtime="R"><resource>process-preprocessed-counts.R</resource></tool>
 		<tool runtime="R"><resource>normalise-counts.R</resource></tool>
 		<tool runtime="R"><resource>deseq2-normalized-counts-for-gene.R</resource></tool>
@@ -107,16 +107,16 @@
 		<tool runtime="R">
 			<resource>bedtools-fastafrombed.R</resource>
 		</tool>
-		<tool runtime="R-3.0.2" module="common">
+		<tool runtime="R" module="common">
 			<resource>srafetch.R</resource>
 		</tool>
-	   <tool runtime="R-3.0.2" module="common">
+	   <tool runtime="R" module="common">
 	   		<resource>srabamfetch.R</resource>
 	   </tool>
 		<tool runtime="java">
 			<resource>fi.csc.chipster.tools.common.DownloadFile</resource>
 		</tool>
-		<tool runtime="R-3.0.2" module="common">
+		<tool runtime="R" module="common">
        		<resource>ensemblfetch.R</resource>
        	</tool>
 		<tool runtime="python" module="common">
@@ -288,9 +288,9 @@
 		<tool runtime="R">
 			<resource>deseq2.R</resource>
 		</tool>		
-		<tool runtime="R">
+		<!--<tool runtime="R">
 			<resource>dea-deseq.R</resource>
-		</tool>
+		</tool>-->
 		<tool runtime="R">
 			<resource>ngs-dea-edger-RNA.R</resource>
 		</tool>
@@ -315,9 +315,6 @@
 		<tool runtime="R">
 			<resource>cuffdiff2_with_replicates.R</resource>
 		</tool>
-<!-- 	<tool runtime="R-2.12">
-			<resource>dea-cufflinks.R</resource>
-		</tool> 	-->
 		<tool runtime="python" module="common">
 			<resource>annotate-cpdb.py</resource>
 		</tool>
@@ -370,10 +367,8 @@
 		</tool>
 	</category>
 
-	<category name="ChIP, DNase, and Methyl-seq" color="#c0d2de">
+	<category name="ChIP- and DNase-seq" color="#c0d2de">
 		<tool runtime="R"><resource>macs2.R</resource></tool>
-<!--  	<tool runtime="R-3.0.2"><resource>macs2-treatmentOnly.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>macs2-treatmentControl.R</resource></tool>-->
 		<tool runtime="R"><resource>ngs-find-peaks-macs-one.R</resource></tool>
 		<tool runtime="R"><resource>ngs-find-peaks-macs-two.R</resource></tool>
 		<tool runtime="R"><resource>ngs-find-peaks-fseq.R</resource></tool>		
@@ -385,8 +380,7 @@
 		<tool runtime="R"><resource>dimont-extract-data-custom.R</resource></tool>
 		<tool runtime="R"><resource>dimont.R</resource></tool>
 		<tool runtime="R"><resource>dimont-predictor.R</resource></tool>
-		<!--<tool runtime="R-3.0.2"><resource>ngs-find-peaks-zinba.R</resource></tool>-->
-		<tool runtime="R-3.0.2"><resource>MEDIPS.R</resource></tool>
+		<!--<tool runtime="R-3.0.2"><resource>MEDIPS.R</resource></tool>-->
 	</category>
 
 	<category name="CNA-seq" color="#a49900">
@@ -399,22 +393,22 @@
 		<tool runtime="R-3.0.2"><resource>cna-call-aberrations.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-identify-regions.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-add-cytobands.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-count-overlapping-cnvs.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-plot-frequencies.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>cna-count-aberrations.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-count-overlapping-cnvs.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-plot-frequencies.R</resource></tool>
+		<tool runtime="R" module="common"><resource>cna-count-aberrations.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-cluster.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>cna-correlate.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-group-test.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-survival-test.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-plot-survival.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>cna-fuse-regions-by-column.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>cna-fuse-regions-manually.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-convert-from-probes-to-genes.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-pathways-go.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-match-probes.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-plot-combined-profile.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-expression-test.R</resource></tool>	
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-plot-combined-expression.R</resource></tool>
+		<tool runtime="R" module="common"><resource>cna-correlate.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-group-test.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-survival-test.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-plot-survival.R</resource></tool>
+		<tool runtime="R" module="common"><resource>cna-fuse-regions-by-column.R</resource></tool>
+		<tool runtime="R" module="common"><resource>cna-fuse-regions-manually.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-convert-from-probes-to-genes.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-pathways-go.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-match-probes.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-plot-combined-profile.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-expression-test.R</resource></tool>	
+		<tool runtime="R" module="common"><resource>acgh-plot-combined-expression.R</resource></tool>
 	</category>
 
 	<category name="Metagenomics" color="#83010b">
