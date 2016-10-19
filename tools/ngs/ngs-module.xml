@@ -251,7 +251,7 @@
 			<resource>vcftools.R</resource>
 		</tool>
 		
-		<tool runtime="R-3.2.0">
+		<tool runtime="R">
 			<resource>annotate-variant.R</resource>
 		</tool>
 		 
@@ -336,9 +336,6 @@
 			<resource>deseq2.R</resource>
 		</tool>
 		<tool runtime="R">
-			<resource>dea-deseq.R</resource>
-		</tool>
-		<tool runtime="R">
 			<resource>ngs-dea-edger-RNA.R</resource>
 		</tool>
 		<tool runtime="R">
@@ -390,7 +387,7 @@
 		<tool runtime="R"><resource>cna-normalize.R</resource></tool>
 		<tool runtime="R"><resource>cna-plot-profile.R</resource></tool>
 		<tool runtime="R"><resource>cna-segment.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>cna-call-aberrations.R</resource></tool>
+		<tool runtime="R"><resource>cna-call-aberrations.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-identify-regions.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-add-cytobands.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-count-overlapping-cnvs.R</resource></tool>
@@ -413,8 +410,8 @@
 
 	<category name="Metagenomics" color="#83010b">
 		<tool runtime="R"><resource>mothur-screenseqs.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>mothur-sffinfo.R</resource></tool>
-    	<tool runtime="R-3.0.2"><resource>merge-fasta-qual.R</resource></tool>
+		<tool runtime="R"><resource>mothur-sffinfo.R</resource></tool>
+    	<tool runtime="R"><resource>merge-fasta-qual.R</resource></tool>
 		<tool runtime="R"><resource>mothur-summaryseqs.R</resource></tool>
 		<tool runtime="R"><resource>mothur-trimseqs-uniqueseqs.R</resource></tool>	
 		<tool runtime="R"><resource>mothur-alignseqs.R</resource></tool>

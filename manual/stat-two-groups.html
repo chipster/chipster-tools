@@ -26,6 +26,11 @@ Tests every gene's expression for a difference between two groups.
 p-value cut-off. If you want to get a p-value for every single gene in your data set, set the p-value cut-off to 1. This
 should return a new gene list of equal length to the original one.</p>
 
+<p> Mark both groups in the phenodata file with numbers, and use smaller number for the control/baseline group. 
+So for example control samples can be coded with "1" and treatment samples with "2" in the group column. 
+Then Chipster knows to compare treatment to control (control is coded with a smaller number than the treatment). 
+Since this makes a difference when interpreting the results such as fold change, it is worth paying attention to.</p>
+
 <p>The test empiricalBayes is essentially a t-test where variance estimates are shrank towards a pooled estimate, 
 resulting in far more stable inference when the number of samples is small. The empiricalBayes test
 is also much faster than the usual t-test. LPE test is especially well suited for small sample sizes. F-test compares the differences in variance between the two 
