@@ -333,9 +333,6 @@
 			<resource>deseq2.R</resource>
 		</tool>
 		<tool runtime="R">
-			<resource>dea-deseq.R</resource>
-		</tool>
-		<tool runtime="R">
 			<resource>ngs-dea-edger-RNA.R</resource>
 		</tool>
 		<tool runtime="R">
