@@ -1,5 +1,6 @@
-# TOOL virusdetect.R: "VirusDetect" (VirusDetect  analyzes large-scale sRNA datasets for virus identification. The program performs reference-guided assembly by aligning sRNA reads to the known virus reference database as well as de novo assembly. The assembled contigs are compared to the reference virus sequences for virus identification.  )
+# TOOL virusdetect-with-index-building.R: "VirusDetect with own host genome" (VirusDetect  analyzes large-scale sRNA datasets for virus identification. The program performs reference-guided assembly by aligning sRNA reads to the known virus reference database as well as de novo assembly. The assembled contigs are compared to the reference virus sequences for virus identification. )
 # INPUT inputseq: "Input reads file" TYPE GENERIC (Reads file)
+# INPUT hostgenome: "Host genome " TYPE GENERIC (Host genome used for host sequence subtraction. This cab be a fasta formatted sequece file or BWA index file created by Chipster)
 # OUTPUT OPTIONAL virusdetect_contigs.fa 
 # OUTPUT OPTIONAL virusderect_matches_blastn.fa 
 # OUTPUT OPTIONAL virusderect_matches_blastx.fa 
@@ -21,7 +22,6 @@
 # OUTPUT OPTIONAL vd.log
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP5, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gasterosteus_aculeatus.BROADS1, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38, Homo_sapiens.NCBI36.54, mature, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT none (Reference sequence.)
 # PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cuttoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
 # PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequences by assembled virus contigs. )
 # PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference)  
@@ -50,35 +50,33 @@ vd.parameters <- paste("--reference", reference, "--thread-num", chipster.thread
 system("date > vd.log")
 
 
-
-if (hostorg != "none" ){
-	#If host sequence subtraction is used, then we need to cerate a temporary copy of virus detect
-	#vdpath <-  c(file.path("/opt/chipster/tools_local", "virusdetect"))
-	#vdpath <-  c(file.path(chipster.tools.path, "virusdetect"))
-	#cp.command <- paste("cp -r ",  vdpath , "./")
-	#system(cp.command)
-	#vd.binary <- c(file.path("./virusdetect", "virus_detect.pl"))
-	
-	
-	# Using pre-calculated indexes
-    bwa.genome <- file.path(chipster.tools.path, "genomes", "indexes", "bwa", hostorg)
-	echo.command <- paste("echo Using genome:", bwa.genome, " >> vd.log 2>&1" )
-	system(echo.command)
-		
-	bwa.genome.all <- paste(bwa.genome, "*", sep = "" )
-	ln.command <- paste("ln -s ", bwa.genome.all, "./ >> vd.log 2>&1 ")
-	system(ln.command)
-	##hostorg.fa <-  paste("./virusdetect/databases/", hostorg, ".fa", sep = "")
-	hostorg.fa <-  paste( hostorg, ".fa", sep = "")
-	##mv.command <- paste("mv ", hostorg.fa ," ./virusdetect/databases/", hostorg, sep = "")
-	mv.command <- paste("mv ", hostorg.fa ," ", hostorg, sep = "")
-	system(mv.command)
-	system("echo Precalculated indexes linked to working directory >> vd.log 2>&1 ")
-	##system("ls -l ./virusdetect/databases/ >> vd.log 2>&1 ")
-	system("ls -l >> vd.log 2>&1 ")
-	system("date >> vd.log")
-	vd.parameters <- paste(vd.parameters, "--host-reference", hostorg)	
+bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
+unzipIfGZipFile("hostgenome")
+hostgenome.filetype <- system("file -b hostgenome | cut -d ' ' -f2", intern = TRUE )
+			
+# case 1. Ready calculated indexes in tar format
+if (hostgenome.filetype == "tar"){
+	check.command <- paste ( bwa.index.binary, "hostgenome| tail -1 ")
+	bwa.genome <- system(check.command, intern = TRUE)
+				
+# case 2. Fasta file
+}else{
+	check.command <- paste ( bwa.index.binary, "hostgenome -tar| tail -1 ")
+	bwa.genome <- system(check.command, intern = TRUE)
+	cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./hostgenome_bwa_index.tar ", sep ="")
+	system(cp.command)
+	hg_ifn <- strip_name(inputnames$hostgenome)
+	# Make a matrix of output names
+	outputnames <- matrix(NA, nrow=1, ncol=2)
+	outputnames[1,] <- c("hostgenome_bwa_index.tar", paste(hg_ifn, "_bwa_index.tar", sep =""))
+	# Write output definitions file
+	write_output_definitions(outputnames)
 }
+			
+vd.parameters <- paste(vd.parameters, "--host-reference hostgenome")
+#system("ls -l >> vd.log")
+system("date >> vd.log")
+
 
 vd.parameters <- paste(vd.parameters, "inputseq")
 
@@ -126,8 +124,6 @@ if (file.exists("result_inputseq/blastx.html")){
 	system(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); weasyprint $file ${bln}.bx.pdf; done;")
 	
 }
-
-
 
 if ( blast_ref == "yes") {
 	#blastn_matching_references.fa
@@ -215,8 +211,7 @@ if ( save_tar == "yes") {
 	# Write output definitions file
 	write_output_definitions(outputnames)
 	system ("echo Result collectin ready >> vd.log")
-	system ("ls -l >> vd.log")
-	
+	system ("ls -l >> vd.log")	
 }
 
 
