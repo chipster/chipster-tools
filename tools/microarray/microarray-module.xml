@@ -84,8 +84,8 @@
 	<category name="Annotation" color="#80a3b7">
 		<tool runtime="R"><resource>annotate-genelist2html.R</resource></tool>
 		<tool runtime="R"><resource>annotate-add-to-data.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>add-locations-to-data.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>annotate-miRNA-targets.R</resource></tool> 
+		<tool runtime="R"><resource>add-locations-to-data.R</resource></tool>
+		<tool runtime="R"><resource>annotate-miRNA-targets.R</resource></tool> 
 		<tool runtime="R"><resource>annotate-agilent-miRNA.R</resource></tool> 
 	</category>
 	

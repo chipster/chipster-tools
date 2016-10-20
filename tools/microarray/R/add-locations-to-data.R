@@ -8,6 +8,7 @@
 # MG 16.03.2012
 # IS  9.6.2013 Fixed sort order and changed output column name from 'chr' to 'chromosome' to be compatible with copy number scripts.
 # MK 10.06.2013, fixing biomaRt queries
+# ML 19.10.2016, fixing 
 
 # Loads libraries into memory
 library(biomaRt)
@@ -55,7 +56,7 @@ if (annotate_with == "probe_id") {
 	lib2 <- sub('.db','',lib)
 	lib3 <- paste(lib2, "SYMBOL", sep="")
 	env <- get(lib3)
-	gene_symbols <- unlist(mget(probes_query, env))
+	gene_symbols <- unlist(mget(probes_query, env,  ifnotfound=NA))
 }
 
 # Fetch the gene symbols and descriptions from ENSEMBL using biomaRt
@@ -71,6 +72,7 @@ if (species=="rat") {
 	dataset <- "rnorvegicus_gene_ensembl"
 	filt <- "rgd_symbol"
 }
+
 ensembl <- useMart("ensembl", dataset=dataset)
 annotated_genes <- getBM(mart=ensembl, attributes=c(filt,"chromosome_name","start_position","end_position"), filters=filt, values=gene_symbols)
 
