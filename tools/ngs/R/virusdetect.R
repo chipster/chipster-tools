@@ -1,8 +1,8 @@
-# TOOL virusdetect.R: "VirusDetect" (VirusDetect  analyzes large-scale sRNA datasets for virus identification. The program performs reference-guided assembly by aligning sRNA reads to the known virus reference database as well as de novo assembly. The assembled contigs are compared to the reference virus sequences for virus identification.  )
+# TOOL virusdetect.R: "VirusDetect" (VirusDetect pipeline performs virus identification using sRNA sequencing data. Given a FASTQ file, it performs de novo assembly and reference-guided assembly by aligning sRNA reads to the known virus reference database. The assembled contigs are compared to the reference virus sequences for virus identification.)
 # INPUT inputseq: "Input reads file" TYPE GENERIC (Reads file)
 # OUTPUT OPTIONAL virusdetect_contigs.fa 
-# OUTPUT OPTIONAL virusderect_matches_blastn.fa 
-# OUTPUT OPTIONAL virusderect_matches_blastx.fa 
+# OUTPUT OPTIONAL virusdetect_matches_blastn.fa 
+# OUTPUT OPTIONAL virusdetect_matches_blastx.fa 
 # OUTPUT OPTIONAL contig_sequences.undetermined.fa 
 # OUTPUT OPTIONAL blastn_matching_references.fa 
 # OUTPUT OPTIONAL blastn_matching_references.fa.fai
@@ -23,12 +23,12 @@
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
 # PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP5, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gasterosteus_aculeatus.BROADS1, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38, Homo_sapiens.NCBI36.54, mature, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT none (Reference sequence.)
 # PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cuttoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
-# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequences by assembled virus contigs. )
-# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference)  
-# PARAMETER OPTIONAL blast_ref: "return the matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs)
-# PARAMETER OPTIONAL blast_bam: "return the BAM formattet alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequeces to the refernce sequences)
+# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequences by assembled virus contigs.)
+# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference.)  
+# PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs)
+# PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequeces to the reference sequences)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
-# PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT no (Collect all the output into single tar formatted file.)
+# PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT no (Collect all the output files into a single tar formatted file.)
 #
 
 options(scipen=999)
@@ -52,7 +52,7 @@ system("date > vd.log")
 
 
 if (hostorg != "none" ){
-	#If host sequence subtraction is used, then we need to cerate a temporary copy of virus detect
+	#If host sequence subtraction is used, then we need to create a temporary copy of virus detect
 	#vdpath <-  c(file.path("/opt/chipster/tools_local", "virusdetect"))
 	#vdpath <-  c(file.path(chipster.tools.path, "virusdetect"))
 	#cp.command <- paste("cp -r ",  vdpath , "./")

@@ -1,9 +1,9 @@
-# TOOL virusdetect-with-index-building.R: "VirusDetect with own host genome" (VirusDetect  analyzes large-scale sRNA datasets for virus identification. The program performs reference-guided assembly by aligning sRNA reads to the known virus reference database as well as de novo assembly. The assembled contigs are compared to the reference virus sequences for virus identification. )
+# TOOL virusdetect-with-index-building.R: "VirusDetect with own host genome" (VirusDetect pipeline performs virus identification using sRNA sequencing data. Given a FASTQ file, it performs de novo assembly and reference-guided assembly by aligning sRNA reads to the known virus reference database. The assembled contigs are compared to the reference virus sequences for virus identification.)
 # INPUT inputseq: "Input reads file" TYPE GENERIC (Reads file)
-# INPUT hostgenome: "Host genome " TYPE GENERIC (Host genome used for host sequence subtraction. This cab be a fasta formatted sequece file or BWA index file created by Chipster)
+# INPUT hostgenome: "Host genome " TYPE GENERIC (Host genome used for host sequence subtraction. This can be a fasta formatted sequence file or a BWA index file created by Chipster.)
 # OUTPUT OPTIONAL virusdetect_contigs.fa 
-# OUTPUT OPTIONAL virusderect_matches_blastn.fa 
-# OUTPUT OPTIONAL virusderect_matches_blastx.fa 
+# OUTPUT OPTIONAL virusdetect_matches_blastn.fa 
+# OUTPUT OPTIONAL virusdetect_matches_blastx.fa 
 # OUTPUT OPTIONAL contig_sequences.undetermined.fa 
 # OUTPUT OPTIONAL blastn_matching_references.fa 
 # OUTPUT OPTIONAL blastn_matching_references.fa.fai
@@ -23,12 +23,12 @@
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
 # PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cuttoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
-# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequences by assembled virus contigs. )
-# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference)  
-# PARAMETER OPTIONAL blast_ref: "return the matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs)
-# PARAMETER OPTIONAL blast_bam: "return the BAM formattet alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequeces to the refernce sequences)
+# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequences by assembled virus contigs.)
+# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference.)  
+# PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs.)
+# PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequeces to the refernce sequences.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
-# PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT no (Collect all the output into single tar formatted file.)
+# PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT no (Collect all the output into a single tar formatted file.)
 #
 
 options(scipen=999)
