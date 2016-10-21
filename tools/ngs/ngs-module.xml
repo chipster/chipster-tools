@@ -327,7 +327,7 @@
 		<tool runtime="R" module="common"><resource>pathways-mirna-hyperg-go.R</resource></tool>
 		<!-- <tool runtime="R-3.0.2" module="common"><resource>pathways-mirna-hyperg-kegg.R</resource></tool>-->
 		<tool runtime="R"><resource>miRNA_RNA-seq_integration.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>ngs-correlation-analysis-mirna.R</resource></tool>
+		<tool runtime="R"><resource>ngs-correlation-analysis-mirna.R</resource></tool>
 		<tool runtime="R"><resource>ngs-up-down-analysis-mirna.R</resource></tool>
 		<tool runtime="R"><resource>ngs-extract-target-gene-expression.R</resource></tool>
 	</category>
