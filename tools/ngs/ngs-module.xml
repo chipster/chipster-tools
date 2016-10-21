@@ -385,7 +385,7 @@
 
 	<category name="CNA-seq" color="#a49900">
 		<tool runtime="R-3.0.2"><resource>cna-define-experiment.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>cna-filter-bins.R</resource></tool>
+		<tool runtime="R"><resource>cna-filter-bins.R</resource></tool>
 		<tool runtime="R"><resource>cna-correct.R</resource></tool>
 		<tool runtime="R"><resource>cna-normalize.R</resource></tool>
 		<tool runtime="R"><resource>cna-plot-profile.R</resource></tool>
