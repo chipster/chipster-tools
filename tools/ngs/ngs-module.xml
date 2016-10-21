@@ -131,12 +131,12 @@
 		<tool runtime="R" module="common">
 			<resource>make_namelist.R</resource>
 		</tool>
-	    <tool runtime="R">
+<!--	<tool runtime="R">
 			<resource>virusdetect.R</resource>
 		</tool>
 		<tool runtime="R">
 			<resource>virusdetect-with-index-building.R</resource>
-		</tool>
+		</tool>-->
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
