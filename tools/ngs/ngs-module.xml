@@ -35,15 +35,9 @@
 		<tool runtime="R"><resource>normalise-counts.R</resource></tool>
 		<tool runtime="R"><resource>deseq2-normalized-counts-for-gene.R</resource></tool>
 		<tool runtime="R"><resource>annotate-ensembl-ids.R</resource></tool>		
-		<tool runtime="R">
-			<resource>samtools-index.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>samtools-sort-index-BAM.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>samtools-convert-SAMtoBAM-sort-index.R</resource>
-		</tool>
+		<tool runtime="R"><resource>samtools-index.R</resource></tool>
+		<tool runtime="R"><resource>samtools-sort-index-BAM.R</resource></tool>
+		<tool runtime="R"><resource>samtools-convert-SAMtoBAM-sort-index.R</resource></tool>
 		<tool runtime="R">
 			<resource>samtools-subset.R</resource>
 		</tool>
@@ -324,47 +318,18 @@
 	</category>
 
 	<category name="miRNA-seq" color="#629a9b">
-		<tool runtime="R">
-			<resource>convert-bam-to-edger.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>convert-miRBase-bam-to-edger.R</resource>
-		</tool>
-		<!--
-		<tool runtime="java">
-			<resource>fi.csc.chipster.tools.ngs.regions.FindOverlappingDatabaseTool</resource>
-		</tool>
-		-->
-		<tool runtime="R">
-			<resource>deseq2.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>ngs-dea-edger-RNA.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>edgeR-multivariate.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>ngs-annotate-miRNA-targets.R</resource>
-		</tool> 
-		<tool runtime="R-3.0.2" module="common">
-			<resource>pathways-mirna-hyperg-go.R</resource>
-		</tool>
-		<tool runtime="R-3.0.2" module="common">
-			<resource>pathways-mirna-hyperg-kegg.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>miRNA_RNA-seq_integration.R</resource>
-		</tool>
-		<tool runtime="R-3.0.2">
-			<resource>ngs-correlation-analysis-mirna.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>ngs-up-down-analysis-mirna.R</resource>
-		</tool>
-		<tool runtime="R">
-			<resource>ngs-extract-target-gene-expression.R</resource>
-		</tool>
+		<tool runtime="R"><resource>convert-bam-to-edger.R</resource></tool>
+		<tool runtime="R"><resource>convert-miRBase-bam-to-edger.R</resource></tool>
+		<tool runtime="R"><resource>deseq2.R</resource></tool>
+		<tool runtime="R"><resource>ngs-dea-edger-RNA.R</resource></tool>
+		<tool runtime="R"><resource>edgeR-multivariate.R</resource></tool>
+		<tool runtime="R"><resource>ngs-annotate-miRNA-targets.R</resource></tool> 
+		<tool runtime="R" module="common"><resource>pathways-mirna-hyperg-go.R</resource></tool>
+		<!-- <tool runtime="R-3.0.2" module="common"><resource>pathways-mirna-hyperg-kegg.R</resource></tool>-->
+		<tool runtime="R"><resource>miRNA_RNA-seq_integration.R</resource></tool>
+		<tool runtime="R-3.0.2"><resource>ngs-correlation-analysis-mirna.R</resource></tool>
+		<tool runtime="R"><resource>ngs-up-down-analysis-mirna.R</resource></tool>
+		<tool runtime="R"><resource>ngs-extract-target-gene-expression.R</resource></tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
