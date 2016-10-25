@@ -78,7 +78,7 @@
 		<tool runtime="R"><resource>cluster-kmeans-testK.R</resource></tool>
 		<tool runtime="R"><resource>cluster-qt.R</resource></tool>
 		<tool runtime="R"><resource>classification.R</resource></tool>
-		<tool runtime="R-3.0.2"><resource>cluster-som.R</resource></tool>
+		<tool runtime="R"><resource>cluster-som.R</resource></tool>
 	</category>
 	
 	<category name="Annotation" color="#80a3b7">
