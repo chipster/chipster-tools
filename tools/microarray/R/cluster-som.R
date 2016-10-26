@@ -72,10 +72,10 @@ for(i in 1:length(dif.dists)) {
 # Plotting the SOM map
 pdf(file="som.pdf", width=w/72, height=h/72)
 par(mfrow=c(2,2), mar=c(2,2,0,0))
-plot.kohonen(kohmap, type="property", property=dists[1,], palette.name=heat.colors, main="Property")
-plot.kohonen(kohmap, type="codes", property=dists[1,], palette.name=heat.colors, main="Codes")
-plot.kohonen(kohmap, type="counts", property=dists[1,], palette.name=heat.colors, main="Counts")
-plot.kohonen(kohmap, type="mapping", property=dists[1,], palette.name=heat.colors, pch=19, main="Mapping")
+plot(kohmap, type="property", property=dists[1,], palette.name=heat.colors, main="Property")
+plot(kohmap, type="codes", property=dists[1,], palette.name=heat.colors, main="Codes")
+plot(kohmap, type="counts", property=dists[1,], palette.name=heat.colors, main="Counts")
+plot(kohmap, type="mapping", property=dists[1,], palette.name=heat.colors, pch=19, main="Mapping")
 dev.off()
 
 # Makes a dataframe of data, SOM result (cell membership and distance to first cell), and colors

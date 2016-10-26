@@ -30,7 +30,7 @@
 # OUTPUT OPTIONAL tss_groups.count_tracking.tsv
 # OUTPUT OPTIONAL tss_groups.fpkm_tracking.tsv
 # OUTPUT OPTIONAL tss_groups.read_group_tracking.tsv
-# PARAMETER organism: "Reference organism" TYPE [other, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1.83, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1.83, Drosophila_melanogaster.BDGP5.78, Drosophila_melanogaster.BDGP6.83, Felis_catus.Felis_catus_6.2.83, Gallus_gallus.Galgal4.83, Gasterosteus_aculeatus.BROADS1.83, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.83, Homo_sapiens.NCBI36.54, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38.83, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1.83, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.83, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2.83, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT other (You can use own GTF file or one of those provided on the server.)
+# PARAMETER OPTIONAL organism: "Reference organism" TYPE [other, Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1.83, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1.83, Drosophila_melanogaster.BDGP5.78, Drosophila_melanogaster.BDGP6.83, Felis_catus.Felis_catus_6.2.83, Gallus_gallus.Galgal4.83, Gasterosteus_aculeatus.BROADS1.83, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.83, Homo_sapiens.NCBI36.54, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38.83, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1.83, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.83, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2.83, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT other (You can use own GTF file or one of those provided on the server.)
 # PARAMETER output.type: "Output type" TYPE [concise, complete] DEFAULT concise (Cuffdiff produces a large number of output files (over 20\). You can choose to see the complete output or just concise processed output.)
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference annotation. Check your BAM and choose accordingly.)
 # PARAMETER OPTIONAL fdr: "Allowed false discovery rate" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (FDR-adjusted p-values (q-values\) are calculated. The concise output files include only those genes or transcripts which have a q-value lower than the given FDR. The value of the Significant-column is adjusted accordingly (yes/no\) in all output files.) 
@@ -79,8 +79,15 @@ if (bias == "yes") {
 			stop(paste('CHIPSTER-NOTE: ', "If you choose to use bias correction, you need to provide a genome FASTA."))
 		}
 	}else{
-		# If not, we use the internal one.
-		internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa" ,sep="" ,collapse=""))
+		# If not, we use the internal one. Because FASTA name may lack the version number GTF name has, we
+		# first remove the number and then match the base name to folder listing of FASTA files.
+		fasta.folder <- file.path(chipster.tools.path, "genomes", "fasta")
+		fasta.listing <- list.files(fasta.folder, pattern="*.fa$")
+		organism.base <- remove_extension(organism)
+		fasta.name <- grep(organism.base, fasta.listing, value=TRUE)
+		internal.fa <- file.path(fasta.folder, fasta.name)
+		#internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa" ,sep="" ,collapse=""))
+		
 		# If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
 		if(chr == "chr1"){
 			source(file.path(chipster.common.path, "seq-utils.R"))

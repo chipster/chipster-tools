@@ -25,6 +25,8 @@ source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("annotation.gtf")
 unzipIfGZipFile("genome.fa")
 
+source(file.path(chipster.common.path, "tool-utils.R"))
+
 # binary
 cufflinks.binary <- c(file.path(chipster.tools.path, "cufflinks2", "cufflinks"))
 
@@ -77,8 +79,15 @@ if (bias == "yes") {
 			stop(paste('CHIPSTER-NOTE: ', "If you choose to use bias correction, you need to provide a genome FASTA."))
 		}
 	}else{
-		# If not, we use the internal one.
-		internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa" ,sep="" ,collapse=""))
+		# If not, we use the internal one. Because FASTA name may lack the version number GTF name has, we
+		# first remove the number and then match the base name to folder listing of FASTA files.
+		fasta.folder <- file.path(chipster.tools.path, "genomes", "fasta")
+		fasta.listing <- list.files(fasta.folder, pattern="*.fa$")
+		organism.base <- remove_extension(organism)
+		fasta.name <- grep(organism.base, fasta.listing, value=TRUE)
+		internal.fa <- file.path(fasta.folder, fasta.name)
+		#internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa" ,sep="" ,collapse=""))
+		
 		# If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
 		if(chr == "chr1"){
 			source(file.path(chipster.common.path, "seq-utils.R"))
