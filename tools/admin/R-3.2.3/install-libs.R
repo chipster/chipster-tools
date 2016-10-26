@@ -64,7 +64,8 @@ cranPackages = c(
 		"ipred",
 		"prodlim",
 		"png",
-		"gplots"
+		"gplots",
+		"shiny"
 )
 
 for (package in cranPackages) {
@@ -217,6 +218,7 @@ illuminaAnnotationBioconductorPackages = c(
 		"org.Mm.eg.db",
 		"org.Rn.eg.db",
 		"org.Cf.eg.db",
+		"org.Dm.eg.db", # needed by FruitFlyAgilent.db
 		"TxDb.Hsapiens.UCSC.hg38.knownGene",
 		"BSgenome.Hsapiens.UCSC.hg38",
 		"BSgenome.Cfamiliaris.UCSC.canFam2",
