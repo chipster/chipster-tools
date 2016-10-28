@@ -202,13 +202,13 @@
 	</category>
 
 	<category name="Metagenomics" color="#83010b">
-		<tool runtime="R"><resource>mothur-makecontigs.R</resource></tool>
+		<!--<tool runtime="R"><resource>mothur-makecontigs.R</resource></tool>-->
 		<tool runtime="R"><resource>mothur-screenseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-pcrseqs.R</resource></tool>
+		<!--<tool runtime="R"><resource>mothur-pcrseqs.R</resource></tool>-->
 		<tool runtime="R"><resource>mothur-sffinfo.R</resource></tool>
     	<tool runtime="R"><resource>merge-fasta-qual.R</resource></tool>
 		<tool runtime="R"><resource>mothur-summaryseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-countseqs.R</resource></tool>
+		<!--<tool runtime="R"><resource>mothur-countseqs.R</resource></tool>-->
 		<tool runtime="R"><resource>mothur-trimseqs-uniqueseqs.R</resource></tool>	
 		<tool runtime="R"><resource>mothur-alignseqs.R</resource></tool>
 		<tool runtime="R"><resource>mothur-filterseqs.R</resource></tool>
