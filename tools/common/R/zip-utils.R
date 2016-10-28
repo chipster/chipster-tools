@@ -16,5 +16,10 @@ isGZipFile <- function(file.name) {
 	# get file type with the unix file command
 	file.type = system(paste("file -Lb --mime", file.name), intern=TRUE)
 	
-	return (file.type %in% c("application/x-gzip","application/gzip"))
+	#return (file.type %in% c("application/x-gzip","application/gzip"))
+	if (!is.na(pmatch("application/x-gzip", file.type)) || !is.na(pmatch("application/gzip", file.type))) {
+		return(TRUE);
+	} else { 
+		return(FALSE);
+	}
 }
