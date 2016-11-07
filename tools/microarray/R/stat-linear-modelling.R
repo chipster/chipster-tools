@@ -3,8 +3,6 @@
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC 
 # OUTPUT limma.tsv: limma.tsv 
 # OUTPUT limma-design.tsv: limma-design.tsv 
-# OUTPUT foldchange.tsv: foldchange.tsv 
-# OUTPUT pvalues.tsv: pvalues.tsv 
 # PARAMETER main.effect1: "Main effect 1" TYPE METACOLUMN_SEL DEFAULT group (Main effect 1)
 # PARAMETER main.effect2: "Main effect 2" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 2)
 # PARAMETER main.effect3: "Main effect 3" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 3)
@@ -23,6 +21,7 @@
 # MG, 28.03.2012, modified to handle NUID:s
 # MK, 22.02.2014, modified so that does not report anymore coef or p-vals for pairing information
 # OH, 12.02.2015, getting columns from phenodata using which rather than grep in order to get exact matches
+# ML, 07.11.2016, simplify the outputs
 
 #main.effect1<-"group"
 #main.effect2<-"gender"
@@ -105,7 +104,7 @@ if(main.effect1=="EMPTY" & main.effect2=="EMPTY" & main.effect3!="EMPTY" & techn
 
 # Two main effects
 if(main.effect1!="EMPTY" & main.effect2!="EMPTY" & main.effect3=="EMPTY" & technical.replication=="EMPTY" & pairing=="EMPTY") {
-   design<-model.matrix(~main1+main2)
+	design<-model.matrix(~main1+main2)
    fit<-lmFit(dat2, design)
    fit<-eBayes(fit)
 }
@@ -482,7 +481,7 @@ if(length(data_pairs) > 0) {
 # Write data to disk
 write.table(dat3, file="limma.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 write.table(design, file="limma-design.tsv", sep="\t", row.names=F, col.names=T, quote=F)
-write.table(fc2, file="foldchange.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-write.table(pvalues2, file="pvalues.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+#write.table(fc2, file="foldchange.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+#write.table(pvalues2, file="pvalues.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 

@@ -45,12 +45,24 @@ read from the given phenodata column </p>
 
 <h3>Output</h3>
 
-<p>Three tab-delimited text files are output as a result of the analysis. The "p.values.tsv" table lists the p-values for tested contrasts, the factor 
-level being reflected in the column headers. For example, a column labeled "chip.p.adjusted.X-Y.tsv" refers to the comparison of level X to level Y. 
-The "foldchange.tsv" table holds the corresponding fold changes. Fold change values are essentially the log2 of the ratio between the averaged expression
-values of samples for the first factor level and the second factor level. The "limma.tsv" table combines the p-values and fold changes results, together 
-with the expression values and annotation information for the probes tested, in a convenient summary table that is suitable for further processing or 
-analysis.</p>
+<p>A tab-delimited text file, "limma.tsv" table combines the p-values and fold changes results, together with the expression values and annotation information for the probes tested, in a
+convenient summary table that is suitable for further processing or analysis.
+In this table there are p-values for all contrasts for each of the main effects, the number and factor level being reflected in the column headers. 
+For example, a column labeled "chip.p.adjusted.main13.tsv" refers to the comparison of level <b>3</b>  to level 1 (the reference level) for the first (<b>1</b>) of the main effects.
+Same applies to the fold changes. When an effect has been setup to be treated as "factor" the fold change value is essentially the log2 of the ratio between the averaged expression values of samples for a particular factor level and the first (reference) factor level.
+In the case the effect is treated as "linear", the fold change values are actually an estimate of the slope of the linear regression fitted to the data.</p>
+
+<p>Note that you usually want to pick the right p.adjusted -column from the result table for further analysis: 
+if you for example are interested in the differences between the levels of the first main effect (usually in the “group” column in phenodata), 
+you should sort and filter your table according to p.adjusted.main12 -column. 
+(You can use <b>Preprocessing / Filter using a column value </b> tool for this.)</p>
+
+<p>The <b>Intercept</b> is sort of a baseline: the expression level for that group for which all the main effects are on their 
+reference level (marked with the smallest number in phenodata file). So the actual test is sort of superfluous: 
+we are testing whether this baseline is in zero -whether this gene is expressed at all. 
+Naturally this is not usually the case, and thus the p-values in the intercept column are usually very small. 
+This is however rarely of any interest.</p>
+
 
 <h3>References</h3>
 
