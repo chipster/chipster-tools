@@ -16,14 +16,6 @@ pos <- c('chromosome','start','end')
 if (length(setdiff(pos, colnames(dat)))!=0)
   stop('CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome, start, end.')
 
-# load genes
-#all.genes <- AnnotationDbi::select(Homo.sapiens::Homo.sapiens, keys=keys(Homo.sapiens::Homo.sapiens,
-#    keytype='CHRLOC'), columns=c('CHRLOC', 'CHRLOCEND', 'ENTREZID', 'SYMBOL', 'GENENAME'), keytype='CHRLOC')
-#all.genes <- all.genes[all.genes$CHRLOCCHR %in% unique(dat$chromosome), ]
-#all.genes$CHRLOC <- abs(all.genes$CHRLOC)
-#all.genes$CHRLOCEND <- abs(all.genes$CHRLOCEND)
-#all.genes <- all.genes[, c('CHRLOCCHR', 'CHRLOC', 'CHRLOCEND', 'SYMBOL', 'GENENAME', 'ENTREZID')]
-
 # Load transcripts into data frame
 txhs <- transcripts(Homo.sapiens, columns=c("TXNAME","SYMBOL","GENENAME","ENTREZID"))
 all.genes <- data.frame(sub("chr", "", as.character(seqnames(txhs))), start(txhs), end(txhs), as.character(mcols(txhs)$SYMBOL), as.character(mcols(txhs)$GENENAME), as.character(mcols(txhs)$ENTREZID))
