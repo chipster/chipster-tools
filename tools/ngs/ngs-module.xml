@@ -40,6 +40,7 @@
 		<tool runtime="R"><resource>samtools-convert-SAMtoBAM-sort-index.R</resource></tool>
 		<tool runtime="R"><resource>samtools-subset.R</resource></tool>
 		<tool runtime="R"><resource>samtools-merge.R</resource></tool>
+		<tool runtime="R" module="common"><resource>concatenate.R</resource></tool>
 		<tool runtime="R"><resource>samtools-idxstats.R</resource></tool>	
 		<tool runtime="R"><resource>samtools-alignment-statistics.R</resource></tool>
 		<tool runtime="R"><resource>samtools-count.R</resource></tool>
@@ -144,7 +145,7 @@
 		<tool runtime="python" module="common"><resource>annotate-cpdb.py</resource></tool>
 	</category>
 
-	<category name="miRNA-seq" color="#629a9b">
+	<category name="small RNA-seq" color="#629a9b">
 		<tool runtime="R"><resource>convert-bam-to-edger.R</resource></tool>
 		<tool runtime="R"><resource>convert-miRBase-bam-to-edger.R</resource></tool>
 		<tool runtime="R"><resource>deseq2.R</resource></tool>
@@ -157,6 +158,8 @@
 		<tool runtime="R"><resource>ngs-correlation-analysis-mirna.R</resource></tool>
 		<tool runtime="R"><resource>ngs-up-down-analysis-mirna.R</resource></tool>
 		<tool runtime="R"><resource>ngs-extract-target-gene-expression.R</resource></tool>
+		<tool runtime="R"><resource>virusdetect.R</resource></tool>
+		<tool runtime="R"><resource>virusdetect-with-index-building.R</resource></tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
