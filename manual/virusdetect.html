@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Virus Detect</h2>
+
+<h3>Description</h3>
+
+<p>This tool runs the VirusDetect pipeline, that performs virus identification using sRNA sequencing data. 
+Given a FASTQ file, it performs <i>de novo</i> assembly and reference-guided assembly by 
+aligning sRNA reads to the reference database of known viruses. The assembled contigs are 
+compared to the reference virus sequences for virus identification.</p>
+
+<p>More detailed definition of Virus detect pipeline can be found from 
+the <a href="http://bioinfo.bti.cornell.edu/cgi-bin/virusdetect/index.cgi">
+home page of VirusDetect</a>.</p>
+
+<h3>Input data</h3>
+<p>Input data (the reads) should be given as FASTQ formatted sequence file. If several FASTQ files are provided,
+a separate VirusDetect analysis will be done for each file.
+</p>
+<h3>Parameters</h3>
+<ul>
+<p>
+<li><b>Reference virus database</b> VirusDetect is mainly used for detecting plant viruses, 
+but you can use it for other viruses too. Use this parameter to select a virus reference database 
+matching you virus type.</li>
+</p>
+<p>
+<li><b>Host Organism</b> If possible, the input data should be cleaned from sequences originating from the genome of the host organism.
+This can be done by mapping the query sequences against the genome of the host organisms and selecting only those reads that do not match 
+to the host genome.
+<ul>
+<li>If the host genonome is not available you should set this parameter to value: none.</li>
+<li>From the drop-down list you can select one of the organisms, for which there 
+are pre-calculated index, to be used as host organism.</li>
+<li>If the genome of the host organism is not available in Chipster, but you have the host genome 
+as a fasta formatted sequence file, you should use tool <i>VirusDetetct with own genome</i> in stead of this tool.
+</li>
+</ul>
+</li>
+</p>
+<p>
+<li><b>Reference virus coverage cuttoff</b> Coverage cutoff of a reported virus contig by reference virus sequences.</li>
+</p>
+<p>
+<li><b>Assembled virus contig cuttoff</b> Coverage cutoff of a reported virus reference sequences by assembled virus contigs.</li>
+</p><p>
+<li><b>Depth cutoff</b> Depth cutoff of a reported virus reference</li>
+</p>
+</ul>
+<h3>Output</h3>
+
+VirusDetect produces large amount of different files as reports. Output related options are used to 
+select, what data is returned. By default VirusDtetect returns following files:
+<ul>
+<li><b>virusdetect_contigs.fa</b>Sequences of non-redundant contigs derived through reference-guided and de novo assemblies.</li>
+<li><b>contig_sequences.undetermined.fa</b> Sequences of contigs that do not match to virus references.</li> 
+<li><b>blastn_matching_refrences.html</b> files listing reference viruses that have corresponding virus contigs identified by BLASTN. A pdf formatted report file is returned for each match</li>
+<li><b>blastn_matches.tsv</b> a table of blastn matches to the reference virus database.</li>
+<li><b>blastx_matching_refrences.html</b> files listing reference viruses that have corresponding virus contigs identified by BLASTX. A pdf formatted report file is returned for each match </li>
+<li><b>blastx_matches.tsv</b> a table of blastn matches to the reference virus database.</li>
+
+</ul>
+
+If parameter <b>Return matching reference sequences</b> is turned on the also following files are returned 
+<ul>
+<li><b>blastn_matching_references.fa</b> and <b>.fai</b>. Virus reference sequences that produced hits for blastn search with the potential virus contigs.</lI>
+<li><b>blastn_matching_references.fa</b> and <b>.fai</b>. Virus reference sequences that produced hits for blastn search with the potential virus contigs.</lI>
+</li>
+</ul>
+If parameter <b>Return matching reference sequences</b> is turned on the also following files are returned 
+<ul>
+<li><b>blastn_matches.bam</b> and <b>.bai</b>. BAM file containing the blastn alignment of each contig to its corresponding virus reference sequences.</li> 
+<li><b>blastx_matches.bam</b> and <b>.bai</b>. BAM file containing the blastx alignment of each contig to its corresponding virus reference sequences.</li> 
+</ul>
+<p>
+Note: If you select both the blastn_matching_references.fa + .fai and blastn_matches.bam + .bai, 
+(or the corresponding blastx files) you can use the Genome Browser to visualize the BLAST reulst.
+In the Genome Browser the <i>blastn_matching_references.fa</i> should be assigned to be used as the genome.
+Each reference virus sequence is then listed in the <i>Chromosome</i> pull down menu.  
+</p>
+
+<p>If parameter <b>Return results in one archive file</b> is selected, the all the outputfiles are stored to
+a single tar formatted output file. This feature is useful if you run VirusDetetc to several input files in 
+the same time. The tar formatted output file can be expanded with tool <i>Extract .tar.gz file</i>.
+
+
+
+
+</body>
+
