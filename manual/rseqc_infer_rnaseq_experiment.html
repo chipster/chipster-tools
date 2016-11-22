@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>RNA-seq / Infer strandedness and inner distance from FASTQ</h2>
+
+<h3>Description</h3>
+
+<p>
+Infers strandedness from RNAseq reads. For paired end reads also calculates inner distance plot.
+
+</p>
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Organism</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+A subset of 200 000 reads is first made from the input FASTQ files. This makes the processing much faster, 
+and has only negligible effect on results.
+</p>
+<p>
+Next the reads are aligned against the selected reference genome using Bowtie2. The alignment is then compared to reference 
+annotation to infer strandedness of reads.
+</p>
+<p>
+For non strand specific experiment the ratio of explanations should be close to 50:50
+</p>
+<pre>
+Fraction of reads failed to determine: 0.0000
+Fraction of reads explained by "1++,1--,2+-,2-+": 0.5074
+Fraction of reads explained by "1+-,1-+,2++,2--": 0.4926
+</pre>
+ <p>
+ For strand specific experiments there are two scenarios:
+ </p>
+ <p>
+ Reads in file 1 are always on the same strand as the gene:
+ </p>
+ <pre>
+Fraction of reads failed to determine: 0.0072
+Fraction of reads explained by "1++,1--,2+-,2-+": 0.9441
+Fraction of reads explained by "1+-,1-+,2++,2--": 0.0487
+ </pre>
+<p>
+Reads in file 2 are always on the same strand as the gene:
+<p>
+<pre>
+Fraction of reads failed to determine: 0.0011
+Fraction of reads explained by "1++,1--,2+-,2-+": 0.0053
+Fraction of reads explained by "1+-,1-+,2++,2--": 0.9936
+</pre>
+<p>
+Some portion of there reads will remain undetermined. They may not align at all or will be aligned to region for which
+strandedness can not be determined. The distribution of the rest of the reads between explanations will give use the 
+strandedness information. For non-strand specific experiments we expect to see even distribution between explanations 
+and for strand specific experiments we expect to see all reads to comply to one explanation. Some deviation from this 
+is normal due to mis-aligned reads, sampling etc, but large deviation is usually indicative of some problem.
+</p>
+<p>
+A more in-depth explanation of the output format can be found in the <A HREF=http://rseqc.sourceforge.net/#infer-experiment-py>RSeQC manual</A>.
+</p>
+<p>
+For paired end data inner distance plot is also calculated.
+</p>
+
+
+<h3>Output</h3>
+
+<p>
+<ul>
+<li>experiment_data.txt: A text file detailing the strandedness of reads</li>
+<li>inner_distance.pdf:  A PDF file with the inner distance plot. Only produced for paired end data.</li>
+</ul>
+</p>
+
+<h3>References</h3>
+
+<p>This tool uses the RSeQC package. Please cite the article:</p>
+
+<p>Wang L, Wang S, Li W* RSeQC: quality control of RNA-seq experiments Bioinformatics (2012) 28 (16): 2184-2185. doi: 10.1093/bioinformatics/bts356
+
+<p>Please see the <a href = "http://rseqc.sourceforge.net/">RSeQC homepage</A> for more details.</p>
+</body>
+
