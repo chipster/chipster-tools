@@ -5,7 +5,7 @@
 # OUTPUT methylated.tsv: methylated.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 
 # OUTPUT OPTIONAL QC-plot.pdf: QC-plot.pdf
-# PARAMETER chiptype: Chiptype TYPE [HumanMethylation27: HumanMethylation27, HumanMethylation450: HumanMethylation450] DEFAULT HumanMethylation27 (Select the correct BeadChip type)
+# PARAMETER chiptype: Chiptype TYPE [HumanMethylation27: HumanMethylation27] DEFAULT HumanMethylation27 (Select the correct BeadChip type)
 # PARAMETER target: "Illumina ID" TYPE STRING DEFAULT TargetID (Name of the TargetID column)
 # PARAMETER signala: "Signal_A/Grn pattern" TYPE STRING DEFAULT Signal_A (Pattern identifying and common to all unmethylated data columns)
 # PARAMETER signalb: "Signal_B/Red pattern" TYPE STRING DEFAULT Signal_B (Pattern identifying and common to all methylated data columns)
@@ -20,6 +20,7 @@
 # JTT: 25.09.2012: Modified
 # JTT: 28.10.2012: Modified
 # MK: 20.11.2013: Added parameters to enalbe analysis of data having atypical columnames
+# TH: 10.11.2016: Disable chiptype HumanMethylation450: HumanMethylation450 for now
 
 # setwd("C://Users//Jarno Tuimala//Desktop//methylumi data")
 # color.balance.adjustment<-c("quantile")

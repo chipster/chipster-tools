@@ -1,4 +1,4 @@
-# TOOL concatenate.R: "Concatenate files" (Writes the content of seletced files into one output file)
+# TOOL concatenate.R: "Concatenate files" (Writes the content of selected files into one output file. You can use this tool for example for merging FASTQ files.)
 # INPUT input{...}.data: "Input files" TYPE GENERIC
 # OUTPUT OPTIONAL concatenated.txt
 # OUTPUT OPTIONAL concatenated.html

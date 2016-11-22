@@ -40,6 +40,7 @@
 		<tool runtime="R"><resource>samtools-convert-SAMtoBAM-sort-index.R</resource></tool>
 		<tool runtime="R"><resource>samtools-subset.R</resource></tool>
 		<tool runtime="R"><resource>samtools-merge.R</resource></tool>
+		<tool runtime="R" module="common"><resource>concatenate.R</resource></tool>
 		<tool runtime="R"><resource>samtools-idxstats.R</resource></tool>	
 		<tool runtime="R"><resource>samtools-alignment-statistics.R</resource></tool>
 		<tool runtime="R"><resource>samtools-count.R</resource></tool>
@@ -64,7 +65,8 @@
 		<tool runtime="java"><resource>fi.csc.chipster.tools.common.DownloadFile</resource></tool>
 		<tool runtime="R" module="common"><resource>ensemblfetch.R</resource></tool>
 		<tool runtime="python" module="common"><resource>extract_gzip_tar.py</resource></tool>
-		<tool runtime="python" module="common"><resource>gunzip.py</resource></tool>	
+		<tool runtime="python" module="common"><resource>gunzip.py</resource></tool>
+		<tool runtime="R" module="common"><resource>make_tar.R</resource></tool>	
 		<tool runtime="R"><resource>a5-miseq.R</resource></tool>
 		<tool runtime="R" module="common"><resource>make_namelist.R</resource></tool>
 		<tool runtime="R"><resource>virusdetect.R</resource></tool>
@@ -143,7 +145,7 @@
 		<tool runtime="python" module="common"><resource>annotate-cpdb.py</resource></tool>
 	</category>
 
-	<category name="miRNA-seq" color="#629a9b">
+	<category name="Small RNA-seq" color="#629a9b">
 		<tool runtime="R"><resource>convert-bam-to-edger.R</resource></tool>
 		<tool runtime="R"><resource>convert-miRBase-bam-to-edger.R</resource></tool>
 		<tool runtime="R"><resource>deseq2.R</resource></tool>
@@ -156,6 +158,8 @@
 		<tool runtime="R"><resource>ngs-correlation-analysis-mirna.R</resource></tool>
 		<tool runtime="R"><resource>ngs-up-down-analysis-mirna.R</resource></tool>
 		<tool runtime="R"><resource>ngs-extract-target-gene-expression.R</resource></tool>
+		<tool runtime="R"><resource>virusdetect.R</resource></tool>
+		<tool runtime="R"><resource>virusdetect-with-index-building.R</resource></tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
@@ -175,7 +179,7 @@
 	</category>
 
 	<category name="CNA-seq" color="#a49900">
-		<tool runtime="R-3.0.2"><resource>cna-define-experiment.R</resource></tool>
+		<tool runtime="R-3.3.2"><resource>cna-define-experiment.R</resource></tool>
 		<tool runtime="R"><resource>cna-filter-bins.R</resource></tool>
 		<tool runtime="R"><resource>cna-correct.R</resource></tool>
 		<tool runtime="R"><resource>cna-normalize.R</resource></tool>
@@ -194,7 +198,7 @@
 		<tool runtime="R" module="common"><resource>acgh-plot-survival.R</resource></tool>
 		<tool runtime="R" module="common"><resource>cna-fuse-regions-by-column.R</resource></tool>
 		<tool runtime="R" module="common"><resource>cna-fuse-regions-manually.R</resource></tool>
-		<tool runtime="R-3.0.2" module="common"><resource>acgh-convert-from-probes-to-genes.R</resource></tool>
+		<tool runtime="R" module="common"><resource>acgh-convert-from-probes-to-genes.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-pathways-go.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-match-probes.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-plot-combined-profile.R</resource></tool>
