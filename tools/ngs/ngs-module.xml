@@ -145,7 +145,7 @@
 		<tool runtime="python" module="common"><resource>annotate-cpdb.py</resource></tool>
 	</category>
 
-	<category name="small RNA-seq" color="#629a9b">
+	<category name="Small RNA-seq" color="#629a9b">
 		<tool runtime="R"><resource>convert-bam-to-edger.R</resource></tool>
 		<tool runtime="R"><resource>convert-miRBase-bam-to-edger.R</resource></tool>
 		<tool runtime="R"><resource>deseq2.R</resource></tool>
