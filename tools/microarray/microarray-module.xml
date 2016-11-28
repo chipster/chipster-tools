@@ -106,7 +106,7 @@
 	</category>
 
 	<category name="Copy number aberrations" color="#c0d2de">
-		<tool runtime="R"><resource>import-soft2.R</resource></tool>
+		<tool runtime="R-3.3.2"><resource>import-soft2.R</resource></tool>
 		<tool runtime="R"><resource>acgh-import-from-cangem.R</resource></tool>
 		<tool runtime="R"><resource>acgh-normalize.R</resource></tool>
 		<tool runtime="R"><resource>acgh-plot-profile.R</resource></tool>
@@ -176,7 +176,7 @@
 		<tool runtime="R"><resource>sampling.R</resource></tool>
 		<tool runtime="R"><resource>export-tab2mage.R</resource></tool>
 		<tool runtime="R"><resource>export-soft.R</resource></tool>
-		<tool runtime="R"><resource>import-soft2.R</resource></tool>
+		<tool runtime="R-3.3.2"><resource>import-soft2.R</resource></tool>
 		<tool runtime="R"><resource>import-ArrayExpress.R</resource></tool>
 		<tool runtime="R"><resource>intersect-lists.R</resource></tool>
 		<tool runtime="R"><resource>output_test.R</resource></tool>
