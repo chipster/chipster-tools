@@ -131,7 +131,7 @@
 		<tool runtime="R" module="common"><resource>acgh-plot-combined-profile.R</resource></tool>
 		<tool runtime="R" module="common"><resource>acgh-expression-test.R</resource></tool>	
 		<tool runtime="R" module="common"><resource>acgh-plot-combined-expression.R</resource></tool>
-		<tool runtime="R"><resource>acgh-fetch-probe-positions-from-geo.R</resource></tool>
+		<tool runtime="R-3.3.2"><resource>acgh-fetch-probe-positions-from-geo.R</resource></tool>
 		<tool runtime="R"><resource>acgh-fetch-probe-positions-from-cangem.R</resource></tool>
 	</category>
 
