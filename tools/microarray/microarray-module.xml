@@ -3,196 +3,196 @@
 <module name="microarray">
 		
 	<category name="Normalisation" color="#d5c796">
-		<tool runtime="R"><resource>norm-affy.R</resource></tool>
-		<tool runtime="R"><resource>norm-affy-exon.R</resource></tool>
-		<tool runtime="R"><resource>norm-affy-gene.R</resource></tool>
-		<tool runtime="R"><resource>norm-affy-snp.R</resource></tool>
-		<tool runtime="R"><resource>norm-agilent-one-color.R</resource></tool>
-		<tool runtime="R"><resource>norm-agilent.R</resource></tool>
-		<tool runtime="R"><resource>norm-agilent-miRNA.R</resource></tool>
-		<tool runtime="R"><resource>norm-cdna.R</resource></tool>
-		<tool runtime="R"><resource>norm-illumina.R</resource></tool>
-		<tool runtime="R"><resource>norm-illumina-backgroundcorr.R</resource></tool>	
-		<tool runtime="R"><resource>norm-illumina-lumi.R</resource></tool>
-		<tool runtime="R"><resource>norm-illumina-methylumi.R</resource></tool>
-		<tool runtime="R"><resource>norm-illumina-SNP.R</resource></tool>
-		<tool runtime="R"><resource>norm-prenormalized.R</resource></tool>
-		<tool runtime="R"><resource>norm-prenormalized-affy.R</resource></tool>
-		<tool runtime="R"><resource>norm-lme.R</resource></tool>
-		<tool runtime="R"><resource>norm-combat.R</resource></tool>
-		<tool runtime="R"><resource>norm-chip-average.R</resource></tool>
-		<tool runtime="R"><resource>norm-gene-average.R</resource></tool>
-		<tool runtime="R"><resource>norm-specific-samples.R</resource></tool>
-		<tool runtime="R"><resource>norm-specific-genes.R</resource></tool>
+		<tool>norm-affy.R</tool>
+		<tool>norm-affy-exon.R</tool>
+		<tool>norm-affy-gene.R</tool>
+		<tool>norm-affy-snp.R</tool>
+		<tool>norm-agilent-one-color.R</tool>
+		<tool>norm-agilent.R</tool>
+		<tool>norm-agilent-miRNA.R</tool>
+		<tool>norm-cdna.R</tool>
+		<tool>norm-illumina.R</tool>
+		<tool>norm-illumina-backgroundcorr.R</tool>	
+		<tool>norm-illumina-lumi.R</tool>
+		<tool>norm-illumina-methylumi.R</tool>
+		<tool>norm-illumina-SNP.R</tool>
+		<tool>norm-prenormalized.R</tool>
+		<tool>norm-prenormalized-affy.R</tool>
+		<tool>norm-lme.R</tool>
+		<tool>norm-combat.R</tool>
+		<tool>norm-chip-average.R</tool>
+		<tool>norm-gene-average.R</tool>
+		<tool>norm-specific-samples.R</tool>
+		<tool>norm-specific-genes.R</tool>
 	</category>
 	
 	<category name="Quality control" color="#e7df70">
-		<tool runtime="R"><resource>qc-affy.R</resource></tool>
-		<tool runtime="R"><resource>qc-affy-rle-nuse.R</resource></tool>
-		<tool runtime="R"><resource>qc-affy-exon-rle-nuse.R</resource></tool>
-		<tool runtime="R"><resource>qc-illumina.R</resource></tool>
-		<tool runtime="R"><resource>qc-agilent.R</resource></tool>
-		<tool runtime="R"><resource>qc-agilent-one-color.R</resource></tool>
-		<tool runtime="R"><resource>qc-cdna.R</resource></tool>
+		<tool>qc-affy.R</tool>
+		<tool>qc-affy-rle-nuse.R</tool>
+		<tool>qc-affy-exon-rle-nuse.R</tool>
+		<tool>qc-illumina.R</tool>
+		<tool>qc-agilent.R</tool>
+		<tool>qc-agilent-one-color.R</tool>
+		<tool>qc-cdna.R</tool>
 	</category>
 	
 	<category name="Preprocessing" color="#d59f45">
-		<tool runtime="R"><resource>filter-expression.R</resource></tool>
-		<tool runtime="R"><resource>filter-flags.R</resource></tool>
-		<tool runtime="R"><resource>filter-sd.R</resource></tool>
-		<tool runtime="R"><resource>filter-iqr.R</resource></tool>
-		<tool runtime="R"><resource>filter-cv.R</resource></tool>
-		<tool runtime="R"><resource>filter-by-column-term.R</resource></tool>
-		<tool runtime="R"><resource>filter-by-column-value.R</resource></tool>
-		<tool runtime="R"><resource>impute.R</resource></tool>
-		<tool runtime="R"><resource>na-omitted.R</resource></tool>
-		<tool runtime="R"><resource>dichotomize-continious-data.R</resource></tool>
+		<tool>filter-expression.R</tool>
+		<tool>filter-flags.R</tool>
+		<tool>filter-sd.R</tool>
+		<tool>filter-iqr.R</tool>
+		<tool>filter-cv.R</tool>
+		<tool>filter-by-column-term.R</tool>
+		<tool>filter-by-column-value.R</tool>
+		<tool>impute.R</tool>
+		<tool>na-omitted.R</tool>
+		<tool>dichotomize-continious-data.R</tool>
 	</category>
 	
 	<category name="Statistics" color="#e7881c">
-		<tool runtime="R"><resource>stat-one-group.R</resource></tool>
-		<tool runtime="R"><resource>stat-two-groups.R</resource></tool>
-		<!-- <tool runtime="R"><resource>stat-ROTS.R</resource></tool> -->
-		<tool runtime="R"><resource>stat-sam.R</resource></tool>
-		<tool runtime="R"><resource>stat-several-groups.R</resource></tool>
-		<tool runtime="R"><resource>stat-linear-modelling.R</resource></tool>
-		<tool runtime="R"><resource>stat-linear-modelling-designmat.R</resource></tool>
-		<tool runtime="R"><resource>stat-proportions.R</resource></tool>
-		<tool runtime="R"><resource>stat-correlate-with-phenodata.R</resource></tool>
-		<tool runtime="R"><resource>correlation-analysis-mirna.R</resource></tool> 
-		<tool runtime="R"><resource>stat-timeseries.R</resource></tool>
-		<tool runtime="R"><resource>stat-chisq-snp.R</resource></tool>
-		<tool runtime="R"><resource>stat-adjust-pvalues.R</resource></tool>
-		<tool runtime="R"><resource>ordination-pca.R</resource></tool>
-		<tool runtime="R"><resource>ordination-ca.R</resource></tool>
-		<tool runtime="R"><resource>ordination-nmds.R</resource></tool>
-		<tool runtime="R"><resource>estimate-samplesize.R</resource></tool>
-		<tool runtime="R"><resource>sample-size-with-bh.R</resource></tool>
-		<tool runtime="R"><resource>up-down-analysis-mirna.R</resource></tool>
+		<tool>stat-one-group.R</tool>
+		<tool>stat-two-groups.R</tool>
+		<!-- <tool>stat-ROTS.R</tool> -->
+		<tool>stat-sam.R</tool>
+		<tool>stat-several-groups.R</tool>
+		<tool>stat-linear-modelling.R</tool>
+		<tool>stat-linear-modelling-designmat.R</tool>
+		<tool>stat-proportions.R</tool>
+		<tool>stat-correlate-with-phenodata.R</tool>
+		<tool>correlation-analysis-mirna.R</tool> 
+		<tool>stat-timeseries.R</tool>
+		<tool>stat-chisq-snp.R</tool>
+		<tool>stat-adjust-pvalues.R</tool>
+		<tool>ordination-pca.R</tool>
+		<tool>ordination-ca.R</tool>
+		<tool>ordination-nmds.R</tool>
+		<tool>estimate-samplesize.R</tool>
+		<tool>sample-size-with-bh.R</tool>
+		<tool>up-down-analysis-mirna.R</tool>
 	</category>
 	
 	<category name="Clustering" color="#d53833">
-		<tool runtime="R"><resource>classification-knn.R</resource></tool>
-		<tool runtime="R"><resource>cluster-hierarchical.R</resource></tool>
-		<tool runtime="R"><resource>cluster-kmeans.R</resource></tool>
-		<tool runtime="R"><resource>cluster-kmeans-testK.R</resource></tool>
-		<tool runtime="R"><resource>cluster-qt.R</resource></tool>
-		<tool runtime="R"><resource>classification.R</resource></tool>
-		<tool runtime="R"><resource>cluster-som.R</resource></tool>
+		<tool>classification-knn.R</tool>
+		<tool>cluster-hierarchical.R</tool>
+		<tool>cluster-kmeans.R</tool>
+		<tool>cluster-kmeans-testK.R</tool>
+		<tool>cluster-qt.R</tool>
+		<tool>classification.R</tool>
+		<tool>cluster-som.R</tool>
 	</category>
 	
 	<category name="Annotation" color="#80a3b7">
-		<tool runtime="R"><resource>annotate-genelist2html.R</resource></tool>
-		<tool runtime="R"><resource>annotate-add-to-data.R</resource></tool>
-		<tool runtime="R"><resource>add-locations-to-data.R</resource></tool>
-		<tool runtime="R"><resource>annotate-miRNA-targets.R</resource></tool> 
-		<tool runtime="R"><resource>annotate-agilent-miRNA.R</resource></tool> 
+		<tool>annotate-genelist2html.R</tool>
+		<tool>annotate-add-to-data.R</tool>
+		<tool>add-locations-to-data.R</tool>
+		<tool>annotate-miRNA-targets.R</tool> 
+		<tool>annotate-agilent-miRNA.R</tool> 
 	</category>
 	
 	<category name="Pathways" color="#0177b7">
-		<tool runtime="R"><resource>stat-hyperG-GO.R</resource></tool>
-		<tool runtime="R"><resource>stat-hyperG-KEGG-PFAM.R</resource></tool>
-		<tool runtime="R"><resource>stat-hyperG-safe.R</resource></tool>
-		<tool runtime="R"><resource>stat-hyperG-cytoband.R</resource></tool>
-		<tool runtime="R"><resource>stat-geneset.R</resource></tool>
-		<tool runtime="R" module="common"><resource>pathways-mirna-hyperg-go.R</resource></tool> 
-		<tool runtime="R" module="common"><resource>pathways-mirna-hyperg-kegg.R</resource></tool> 
-		<tool runtime="python" module="common"><resource>annotate-cpdb.py</resource></tool>
+		<tool>stat-hyperG-GO.R</tool>
+		<tool>stat-hyperG-KEGG-PFAM.R</tool>
+		<tool>stat-hyperG-safe.R</tool>
+		<tool>stat-hyperG-cytoband.R</tool>
+		<tool>stat-geneset.R</tool>
+		<tool module="common">pathways-mirna-hyperg-go.R</tool> 
+		<tool module="common">pathways-mirna-hyperg-kegg.R</tool> 
+		<tool module="common">annotate-cpdb.py</tool>
 	</category>
 
 	<category name="Promoter analysis" color="#629a9b">
-		<tool runtime="R"><resource>promoter-tfbs.R</resource></tool>
-		<tool runtime="R"><resource>promoter-retrprom.R</resource></tool>
+		<tool>promoter-tfbs.R</tool>
+		<tool>promoter-retrprom.R</tool>
 	</category>
 
 	<category name="Copy number aberrations" color="#c0d2de">
-		<tool runtime="R-3.3.2"><resource>import-soft2.R</resource></tool>
-		<tool runtime="R"><resource>acgh-import-from-cangem.R</resource></tool>
-		<tool runtime="R"><resource>acgh-normalize.R</resource></tool>
-		<tool runtime="R"><resource>acgh-plot-profile.R</resource></tool>
-		<tool runtime="R"><resource>acgh-smooth.R</resource></tool>
-		<tool runtime="R"><resource>acgh-segment.R</resource></tool>
-		<tool runtime="R"><resource>acgh-call-aberrations.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-identify-regions.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-add-cytobands.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-count-overlapping-cnvs.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-plot-frequencies.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-count-aberrations.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-cluster.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-correlate.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-group-test.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-survival-test.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-plot-survival.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-fuse-regions-by-column.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-fuse-regions-manually.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-convert-from-probes-to-genes.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-pathways-go.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-match-probes.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-plot-combined-profile.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-expression-test.R</resource></tool>	
-		<tool runtime="R" module="common"><resource>acgh-plot-combined-expression.R</resource></tool>
-		<tool runtime="R-3.3.2"><resource>acgh-fetch-probe-positions-from-geo.R</resource></tool>
-		<tool runtime="R"><resource>acgh-fetch-probe-positions-from-cangem.R</resource></tool>
+		<tool runtime="R-3.3.2">import-soft2.R</tool>
+		<tool>acgh-import-from-cangem.R</tool>
+		<tool>acgh-normalize.R</tool>
+		<tool>acgh-plot-profile.R</tool>
+		<tool>acgh-smooth.R</tool>
+		<tool>acgh-segment.R</tool>
+		<tool>acgh-call-aberrations.R</tool>
+		<tool module="common">acgh-identify-regions.R</tool>
+		<tool module="common">acgh-add-cytobands.R</tool>
+		<tool module="common">acgh-count-overlapping-cnvs.R</tool>
+		<tool module="common">acgh-plot-frequencies.R</tool>
+		<tool module="common">cna-count-aberrations.R</tool>
+		<tool module="common">acgh-cluster.R</tool>
+		<tool module="common">cna-correlate.R</tool>
+		<tool module="common">acgh-group-test.R</tool>
+		<tool module="common">acgh-survival-test.R</tool>
+		<tool module="common">acgh-plot-survival.R</tool>
+		<tool module="common">cna-fuse-regions-by-column.R</tool>
+		<tool module="common">cna-fuse-regions-manually.R</tool>
+		<tool module="common">acgh-convert-from-probes-to-genes.R</tool>
+		<tool module="common">acgh-pathways-go.R</tool>
+		<tool module="common">acgh-match-probes.R</tool>
+		<tool module="common">acgh-plot-combined-profile.R</tool>
+		<tool module="common">acgh-expression-test.R</tool>	
+		<tool module="common">acgh-plot-combined-expression.R</tool>
+		<tool runtime="R-3.3.2">acgh-fetch-probe-positions-from-geo.R</tool>
+		<tool>acgh-fetch-probe-positions-from-cangem.R</tool>
 	</category>
 
 	<category name="Visualisation" color="#a49900">
-		<tool runtime="R"><resource>plot-idiogram.R</resource></tool>
-		<tool runtime="R"><resource>plot-chrom-pos.R</resource></tool>
-		<tool runtime="R"><resource>plot-volcano.R</resource></tool>
-		<tool runtime="R"><resource>plot-volcano-data-exists.R</resource></tool>
-		<tool runtime="R"><resource>plot-boxplot.R</resource></tool>
-		<tool runtime="R"><resource>plot-dendrogram.R</resource></tool>
-		<tool runtime="R"><resource>plot-histogram.R</resource></tool>
-		<tool runtime="R"><resource>plot-corrgram.R</resource></tool>
-		<tool runtime="R"><resource>plot-heatmap.R</resource></tool>
-		<tool runtime="R"><resource>plot-annoheatmap.R</resource></tool>
+		<tool>plot-idiogram.R</tool>
+		<tool>plot-chrom-pos.R</tool>
+		<tool>plot-volcano.R</tool>
+		<tool>plot-volcano-data-exists.R</tool>
+		<tool>plot-boxplot.R</tool>
+		<tool>plot-dendrogram.R</tool>
+		<tool>plot-histogram.R</tool>
+		<tool>plot-corrgram.R</tool>
+		<tool>plot-heatmap.R</tool>
+		<tool>plot-annoheatmap.R</tool>
 	</category>
 
 	<category name="Utilities" color="#83010b">
-		<tool runtime="R"><resource>search-correlation.R</resource></tool>
-		<tool runtime="R"><resource>search-queryword.R</resource></tool>
-		<tool runtime="R"><resource>search-coordinates.R</resource></tool>
-		<tool runtime="R"><resource>filter-by-column-term.R</resource></tool>
-		<tool runtime="R"><resource>filter-by-column-value.R</resource></tool>
-		<tool runtime="R"><resource>delete-columns.R</resource></tool>
-		<tool runtime="R"><resource>delete-and-subtract-columns.R</resource></tool>
-		<tool runtime="R"><resource>merge-tables.R</resource></tool>
-		<tool runtime="R"><resource>merge-datasets.R</resource></tool>
-		<tool runtime="R"><resource>merge-pheno-and-data.R</resource></tool>
-		<tool runtime="R"><resource>extract-genes-from-clustering.R</resource></tool>
-		<tool runtime="R"><resource>extract-genes-from-go.R</resource></tool>
-		<tool runtime="R"><resource>extract-genes-from-kegg.R</resource></tool>
-		<tool runtime="R" module="common"><resource>extract-samples-from-dataset.R</resource></tool>		
-		<tool runtime="R"><resource>extract-genes-from-stattest.R</resource></tool>
-		<tool runtime="R"><resource>extract-genes.R</resource></tool>
-		<tool runtime="R"><resource>calculate-fold-change.R</resource></tool>
-		<tool runtime="R"><resource>average-replicates.R</resource></tool>
-		<tool runtime="R"><resource>combine-probes-to-genes.R</resource></tool>
-		<tool runtime="R"><resource>change-interpretation.R</resource></tool>
-		<tool runtime="R"><resource>generate-phenodata.R</resource></tool>
-		<tool runtime="R"><resource>calculate-descriptive-statistics.R</resource></tool>
-		<tool runtime="R"><resource>sort-samples.R</resource></tool>
-		<tool runtime="R"><resource>sort-genes.R</resource></tool>
-		<tool runtime="R"><resource>sampling.R</resource></tool>
-		<tool runtime="R"><resource>export-tab2mage.R</resource></tool>
-		<tool runtime="R"><resource>export-soft.R</resource></tool>
-		<tool runtime="R-3.3.2"><resource>import-soft2.R</resource></tool>
-		<tool runtime="R"><resource>import-ArrayExpress.R</resource></tool>
-		<tool runtime="R"><resource>intersect-lists.R</resource></tool>
-		<tool runtime="R"><resource>output_test.R</resource></tool>
-		<tool runtime="R" module="common"><resource>join_tsv_files.R</resource></tool>
+		<tool>search-correlation.R</tool>
+		<tool>search-queryword.R</tool>
+		<tool>search-coordinates.R</tool>
+		<tool>filter-by-column-term.R</tool>
+		<tool>filter-by-column-value.R</tool>
+		<tool>delete-columns.R</tool>
+		<tool>delete-and-subtract-columns.R</tool>
+		<tool>merge-tables.R</tool>
+		<tool>merge-datasets.R</tool>
+		<tool>merge-pheno-and-data.R</tool>
+		<tool>extract-genes-from-clustering.R</tool>
+		<tool>extract-genes-from-go.R</tool>
+		<tool>extract-genes-from-kegg.R</tool>
+		<tool module="common">extract-samples-from-dataset.R</tool>		
+		<tool>extract-genes-from-stattest.R</tool>
+		<tool>extract-genes.R</tool>
+		<tool>calculate-fold-change.R</tool>
+		<tool>average-replicates.R</tool>
+		<tool>combine-probes-to-genes.R</tool>
+		<tool>change-interpretation.R</tool>
+		<tool>generate-phenodata.R</tool>
+		<tool>calculate-descriptive-statistics.R</tool>
+		<tool>sort-samples.R</tool>
+		<tool>sort-genes.R</tool>
+		<tool>sampling.R</tool>
+		<tool>export-tab2mage.R</tool>
+		<tool>export-soft.R</tool>
+		<tool runtime="R-3.3.2">import-soft2.R</tool>
+		<tool>import-ArrayExpress.R</tool>
+		<tool>intersect-lists.R</tool>
+		<tool>output_test.R</tool>
+		<tool module="common">join_tsv_files.R</tool>
 	</category>
 	
 	<category name="Hidden" hidden="true" color="#0">
-		<tool runtime="R"><resource>test.R</resource></tool>
-		<tool runtime="R"><resource>no-operation.R</resource></tool>
-		<tool runtime="R"><resource>echo.R</resource></tool>
-		<tool runtime="R"><resource>fail.R</resource></tool>
-		<tool runtime="R"><resource>input-output.R</resource></tool>
-		<tool runtime="R"><resource>simple-input-output.R</resource></tool>
-		<tool runtime="R"><resource>data-throughput.R</resource></tool>
-		<tool runtime="R"><resource>sleep.R</resource></tool>
-		<tool runtime="R"><resource>input-sleep-output.R</resource></tool>
+		<tool>test.R</tool>
+		<tool>no-operation.R</tool>
+		<tool>echo.R</tool>
+		<tool>fail.R</tool>
+		<tool>input-output.R</tool>
+		<tool>simple-input-output.R</tool>
+		<tool>data-throughput.R</tool>
+		<tool>sleep.R</tool>
+		<tool>input-sleep-output.R</tool>
 	</category>
 </module>
 
