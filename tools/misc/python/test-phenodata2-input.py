@@ -1,4 +1,4 @@
-# TOOL test-phenodata-input2.py: "Test phenodata2 input in Python" () 
+# TOOL test-phenodata2-input.py: "Test phenodata2 input in Python" () 
 # INPUT META phenodata2.tsv TYPE GENERIC
 # OUTPUT output.tsv
 
