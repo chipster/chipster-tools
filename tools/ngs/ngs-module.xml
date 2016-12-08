@@ -223,16 +223,16 @@
 	</category>
 
 	<category name="Single cell (BETA)" color="#37dddd">
-		<tool runtime="R"><resource>picard-fastqtosam.R</resource></tool>
-		<tool runtime="R"><resource>single-cell-TagBam.R</resource></tool>
-		<tool runtime="R"><resource>single-cell-FilterBam.R</resource></tool>
-		<tool runtime="R"><resource>picard-samtofastq.R</resource></tool>		
-	    <tool runtime="R"><resource>picard-sortsam.R</resource></tool>	
-		<tool runtime="R"><resource>picard-merge-bam-alignment.R</resource></tool>	    
-		<tool runtime="R"><resource>single-cell-tag-read-with-gene-exon.R</resource></tool>	   	
-		<tool runtime="R"><resource>single-cell-detect-bead-synthesis-errors.R</resource></tool>	   	
-		<tool runtime="R"><resource>single-cell-digital-expression.R</resource></tool>	   	
-		<tool runtime="R"><resource>single-cell-bam-tag-histogram.R</resource></tool>	   	
+		<tool>picard-fastqtosam.R</tool>
+		<tool>single-cell-TagBam.R</tool>
+		<tool>single-cell-FilterBam.R</tool>
+		<tool>picard-samtofastq.R</tool>		
+	    <tool>picard-sortsam.R</tool>	
+		<tool>picard-merge-bam-alignment.R</tool>	    
+		<tool>single-cell-tag-read-with-gene-exon.R</tool>	   	
+		<tool>single-cell-detect-bead-synthesis-errors.R</tool>	   	
+		<tool>single-cell-digital-expression.R</tool>	   	
+		<tool>single-cell-bam-tag-histogram.R</tool>	   	
 	</category>
 
 </module>
