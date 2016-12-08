@@ -1,16 +1,17 @@
-# TOOL norm-prenormalized.R: "Process prenormalized" (If you import prenormalized data that is not in Chipster format, you need to import it through Import tool, and then use this tool for preprocessing it. Every column containing normalized expression values need to be specified as Sample in the Import tool. If you want to be able to use annotation, you need to SPECIFY THE CHIPTYPE.)
+# TOOL norm-prenormalized.R: "Process prenormalized" (If you import prenormalized data that is not in Chipster format, you need to import it through Import tool, and then use this tool for preprocessing it. Every column containing normalized expression values need to be specified as Sample in the Import tool. If you want to be able to use annotation, you need to SPECIFY THE CHIPTYPE. Please find the correct naming in the Supported microarray types page in the Chipster manual.)
 # INPUT microarray{...}.tsv: microarray{...}.tsv TYPE CDNA 
 # OUTPUT normalized.tsv: normalized.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 
-# PARAMETER chiptype: "Chiptype" TYPE STRING DEFAULT cDNA ()
-# PARAMETER keep.annotations: "Keep annotations" TYPE [yes: yes, no: no] DEFAULT no (Keep or discard annotation column after preprocessing)
+# PARAMETER chiptype: "Chip type" TYPE STRING DEFAULT cDNA (Please find the correct naming in the Supported microarray types page in the Chipster manual.)
+# PARAMETER OPTIONAL keep.annotations: "Keep annotations" TYPE [yes: yes, no: no] DEFAULT no (Keep or discard annotation column after preprocessing)
 
 # Process prenormalized
 # JTT 26.01.2009
 # MG 21.10.2009
 # EK 23.04.2013, added .tsv ending to expression column names so that sample renaming is possible in interactive visualizations
 # MK 04.10.2013, special characters trimmed off
-# MK 06.02.2014, fixed bug resulting in wrongly formatted files for non-typical files 
+# MK 06.02.2014, fixed bug resulting in wrongly formatted files for non-typical files
+# EK 08.12.2016, added lib2 initialization that has been accidentally removed
 
 # Loads the libraries
 library(limma)
@@ -68,8 +69,10 @@ if(class(a)=="try-error") {
 	a <- try(library(paste(chiptype, ".db", sep=""), character.only=T)) 
 }
 
-#If chiptype has annotation file
-if(class(a) !="try-error") { 
+
+# If chiptype has annotation file
+if(class(a) !="try-error") {
+	lib2<-sub('.db','',chiptype)
 	symbol<-gsub("\'", "", data.frame(unlist(as.list(get(paste(lib2, "SYMBOL", sep="")))))[rownames(M2),])
 	genename<-gsub("\'", "", data.frame(unlist(as.list(get(paste(lib2, "GENENAME", sep="")))))[rownames(M2),])	
 	genename <- gsub("#", "", genename)
