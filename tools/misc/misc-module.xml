@@ -1,7 +1,7 @@
 <module name="misc">
 
 	<category name="Data retrieval" color="#e7df70">
-	   <tool runtime="python"><resource>edirect_fetch.py</resource></tool>
+	   <!-- <tool runtime="python"><resource>edirect_fetch.py</resource></tool> -->
 	   <tool runtime="R" module="common"><resource>srafetch.R</resource></tool>
 	   <tool runtime="R" module="common"><resource>srabamfetch.R</resource></tool>
        <tool runtime="R" module="common"><resource>ensemblfetch.R</resource></tool>

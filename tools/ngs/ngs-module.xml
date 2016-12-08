@@ -5,6 +5,7 @@
 		<tool runtime="R"><resource>fastx-statistics.R</resource></tool>
 		<tool runtime="R"><resource>prinseq-statistics.R</resource></tool>
 		<tool runtime="R"><resource>rseqc.R</resource></tool>
+		<tool runtime="R"><resource>rseqc_infer_rnaseq_experiment.R</resource></tool>
 		<tool runtime="R"><resource>picard-collectmultiplemetrics.R</resource></tool>
 		<tool runtime="R"><resource>deseq2-pca-heatmap.R</resource></tool>		
 	</category>
