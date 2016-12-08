@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Detect bead synthesis errors</h2>
+
+<h3>Description</h3>
+
+<p>This Drop­-seq tool identifies cell barcodes with aberrant “fixed” UMI bases. 
+If only the last UMI base is fixed as a T, the cell barcode is corrected (the last base is trimmed off) and 
+all cell barcodes with identical sequence at the first 11 bases are merged together. 
+If any other UMI base is fixed, the reads with that cell barcode are discarded.
+</p>
+
+<p>
+The tool asks the user to select a number of barcodes on which to perform the correction. 
+In the original Drop-seq manual, the tool developers guide users to use roughly 2 times the 
+anticipated number cells, 
+as they have empirically found that this allows to recover nearly every defective cell barcode 
+that corresponds to a STAMP (rather than an empty bead cell barcode). </p>
+ </p>
+ 
+ 
+<p>
+This program reads in the BAM file, and looks at the distribution of bases at each position of all UMIs 
+for a cell barcode. It detects unusual distributions of base frequency, where a base with >=80% frequency at 
+any position is detected as an error. Barcodes with less than 25 total UMIs are ignored.
+</p>
+
+
+<p>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+		<li>Number of barcodes [2000]</li>
+		<li>Sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
+	</ul>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>cleaned.bam: Cleaned BAM </li>
+<li>synthesis_stats.txt: Synthesis statistics  </li>
+<li>synthesis_stats_summary.txt: Counts of the synthesis errors </li>
+</ul>
+
+</body>

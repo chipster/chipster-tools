@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Merge BAM alignment</h2>
+
+<h3>Description</h3>
+
+<p>This Picard tool merges alignment data from a sorted BAM file with data in an unmapped BAM file. 
+This tool produces a new BAM file that includes all aligned and unaligned reads and also carries 
+forward additional read attributes from the unmapped BAM 
+(attributes that are otherwise lost in the process of alignment). 
+The purpose of this tool is to use information from the unmapped BAM to fix up aligner output.  
+In short, this tool can be used to add the cell and molecular barcode and other tags  
+that were lost during the alignment to the aligned BAM file.
+</p>
+ 
+<p>
+Note, that this tool ignores secondary alignments.</p>
+
+<p>
+Make sure you choose the same reference that was used in the alignment, and check that the input files are assigned correctly!</p>
+
+<p>
+For more details, please check the <a href="https://broadinstitute.github.io/picard/command-line-overview.html/">home page of Picard tools.</a>
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+		<li>Reference [Homo_sapiens.GRCh38]</li>
+	</ul>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>merged.bam: Merged BAM </li></ul>
+
+</body>
