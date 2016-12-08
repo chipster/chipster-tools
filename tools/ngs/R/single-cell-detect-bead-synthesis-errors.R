@@ -1,4 +1,4 @@
-# TOOL single-cell-detect-bead-synthesis-erros.R: "Detect bead synthesis errors" (Detect and repair barcode synthesis errors.)
+# TOOL single-cell-detect-bead-synthesis-errors.R: "Detect bead synthesis errors" (Detect and repair barcode synthesis errors.)
 # INPUT input.bam: "BAM file" TYPE GENERIC
 # OUTPUT OPTIONAL cleaned.bam
 # OUTPUT OPTIONAL synthesis_stats.txt
