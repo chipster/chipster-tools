@@ -55,15 +55,15 @@
 		<tool>samtools-index-fasta.R</tool>
 		<tool>fastx-renamer.R</tool>
 		<tool>fastx-collapser.R</tool>
-		<tool>fi.csc.chipster.tools.ngs.SortBed</tool>
-		<tool>fi.csc.chipster.tools.ngs.SortGtf</tool>
-		<tool>fi.csc.chipster.tools.ngs.SortTsv</tool>
-		<tool>fi.csc.chipster.tools.ngs.SortVcf</tool>		
+		<tool>fi.csc.chipster.tools.ngs.SortBed.java</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortGtf.java</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortTsv.java</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortVcf.java</tool>		
 		<tool>extract-features-from-BED.R</tool>	
 		<tool>bedtools-fastafrombed.R</tool>
 		<tool module="common">srafetch.R</tool>
 	    <tool module="common">srabamfetch.R</tool>
-		<tool>fi.csc.chipster.tools.common.DownloadFile</tool>
+		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
 		<tool module="common">gunzip.py</tool>
@@ -75,11 +75,11 @@
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
-		<tool>fi.csc.chipster.tools.ngs.regions.FindOverlappingTool
+		<tool>fi.csc.chipster.tools.ngs.regions.FindOverlappingTool.java
 			</tool>
-		<tool>fi.csc.chipster.tools.ngs.regions.RemoveOverlappingTool
+		<tool>fi.csc.chipster.tools.ngs.regions.RemoveOverlappingTool.java
 			</tool>
-		<tool>fi.csc.chipster.tools.ngs.regions.CombineRegionsTool
+		<tool>fi.csc.chipster.tools.ngs.regions.CombineRegionsTool.java
 			</tool>
 		<tool>bedtools-subtractbed.R</tool>	
 		<tool>bedtools-intersectbed.R</tool>
@@ -180,7 +180,7 @@
 	</category>
 
 	<category name="CNA-seq" color="#a49900">
-		<tool runtime="R-3.3.2">cna-define-experiment.R</tool>
+		<tool>cna-define-experiment.R</tool>
 		<tool>cna-filter-bins.R</tool>
 		<tool>cna-correct.R</tool>
 		<tool>cna-normalize.R</tool>

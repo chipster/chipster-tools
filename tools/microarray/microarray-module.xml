@@ -106,7 +106,7 @@
 	</category>
 
 	<category name="Copy number aberrations" color="#c0d2de">
-		<tool runtime="R-3.3.2">import-soft2.R</tool>
+		<tool>import-soft2.R</tool>
 		<tool>acgh-import-from-cangem.R</tool>
 		<tool>acgh-normalize.R</tool>
 		<tool>acgh-plot-profile.R</tool>
@@ -131,7 +131,7 @@
 		<tool module="common">acgh-plot-combined-profile.R</tool>
 		<tool module="common">acgh-expression-test.R</tool>	
 		<tool module="common">acgh-plot-combined-expression.R</tool>
-		<tool runtime="R-3.3.2">acgh-fetch-probe-positions-from-geo.R</tool>
+		<tool>acgh-fetch-probe-positions-from-geo.R</tool>
 		<tool>acgh-fetch-probe-positions-from-cangem.R</tool>
 	</category>
 
@@ -176,7 +176,7 @@
 		<tool>sampling.R</tool>
 		<tool>export-tab2mage.R</tool>
 		<tool>export-soft.R</tool>
-		<tool runtime="R-3.3.2">import-soft2.R</tool>
+		<tool>import-soft2.R</tool>
 		<tool>import-ArrayExpress.R</tool>
 		<tool>intersect-lists.R</tool>
 		<tool>output_test.R</tool>
