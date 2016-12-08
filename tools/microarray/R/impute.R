@@ -47,7 +47,7 @@ if(method=="knn") {
 
 	if(max(apply(dat2, 2, function(z) sum(is.na(z))) / nrow(dat2)) > cmax) {
 		namax <- max(apply(dat2, 2, function(z) sum(is.na(z))) / nrow(dat2))
-		stop(paste("CHIPSTER-NOTE: One of your columns has more NAs than anticipated. Please choose another imputation method or set missing.row.max to ", round(namax, 2)*100, "%", sep=""))
+		stop(paste("CHIPSTER-NOTE: One of your columns has more NAs than anticipated. Please choose another imputation method or set Missing values column max to ", round(namax, 2)*100, "%", sep=""))
 	}
 
 	dat.impute<-impute.knn(as.matrix(dat2), k = K, rowmax = rmax, colmax = cmax, maxp = "p")
