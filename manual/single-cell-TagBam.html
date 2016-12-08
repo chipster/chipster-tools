@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Tag BAM</h2>
+
+<h3>Description</h3>
+
+<p>This Drop­-seq tool extracts bases from the cell/molecular barcode encoding read,
+ and creates a new BAM tag with those bases on the g​enome read.​ 
+ We use the BAM tag XM for molecular barcodes, and XC for cell barcodes. </p>
+ 
+<p>This program is run once per barcode extraction to add a tag. 
+On the first iteration, the cell barcode is extracted from bases determined in the first parameter (default: 1-­12).
+On the second iteration, the molecular barcode is extracted from bases determined by the base range for molecular barcode
+parameter (default 13-­20) of the barcode read.
+</p>
+
+<p>
+The tool also tags the reads in which the quality drops below the base quality threshold.
+The number of bases that fall below the threshold is marked in the XQ tag. 
+This information can be used later on in the filtering tools.
+</p>
+
+<p>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+		<li>Base range for cell barcode [1-12]</li>
+		<li>Base range for molecule barcode [13-20]</li>
+		<li>Base quality [10]</li>
+	</ul>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>unaligned_tagged.bam : Tagged BAM </li>
+<li>summary_cell.txt : Summary of the cell barcode tagging </li>
+<li>summary_molecular.txt : Summary of the molecular barcode tagging </li>
+</ul>
+
+</body>
+

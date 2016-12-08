@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Filter and trim BAM</h2>
+
+<h3>Description</h3>
+
+<p>This Drop­-seq tool removes reads where the cell or molecular barcode has low quality bases, 
+trims adapters and polyA tails.
+ </p>
+ 
+<p>This tool is a combination of three Drop-seq tools: FilterBAM, TrimStartingSequence and PolyATrimmer.
+<br>
+<b>First</b>, the information added to the XQ tag in Tag BAM tool is used to filter out reads where more than one (1)
+base have quality below the threshold used in this Tag BAM tool (default: 10). 
+<br>
+<b>Next</b>, any user determined sequences are trimmed away. 
+User can determine how many mismatches are allowed in these sequences (default: 0), 
+and how long stretch of the sequence there has to be in the read at least (default: 5 bases).
+The SMART Adapter sequence is offered as a default.
+<br>
+<b>Lastly</b>, trailing polyA tails are hard clipped from the reads. 
+The tools searches for contiguous A's from the end of the read. User is again allowed to
+determine the number of mismatches allowed (default: 0) and how many A's there at least need to be 
+for the clipping to happen (default: 6).
+</p>
+
+<p>
+Please note that after this tool, you might end up having some rather short reads in your BAM file.
+It might be advisable to remove those, as this makes the alignment step faster. 
+For this purpose you can use for example the Trimmomatic tool.
+</p>
+
+<p>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+		<li>Adapter sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
+		<li>Mismatches in adapter [0]</li>
+		<li>Number of bases to check in adapter [5]</li>
+		<li>Mismatches in polyA [0]</li>
+		<li>Number of bases to check in polyA [6]</li>
+	</ul>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>unaligned_tagged_polyA_filtered.bam : Filtered BAM </li>
+<li>adapter_trim_summary.txt : Summary of the adapter trimming step </li>
+<li>polyA_trimming_report.txt : Summary of the polyA trimmming step </li>
+</ul>
+
+
+
+</body>
+

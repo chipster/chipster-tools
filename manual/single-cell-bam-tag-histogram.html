@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>BAM tag histogram</h2>
+
+<h3>Description</h3>
+
+<p>This Drop­-seq tool extracts reads per cell barcode (=the number of reads for XC tag in a BAM file).
+Based on these, a cumulative distribution plot is drawn. This plot can be used to estimate how many cells you want
+to extract from your BAM in the DGE matrix: the "knee" of the distribution shows this. 
+The number of STAMPs are the number of cell barcodes to the left of the inflection point (the "knee"); 
+to the right of the inflection point are the empty beads that have only been exposed to ambient RNA.
+</p>
+
+<p>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+</p>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>cell_readcounts.txt.gz: Cell read counts </li>
+<li>tag_histogram.pdf: The cumulative distribution plot   </li>
+</ul>
+
+
+</body>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Digital expression</h2>
+
+<h3>Description</h3>
+
+<p>This Drop­-seq tool extracts the digital gene expression data from an aligned library.
+<br>
+There are two outputs available: 
+<br>-the primary is the DGE matrix, with each a row for each gene, and a column for each cell
+<br>-the secondary analysis is a summary of the DGE matrix on a per ­cell level, 
+indicating the number of genes and transcripts observed.
+</p>
+
+<p>
+<b>The selection of the sets of cells</b> <br>
+<ul>
+		<li>Number of barcodes: Counts the number of reads per cell barcode and only includes cells that 
+		have at least this many reads.</li>
+		li>Number of genes per cell: Select cells that have at least this many genes.</li>
+ </p>
+
+<p>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+		<li>Number of barcodes [100]</li>
+		<li>Number of genes per cell [100]</li>
+	</ul>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>digital_expression.tsv: The DGE matrix (primary output) </li>
+<li>digital_expression_summary.txt: summary of the DGE matrix on a per ­cell level (the secondary output)  </li>
+</ul>
+
+
+</body>

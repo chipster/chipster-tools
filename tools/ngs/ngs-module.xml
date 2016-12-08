@@ -1,5 +1,5 @@
 <module name="ngs">
-
+	
 	<category name="Quality control" color="#d5c796">
 		<tool>fastqc.R</tool>
 		<tool>fastx-statistics.R</tool>
@@ -222,6 +222,17 @@
 	    <tool>mothur-analyses.R</tool>
 	</category>
 
-
+	<category name="Single cell (BETA)" color="#37dddd">
+		<tool runtime="R"><resource>picard-fastqtosam.R</resource></tool>
+		<tool runtime="R"><resource>single-cell-TagBam.R</resource></tool>
+		<tool runtime="R"><resource>single-cell-FilterBam.R</resource></tool>
+		<tool runtime="R"><resource>picard-samtofastq.R</resource></tool>		
+	    <tool runtime="R"><resource>picard-sortsam.R</resource></tool>	
+		<tool runtime="R"><resource>picard-merge-bam-alignment.R</resource></tool>	    
+		<tool runtime="R"><resource>single-cell-tag-read-with-gene-exon.R</resource></tool>	   	
+		<tool runtime="R"><resource>single-cell-detect-bead-synthesis-errors.R</resource></tool>	   	
+		<tool runtime="R"><resource>single-cell-digital-expression.R</resource></tool>	   	
+		<tool runtime="R"><resource>single-cell-bam-tag-histogram.R</resource></tool>	   	
+	</category>
 
 </module>
