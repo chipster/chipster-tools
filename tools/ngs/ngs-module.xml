@@ -1,238 +1,238 @@
 <module name="ngs">
 	
 	<category name="Quality control" color="#d5c796">
-		<tool runtime="R"><resource>fastqc.R</resource></tool>
-		<tool runtime="R"><resource>fastx-statistics.R</resource></tool>
-		<tool runtime="R"><resource>prinseq-statistics.R</resource></tool>
-		<tool runtime="R"><resource>rseqc.R</resource></tool>
-		<tool runtime="R"><resource>rseqc_infer_rnaseq_experiment.R</resource></tool>
-		<tool runtime="R"><resource>picard-collectmultiplemetrics.R</resource></tool>
-		<tool runtime="R"><resource>deseq2-pca-heatmap.R</resource></tool>		
+		<tool>fastqc.R</tool>
+		<tool>fastx-statistics.R</tool>
+		<tool>prinseq-statistics.R</tool>
+		<tool>rseqc.R</tool>
+		<tool>rseqc_infer_rnaseq_experiment.R</tool>
+		<tool>picard-collectmultiplemetrics.R</tool>
+		<tool>deseq2-pca-heatmap.R</tool>		
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
-		<tool runtime="R"><resource>prinseq-filter.R</resource></tool>
-		<tool runtime="R"><resource>fastx-clipper.R</resource></tool>
-		<tool runtime="R"><resource>fastx-quality-filter.R</resource></tool>
-		<tool runtime="R"><resource>prinseq-trimmer.R</resource></tool>	
-		<tool runtime="R"><resource>trimmomatic.R</resource></tool>
-		<tool runtime="R"><resource>fastx-trimmer.R</resource></tool>
-		<tool runtime="R"><resource>tagcleaner-trim.R</resource></tool>	
-		<tool runtime="R"><resource>tagcleaner-predict.R</resource></tool>	
-		<tool runtime="R"><resource>tagcleaner-statistics.R</resource></tool>
+		<tool>prinseq-filter.R</tool>
+		<tool>fastx-clipper.R</tool>
+		<tool>fastx-quality-filter.R</tool>
+		<tool>prinseq-trimmer.R</tool>	
+		<tool>trimmomatic.R</tool>
+		<tool>fastx-trimmer.R</tool>
+		<tool>tagcleaner-trim.R</tool>	
+		<tool>tagcleaner-predict.R</tool>	
+		<tool>tagcleaner-statistics.R</tool>
 	</category>
 
 	<category name="Utilities" color="#d59f45">
-		<tool runtime="R"><resource>ngs-create-experiment.R</resource></tool>
-		<tool runtime="R"><resource>ngs-filter-annotations.R</resource></tool>
-		<tool runtime="R"><resource>ngs-filter-results-column.R</resource></tool>
-		<tool runtime="R"><resource>filter-bed-value.R</resource></tool>
-		<tool runtime="R" module="common"><resource>extract-samples-from-dataset.R</resource></tool>
-		<tool runtime="R" module="common"><resource>select_columns.R</resource></tool>
-		<tool runtime="R" module="common"><resource>sort_and_select_columns.R</resource></tool>
-		<tool runtime="R" module="common"><resource>join_tsv_files.R</resource></tool>
-		<tool runtime="R" module="common"><resource>general_file_processing.R</resource></tool>	
-		<tool runtime="R"><resource>process-preprocessed-counts.R</resource></tool>
-		<tool runtime="R"><resource>normalise-counts.R</resource></tool>
-		<tool runtime="R"><resource>deseq2-normalized-counts-for-gene.R</resource></tool>
-		<tool runtime="R"><resource>annotate-ensembl-ids.R</resource></tool>		
-		<tool runtime="R"><resource>samtools-index.R</resource></tool>
-		<tool runtime="R"><resource>samtools-sort-index-BAM.R</resource></tool>
-		<tool runtime="R"><resource>samtools-convert-SAMtoBAM-sort-index.R</resource></tool>
-		<tool runtime="R"><resource>samtools-subset.R</resource></tool>
-		<tool runtime="R"><resource>samtools-merge.R</resource></tool>
-		<tool runtime="R" module="common"><resource>concatenate.R</resource></tool>
-		<tool runtime="R"><resource>samtools-idxstats.R</resource></tool>	
-		<tool runtime="R"><resource>samtools-alignment-statistics.R</resource></tool>
-		<tool runtime="R"><resource>samtools-count.R</resource></tool>
-		<tool runtime="R"><resource>samtools-rmdup.R</resource></tool>
-		<tool runtime="R"><resource>picard-markduplicates.R</resource></tool>
-		<tool runtime="R"><resource>samtools-consensus.R</resource></tool>
-		<tool runtime="R"><resource>unique-alignments-from-bam.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-bamtobed.R</resource></tool>
-		<tool runtime="R"><resource>fastx-fastq-to-fasta.R</resource></tool>
-		<tool runtime="R"><resource>subset-fastq.R</resource></tool>
-		<tool runtime="R"><resource>samtools-index-fasta.R</resource></tool>
-		<tool runtime="R"><resource>fastx-renamer.R</resource></tool>
-		<tool runtime="R"><resource>fastx-collapser.R</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.SortBed</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.SortGtf</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.SortTsv</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.SortVcf</resource></tool>		
-		<tool runtime="R"><resource>extract-features-from-BED.R</resource></tool>	
-		<tool runtime="R"><resource>bedtools-fastafrombed.R</resource></tool>
-		<tool runtime="R" module="common"><resource>srafetch.R</resource></tool>
-	    <tool runtime="R" module="common"><resource>srabamfetch.R</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.common.DownloadFile</resource></tool>
-		<tool runtime="R" module="common"><resource>ensemblfetch.R</resource></tool>
-		<tool runtime="python" module="common"><resource>extract_gzip_tar.py</resource></tool>
-		<tool runtime="python" module="common"><resource>gunzip.py</resource></tool>
-		<tool runtime="R" module="common"><resource>make_tar.R</resource></tool>	
-		<tool runtime="R"><resource>a5-miseq.R</resource></tool>
-		<tool runtime="R" module="common"><resource>make_namelist.R</resource></tool>
-		<tool runtime="R"><resource>virusdetect.R</resource></tool>
-		<tool runtime="R"><resource>virusdetect-with-index-building.R</resource></tool>
+		<tool>ngs-create-experiment.R</tool>
+		<tool>ngs-filter-annotations.R</tool>
+		<tool>ngs-filter-results-column.R</tool>
+		<tool>filter-bed-value.R</tool>
+		<tool module="common">extract-samples-from-dataset.R</tool>
+		<tool module="common">select_columns.R</tool>
+		<tool module="common">sort_and_select_columns.R</tool>
+		<tool module="common">join_tsv_files.R</tool>
+		<tool module="common">general_file_processing.R</tool>	
+		<tool>process-preprocessed-counts.R</tool>
+		<tool>normalise-counts.R</tool>
+		<tool>deseq2-normalized-counts-for-gene.R</tool>
+		<tool>annotate-ensembl-ids.R</tool>		
+		<tool>samtools-index.R</tool>
+		<tool>samtools-sort-index-BAM.R</tool>
+		<tool>samtools-convert-SAMtoBAM-sort-index.R</tool>
+		<tool>samtools-subset.R</tool>
+		<tool>samtools-merge.R</tool>
+		<tool module="common">concatenate.R</tool>
+		<tool>samtools-idxstats.R</tool>	
+		<tool>samtools-alignment-statistics.R</tool>
+		<tool>samtools-count.R</tool>
+		<tool>samtools-rmdup.R</tool>
+		<tool>picard-markduplicates.R</tool>
+		<tool>samtools-consensus.R</tool>
+		<tool>unique-alignments-from-bam.R</tool>
+		<tool>bedtools-bamtobed.R</tool>
+		<tool>fastx-fastq-to-fasta.R</tool>
+		<tool>subset-fastq.R</tool>
+		<tool>samtools-index-fasta.R</tool>
+		<tool>fastx-renamer.R</tool>
+		<tool>fastx-collapser.R</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortBed.java</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortGtf.java</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortTsv.java</tool>
+		<tool>fi.csc.chipster.tools.ngs.SortVcf.java</tool>		
+		<tool>extract-features-from-BED.R</tool>	
+		<tool>bedtools-fastafrombed.R</tool>
+		<tool module="common">srafetch.R</tool>
+	    <tool module="common">srabamfetch.R</tool>
+		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
+		<tool module="common">ensemblfetch.R</tool>
+		<tool module="common">extract_gzip_tar.py</tool>
+		<tool module="common">gunzip.py</tool>
+		<tool module="common">make_tar.R</tool>	
+		<tool>a5-miseq.R</tool>
+		<tool module="common">make_namelist.R</tool>
+		<tool>virusdetect.R</tool>
+		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.regions.FindOverlappingTool
-			</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.regions.RemoveOverlappingTool
-			</resource></tool>
-		<tool runtime="java"><resource>fi.csc.chipster.tools.ngs.regions.CombineRegionsTool
-			</resource></tool>
-		<tool runtime="R"><resource>bedtools-subtractbed.R</resource></tool>	
-		<tool runtime="R"><resource>bedtools-intersectbed.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-closestbed.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-windowbed.R</resource></tool>
+		<tool>fi.csc.chipster.tools.ngs.regions.FindOverlappingTool.java
+			</tool>
+		<tool>fi.csc.chipster.tools.ngs.regions.RemoveOverlappingTool.java
+			</tool>
+		<tool>fi.csc.chipster.tools.ngs.regions.CombineRegionsTool.java
+			</tool>
+		<tool>bedtools-subtractbed.R</tool>	
+		<tool>bedtools-intersectbed.R</tool>
+		<tool>bedtools-closestbed.R</tool>
+		<tool>bedtools-windowbed.R</tool>
 		<!-- 
-		<tool runtime="R"><resource>bedtools-mergebed.R</resource></tool>
+		<tool>bedtools-mergebed.R</tool>
 		-->
-		<tool runtime="R"><resource>bedtools-coveragebed.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-genomecoveragebed.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-overlap.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-slopbed.R</resource></tool>	
-		<tool runtime="R"><resource>bedtools-pairtobed.R</resource></tool>
-		<tool runtime="R"><resource>bedtools-pairtopair.R</resource></tool>	
+		<tool>bedtools-coveragebed.R</tool>
+		<tool>bedtools-genomecoveragebed.R</tool>
+		<tool>bedtools-overlap.R</tool>
+		<tool>bedtools-slopbed.R</tool>	
+		<tool>bedtools-pairtobed.R</tool>
+		<tool>bedtools-pairtopair.R</tool>	
 	</category>
 
 	<category name="Alignment" color="#d53833">
-		<tool runtime="R"><resource>bowtie2.R</resource></tool>
-		<tool runtime="R"><resource>bowtie2-paired-end.R</resource></tool>
-		<tool runtime="R"><resource>bowtie2-with-index-building.R</resource></tool>
-	    <tool runtime="R"><resource>bowtie2-paired-end-with-index-building.R</resource></tool>
-		<tool runtime="R"><resource>tophat2.R</resource></tool>
-		<tool runtime="R"><resource>tophat2-single-end.R</resource></tool>
-	    <tool runtime="R"><resource>tophat2-with-index-building.R</resource></tool>
-		<tool runtime="R"><resource>tophat2-single-end-with-index-building.R</resource></tool>
-		<tool runtime="R"><resource>bwa-mem.R</resource></tool>
-		<tool runtime="R"><resource>bwa-mem-with-index-building.R</resource></tool>
-	    <tool runtime="R"><resource>bwa.R</resource></tool>
-		<tool runtime="R"><resource>bwa-paired-end.R</resource></tool>
-		<tool runtime="R"><resource>bwa-with-index-building.R</resource></tool>
-		<tool runtime="R"><resource>bwa-paired-end-with-index-building.R</resource></tool>
-		<tool runtime="R"><resource>bowtie.R</resource></tool>
-		<tool runtime="R"><resource>bowtie-paired-end.R</resource></tool>
-		<tool runtime="R"><resource>bowtie-with-index-building.R</resource></tool>
-		<tool runtime="R"><resource>bowtie-paired-end-with-index-building.R</resource></tool>
+		<tool>bowtie2.R</tool>
+		<tool>bowtie2-paired-end.R</tool>
+		<tool>bowtie2-with-index-building.R</tool>
+	    <tool>bowtie2-paired-end-with-index-building.R</tool>
+		<tool>tophat2.R</tool>
+		<tool>tophat2-single-end.R</tool>
+	    <tool>tophat2-with-index-building.R</tool>
+		<tool>tophat2-single-end-with-index-building.R</tool>
+		<tool>bwa-mem.R</tool>
+		<tool>bwa-mem-with-index-building.R</tool>
+	    <tool>bwa.R</tool>
+		<tool>bwa-paired-end.R</tool>
+		<tool>bwa-with-index-building.R</tool>
+		<tool>bwa-paired-end-with-index-building.R</tool>
+		<tool>bowtie.R</tool>
+		<tool>bowtie-paired-end.R</tool>
+		<tool>bowtie-with-index-building.R</tool>
+		<tool>bowtie-paired-end-with-index-building.R</tool>
 	</category>
 	
 	<category name="Variants" color="#80a3b7">
-		<tool runtime="R"><resource>samtools-snp-indel-single.R</resource></tool> 
-		<tool runtime="R"><resource>vcftools.R</resource></tool>
-		<tool runtime="R"><resource>annotate-variant.R</resource></tool>
-		<tool runtime="python" module="common"><resource>vep.py</resource></tool>
-		<tool runtime="R"><resource>bcftools-intersect-vcf.R</resource></tool>	
-		<tool runtime="R"><resource>vcftools-reports.R</resource></tool>
+		<tool>samtools-snp-indel-single.R</tool> 
+		<tool>vcftools.R</tool>
+		<tool>annotate-variant.R</tool>
+		<tool module="common">vep.py</tool>
+		<tool>bcftools-intersect-vcf.R</tool>	
+		<tool>vcftools-reports.R</tool>
 	</category>
 	
 	<category name="RNA-seq" color="#0177b7">
-		<tool runtime="R"><resource>htseq-count.R</resource></tool>
-		<tool runtime="R"><resource>htseq-count-own-gtf.R</resource></tool>
-		<tool runtime="R"><resource>dexseq-exoncount.R</resource></tool>
-		<tool runtime="R"><resource>dexseq-exoncount-own-gtf.R</resource></tool>
-		<tool runtime="R"><resource>express.R</resource></tool>
-		<tool runtime="R"><resource>deseq2-transform.R</resource></tool>
-		<tool runtime="R"><resource>deseq2.R</resource></tool>		
-		<!--<tool runtime="R"><resource>dea-deseq.R</resource></tool>-->
-		<tool runtime="R"><resource>ngs-dea-edger-RNA.R</resource></tool>
-		<tool runtime="R"><resource>edgeR-multivariate.R</resource></tool>
-		<tool runtime="R"><resource>DEXseq.R</resource></tool>
-		<tool runtime="R"><resource>cufflinks2.R</resource></tool>
-		<tool runtime="R"><resource>cuffmerge2.R</resource></tool>
-		<tool runtime="R"><resource>cuffcompare2.R</resource></tool>
-		<tool runtime="R"><resource>cuffdiff2.R</resource></tool>
-		<tool runtime="R"><resource>cuffdiff2_with_replicates.R</resource></tool>
-		<tool runtime="python" module="common"><resource>annotate-cpdb.py</resource></tool>
+		<tool>htseq-count.R</tool>
+		<tool>htseq-count-own-gtf.R</tool>
+		<tool>dexseq-exoncount.R</tool>
+		<tool>dexseq-exoncount-own-gtf.R</tool>
+		<tool>express.R</tool>
+		<tool>deseq2-transform.R</tool>
+		<tool>deseq2.R</tool>		
+		<!--<tool>dea-deseq.R</tool>-->
+		<tool>ngs-dea-edger-RNA.R</tool>
+		<tool>edgeR-multivariate.R</tool>
+		<tool>DEXseq.R</tool>
+		<tool>cufflinks2.R</tool>
+		<tool>cuffmerge2.R</tool>
+		<tool>cuffcompare2.R</tool>
+		<tool>cuffdiff2.R</tool>
+		<tool>cuffdiff2_with_replicates.R</tool>
+		<tool module="common">annotate-cpdb.py</tool>
 	</category>
 
 	<category name="Small RNA-seq" color="#629a9b">
-		<tool runtime="R"><resource>convert-bam-to-edger.R</resource></tool>
-		<tool runtime="R"><resource>convert-miRBase-bam-to-edger.R</resource></tool>
-		<tool runtime="R"><resource>deseq2.R</resource></tool>
-		<tool runtime="R"><resource>ngs-dea-edger-RNA.R</resource></tool>
-		<tool runtime="R"><resource>edgeR-multivariate.R</resource></tool>
-		<tool runtime="R"><resource>ngs-annotate-miRNA-targets.R</resource></tool> 
-		<tool runtime="R" module="common"><resource>pathways-mirna-hyperg-go.R</resource></tool>
-		<!-- <tool runtime="R-3.0.2" module="common"><resource>pathways-mirna-hyperg-kegg.R</resource></tool>-->
-		<tool runtime="R"><resource>miRNA_RNA-seq_integration.R</resource></tool>
-		<tool runtime="R"><resource>ngs-correlation-analysis-mirna.R</resource></tool>
-		<tool runtime="R"><resource>ngs-up-down-analysis-mirna.R</resource></tool>
-		<tool runtime="R"><resource>ngs-extract-target-gene-expression.R</resource></tool>
-		<tool runtime="R"><resource>virusdetect.R</resource></tool>
-		<tool runtime="R"><resource>virusdetect-with-index-building.R</resource></tool>
+		<tool>convert-bam-to-edger.R</tool>
+		<tool>convert-miRBase-bam-to-edger.R</tool>
+		<tool>deseq2.R</tool>
+		<tool>ngs-dea-edger-RNA.R</tool>
+		<tool>edgeR-multivariate.R</tool>
+		<tool>ngs-annotate-miRNA-targets.R</tool> 
+		<tool module="common">pathways-mirna-hyperg-go.R</tool>
+		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
+		<tool>miRNA_RNA-seq_integration.R</tool>
+		<tool>ngs-correlation-analysis-mirna.R</tool>
+		<tool>ngs-up-down-analysis-mirna.R</tool>
+		<tool>ngs-extract-target-gene-expression.R</tool>
+		<tool>virusdetect.R</tool>
+		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
-		<tool runtime="R"><resource>macs2.R</resource></tool>
-		<tool runtime="R"><resource>ngs-find-peaks-macs-one.R</resource></tool>
-		<tool runtime="R"><resource>ngs-find-peaks-macs-two.R</resource></tool>
-		<tool runtime="R"><resource>ngs-find-peaks-fseq.R</resource></tool>		
-		<tool runtime="R"><resource>ngs-find-nearest-genes.R</resource></tool>
-		<tool runtime="R"><resource>ngs-find-unique-genes.R</resource></tool>
-		<tool runtime="R"><resource>pathways-ngs-hyperg-go.R</resource></tool>
-		<tool runtime="R"><resource>ngs-find-motifs-jaspar.R</resource></tool>
-		<tool runtime="R"><resource>dimont-extract-data.R</resource></tool>
-		<tool runtime="R"><resource>dimont-extract-data-custom.R</resource></tool>
-		<tool runtime="R"><resource>dimont.R</resource></tool>
-		<tool runtime="R"><resource>dimont-predictor.R</resource></tool>
-		<!--<tool runtime="R-3.0.2"><resource>MEDIPS.R</resource></tool>-->
+		<tool>macs2.R</tool>
+		<tool>ngs-find-peaks-macs-one.R</tool>
+		<tool>ngs-find-peaks-macs-two.R</tool>
+		<tool>ngs-find-peaks-fseq.R</tool>		
+		<tool>ngs-find-nearest-genes.R</tool>
+		<tool>ngs-find-unique-genes.R</tool>
+		<tool>pathways-ngs-hyperg-go.R</tool>
+		<tool>ngs-find-motifs-jaspar.R</tool>
+		<tool>dimont-extract-data.R</tool>
+		<tool>dimont-extract-data-custom.R</tool>
+		<tool>dimont.R</tool>
+		<tool>dimont-predictor.R</tool>
+		<!--<tool runtime="R-3.0.2">MEDIPS.R</tool>-->
 	</category>
 
 	<category name="CNA-seq" color="#a49900">
-		<tool runtime="R-3.3.2"><resource>cna-define-experiment.R</resource></tool>
-		<tool runtime="R"><resource>cna-filter-bins.R</resource></tool>
-		<tool runtime="R"><resource>cna-correct.R</resource></tool>
-		<tool runtime="R"><resource>cna-normalize.R</resource></tool>
-		<tool runtime="R"><resource>cna-plot-profile.R</resource></tool>
-		<tool runtime="R"><resource>cna-segment.R</resource></tool>
-		<tool runtime="R"><resource>cna-call-aberrations.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-identify-regions.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-add-cytobands.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-count-overlapping-cnvs.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-plot-frequencies.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-count-aberrations.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-cluster.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-correlate.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-group-test.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-survival-test.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-plot-survival.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-fuse-regions-by-column.R</resource></tool>
-		<tool runtime="R" module="common"><resource>cna-fuse-regions-manually.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-convert-from-probes-to-genes.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-pathways-go.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-match-probes.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-plot-combined-profile.R</resource></tool>
-		<tool runtime="R" module="common"><resource>acgh-expression-test.R</resource></tool>	
-		<tool runtime="R" module="common"><resource>acgh-plot-combined-expression.R</resource></tool>
+		<tool>cna-define-experiment.R</tool>
+		<tool>cna-filter-bins.R</tool>
+		<tool>cna-correct.R</tool>
+		<tool>cna-normalize.R</tool>
+		<tool>cna-plot-profile.R</tool>
+		<tool>cna-segment.R</tool>
+		<tool>cna-call-aberrations.R</tool>
+		<tool module="common">acgh-identify-regions.R</tool>
+		<tool module="common">acgh-add-cytobands.R</tool>
+		<tool module="common">acgh-count-overlapping-cnvs.R</tool>
+		<tool module="common">acgh-plot-frequencies.R</tool>
+		<tool module="common">cna-count-aberrations.R</tool>
+		<tool module="common">acgh-cluster.R</tool>
+		<tool module="common">cna-correlate.R</tool>
+		<tool module="common">acgh-group-test.R</tool>
+		<tool module="common">acgh-survival-test.R</tool>
+		<tool module="common">acgh-plot-survival.R</tool>
+		<tool module="common">cna-fuse-regions-by-column.R</tool>
+		<tool module="common">cna-fuse-regions-manually.R</tool>
+		<tool module="common">acgh-convert-from-probes-to-genes.R</tool>
+		<tool module="common">acgh-pathways-go.R</tool>
+		<tool module="common">acgh-match-probes.R</tool>
+		<tool module="common">acgh-plot-combined-profile.R</tool>
+		<tool module="common">acgh-expression-test.R</tool>	
+		<tool module="common">acgh-plot-combined-expression.R</tool>
 	</category>
 
 	<category name="Metagenomics" color="#83010b">
-		<tool runtime="R"><resource>mothur-screenseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-sffinfo.R</resource></tool>
-    	<tool runtime="R"><resource>merge-fasta-qual.R</resource></tool>
-		<tool runtime="R"><resource>mothur-summaryseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-trimseqs-uniqueseqs.R</resource></tool>	
-		<tool runtime="R"><resource>mothur-alignseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-filterseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-uniqueseqs.R</resource></tool>
-		<tool runtime="R"><resource>mothur-precluster.R</resource></tool>		
-		<tool runtime="R"><resource>mothur-chimera-uchime.R</resource></tool>		
-		<tool runtime="R"><resource>mothur-classifyseqs.R</resource></tool>
-	    <tool runtime="R"><resource>mothur-analyses.R</resource></tool>
+		<tool>mothur-screenseqs.R</tool>
+		<tool>mothur-sffinfo.R</tool>
+    	<tool>merge-fasta-qual.R</tool>
+		<tool>mothur-summaryseqs.R</tool>
+		<tool>mothur-trimseqs-uniqueseqs.R</tool>	
+		<tool>mothur-alignseqs.R</tool>
+		<tool>mothur-filterseqs.R</tool>
+		<tool>mothur-uniqueseqs.R</tool>
+		<tool>mothur-precluster.R</tool>		
+		<tool>mothur-chimera-uchime.R</tool>		
+		<tool>mothur-classifyseqs.R</tool>
+	    <tool>mothur-analyses.R</tool>
 	</category>
 
 	<category name="Single cell RNA-seq (BETA)" color="#37dddd">
-		<tool runtime="R"><resource>picard-fastqtosam.R</resource></tool>
-		<tool runtime="R"><resource>single-cell-TagBam.R</resource></tool>
-		<tool runtime="R"><resource>single-cell-FilterBam.R</resource></tool>
-		<tool runtime="R"><resource>picard-samtofastq.R</resource></tool>		
-	    <tool runtime="R"><resource>picard-sortsam.R</resource></tool>	
-		<tool runtime="R"><resource>picard-merge-bam-alignment.R</resource></tool>	    
-		<tool runtime="R"><resource>single-cell-tag-read-with-gene-exon.R</resource></tool>	   	
-		<tool runtime="R"><resource>single-cell-detect-bead-synthesis-errors.R</resource></tool>	   	
-		<tool runtime="R"><resource>single-cell-digital-expression.R</resource></tool>	   	
-		<tool runtime="R"><resource>single-cell-bam-tag-histogram.R</resource></tool>	   	
+		<tool>picard-fastqtosam.R</tool>
+		<tool>single-cell-TagBam.R</tool>
+		<tool>single-cell-FilterBam.R</tool>
+		<tool>picard-samtofastq.R</tool>		
+	    <tool>picard-sortsam.R</tool>	
+		<tool>picard-merge-bam-alignment.R</tool>	    
+		<tool>single-cell-tag-read-with-gene-exon.R</tool>	   	
+		<tool>single-cell-detect-bead-synthesis-errors.R</tool>	   	
+		<tool>single-cell-digital-expression.R</tool>	   	
+		<tool>single-cell-bam-tag-histogram.R</tool>	   	
 	</category>
 
 </module>

@@ -9,6 +9,7 @@
 # PARAMETER isNotPassingQualityControls: "Is not passing quality controls" TYPE [FALSE: no, TRUE: yes, NA: any] DEFAULT FALSE (Whether reads passing quality controls, reads not passing quality controls, or any read should be returned.)
 # PARAMETER isDuplicate: "Is duplicate" TYPE [FALSE: no, TRUE: yes, NA: any] DEFAULT FALSE (Wether un-duplicated, duplicated, or any reads should be returned. 'Duplicated' reads may represent PCR or optical duplicates.)
 # PARAMETER minMapq: "Minimum mapping quality" TYPE INTEGER DEFAULT 37 (Minimum mapping quality. Reads with a lower MAPQ are not counted.)
+# RUNTIME R-3.3.2
 
 # Ilari Scheinin <firstname.lastname@gmail.com>
 # 2014-04-01
