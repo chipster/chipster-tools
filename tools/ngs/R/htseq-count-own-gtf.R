@@ -59,6 +59,21 @@ if(print.coord == "no") {
 # write result table to output
 write.table(dat, file="htseq-counts.tsv", col.names=T, quote=F, sep="\t", row.names=F)
 
+# Add additional info lines about read totals to output
+file2 <- c("htseq-count-info.txt")
+dat2 <- read.table(file2, header=F, sep="\t")
+
+assigned <- sum(dat$count)
+notassigned <- sum(dat2[2])
+total <- assigned + notassigned
+
+line <- paste("\n")
+line <- paste(line, "not_counted\t", notassigned, "\n", sep ="")
+line <- paste(line, "counted\t", assigned, "\n", sep ="")
+line <- paste(line, "total\t", total, "\n", sep ="")
+
+write(line, "htseq-count-info.txt", append=TRUE)
+
 # Handle output names
 source(file.path(chipster.common.path, "tool-utils.R"))
 
