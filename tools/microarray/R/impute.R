@@ -2,6 +2,7 @@
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # OUTPUT imputed.tsv: imputed.tsv 
 # PARAMETER imputation.method: "Imputation method" TYPE [mean: mean, median: median, knn: knn] DEFAULT knn (Imputation method)
+# PARAMETER row.or.col: "Row wise or column wise" TYPE [row: row, column: column] DEFAULT column (Is the mean\/median computed based on rows \(gene wise\) or columns \(array\/sample wise\).)
 # PARAMETER number.of.neighbors: "Number of neighbors" TYPE INTEGER FROM 1 TO 100000 DEFAULT 5 (Number of neighbors to use for knn imputation)
 # PARAMETER missing.row.max: "Missing values row max" TYPE PERCENT DEFAULT 20 (Maximum number of missing values on a row)
 # PARAMETER missing.column.max: "Missing values column max" TYPE PERCENT DEFAULT 20 (Maximum number of missing values on a column)
@@ -9,6 +10,7 @@
 
 # JTT 22.06.2006: Imputation of missing values by mean or median
 # IS  12.10.2012: to cope with tables with gene descriptions (that typically contain 's)
+# ML 9.12.2016: Add option to impute also row wise
 
 # Parameter settings (default) for testing purposes
 #imputation.method<-c("mean")
@@ -39,7 +41,14 @@ dat2[is.infinite(as.matrix(dat2))]<-NA
 # Imputation
 if(method=="mean" | method=="median") {
 	library(e1071)
-	dat.impute<-impute(dat2, method)
+	# sample/array wise = column
+	if (row.or.col=="column") {
+		dat.impute<-impute(dat2, method)
+		}
+	# gene wise = row		
+	else {
+		dat.impute<-t(impute(t(dat2), method))   
+		}
 	dat.impute<-data.frame(dat.impute, calls)
 }
 if(method=="knn") {

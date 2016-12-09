@@ -13,6 +13,7 @@ Fills in the missing values in the data by estimated values.
 
 <ul>
 <li>Imputation method (mean, median, knn) [knn]</li>
+<li>Row wise or column wise (column, row) [column]</li> 
 <li>Number of neighbor (1....10000) [5]</li>
 <li>Maximum number of missing values on a row (0...100) [20]</li>
 <li>Maximum number of missing values on a column (0...100) [20]</li>
@@ -20,11 +21,11 @@ Fills in the missing values in the data by estimated values.
 
 <h3>Details</h3>
 
-The missing values can be replaced with the mean or median of the array, or they can be
-estimated using the specified number of closest neigbors (knn). If the maximum number
+The missing values can be replaced with the mean or median of the array/sample (column) or genes (rows), or they can be
+estimated using the specified number of closest neighbors (knn). If the maximum number
 of genes missing either on a row or on a column is larger than the selected number, the missing
 values will not be estimated. This is implemented in order to protect users from imputing too 
-large a fraction of their dataset, since this will probably affect the result tradically.
+large a fraction of their dataset, since this will probably affect the result tragically.
 
 <h3>Output</h3>
 
