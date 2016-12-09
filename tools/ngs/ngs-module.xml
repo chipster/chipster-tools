@@ -222,7 +222,7 @@
 	    <tool>mothur-analyses.R</tool>
 	</category>
 
-	<category name="Single cell (BETA)" color="#37dddd">
+	<category name="Single cell RNA-seq (BETA)" color="#37dddd">
 		<tool>picard-fastqtosam.R</tool>
 		<tool>single-cell-TagBam.R</tool>
 		<tool>single-cell-FilterBam.R</tool>
