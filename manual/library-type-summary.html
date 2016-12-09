@@ -36,6 +36,10 @@ location on the other strand, your reads are counted for that wrong gene.
 </p>
 
 <p><b>How can I check I chose correctly? </b>It's a good idea to check that!  <br>
+<b>Using the tool <i>Infer strandedness and inner distance from FASTQ</i>: </b> We added this tool under the Quality control 
+category to help you. The tool aligns subsets of the input FASTQ files against the reference genome, 
+and this alignment is then compared to the reference annotation to deduce the strandedness. Check out the
+ <a href="http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html">help page</a> of this tool for more information! <br>
 <b>In Tophat:</b> Check the mapping rate after the TopHat alignment (in Chipster, open file tophat-summary.txt). 
 Note that you can 
 run TopHat with the different parameters to a small part of the data and then compare the results. <br>
