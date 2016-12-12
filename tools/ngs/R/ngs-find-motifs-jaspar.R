@@ -2,7 +2,7 @@
 # INPUT results.tsv: "Peak data file" TYPE GENERIC 
 # OUTPUT motif-analysis-summary.txt: "A lot of analysis information collected in one single file" 
 # OUTPUT logo-plot-{...}.pdf: "Logo plots for each consensus motif" 
-# PARAMETER genome: Genome TYPE [BSgenome.Hsapiens.UCSC.hg17: hg17, BSgenome.Hsapiens.UCSC.hg18: hg18, BSgenome.Hsapiens.UCSC.hg19: hg19, BSgenome.Mmusculus.UCSC.mm8: mm8, BSgenome.Mmusculus.UCSC.mm9: mm9, BSgenome.Mmusculus.UCSC.mm10: mm10, BSgenome.Rnorvegicus.UCSC.rn4: rn4, BSgenome.Rnorvegicus.UCSC.rn5: rn5, BSgenome.Dmelanogaster.UCSC.dm2: dm2, BSgenome.Dmelanogaster.UCSC.dm3: dm3] DEFAULT BSgenome.Hsapiens.UCSC.hg19 (The genome and version used when aligning the sequences.)
+# PARAMETER genome: Genome TYPE [BSgenome.Hsapiens.UCSC.hg18: hg18, BSgenome.Hsapiens.UCSC.hg19: hg19, BSgenome.Mmusculus.UCSC.mm9: mm9, BSgenome.Mmusculus.UCSC.mm10: mm10, BSgenome.Rnorvegicus.UCSC.rn5: rn5, BSgenome.Dmelanogaster.UCSC.dm3: dm3] DEFAULT BSgenome.Hsapiens.UCSC.hg19 (The genome and version used when aligning the sequences.)
 # PARAMETER chr_column: "Chromosome column" TYPE COLUMN_SEL DEFAULT chr (Column containing chromosome information of peaks.)
 # PARAMETER start_column: "Start coordinate column" TYPE COLUMN_SEL DEFAULT start (Column containing start coordinates of peaks.)
 # PARAMETER end_column: "End coordinate column" TYPE COLUMN_SEL DEFAULT end (Column containing end coordinates of peaks.)
@@ -46,7 +46,7 @@ results_ranged <- IRanges(start=results_bed[,2], end=results_bed[,3])
 results_sequences <- RangedData(results_ranged, space=results_bed[,1])
 
 # Perform unseeded GADEM analysis with default values for specific genome
-if (genome == "BSgenome.Hsapiens.UCSC.hg17" | genome == "BSgenome.Hsapiens.UCSC.hg18" | genome == "BSgenome.Hsapiens.UCSC.hg19") {
+if (genome == "BSgenome.Hsapiens.UCSC.hg18" | genome == "BSgenome.Hsapiens.UCSC.hg19") {
 	results_gadem <- GADEM(
 			results_sequences,
 			verbose=1,
@@ -54,7 +54,7 @@ if (genome == "BSgenome.Hsapiens.UCSC.hg17" | genome == "BSgenome.Hsapiens.UCSC.
 			pValue=p.value.cutoff,
 			eValue=e.value.cutoff)
 }
-if (genome == "BSgenome.Mmusculus.UCSC.mm8" | genome == "BSgenome.Mmusculus.UCSC.mm9" | genome == "BSgenome.Mmusculus.UCSC.mm10") {
+if (genome == "BSgenome.Mmusculus.UCSC.mm9" | genome == "BSgenome.Mmusculus.UCSC.mm10") {
 	results_gadem <- GADEM(
 			results_sequences,
 			verbose=1,
@@ -62,7 +62,7 @@ if (genome == "BSgenome.Mmusculus.UCSC.mm8" | genome == "BSgenome.Mmusculus.UCSC
 			pValue=p.value.cutoff,
 			eValue=e.value.cutoff)
 }
-if (genome == "BSgenome.Rnorvegicus.UCSC.rn4" | genome == "BSgenome.Rnorvegicus.UCSC.rn5") {
+if (genome == "BSgenome.Rnorvegicus.UCSC.rn5") {
 	results_gadem <- GADEM(
 			results_sequences,
 			verbose=1,
@@ -70,7 +70,7 @@ if (genome == "BSgenome.Rnorvegicus.UCSC.rn4" | genome == "BSgenome.Rnorvegicus.
 			pValue=p.value.cutoff,
 			eValue=e.value.cutoff)
 }
-if (genome == "BSgenome.Dmelanogaster.UCSC.dm2" | genome == "BSgenome.Dmelanogaster.UCSC.dm3") {
+if (genome == "BSgenome.Dmelanogaster.UCSC.dm3") {
 	results_gadem <- GADEM(
 			results_sequences,
 			verbose=1,
