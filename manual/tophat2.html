@@ -18,9 +18,15 @@ This assumes the files are named so that the beginning of the name is identical 
 <i>e.g.</i> Abc123_1, Abc123_2. If your files are named differently, you need to provide list files to make sure the files are assigned 
 correctly.
 </p>
-<p>If you have more than two FASTQ files, you will need to provide a list of filenames of the FASTQ files for each direction as a text 
-file (<i>e.g.</i>1files.txt and 2files.txt). These lists can be generated with the tool <strong>Utilities / Make a list of file names.</strong> The read 
-pairs must be ordered identically in both lists.
+<p><b>If you have more than two FASTQ files</b>, you will need to provide a list of filenames of the FASTQ files for each direction (one file for read1 files, and another one for the read2 files) as a text 
+file (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  <strong><a href="http://chipster.csc.fi/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. The read 
+pairs must be ordered identically in both lists. 
+<br>
+Select BOTH list files (R1files.txt and R2files.txt) and ALL FASTQ files (8 of them in the example below), and assign the list files correctly. 
+When assigning the list files, they are automatically inactivated in the "reads" file list.
+<img src="tophat-assign-list-files.jpg"> <br>
+<br>
+<img src="tophat-list-files-demo.png"> <br>
 </p>
 <p>
 Chipster has GTF files for the genomes offered, but you can also provide your own. In general using a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
