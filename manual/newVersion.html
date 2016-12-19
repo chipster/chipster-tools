@@ -15,6 +15,27 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 19.12.2016: What is new in Chipster 3.11</h2>
+
+ 	<p>
+		<b>Summary:</b> This version contains a new tool category Single cell RNA-seq, and it also contains some updates and improvements to existing tools.  
+	</p>
+	<ul><li><div class=header-item>New tool category single cell RNA-seq (BETA) and new example session NGS_single_cell_BETA</div>
+			<ul>
+				<li>10 new tools for analyzing single cell RNA-seq data and a corresponding example session have been added. These tools are based on the Picard and <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">Drop-seq</a> packages, and they allow you to perform the required preprocessing steps, quantitate expression, and produce diagnostic plots.
+				Please note that these tools are still under development, so we might make changes to them or even combine several tools at a later stage. Should you have any wishes or comments regarding tools for single cell RNA-seq data, please feel free to contact us.</li>
+			</ul> 
+		</li>		
+		<li><div class=header-item>Improvements and updates to analysis tools</div>
+			<ul>
+				<li>The following tools have been updated to new version: NCBI BLAST (v2.2.29), Entrez Direct (v5.8), and SRAtoolkit (v2.4.2)</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a>: Recommendation for TopHat and HTSeq parameters has been added to the report.</li>
+				<li>RNA-seq / HTSeq tools: The file htseq-count-info.txt now includes a sum of counted alignments.</li>
+			</ul>
+		</li>
+	</ul>
+	<hr />
+
 <h2>Version update 22.11.2016: What is new in Chipster 3.10</h2>
  	<p>
 		<b>Summary:</b> All the reference genomes and many analysis packages have been updated. This version contains also new and improved functionality for RNA-seq data. 
@@ -32,7 +53,7 @@ div.header-item {
 			<ul>
 				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> pipeline detects viruses using siRNA data.</li>
 				<li><a href="virusdetect-with-index-building.html">Small RNA-seq / VirusDetect with own host genome</a>, as above but with a user-supplied host genome.</li>
-				<li><a href="rseqc_infer_rnaseq_experiment.html">RNA-seq / Infer strandedness and inner distance from FASTQ</a> detects the type of strand-specific sequencing used and the inner distance between paired reads.</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a> detects the type of strand-specific sequencing used and the inner distance between paired reads.</li>
 				<li><a href="cuffdiff2_with_replicates.html">RNA-seq / Differential expression using Cuffdiff with replicates</a> allows you to assign several BAM files to each experimental group using filename lists.</li>
 				<li><a href="make_namelist.html">Utilities / Make a list of file names</a> makes file name lists used by Cuffdiff and TopHat tools.</li>				
 				<li><a href="mothur-screenseqs.html">Metagenomics / Screen sequences with Mothur</a> filters reads for selected criteria.</li>
