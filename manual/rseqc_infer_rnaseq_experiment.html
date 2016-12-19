@@ -3,12 +3,12 @@
 <head><title></title></head>
 <body>
 
-<h2>RNA-seq / Infer strandedness and inner distance from FASTQ</h2>
+<h2>Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</h2>
 
 <h3>Description</h3>
 
 <p>
-Infers strandedness from RNAseq reads. For paired end reads also calculates inner distance plot.
+Infers strandedness from RNA-seq reads. For paired end reads also calculates inner distance plot.
 
 </p>
 
@@ -26,7 +26,7 @@ and has only negligible effect on results.
 </p>
 <p>
 Next the reads are aligned against the selected reference genome using Bowtie2. The alignment is then compared to reference 
-annotation to infer strandedness of reads.
+annotation to infer the strandedness of reads.
 </p>
 <p>
 For non strand specific experiment the ratio of explanations should be close to 50:50
@@ -56,9 +56,9 @@ Fraction of reads explained by "1++,1--,2+-,2-+": 0.0053
 Fraction of reads explained by "1+-,1-+,2++,2--": 0.9936
 </pre>
 <p>
-Some portion of there reads will remain undetermined. They may not align at all or will be aligned to region for which
-strandedness can not be determined. The distribution of the rest of the reads between explanations will give use the 
-strandedness information. For non-strand specific experiments we expect to see even distribution between explanations 
+Some portion of there reads will remain undetermined. They may not align at all, or align to a region for which
+strandedness can not be determined. The distribution of the rest of the reads between explanations will give the 
+strandedness information. For non-strand specific experiments we expect to see even distribution between explanations, 
 and for strand specific experiments we expect to see all reads to comply to one explanation. Some deviation from this 
 is normal due to mis-aligned reads, sampling etc, but large deviation is usually indicative of some problem.
 </p>

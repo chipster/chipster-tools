@@ -1,4 +1,4 @@
-# TOOL rseqc_infer_rnaseq_experiment.R: "Infer strandedness and inner distance from FASTQ" (Subsets of the input FASTQ files are first aligned against reference genomes. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. For paired-end reads matepair inner distance distribution is also calculated.)
+# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference and inner distance estimation using RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. For paired-end reads the inner distance distribution is also calculated.)
 # INPUT reads1.fq: "Read 1 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
 # OUTPUT experiment_data.txt
