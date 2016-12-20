@@ -25,7 +25,7 @@ method was used when generating your data.  In general, there are three types of
 >http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html</a>)</i>
 
 <p><b>Be extra careful to assign the files correctly in TopHat!</b> Using these parameters assumes you are giving the 
-files in specific order: read1, read2. In Chipster always check in the parameters window that your 
+files in specific order: read1, read2. In Chipster always check from the parameters window that your 
 files are assigned correctly. 
 </p>
 
@@ -36,7 +36,7 @@ location on the other strand, your reads are counted for that wrong gene.
 </p>
 
 <p><b>How can I check I chose correctly? </b>It's a good idea to check that!  <br>
-<b>Using the tool <i>RNA-seq strandedness inference and inner distance estimation using RseQC</i>: </b> We added this tool under the Quality control 
+<b>Using the tool <i>Infer strandedness and inner distance from FASTQ</i>: </b> We added this tool under the Quality control 
 category to help you. The tool aligns subsets of the input FASTQ files against the reference genome, 
 and this alignment is then compared to the reference annotation to deduce the strandedness. Check out the
  <a href="http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html">help page</a> of this tool for more information! <br>
@@ -48,8 +48,8 @@ run TopHat with the different parameters to a small part of the data and then co
 </p>
 
 <p>Below we list some common library preparation kits and their corresponding parameters 
-in different tools. <b>PLEASE NOTE</b> that the kits are listed in the different categories based 
-on our best understanding, so please inform us if you discover something more.</p>
+in different tools. <b>Is your kit missing from the list?</b> If you have the data generated with that kit and figure
+out the library type, please let us know too, so we can add that kit to the list below.</p>
 
 <p><b><u> Unstranded: </u></b><br>
 Information regarding the strand is not conserved 
@@ -70,7 +70,7 @@ All dUTP methods, NSR, NNSR<br>
 TruSeq Stranded Total RNA Sample Prep Kit<br>
 TruSeq Stranded mRNA Sample Prep Kit<br>
 NEB Ultra Directional RNA Library Prep Kit <br>
-Agilent SureSelect Strand-Specific (as far as we understand) <br>
+Agilent SureSelect Strand-Specific <br>
 <b>Parameters:</b><br>
 TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
 HTSeq: stranded -- reverse<br> </p>
@@ -81,8 +81,9 @@ opposite strand.
 The directionality is preserved, as different adapters are ligated to different ends of the fragment. <br>
 <b>Kits:</b><br>
 Directional Illumina (Ligation), Standard SOLiD<br>
-ScriptSeq v2 RNA-Seq Library Preparation Kit (as far as we understand)<br>
-Encore® Complete RNA-Seq Library Systems (as far as we understand)<br>
+ScriptSeq v2 RNA-Seq Library Preparation Kit <br>
+SMARTer Stranded Total RNA <br>
+Encore Complete RNA-Seq Library Systems<br>
 <b>Parameters:</b><br>
 TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
 HTSeq: stranded -- yes<br></p>
