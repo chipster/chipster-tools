@@ -3,7 +3,7 @@
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
 # OUTPUT experiment_data.txt
 # OUTPUT OPTIONAL inner_distance.pdf
-# PARAMETER organism: "Genome" TYPE [Arabidopsis_thaliana.TAIR10.32, Bos_taurus.UMD3.1.86, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1.86, Drosophila_melanogaster.BDGP5.78, Drosophila_melanogaster.BDGP6.86, Felis_catus.Felis_catus_6.2.86, Gallus_gallus.Galgal4.85, Gallus_gallus.Gallus_gallus-5.0.86, Gasterosteus_aculeatus.BROADS1.86, Halorubrum_lacusprofundi_atcc_49239.ASM2220v1.32, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.86, Homo_sapiens.NCBI36.54, Medicago_truncatula.MedtrA17_4.0.32, Mus_musculus.GRCm38.86, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.32, Ovis_aries.Oar_v3.1.86, Populus_trichocarpa.JGI2.0.32, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.86, Schizosaccharomyces_pombe.ASM294v2.32, Solanum_tuberosum.SolTub_3.0.32, Sus_scrofa.Sscrofa10.2.86, Vitis_vinifera.IGGP_12x.32, Yersinia_enterocolitica_subsp_palearctica_y11.ASM25317v1.32, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.ASM83429v1.32] DEFAULT Homo_sapiens.GRCh38.86 (Genome or transcriptome that you would like to align your reads against.)
+# PARAMETER organism: "Genome" TYPE ["FILES genomes/bed .bed"] DEFAULT "SYMLINK_TARGET genomes/bed/default .bed" (Genome or transcriptome that you would like to align your reads against.)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))

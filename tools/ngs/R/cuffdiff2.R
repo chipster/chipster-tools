@@ -31,11 +31,10 @@
 # OUTPUT OPTIONAL tss_groups.read_group_tracking.tsv
 # PARAMETER output.type: "Output type" TYPE [concise, complete] DEFAULT concise (Cuffdiff produces a large number of output files (over 20\). You can choose to see the complete output or just concise processed output.)
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference annotation. Check your BAM and choose accordingly.)
-# PARAMETER OPTIONAL organism: "Reference organism" TYPE [other, Arabidopsis_thaliana.TAIR10.32, Bos_taurus.UMD3.1.86, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1.86, Drosophila_melanogaster.BDGP5.78, Drosophila_melanogaster.BDGP6.86, Felis_catus.Felis_catus_6.2.86, Gallus_gallus.Galgal4.85, Gallus_gallus.Gallus_gallus-5.0.86, Gasterosteus_aculeatus.BROADS1.86, Halorubrum_lacusprofundi_atcc_49239.ASM2220v1.32, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.86, Homo_sapiens.NCBI36.54, Medicago_truncatula.MedtrA17_4.0.32, Mus_musculus.GRCm38.86, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.32, Ovis_aries.Oar_v3.1.86, Populus_trichocarpa.JGI2.0.32, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.86, Schizosaccharomyces_pombe.ASM294v2.32, Solanum_tuberosum.SolTub_3.0.32, Sus_scrofa.Sscrofa10.2.86, Vitis_vinifera.IGGP_12x.32, Yersinia_enterocolitica_subsp_palearctica_y11.ASM25317v1.32, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.ASM83429v1.32] DEFAULT other (You can use own GTF file or one of those provided on the server.)
+# PARAMETER OPTIONAL organism: "Reference organism" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (You can use own GTF file or one of those provided on the server.)
 # PARAMETER OPTIONAL fdr: "Allowed false discovery rate" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (FDR-adjusted p-values (q-values\) are calculated. The concise output files include only those genes or transcripts which have a q-value lower than the given FDR. The value of the Significant-column is adjusted accordingly (yes/no\) in all output files.) 
 # PARAMETER OPTIONAL mmread: "Enable multi-mapped read correction" TYPE [yes, no] DEFAULT no (By default, Cufflinks will uniformly divide each multi-mapped read to all of the positions it maps to. If multi-mapped read correction is enabled, Cufflinks will re-estimate the transcript abundances dividing each multi-mapped read probabilistically based on the initial abundance estimation, the inferred fragment length and fragment bias, if bias correction is enabled.)
 # PARAMETER OPTIONAL bias: "Correct for sequence-specific bias" TYPE [yes, no] DEFAULT no (Cuffdiff can detect sequence-specific bias and correct for it in abundance estimation. You will need to supply a reference genome as a FASTA file if you are not using one of the provided reference organisms.)
-# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 
 # AMS 21.1.2013
 # check column renaming when replicates are enabled
@@ -46,14 +45,11 @@
 # AMS 2014.06.18 Changed the handling of GTF files
 # AMS 04.07.2014 New genome/gtf/index locations & names
 # AMS 15.04.2016 Fixed "bias" parameter
-# EK 14.09.2016 Changed the order of control and treatment BAM so that FC is shown as expected
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("annotation.gtf")
 unzipIfGZipFile("genome.fa")
-
-source(file.path(chipster.common.path, "tool-utils.R"))
 
 # binary
 cuffdiff.binary <- c(file.path(chipster.tools.path, "cufflinks2", "cuffdiff"))
@@ -76,15 +72,8 @@ if (bias == "yes") {
 			stop(paste('CHIPSTER-NOTE: ', "If you choose to use bias correction, you need to provide a genome FASTA."))
 		}
 	}else{
-		# If not, we use the internal one. Because FASTA name may lack the version number GTF name has, we
-		# first remove the number and then match the base name to folder listing of FASTA files.
-		fasta.folder <- file.path(chipster.tools.path, "genomes", "fasta")
-		fasta.listing <- list.files(fasta.folder, pattern="*.fa$")
-		organism.base <- remove_extension(organism)
-		fasta.name <- grep(organism.base, fasta.listing, value=TRUE)
-		internal.fa <- file.path(fasta.folder, fasta.name)
-		#internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa" ,sep="" ,collapse=""))
-		
+		# If not, we use the internal one.
+		internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa" ,sep="" ,collapse=""))
 		# If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
 		if(chr == "chr1"){
 			source(file.path(chipster.common.path, "seq-utils.R"))
@@ -95,15 +84,6 @@ if (bias == "yes") {
 		}
 	}	
 	cuffdiff.options <- paste(cuffdiff.options, "-b", refseq)
-}
-
-# library type: fr-unstranded, fr-firststrand, fr-secondstrand
-if (library.type == "fr-unstranded") {
-	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-unstranded")
-}else if (library.type == "fr-firststrand") {
-	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-firststrand")	
-}else if (library.type == "fr-secondstrand") {	
-	cuffdiff.options <- paste(cuffdiff.options, "--library-type fr-secondstrand")
 }
 
 # If user has provided a GTF, we use it
@@ -129,7 +109,7 @@ if (organism == "other"){
 cuffdiff.options <- paste(cuffdiff.options, annotation.file)
 
 # command
-command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "control1.bam", "treatment1.bam")
+command <- paste(cuffdiff.binary, "-q", "-o tmp", cuffdiff.options, "treatment1.bam", "control1.bam")
 
 # run
 #stop(paste('CHIPSTER-NOTE: ', command))
