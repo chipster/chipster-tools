@@ -10,6 +10,7 @@
 
 # EK 18.06.2013
 # JTT 28.8.2013 count table and phenodata added
+# ML 21.12.2016 update (new Silva version)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -17,9 +18,13 @@ unzipIfGZipFile("a.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
-taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+#template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+#taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
+template.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.fasta"))
+taxonomy.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.silva.tax"))
+
 
 # batch file
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
@@ -36,6 +41,11 @@ command <- paste(binary, "batch.mth", "> log.txt 2>&1")
 
 # run
 system(command)
+
+## testi
+#write("get.current()", "batch2.mth", append=F)
+#system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
+
 
 # Postprocess output
 system("mv a.silva.wang.taxonomy reads-taxonomy-assignment.txt")
