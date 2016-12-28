@@ -13,6 +13,7 @@
 
 # EK 18.06.2013
 # 30.3.2016 ML added input options and parameters
+# ML 21.12.2016 update (new version, new Silva version)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -20,8 +21,11 @@ unzipIfGZipFile("a.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-template.path <- c(file.path(data.path, "silva.gold.align"))
+#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+#template.path <- c(file.path(data.path, "silva.gold.align"))
+data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
+template.path <- c(file.path(data.path, "silva.bacteria/silva.gold.ng.fasta"))
+
 
 # batch file
 uchime.options <- ""
