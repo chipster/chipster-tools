@@ -4,7 +4,6 @@
 # OUTPUT aligned-summary.tsv
 
 # EK 05.06.2013
-# ML 21.12.2016 update (new Silva version)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -12,8 +11,8 @@ unzipIfGZipFile("reads.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
-template.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.fasta"))
+data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 
 # batch file
 write(paste("align.seqs(fasta=reads.fasta, template=", template.path, ")", sep=""), "batch.mth", append=F)
