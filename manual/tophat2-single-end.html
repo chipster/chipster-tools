@@ -7,8 +7,9 @@
 
 <h3>Description</h3>
 
-<p>This tool aligns Illumina single end RNA-seq reads to publicly available genomes. If you would like us to add new reference genomes to Chipster, please contact us.
-You need to supply the reads in a FASTQ file. Supplying a GTF file is optional but recommended, because using annotation information improves the alignment process. 
+<p>This tool aligns Illumina single end RNA-seq reads to publicly available genomes. You need to supply the reads in one or more FASTQ files. 
+Chipster has GTF files for the genomes offered, but you can also provide your own. In general using a GTF file containing known gene and exon locations is recommended, because it improves the alignment process.
+If you would like us to add new reference genomes to Chipster, please contact us. 
 </p> 
 
 
@@ -16,6 +17,7 @@ You need to supply the reads in a FASTQ file. Supplying a GTF file is optional b
 
 <ul>
 <li>Genome (list of supported genomes) [latest human]</li>
+<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
 <li>Use annotation GTF (yes, no) [yes]</li>
 <li>When GTF file is used, ignore novel junctions (yes, no) [yes]</li>
 <li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
@@ -25,8 +27,6 @@ You need to supply the reads in a FASTQ file. Supplying a GTF file is optional b
 <li>Maximum number of mismatches allowed in the anchor (0, 1, 2) [0]</li>
 <li>Minimum intron length (10-1000) [70]</li>
 <li>Maximum intron length (1000-1,000,000) [500,000]</li>
-<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
-
 </ul>
 
 <h3>Details</h3>
@@ -45,7 +45,15 @@ in spliced alignments is supported by at least one read with this many bases on 
 <p>
 TopHat2 will ignore donor-acceptor pairs which are closer than the minimum intron length or further than the maximum intron length apart.  
 </p>
-
+<p>
+If your RNA-seq data was produced with a stranded/directional protocol, it is important that you select the correct strandedness option in the parameter "Library type":
+<ul>
+<li>fr-unstranded (Standard Illumina).</li>
+<li>fr-firststrand (dUTP, NSR, NNSR): The right-most end of the fragment (in transcript coordinates) is sequenced. Equivalently, it is assumed that only the strand generated during first strand synthesis is sequenced. For example Illumina TruSeq Stranded Total RNA Sample Prep Kit is a dUTP method.</li>
+<li>fr-secondstrand	(Ligation, Standard SOLiD): The left-most end of the fragment (in transcript coordinates) is sequenced. Equivalently, it is assumed that only the strand generated during second strand synthesis is sequenced.</li>
+</ul>
+You can read more about stranded data <a href="library-type-summary.html">here</a>.
+</p>
 <p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
 
 

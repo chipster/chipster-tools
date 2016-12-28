@@ -42,17 +42,8 @@ for(i in 1:ncol(d2)) {
    write.table(v, paste(cn[i], ".jtt", sep=""), col.names=FALSE, row.names=TRUE, sep="\t", quote=FALSE)
 }
 
-# changed to DEXSeqDataSetFromHTSeq, since read.HTSeqCounts gives error.
-#ecs = DEXSeqDataSetFromHTSeq(countfiles = dir(pattern="jtt"), design = pd, flattenedfile = gtf)
-#ecs = DEXSeqDataSetFromHTSeq(countfiles = dir(pattern="jtt"), sampleData=phenodata, design = pd, flattenedfile = gtf)
-
-sampleTable = data.frame(
-		row.names = phenodata$sample,
-		condition = as.factor(phenodata$group))
-
-ecs = DEXSeqDataSetFromHTSeq(countfiles = dir(pattern="jtt"), sampleData=sampleTable, design = ~ sample + exon + condition:exon, flattenedfile = gtf)
-
-#sampleNames(ecs)<-phenodata$original_name
+ecs = read.HTSeqCounts(countfiles = dir(pattern="jtt"), design = pd, flattenedfile = gtf)
+sampleNames(ecs)<-phenodata$original_name
 
 # Normalization
 ecs<-estimateSizeFactors(ecs)
@@ -62,61 +53,57 @@ ecs<-estimateSizeFactors(ecs)
 ####ecs<-estimateDispersions(ecs, formula = formuladispersion)
 ####ecs.fdf<-try(fitDispersionFunction(ecs), silent=TRUE)
 ecs<-estimateDispersions(ecs)
-#ecs.fdf<-try(fitDispersionFunction(ecs), silent=TRUE) # tätä ei enää oo.
+ecs.fdf<-try(fitDispersionFunction(ecs), silent=TRUE)
 
-#if(class(ecs.fdf)=="try-error") {
-#  # fData(ecs)$dispersion <- dispersion 
-#   doplot<-FALSE
-#} else {
-#   ecs<-ecs.fdf
-#   doplot<-TRUE
-#}
+if(class(ecs.fdf)=="try-error") {
+   fData(ecs)$dispersion <- dispersion 
+   doplot<-FALSE
+} else {
+   ecs<-ecs.fdf
+   doplot<-TRUE
+}
 
 # Testing for differential exon usage
 ####formula0<-count ~ sample + condition + exon
 ####formula1<-count ~ sample + condition * I(exon==exonID) 
 ecs <- testForDEU(ecs)
-# ecs <- estimatelog2FoldChanges(ecs) # tätä ei enää oo...
-ecs = estimateExonFoldChanges(ecs, fitExpToVar="condition")
-#res <- DEUresultTable(ecs)
-res <- DEXSeqResults(ecs)
+ecs <- estimatelog2FoldChanges(ecs)
+res <- DEUresultTable(ecs)
 
-siggenes<-as.character(unique(res$groupID[res$padj<pvalue]))
-res2<-res[as.character(res$groupID) %in% siggenes,]
+siggenes<-as.character(unique(res$geneID[res$padjust<pvalue]))
+res2<-res[as.character(res$geneID) %in% siggenes,]
 
 # write.table(res, "dexseq-all-genes.tsv", col.names=TRUE, row.names=TRUE, sep="\t", quote=FALSE)
 write.table(res2, "dexseq-genes-with-significant-exons.tsv", col.names=TRUE, row.names=TRUE, sep="\t", quote=FALSE)
 
 # Visualization
-# Note: as many pages of PDF as there are DEgenes.
-if(nrow(res2)>0) {
-	genes<-unique(as.character(res[which(res$padj<=pvalue),]$groupID))
-	pdf("dexseq-exons.pdf", width=297/25.4, height=210/25.4)
-	for(i in 1:length(genes)) {
-		plottry<-try(plotDEXSeq(res, genes[i], displayTranscripts = FALSE, cex.axis = 1.2, cex = 1.3, lwd = 2, legend = TRUE))
-		if(class(plottry)=="try-error") {
-			plot(x=1, y=1, xlab="", ylab="", axes=F, type="")
-			title(main=genes[i])
-			text(x=1, y=1, "No results to plot for this gene")
-		}
-	}
-	dev.off()
+if(doplot & nrow(res2)>0) {
+   genes<-unique(as.character(res[which(res$padjust<=pvalue),]$geneID))
+   pdf("dexseq-exons.pdf", width=297/25.4, height=210/25.4)
+   for(i in 1:length(genes)) {
+      plottry<-try(plotDEXSeq(ecs, genes[i], displayTranscripts = FALSE, cex.axis = 1.2, cex = 1.3, lwd = 2, legend = TRUE))
+      if(class(plottry)=="try-error") {
+         plot(x=1, y=1, xlab="", ylab="", axes=F, type="")
+         title(main=genes[i])
+         text(x=1, y=1, "No results to plot for this gene")
+      }
+   }
+   dev.off()
 }
+
 if(nrow(res)>0) {
    pdf("dexseq-MAplot.pdf", width=297/25.4, height=210/25.4)
-#   plot(x=log2(res[,6]), y=res[,7], xlab="mean of normalized counts (log2)", ylab="log2 fold change", type="n")
-#
-#   nonsig <- data.frame(x=log2(res[res[,5]>pvalue,6]), y=res[res[,5]>pvalue,7])
-#   nonsig <- unique(nonsig)
-#   points(x=nonsig$x, y=nonsig$y, col="black", pch=16, cex=0.5)
-#
-#   sig <- data.frame(x=log2(res[res[,5]<=pvalue,6]), y=res[res[,5]<=pvalue,7])
-#   sig <- unique(sig)
-#   points(x=sig$x, y=sig$y,, col="#CC0000", pch=16, cex=0.5)
-#
-#   legend(x="topright", legend=c("significant", "unsignificant"), col=c("#CC0000", "black"), cex=1, pch=16)
-   
-   plotMA(res)
+   plot(x=log2(res[,6]), y=res[,7], xlab="mean of normalized counts (log2)", ylab="log2 fold change", type="n")
+
+   nonsig <- data.frame(x=log2(res[res[,5]>pvalue,6]), y=res[res[,5]>pvalue,7])
+   nonsig <- unique(nonsig)
+   points(x=nonsig$x, y=nonsig$y, col="black", pch=16, cex=0.5)
+
+   sig <- data.frame(x=log2(res[res[,5]<=pvalue,6]), y=res[res[,5]<=pvalue,7])
+   sig <- unique(sig)
+   points(x=sig$x, y=sig$y,, col="#CC0000", pch=16, cex=0.5)
+
+   legend(x="topright", legend=c("significant", "unsignificant"), col=c("#CC0000", "black"), cex=1, pch=16)
    dev.off()
 }
 

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Utilities / Make a list of file names</h2>
+
+<h3>Description</h3>
+
+<p>
+Makes a list of file names of the selected files.</p>
+
+<h3>Parameters</h3>
+
+<ul>
+<li>File name for list (String) [files.txt]</li>
+<li>Sort (yes, no) [yes]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+Some Chipster tools (<i>e.g.</i> Tophat2 and Cuffdiff2) require a list of file names to assign input files to
+correct inputs. This tool will produce a suitable list file for those tools.
+</p>
+<p>By default the list is sorted in alphabetical order. This is done so that if you have <i>e.g.</i> two lists for matching read pairs,
+the read pairs are listed in identical order in both lists.  If your files are named so that the sorted order is not correct, you can 
+carefully select the files one by one in the correct order and set <strong>Sort: no</strong>.
+</p>
+<p>
+Note: Use ctrl or cmd key to select multiple files.
+</p>
+<p>
+<img src="list-files-demo.png"> <br>
+An example of how to create the list files for Tophat: first select all read 1 FASTQ files (named here "_R1") and run the
+Make a list of file names tool. Repeat for the read 2 files (named "_R2"). Alphabetical sorting is ok here, as
+the file names are identical except for the lane number ("_L001") and read ("_R1"), 
+so they get ordered the same way in both list files.
+You need both of these list files and
+all the original FASTQ files as inputs for Tophat. 
+</p
+<h3>Output</h3>
+
+<p>
+The output is a text file.
+</p>
+
+
+</body>
+

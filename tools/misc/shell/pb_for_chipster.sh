@@ -3,7 +3,7 @@
 #
 #
 pblogfile=("./pb_blast_log")
-pbtmproot=("/tmp")
+pbtmproot=$(pwd)
 start_time=$(date)
 user=$(whoami)
 
@@ -195,7 +195,7 @@ do
                 ;;
                 '-ensembl_dna')
                 # database
-                  blast_database=$(ensemblfetch.sh -type dna $2 | tee | tail -1 )
+                  blast_database=$(../../admin/shell/ensemblfetch.sh -type dna $2 | tee | tail -1 )
                   if [[ -e $blast_database ]]
                   then
                      echo "The genome data file $blast_database succesfully retrieved"
@@ -222,7 +222,7 @@ do
                 ;;
                 '-ensembl_cdna')
                 # database
-                   blast_database=$(ensemblfetch.sh -type cdna $2 | tail -1 )
+                   blast_database=$(../../admin/shell/ensemblfetch.sh -type cdna $2 | tail -1 )
                    if [[ -e $blast_database ]]
                    then
                      echo "The genome data file $blast_database succesfully retrieved"
@@ -250,7 +250,7 @@ do
 
                 '-ensembl_prot')
                  # database
-                   blast_database=$(ensemblfetch.sh -type pep $2 | tail -1 )
+                   blast_database=$(../../admin/shell/ensemblfetch.sh -type pep $2 | tail -1 )
                    if [[ -e $blast_database ]]
                    then
                     echo "The protein data file $blast_database succesfully retrieved"

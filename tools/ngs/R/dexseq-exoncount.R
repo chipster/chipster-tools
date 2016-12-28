@@ -2,7 +2,7 @@
 # INPUT alignment.bam: "BAM alignment file" TYPE GENERIC
 # OUTPUT exon-counts.tsv
 # OUTPUT OPTIONAL exon-counts-info.txt
-# PARAMETER organism: "Reference organism" TYPE [Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1.83, Canis_familiaris.BROADD2.67, Canis_familiaris.CanFam3.1.83, Drosophila_melanogaster.BDGP5.78, Drosophila_melanogaster.BDGP6.83, Felis_catus.Felis_catus_6.2.83, Gallus_gallus.Galgal4.83, Gasterosteus_aculeatus.BROADS1.83, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.83, Homo_sapiens.NCBI36.54, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38.83, Mus_musculus.NCBIM37.67, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1.83, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.RGSC3.4.69, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.83, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2.83, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT Homo_sapiens.GRCh38.83 (Which organism is your data from.)
+# PARAMETER organism: "Reference organism" TYPE ["FILES genomes/dexseq .DEXSeq.gtf"] DEFAULT "SYMLINK_TARGET genomes/dexseq/default .DEXSeq.gtf" (Which organism is your data from.)
 # PARAMETER chr: "Chromosome names in the BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference annotation. Check your BAM and choose accordingly.)
 # PARAMETER paired: "Does the BAM file contain paired-end data" TYPE [yes, no] DEFAULT no (Does the alignment data contain paired end or single end reads?)
 # PARAMETER stranded: "Was the data produced with a strand-specific protocol" TYPE [yes, no, reverse] DEFAULT no (Select no if your data was not produced with a strand-specific RNA-seq protocol, so that a read is considered overlapping with a feature regardless of whether it is mapped to the same or the opposite strand as the feature. If you select yes, the read has to be mapped to the same strand as the feature.)
@@ -38,7 +38,8 @@ if(chr == "1"){
 
 # counts reads per non-overlapping exonic regions
 dexseq.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_count.py")
-dexseq.command <- paste("python", dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, gtf, bam, "exon-counts-out.tsv")
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
+dexseq.command <- paste(python.binary, dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, gtf, bam, "exon-counts-out.tsv")
 system(dexseq.command)
 
 # separate result file

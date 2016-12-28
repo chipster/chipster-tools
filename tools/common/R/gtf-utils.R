@@ -6,7 +6,7 @@
 # using this function guarantees that sorted files are compatible with it.    
 #
 sort.gtf <- function(input, output) {
-	system(paste("java -cp  '", chipster.module.path, "/../../../shared/lib/*' fi.csc.chipster.tools.ngs.SortGtf ", input, " ", output, sep = ""))
+	system(paste("java -cp  '", chipster.java.libs.path, "/*' fi.csc.chipster.tools.ngs.SortGtf ", input, " ", output, sep = ""))
 }
 
 # Adds "chr" to the beginning of each line that starts with a number or with X, Y, Z, W or M

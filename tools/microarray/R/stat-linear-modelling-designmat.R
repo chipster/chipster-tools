@@ -3,15 +3,14 @@
 # INPUT design.tsv: design.tsv TYPE GENERIC
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC
 # OUTPUT limma.tsv: limma.tsv
-# OUTPUT foldchange.tsv: foldchange.tsv 
-# OUTPUT pvalues.tsv: pvalues.tsv
 # PARAMETER cont.string: "Contrasts" TYPE STRING DEFAULT empty (List of contrasts to be compared separated by commas)
 # PARAMETER OPTIONAL technical.replication: "Technical replication" TYPE METACOLUMN_SEL DEFAULT EMPTY (Technical replication)
 # PARAMETER OPTIONAL p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, bonferroni: Bonferroni, holm: Holm, hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
 
 # MK, 24.06.2013 created linear Modelling using limma
 # OH, 12.02.2015, getting columns from phenodata using which rather than grep in order to get exact matches
- 
+# ML, 07.11.2016, simplify the outputs 
+
 # Loads the libraries
 library(limma)
 
@@ -104,5 +103,5 @@ colnames(pvalues2) 	<- sub("-", ".", colnames(pvalues2))
 
 # Write data to disk
 write.table(dat3, file="limma.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-write.table(fc2, file="foldchange.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-write.table(pvalues2, file="pvalues.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+#write.table(fc2, file="foldchange.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+#write.table(pvalues2, file="pvalues.tsv", sep="\t", row.names=T, col.names=T, quote=F)

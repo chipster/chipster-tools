@@ -7,14 +7,17 @@
 
 <h3>Description</h3>
 
-<p>This tool aligns Illumina single end RNA-seq reads to a genome provided as a FASTA file. You need to supply the reads in a FASTQ file. 
-Supplying a GTF file is optional but recommended, because using annotation information improves the alignment process. 
+<p>This tool aligns Illumina single end RNA-seq reads to a genome provided as a FASTA file. You need to supply the reads in one or more FASTQ files. 
+<p>
+Supplying a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
+<p> 
 </p> 
 
 
 <h3>Parameters</h3> 
 
 <ul>
+<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
 <li>When GTF file is used, ignore novel junctions (yes, no) [yes]</li>
 <li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
 <li>How many hits is a read allowed to have (1-1000000) [20]</li>
@@ -23,8 +26,6 @@ Supplying a GTF file is optional but recommended, because using annotation infor
 <li>Maximum number of mismatches allowed in the anchor (0, 1, 2) [0]</li>
 <li>Minimum intron length (10-1000) [70]</li>
 <li>Maximum intron length (1000-1,000,000) [500,000]</li>
-<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
-
 </ul>
 
 <h3>Details</h3>
@@ -46,6 +47,15 @@ TopHat2 will ignore donor-acceptor pairs which are closer than the minimum intro
 
 <p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
 
+<p>
+If your RNA-seq data was produced with a stranded/directional protocol, it is important that you select the correct strandedness option in the parameter "Library type":
+<ul>
+<li>fr-unstranded (Standard Illumina).</li>
+<li>fr-firststrand (dUTP, NSR, NNSR): The right-most end of the fragment (in transcript coordinates) is sequenced. Equivalently, it is assumed that only the strand generated during first strand synthesis is sequenced. For example Illumina TruSeq Stranded Total RNA Sample Prep Kit is a dUTP method.</li>
+<li>fr-secondstrand	(Ligation, Standard SOLiD): The left-most end of the fragment (in transcript coordinates) is sequenced. Equivalently, it is assumed that only the strand generated during second strand synthesis is sequenced.</li>
+</ul>
+You can read more about stranded data <a href="library-type-summary.html">here</a>.
+</p>
 
 <h3>Output</h3>
 <p>

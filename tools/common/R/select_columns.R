@@ -29,7 +29,7 @@ if ( nchar(colnames) > 0 ){
 		command.full <- paste(command.full,i,'"\\t"', sep="")
 		nnames <- (nnames + 1)
 	}
-	command.full <- paste(command.full,' > selected.tsv1', sep="")
+	command.full <- paste(command.full,' > converted.tsv1', sep="")
 	#stop(paste("CHIPSTER-NOTE:", command.full))
 	system(command.full)
 }

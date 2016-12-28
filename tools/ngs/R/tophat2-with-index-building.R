@@ -1,16 +1,18 @@
-# TOOL tophat2-with-index-building.R: "TopHat2 for paired end reads and own genome" (Aligns paired end Illumina RNA-seq reads to a genome in order to identify exon-exon splice junctions. The alignment process consists of several steps. If annotation is available as a GTF file, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that remain still unmapped are split into shorter segments, which are then aligned to the genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.)
-# INPUT reads1.fq: "Read file 1" TYPE GENERIC
-# INPUT reads2.fq: "Read file 2 with mates in matching order" TYPE GENERIC
-# INPUT genome.txt: "Genome to align against" TYPE GENERIC
+# TOOL tophat2-with-index-building.R: "TopHat2 for paired end reads and own genome" (Aligns paired end RNA-seq reads to a genome. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction \(e.g. 1files.txt and 2files.txt\). You can generate the lists with the tool \"Utilities \\\ Make a list of filenames\". Note that if you have stranded data, you need to set the \"Library type\" parameter accordingly. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed  in Chipster genome browser.)
+# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
+# INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL tophat.bam
 # OUTPUT OPTIONAL tophat.bam.bai
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL tophat-summary.txt
 # OUTPUT OPTIONAL tophat2.log
+# PARAMETER library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
+# PARAMETER  mate.inner.distance: "Expected inner distance between mate pairs" TYPE INTEGER DEFAULT 200 (Expected mean inner distance between mate pairs. For example, if your fragment size is 300 bp and read length is 50 bp, the inner distance is 200.)
 # PARAMETER OPTIONAL no.novel.juncs: "When GTF file is used, ignore novel junctions" TYPE [yes, no] DEFAULT no (Only look for reads across junctions indicated in the supplied GTF file.)
 # PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
-# PARAMETER OPTIONAL mate.inner.distance: "Expected inner distance between mate pairs" TYPE INTEGER DEFAULT 200 (Expected mean inner distance between mate pairs. For example, if your fragment size is 300 bp and read length is 50 bp, the inner distance is 200.)
 # PARAMETER OPTIONAL mate.std.dev: "Standard deviation for the inner distances between mate pairs" TYPE INTEGER DEFAULT 20 (The standard deviation for the distribution on inner distances between mate pairs. The default is 20bp.)
 # PARAMETER OPTIONAL max.multihits: "How many hits is a read allowed to have" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 20 (Instructs TopHat to allow up to this many alignments to the reference for a given read.)
 # PARAMETER OPTIONAL mismatches: "Number of mismatches allowed in final alignment" TYPE INTEGER FROM 0 TO 5 DEFAULT 2 (Final read alignments having more than this many mismatches are discarded.)
@@ -19,7 +21,6 @@
 # PARAMETER OPTIONAL min.intron.length: "Minimum intron length" TYPE INTEGER FROM 10 TO 1000 DEFAULT 70 (TopHat2 will ignore donor-acceptor pairs closer than this many bases apart.)
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1000 TO 1000000 DEFAULT 500000 (TopHat2 will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
 # PARAMETER OPTIONAL no.mixed: "Report only paired alignments" TYPE [yes, no] DEFAULT yes (Only report read alignments if both reads in a pair can be mapped.)
-# PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use.)
 
 
 # EK 17.4.2012 added -G and -g options
@@ -37,15 +38,15 @@
 
 # PARAMETER OPTIONAL no.discordant: "Report only concordant alignments" TYPE [yes, no] DEFAULT yes (Report only concordant mappings.) 
 
-
-
-
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads1.fq")
-unzipIfGZipFile("reads2.fq")
-unzipIfGZipFile("genome.txt")
-unzipIfGZipFile("genes.gtf")
+
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
+
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 options(scipen = 10)
 # max.intron.length <- formatC(max.intron.length, "f", digits = 0)
@@ -72,7 +73,7 @@ command.start <- paste("bash -c '", set.path, tophat.binary)
 # parameters
 #command.parameters <- paste("--bowtie1 -r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
 #command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
-command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits)
+command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
 
 if (mismatches > 2){
 	command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
@@ -99,18 +100,31 @@ if (file.exists("genes.gtf")){
 	}
 }
 
-# library type: fr-unstranded, fr-firststrand, fr-secondstrand
-if (library.type == "fr-unstranded") {
-	command.parameters <- paste(command.parameters, "--library-type fr-unstranded")
-}else if (library.type == "fr-firststrand") {
-	command.parameters <- paste(command.parameters, "--library-type fr-firststrand")	
-}else if (library.type == "fr-secondstrand") {	
-	command.parameters <- paste(command.parameters, "--library-type fr-secondstrand")
+
+# Input files
+if (file.exists("reads1.txt") && file.exists("reads2.txt")){
+	# Case: list files exist
+	reads1.list <- make_input_list("reads1.txt")
+	reads2.list <- make_input_list("reads2.txt")
+	if (identical(intersect(reads1.list, reads2.list), character(0))){
+		reads1 <- paste(reads1.list, sep="", collapse=",")
+		reads2 <- paste(reads2.list, sep="", collapse=",")
+	}else{
+		stop(paste('CHIPSTER-NOTE: ', "One or more files is listed in both lists."))
+	}
+}else if (file.exists("reads002.fq") && !file.exists("reads003.fq")){
+	# Case: no list file, but only two fastq inputs
+	in.sorted <- input.names[order(input.names[,2]),]
+	reads <- grep("reads", in.sorted[,1], value = TRUE)
+	reads1 <- reads[1]
+	reads2 <- reads[2]
+}else{
+	# Case: no list files, more than two fastq inputs
+	stop(paste('CHIPSTER-NOTE: ', "List file is missing. You need to provide a list of read files for both directions."))
 }
 
 # command ending
-#command.end <- paste(path.bowtie.index, "reads1.fq reads2.fq '")
-command.end <- paste(bowtie2.genome, "reads1.fq reads2.fq 2>> tophat.log'")
+command.end <- paste(bowtie2.genome, reads1, reads2, "2>> tophat.log'")
 
 # run tophat
 command <- paste(command.start, command.parameters, command.end)
@@ -187,8 +201,12 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 # Determine base name
-base1 <- strip_name(inputnames$reads1.fq)
-base2 <- strip_name(inputnames$reads2.fq)
+name1 <- unlist(strsplit(reads1, ","))
+base1 <- strip_name(inputnames[[name1[1]]])
+
+name2 <- unlist(strsplit(reads2, ","))
+base2 <- strip_name(inputnames[[name2[1]]])
+
 basename <- paired_name(base1, base2)
 
 # Make a matrix of output names

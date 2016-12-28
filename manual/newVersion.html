@@ -15,6 +15,102 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 19.12.2016: What is new in Chipster 3.11</h2>
+
+ 	<p>
+		<b>Summary:</b> This version contains a new tool category Single cell RNA-seq, and it also contains some updates and improvements to existing tools.  
+	</p>
+	<ul><li><div class=header-item>New tool category single cell RNA-seq (BETA) and new example session NGS_single_cell_BETA</div>
+			<ul>
+				<li>10 new tools for analyzing single cell RNA-seq data and a corresponding example session have been added. These tools are based on the Picard and <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">Drop-seq</a> packages, and they allow you to perform the required preprocessing steps, quantitate expression, and produce diagnostic plots.
+				Please note that these tools are still under development, so we might make changes to them or even combine several tools at a later stage. Should you have any wishes or comments regarding tools for single cell RNA-seq data, please feel free to contact us.</li>
+			</ul> 
+		</li>		
+		<li><div class=header-item>Improvements and updates to analysis tools</div>
+			<ul>
+				<li>The following tools have been updated to new version: NCBI BLAST (v2.2.29), Entrez Direct (v5.8), and SRAtoolkit (v2.4.2)</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a>: Recommendation for TopHat and HTSeq parameters has been added to the report.</li>
+				<li>RNA-seq / HTSeq tools: The file htseq-count-info.txt now includes a sum of counted alignments.</li>
+			</ul>
+		</li>
+	</ul>
+	<hr />
+
+<h2>Version update 22.11.2016: What is new in Chipster 3.10</h2>
+ 	<p>
+		<b>Summary:</b> All the reference genomes and many analysis packages have been updated. This version contains also new and improved functionality for RNA-seq data. 
+		In particular, stranded RNA-seq data is now better supported and there is also a <a href="library-type-summary.html">manual page for stranded RNA-seq data</a>.
+	</p>
+	<ul>
+		<li><div class=header-item>Updates to reference genomes and analysis packages</div>
+			<ul>
+				<li>Reference data has been updated to Ensembl v86.</li>
+				<li>R-based analysis tools have been migrated to R3.2.3 and some copy number aberration tools have been migrated to R3.3.2.</li>
+				<li>The following command line tools have been updated: Bowtie2 2.2.9, Cufflinks 2.2.1, MACS2 2.1.1.20160309, Mothur 1.36.1, Picard 2.6.0, RSeQC 2.6.4, Tophat 2.1.1</li>
+			</ul>
+		</li>
+		<li><div class=header-item>New NGS analysis tools</div>		
+			<ul>
+				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> pipeline detects viruses using siRNA data.</li>
+				<li><a href="virusdetect-with-index-building.html">Small RNA-seq / VirusDetect with own host genome</a>, as above but with a user-supplied host genome.</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a> detects the type of strand-specific sequencing used and the inner distance between paired reads.</li>
+				<li><a href="cuffdiff2_with_replicates.html">RNA-seq / Differential expression using Cuffdiff with replicates</a> allows you to assign several BAM files to each experimental group using filename lists.</li>
+				<li><a href="make_namelist.html">Utilities / Make a list of file names</a> makes file name lists used by Cuffdiff and TopHat tools.</li>				
+				<li><a href="mothur-screenseqs.html">Metagenomics / Screen sequences with Mothur</a> filters reads for selected criteria.</li>
+				<li><a href="make_tar.html">Utilities / Make a tar package</a> makes a package of selected files allowing easier export from Chipster.</li>
+				<li><a href="concatenate.html">Utilities / Concatenate files</a> allows you to combine for example FASTQ files one after the other.</li>
+			</ul> 
+		</li>	 
+		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+			<ul>
+				<li>RNA-seq / Merge transcript assemblies with Cuffmerge: Reference GTF and fasta files are now available. The problem with duplicate identifiers has been solved.</li>
+				<li>RNA-seq / Differential expression using Cuffdiff: Library type and labels parameter have been added. The direction of fold change calculation has been reversed.</li>
+				<li>RNA-seq / Assemble transcripts using Cufflinks: GTF sorting has been added.</li>
+				<li>RNA-seq / Count aligned reads per genes with HTSeq: Information about the different strandedness options has been added.</li>
+				<li>RNA-seq / Differential expression using DESeq2: Plots and rounding of result columns has been improved for cases when there are more than two experimental groups.</li>
+				<li>Alignment / TopHat tools: You can give several FASTQ files per sample as input. For paired end reads you need to make a list of filenames first.</li>
+				<li>Quality control / RNA-seq quality metrics with RseQC: BED files are now available in Chipster.</li>	
+				<li>Variants / Filter variants: Option to keep all INFO fields has been added. INDELs are added by the default in the output.</li>
+			</ul> 
+		</li>
+				<li><div class=header-item>Improvements to microarray analysis tools</div>		
+			<ul>
+				<li>Statistics / Linear modeling: The output has been simplified and the manual has been clarified.</li>
+				<li>Statistics / Two group test: The direction of fold change produced by the RankProd method has been reverted.</li>
+				<li>Normalization / Illumina - methylumi pipeline: The ability to analyze Illumina 450k arrays has been removed because the new Bioconductor version doesn't support it.</li>
+			</ul> 
+				<li><div class=header-item>For admins and developers</div>		
+			<ul>
+				<li>Chipster now uses Ubuntu v16.04.</li>
+				<li>Database performance for cloud sessions has been improved.</li>
+				<li>All R-based tools are now in folder R. Runtimes.xml has been simplified.</li>
+			</ul>
+		</li>		
+	</ul>
+	<hr />
+
+<h2>Version update 23.5.2016: What is new in Chipster 3.9.0</h2>
+
+ 	<p>
+		<b>Summary:</b>This version mainly contains internal changes to the way how tool scripts are distributed on the server side.  
+	</p>
+	<ul>
+		<li><div class=header-item>Changes</div>
+			<ul>
+				<li>Chipster client application now requires Java 1.8 or later</li>
+				<li>Tool scripts are moved from computing services to a centralised toolbox service</li>
+			</ul>
+		</li>		
+		<li><div class=header-item>Improvements to analysis tools</div>
+			<ul>
+				<li><a href="merge-tables.html">Merge tables</a> now accepts multiple inputs</li>
+			</ul>
+		</li>
+	</ul>
+	<hr />
+
+
+
 <h2>Version update 4.5.2016: What is new in Chipster 3.8.1</h2>
 
  	<p>

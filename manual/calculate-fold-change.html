@@ -13,17 +13,17 @@
 
 <ul>
 <li>Column [group]</li>
-<li>Geometric (yes, no) [yes] </li>
+<li>Which mean to use (geometric, arithmetic) [geometric] </li>
 <li>Scale (log2, linear) [log2] </li>
-<li>Order (normal, reverse) [normal] </li>
 </ul>
 
 <h3>Details</h3>
 
-<p>User needs to select a phenodata column that defines the grouping of the samples. The reference group selection is controlled by the "order" parameter: 
-In the normal mode the group of the first sample is assumed to be the reference, whereas in the reversed mode the situation is reversed. Note that this is different to how
-# FC values are calculated in the various statistical testing tool, where the reference group is defined by the lower group number or alphabetical order.
-</p>
+<p>User needs to select a phenodata column that defines the grouping of the samples. Mark both groups in the phenodata file with numbers, and use smaller number for the control/baseline group. 
+So for example control samples can be coded with "1" and treatment samples with "2" in the group column. 
+Then Chipster knows to compare treatment to control (control is coded with a smaller number than the treatment). 
+Since this makes a difference when interpreting the results such as fold change, it is worth paying attention to.</p>
+
 <p>
 First the samples in both groups are averaged - either using the geometric or arithmetic mean - and then a fold change of these averages
 is calculated. In most cases the geometric mean is considered the most appropriate way to calculate the average expression, especially for data from 2-color array

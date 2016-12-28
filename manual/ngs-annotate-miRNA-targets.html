@@ -7,27 +7,26 @@
 
 <h3>Description</h3>
 
-<p>Fetches predicted gene targets from a selected database given a list of miRNA:s.</p>
+<p>Given a list of miRNAs, fetches target gene predictions from the selected database.</p>
 
 <h3>Parameters</h3>
 
 <ul>
-<li>species (human, mouse, rat) [human]</li>
-<li>database (miranda) mirbase, mirtarget2, pictar, tarbase, targetscan) [mirtarget2]</li>
+<li>Species (human, mouse, rat) [human]</li>
+<li>Database (miRanda, miRBase, MirTarget, PicTar, TarBase, TargetScan) [MirTarget]</li>
 </ul>
 
 
 <h3>Details</h3>
 
-<p>Given a list of miRNA:s, which have identifiers recognized by the miRNA database (such as hsa-let-7a or MIMAT0004481),
-this tool searches one of the specified databases to fetch the predicted gene targets.
-Currently, the following databases are supported: miRanda, miRbase, miRtarget2, PicTar, TarBase or targetScan.
+<p>Given a list of miRNAs, which have identifiers recognized by the miRNA database (such as hsa-let-7a or MIMAT0004481),
+this tool searches the specified database for predicted target genes.
 </p>
 
 <h3>Output</h3>
 
-<p>A table listing the miRNA:s in one column and their predicted target genes in another. The sites column corresponds 
-to the number of times each miRNA-gene -pair has been listed in the given database. In most cases, this equals to the
+<p>A table listing the miRNAs in one column and their predicted target genes in another. The sites column corresponds 
+to the number of times each miRNA-gene pair has been listed in the given database. In most cases, this equals to the
 number of putative miRNA sites within the given Entrez gene.</p>
 
 <h3>References</h3>
@@ -38,7 +37,7 @@ number of putative miRNA sites within the given Entrez gene.</p>
 <a href="http://www.microrna.org/microrna/home.do">miRanda</a>
 <p>
 <p>
-<a href="http://mirdb.org/miRDB/">miRTarget2</a>
+<a href="http://mirdb.org/miRDB/">MirTarget</a>
 <p>
 <p>
 <a href="http://diana.cslab.ece.ntua.gr/tarbase/">TarBase</a>

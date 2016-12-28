@@ -7,14 +7,26 @@
 
 <h3>Description</h3>
 
-<p>This tool aligns Illumina paired end RNA-seq reads to publicly available genomes. If you would like us to add new reference genomes to Chipster, please contact us.
-You need to supply the reads in a FASTQ file. Supplying a GTF file is optional but recommended, because using annotation information improves the alignment process. 
+<p>This tool aligns Illumina paired end RNA-seq reads to publicly available genomes. If you would like us to add new reference 
+genomes to Chipster, please contact us. 
+<p>
+<p> You need to supply the reads in two or more FASTQ files. Files can be compressed with gzip. You may also need two list files to assign the 
+FASTQ files to each direction. 
 </p>
+<p>List files are optional if you provide just two FASTQ files. Chipster will try to assign the files to directions based on file names. 
+This assumes the files are named so that the beginning of the name is identical and the directions are specified with _1 and _2, 
+<i>e.g.</i> Abc123_1, Abc123_2. If your files are named differently, you need to provide list files to make sure the files are assigned 
+correctly (see Details for more information).
+</p>
+<p>
+Chipster has GTF files for the genomes offered, but you can also provide your own. In general using a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
+<p>
 
 <h3>Parameters</h3> 
 
 <ul>
 <li>Genome (list of supported genomes) [latest human]</li>
+<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
 <li>Use annotation GTF (yes, no) [yes]</li>
 <li>When GTF file is used, ignore novel junctions (yes, no) [yes]</li>
 <li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
@@ -27,7 +39,6 @@ You need to supply the reads in a FASTQ file. Supplying a GTF file is optional b
 <li>Minimum intron length (10-1000) [70]</li>
 <li>Maximum intron length (1000-1000000) [500000]</li>
 <li>Report only paired alignments (yes, no) [yes]</li>
-<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
 </ul>
 
 <h3>Details</h3>
@@ -52,6 +63,27 @@ mapping stages described above. In the final stage, the independently aligned re
 analyzed together to produce paired alignments, taking into consideration additional
 factors including fragment length and orientation.
 The expected mean inner distance between mate pairs means the fragment length minus the reads. For example, if your fragment size is 300 bp and read length is 50 bp, the inner distance is 200.
+</p>
+
+<p><b>If you have more than two FASTQ files</b>, you will need to provide a list of filenames of the FASTQ files for each direction (one file for read1 files, and another one for the read2 files) as a text 
+file (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  <strong><a href="http://chipster.csc.fi/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. The read 
+pairs must be ordered identically in both lists. 
+<br>
+Select BOTH list files (R1files.txt and R2files.txt) and ALL FASTQ files (8 of them in the example below), and assign the list files correctly. 
+When assigning the list files, they are automatically inactivated in the "reads" file list.
+<img src="tophat-assign-list-files.jpg"> <br>
+<br>
+<img src="tophat-list-files-demo.png"> <br>
+</p>
+
+<p>
+If your RNA-seq data was produced with a stranded/directional protocol, it is important that you select the correct strandedness option in the parameter "Library type":
+<ul>
+<li>fr-unstranded	(Standard Illumina) Reads from the left-most end of the fragment (in transcript coordinates) map to the transcript strand, and the right-most end maps to the opposite strand.</li>
+<li>fr-firststrand	(dUTP, NSR, NNSR) Same as above except we enforce the rule that the right-most end of the fragment (in transcript coordinates) is the first sequenced (or only sequenced for single-end reads). Equivalently, it is assumed that only the strand generated during first strand synthesis is sequenced. For example Illumina TruSeq Stranded Total RNA Sample Prep Kit is a dUTP method.</li>
+<li>fr-secondstrand	(Ligation, Standard SOLiD) Same as above except we enforce the rule that the left-most end of the fragment (in transcript coordinates) is the first sequenced (or only sequenced for single-end reads). Equivalently, it is assumed that only the strand generated during second strand synthesis is sequenced.</li>
+</ul>
+Please check that you have assigned the files correctly, as this parameter assumes that Read1 is listed before Read2! You can read more about stranded data <a href="library-type-summary.html">here</a>.
 </p>
 
 <p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>

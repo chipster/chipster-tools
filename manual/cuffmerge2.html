@@ -12,7 +12,7 @@ This tool merges transcript assemblies with Cuffmerge.
 </p>
 
 <h3>Parameters</h3>
-None.
+Exclude transcripts with duplicate ids (yes, no) [no]
 <ul>
 
 </ul>
@@ -23,7 +23,10 @@ None.
 Given several transcript GTF files obtained by Cufflinks, Cuffmerge merges them into one. 
 The merged GTF file can be used in differential expression analysis with Cuffdiff.
 </p>
-
+<p>
+Cufflinks produces sometimes GTF files which contain duplicate transcript identifiers. In this case Cuffmerge will terminate and produce a log file reporting the problem.
+You can exclude duplicate identifiers by turning the parameter on. This way Cuffmerge will produce a merged GTF file and report in the log file how many transcripts were removed from each input file.
+</p>
 
 <h3>Output</h3>
 
@@ -31,6 +34,7 @@ The merged GTF file can be used in differential expression analysis with Cuffdif
 <p>The analysis output consists of the following:</p>
 <ul>
 <li>merged.gtf: A GTF file that contains an assembly that merges together the input assemblies.</li>
+<li>cuffmerge.log: A log file containing possible error messages or the number of excluded transcripts.</li>
 </ul>
 </p>
 
