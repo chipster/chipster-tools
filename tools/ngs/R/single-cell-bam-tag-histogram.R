@@ -2,6 +2,7 @@
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL cell_readcounts.txt.gz
 # OUTPUT OPTIONAL tag_histogram.pdf
+# PARAMETER OPTIONAL x_axis_max: "Max to x axis" TYPE INTEGER FROM 0 TO 100000 DEFAULT 5000 (Upper limit for x-axis in the histogram. If you cannot see the knee in the curve, try tuning this parameter.) 
 
 
 # ML 12.10.2016 created
@@ -21,7 +22,7 @@ a=read.table("cell_readcounts.txt.gz", header=F, stringsAsFactors=F)
 x=cumsum(a$V1)
 x=x/max(x)
 pdf(file="tag_histogram.pdf")
-plot(1:length(x), x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]", ylab="cumulative fraction of reads", xlim=c(1,500))
+plot(1:length(x), x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]", ylab="cumulative fraction of reads", xlim=c(1,x_axis_max))
 dev.off()
 
 
