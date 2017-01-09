@@ -2,7 +2,7 @@
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL cell_readcounts.txt.gz
 # OUTPUT OPTIONAL tag_histogram.pdf
-# PARAMETER OPTIONAL x_axis_max: "Max to x axis" TYPE INTEGER FROM 0 TO 100000 DEFAULT 5000 (Upper limit for x-axis in the histogram. If you cannot see the knee in the curve, try tuning this parameter.) 
+# PARAMETER OPTIONAL x_axis_max: "Max to x axis" TYPE INTEGER FROM 0 TO 100000 DEFAULT 1500 (Upper limit for x-axis in the histogram. If you cannot see the knee in the curve, try tuning this parameter.) 
 
 
 # ML 12.10.2016 created
