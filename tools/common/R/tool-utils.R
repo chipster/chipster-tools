@@ -97,3 +97,56 @@ make_input_list <-function(listfile){
 	}
 	return(input.list)
 }
+
+# fileOk and fileNotOk ar functions to check that file exists and optionally that it is larger than the provided threshold.
+# fileOk("myfile.txt") : returns TRUE if file myfile.txt exists
+# fileOk("myfile.txt", 100) : returns TRUE if file myfile.txt exists and is min. 100 bytes
+# fileOk("myfile.txt",,2) : returnd TRUE if file myfile.txt exists and is min. 2 lines
+# The two functions work the same exept fileOk returns TRUE if the file meets the criteria, and fileNotOk returns TRUE
+# if it does not. The idea is to make if statements more readable.
+
+fileOk <- function(filename, minsize, minlines){
+	# Check that file exists
+	if (!(file.exists(filename))){
+		return(FALSE)
+	}
+	# Check minimum size if provided
+	if (!(missing(minsize))){
+		if (file.info(filename)$size < minsize) {
+			return(FALSE)	
+		}
+	}
+	# Check line number if provided
+	if (!(missing(minlines))){
+		linenumber <- as.integer(system(paste("wc -l <", filename), intern=TRUE))
+		if (linenumber < minlines) {
+			return(FALSE)	
+		}
+	}
+	
+	# If all checks pass, return TRUE
+	return(TRUE)
+}
+
+fileNotOk <- function(filename, minsize, minlines){
+	# Check if file exists
+	if (!(file.exists(filename))){
+		return(TRUE)
+	}
+	# Check minimum size if provided
+	if (!(missing(minsize))){
+		if (file.info(filename)$size >= minsize) {
+			return(FALSE)	
+		}
+	}
+	# Checkline number if provided
+	if (!(missing(minlines))){
+		linenumber <- as.integer(system(paste("wc -l <", filename), intern=TRUE))
+		if (linenumber >= minlines) {
+			return(FALSE)	
+		}
+	}
+	
+	# If all checks pass, return TRUE
+	return(TRUE)
+}
