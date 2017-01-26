@@ -67,7 +67,8 @@
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
 		<tool module="common">gunzip.py</tool>
-		<tool module="common">make_tar.R</tool>	
+		<tool module="common">make_tar.R</tool>
+		<tool module="common">gzip.R</tool>	
 		<tool>a5-miseq.R</tool>
 		<tool module="common">make_namelist.R</tool>
 		<tool>virusdetect.R</tool>
