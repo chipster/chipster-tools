@@ -150,3 +150,17 @@ fileNotOk <- function(filename, minsize, minlines){
 	# If all checks pass, return TRUE
 	return(TRUE)
 }
+
+# Wrapper for system() command. Shows Chipster error message if shell exit code !=0
+#
+runExternal <- function(command){
+	exitcode <- system(command)
+	if (exitcode != 0){
+		message <- paste("External program did not complete succesfully.\n\n")
+		message <- paste(message,"Please check your parameters, input files and input file asssignment.\n\n")
+		message <- paste(message,"Failed command:\n")
+		message <- paste(message, command)
+		stop(paste('CHIPSTER-NOTE: ', message))
+	}
+	
+}
