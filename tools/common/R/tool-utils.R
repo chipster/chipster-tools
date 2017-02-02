@@ -151,16 +151,65 @@ fileNotOk <- function(filename, minsize, minlines){
 	return(TRUE)
 }
 
-# Wrapper for system() command. Shows Chipster error message if shell exit code !=0
-#
-runExternal <- function(command){
-	exitcode <- system(command)
-	if (exitcode != 0){
-		message <- paste("External program did not complete succesfully.\n\n")
-		message <- paste(message,"Please check your parameters, input files and input file assignment.\n\n")
-		message <- paste(message,"Failed command:\n")
-		message <- paste(message, command)
-		stop(paste('CHIPSTER-NOTE: ', message))
+fileCheck <- function(filename, minsize, minlines){
+	# Check if file exists
+	if (!(file.exists(filename))){
+		stop(paste('CHIPSTER-NOTE: ', "Required file", filename, "does not exist."))
+	}
+	# Check minimum size if provided
+	if (!(missing(minsize))){
+		filesize <- file.info(filename)$size
+		if (filesize < minsize) {
+			stop(paste('CHIPSTER-NOTE: ', "Required file", filename, "exists, but is smaller (", filesize, ") than required size (", minsize, ")."))	
+		}
+	}
+	# Checkline number if provided
+	if (!(missing(minlines))){
+		linenumber <- as.integer(system(paste("wc -l <", filename), intern=TRUE))
+		if (linenumber < minlines) {
+			stop(paste('CHIPSTER-NOTE: ', "Required file", filename, "exists, but has fewer lines (", linenumber, ") than required (", minlines, ")."))	
+		}
+	}
+}
+
+# Wrapper for system2() command. Captures stderr and stdout to stderr.txt and stdout.txt respectively.
+# Checks for exit statua and gives an error message is staus != 0
+runExternal <- function(command, envar = NULL, capture = TRUE, checkexit = TRUE){
+
+	# Split command to words
+	wcom <- strsplit(command, " ")[[1]]
+	
+	# if environment varaiables are set, the command has to be started with "bash -c" and encased in single quotes.
+	if (!is.null(envar)){
+		wcom <- c("bash", "-c", "\'", wcom, "\'")		
+	}
+	
+	# Capture of stdout and stderr is optional
+	if (capture){
+		# Run command, capture stdout and stderr
+		exitcode <- system2(wcom[1], wcom[2:length(wcom)], stdout="stdout.tmp", stderr="stderr.tmp", env=envar )
+		# Append to the tool capture files. The .tmp files are overwritten each time runExternal is called.
+		system("cat stdout.tmp >> stdout.txt")
+		system("cat stderr.tmp >> stderr.txt")
+	} else {
+		# Run command without capturing stdout and stderr
+		exitcode <- system2(wcom[1], wcom[2:length(wcom)], env=envar )		
+	}
+	# Show error message if command fails
+	if (checkexit){
+		if (exitcode != 0){
+
+			error <- scan("stderr.tmp", what=" ", sep="\n")
+
+			msg <- paste("External program did not complete succesfully.\n")
+			msg <- paste(msg,"Please check your parameters, input files and input file assignment.\n\n")
+			msg <- paste(msg,"Failed command:\n")
+			msg <- paste(msg, command, "\n\n")
+			msg <- paste(msg, "Error:\n")
+			msg <- paste(msg, paste(error, collapse = "\n"))
+			
+			stop(paste('CHIPSTER-NOTE: ', msg))
+		}
 	}
 	
 }
