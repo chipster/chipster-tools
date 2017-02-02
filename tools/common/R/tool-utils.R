@@ -174,26 +174,26 @@ fileCheck <- function(filename, minsize, minlines){
 
 # Wrapper for system2() command. Captures stderr and stdout to stderr.txt and stdout.txt respectively.
 # Checks for exit statua and gives an error message is staus != 0
-runExternal <- function(command, envar = NULL, capture = TRUE, checkexit = TRUE){
+runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 
 	# Split command to words
 	wcom <- strsplit(command, " ")[[1]]
 	
 	# if environment varaiables are set, the command has to be started with "bash -c" and encased in single quotes.
-	if (!is.null(envar)){
+	if (!is.null(env)){
 		wcom <- c("bash", "-c", "\'", wcom, "\'")		
 	}
 	
 	# Capture of stdout and stderr is optional
 	if (capture){
 		# Run command, capture stdout and stderr
-		exitcode <- system2(wcom[1], wcom[2:length(wcom)], stdout="stdout.tmp", stderr="stderr.tmp", env=envar )
+		exitcode <- system2(wcom[1], wcom[2:length(wcom)], stdout="stdout.tmp", stderr="stderr.tmp", env=env )
 		# Append to the tool capture files. The .tmp files are overwritten each time runExternal is called.
 		system("cat stdout.tmp >> stdout.txt")
 		system("cat stderr.tmp >> stderr.txt")
 	} else {
 		# Run command without capturing stdout and stderr
-		exitcode <- system2(wcom[1], wcom[2:length(wcom)], env=envar )		
+		exitcode <- system2(wcom[1], wcom[2:length(wcom)], env=env )		
 	}
 	# Show error message if command fails
 	if (checkexit){
