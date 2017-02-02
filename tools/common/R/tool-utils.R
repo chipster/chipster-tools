@@ -172,8 +172,11 @@ fileCheck <- function(filename, minsize, minlines){
 	}
 }
 
-# Wrapper for system2() command. Captures stderr and stdout to stderr.txt and stdout.txt respectively.
-# Checks for exit statua and gives an error message is staus != 0
+# Wrapper for system2() command. 
+# Optionally captures stderr.
+# Checks for exit status and gives an error message if status != 0
+# Allows setting environment variables give as character vector in style "VARIABLE=value"
+#
 runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 
 	# Split command to words
@@ -184,15 +187,22 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 		wcom <- c("bash", "-c", "\'", wcom, "\'")		
 	}
 	
-	# Capture of stdout and stderr is optional
+	# Add timestamp and command line to stderr.log
+	system("echo \"# Chipster log\" >> stderr.log")
+	system("echo \"# \"\`date\` >> stderr.log")
+	write(paste(wcom, collapse = " "), file = "stderr.log", append = TRUE)
+	
+	# Capture of stderr is optional
 	if (capture){
-		# Run command, capture stdout and stderr
-		exitcode <- system2(wcom[1], wcom[2:length(wcom)], stdout="stdout.tmp", stderr="stderr.tmp", env=env )
-		# Append to the tool capture files. The .tmp files are overwritten each time runExternal is called.
-		system("cat stdout.tmp >> stdout.txt")
-		system("cat stderr.tmp >> stderr.txt")
+		# Run command, capture stderr
+		exitcode <- system2(wcom[1], wcom[2:length(wcom)], stderr="stderr.tmp", env=env )
+
+		# Append error messages to the log file. stderr.tmp is overwritten each time runExternal is called.
+		system("echo >> stderr.log")
+		system("cat stderr.tmp >> stderr.log")
+		system("echo  >> stderr.log")
 	} else {
-		# Run command without capturing stdout and stderr
+		# Run command without capturing stderr
 		exitcode <- system2(wcom[1], wcom[2:length(wcom)], env=env )		
 	}
 	# Show error message if command fails
