@@ -173,6 +173,7 @@ bioconductorPackages = c(
 		"Heatplus",
 		"RmiR.Hs.miRNA",
 		"QDNAseq",
+		"FDb.InfiniumMethylation.hg19",
 		
 		# SNP 5.0 / 6.0
 		"crlmm",
