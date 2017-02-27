@@ -5,7 +5,7 @@
 # OUTPUT methylated.tsv: methylated.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 
 # OUTPUT OPTIONAL QC-plot.pdf: QC-plot.pdf
-# PARAMETER chiptype: Chiptype TYPE [HumanMethylation27: HumanMethylation27, FDb.InfiniumMethylation.hg19:FDb.InfiniumMethylation.hg19] DEFAULT HumanMethylation27 (Select the correct BeadChip type)
+# PARAMETER chiptype: Chiptype TYPE [FDb.InfiniumMethylation.hg19:FDb.InfiniumMethylation.hg19] DEFAULT FDb.InfiniumMethylation.hg19 (Select the annotation package)
 # PARAMETER target: "Illumina ID" TYPE STRING DEFAULT TargetID (Name of the TargetID column)
 # PARAMETER signala: "Signal_A/Grn pattern" TYPE STRING DEFAULT Signal_A (Pattern identifying and common to all unmethylated data columns)
 # PARAMETER signalb: "Signal_B/Red pattern" TYPE STRING DEFAULT Signal_B (Pattern identifying and common to all methylated data columns)
@@ -21,7 +21,7 @@
 # JTT: 28.10.2012: Modified
 # MK: 20.11.2013: Added parameters to enalbe analysis of data having atypical columnames
 # TH: 10.11.2016: Disable chiptype HumanMethylation450: HumanMethylation450 for now
-# ML: 27.2.2017: Fix, use FDb.InfiniumMethylation.hg19 package.
+# ML: 27.2.2017: Fix, use FDb.InfiniumMethylation.hg19 package. Disable HumanMethylation27: HumanMethylation27 package.
 
 # setwd("C://Users//Jarno Tuimala//Desktop//methylumi data")
 # color.balance.adjustment<-c("quantile")
@@ -46,17 +46,17 @@ library(methylumi)
 library(annotate)
 
 # Converting to the correct chiptype
-if(chiptype=="HumanMethylation27") {
-	chiptype<-c("IlluminaHumanMethylation27k")
-	chiptype<-paste(chiptype, ".db", sep="")
-}
-if(chiptype=="HumanMethylation450") {
-	chiptype<-c("IlluminaHumanMethylation450k")
-}
+#if(chiptype=="HumanMethylation27") {
+#	chiptype<-c("IlluminaHumanMethylation27k")
+#	chiptype<-paste(chiptype, ".db", sep="")
+#}
+#if(chiptype=="HumanMethylation450") {
+#	chiptype<-c("IlluminaHumanMethylation450k")
+#	chiptype<-paste(chiptype, ".db", sep="")	
+#}
 if(chiptype=="FDb.InfiniumMethylation.hg19") {
 chiptype <- "FDb.InfiniumMethylation.hg19"
 }
-#chiptype<-paste(chiptype, ".db", sep="")
 
 # Loading data files. 
 # Note that if the pattern given in target-variable, following wrong error is returned:
