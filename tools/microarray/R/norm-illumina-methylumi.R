@@ -5,7 +5,7 @@
 # OUTPUT methylated.tsv: methylated.tsv 
 # OUTPUT META phenodata.tsv: phenodata.tsv 
 # OUTPUT OPTIONAL QC-plot.pdf: QC-plot.pdf
-# PARAMETER chiptype: Chiptype TYPE [HumanMethylation27: HumanMethylation27] DEFAULT HumanMethylation27 (Select the correct BeadChip type)
+# PARAMETER chiptype: Chiptype TYPE [HumanMethylation27: HumanMethylation27, FDb.InfiniumMethylation.hg19:FDb.InfiniumMethylation.hg19] DEFAULT HumanMethylation27 (Select the correct BeadChip type)
 # PARAMETER target: "Illumina ID" TYPE STRING DEFAULT TargetID (Name of the TargetID column)
 # PARAMETER signala: "Signal_A/Grn pattern" TYPE STRING DEFAULT Signal_A (Pattern identifying and common to all unmethylated data columns)
 # PARAMETER signalb: "Signal_B/Red pattern" TYPE STRING DEFAULT Signal_B (Pattern identifying and common to all methylated data columns)
@@ -21,12 +21,13 @@
 # JTT: 28.10.2012: Modified
 # MK: 20.11.2013: Added parameters to enalbe analysis of data having atypical columnames
 # TH: 10.11.2016: Disable chiptype HumanMethylation450: HumanMethylation450 for now
+# ML: 27.2.2017: Fix, use FDb.InfiniumMethylation.hg19 package.
 
 # setwd("C://Users//Jarno Tuimala//Desktop//methylumi data")
 # color.balance.adjustment<-c("quantile")
 # background.correction<-c("none")
 # normalization<-c("quantile")
-# chiptype<-c("HumanMethylation450")
+# chiptype<-c("HumanMethylation450", "FDb.InfiniumMethylation.hg19")
 # QCplots<-"yes"
 # image.width<-c(600)
 # image.height<-c(600)
@@ -47,11 +48,15 @@ library(annotate)
 # Converting to the correct chiptype
 if(chiptype=="HumanMethylation27") {
 	chiptype<-c("IlluminaHumanMethylation27k")
+	chiptype<-paste(chiptype, ".db", sep="")
 }
 if(chiptype=="HumanMethylation450") {
 	chiptype<-c("IlluminaHumanMethylation450k")
 }
-chiptype<-paste(chiptype, ".db", sep="")
+if(chiptype=="FDb.InfiniumMethylation.hg19") {
+chiptype <- "FDb.InfiniumMethylation.hg19"
+}
+#chiptype<-paste(chiptype, ".db", sep="")
 
 # Loading data files. 
 # Note that if the pattern given in target-variable, following wrong error is returned:
@@ -59,7 +64,7 @@ chiptype<-paste(chiptype, ".db", sep="")
 #   Cannot determine separator used in the file, please manually set the "sep" parameter!
 # Calls: methylumiR -> .getFileSeparator
 
-dat<-methylumiR("FinalReport_sample_methylation_profile.txt", lib=chiptype)
+dat<-methylumiR("FinalReport_sample_methylation_profile.txt", lib=chiptype, sep="\t")
 methyLumiM <- as(dat, "MethyLumiM")
 methyLumiM <- addAnnotationInfo(methyLumiM, lib = chiptype)
 
@@ -108,13 +113,14 @@ names(dat7)<-sample.names
 colnames(dat7)<-sample.names
 
 # Annotations
-library(chiptype, character.only=T)
-symbols <- unlist (lookUp(rownames(dat5), chiptype, what="SYMBOL"))
-genenames <- unlist (lookUp(rownames(dat5), chiptype, what="GENENAME"))
-symbols <- gsub("#", "", symbols)
-genenames <- gsub("#", "", genenames)
-symbols <- gsub("'", "", symbols)
-genenames <- gsub("'", "", genenames)
+# Not up to date 
+#library(chiptype, character.only=T)
+#symbols <- unlist (lookUp(rownames(dat5), chiptype, what="SYMBOL"))
+#genenames <- unlist (lookUp(rownames(dat5), chiptype, what="GENENAME"))
+#symbols <- gsub("#", "", symbols)
+#genenames <- gsub("#", "", genenames)
+#symbols <- gsub("'", "", symbols)
+#genenames <- gsub("'", "", genenames)
 
 # Write out a phenodata
 group<-c(rep("", ncol(dat5)))
@@ -122,6 +128,10 @@ training<-c(rep("", ncol(dat5)))
 write.table(data.frame(sample=sample.names, chiptype=chiptype, group=group), file="phenodata.tsv", sep="\t", row.names=F, col.names=T, quote=F)
 
 # Write out expression data
-write.table(data.frame(symbol=symbols, description=genenames, dat5), file="normalized.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-write.table(data.frame(symbol=symbols, description=genenames, dat6), file="methylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-write.table(data.frame(symbol=symbols, description=genenames, dat7), file="unmethylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+write.table(data.frame(dat5), file="normalized.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+write.table(data.frame(dat6), file="methylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+write.table(data.frame(dat7), file="unmethylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+
+#write.table(data.frame(symbol=symbols, description=genenames, dat5), file="normalized.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+#write.table(data.frame(symbol=symbols, description=genenames, dat6), file="methylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+#write.table(data.frame(symbol=symbols, description=genenames, dat7), file="unmethylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
