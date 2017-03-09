@@ -220,6 +220,8 @@
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
 	    <tool>mothur-analyses.R</tool>
+	    <tool>mothur-makecontigs.R</tool>
+	    <tool>mothur-pcrseqs.R</tool>
 	</category>
 
 	<category name="Single cell RNA-seq (BETA)" color="#37dddd">
