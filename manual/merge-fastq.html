@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Utilities / Merge FASTQ</h2>
+
+<h3>Description</h3>
+
+<p>
+Merge two or more FASTQ files together.
+</p>
+
+<h3>Parameters</h3>
+<ul>
+<li>Order by file name (yes, no) [yes]</li>
+<li>Compress merged file with gzip (yes, no) [yes]</li>
+</ul>
+
+<h3>Details</h3>
+<p>
+Merges two or more FASTQ. Files can be uncompressed, compressed or mixture of the two.
+</p>
+<p>
+There is an option to merge the files in alphabetical order by file name. This can 
+be useful when <i>e.g.</i> merging set of paired end reads, where maintaining the order 
+of reads within files is important.
+<p>
+<p>
+Default option is to compress the merged file with gzip. This should be used in most cases as the files can be large.
+</p>
+
+<h3>Output</h3>
+
+<p>The analysis output consists of the following depending on chosen parameters:</p>
+<ul>
+<li>merged.fq: Merged FASTQ files</li>
+<li>merged.fq.gz: Merged and compressed FASTQ files</li>  
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+None
+</p>
+
+</body>
+
