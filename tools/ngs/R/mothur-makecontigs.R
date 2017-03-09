@@ -1,12 +1,12 @@
-# TOOL mothur-makecontigs.R: "Combine fastq files to one fasta and qual -files with Mothur" (Combine the paired end reads for each sample and then the data from all samples. Extract the sequence and quality score data from fastq files. You need a list of your samples in .files -format as an input. )
+# TOOL mothur-makecontigs.R: "Combine fastq files to one fasta and one qual file with Mothur" (Combine paired end reads for each sample and then the data from all the samples. Extract the sequence and quality score data from fastq files. You need a list of your samples in .files -format as an input.)
 # INPUT stability.files: "stability.files" TYPE MOTHUR_STABILITY
-# INPUT sample{...}.fastq: "Fastq files" TYPE GENERIC 
+# INPUT sample{...}.fastq: "Fastq files" TYPE GENERIC
+# OUTPUT fastq-summary.tsv
 # OUTPUT OPTIONAL fastq.trim.contigs.fasta
 # OUTPUT OPTIONAL fastq.trim.contigs.qual
 # OUTPUT OPTIONAL fastq.contigs.groups
-# OUTPUT fastq-summary.tsv
 # OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL fastq.trim.contigs.summary
+# OUTPUT OPTIONAL fastq.trim.contigs.summary.tsv
 
 #Output File Names: 
 #inputs.trim.contigs.fasta
