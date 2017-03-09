@@ -123,7 +123,6 @@ fileOk <- function(filename, minsize, minlines){
 			return(FALSE)	
 		}
 	}
-	
 	# If all checks pass, return TRUE
 	return(TRUE)
 }
@@ -135,20 +134,19 @@ fileNotOk <- function(filename, minsize, minlines){
 	}
 	# Check minimum size if provided
 	if (!(missing(minsize))){
-		if (file.info(filename)$size >= minsize) {
-			return(FALSE)	
+		if (file.info(filename)$size < minsize) {
+			return(TRUE)	
 		}
 	}
 	# Checkline number if provided
 	if (!(missing(minlines))){
 		linenumber <- as.integer(system(paste("wc -l <", filename), intern=TRUE))
-		if (linenumber >= minlines) {
-			return(FALSE)	
+		if (linenumber < minlines) {
+			return(TRUE)	
 		}
 	}
-	
-	# If all checks pass, return TRUE
-	return(TRUE)
+	# If all checks pass, return FALSE
+	return(FALSE)
 }
 
 fileCheck <- function(filename, minsize, minlines){
