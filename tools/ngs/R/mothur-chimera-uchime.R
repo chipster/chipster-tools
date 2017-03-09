@@ -6,10 +6,10 @@
 # OUTPUT OPTIONAL chimeras.removed.fasta
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL log2.txt
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [yes, no] DEFAULT yes (If sequence is flagged as chimeric, remove it from all samples)
 
+# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL log2.txt
 
 # EK 18.06.2013
 # 30.3.2016 ML added input options and parameters
@@ -21,11 +21,15 @@ unzipIfGZipFile("a.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# old references:
 #data.path <- c(file.path(chipster.tools.path, "mothur-data"))
 #template.path <- c(file.path(data.path, "silva.gold.align"))
-data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
-template.path <- c(file.path(data.path, "silva.bacteria/silva.gold.ng.fasta"))
-
+# new bacterial references:
+#data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
+#template.path <- c(file.path(data.path, "silva.bacteria/silva.gold.ng.fasta"))
+# new whole references:
+data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference-whole"))
+template.path <- c(file.path(data.path, "silva.gold.align")) 
 
 # batch file
 uchime.options <- ""
