@@ -5,12 +5,12 @@
 # OUTPUT OPTIONAL preclustered.fasta
 # OUTPUT OPTIONAL preclustered.names
 # OUTPUT OPTIONAL preclustered-summary.tsv
-# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL preclustered.count-table 
-# PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed for every 100 bp sequence)
+# PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed. 1 for every 100 bp sequence is recommended)
 
 
 # EK 18.06.2013
+# OUTPUT OPTIONAL log.txt
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))

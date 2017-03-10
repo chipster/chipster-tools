@@ -22,14 +22,15 @@ unzipIfGZipFile("a.fasta")
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 # old references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-#template.path <- c(file.path(data.path, "silva.gold.align"))
+data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+template.path <- c(file.path(data.path, "silva.gold.align"))
 # new bacterial references:
 #data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
 #template.path <- c(file.path(data.path, "silva.bacteria/silva.gold.ng.fasta"))
 # new whole references:
-data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference-whole"))
-template.path <- c(file.path(data.path, "silva.gold.align")) 
+#data.path <- c(file.path(chipster.tools.path, "mothur-data","mothur-silva-reference-whole"))
+#template.path <- c(file.path(data.path, "silva.gold.align")) 
+
 
 # batch file
 uchime.options <- ""
@@ -42,7 +43,7 @@ if (file.exists("a.names")){
 if (file.exists("a.groups")){
 	uchime.options <- paste(uchime.options, " group=a.groups", sep=",")
 }
-if (file.exists("a.count_table")){
+if (file.exists("a.count-table")){
 	uchime.options <- paste(uchime.options, " count=a.count_table", sep=",")
 }
 if (dereplicate=="yes"){

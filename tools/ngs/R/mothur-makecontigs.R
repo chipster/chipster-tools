@@ -1,9 +1,8 @@
-# TOOL mothur-makecontigs.R: "Combine fastq files to one fasta and one qual file with Mothur" (Combine paired end reads for each sample and then the data from all the samples. Extract the sequence and quality score data from fastq files. You need a list of your samples in .files -format as an input.)
+# TOOL mothur-makecontigs.R: "Combine paired reads to contigs with Mothur" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. You need a list of your samples in .files -format as an input.)
 # INPUT stability.files: "stability.files" TYPE MOTHUR_STABILITY
 # INPUT sample{...}.fastq: "Fastq files" TYPE GENERIC
 # OUTPUT fastq-summary.tsv
 # OUTPUT OPTIONAL fastq.trim.contigs.fasta
-# OUTPUT OPTIONAL fastq.trim.contigs.qual
 # OUTPUT OPTIONAL fastq.contigs.groups
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL fastq.trim.contigs.summary.tsv
@@ -17,6 +16,8 @@
 #inputs.contigs.groups
 # OUTPUT log_raw.txt
 # OUTPUT OPTIONAL fastq.contigs.report
+# OUTPUT OPTIONAL fastq.trim.contigs.qual
+
 
 # ML 02.03.2016
 
@@ -42,7 +43,7 @@ for (i in 1:nrow(orig.file.names)) {
 }
 
 
-#write.table(input.names, "inputs.tsv", col.names=T, row.names=T, sep="\t", quote=F)
+# write.table(input.names, "inputs.tsv", col.names=T, row.names=T, sep="\t", quote=F)
 write.table(new.files, "fastq.files", col.names=F, row.names=F, sep="\t", quote=F)
 
 

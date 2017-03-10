@@ -3,12 +3,13 @@
 # INPUT OPTIONAL reference.fasta: "custom reference FASTA file" TYPE FASTA
 # OUTPUT OPTIONAL aligned.fasta
 # OUTPUT aligned-summary.tsv
-# OUTPUT log.txt
+
 
 
 # EK 05.06.2013
 # ML 21.12.2016 update (new Silva version)
 # ML 4.1.2016 new, whole Silva reference
+# OUTPUT log.txt
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))

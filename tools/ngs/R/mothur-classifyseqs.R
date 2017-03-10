@@ -19,17 +19,17 @@ unzipIfGZipFile("a.fasta")
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 # old references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-#template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
-#taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
 # new bacteria references:
 #data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
 #template.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.fasta"))
 #taxonomy.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.silva.tax"))
 # new whole references:
-data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference-whole"))
-template.path <- c(file.path(data.path, "silva.nr_v123.align")) # or silva.seed_v123.align ?? https://mothur.org/wiki/Alignment_database
-taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
+#data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference-whole"))
+#template.path <- c(file.path(data.path, "silva.nr_v123.align")) # or silva.seed_v123.align ?? https://mothur.org/wiki/Alignment_database
+#taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
 
 # batch file
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)

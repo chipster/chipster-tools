@@ -3,7 +3,7 @@
 # INPUT OPTIONAL reads.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL reads.trim.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL reads.summary: "Summary file" TYPE GENERIC
-# INPUT OPTIONAL reads.count: "Count file" TYPE GENERIC
+# INPUT OPTIONAL reads.count: "Count file" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL reads.trim.unique.good.fasta
 # OUTPUT OPTIONAL reads.good.groups
 # OUTPUT OPTIONAL reads.trim.good.names
@@ -14,7 +14,7 @@
 # PARAMETER OPTIONAL end: "End position" TYPE INTEGER (By which position should the sequences end?)
 # PARAMETER OPTIONAL start: "Start position" TYPE INTEGER (By which position should the sequences start?)
 # PARAMETER OPTIONAL optimize: "Optimize by"  TYPE [empty, minlength, start, end] DEFAULT empty  (Optimize according to minlength, start or end position. Please note that if you use this option, you can't determine the same criteria above! Fill in the optimization criteria below as well.)
-# PARAMETER OPTIONAL criteria: "Optimization criteria"  TYPE INTEGER FROM 0 TO 100  (Optimization criteria. For example 85 means that mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.)
+# PARAMETER OPTIONAL criteria: "Optimization criteria"  TYPE INTEGER FROM 0 TO 100  (Optimization criteria. For example 85 means that Mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.)
 # PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in the sequences?)
 # PARAMETER OPTIONAL maxhomop: "Maximum homopolymer length" TYPE INTEGER (Maximum length of homopolymers allowed)
 
