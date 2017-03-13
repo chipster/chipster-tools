@@ -179,7 +179,26 @@
 		<!--<tool runtime="R-3.0.2">MEDIPS.R</tool>-->
 	</category>
 
-	<category name="CNA-seq" color="#a49900">
+
+	<category name="16S rRNA sequencing" color="#a49900">
+		<tool>mothur-makecontigs.R</tool>
+		<tool>mothur-screenseqs.R</tool>
+		<tool>mothur-uniqueseqs.R</tool>
+		<tool>mothur-countseqs.R</tool>
+		<tool>mothur-alignseqs.R</tool>
+		<tool>mothur-summaryseqs.R</tool>
+		<tool>mothur-trimseqs-uniqueseqs.R</tool>	
+		<tool>mothur-filterseqs.R</tool>
+		<tool>mothur-precluster.R</tool>		
+		<tool>mothur-chimera-uchime.R</tool>		
+		<tool>mothur-classifyseqs.R</tool>
+	    <tool>mothur-analyses.R</tool>
+	    <tool>mothur-pcrseqs.R</tool>
+	    <tool>mothur-sffinfo.R</tool>
+    	<tool>merge-fasta-qual.R</tool>
+	</category>
+	
+	<category name="CNA-seq" color="#83010b">
 		<tool>cna-define-experiment.R</tool>
 		<tool>cna-filter-bins.R</tool>
 		<tool>cna-correct.R</tool>
@@ -205,24 +224,6 @@
 		<tool module="common">acgh-plot-combined-profile.R</tool>
 		<tool module="common">acgh-expression-test.R</tool>	
 		<tool module="common">acgh-plot-combined-expression.R</tool>
-	</category>
-
-	<category name="Metagenomics" color="#83010b">
-		<tool>mothur-makecontigs.R</tool>
-		<tool>mothur-screenseqs.R</tool>
-		<tool>mothur-uniqueseqs.R</tool>
-		<tool>mothur-countseqs.R</tool>
-		<tool>mothur-alignseqs.R</tool>
-		<tool>mothur-summaryseqs.R</tool>
-		<tool>mothur-trimseqs-uniqueseqs.R</tool>	
-		<tool>mothur-filterseqs.R</tool>
-		<tool>mothur-precluster.R</tool>		
-		<tool>mothur-chimera-uchime.R</tool>		
-		<tool>mothur-classifyseqs.R</tool>
-	    <tool>mothur-analyses.R</tool>
-	    <tool>mothur-pcrseqs.R</tool>
-	    <tool>mothur-sffinfo.R</tool>
-    	<tool>merge-fasta-qual.R</tool>
 	</category>
 
 	<category name="Single cell RNA-seq (BETA)" color="#37dddd">
