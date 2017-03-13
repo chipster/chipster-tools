@@ -1,4 +1,4 @@
-# TOOL mothur-makecontigs.R: "Combine paired reads to contigs with Mothur" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. You need a list of your samples in .files -format as an input.)
+# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. You need a list of your samples in .files -format as an input. This tool is based on the Mothur tool make.contigs.)
 # INPUT stability.files: "stability.files" TYPE MOTHUR_STABILITY
 # INPUT sample{...}.fastq: "Fastq files" TYPE GENERIC
 # OUTPUT fastq-summary.tsv

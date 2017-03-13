@@ -1,4 +1,4 @@
-# TOOL mothur-uniqueseqs.R: "Extract unique aligned sequences with Mothur" (Removes identical sequences from fasta-formatted alignment files. This tool is based on the Mothur package. In addition to the alignment, you need to supply the names file that was created by the tool \"Trim and filter reads with Mothur\". )
+# TOOL mothur-uniqueseqs.R: "Extract unique sequences" (Identifies identical sequences and keep only one representative sequence and the number of times this sequence occures in each sample. This tool is based on the Mothur tools unique.seqs and count.seqs.)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count_table: "Count file" TYPE GENERIC

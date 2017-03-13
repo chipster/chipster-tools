@@ -1,4 +1,4 @@
-# TOOL mothur-alignseqs.R: "Align sequences with Mothur" (Given a fasta file of 16S rRNA sequences, aligns them to the Silva reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment, which penalizes the same amount for opening and extending a gap. This tool is based on the Mothur package. You can give a customized reference fasta. If you do so, make sure the files are correctly assigned in the parameters section! Please note that it can take some time to run this tool.)
+# TOOL mothur-alignseqs.R: "Align sequences to reference" (Given a fasta file of 16S rRNA sequences, this tool aligns them to the Silva reference set available on the server. Alternatively you can give a customized reference fasta. If you do so, make sure the files are correctly assigned in the parameters section! Please note that it can take some time to run this tool. This tool is based on the Mothur tool align.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL reference.fasta: "custom reference FASTA file" TYPE FASTA
 # OUTPUT OPTIONAL aligned.fasta

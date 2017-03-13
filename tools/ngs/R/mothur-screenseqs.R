@@ -1,4 +1,4 @@
-# TOOL mothur-screenseqs.R: "Screen sequences with Mothur" (Keep sequences that fulfill certain user defined criteria. )
+# TOOL mothur-screenseqs.R: "Screen sequences for several criteria" (Keep sequences that fulfill certain user defined criteria. This tool is based on the Mothur tool screen.seqs.)
 # INPUT reads.trim.unique.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL reads.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL reads.trim.names: "Names file" TYPE MOTHUR_NAMES

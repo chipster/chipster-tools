@@ -1,4 +1,4 @@
-# TOOL mothur-filterseqs.R: "Filter sequence alignment with Mothur" (Filters out columns from a fasta formatted sequence alignment. By removing empty columns, the distance calculation is accelerated. This tool is based on the Mothur package.)
+# TOOL mothur-filterseqs.R: "Filter sequence alignment" (Filters out empty columns from a fasta formatted sequence alignment. By removing empty columns, the distance calculation is accelerated. This tool is based on the Mothur tool filter.seqs.)
 # INPUT a.align: "Aligned reads in FASTA format" TYPE FASTA
 # OUTPUT filtered-aligned.fasta
 # OUTPUT filtered-log.txt

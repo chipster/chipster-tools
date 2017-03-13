@@ -1,4 +1,4 @@
-# TOOL mothur-countseqs.R: "Count sequences with Mothur" (Counts the number of sequences represented by the representative sequence in a name file. If a group file is given, it will also provide the group count breakdown. This tool is based on the Mothur package.)
+# TOOL mothur-countseqs.R: "Count identical sequences" (Counts the number of sequences represented by the representative sequence in a name file. If a group file is given, it will also provide the group count breakdown. This tool is based on the Mothur tool make.contigs.)
 # INPUT a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
