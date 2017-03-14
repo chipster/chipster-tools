@@ -1,4 +1,4 @@
-# TOOL mothur-pcrseqs.R: "Customize the reference with Mothur" (Customize your region of interest from the Silva reference sequence. This tool is based on the Mothur package.)
+# TOOL mothur-pcrseqs.R: "Extract amplified region from reference alignment" (Extract your amplified region from the Silva reference alignment. This tool is based on the Mothur tool pcr.seqs.)
 # INPUT silva.bacteria.fasta: "reference FASTA file" TYPE FASTA
 # OUTPUT custom.reference.fasta
 # OUTPUT custom.reference.summary.tsv
