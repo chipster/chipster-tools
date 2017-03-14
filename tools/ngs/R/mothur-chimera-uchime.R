@@ -6,12 +6,12 @@
 # OUTPUT OPTIONAL chimeras.removed.fasta
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL log2.txt
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [yes, no] DEFAULT yes (If sequence is flagged as chimeric, remove it from all samples)
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, none] DEFAULT bacterial (Reference sequences to use. If you choose none, note that you have to give count table as input.)
 
 
+# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL log2.txt
 
 # EK 18.06.2013
 # 30.3.2016 ML added input options and parameters
@@ -92,7 +92,7 @@ if (reference=="full" | reference=="bacterial"){
 	write("remove.seqs(accnos=a.ref.uchime.accnos, fasta=a.fasta)", "remove.mth", append=F)
 }
 if (reference=="none"){
-	write("remove.seqs(accnos=a.denovo.uchime.accnos, fasta=a.fasta)", "remove.mth", append=F)
+	write("remove.seqs(accnos=a.denovo.uchime.accnos, fasta=a.fasta, count=a.count_table)", "remove.mth", append=F)
 }	
 
 # command
@@ -103,14 +103,12 @@ system(command2)
 
 # Post process output
 system("mv a.pick.fasta chimeras.removed.fasta")
-if (file.exists("a.uchime.count_table")){
-	system("mv a.uchime.count_table chimeras.removed.count_table")
+if (file.exists("a.pick.count_table")){
+	system("mv a.pick.count_table chimeras.removed.count_table")
+	write("summary.seqs(fasta=chimeras.removed.fasta, count=chimeras.removed.count_table)", "summary.mth", append=F)
+} else {
+	write("summary.seqs(fasta=chimeras.removed.fasta)", "summary.mth", append=F)
 }
-
-# system("grep -A 2 Removed log_raw.txt > log.txt")
-
-# batch file 3
-write("summary.seqs(fasta=chimeras.removed.fasta)", "summary.mth", append=F)
 
 # command 3
 command3 <- paste(binary, "summary.mth", "> log_raw.txt")
