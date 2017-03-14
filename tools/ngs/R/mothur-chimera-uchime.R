@@ -2,18 +2,21 @@
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
-# INPUT OPTIONAL a.count-table: "Count table" TYPE GENERIC
+# INPUT OPTIONAL a.count_table: "Count table" TYPE GENERIC
 # OUTPUT OPTIONAL chimeras.removed.fasta
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [yes, no] DEFAULT yes (If sequence is flagged as chimeric, remove it from all samples)
-
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt
+# PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [yes, no] DEFAULT yes (If sequence is flagged as chimeric, remove it from all samples)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, none] DEFAULT bacterial (Reference sequences to use. If you choose none, note that you have to give count table as input.)
+
+
 
 # EK 18.06.2013
 # 30.3.2016 ML added input options and parameters
 # ML 21.12.2016 update (new version, new Silva version)
+# ML 14.3.2017 reference option (bacterial vs whole)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -22,20 +25,33 @@ unzipIfGZipFile("a.fasta")
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 # old references:
-data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-template.path <- c(file.path(data.path, "silva.gold.align"))
-# new bacterial references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
-#template.path <- c(file.path(data.path, "silva.bacteria/silva.gold.ng.fasta"))
-# new whole references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-data","mothur-silva-reference-whole"))
-#template.path <- c(file.path(data.path, "silva.gold.align")) 
+#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+#template.path <- c(file.path(data.path, "silva.gold.align"))
 
-
-# batch file
 uchime.options <- ""
-uchime.options <- paste(uchime.options, "chimera.uchime(fasta=a.fasta, template=", template.path,sep="")
-#uchime.options <- paste(uchime.options, "chimera.uchime(fasta=a.fasta", sep="")
+
+if (reference=="bacterial"){
+	# new bacterial references:
+	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+	template.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
+	uchime.options <- paste(uchime.options, "chimera.uchime(fasta=a.fasta, template=", template.path,sep="")
+}
+if (reference=="full"){
+	# new whole references:
+	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+	template.path <- c(file.path(data.path, "silva.gold.align")) 
+	uchime.options <- paste(uchime.options, "chimera.uchime(fasta=a.fasta, template=", template.path,sep="")
+}
+if (reference=="none"){
+	uchime.options <- paste(uchime.options, "chimera.uchime(fasta=a.fasta", sep="")
+	if (file.exists("a.count_table")){
+		uchime.options <- paste(uchime.options, " count=a.count_table", sep=",")
+	}
+	else {
+		stop('CHIPSTER-NOTE: In order to use the denovo option, note that you have to give a count table as input!')
+	}
+}
+	
 
 if (file.exists("a.names")){
 	uchime.options <- paste(uchime.options, " name=a.names", sep=",")
@@ -43,9 +59,7 @@ if (file.exists("a.names")){
 if (file.exists("a.groups")){
 	uchime.options <- paste(uchime.options, " group=a.groups", sep=",")
 }
-if (file.exists("a.count-table")){
-	uchime.options <- paste(uchime.options, " count=a.count_table", sep=",")
-}
+
 if (dereplicate=="yes"){
 	uchime.options <- paste(uchime.options, ", dereplicate=F", sep="")
 }
@@ -70,9 +84,16 @@ system(command)
 #Output File Names: 
 #a.ref.uchime.chimeras
 #a.ref.uchime.accnos
+#a.denovo.uchime.chimeras
+#a.denovo.uchime.accnos
 
 # batch file 2
-write("remove.seqs(accnos=a.ref.uchime.accnos, fasta=a.fasta)", "remove.mth", append=F)
+if (reference=="full" | reference=="bacterial"){
+	write("remove.seqs(accnos=a.ref.uchime.accnos, fasta=a.fasta)", "remove.mth", append=F)
+}
+if (reference=="none"){
+	write("remove.seqs(accnos=a.denovo.uchime.accnos, fasta=a.fasta)", "remove.mth", append=F)
+}	
 
 # command
 command2 <- paste(binary, "remove.mth", "> log2.txt 2>&1")
