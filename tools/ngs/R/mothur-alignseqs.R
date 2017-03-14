@@ -3,12 +3,14 @@
 # INPUT OPTIONAL reference.fasta: "custom reference FASTA file" TYPE FASTA
 # OUTPUT OPTIONAL aligned.fasta
 # OUTPUT aligned-summary.tsv
+# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full] DEFAULT bacterial (Reference sequences to use.)
 
 
 
 # EK 05.06.2013
 # ML 21.12.2016 update (new Silva version)
 # ML 4.1.2016 new, whole Silva reference
+# ML 14.3.2017 reference option (bacterial vs whole)
 # OUTPUT log.txt
 
 # check out if the file is compressed and if so unzip it
@@ -17,12 +19,17 @@ unzipIfGZipFile("reads.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-# new bacteria references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
-#template.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.fasta"))
-# new whole references:
-data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference-whole"))
-template.path <- c(file.path(data.path, "silva.nr_v123.align")) # or silva.seed_v123.align ?? https://mothur.org/wiki/Alignment_database
+
+if (reference=="bacterial"){
+	# new bacterial references:
+	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+}
+if (reference=="full"){
+	# new whole references:
+	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+	template.path <- c(file.path(data.path, "silva.nr_v123.align")) 
+}
 
 # batch file
 if (file.exists("reference.fasta")){
