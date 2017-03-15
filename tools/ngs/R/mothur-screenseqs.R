@@ -1,14 +1,14 @@
-# TOOL mothur-screenseqs.R: "Screen sequences for several criteria" (Keep sequences that fulfill certain user defined criteria. This tool is based on the Mothur tool screen.seqs.)
-# INPUT reads.trim.unique.fasta: "FASTA file" TYPE FASTA
-# INPUT OPTIONAL reads.groups: "Groups file" TYPE MOTHUR_GROUPS
-# INPUT OPTIONAL reads.trim.names: "Names file" TYPE MOTHUR_NAMES
-# INPUT OPTIONAL reads.summary: "Summary file" TYPE GENERIC
-# INPUT OPTIONAL reads.count: "Count file" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL reads.trim.unique.good.fasta
-# OUTPUT OPTIONAL reads.good.groups
-# OUTPUT OPTIONAL reads.trim.good.names
-# OUTPUT OPTIONAL summary.trim.screen.tsv
-# OUTPUT OPTIONAL reads.good.count
+# TOOL mothur-screenseqs.R: "Screen sequences for several criteria" (Keeps sequences that fulfill certain user-defined criteria. This tool is based on the Mothur tool screen.seqs.)
+# INPUT a.fasta: "FASTA file" TYPE FASTA
+# INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
+# INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
+# INPUT OPTIONAL a.summary: "Summary file" TYPE GENERIC
+# INPUT OPTIONAL a.count: "Count file" TYPE MOTHUR_COUNT
+# OUTPUT OPTIONAL screened.fasta
+# OUTPUT OPTIONAL screened.groups
+# OUTPUT OPTIONAL screened.names
+# OUTPUT OPTIONAL summary.screened.tsv
+# OUTPUT OPTIONAL screened.count_table
 # PARAMETER OPTIONAL minlength: "Minimum length of the sequences" TYPE INTEGER (What is the minimum lenght of the sequences?)
 # PARAMETER OPTIONAL maxlength: "Maximum length of the sequences" TYPE INTEGER (What is the maximum lenght of the sequences?)
 # PARAMETER OPTIONAL end: "End position" TYPE INTEGER (By which position should the sequences end?)
@@ -31,18 +31,18 @@ binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 
 # Add options
 screenseqs.options <- ""
-screenseqs.options <- paste(screenseqs.options, "screen.seqs(fasta=reads.trim.unique.fasta")
-if (file.exists("reads.trim.names")){
-	screenseqs.options <- paste(screenseqs.options, " name=reads.trim.names", sep=",")
+screenseqs.options <- paste(screenseqs.options, "screen.seqs(fasta=a.fasta")
+if (file.exists("a.names")){
+	screenseqs.options <- paste(screenseqs.options, " name=a.names", sep=",")
 }
-if (file.exists("reads.groups")){
-	screenseqs.options <- paste(screenseqs.options, " group=reads.groups", sep=",")
+if (file.exists("a.groups")){
+	screenseqs.options <- paste(screenseqs.options, " group=a.groups", sep=",")
 }
-if (file.exists("reads.summary")){
-	screenseqs.options <- paste(screenseqs.options, " summary=reads.summary", sep=",")
+if (file.exists("a.summary")){
+	screenseqs.options <- paste(screenseqs.options, " summary=a.summary", sep=",")
 }
-if (file.exists("reads.count")){
-	screenseqs.options <- paste(screenseqs.options, " count=reads.count", sep=",")
+if (file.exists("a.count")){
+	screenseqs.options <- paste(screenseqs.options, " count=a.count", sep=",")
 }
 # Sanity check (User can't optimize by minlength and specify a minlength at the same time)
 if (optimize != "empty"){
@@ -89,12 +89,24 @@ command <- paste(binary, "trim.mth", "> log.txt 2>&1")
 # run
 system(command)
 
-# rename the file
-system("mv reads.trim.unique.good.align reads.trim.unique.good.fasta")
+# rename the result files
+system("mv a.good.fasta screened.fasta")
+if (file.exists("a.good.count")){
+	system("mv a.good.count screened.count_table")
+}
+if (file.exists("a.good.groups")){
+	system("mv a.good.groups screened.groups")
+}
 
 # batch file
 # write("summary.seqs(fasta=reads.trim.unique.good.fasta, name=reads.trim.good.names)", "summary.mth", append=F)
-write("summary.seqs(fasta=reads.trim.unique.good.fasta)", "summary.mth", append=F)
+# write("summary.seqs(fasta=screened.fasta)", "summary.mth", append=F)
+
+if (file.exists("screened.count_table")){
+	write("summary.seqs(fasta=screened.fasta, count=screened.count_table)", "summary.mth", append=F)
+} else {
+	write("summary.seqs(fasta=screened.fasta)", "summary.mth", append=F)
+}
 
 # command
 command <- paste(binary, "summary.mth", "> log_raw.txt")
@@ -103,7 +115,7 @@ command <- paste(binary, "summary.mth", "> log_raw.txt")
 system(command)
 
 # Postprocess output files
-system("grep -A 10 Start log_raw.txt > summary.trim.screen2.tsv")
+system("grep -A 10 Start log_raw.txt > summary.screen2.tsv")
 # Remove one tab to get the column naming look nice:
-system("sed 's/^		/	/' summary.trim.screen2.tsv > summary.trim.screen.tsv")
+system("sed 's/^		/	/' summary.screen2.tsv > summary.screened.tsv")
 
