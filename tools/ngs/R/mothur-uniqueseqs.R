@@ -46,7 +46,11 @@ if (file.exists("a.count_table")){
 }
 
 # batch file 2
-write("summary.seqs(fasta=unique.fasta)", "summary.mth", append=F)
+if (file.exists("unique.count_table")){
+	write("summary.seqs(fasta=unique.fasta, count=unique.count_table)", "summary.mth", append=F)
+} else {
+		write("summary.seqs(fasta=unique.fasta)", "summary.mth", append=F)
+		}
 
 # command 2
 command2 <- paste(binary, "summary.mth", "> log_raw.txt")
