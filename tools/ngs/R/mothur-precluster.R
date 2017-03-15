@@ -1,11 +1,11 @@
 # TOOL mothur-precluster.R: "Precluster aligned sequences" (Clusters together very similar sequences in order to remove possible sequencing errors. This tool is based on the Mothur tool pre.cluster.)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
-# INPUT OPTIONAL a.count-table: "Count table" TYPE GENERIC
+# INPUT OPTIONAL a.count_table: "Count table" TYPE GENERIC
 # OUTPUT OPTIONAL preclustered.fasta
 # OUTPUT OPTIONAL preclustered.names
 # OUTPUT OPTIONAL preclustered-summary.tsv
-# OUTPUT OPTIONAL preclustered.count-table 
+# OUTPUT OPTIONAL preclustered.count_table 
 # PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed. 1 for every 100 bp sequence is recommended)
 
 
@@ -24,8 +24,8 @@ preclust.options <- paste(preclust.options, "pre.cluster(fasta=a.fasta")
 if (file.exists("a.names")){
 	preclust.options <- paste(preclust.options, " name=a.names", sep=",")
 }
-if (file.exists("a.count-table")){
-	preclust.options <- paste(preclust.options, " count=a.count-table", sep=",")
+if (file.exists("a.count_table")){
+	preclust.options <- paste(preclust.options, " count=a.count_table", sep=",")
 }
 preclust.options <- paste(preclust.options, ", diffs=", diffs, ")", sep="")
 
@@ -46,13 +46,13 @@ if (file.exists("a.names")){
 	system("mv a.names preclustered.names")
 }
 if (file.exists("a.precluster.count_table")){
-	system("mv a.precluster.count_table preclustered.count-table")
+	system("mv a.precluster.count_table preclustered.count_table")
 }
 
 #stool.trim.unique.good.filter.unique.precluster.map
 
 # batch file 2
-write("summary.seqs(fasta=preclustered.fasta)", "summary.mth", append=F)
+write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
 
 # command 2
 command2 <- paste(binary, "summary.mth", "> log_raw.txt")
