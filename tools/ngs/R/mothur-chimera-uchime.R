@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL chimeras.removed.fasta
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [yes, no] DEFAULT yes (If sequence is flagged as chimeric, remove it from all samples)
+# PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (If sequence is flagged as chimeric, remove it from all samples)
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, none] DEFAULT bacterial (Reference sequences to use. If you choose none, note that you have to give count table as input.)
 
 
@@ -60,10 +60,10 @@ if (file.exists("a.groups")){
 	uchime.options <- paste(uchime.options, " group=a.groups", sep=",")
 }
 
-if (dereplicate=="yes"){
+if (dereplicate=="false"){
 	uchime.options <- paste(uchime.options, ", dereplicate=F", sep="")
 }
-if (dereplicate=="no"){
+if (dereplicate=="true"){
 	uchime.options <- paste(uchime.options, ", dereplicate=T", sep="")
 }
 
