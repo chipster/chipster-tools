@@ -1,4 +1,4 @@
-# TOOL mothur-precluster.R: "Precluster aligned sequences" (Clusters together very similar sequences in order to remove possible sequencing errors. This tool is based on the Mothur tool pre.cluster.)
+# TOOL mothur-precluster.R: "Precluster aligned sequences" (Clusters together very similar sequences in order to remove possible sequencing errors. In addition to the fasta file, you need to give count_table file or names file. This tool is based on the Mothur tool pre.cluster.)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count_table: "Count table" TYPE GENERIC
@@ -11,6 +11,7 @@
 
 # EK 18.06.2013
 # OUTPUT OPTIONAL log.txt
+# add if for names file in summary
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -52,7 +53,13 @@ if (file.exists("a.precluster.count_table")){
 #stool.trim.unique.good.filter.unique.precluster.map
 
 # batch file 2
-write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
+#write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
+
+if (file.exists("preclustered.count_table")){
+	write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
+} else {
+	write("summary.seqs(fasta=preclustered.fasta)", "summary.mth", append=F)
+}
 
 # command 2
 command2 <- paste(binary, "summary.mth", "> log_raw.txt")
