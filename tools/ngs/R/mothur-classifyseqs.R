@@ -6,11 +6,15 @@
 # OUTPUT classification-summary.txt
 # OUTPUT counttable.tsv: counttable.tsv
 # OUTPUT META phenodata.tsv: phenodata.tsv
+# OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL cutlevel: "Cutting level for taxonomic names" TYPE INTEGER FROM 0 TO 9 DEFAULT 0 (Cutting level for taxonomic names for the count table. 0 means retain full names, e.g. Bacteria;Actinobacteria;Actinobacteria;Coriobacteridae;Coriobacteriales;Coriobacterineae;Coriobacteriaceae;Slackia;unclassified.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full] DEFAULT bacterial (Reference sequences to use.)
+
 
 # EK 18.06.2013
 # JTT 28.8.2013 count table and phenodata added
 # ML 21.12.2016 update (new Silva version)
+# ML 14.3.2017 reference option (bacterial vs whole)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -19,22 +23,27 @@ unzipIfGZipFile("a.fasta")
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 # old references:
-data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
-taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
-# new bacteria references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference"))
-#template.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.fasta"))
-#taxonomy.path <- c(file.path(data.path, "silva.bacteria/silva.bacteria.silva.tax"))
-# new whole references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference-whole"))
-#template.path <- c(file.path(data.path, "silva.nr_v123.align")) # or silva.seed_v123.align ?? https://mothur.org/wiki/Alignment_database
-#taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
+#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+#template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+#taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+
+if (reference=="bacterial"){
+	# new bacterial references:
+	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+	taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+}
+if (reference=="full"){
+	# new whole references:
+	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+	template.path <- c(file.path(data.path, "silva.nr_v123.align")) 
+	taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
+}
 
 # batch file
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 if (file.exists("a.count_table")){
-	write(paste("classify.seqs(fasta=a.fasta, count=1.count_table, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
+	write(paste("classify.seqs(fasta=a.fasta, count=a.count_table, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	
 }else {
 	write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
@@ -47,14 +56,24 @@ command <- paste(binary, "batch.mth", "> log.txt 2>&1")
 # run
 system(command)
 
+
+
 ## testi
-#write("get.current()", "batch2.mth", append=F)
-#system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
+write("get.current()", "batch2.mth", append=F)
+system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
 
 
 # Postprocess output
-system("mv a.nr_v123.wang.taxonomy reads-taxonomy-assignment.txt")
-system("mv a.nr_v123.wang.tax.summary classification-summary.txt")
+if (reference=="full"){
+	system("mv a.nr_v123.wang.taxonomy reads-taxonomy-assignment.txt")
+	system("mv a.nr_v123.wang.tax.summary classification-summary.txt")
+}
+if (reference=="bacterial"){
+	system("mv a.silva.wang.taxonomy reads-taxonomy-assignment.txt")
+	system("mv a.silva.wang.tax.summary classification-summary.txt")
+}
+
+
 
 # Count table and phenodata preparations:
 
