@@ -1,11 +1,11 @@
 # TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. You need a list of your samples in .files -format as an input. This tool is based on the Mothur tool make.contigs.)
 # INPUT stability.files: "stability.files" TYPE MOTHUR_STABILITY
 # INPUT sample{...}.fastq: "Fastq files" TYPE GENERIC
-# OUTPUT fastq-summary.tsv
-# OUTPUT OPTIONAL fastq.trim.contigs.fasta
-# OUTPUT OPTIONAL fastq.contigs.groups
+# OUTPUT contigs.summary.tsv
+# OUTPUT OPTIONAL contigs.fasta
+# OUTPUT OPTIONAL contigs.groups
 # OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL fastq.trim.contigs.summary.tsv
+
 
 #Output File Names: 
 #inputs.trim.contigs.fasta
@@ -20,6 +20,7 @@
 
 
 # ML 02.03.2016
+# OUTPUT OPTIONAL contigs.summary.tsv
 
 
 
@@ -61,13 +62,18 @@ command <- paste(binary, "batch.mth", "> log2.txt")
 # run
 system(command)
 
+# rename the result files
+system("mv fastq.trim.contigs.fasta contigs.fasta")
+system("mv fastq.contigs.groups contigs.groups")
+
+
 # Post process output
 system("sed -n  '/Group count: / ,/Output File/p' log2.txt > log.txt")
 #$ sed -n '/WORD1/,/WORD2/p' /path/to/file
 #$ sed -n '/FOO/,/BAR/p' test.txt
 
 # The summary file:
-write("summary.seqs(fasta=fastq.trim.contigs.fasta)", "summary.mth", append=F)
+write("summary.seqs(fasta=contigs.fasta)", "summary.mth", append=F)
 
 # command
 command2 <- paste(binary, "summary.mth", "> log_raw.txt")
@@ -78,4 +84,4 @@ system(command2)
 # Post process output
 system("grep -A 10 Start log_raw.txt > fastq-summary2.tsv")
 # Remove one tab to get the column naming look nice:
-system("sed 's/^		/	/' fastq-summary2.tsv > fastq-summary.tsv")
+system("sed 's/^		/	/' fastq-summary2.tsv > contigs.summary.tsv")
