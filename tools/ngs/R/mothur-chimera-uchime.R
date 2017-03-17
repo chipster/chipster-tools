@@ -1,4 +1,4 @@
-# TOOL mothur-chimera-uchime.R: "Remove chimeric sequences with Mothur" (Remove chimeric sequences from a fasta-formatted alignment using the uchime method and the 16S rRNA Silva gold reference set. This tool is based on the Mothur package. Please note that it can take some time to run this tool!)
+# TOOL mothur-chimera-uchime.R: "Remove chimeric sequences" (Remove chimeric sequences from a fasta-formatted alignment using the uchime method and the 16S rRNA Silva gold reference set. This tool is based on the Mothur package. Please note that it can take some time to run this tool!)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
@@ -6,7 +6,6 @@
 # OUTPUT OPTIONAL chimeras.removed.fasta
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# OUTPUT OPTIONAL log2.txt
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (If sequence is flagged as chimeric, remove it from all samples)
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, none] DEFAULT bacterial (Reference sequences to use. If you choose none, note that you have to give count table as input.)
 
