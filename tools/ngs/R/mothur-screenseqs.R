@@ -2,7 +2,6 @@
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
-# INPUT OPTIONAL a.summary: "Summary file" TYPE GENERIC
 # INPUT OPTIONAL a.count: "Count file" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL screened.fasta
 # OUTPUT OPTIONAL screened.groups
@@ -20,6 +19,7 @@
 
 
 # ML 03.03.2016
+# ML 17.3.2017 Clarify inputs and outputs
 #Output File Names: 
 #reads.trim.unique.good.fasta
 #reads.trim.unique.bad.accnos
