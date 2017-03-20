@@ -219,5 +219,4 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 			stop(paste('CHIPSTER-NOTE: ', msg))
 		}
 	}
-	
 }

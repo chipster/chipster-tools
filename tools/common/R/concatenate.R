@@ -11,9 +11,11 @@
 # OUTPUT OPTIONAL concatenated.gff3
 # OUTPUT OPTIONAL concatenated.text
 # PARAMETER outformat: "Output name extension" TYPE [ auto: "Automatic", txt: ".txt, General text formatted data", tsv: ".tsv, Tab delimited table", html: ".html, HTML formatted data", fasta: ".fasta, FASTA formatted sequence data",  fastq: ".fastq, Sequence data in FASTQ format " ] DEFAULT auto (Output format type)
+# PARAMETER order: "Order by file name" TYPE [yes, no] DEFAULT yes (Concatenate files in alphabetical order by file name.)
 
 #K.M. 18.4. 2016
 source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 #check if files are zipped
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
@@ -29,7 +31,7 @@ if (outformat == "auto"){
    for (i in 1:nrow(input.names)) {
 	 outformat2 <- file_ext(input.names[i,2])
 	 if ( outformat2 == "aln" ||outformat == "bai" ||outformat == "bam" ||outformat == "gifasta" ||outformat == "gz" ||outformat == "pdf" ||outformat == "phylip" ||outformat == "png" ||outformat == "qual" || outformat == "svg"){
-		 stop("CHIPSTER-NOTE:", outformat2, " formatted files should not be concatenated with this tool. If you are sure you want to do the concatenation, please select explicit output file name extension.")
+		 stop("CHIPSTER-NOTE:", outformat2, " Formatted files should not be concatenated with this tool. If you are sure you want to do the concatenation, please select explicit output file name extension.")
 	 }
 	 
 	 if ( outformat != outformat2){
@@ -37,7 +39,7 @@ if (outformat == "auto"){
 	 }		      
    }
  if ( fcheck != 0) {
-	 stop("CHIPSTER-NOTE:Input files contain different file name extensions! If you are sure you want to do the concatenation, please select explicit output file name extension.")
+	 stop("CHIPSTER-NOTE: Input files contain different file name extensions! If you are sure you want to do the concatenation, please select explicit output file name extension.")
  } 
 }
 
@@ -48,11 +50,25 @@ if (outformat == "txt" || outformat == "html" || outformat == "tsv" || outformat
  } else { outformat <- "txt" }
 
 
+# Make list of inputs
+
+input.list <- vector(mode="character", length=0)
+ 
+if (order == "yes"){
+    in.sorted <- input.names[order(input.names[,2]),]
+    for (i in 1:nrow(input.names)) {
+        input.list <- c(input.list, paste(in.sorted[i,1]))
+    }
+}else{
+    for (i in 1:nrow(input.names)) {
+	    input.list <- c(input.list, paste(input.names[i,1]))
+	}
+}
+ 
+files <- paste(input.list, sep="", collapse=" ")
+
 outfile <- paste("concatenated.",outformat , sep="" )
-command.full <- paste("cat *.data > ", outfile)
+command.full <- paste("cat", files, "> ", outfile)
 
 system(command.full)
-
-
-
 
