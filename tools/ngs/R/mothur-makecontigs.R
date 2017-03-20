@@ -1,4 +1,4 @@
-# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. Input file is a single Tar package containing all the FASTQ files. FASTQ file can be gzipped. This tool is based on the Mothur tool make.contigs.)
+# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be zipped. This tool is based on the Mothur tool make.contigs. Note that you can make a Tar package of your FASTQ files using the Utilities tool Make a tar package.)
 # INPUT reads.tar: "Tar package containing the Fastq files" TYPE GENERIC
 # OUTPUT OPTIONAL contigs.summary.tsv
 # OUTPUT OPTIONAL contigs.fasta.gz
