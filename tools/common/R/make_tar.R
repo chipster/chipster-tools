@@ -1,4 +1,4 @@
-# TOOL make_tar.R: "Make a tar package" (Makes a tar package with selected files. File names must be unique., so you must first rename all files with duplicated file names.)
+# TOOL make_tar.R: "Make a tar package" (Makes a tar package with selected files. Note that file names must be unique.)
 # INPUT file{...}.tsv: "Files to include" TYPE GENERIC
 # OUTPUT OPTIONAL chipster.tar 
 # PARAMETER name: "File name for tar package" TYPE STRING DEFAULT "chipster" (File name for the tar package. Ending .tar will be added to the name.)
