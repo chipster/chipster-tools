@@ -159,7 +159,6 @@ bioconductorPackages = c(
 		"DEXSeq",
 		"RPA",
 		"methylumi",
-		"IlluminaHumanMethylation27k.db", # annotation package, not needed if all annotation packages from the repository are installed
 		"VariantAnnotation",
 		"TxDb.Hsapiens.UCSC.hg19.knownGene",
 		"BSgenome.Hsapiens.UCSC.hg19",
