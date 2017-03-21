@@ -1,5 +1,5 @@
 # TOOL mothur-uniqueseqs.R: "Extract unique sequences" (Identifies identical sequences and keep only one representative sequence and the number of times this sequence occures in each sample. If names file is given, the tool also counts the number of sequences represented by the representative sequence in a names file, generating a counts_table. If a groups file is also given, it will also provide the group count breakdown. This tool is based on the Mothur tools unique.seqs and count.seqs.)
-# INPUT a.fasta: "FASTA file" TYPE FASTA
+# INPUT a.fasta: "FASTA file" TYPE GENERIC
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count_table: "Count file" TYPE MOTHUR_COUNT
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
@@ -41,6 +41,7 @@ system(command)
 
 ## Post process output
 system("mv a.unique.fasta unique.fasta")
+system("mv a.unique.count_table unique.count_table")
 #if (file.exists("a.names")){
 #	system("mv a.names unique.names")
 #}
