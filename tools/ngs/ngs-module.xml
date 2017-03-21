@@ -185,16 +185,16 @@
 		<tool>mothur-makecontigs.R</tool>
 		<tool>mothur-screenseqs.R</tool>
 		<tool>mothur-uniqueseqs.R</tool>
-		<tool>mothur-countseqs.R</tool>
-		<tool>mothur-pcrseqs.R</tool>
 		<tool>mothur-alignseqs.R</tool>
-		<tool>mothur-summaryseqs.R</tool>
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>	
 		<tool>mothur-filterseqs.R</tool>
 		<tool>mothur-precluster.R</tool>		
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
 	    <tool>mothur-analyses.R</tool>
+	    <tool>mothur-summaryseqs.R</tool>
+	    <tool>mothur-countseqs.R</tool>
+	    <tool>mothur-pcrseqs.R</tool>
 	    <tool>mothur-sffinfo.R</tool>
     	<tool>merge-fasta-qual.R</tool>
 	</category>
