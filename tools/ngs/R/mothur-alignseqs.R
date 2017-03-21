@@ -1,8 +1,8 @@
 # TOOL mothur-alignseqs.R: "Align sequences to reference" (Given a fasta file of 16S rRNA sequences, this tool aligns them to the Silva reference set available on the server. Alternatively you can give a customized reference fasta. If you do so, make sure the files are correctly assigned in the parameters section! Please note that it can take some time to run this tool. This tool is based on the Mothur tool align.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
-# INPUT OPTIONAL reference.fasta: "custom reference FASTA file" TYPE FASTA
+# INPUT OPTIONAL reference.fasta: "Custom reference FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL aligned.fasta
+# OUTPUT OPTIONAL aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT log.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, own] DEFAULT bacterial (Reference sequences to use.)
