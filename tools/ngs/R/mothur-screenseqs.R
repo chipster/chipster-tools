@@ -1,9 +1,9 @@
 # TOOL mothur-screenseqs.R: "Screen sequences for several criteria" (Keeps sequences that fulfill certain user-defined criteria. This tool is based on the Mothur tool screen.seqs.)
-# INPUT a.fasta: "FASTA file" TYPE FASTA
+# INPUT a.fasta: "FASTA file" TYPE GENERIC
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count: "Count file" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL screened.fasta
+# OUTPUT OPTIONAL screened.fasta.gz
 # OUTPUT OPTIONAL screened.groups
 # OUTPUT OPTIONAL screened.names
 # OUTPUT OPTIONAL summary.screened.tsv
@@ -25,6 +25,9 @@
 #reads.trim.unique.bad.accnos
 #reads.good.groups
 
+# Check if fasta is zipped and unzip it if needed
+source(file.path(chipster.common.path, "zip-utils.R"))
+unzipIfGZipFile("a.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
@@ -113,6 +116,9 @@ command <- paste(binary, "summary.mth", "> log_raw.txt")
 
 # run
 system(command)
+
+# zip output fasta
+system("gzip screened.fasta")
 
 # Postprocess output files
 system("grep -A 10 Start log_raw.txt > summary.screen2.tsv")
