@@ -40,7 +40,7 @@ def writeToFile(input_region, consequence_type, feature_type, f):
         location = input_region['seq_region_name'] + ':' + str(input_region['start']) + '-' + str(input_region['end'])
         allele = get(conseq, 'variant_allele')
         consequence = ','.join(conseq['consequence_terms'])
-        impact = conseq['impact']
+        impact = get(conseq, 'impact')
         symbol = get(conseq, 'gene_symbol')
         gene = get(conseq, 'gene_id')
         feature = get(conseq, 'transcript_id')
@@ -148,7 +148,7 @@ def main():
     with open('input_file') as f:
         for line in f:
             lines.append(line)
-            if len(lines) >= 1000:
+            if len(lines) >= 200:
                 print('query ' + str(len(lines)) + ' variants')
                 write(query(lines))
                 lines = []
@@ -156,7 +156,7 @@ def main():
                 # that we can safely run about 30 instances of this tool in parallel without having
                 # to wait for the quota reset (which may take up to an hour).
                 # https://github.com/Ensembl/ensembl-rest/wiki/Rate-Limits
-                time.sleep(2)      
+                time.sleep(2)
         print('query ' + str(len(lines)) + ' variants')
         write(query(lines))      
 
@@ -200,4 +200,3 @@ To VEP format:
 
 if __name__ == "__main__":
     main()
-
