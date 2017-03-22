@@ -7,6 +7,7 @@
 # OUTPUT counttable.tsv: counttable.tsv
 # OUTPUT META phenodata.tsv: phenodata.tsv
 # OUTPUT OPTIONAL log.txt
+# PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 # PARAMETER OPTIONAL cutlevel: "Cutting level for taxonomic names" TYPE INTEGER FROM 0 TO 9 DEFAULT 0 (Cutting level for taxonomic names for the count table. 0 means retain full names, e.g. Bacteria;Actinobacteria;Actinobacteria;Coriobacteridae;Coriobacteriales;Coriobacterineae;Coriobacteriaceae;Slackia;unclassified.)
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full] DEFAULT bacterial (Reference sequences to use.)
 
