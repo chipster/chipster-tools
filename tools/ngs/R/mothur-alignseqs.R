@@ -125,6 +125,9 @@ command2 <- paste(binary, "summary.mth", "> log_raw.txt")
 # run
 system(command2)
 
+# zip fasta
+system("gzip aligned.fasta")
+
 # Post process output
 system("grep -A 10 Start log_raw.txt > aligned-summary2.tsv")
 # Remove one tab to get the column naming look nice:
