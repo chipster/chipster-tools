@@ -38,7 +38,7 @@ system("tar tf reads.tar > tar.contents")
 file.list <- scan("tar.contents", what="", sep="\n")
 # Check that the input is a valid tar file
 if (length(file.list) == 0){
-	stop(paste('CHIPSTER-NOTE: ', "It seems your input file was not a valid Tar package. Please check your input file."))
+	stop(paste('CHIPSTER-NOTE: ', "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
 if (grepl("/", file.list[1])){
