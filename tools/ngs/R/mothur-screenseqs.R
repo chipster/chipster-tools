@@ -1,20 +1,18 @@
-# TOOL mothur-screenseqs.R: "Screen sequences for several criteria" (Keeps sequences that fulfill certain user-defined criteria. This tool is based on the Mothur tool screen.seqs.)
+# TOOL mothur-screenseqs.R: "Screen sequences for several criteria" (Keeps sequences that fulfill user-defined criteria. This tool is based on the Mothur tool screen.seqs.)
 # INPUT a.fasta: "FASTA file" TYPE GENERIC
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
-# INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count: "Count file" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL screened.fasta.gz
 # OUTPUT OPTIONAL screened.groups
-# OUTPUT OPTIONAL screened.names
 # OUTPUT OPTIONAL summary.screened.tsv
 # OUTPUT OPTIONAL screened.count_table
-# PARAMETER OPTIONAL minlength: "Minimum length of the sequences" TYPE INTEGER (What is the minimum lenght of the sequences?)
-# PARAMETER OPTIONAL maxlength: "Maximum length of the sequences" TYPE INTEGER (What is the maximum lenght of the sequences?)
-# PARAMETER OPTIONAL end: "End position" TYPE INTEGER (By which position should the sequences end?)
-# PARAMETER OPTIONAL start: "Start position" TYPE INTEGER (By which position should the sequences start?)
+# PARAMETER OPTIONAL minlength: "Minimum length" TYPE INTEGER (What is the minimum length of the sequences to be kept?)
+# PARAMETER OPTIONAL maxlength: "Maximum length" TYPE INTEGER (What is the maximum length of the sequences to be kept?)
+# PARAMETER OPTIONAL end: "Alignment end position" TYPE INTEGER (By which alignment position should the sequence end?)
+# PARAMETER OPTIONAL start: "Alignment start position" TYPE INTEGER (By which alignment position should the sequence start?)
 # PARAMETER OPTIONAL optimize: "Optimize by"  TYPE [empty, minlength, start, end] DEFAULT empty  (Optimize according to minlength, start or end position. Please note that if you use this option, you can't determine the same criteria above! Fill in the optimization criteria below as well.)
 # PARAMETER OPTIONAL criteria: "Optimization criteria"  TYPE INTEGER FROM 0 TO 100  (Optimization criteria. For example 85 means that Mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.)
-# PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in the sequences?)
+# PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in a sequence?)
 # PARAMETER OPTIONAL maxhomop: "Maximum homopolymer length" TYPE INTEGER (Maximum length of homopolymers allowed)
 
 
@@ -24,6 +22,8 @@
 #reads.trim.unique.good.fasta
 #reads.trim.unique.bad.accnos
 #reads.good.groups
+# OUTPUT OPTIONAL screened.names
+# INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 
 # Check if fasta is zipped and unzip it if needed
 source(file.path(chipster.common.path, "zip-utils.R"))
