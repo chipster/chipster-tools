@@ -191,6 +191,7 @@
 		<tool>mothur-precluster.R</tool>		
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
+		<tool>mothur-classify-counttable.R</tool>	
 	    <tool>mothur-analyses.R</tool>
 	    <tool>mothur-summaryseqs.R</tool>
 	    <tool>mothur-countseqs.R</tool>
