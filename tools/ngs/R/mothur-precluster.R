@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL preclustered.names
 # OUTPUT OPTIONAL preclustered-summary.tsv
 # OUTPUT OPTIONAL preclustered.count_table 
-# PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed. 1 for every 100 bp sequence is recommended)
+# PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed for every 100 bases. 1 for every 100 bp sequence is recommended.)
 
 
 # EK 18.06.2013
