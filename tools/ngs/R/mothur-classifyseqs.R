@@ -7,7 +7,7 @@
 # OUTPUT OPTIONAL picked.fasta 
 # OUTPUT OPTIONAL picked.count_table
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
-# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full] DEFAULT bacterial (Reference sequences to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full] DEFAULT bacterial (Silva reference sequences to use.)
 # PARAMETER OPTIONAL toremove: "Remove lineages" TYPE STRING DEFAULT empty (List of taxons to remove. You must wrap your taxon in quotes so mothur knows to ignore the semicolon characters. For example try Chloroplast-mitochondria-Archaea-Eukaryota-unknown.)
 
 
