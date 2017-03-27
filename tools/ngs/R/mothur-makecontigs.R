@@ -1,26 +1,14 @@
-# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be zipped. This tool is based on the Mothur tool make.contigs. Note that you can make a Tar package of your FASTQ files using the Utilities tool Make a tar package.)
-# INPUT reads.tar: "Tar package containing the Fastq files" TYPE GENERIC
+# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can also provide an optional group file. If file is not provided, the tool tries to organize the FASTQ files into groups based on the file names. This tool is based on the Mothur tool make.contigs. Note that you can make a Tar package of your FASTQ files using the Utilities tool Make a tar package.)
+# INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
+# INPUT OPTIONAL input_list: "List of FASTQ files by group." TYPE GENERIC
 # OUTPUT OPTIONAL contigs.summary.tsv
 # OUTPUT OPTIONAL contigs.fasta.gz
 # OUTPUT OPTIONAL contigs.groups
 # OUTPUT OPTIONAL log.txt
-
-
-#Output File Names: 
-#inputs.trim.contigs.fasta
-#inputs.trim.contigs.qual
-#inputs.contigs.report
-#inputs.scrap.contigs.fasta
-#inputs.scrap.contigs.qual
-#inputs.contigs.groups
-# OUTPUT log_raw.txt
-# OUTPUT OPTIONAL fastq.contigs.report
-# OUTPUT OPTIONAL fastq.trim.contigs.qual
-
+# OUTPUT OPTIONAL stability.file.txt
 
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
-# OUTPUT OPTIONAL contigs.summary.tsv
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -53,12 +41,16 @@ for (i in 1:length(file.list)) {
 		system(paste("gzip", file.list[i]))
 }
 
-# Use Mothur make.file tool to generate the input list
-write("make.file(inputdir=., type=gz, prefix=fastq)", "makefile.mth", append=F)
-command <- paste(binary, "makefile.mth")
-system(command)
-system("cat *.logfile > log.tmp")
-
+# Use input_list if provided. Else use Mothur make.file tool to generate the input list
+if (fileOk("input_list")){
+	system("mv input_list fastq.files")
+}else{
+	write("make.file(inputdir=., type=gz, prefix=fastq)", "makefile.mth", append=F)
+	command <- paste(binary, "makefile.mth")
+	system(command)
+	system("cat *.logfile > log.tmp")
+	system("cp fastq.files stability.file.txt")
+}
 
 # Run Mothur make.contigs
 write("make.contigs(file=fastq.files)", "makecontigs.mth", append=F)
