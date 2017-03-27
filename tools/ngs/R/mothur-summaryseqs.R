@@ -1,4 +1,4 @@
-# TOOL mothur-summaryseqs.R: "Summarize sequences with Mothur" (Given a fasta file with unaligned or aligned sequences, provides summary statistics on sequence start and end coordinates, length, number of ambiguous bases, and homopolymer length. This tool is based on the Mothur package.)
+# TOOL mothur-summaryseqs.R: "Summarize sequences" (Given a fasta file with unaligned or aligned sequences, provides summary statistics on sequence start and end coordinates, length, number of ambiguous bases, and homopolymer length. This tool is based on the Mothur tool summary.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # OUTPUT summary.tsv
 		
@@ -24,7 +24,7 @@ system(command)
 # Post process output
 # system("mv reads.summary summary.tsv")
 # Choose the summary lines:
-system("grep -A 9 Start log_raw.txt > summary_2.tsv")
+system("grep -A 10 Start log_raw.txt > summary_2.tsv")
 # Remove one tab to get the column naming look nice:
 system("sed 's/^		/	/' summary_2.tsv > summary.tsv")
 

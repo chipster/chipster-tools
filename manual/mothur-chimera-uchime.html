@@ -13,11 +13,22 @@ Given a fasta-formatted alignment file, removes chimeric sequences.
 
 <h3>Parameters</h3>
 
-None
+Dereplicate (false, true) [false]
+Reference (bacterial, full, none) [bacterial]
 
 <h3>Details</h3>
 <p>
 Removes chimeric sequences from an alignment using the uchime method and the 16S rRNA Silva gold reference set. Chimeric sequences are artifacts which contain parts of several sequences.
+</p>
+<p>
+The dereplicate parameter can be used when checking for chimeras by group. 
+If the dereplicate parameter is false (default), then if one group finds the sequence to be chimeric, 
+all groups find it to be chimeric. 
+</p>
+<p>
+You can choose whether you want to use the full silva reference set, or just the bacterial sequences. 
+If you choose none, the tool checks for chimeras using the more abundant sequences as the reference.
+</p>
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Chimera.uchime">Chimera.uchime</a> and <a href="http://www.mothur.org/wiki/Remove.seqs">Remove.seqs</a> commands of the Mothur package.
 </p>

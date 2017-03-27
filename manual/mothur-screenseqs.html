@@ -3,27 +3,31 @@
 <head><title></title></head>
 <body>
 
-<h2>Metagenomics / Screen sequences with Mothur</h2>
+<h2>Screen sequences for several criteria</h2>
 
 <h3>Description</h3>
 
 <p>
-Screen out sequences that do not fulfill certain user defined criteria.
+Given a fasta file and a group/count file, this tool screens out sequences that do not fulfill user defined criteria.
 </p>
 
 <h3>Parameters</h3>
-<li>Minimum length of the sequences </li>
-<li>End position</li>
-<li>Start position </li>
+<li>Minimum length </li>
+<li>Maximum length </li>
+<li>Alignment start position </li>
+<li>Alignment end position</li>
 <li>Optimize by (empty, minlength, start, end) [empty]</li>
-<li>Criteria (0:100) </li>
+<li>Optimization criteria (0-100) </li>
+<li>Maximum number of ambiguous bases </li>
+<li>Maximum homopolymer length </li>
+
 
 <h3>Details</h3>
 <p>
-Screen out sequences based on their length, ending or starting position. 
-You can either choose the cut-off yourself (first three parameters), or use the optimization based on these.
-If you choose to use the optimization, remember to determine the criteria: 
-for example 85 means that mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.
+Screen out sequences based on their length or alignment position. 
+You can either choose the cut-off yourself (first four parameters), or use the optimization based on these.
+If you use the optimization, remember to determine the criteria: 
+for example 85 means that Mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Screen.seqs">screen.seqs</a> command of the Mothur package.
 </p>
@@ -35,10 +39,10 @@ This tool is based on the <a href="http://www.mothur.org/wiki/Screen.seqs">scree
 
 <p>The analysis output consists of the following:</p>
 <ul>
-<li>reads.good.groups: A two column list with the first column indicating the sequence names in the input file and the second column the group that it came from.</li>
-<li>reads.trim.good.names: A list of the selected sequences and the redundant sequences corresponding to each.</li>
-<li>reads.trim.unique.good.fasta: A FASTA-formatted sequence file with the screened reads.</li>
-<li>summary.trim.screen.tsv: Summary statistics for the sequences</li>
+<li>screened.fasta.gz: Compressed sequence file with the screened reads.</li>
+<li>screened.groups: If a group file was provided as input, a group file containing the names and sample assignment of sequences after screening will be provided.</li>
+<li>summary.screened.tsv: Summary statistics for the sequences.</li>
+<li>screened.count: If a count file was provided as input, a count file containing the names and numbers of unique sequences after screening will be provided.</li>
 </ul>
 </p>
 

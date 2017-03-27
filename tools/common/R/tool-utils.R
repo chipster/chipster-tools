@@ -176,7 +176,7 @@ fileCheck <- function(filename, minsize, minlines){
 # Allows setting environment variables give as character vector in style "VARIABLE=value"
 #
 runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
-
+	
 	# Split command to words
 	wcom <- strsplit(command, " ")[[1]]
 	
@@ -194,7 +194,7 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 	if (capture){
 		# Run command, capture stderr
 		exitcode <- system2(wcom[1], wcom[2:length(wcom)], stderr="stderr.tmp", env=env )
-
+		
 		# Append error messages to the log file. stderr.tmp is overwritten each time runExternal is called.
 		system("echo >> stderr.log")
 		system("cat stderr.tmp >> stderr.log")
@@ -206,9 +206,9 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 	# Show error message if command fails
 	if (checkexit){
 		if (exitcode != 0){
-
+			
 			error <- scan("stderr.tmp", what=" ", sep="\n")
-
+			
 			msg <- paste("External program did not complete succesfully.\n")
 			msg <- paste(msg,"Please check your parameters, input files and input file assignment.\n\n")
 			msg <- paste(msg,"Failed command:\n")
@@ -219,5 +219,4 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 			stop(paste('CHIPSTER-NOTE: ', msg))
 		}
 	}
-	
 }

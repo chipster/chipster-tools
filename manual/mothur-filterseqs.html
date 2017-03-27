@@ -3,12 +3,12 @@
 <head><title></title></head>
 <body>
 
-<h2>Metagenomics / Filter sequence alignment with Mothur</h2>
+<h2>Filter sequence alignment</h2>
 
 <h3>Description</h3>
 
 <p>
-Filters out columns from a fasta formatted sequence alignment.
+Filters out columns from a fasta formatted sequence alignment. Removes newly formed identical sequences after that.
 </p>
 
 <h3>Parameters</h3>
@@ -17,24 +17,26 @@ None
 
 <h3>Details</h3>
 <p>
-Removes columns where every character is '-'. These empty columns are not included in calculating distances because they have no information in them. 
-By removing these columns, the calculation of a large number of distances is accelerated. Removes also columns where one or more sequences have '.'  
-<p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Filter.seqs">Filter.seqs</a> command of the Mothur package.
+Removes overhangs at both ends of the alignment by removing columns where one or more sequences have '.' Removes also gaps in the alignment by removing columns where every character is '-'. 
+These gap columns are not included in calculating distances because they have no information in them. 
+Removing empty columns speeds up the distance calculation later on.  
 </p>
-
-
+<p> 
+As removing columns can create new identical sequences, identical sequences are detected and removed after filtering. In addition to the FASTA file, you need to provide a count file so that the number of sequences is updated. 
+</p>
+<p>
+This tool is based on the <a href="http://www.mothur.org/wiki/Filter.seqs">Filter.seqs</a> and <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> commands of the Mothur package.
 </p>
 
 <h3>Output</h3>
 
 <p>The analysis output consists of the following:</p>
 <ul>
-<li>filtered-aligned.fasta: Filtered alignment </li> 
-<li>filtered-summary.tsv: Summary statistics for the filtered alignment </li> 
+<li>filtered-unique.fasta: Filtered alignment </li> 
+<li>filtered-unique-summary.tsv: Summary statistics for the filtered alignment </li> 
 <li>filtered-log.txt: Lists the number of columns removed </li>
+<li>filtered-unique.count_table: Count table where the number of identical sequences has been updated </li>
 </ul>
-</p>
 
 
 <h3>References</h3>
