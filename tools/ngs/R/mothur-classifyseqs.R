@@ -3,7 +3,6 @@
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL reads-taxonomy-assignment.txt
 # OUTPUT OPTIONAL classification-summary.txt
-# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL picked.fasta 
 # OUTPUT OPTIONAL picked.count_table
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
@@ -11,12 +10,9 @@
 # PARAMETER OPTIONAL toremove: "Remove lineages" TYPE STRING DEFAULT empty (List of taxons to remove. You must wrap your taxon in quotes so mothur knows to ignore the semicolon characters. For example try Chloroplast-mitochondria-Archaea-Eukaryota-unknown.)
 
 
-
+# OUTPUT OPTIONAL log.txt
 # OUTPUT counttable.tsv: counttable.tsv
-# OUTPUT META phenodata.tsv: phenodata.tsv
-# INPUT OPTIONAL all.grp: "Groups file" TYPE MOTHUR_GROUPS
-# PARAMETER OPTIONAL cutlevel: "Cutting level for taxonomic names" TYPE INTEGER FROM 0 TO 9 DEFAULT 0 (Cutting level for taxonomic names for the count table. 0 means retain full names, e.g. Bacteria;Actinobacteria;Actinobacteria;Coriobacteridae;Coriobacteriales;Coriobacterineae;Coriobacteriaceae;Slackia;unclassified.)
-# OUTPUT OPTIONAL picked-summary.tsv
+
 
 # EK 18.06.2013
 # JTT 28.8.2013 count table and phenodata added
@@ -30,10 +26,6 @@ unzipIfGZipFile("a.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-# old references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-#template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
-#taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
 
 if (reference=="bacterial"){
 	# new bacterial references:
@@ -90,10 +82,8 @@ if (toremove!="empty"){
 
 	if (file.exists("a.count_table")){
 		write(paste("remove.lineage(fasta=a.fasta, count=a.count_table, taxonomy=reads-taxonomy-assignment.txt, taxon=",toremove ,")", sep=""), "batch.mth", append=F)
-	
 	}else {
 		write(paste("remove.lineage(fasta=a.fasta, taxonomy=reads-taxonomy-assignment.txt, taxon=",toremove ,")", sep=""), "batch.mth", append=F)
-		
 	}
 
 	# command
@@ -107,15 +97,14 @@ if (toremove!="empty"){
 	if (file.exists("a.pick.count_table")){ 
 		system("mv a.pick.count_table picked.count_table")
 	}
+	
 # batch file 3 -classify.seqs again:
 	
 	# write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	if (file.exists("picked.count_table")){
 		write(paste("classify.seqs(fasta=picked.fasta, count=picked.count_table, iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
-		
 	}else {
-		write(paste("classify.seqs(fasta=picked.fasta, iters=", iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
-		
+		write(paste("classify.seqs(fasta=picked.fasta, iters=", iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)	
 	}
 	
 	# command
@@ -138,7 +127,6 @@ if (toremove!="empty"){
 		system("mv picked.silva.wang.tax.summary classification-summary.txt")
 	}
 	
-	
 #	# batch file 3 -summary 
 #	write("summary.seqs(fasta=picked.fasta, count=picked.count_table)", "summary.mth", append=F)
 #	
@@ -155,38 +143,3 @@ if (toremove!="empty"){
 }
 	
 
-
-
-
-#
-## Count table and phenodata preparations:
-#
-## Reads the data and tabulates it
-#grp<-read.table("all.grp", header=F, sep="\t")
-#tax<-read.table("reads-taxonomy-assignment.txt", header=F, sep="\t")
-#dat<-merge(grp, tax, by.x="V1", by.y="V1")
-#dat2<-dat
-#dat2$V2.y<-gsub(".[[:digit:]]{1,}.?[[:digit:]]?)", "", as.character(dat2$V2.y))
-#
-## Cutting the taxonomic names
-#if(cutlevel==0) {
-#	dat2$newnames<-dat2$V2.y
-#} else {
-#	sp<-strsplit(dat2$V2.y, ";")
-#	sp2<-rep(NA, nrow(dat2))
-#	for(i in 1:nrow(dat2)) {
-#		sp2[i]<-paste(sp[[i]][1:cutlevel], collapse=";")
-#	}
-#	dat2$newnames<-sp2
-#}
-#
-## Creating the count table
-#tab<-table(dat2$V2.x, dat2$newnames)
-#tab2<-as.data.frame.matrix(tab)
-#chiptype<-c("metagenomics")
-#
-## Writing the table to disk
-#write.table(tab, "counttable.tsv", col.names=T, row.names=T, sep="\t", quote=FALSE)
-#write.table(data.frame(sample=rownames(tab2), chiptype=chiptype, group=rep("", length(rownames(tab2)))), "phenodata.tsv", col.names=T, row.names=F, sep="\t", quote=F)
-#
-#
