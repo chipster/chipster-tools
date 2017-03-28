@@ -49,7 +49,8 @@ if (fileOk("input_list")){
 	command <- paste(binary, "makefile.mth")
 	system(command)
 	system("cat *.logfile > log.tmp")
-	system("cp fastq.files stability.file.txt")
+	# Remove full paths from the Mothur-generated input list to make it more readable
+	system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > stability.file.txt")
 }
 
 # Run Mothur make.contigs
