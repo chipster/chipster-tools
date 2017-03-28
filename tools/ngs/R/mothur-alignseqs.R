@@ -4,7 +4,7 @@
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
-# OUTPUT log.txt
+# OUTPUT OPTIONAL custom.reference.summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, own] DEFAULT bacterial (Reference sequences to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
@@ -86,18 +86,19 @@ if (file.exists("reference.pcr.fasta")) {
 	system("mv reference.pcr.fasta custom.reference.fasta")
 }	
 	
-# If we want summary file from this step:
-## batch file 2
-#write("summary.seqs(fasta=custom.reference.fasta)", "summary.mth", append=F)
-## command
-#command2 <- paste(binary, "summary.mth", "> log_raw.txt")
-## run
-#system(command2)
-## Post process output
-#system("grep -A 10 Start log_raw.txt > custom.reference.summary2.tsv")
-## Remove one tab to get the column naming look nice:
-#system("sed 's/^		/	/' custom.reference.summary2.tsv > custom.reference.summary.tsv")
-
+#  summary file from this step:
+if (file.exists("custom.reference.fasta")) {
+	# batch file 2
+	write("summary.seqs(fasta=custom.reference.fasta)", "summary.mth", append=F)
+	# command
+	command2 <- paste(binary, "summary.mth", "> log_raw.txt")
+	# run
+	system(command2)
+	# Post process output
+	system("grep -A 10 Start log_raw.txt > custom.reference.summary2.tsv")
+	# Remove one tab to get the column naming look nice:
+	system("sed 's/^		/	/' custom.reference.summary2.tsv > custom.reference.summary.tsv")
+}	
 
 
 # batch file 2 -align.seqs
