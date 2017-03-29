@@ -1,6 +1,6 @@
 # TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired end reads to sequence contigs and puts all the resulting sequences to one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can also provide an optional group file. If file is not provided, the tool tries to organize the FASTQ files into groups based on the file names. This tool is based on the Mothur tool make.contigs. Note that you can make a Tar package of your FASTQ files using the Utilities tool Make a tar package.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
-# INPUT OPTIONAL input_list: "List of FASTQ files by group." TYPE GENERIC
+# INPUT OPTIONAL input_list: "List of FASTQ files by sample" TYPE GENERIC
 # OUTPUT OPTIONAL contigs.summary.tsv
 # OUTPUT OPTIONAL contigs.fasta.gz
 # OUTPUT OPTIONAL contigs.groups
@@ -77,7 +77,7 @@ system("grep -A 10 Start log_raw.txt > fastq-summary2.tsv")
 # Remove one tab to get the column naming look nice:
 system("sed 's/^		/	/' fastq-summary2.tsv > contigs.summary.tsv.tmp")
 
-# If contigs.summary.tsv is empty, return stderr.log
+# If contigs.summary.tsv is empty, return the log instead
 if (fileOk("contigs.summary.tsv.tmp", minlines = 1)){
 	system("mv contigs.summary.tsv.tmp contigs.summary.tsv")
 }else{
