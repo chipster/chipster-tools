@@ -8,7 +8,8 @@
 <h3>Description</h3>
 
 <p>
-Filters out columns from a fasta formatted sequence alignment. Removes newly formed identical sequences after that.
+Filters out columns from a fasta formatted sequence alignment. 
+Removes newly formed identical sequences after that.
 </p>
 
 <h3>Parameters</h3>
@@ -17,12 +18,15 @@ None
 
 <h3>Details</h3>
 <p>
-Removes overhangs at both ends of the alignment by removing columns where one or more sequences have '.' Removes also gaps in the alignment by removing columns where every character is '-'. 
+Removes overhangs at both ends of the alignment by removing columns where one or more sequences have '.' 
+Removes also gaps in the alignment by removing columns where every character is '-'. 
 These gap columns are not included in calculating distances because they have no information in them. 
 Removing empty columns speeds up the distance calculation later on.  
 </p>
 <p> 
-As removing columns can create new identical sequences, identical sequences are detected and removed after filtering. In addition to the FASTA file, you need to provide a count file so that the number of sequences is updated. 
+As removing columns can create new identical sequences, identical sequences are detected 
+and removed after filtering. 
+In addition to the FASTA file, you need to provide a count file so that the number of sequences is updated. 
 </p>
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Filter.seqs">Filter.seqs</a> and <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> commands of the Mothur package.
