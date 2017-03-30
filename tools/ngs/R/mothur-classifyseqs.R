@@ -98,7 +98,7 @@ if (toremove!="empty"){
 		system("mv a.pick.count_table picked.count_table")
 	}
 	
-# batch file 3 -classify.seqs again:
+	# batch file 3 -classify.seqs again:
 	
 	# write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	if (file.exists("picked.count_table")){
