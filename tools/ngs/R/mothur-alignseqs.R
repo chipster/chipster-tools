@@ -5,7 +5,6 @@
 # OUTPUT OPTIONAL aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT OPTIONAL custom.reference.summary.tsv
-# OUTPUT log.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, own] DEFAULT bacterial (Reference sequences to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
@@ -85,15 +84,11 @@ if (!is.na(start) | !is.na(end)){
 	
 	# rename the ref file as custom.reference.fasta 
 	if (file.exists("template.pcr.fasta")) {
-		system("mv template.pcr.fasta custom.reference.fasta")
-	}	
-
-	if (file.exists("reference.pcr.fasta")) {
-		system("mv reference.pcr.fasta custom.reference.fasta")
-	}	
-	
-	if (file.exists("template.fasta")) {
-		system("mv template.fasta custom.reference.fasta")
+			system("mv template.pcr.fasta custom.reference.fasta")
+	}	else if (file.exists("reference.pcr.fasta")) {
+			system("mv reference.pcr.fasta custom.reference.fasta")
+	}	else if (file.exists("template.fasta")) {
+			system("mv template.fasta custom.reference.fasta")
 	}	
 	
 	
