@@ -5,6 +5,7 @@
 # OUTPUT OPTIONAL aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT OPTIONAL custom.reference.summary.tsv
+# OUTPUT log.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, own] DEFAULT bacterial (Reference sequences to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
@@ -42,63 +43,74 @@ if (reference=="full"){
 system(paste("ln -s ", template.path, " template.fasta", sep=""))
 
 
-# batch file 1 -pcr.seqs
-pcrseqs.options <- ""
-if (reference=="own"){
-	if (file.exists("reference.fasta")) {
-	pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=reference.fasta", sep="")
-	} else{
-	stop('CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!')
-	}
-} else {
-	# if using full or bacterial silva reference:
-	#pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=", template.path, sep="")	
-	pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=template.fasta", sep="")	
-}
+# batch file 1 -pcr.seqs -only if user determined end or start 
 
-if (!is.na(start)){
-	pcrseqs.options <- paste(pcrseqs.options, ", start=", start, sep="")
-}
-if (!is.na(end)){
-	pcrseqs.options <- paste(pcrseqs.options, ", end=", end, sep="")
-}
-if (keepdots=="yes"){
-	pcrseqs.options <- paste(pcrseqs.options, ", keepdots=F", sep="")
-}
-if (keepdots=="no"){
-	pcrseqs.options <- paste(pcrseqs.options, ", keepdots=T", sep="")
-}
-pcrseqs.options <- paste(pcrseqs.options, ")", sep="")
-
-# Write batch file
-write(pcrseqs.options, "pcrseq.mth", append=F)
-# command
-command <- paste(binary, "pcrseq.mth", "> log.txt 2>&1")
-# run
-system(command)
-
-# rename the ref file as custom.reference.fasta 
-if (file.exists("template.pcr.fasta")) {
-	system("mv template.pcr.fasta custom.reference.fasta")
-}	
-
-if (file.exists("reference.pcr.fasta")) {
-	system("mv reference.pcr.fasta custom.reference.fasta")
-}	
+if (!is.na(start) | !is.na(end)){
 	
-#  summary file from this step:
-if (file.exists("custom.reference.fasta")) {
-	# batch file 2
-	write("summary.seqs(fasta=custom.reference.fasta)", "summary.mth", append=F)
+	pcrseqs.options <- ""
+	if (reference=="own"){
+		if (file.exists("reference.fasta")) {
+		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=reference.fasta", sep="")
+		} else{
+		stop('CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!')
+		}
+	} else {
+		# if using full or bacterial silva reference:
+		#pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=", template.path, sep="")	
+		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=template.fasta", sep="")	
+	}
+
+	if (!is.na(start)){
+		pcrseqs.options <- paste(pcrseqs.options, ", start=", start, sep="")
+	}
+	if (!is.na(end)){
+		pcrseqs.options <- paste(pcrseqs.options, ", end=", end, sep="")
+	}
+	if (keepdots=="yes"){
+		pcrseqs.options <- paste(pcrseqs.options, ", keepdots=F", sep="")
+	}
+	if (keepdots=="no"){
+		pcrseqs.options <- paste(pcrseqs.options, ", keepdots=T", sep="")
+	}
+	pcrseqs.options <- paste(pcrseqs.options, ")", sep="")
+
+	# Write batch file
+	write(pcrseqs.options, "pcrseq.mth", append=F)
 	# command
-	command2 <- paste(binary, "summary.mth", "> log_raw.txt")
+	command <- paste(binary, "pcrseq.mth", "> log.txt 2>&1")
 	# run
-	system(command2)
-	# Post process output
-	system("grep -A 10 Start log_raw.txt > custom.reference.summary2.tsv")
-	# Remove one tab to get the column naming look nice:
-	system("sed 's/^		/	/' custom.reference.summary2.tsv > custom.reference.summary.tsv")
-}	
+	system(command)
+
+}
+	
+	# rename the ref file as custom.reference.fasta 
+	if (file.exists("template.pcr.fasta")) {
+		system("mv template.pcr.fasta custom.reference.fasta")
+	}	
+
+	if (file.exists("reference.pcr.fasta")) {
+		system("mv reference.pcr.fasta custom.reference.fasta")
+	}	
+	
+	if (file.exists("template.fasta")) {
+		system("mv template.fasta custom.reference.fasta")
+	}	
+	
+	
+	
+	#  summary file from this step:
+	if (file.exists("custom.reference.fasta")) {
+		# batch file 2
+		write("summary.seqs(fasta=custom.reference.fasta)", "summary.mth", append=F)
+		# command
+		command2 <- paste(binary, "summary.mth", "> log_raw.txt")
+		# run
+		system(command2)
+		# Post process output
+		system("grep -A 10 Start log_raw.txt > custom.reference.summary2.tsv")
+		# Remove one tab to get the column naming look nice:
+		system("sed 's/^		/	/' custom.reference.summary2.tsv > custom.reference.summary.tsv")
+	}	
 
 
 # batch file 2 -align.seqs
