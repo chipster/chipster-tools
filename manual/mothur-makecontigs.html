@@ -8,26 +8,27 @@
 <h3>Description</h3>
 
 <p>
-Combines paired reads to contigs for each sample and then the data from all the samples. Extracts the sequence and quality score data from fastq files. 
+Combines paired reads to contigs for each sample and then collects the sequences from all the samples in one fasta file. 
 </p>
 
 <h3>Parameters</h3>
 none
 
 <h3>Details</h3>
-<p>
-The tool takes a Tar package of fastq files (you can create one using the tool Utilities / Make a Tar package). It reads a forward fastq file and a reverse fastq file and outputs new fasta and report files.
-It extracts the sequence and quality data from the fastq files, creates a reverse complement of the reverse read and joins the reads into contigs.
-The algorithm aligns the pair of sequences, and then identifies possible positions where the two reads disagree. 
-If one of the disagreeing bases has a quality score 6 or more points higher than the other, that base is reported. 
-If not, that base is set to N. If one of the reads suggest a gap, 
-the other read has to have a base with quality score over 25 to be considered real.
-</p>
+
+This tool takes a Tar package of fastq files (you can create one using the tool Utilities / Make a Tar package).
+It extracts the sequence and quality data from the fastq files, creates a reverse complement of the reverse read,
+ and joins the reads into contigs by performing a Needleman alignment.
+When it identifies positions where the two reads disagree, it proceeds as follows: 
+<ul>
+<li>If one of the disagreeing bases has a quality score which is 6 or more points higher than the other, that base is reported. If not, that base is set to N.</li> 
+<li>If one of the reads suggest a gap, the other read has to have a base with a quality score over 25 to be considered real.</li>
+</ul>
+
 <p>
 The tool figures by itself which fastq files belong to each sample. You can check this in the output file stability.file.txt. 
-If the file assignment to samples is not correct, you can make a stability.file.txt yourself and give as input. 
- In this file you have 3 columns: in the first column you list the sample names, in the second column the forward fastq file name (R1),
-and in the third column the name of the reverse fastq file (R2). So it should look something like this: <br>
+If the file assignment to samples is not correct, you can make a stability.file.txt yourself and give it as input. 
+This file has 3 columns: sample name, forward fastq file name (R1), and reverse fastq file name (R2). So it should look something like this: <br>
 sample1	sample1_L001_R1_001.fastq sample1_L001_R2_001.fastq <br>
 sample2 sample2_L001_R1_001.fastq sample2_L001_R2_001.fastq <br>
 sample3 sample3_L001_R1_001.fastq sample3_L001_R2_001.fastq <br>
@@ -38,20 +39,16 @@ This tool is based on the <a href="http://www.mothur.org/wiki/Make.contigs">make
 <a href="http://www.mothur.org/wiki/Make.file">make.file</a> commands of the Mothur package.
 </p>
 
-
-</p>
-
 <h3>Output</h3>
 
 <p>The analysis output consists of the following:</p>
 <ul>
-<li>contigs.fasta.gz: A FASTA-formatted sequence file with the combined reads.</li>
+<li>contigs.fasta.gz: Fasta file containing the contig sequences.</li>
 <li>contigs.summary.tsv: Summary statistics for the sequences</li>
 <li>contigs.groups: A two column list with the first column indicating the sequence names in the input file and the second column the sample that it came from.</li>
 <li>log.txt: List how many contigs each sample has.</li>
 <li>stability.file.txt: Shows how fastq files were assigned to samples.</li>
 </ul>
-</p>
 
 
 <h3>References</h3>
