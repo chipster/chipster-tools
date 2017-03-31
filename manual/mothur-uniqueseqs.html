@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta-formatted alignment and a names file, removes identical sequences from the alignment.
+Given a fasta file and groups file, removes identical sequences from the fasta file.
 </p>
 
 <h3>Parameters</h3>
@@ -17,26 +17,27 @@ None
 
 <h3>Details</h3>
 <p>
-When you filter an alignment of unique sequences, you might be removing bases that accounted for differences between the sequences. 
-It is therefore recommended to remove redundant sequences from the filtered alignment in order to speed up distance calculations later. 
-In addition to the alignment, you need to supply the names file that was created by the tool "Trim and filter reads with Mothur".
-When redundant sequences are found, the list of names corresponding to the sequence names will be merged.
+Many sequences are identical and it would be computationally wasteful to align the same sequence many times later. It is therefore
+better to keep only one representative sequence in the fasta file, and keep track of how many sequences it represents and store this info in a count_table file. 
+Alternatively we could list the names of each represented sequence, but this names file would be very large as sequence names are long.
+Based on Mothur tool unique.seqs and count.seqs.
+</p>
 <p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> command of the Mothur package.
+This tool is based on the <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> and 
+<a href="http://www.mothur.org/wiki/Unique.seqs">Count.seqs</a> commands of the Mothur package.
 </p>
 
 
-</p>
+
 
 <h3>Output</h3>
 
 <p>The analysis output consists of the following:</p>
 <ul>
-<li>unique.fasta: Alignment with redundant sequences removed</li> 
-<li>unique-summary.tsv: Summary statistics for the alignment </li> 
-<li>unique.names: A list of the unique sequences and the redundant sequences corresponding to each. </li>
+<li>unique.fasta: Unique sequences</li> 
+<li>unique.summary.tsv: Summary statistics for the sequences </li> 
+<li>unique.count_table = how many represented sequences are in each sample </li>
 </ul>
-</p>
 
 
 <h3>References</h3>
