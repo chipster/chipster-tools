@@ -8,40 +8,41 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta file of 16S rRNA sequences, aligns them to the Silva 16S rRNA template sequence set.
+Given a fasta file of 16S rRNA sequences, aligns them to the Silva 16S rRNA reference alignment template.
 </p>
 
 <h3>Parameters</h3>
-
-None
+<ul>
+<li>Reference (bacterial, full, own) [bacterial]</li>
+<li>Start position of your region of interest</li>
+<li>End position of your region of interest</li> 
+</ul>
 
 <h3>Details</h3>
-<p>
-Sequences in are aligned, one by one, against the Silva 16S rRNA reference set. Kmer searching with 8mers is followed by Needleman-Wunsch 
-pairwise alignment, which penalizes the same amount for opening and extending a gap.
-<p>
+<p> 
+Sequences in are aligned, one by one, against the Silva 16S rRNA reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment.
+ You can use either the full reference or just the bacterial subsection of it. You can also provide your own reference alignment fasta. 
+Please indicate the region of the reference alignment that your amplified region corresponds to, as this will improve the overall alignment quality and save space. 
+</p> 
 <p>
 The alignment result is given in fasta format, with periods ('.') leading up to the first base in the sequence and following the last base of the sequence.
 </p>
 <p>
-You can also give a customized reference genome in .FASTA-format as an input. 
-You can create a customized version of the Silva reference genome with Customize the reference with Mothur -tool.
+The speed of this tool depends on the number and length of your sequences, and the number and length of the sequences in the reference template.
 </p>
 <p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Align.seqs">Align.seqs</a> command of the Mothur package.
+This tool is based on the <a href="http://www.mothur.org/wiki/Align.seqs">Align.seqs</a> and <a href="http://www.mothur.org/wiki/Pcr.seqs">Pcr.seqs</a> commands of the Mothur package.
 </p>
 
-
-</p>
 
 <h3>Output</h3>
 
 <p>The analysis output consists of the following:</p>
 <ul>
 <li>aligned.fasta: Aligned sequences </li> 
-<li>aligned-summary.tsv: Summary statistics for the aligned sequences </li> 
+<li>aligned-summary.tsv: Summary statistics for the aligned sequences </li>
+<li>custom.reference.summary.tsv: Summary statistics for the reference alignment</li> 
 </ul>
-</p>
 
 
 <h3>References</h3>
