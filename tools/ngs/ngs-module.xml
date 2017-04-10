@@ -185,10 +185,10 @@
 
 	<category name="16S rRNA sequencing" color="#a49900">
 		<tool>mothur-makecontigs.R</tool>
+		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-screenseqs.R</tool>
 		<tool>mothur-uniqueseqs.R</tool>
 		<tool>mothur-alignseqs.R</tool>
-		<tool>mothur-trimseqs-uniqueseqs.R</tool>	
 		<tool>mothur-filterseqs.R</tool>
 		<tool>mothur-precluster.R</tool>		
 		<tool>mothur-chimera-uchime.R</tool>		
