@@ -123,7 +123,7 @@
 	<category name="Variants" color="#80a3b7">
 		<tool>samtools-snp-indel-single.R</tool> 
 		<tool>vcftools.R</tool>
-		<tool>annotate-variant.R</tool>
+<!--  	<tool>annotate-variant.R</tool>-->
 		<tool module="common">vep.py</tool>
 		<tool>bcftools-intersect-vcf.R</tool>	
 		<tool>vcftools-reports.R</tool>
