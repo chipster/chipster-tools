@@ -3,13 +3,12 @@
 <head><title></title></head>
 <body>
 
-<h2>Trim and filter reads</h2>
+<h2>Trim primers and barcodes and filter reads</h2>
 
 <h3>Description</h3>
 
 <p>
-Trims and filters reads and removes duplicate reads.
-
+Given a fasta, qual and oligos file, this tool trims primers and barcodes and filters reads for several criteria, including uniqueness.
 </p>
 
 <h3>Parameters</h3>
@@ -29,31 +28,24 @@ Trims and filters reads and removes duplicate reads.
 
 <h3>Details</h3>
 <p>
-The reads are checked against user-defined requirements. The output sequences will be trimmed to remove the 
-user-provided primers, barcodes, and sequences that do not meet the give ncriteria. The reads are also checked for redundancy. If
-a quality file is provided, a trimmed, non-redundant quality file is produce to match the trimmed, non-redundant sequence file.
-<p>
-
-<p>
-<p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Trim.seqs">Trim.seqs</a> and <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> commands of the Mothur package.
-</p>
+Trims primers and barcodes provided in an oligos-file, and filters out reads which don't fulfill the user-defined criteria.
+Also duplicate reads are removed and a count_table is produced showing how many times each representative sequence occurs in the different samples. 
 </p>
 
-
+<p>
+This tool is based on the <a href="http://www.mothur.org/wiki/Trim.seqs">Trim.seqs</a>, <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> and <a href="http://www.mothur.org/wiki/Count.seqs">Count.seqs</a> commands of the Mothur package.
 </p>
+
 
 <h3>Output</h3>
 
-<p>The analysis output consists of the following:</p>
+<p>The analysis output consists of the following files:</p>
 <ul>
-<li>reads.groups: A two column list with the first column indicating the sequence names in the input file and the second column the group that it came from.</li>
-<li>reads.trim.names: A list of the selected sequences and the redundant sequences corresponding to each.</li>
-<li>reads.trim.unique.fasta: A FASTA-formatted sequence file trimmed, non-redundant reads.</li>
-<li>reads.trim.unique.qual: Quality values (if provided as input) for the trimmed, non-redundant reads</li>
+<li>trim.unique.fasta: Trimmed and filtered unique sequences.</li>
+<li>trim.groups: List showing from which sample each sequence comes from.</li>
+<li>trim.unique.count_table: Table showing how many times each representative sequence occurs in the different samples.</li>
 <li>summary.trim.unique.tsv: Summary statistics for the sequences</li>
 </ul>
-</p>
 
 
 <h3>References</h3>
