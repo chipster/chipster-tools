@@ -184,8 +184,8 @@
 
 
 	<category name="16S rRNA sequencing" color="#a49900">
-		<tool>mothur-makecontigs.R</tool>
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
+		<tool>mothur-makecontigs.R</tool>
 		<tool>mothur-screenseqs.R</tool>
 		<tool>mothur-uniqueseqs.R</tool>
 		<tool>mothur-alignseqs.R</tool>
@@ -199,6 +199,7 @@
 	    <tool>mothur-countseqs.R</tool>
 	    <tool>mothur-pcrseqs.R</tool>
 	    <tool>mothur-sffinfo.R</tool>
+	    <tool>mothur-fastqinfo.R</tool>	      
     	<tool>merge-fasta-qual.R</tool>
 	</category>
 	
