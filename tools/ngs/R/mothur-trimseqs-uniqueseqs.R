@@ -1,11 +1,10 @@
-# TOOL mothur-trimseqs-uniqueseqs.R: "Trim and filter sequences" (Removes primers and barcodes, trims and filters reads for several criteria, and removes duplicate reads. This tool is based on the Mothur tools trim.seqs.)
+# TOOL mothur-trimseqs-uniqueseqs.R: "Trim primers and barcodes and filter reads" (Removes primers and barcodes and filters reads for several criteria, including uniqueness. This tool is based on the Mothur tools trim.seqs, unique.seqs and count.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # INPUT reads.oligos: "Oligos" TYPE MOTHUR_OLIGOS
 # INPUT OPTIONAL reads.qual: "QUAL file" TYPE GENERIC
-# OUTPUT OPTIONAL reads.trim.unique.fasta
-# OUTPUT OPTIONAL reads.trim.unique.qual
-# OUTPUT OPTIONAL reads.groups
-# OUTPUT OPTIONAL reads.trim.names
+# OUTPUT OPTIONAL trim.unique.fasta
+# OUTPUT OPTIONAL trim.groups
+# OUTPUT OPTIONAL trim.unique.count_table
 # OUTPUT OPTIONAL summary.trim.unique.tsv
 # PARAMETER OPTIONAL flip: "Use reverse complement" TYPE [yes, no] DEFAULT no (Use reverse complement of the sequences.)
 # PARAMETER OPTIONAL qaverage: "Minimum average quality of sequence" TYPE INTEGER FROM 0 TO 40 (Minimum average quality of the sequence. Sequences that have a lower average quality are dropped.)
@@ -20,6 +19,9 @@
 # PARAMETER OPTIONAL bdiffs: "Maximum differences to barcode sequences" TYPE INTEGER FROM 0 TO 10 (Maximum number of allowed differences to barcode sequences)
 
 # AMS 05.06.2013
+# EK 11.04.2017 Renamed tool, changed names file to count file, removed qual file, modified summary to show total seqs
+# OUTPUT OPTIONAL reads.trim.names
+# OUTPUT OPTIONAL trim.unique.qual
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
@@ -67,31 +69,38 @@ trimseqs.options <- paste(trimseqs.options, ")", sep="")
 
 #stop(paste('CHIPSTER-NOTE: ', trimseqs.options))
 
-# Write batch file
+# Batch file 1 for trim.seqs and unique.seqs
 write(trimseqs.options, "trim.mth", append=F)
 write("unique.seqs(fasta=reads.trim.fasta)", "trim.mth", append=T)
-
 # command
 command <- paste(binary, "trim.mth")
-
 # run
 system(command)
+# rename fasta and groups file
+system("mv reads.trim.unique.fasta trim.unique.fasta")
+system("mv reads.groups trim.groups")
 
+# Batch file 2 for count.seqs
+write(paste("count.seqs(name=reads.trim.names, group=trim.groups)", sep=""), "batch.mth", append=F)
+# command
+command <- paste(binary, "batch.mth", ">> log.txt")
+# run
+system(command)
+# rename count file
+system("mv reads.trim.count_table trim.unique.count_table")
 
-# batch file
-write("summary.seqs(fasta=reads.trim.unique.fasta)", "summary.mth", append=F)
-
+# Batch file 3 for summary.seqs
+write("summary.seqs(fasta=trim.unique.fasta, count=trim.unique.count_table)", "summary.mth", append=F)
 # command
 command <- paste(binary, "summary.mth", "> log_raw.txt")
-
 # run
 system(command)
 
-# Make reads.trim.unique.qual
-if (file.exists("reads.trim.qual")){
-	system("grep '>' reads.trim.unique.fasta | cut -c 2- > reads.trim.unique.list")
-	system("perl -ne 'if(/^>(\\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' reads.trim.unique.list reads.trim.qual > reads.trim.unique.qual")
-}
+# Make trim.unique.qual
+#if (file.exists("reads.trim.qual")){
+#	system("grep '>' trim.unique.fasta | cut -c 2- > reads.trim.unique.list")
+#	system("perl -ne 'if(/^>(\\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' reads.trim.unique.list reads.trim.qual > trim.unique.qual")
+#}
 
 # Postprocess output files
 system("grep -A 10 Start log_raw.txt > summary.trim.unique2.tsv")
