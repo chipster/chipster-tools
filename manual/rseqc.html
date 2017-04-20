@@ -75,7 +75,14 @@ In the output figure, Y axis is "Percent Relative Error" or "Percent Error" whic
 the RPKM estimated from subset of reads (i.e. RPKMobs) deviates from real expression level (i.e. RPKMreal). 
 However, in practice one cannot know the RPKMreal. As a proxy, we use the RPKM estimated from total reads 
 to approximate RPKMreal.</p>
-
+<p>
+All transcripts were sorted in ascending order according to expression level (RPKM). 
+Then they are divided into 4 groups: <br>
+Q1 (0-25%): Transcripts with expression level ranked below 25 percentile.<br>
+Q2 (25-50%): Transcripts with expression level ranked between 25 percentile and 50 percentile.<br>
+Q3 (50-75%): Transcripts with expression level ranked between 50 percentile and 75 percentile.<br>
+Q4 (75-100%): Transcripts with expression level ranked above 75 percentile.<br>
+</p>
 <h4>BAM_stat</h4>
 <p>
 This program is used to calculate reads mapping statistics from provided BAM file. This script determines 

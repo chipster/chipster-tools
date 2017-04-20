@@ -6,8 +6,11 @@
 # PARAMETER organism: "Organism" TYPE [other: "Own BED file", "FILES genomes/bed .bed"] DEFAULT other (Choose one of the reference organisms or provide your own BED file.)
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the annotation. Check your BAM and choose accordingly. This only applies if you have generated your BAM outside Chipster and are using one of the reference organisms.)
 # PARAMETER OPTIONAL rpkm: "Generate RPKM saturation plot" TYPE [yes, no] DEFAULT yes (BAM file containing more than 100 million alignments will make this analysis very slow. Try disabling it if RSeQC takes a very long time or fails to complete.)
-# PARAMETER OPTIONAL strandedness: "Strandedness of reads" TYPE [none, 1++1–2+-2-+: "1++,1–,2+-,2-+", 1+-1-+2++2–: "1+-,1-+,2++,2–", ++–: "++,–", +--+: "+-,-+"] DEFAULT none (How reads were stranded during sequencing. This only needed for RPKM saturation plot. If unsure, use tool RNA-seq strandedness inference and inner distance estimation using RseQC.)
 # PARAMETER OPTIONAL paired: "Generate inner distance plot" TYPE [yes, no] DEFAULT no (Calculate the inner distance (or insert size\) between two paired RNA reads. The distance is the mRNA length between two paired fragments.)
+
+
+# PARAMETER OPTIONAL strandedness: "Strandedness of reads" TYPE [none, 1++1--,2+-2-+: "1++,1--,2+-,2-+", 1+-1-+2++2--: "1+-,1-+,2++,2--", ++--: "++,--", +--+: "+-,-+"] DEFAULT none (How reads were stranded during sequencing. This only needed for RPKM saturation plot. If unsure, use tool RNA-seq strandedness inference and inner distance estimation using RseQC.)
+
 
 # AMS 09.01.2014
 # AMS 23.05.2014 added inner distance plot
