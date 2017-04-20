@@ -196,8 +196,6 @@
 		<tool>mothur-classify-counttable.R</tool>	
 	    <tool>mothur-analyses.R</tool>
 	    <tool>mothur-summaryseqs.R</tool>
-	    <tool>mothur-countseqs.R</tool>
-	    <tool>mothur-pcrseqs.R</tool>
 	    <tool>mothur-sffinfo.R</tool>
 	    <tool>mothur-fastqinfo.R</tool>	      
     	<tool>merge-fasta-qual.R</tool>
