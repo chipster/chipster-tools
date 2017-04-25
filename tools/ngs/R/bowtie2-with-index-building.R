@@ -95,7 +95,7 @@ system("mv alignment.sorted.bam bowtie2.bam")
 system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 
 if (unaligned.file== "yes"){
-	system("mv unaligned.1 unaligned_1.fq")
+	system("mv unaligned unaligned_1.fq")
 }
 
 # Handle output names
