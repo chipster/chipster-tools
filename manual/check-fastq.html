@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Quality control / Check FASTQ file for errors</h2>
+
+<h3>Description</h3>
+
+<p>
+Checks a FASTQ file for common errors.
+</p>
+
+<h3>Parameters</h3>
+
+<p>
+None
+</p>
+
+<h3>Details</h3>
+
+<p>
+The tool  does some simple tests to validate a FASTQC file:
+<ol>
+<li>Check that the number of lines in file is divisible by four</li>
+<li>For each read check that the number of sequence letters and the number of quality values match</li>
+<li>Check for duplicated sequence identifier lines</li>
+</ol>
+Tests 1 and 2 are mainly meant to spot files that are truncated in transfer or otherwise. Test 3 
+can spot instances where FASTQ files have been concatenated, and one or more files have been added 
+more than once by mistake.
+</p>
+
+<p>
+Please note that the tool is not guaranteed to find all errors. It does not, for example, check for 
+non-permitted characters in sequences and quality values. It is intended to be a simple and relatively fast
+tool to spot some common problems that can occur in file transfer or manipulation.
+<P>
+For more in-depth analysis use one the more comprehensive quality checking tools such as "Read quality with FastQC".
+</p>
+
+<h3>Output</h3>
+
+<p>
+A log file with details of any found problems is generated for each FASTQ file. Log files for files with no problems are named
+&#42;_PASS.log. If any of the tests fails, the file is named &#42;_FAIL.log.
+</p>
+
+
+<h3>References</h3>
+
+For details on FASTQ file format see <i>e.g.</i> the Wikipedia <a href="https://en.wikipedia.org/wiki/FASTQ_format">FASTQ</a> entry.
+
+</body>
+
