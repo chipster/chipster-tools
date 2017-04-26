@@ -18,7 +18,7 @@ system(command)
 system("grep -A2 CATEGORY cmm.alignment_summary_metrics > alignment_summary_metrics.tsv")
 
 # insert_size_metrics
-system("grep -A2 CATEGORY cmm.insert_size_metric > insert_size_metric.tsv")
+system("grep -A2 MEDIAN_INSERT_SIZE cmm.insert_size_metrics > insert_size_metrics.tsv")
 
 # Join the PDFs 
 system("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=reports.pdf *.pdf")
