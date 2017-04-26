@@ -7,11 +7,9 @@
 # 2015.09.09 AMS 
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
-rscript.path <- file.path(chipster.tools.path, "R-3.0.2", "bin")
-
 
 # run
-set.path <-paste(sep="", "PATH=", rscript.path, ":$PATH")
+set.path <-paste(sep="", "PATH=", R.home("bin"), ":$PATH")
 picard.command <- paste("java -Xmx2g -jar", picard.binary, "CollectMultipleMetrics INPUT=alignment.bam OUTPUT=cmm")
 command <- paste("bash -c '", set.path, picard.command, "'")
 system(command)
