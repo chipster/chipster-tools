@@ -26,31 +26,23 @@ if(length(grep("chr", vcf@rowRanges@seqnames@values))>=1) {
  #  vcf2<-vcf
  #  rd<-rowRanges(vcf)
 # } else {
+vcf2 <- vcf
+seqlevelsStyle(vcf2) <- "UCSC" 
+	
+rd<-rowRanges(vcf)
+rd2 <- rd
+seqlevelsStyle(rd2) <- "UCSC" 
    if(genome=="hg19") {
-		vcf2 <- vcf
-		seqlevelsStyle(vcf2) <- "UCSC" 
-
-      	rd<-rowRanges(vcf)
-		rd2 <- rd
-		seqlevelsStyle(rd2) <- "UCSC" 
-		
 		# Exon isoform database
 		library("TxDb.Hsapiens.UCSC.hg19.knownGene")
 		txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-		library(BSgenome.Hsapiens.UCSC.hg19)
+		library("BSgenome.Hsapiens.UCSC.hg19")
    }
    if(genome=="hg38") {
-	   vcf2 <- vcf
-	   seqlevelsStyle(vcf2) <- "UCSC" 
-	   
-	   rd<-rowRanges(vcf)
-	   rd2 <- rd
-	   seqlevelsStyle(rd2) <- "UCSC" 
-	   
 	   # Exon isoform database
 	   library("TxDb.Hsapiens.UCSC.hg38.knownGene")
 	   txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
-	   library(BSgenome.Hsapiens.UCSC.hg38)
+	   library("BSgenome.Hsapiens.UCSC.hg38")
    }
 }
 
@@ -59,9 +51,10 @@ if(length(grep("chr", vcf@rowRanges@seqnames@values))>=1) {
 # remove mitochonrial DNA (it is causing problems with genome versions)
 # vcf2 <- keepSeqlevels(vcf2, seqlevels(vcf2)[1:24])								
 vcf2 <- keepSeqlevels(vcf2, c("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chr21","chr22","chrX","chrY"))
+txdb2 <- keepSeqlevels(txdb, c("chr1","chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10","chr11","chr12","chr13","chr14","chr15","chr16","chr17","chr18","chr19","chr20","chr21","chr22","chrX","chrY"))
 
 # Test if the annotation was correct:
-if(length(seqlengths(vcf2) != seqlengths(txdb)) >0){
+if(all(seqlengths(vcf2) == seqlengths(txdb2))==FALSE){
 	stop(paste('CHIPSTER-NOTE: You seem to have chosen an unmatching reference genome.'))
 }
 
