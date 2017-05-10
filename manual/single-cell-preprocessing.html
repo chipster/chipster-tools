@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Preprocessing single cell DropSeq FASTQ files</h2>
+
+<h3>Description</h3>
+
+<p>This tool removes reads where the cell or molecular barcode has low quality bases, 
+trims adapters and polyA tails.
+ </p>
+ 
+<p>This tool is a combination of several tools: DropSeq (TagBamWithReadSequenceExtended, FilterBam) , 
+Picard (FASTQ to BAM, BAM to FASTQ) and Trimmomatic (MINLEN). 
+<br> The steps are:
+<ol>
+		<li>Convert the FASTQ files into a unaligned BAM file</li>
+		<li>Tag the reads in the BAM file with the cellular and molecular barcodes </li>
+		<li>Filter and trim the reads in the BAM file</li>
+		<li>Convert the tagged and trimmed BAM file back into a FASTQ file for the alignment</li>
+		<li>Trim too short reads of the FASTQ file </li>
+</ol>
+</p>
+
+<p>
+Since the FASTQ format cannot hold the information about the cellular and molecular barcodes (or "tags"), 
+we need to transform the FASTQ files into a BAM file. The BAM format tags can be used to held this information.
+In this format we can also do some trimming and filtering for the reads.
+However, the aligners take as input only FASTQ format, which is why we need to transform the trimmed & filtered
+BAM back to FASTQ format. 
+</p>
+<p>
+After this preprocessing step, we will have one unaligned, tagged and trimmed BAM file 
+(that holds the information of the molecular and cellular barcodes in it), and a FASTQ file ready for alignment.
+After the alignment, these two files are merged using the Merge BAM alignment tool.
+</p>
+
+<br><br>
+<p>
+In the second step, <b>Tag the reads with cellular and molecular barcodes </b> 
+the tool extracts bases from the cell/molecular barcode encoding read,
+ and creates a new BAM tag with those bases on the g​enome read.​ 
+ We use the BAM tag XM for molecular barcodes, and XC for cell barcodes. 
+ </p>
+<p>
+This program is run once per barcode extraction to add a tag. 
+On the first iteration, the cell barcode is extracted from bases determined in the first parameter (default: 1-­12).
+On the second iteration, the molecular barcode is extracted from bases determined by the base range for molecular barcode
+parameter (default 13-­20) of the barcode read.
+</p>
+<p>
+The tool also tags the reads in which the quality drops below the base quality threshold.
+The number of bases that fall below the threshold is marked in the XQ tag. 
+This information can be used later on in the filtering tools.
+</p>
+<br><br>
+<p>
+In the third step, <b>Filter and trim the reads in the BAM file</b>, several things are performed:
+<br>
+<b>First</b>, the information added to the XQ tag in Tag BAM tool is used to filter out reads where more than one (1)
+base have quality below the threshold used in this Tag BAM tool (default: 10). 
+<br>
+<b>Next</b>, any user determined sequences are trimmed away. 
+User can determine how many mismatches are allowed in these sequences (default: 0), 
+and how long stretch of the sequence there has to be in the read at least (default: 5 bases).
+The SMART Adapter sequence is offered as a default.
+<br>
+<b>Lastly</b>, trailing polyA tails are hard clipped from the reads. 
+The tools searches for contiguous A's from the end of the read. User is again allowed to
+determine the number of mismatches allowed (default: 0) and how many A's there at least need to be 
+for the clipping to happen (default: 6).
+</p>
+
+<p>
+After trimming and filtering, you might end up having some rather short reads in your BAM file.
+It is advisable to remove those, as this makes the alignment step faster. 
+For this purpose, the Trimmomatic tool and MINLEN option is used in the last step: the default
+for the <b>Minimum length of reads to keep</b> is set to 50.
+</p>
+
+<p>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual</a>
+and the <a href="https://broadinstitute.github.io/picard/command-line-overview.html/">home page of Picard tools</a>.
+
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+		<li>Base range for cell barcode [1-12]</li>
+		<li>Base range for molecule barcode [13-20]</li>
+		<li>Base quality [10]</li>
+		<li>Adapter sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
+		<li>Mismatches in adapter [0]</li>
+		<li>Number of bases to check in adapter [5]</li>
+		<li>Mismatches in polyA [0]</li>
+		<li>Number of bases to check in polyA [6]</li>
+		<li>Minimum length of reads to keep [50]</li>	
+	</ul>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>unaligned_tagged.bam : Tagged, trimmed & filtered unaligned BAM </li>
+<li>preprocessed.fq.gz: Trimmed and filtered FASTQ file </li>
+<li>tagging_and_trimming_summary.txt: Summary of the tagging and trimming steps</li>
+<li>tagging_and_trimming_histograms.pdf: Graphics presenting the failed bases in tagging steps, and adapters and polyAs trimmed </li>
+</ul>
+
+
+
+</body>
+

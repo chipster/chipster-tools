@@ -7,18 +7,44 @@
 
 <h3>Description</h3>
 
-<p>This Drop-seq tool extracts the digital gene expression data from an aligned library.
-<br>
-There are two outputs available: 
+<p>This Drop-seq tool does two things: <br>
+1) identifies and corrects bead synthesis errors, and <br>
+2) extracts the digital gene expression data from an aligned library.
+<br><br>
+In the <b>bead synthesis step (step 1)</b> the tool identifies cell barcodes with aberrant “fixed” UMI bases.
+If only the last UMI base is fixed as a T, the cell barcode is corrected (the last base is trimmed off) and 
+all cell barcodes with identical sequence at the first 11 bases are merged together. 
+If any other UMI base is fixed, the reads with that cell barcode are discarded.
+</p>
+<p>
+The tool asks the user to select a number of barcodes on which to perform the correction. 
+In the original Drop-seq manual, the tool developers guide users to use roughly 2 times the 
+anticipated number cells, 
+as they have empirically found that this allows to recover nearly every defective cell barcode 
+that corresponds to a STAMP (rather than an empty bead cell barcode). </p>
+ </p>
+<p>
+This program reads in the BAM file, and looks at the distribution of bases at each position of all UMIs 
+for a cell barcode. It detects unusual distributions of base frequency, where a base with >=80% frequency at 
+any position is detected as an error. Barcodes with less than 25 total UMIs are ignored.
+ </p>
+<p>
+The tool also checks for PRIMER_MATCHes, where the UMI perfectly matches one of the PCR primers. 
+These cell barcodes are dropped. 
+These errors are only detected if a PRIMER_SEQUENCE argument is supplied as a parameter.
+</p>
+
+<br><br>
+From the <b>digital expression stage (step 2)</b>, there are two outputs available: 
 <br>-the primary is the DGE matrix, with each a row for each gene, and a column for each cell
 <br>-the secondary analysis is a summary of the DGE matrix on a per cell level, 
 indicating the number of genes and transcripts observed.
 </p>
 
 <p>
-<b>The selection of the sets of cells</b> <br>
+<b>The selection of the sets of cells:</b> <br>
 		<ul>
-		<li>Number of barcodes: Counts the number of reads per cell barcode and only includes cells that 
+		<li>Number of core barcodes: Counts the number of reads per cell barcode and only includes cells that 
 		have at least this many reads.</li>
 		<li>Number of genes per cell: Select cells that have at least this many genes.</li>
 		</ul>
@@ -30,8 +56,9 @@ For more details, please check the <a href="http://mccarrolllab.com/wp-content/u
 
 
 <h3>Parameters</h3>
-<ul>
-		<li>Number of barcodes [100]</li>
+<ul>	<li>Number of barcodes [2000]</li>
+		<li>Sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
+		<li>Number of core barcodes [100]</li>
 		<li>Number of genes per cell [100]</li>
 	</ul>
 
@@ -39,6 +66,9 @@ For more details, please check the <a href="http://mccarrolllab.com/wp-content/u
 <h3>Output</h3>
 
 <ul>
+<li>cleaned.bam: Cleaned BAM </li>
+<li>synthesis_stats.txt: Synthesis statistics  </li>
+<li>synthesis_stats_summary.txt: Counts of the synthesis errors </li>
 <li>digital_expression.tsv: The DGE matrix (primary output) </li>
 <li>digital_expression_summary.txt: summary of the DGE matrix on a per cell level (the secondary output)  </li>
 </ul>
