@@ -1,0 +1,158 @@
+# TOOL single-cell-preprocessing.R: "Preprocessing DropSeq FASTQ files" (Transforms FASTQ to BAM, then tags the reads based on the cell barcodes using XC tag and molecular barcodes using XM tag. The rest of the read is discarded. XQ tag is added to each read to represent the number of bases that have quality scores below the base quality threshold. Filtering can be performed. Finally the BAM is transformed back to FASTQ format.)
+# INPUT input.fastq.gz: "FASTQ file, read1" TYPE GENERIC
+# INPUT OPTIONAL input2.fastq.gz: "FASTQ file, read2 " TYPE GENERIC
+# OUTPUT OPTIONAL unaligned_tagged.bam
+# OUTPUT OPTIONAL tagging_and_trimming_histograms.pdf 
+# OUTPUT OPTIONAL preprocessed.fq.gz
+# OUTPUT OPTIONAL tagging_and_trimming_summary.txt
+# PARAMETER base_range_cell: "Base range for cell barcode" TYPE STRING DEFAULT 1-12 (Which bases correspond to the cell barcode)
+# PARAMETER base_range_mol: "Base range for molecule barcode" TYPE STRING DEFAULT 13-20 (Which bases correspond to the molecule barcode)
+# PARAMETER OPTIONAL base_quality: "Base quality" TYPE INTEGER DEFAULT 10 (Mark in the XQ tag how many bases fall below this threshold.)
+# PARAMETER OPTIONAL sequence: "Adapter sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Adapter sequence to trim off. As a default, SMART adapter sequence.)
+# PARAMETER OPTIONAL mismatches: "Mismatches in adapter" TYPE INTEGER DEFAULT 0 (How many mismatches allowed in the adapter sequence)
+# PARAMETER OPTIONAL num_bases: "Number of bases to check in adapter" TYPE INTEGER DEFAULT 5 (How many bases to check of the adapter sequence)
+# PARAMETER OPTIONAL mismatches_polyA: "Mismatches in polyA" TYPE INTEGER DEFAULT 0 (How many mismatches allowed in the polyA sequence)
+# PARAMETER OPTIONAL num_bases_polyA: "Number of bases to check in polyA" TYPE INTEGER DEFAULT 6 (How many bases to at least have to be A in the polyA tail)
+# PARAMETER OPTIONAL minlen: "Minimum length of reads to keep" TYPE INTEGER DEFAULT 50 (Drop the read if it is below a specified length. Trimmomatic tool is used for this step.)
+
+# PARAMETER OPTIONAL discard_read: "Discard read" TYPE [True, False] DEFAULT False (Discard the read)
+# PARAMETER OPTIONAL tag_name_cell: "Tag name for cell" TYPE [XC:XC, XM:XM] DEFAULT XC (Which BAM tag to use for the barcodes)
+# OUTPUT OPTIONAL log.txt
+# INPUT unaligned.bam: "Unaligned BAM" TYPE GENERIC
+# OUTPUT OPTIONAL adapter_trim_summary.txt
+# OUTPUT OPTIONAL polyA_trimming_report.txt
+# OUTPUT OPTIONAL preprocessed.fastq 
+# OUTPUT OPTIONAL summary_cell.txt
+# OUTPUT OPTIONAL summary_molecular.txt 
+# OUTPUT OPTIONAL trimlog.txt
+# OUTPUT OPTIONAL tagging_summary.txt
+
+# 2016-10-31 ML
+# 2017-05-04 ML combined tools, made plots of the histograms, added Trimmomatic step
+
+picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
+path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
+trimmomatic.binary <- c(file.path(chipster.tools.path, "trimmomatic", "trimmomatic-0.33.jar" ))
+
+# STEP 1: FASTQ to BAM
+# run
+# single end:
+if (file.exists("input2.fastq.gz")==FALSE) {
+	command <- paste("java -Xmx2g -jar", picard.binary, "FastqToSam F1=input.fastq.gz O=fastq_to_bam.bam SM=something  2>> log.txt")
+}
+
+# paired end:
+if (file.exists("input2.fastq.gz")==TRUE) {
+	command <- paste("java -Xmx2g -jar", picard.binary, "FastqToSam F1=input.fastq.gz F2=input2.fastq.gz O=fastq_to_bam.bam SM=something  2>> log.txt")
+}
+
+#stop(paste('CHIPSTER-NOTE: ', command))
+system(command)
+
+
+# STEP 2: Tag BAM
+# First round: cell barcode
+# command start
+command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=fastq_to_bam.bam OUTPUT=unaligned_tagged_cell.bam SUMMARY=summary_cell.txt", sep="")
+# parameters
+command.parameters <- paste("BASE_RANGE=", base_range_cell, " BASE_QUALITY=",base_quality ," BARCODED_READ=1 DISCARD_READ=False TAG_NAME=XC NUM_BASES_BELOW_QUALITY=1")
+# run the tool
+command <- paste(command.start, command.parameters, " 2>> log.txt")
+system(command)
+# make a plot (open the pdf)
+pdf(file="tagging_and_trimming_histograms.pdf")
+cell_summary <- read.table("summary_cell.txt",header = TRUE,"\t")
+cell_summary2 <- data.matrix(cell_summary)
+plot(cell_summary2, type = "h", col = "blue", lwd = 10, main="Number of failed cell barcodes")
+# system("sed -i '1s/^/Summary_of_cell_barcodes \n/' summary_cell.txt")
+
+# Second round: molecule barcode
+# command start
+command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=unaligned_tagged_cell.bam OUTPUT=unaligned_tagged.bam SUMMARY=summary_molecular.txt", sep="")
+# parameters
+command.parameters <- paste("BASE_RANGE=", base_range_mol, "BASE_QUALITY=", base_quality ," BARCODED_READ=1 DISCARD_READ=True TAG_NAME=XM NUM_BASES_BELOW_QUALITY=1")
+# run the tool
+command <- paste(command.start, command.parameters, " 2>> log.txt")
+system(command)
+# stop(paste('CHIPSTER-NOTE: ', command))
+# make a plot:
+molecular_summary <- read.table("summary_molecular.txt",header = TRUE,"\t")
+molecular_summary2 <- data.matrix(molecular_summary)
+plot(molecular_summary2, type = "h", col = "blue", lwd = 10, main="Number of failed molecule barcodes")
+#system("sed -i '1s/^/Summary_of_molecular_barcodes \n/' summary_molecular.txt")
+
+## Combine summary files:
+system("sed -i \'1s/^/ Summary of cell barcodes: \\n /\' summary_cell.txt")
+system("sed -i \'1s/^/ \\n \\n Summary of molecular barcodes: \\n /\' summary_molecular.txt")
+system("cat summary_cell.txt summary_molecular.txt > tagging_summary.txt")
+
+
+# STEP 3: Filter & trim
+# FilterBAM:
+command <- paste(path.dropseq, "/FilterBAM TAG_REJECT=XQ INPUT=unaligned_tagged.bam OUTPUT=unaligned_tagged_filtered.bam  2>> log.txt", sep="")
+system(command)
+
+# TrimStartingSequence:
+# command start
+command.start <- paste(path.dropseq, "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=adapter_trim_summary.txt", sep="")
+# parameters
+command.parameters <- paste("SEQUENCE=", sequence, "MISMATCHES=", mismatches, "NUM_BASES=", num_bases)
+# run the tool
+command <- paste(command.start, command.parameters, " 2>> log.txt")
+system(command)
+# make a plot 
+# pdf(file="Trimming_histogram.pdf")
+polyA_trim_summary <- read.table("adapter_trim_summary.txt",header = TRUE,"\t", skip = 6)
+polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
+plot(polyA_trim_summary2, type = "h", col = "red", lwd = 10, main="Adapter trimming")
+
+# PolyATrimmer:
+# command start
+command.start <- paste(path.dropseq, "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt", sep="")
+# parameters
+command.parameters <- paste("MISMATCHES=", mismatches_polyA, "NUM_BASES=", num_bases_polyA)
+# run the tool
+command <- paste(command.start, command.parameters, " 2>> log.txt")
+system(command)
+# make a plot:
+polyA_trim_summary <- read.table("polyA_trimming_report.txt",header = TRUE,"\t", skip = 6)
+polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
+plot(polyA_trim_summary2, type = "h", col = "red", lwd = 5, main="polyA trimming")
+dev.off() # close the pdf
+
+# STEP 4: BAM to FASTQ
+picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
+# run
+command <- paste("java -Xmx4g -jar", picard.binary, "SamToFastq INPUT=unaligned_tagged_polyA_filtered.bam FASTQ=preprocessed.fastq 2>> log.txt")
+
+#stop(paste('CHIPSTER-NOTE: ', command))
+system(command)
+
+
+# STEP 5: Trimmomatic
+# Check out if the files are compressed and if so unzip it
+source(file.path(chipster.common.path, "zip-utils.R"))
+unzipIfGZipFile("reads1.fastaq")
+source(file.path(chipster.common.path, "zip-utils.R"))
+unzipIfGZipFile("reads2.fastaq")
+
+trim.params <- paste("")
+trim.params <- paste(trim.params, "SE")
+trim.params <- paste(trim.params, "-phred33")
+trim.params <- paste(trim.params, "preprocessed.fastq preprocessed.fq")   #### MIETI NIMET
+step.params <- paste("")
+step.params <- paste(c(step.params, " MINLEN:",  minlen), collapse="")
+
+trimmomatic.command <- paste("java -jar", trimmomatic.binary, trim.params, step.params)
+trimmomatic.command <- paste(trimmomatic.command, "1>trimlog.txt 2>> trimlog.txt")
+
+#stop(paste('CHIPSTER-NOTE: ', trimmomatic.command))
+system(trimmomatic.command)
+system("gzip *.fq")
+
+## Combine summary files:
+# system("sed -i \'1s/^/ Summary of cell barcodes: \\n /\' summary_cell.txt")
+system("sed -i \'1s/^/ \\n \\n Trimmomatic summary: \\n /\' trimlog.txt")
+system("cat tagging_summary.txt trimlog.txt > tagging_and_trimming_summary.txt")
+
+# EOF
