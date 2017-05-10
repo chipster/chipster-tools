@@ -45,7 +45,6 @@ print(infl[1,2])
 
 
 # Plot Cumulative Read proportion of cells 
-# pdf(file=paste(outputDir,"/CumCellReadCount.pdf",sep=""))
 pdf(file="tag_histogram.pdf")
 cellIds = 1:length(x)
 plot(cellIds, x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]",
