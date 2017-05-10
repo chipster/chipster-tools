@@ -65,7 +65,8 @@ cranPackages = c(
 		"prodlim",
 		"png",
 		"gplots",
-		"shiny"
+		"shiny",
+		"inflection"
 )
 
 for (package in cranPackages) {
