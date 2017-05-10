@@ -7,7 +7,8 @@
 
 <h3>Description</h3>
 
-<p>This Picard tool merges alignment data from a sorted BAM file with data in an unmapped BAM file. 
+<p>This Picard tool merges alignment data from a normal aligned BAM file with data in an unmapped BAM file.
+ Before merging, the tool also sorts the aligned BAM file by queryname (QNAME), so that merging is possible.
 This tool produces a new BAM file that includes all aligned and unaligned reads and also carries 
 forward additional read attributes from the unmapped BAM 
 (attributes that are otherwise lost in the process of alignment). 
@@ -29,7 +30,8 @@ For more details, please check the <a href="https://broadinstitute.github.io/pic
 
 <h3>Parameters</h3>
 <ul>
-		<li>Reference [Homo_sapiens.GRCh38]</li>
+		<li>Reference [Homo_sapiens.GRCh38] (Homo_sapiens.GRCh38, Mus_musculus.GRCm38)</li>
+		
 	</ul>
 
 
