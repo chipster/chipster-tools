@@ -231,14 +231,14 @@
 
 	<category name="Single cell RNA-seq (BETA)" color="#37dddd">
 		<tool>single-cell-preprocessing.R</tool>
-		<tool>picard-fastqtosam.R</tool>
-		<tool>single-cell-TagBam.R</tool>
-		<tool>single-cell-FilterBam.R</tool>
-		<tool>picard-samtofastq.R</tool>		
-	    <tool>picard-sortsam.R</tool>	
+		<!--<tool>picard-fastqtosam.R</tool> --> 
+		<!--<tool>single-cell-TagBam.R</tool> --> 
+		<!--<tool>single-cell-FilterBam.R</tool> --> 
+		<!--<tool>picard-samtofastq.R</tool> --> 		
+	    <!--<tool>picard-sortsam.R</tool>	--> 
 		<tool>picard-merge-bam-alignment.R</tool>	    
 		<tool>single-cell-tag-read-with-gene-exon.R</tool>	   	
-		<tool>single-cell-detect-bead-synthesis-errors.R</tool>	   	
+		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	-->   	
 		<tool>single-cell-digital-expression.R</tool>	   	
 		<tool>single-cell-bam-tag-histogram.R</tool>	   	
 	</category>
