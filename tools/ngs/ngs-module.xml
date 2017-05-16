@@ -33,6 +33,7 @@
 		<tool module="common">sort_and_select_columns.R</tool>
 		<tool module="common">join_tsv_files.R</tool>
 		<tool module="common">general_file_processing.R</tool>	
+		<tool>row_count.R</tool>
 		<tool>process-preprocessed-counts.R</tool>
 		<tool>normalise-counts.R</tool>
 		<tool>deseq2-normalized-counts-for-gene.R</tool>
