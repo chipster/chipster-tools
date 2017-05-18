@@ -18,17 +18,34 @@
 # PARAMETER OPTIONAL discard_read: "Discard read" TYPE [True, False] DEFAULT False (Discard the read)
 # PARAMETER OPTIONAL tag_name_cell: "Tag name for cell" TYPE [XC:XC, XM:XM] DEFAULT XC (Which BAM tag to use for the barcodes)
 # OUTPUT OPTIONAL log.txt
-# INPUT unaligned.bam: "Unaligned BAM" TYPE GENERIC
-# OUTPUT OPTIONAL adapter_trim_summary.txt
-# OUTPUT OPTIONAL polyA_trimming_report.txt
-# OUTPUT OPTIONAL preprocessed.fastq 
-# OUTPUT OPTIONAL summary_cell.txt
-# OUTPUT OPTIONAL summary_molecular.txt 
-# OUTPUT OPTIONAL trimlog.txt
-# OUTPUT OPTIONAL tagging_summary.txt
 
 # 2016-10-31 ML
 # 2017-05-04 ML combined tools, made plots of the histograms, added Trimmomatic step
+# 2017-05-18 AO Naming of outputs according to the input names NOTICE: output override
+
+# Handle output names
+# Source read_input_definitions and strip_name functions
+source(file.path(chipster.common.path, "tool-utils.R"))
+# read input names and strip file extension
+inputnames <- read_input_definitions()
+input1name <- inputnames$input.fastq.gz
+input1namestripped <-strip_name(input1name)
+#write the input file name into log
+write(input1namestripped, file = "log.txt")
+
+# Make a matrix of output names
+# These override the default ones
+outputnames <- matrix(NA, nrow=4, ncol=2)
+outputnames[1,] <- c("preprocessed.fq.gz", paste(input1namestripped, ".fq.gz", sep = ""))
+outputnames[2,] <- c("tagging_and_trimming_summary.txt", "tagging_and_trimming_summary.txt")
+outputnames[3,] <- c("tagging_and_trimming_histograms.pdf", "tagging_and_trimming_histograms.pdf")
+outputnames[4,] <- c("unaligned_tagged.bam", paste(input1namestripped, ".bam", sep =  ""))
+
+
+# Write output definitions file
+write_output_definitions(outputnames)
+
+
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
@@ -139,7 +156,7 @@ unzipIfGZipFile("reads2.fastaq")
 trim.params <- paste("")
 trim.params <- paste(trim.params, "SE")
 trim.params <- paste(trim.params, "-phred33")
-trim.params <- paste(trim.params, "preprocessed.fastq preprocessed.fq")   #### MIETI NIMET
+trim.params <- paste(trim.params, "preprocessed.fastq preprocessed.fq")
 step.params <- paste("")
 step.params <- paste(c(step.params, " MINLEN:",  minlen), collapse="")
 
@@ -153,6 +170,8 @@ system("gzip *.fq")
 ## Combine summary files:
 # system("sed -i \'1s/^/ Summary of cell barcodes: \\n /\' summary_cell.txt")
 system("sed -i \'1s/^/ \\n \\n Trimmomatic summary: \\n /\' trimlog.txt")
-system("cat tagging_summary.txt trimlog.txt > tagging_and_trimming_summary.txt")
+# Debug log
+# system("cat log.txt > tagging_and_trimming_summary.txt")
+system("cat tagging_summary.txt trimlog.txt >> tagging_and_trimming_summary.txt")
 
 # EOF
