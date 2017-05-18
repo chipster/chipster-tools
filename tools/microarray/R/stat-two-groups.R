@@ -4,7 +4,7 @@
 # OUTPUT two-sample.tsv: two-sample.tsv 
 # PARAMETER column: "Column with group information" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test)
 # PARAMETER OPTIONAL pairing: "Column with pairing information" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing which samples form pairs. This option should be used if you have samples from the same individual, for example before and after treatment. Note that the tests LPE, F-test and fast-t-test do not support pairing.)
-# PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered.)
+# PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE] DEFAULT empiricalBayes (Test type. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered.)
 # PARAMETER OPTIONAL p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, Bonferroni: Bonferroni, Holm: Holm, Hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
 # PARAMETER OPTIONAL p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off \\(0.05\)for significant results)
 # PARAMETER OPTIONAL show.na: "Include genes whose p-value is NA" TYPE [yes: yes, no:no] DEFAULT no (Include results where p-value is NA)
@@ -16,6 +16,10 @@
 # JT, 28.11.2012, fixed Wilcoxon test, sped up other tests
 # MK, 05.02.2013, added paired tests for limma, t-test and Wilcox
 # ML, 14.10.2016, FC direction fixes by oheil + RankProd fixes
+# ML, 18.5.2017, Remove RankProd from production for fixing
+
+# PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered.)
+
 
 # Loads the libraries
 library(multtest)
