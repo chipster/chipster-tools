@@ -14,7 +14,8 @@
 		<tool>norm-illumina.R</tool>
 		<tool>norm-illumina-backgroundcorr.R</tool>	
 		<tool>norm-illumina-lumi.R</tool>
-		<tool>norm-illumina-methylumi.R</tool>
+		<!-- <tool>norm-illumina-methylumi.R</tool> -->
+		<tool>norm-illumina-methylumi-new.R</tool>
 		<tool>norm-illumina-SNP.R</tool>
 		<tool>norm-prenormalized.R</tool>
 		<tool>norm-prenormalized-affy.R</tool>
