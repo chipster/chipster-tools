@@ -1,5 +1,5 @@
-# TOOL norm-illumina-methylumi-new.R: "Illumina - methylumi pipeline NEW" (Illumina methylation assay normalization using lumi methodology. As input, give simple tab delimited text file with the headers from Beadstudio, and a similarly constructed control file, OR a directly imported FinalReport file.  )
-# INPUT samples.txt: samples.txt TYPE GENERIC 
+# TOOL norm-illumina-methylumi-new.R: "Illumina - methylumi pipeline NEW" (Illumina methylation assay normalization using lumi methodology. As input, give EITHER simple tab delimited text file with the headers from Beadstudio and a similarly constructed control file, OR just a directly imported FinalReport file.  )
+# INPUT samples.txt: "samples.txt or FinalReport file" TYPE GENERIC 
 # INPUT OPTIONAL controls.txt: controls.txt TYPE GENERIC 
 # OUTPUT normalized.tsv: normalized.tsv 
 # OUTPUT unmethylated.tsv: unmethylated.tsv 
