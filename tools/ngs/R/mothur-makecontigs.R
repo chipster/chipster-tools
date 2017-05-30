@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL contigs.summary.tsv
 # OUTPUT OPTIONAL contigs.fasta.gz
 # OUTPUT OPTIONAL contigs.groups
-# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL contig-numbers.txt
 # OUTPUT OPTIONAL samples-files.txt
 
 # ML 02.03.2016
@@ -64,7 +64,7 @@ system("mv fastq.trim.contigs.fasta contigs.fasta")
 system("mv fastq.contigs.groups contigs.groups")
 
 # Post process output
-system("sed -n  '/Group count: / ,/Output File/p' log2.txt > log.txt")
+system("sed -n  '/Group count: / ,/Output File/p' log2.txt > contig-numbers.txt")
 
 # The summary file:
 write("summary.seqs(fasta=contigs.fasta)", "summary.mth", append=F)
