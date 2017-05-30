@@ -2,7 +2,7 @@
 # INPUT input: input TYPE GENERIC
 # OUTPUT output: output
 # PARAMETER  header_text: "Does the first column have rownames" TYPE [yes: Yes, no: No] DEFAULT yes (Does the first column have rownames in the input file)
-# PARAMETER OPTIONAL precision: "How many digits is used to express a number" DEFAULT 7 (How many digits is used to express a number)
+# PARAMETER OPTIONAL precision: "How many digits is used to display floating point numbers" TYPE INTEGER FROM 1 TO 22 DEFAULT 7 (How many digits is used to display floating point numbers)
 
 #AO 22.5.2017
 
