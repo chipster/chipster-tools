@@ -1,35 +1,17 @@
-# TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction \(e.g. 1files.txt and 2files.txt\). You can generate the lists with the tool \"Utilities \\\ Make a list of filenames\". Note that if you have stranded data, you need to set the \"Library type\" parameter accordingly. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed  in Chipster genome browser.)
-# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. )
+# INPUT read.fq: "Reads" TYPE GENERIC
+# OUTPUT OPTIONAL hisat.bam
+
+# AO 30.5.2017 First version
+
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
-# OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL hisat-summary.txt
 # OUTPUT OPTIONAL hisat.log
-
-
-# EK 17.4.2012 added -G and -g options
-# MG 24.4.2012 added ability to use gtf files from Chipster server
-# AMS 19.6.2012 added unzipping
-
-# AMS 27.6.2012 added parameter mate.std.dev, allow negative values for mate.inner.distance
-# AMS 4.10.2012 added BED sorting
-# KM 10.7. 2012 added RN5
-# AMS 11.11.2013 added thread support
-# AMS 3.1.2014 added transcriptome index for human
-# EK 3.1.2014 added alignment summary to output, added quality and mismatch parameter
-# EK 3.6.2014 rn4 commented out
-# AMS 04.07.2014 New genome/gtf/index locations & names
-# AMS 07.01.2015 Removed parameter no.discordant until tophat code fixed, return tophat2.log if tophat-summary.txt not produced
-# ML 15.01.2015 Added the library-type parameter
-# AMS 29.01.2015 Removed optional outputs deletions.bed and insertions.bed
-
 # PARAMETER OPTIONAL no.discordant: "Report only concordant alignments" TYPE [yes, no] DEFAULT yes (Report only concordant mappings.) 
-
-# Changes from tophat2 are marked with a tag CHANGED
-
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER OPTIONALlibrary.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 # TODO: comment library.type away, unstranded is the default on hisat2
@@ -47,222 +29,76 @@
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (TopHat2 will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
 # PARAMETER OPTIONAL no.mixed: "Report only paired alignments" TYPE [yes, no] DEFAULT yes (Only report read alignments if both reads in a pair can be mapped.)
 
+## Source required functions
+source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
 
+## Options
+# Prefer fixed representation over exponential
+options(scipen = 10)
+
+# Get inputname
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+# TODO: create a function for this
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
 }
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+# setting up HISAT binaries and paths
+hisat.binary <-(file.path(chipster.tools.path, "hisat2", "hisat2"))
+hisat.path <- c(file.path(chipster.tools.path, "hisat2"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.path<- c(file.path(chipster.tools.path, "samtools"))
+set.path <-paste(sep="", "PATH=", hisat.path, ":", samtools.path, ":$PATH")
+system(paste("bash -c ", set.path))
 
-options(scipen = 10)
-# max.intron.length <- formatC(max.intron.length, "f", digits = 0)
+# TODO: this should be determined by paramter, there is a fancy way to determine the different possibilites for GUI
+organism <- "grch37" 
+hisat.index.path <- c(file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism))
 
-# setting up TopHat
-# CHANGED
-#tophat.binary <- c(file.path(chipster.tools.path, "tophat2", "tophat2"))
-hisat.binary <-(file.path(chipster.tools.path, "hisat2", "hisat2")) # TODO: Test if works, should work
-path.hisat <- c(file.path(chipster.tools.path, "hisat2"))
-#path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))
-path.samtools <- c(file.path(chipster.tools.path, "samtools"))
-set.path <-paste(sep="", "PATH=", path.hisat, ":", path.samtools, ":$PATH")
-# TODO: Findt indexes for HISAT for specific oragnism, probably write a script?
-#path.bowtie.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "bowtie2", organism))
-#path.tophat.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "tophat2", organism))
-# TODO: move to parameter
-organism <- "grch37"
-path.hisat.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism)) # Not tested yet, the organism parameter has to be configured
-
-# command start
-# CHANGED
-command.start <- paste("bash -c '", set.path, hisat.binary)
-
-# CHANGED
-# parameters
-#command.parameters <- paste("--bowtie1 -r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
-# TODO: Check the MVP parameters from MANUAL
-# inner distance is the gap between the paired-end reads
-# tophat way
-#command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, 
-#"--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
-
-#Parameters from the example: $HISAT2_HOME/hisat2 -f -x $HISAT2_HOME/example/index/22_20-21M_snp -1 $HISAT2_HOME/example/reads/reads_1.fa -2 $HISAT2_HOME/example/reads/reads_2.fa -S eg2.sam
-
-#Parameters:-p, how many threads
-#           -q use FASTQ files
-#           -x the basename of the index of the reference genome
-command.parameters <- paste("-p" , chipster.threads.max, "-q", "-x", organism)
-# TODO: CHECK WHAT IS THIS
-#if (mismatches > 2){
-#	command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
-#}
-# TODO: WHAT IS THIS
-#if ( quality.format == "phred64") {
-#	command.parameters <- paste(command.parameters, "--phred64-quals")
-#}
-
-#if (no.discordant == "yes"){
-#	command.parameters <- paste(command.parameters, "--no-discordant")
-#}
-
-# TODO: WHAT IS THIS
-#if (no.mixed == "yes"){
-#	command.parameters <- paste(command.parameters, "--no-mixed")
-#}
-
-#GTF is a general transfer format 
-#TODO: study this, at least change from tophat to hisat2
-# Determine whether GTF file or internal transcriptome index should be used.
-# Option --no-novel-juncs is only valid when -G or --transcriptome-index option is used.
-#nnj.usable <- FALSE
-#if (file.exists("genes.gtf")){
-#	# If user has provided a gtf we use it
-#	command.parameters <- paste(command.parameters, "-G genes.gtf")
-#	nnj.usable <- TRUE
-#}else if (use.gtf == "yes") {
-#	# if no GTF file is provided, but use.gtf is selected, use an internal transcriptome index
-#	command.parameters <- paste(command.parameters, "--transcriptome-index", path.tophat.index)
-#	nnj.usable <- TRUE
-#}
-#if (nnj.usable) {
-#	if (no.novel.juncs == "yes") {
-#		command.parameters <- paste(command.parameters, "--no-novel-juncs")
-#	}	
-#}
-
-
-# CHANGED: commented out, now for single end, not paired end
-# Input files
-#if (file.exists("reads1.txt") && file.exists("reads2.txt")){
-#	# Case: list files exist
-#	reads1.list <- make_input_list("reads1.txt")
-#	reads2.list <- make_input_list("reads2.txt")
-#	if (identical(intersect(reads1.list, reads2.list), character(0))){
-#		reads1 <- paste(reads1.list, sep="", collapse=",")
-#		reads2 <- paste(reads2.list, sep="", collapse=",")
-#	}else{
-#		stop(paste('CHIPSTER-NOTE: ', "One or more files is listed in both lists."))
-#	}
-#}else if (file.exists("reads002.fq") && !file.exists("reads003.fq")){
-#	# Case: no list file, but only two fastq inputs
-#	in.sorted <- input.names[order(input.names[,2]),]
-#	reads <- grep("reads", in.sorted[,1], value = TRUE)
-#	reads1 <- reads[1]
-#	reads2 <- reads[2]
-#}else{
-#	# Case: no list files, more than two fastq inputs
-#	stop(paste('CHIPSTER-NOTE: ', "List file is missing. You need to provide a list of read files for both directions."))
-#}
-# Input fastq names
-reads1 <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
-
-
-# command ending
-# TODO: check that this makes sense
-# Parameters:
-# -U
-# -1 and -2 are the reads
-# path.hisat.index is followed by the name of the index file 
-# -S file to write SAM alignments
-
-command.end <- paste("-U", reads1,  "2>> hisat.log", "-S", "hisat.sam" )
-
-# TODO: use HISAT instead of tophat
-# run tophat
-command <- paste(command.start, command.parameters, command.end)
-
-echo.command <- paste("echo '",command ,"' 2>> hisat.log " )
-system(echo.command)
+## Run HISAT
+#Parameters:-p Launch NTHREADS parallel search threads (default: 1). Threads will run on separate processors/cores and synchronize when parsing reads 
+#				and outputting alignments. Searching for alignments is highly parallel, and speedup is close to linear. Increasing -p increases HISAT2's
+#				memory footprint. E.g. when aligning to a human genome index, increasing -p from 1 to 8 increases the memory footprint by a few hundred
+#				megabytes. This option is only available if bowtie is linked with the pthreads library (i.e. if BOWTIE_PTHREADS=0 is not specified at 
+#				build time).
+#           -q Reads (specified with <m1>, <m2>, <s>) are FASTQ files. FASTQ files usually have extension .fq or .fastq. FASTQ is the default format.
+#				See also: --solexa-quals and --int-quals.
+#           -x The basename of the index for the reference genome. The basename is the name of any of the index files up to but not including the 
+#				final .1.ht2 / etc. hisat2 looks for the specified index first in the current directory, then in the directory specified in the 
+#				HISAT2_INDEXES environment variable.
+# 			-S File to write SAM alignments to. By default, alignments are written to the "standard out" or "stdout" filehandle (i.e. the console).
+# 			-U Comma-separated list of files containing unpaired reads to be aligned, 
+#				e.g. lane1.fq,lane2.fq,lane3.fq,lane4.fq. Reads may be a mix of different lengths.
+#				If - is specified, hisat2 gets the reads from the "standard in" or "stdin" filehandle.
+#			2>> Redirects error messages from stderr to spesified location.
+command <- paste("hisat2", "-p" , chipster.threads.max,"-x", organism, "-U", read, "-S", "hisat.sam",  "2>> hisat.log")
+system(paste("echo '",command ,"' 2>> hisat.log "))
 system("echo >> hisat.log")
-
 system(command)
 
-# TODO: This should be fine ?
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 
-# sort bam (removed because TopHat itself does the sorting)
-# system(paste(samtools.binary, "sort tophat_out/accepted_hits.bam tophat"))
-#system("mv tophat_out/accepted_hits.bam tophat.bam") 
 
-# CHANGED
-# Convert SAM file into BAM file.
-# Parameters
-# b
-# S
-# view
-# inpput and output names
-system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
 
+# Convert SAM file into BAM file and index bam file
+# Parameters:
+# 	-b Output in the BAM format.
+# Convert SAM to BAM
+system(paste(samtools.binary, "sort -b hisat.sam > hisat.bam"))
 # index bam
-#TODO: is this necessary?
 system(paste(samtools.binary, "index hisat.bam"))
 
-#TODO: Check are these
-# CHNAGED: commented out
-#system("mv tophat_out/junctions.bed junctions.u.bed")
-#system("mv tophat_out/insertions.bed insertions.u.bed")
-#system("mv tophat_out/deletions.bed deletions.u.bed")
-#system("mv tophat_out/align_summary.txt tophat-summary.txt")
-
-# sorting BEDs
-#source(file.path(chipster.common.path, "bed-utils.R"))
-
-#if (file.exists("junctions.u.bed")){
-#	size <- file.info("junctions.u.bed")$size
-#	if (size > 100){	
-#		bed <- read.table(file="junctions.u.bed", skip=1, sep="\t")
-#		colnames(bed)[1:2] <- c("chr", "start")
-#		sorted.bed <- sort.bed(bed)
-#		write.table(sorted.bed, file="junctions.bed", sep="\t", row.names=F, col.names=F, quote=F)
-#	}	
-#}
-
-#if (file.exists("insertions.u.bed")){
-#	size <- file.info("insertions.u.bed")$size
-#	if (size > 100){
-#		bed <- read.table(file="insertions.u.bed", skip=1, sep="\t")
-#		colnames(bed)[1:2] <- c("chr", "start")
-#		sorted.bed <- sort.bed(bed)
-#		write.table(sorted.bed, file="insertions.bed", sep="\t", row.names=F, col.names=F, quote=F)
-#	}
-#}
-
-#if (file.exists("deletions.u.bed")){
-#	size <- file.info("deletions.u.bed")$size
-#	if (size > 100){
-#		bed <- read.table(file="deletions.u.bed", skip=1, sep="\t")
-#		colnames(bed)[1:2] <- c("chr", "start")
-#		sorted.bed <- sort.bed(bed)
-#		write.table(sorted.bed, file="deletions.bed", sep="\t", row.names=F, col.names=F, quote=F)
-#	}
-#}
-
-# TODO: Rename this should I remove this?
-if (!(file.exists("hisat-summary.txt"))){
-	#system("mv tophat_out/logs/tophat.log tophat2.log")
-	system("mv hisat.log hisat.log")
-}
-
-
-# TODO: rename output
-# Handle output names
-#
-
+# TODO: Create a separate funtion, not like this
+## Handle output names
 # read input names
 inputnames <- read_input_definitions()
 
 # Determine base name
 name1 <- unlist(strsplit(reads1, ","))
 basename <- strip_name(inputnames[[name1[1]]])
-
-#name2 <- unlist(strsplit(reads2, ","))
-#base2 <- strip_name(inputnames[[name2[1]]])
-
-#basename <- paired_name(base1, base2)
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)
