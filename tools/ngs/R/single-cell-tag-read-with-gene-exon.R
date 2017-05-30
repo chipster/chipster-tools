@@ -1,7 +1,6 @@
 # TOOL single-cell-tag-read-with-gene-exon.R: "Tag read with gene exon" (Adds a BAM tag GE onto reads when the read overlaps the exon of a gene. This tag contains the name of the gene, as reported in the GTF annotations file. )
 # INPUT merged.bam: "Merged BAM" TYPE GENERIC
 # OUTPUT OPTIONAL merged_tagged.bam
-# OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL organism: "GTF" TYPE [Homo_sapiens.GRCh38.87, Mus_musculus.GRCm38.87] DEFAULT Homo_sapiens.GRCh38.87 (GTF file to be used in tagging.)
 
 
