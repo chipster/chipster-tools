@@ -31,4 +31,4 @@ if( header_text == "yes") {
 
 matrix <- read.table(file = "input", sep = '\t', header = header.bool)
 matrix.transposed <- t(matrix)
-write.table(matrix.transposed, file = "output", sep = '\t', col.names = header.bool, row.names = header.bool)	
+write.table(matrix.transposed, file = "output", sep = '\t', col.names = header.bool, row.names = header.bool, quote= FALSE)	
