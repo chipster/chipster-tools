@@ -2,6 +2,7 @@
 # INPUT input: input TYPE GENERIC
 # OUTPUT output: output
 # PARAMETER  header_text: "Does the first column have rownames" TYPE [yes: Yes, no: No] DEFAULT yes (Does the first column have rownames in the input file)
+# PARAMETER OPTIONAL precision: "How many digits is used to express a number" DEFAULT 7 (How many digits is used to express a number)
 
 #AO 22.5.2017
 
@@ -20,12 +21,15 @@ output.names[1,] <- c("output", input.name1)
 # Write output definitions file
 write_output_definitions(output.names)
 
-##Check the header parameter
+## Check the header parameter
 if( header_text == "yes") {
 	header.bool <- TRUE
 } else {
 	header.bool <- FALSE
 }
+
+# Control number of digits, the default is 7
+options(digits=precision)
 
 ## Load, transpose, and write back
 
