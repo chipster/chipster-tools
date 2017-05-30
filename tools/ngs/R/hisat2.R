@@ -1,6 +1,8 @@
-# TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. )
+# TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. Takes only one reads filein ziped format or not )
 # INPUT read.fq: "Reads" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
+# OUTPUT OPTIONAL hisat.log
+
 
 # AO 30.5.2017 First version
 
@@ -10,7 +12,6 @@
 # OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL hisat-summary.txt
-# OUTPUT OPTIONAL hisat.log
 # PARAMETER OPTIONAL no.discordant: "Report only concordant alignments" TYPE [yes, no] DEFAULT yes (Report only concordant mappings.) 
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER OPTIONALlibrary.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
@@ -42,6 +43,7 @@ input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 # check out if the file is compressed and if so unzip it
 # TODO: create a function for this
+
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
 }
@@ -51,12 +53,20 @@ hisat.binary <-(file.path(chipster.tools.path, "hisat2", "hisat2"))
 hisat.path <- c(file.path(chipster.tools.path, "hisat2"))
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 samtools.path<- c(file.path(chipster.tools.path, "samtools"))
-set.path <-paste(sep="", "PATH=", hisat.path, ":", samtools.path, ":$PATH")
-system(paste("bash -c ", set.path))
+# TODO: is this change permanent? or just for this instance?
+#set.path <-paste(sep="", "PATH=", hisat.path, ":", samtools.path, ":$PATH")
+#system(paste("bash -c '", set.path," '"))
 
 # TODO: this should be determined by paramter, there is a fancy way to determine the different possibilites for GUI
-organism <- "grch37" 
-hisat.index.path <- c(file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism))
+organism <- "grch37"
+Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2/grch37")
+
+
+system("echo 'HISAT2_INDEXES:' >> hisat.log")
+system("echo $HISAT2_INDEXES >> hisat.log")
+#setwd(file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism))
+
+
 
 ## Run HISAT
 #Parameters:-p Launch NTHREADS parallel search threads (default: 1). Threads will run on separate processors/cores and synchronize when parsing reads 
@@ -74,7 +84,10 @@ hisat.index.path <- c(file.path(chipster.tools.path, "genomes", "indexes", "hisa
 #				e.g. lane1.fq,lane2.fq,lane3.fq,lane4.fq. Reads may be a mix of different lengths.
 #				If - is specified, hisat2 gets the reads from the "standard in" or "stdin" filehandle.
 #			2>> Redirects error messages from stderr to spesified location.
-command <- paste("hisat2", "-p" , chipster.threads.max,"-x", organism, "-U", read, "-S", "hisat.sam",  "2>> hisat.log")
+# TODO: index path
+
+# Set HISAT2_INDEXES environment variable, where the indecies locate
+command <- paste(hisat.binary, "-p" , chipster.threads.max,"-x", organism, "-U", "read.fq" , "-S", "hisat.sam",  "2>> hisat.log")
 system(paste("echo '",command ,"' 2>> hisat.log "))
 system("echo >> hisat.log")
 system(command)
@@ -82,30 +95,14 @@ system(command)
 # samtools binary
 
 
-
+# TODO: Check parameters
 # Convert SAM file into BAM file and index bam file
 # Parameters:
 # 	-b Output in the BAM format.
 # Convert SAM to BAM
-system(paste(samtools.binary, "sort -b hisat.sam > hisat.bam"))
+system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
 # index bam
-system(paste(samtools.binary, "index hisat.bam"))
-
-# TODO: Create a separate funtion, not like this
-## Handle output names
-# read input names
-inputnames <- read_input_definitions()
-
-# Determine base name
-name1 <- unlist(strsplit(reads1, ","))
-basename <- strip_name(inputnames[[name1[1]]])
-
-# Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("hisat.bam", paste(basename, ".bam", sep =""))
-outputnames[2,] <- c("hisat.bam.bai", paste(basename, ".bam.bai", sep =""))
-
-# Write output definitions file
-write_output_definitions(outputnames)
+system(paste(samtools.binary, "sort hisat.bam"))
+Sys.unsetenv("HISAT2_INDEX")
 
 #EOF
