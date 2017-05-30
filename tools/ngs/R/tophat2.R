@@ -8,6 +8,7 @@
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL tophat-summary.txt
 # OUTPUT OPTIONAL tophat2.log
+# OUTPUT OPTIONAL logs.tar
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/tophat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/tophat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 # PARAMETER mate.inner.distance: "Expected inner distance between mate pairs" TYPE INTEGER DEFAULT 200 (Expected mean inner distance between mate pairs. For example, if your fragment size is 300 bp and read length is 50 bp, the inner distance is 200.)
@@ -40,9 +41,10 @@
 
 # PARAMETER OPTIONAL no.discordant: "Report only concordant alignments" TYPE [yes, no] DEFAULT yes (Report only concordant mappings.) 
 
+source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
@@ -183,6 +185,11 @@ if (file.exists("deletions.u.bed")){
 		sorted.bed <- sort.bed(bed)
 		write.table(sorted.bed, file="deletions.bed", sep="\t", row.names=F, col.names=F, quote=F)
 	}
+}
+
+# If no BAM file is produced, return the whole logs folder as a tar package
+if (fileNotOk("tophat.bam")){
+	system("tar cf logs.tar tophat_out/logs/*")	
 }
 
 if (!(file.exists("tophat-summary.txt"))){

@@ -6,6 +6,7 @@
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL tophat-summary.txt
 # OUTPUT OPTIONAL tophat2.log
+# OUTPUT OPTIONAL logs.tar
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/tophat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/tophat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 # PARAMETER OPTIONAL use.gtf: "Use internal annotation GTF" TYPE [yes, no] DEFAULT yes (If this option is selected, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that did map on the transcriptome will be converted to genomic mappings (spliced as needed\) and merged with the novel mappings and junctions in the final TopHat output. If user provides a GTF file it is used instead of the internal annotation.)
@@ -31,9 +32,10 @@
 # ML 15.01.2015 Added the library-type parameter
 # AMS 29.01.2015 Removed optional outputs deletions.bed and insertions.bed
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
+# check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
@@ -153,13 +155,17 @@ if (file.exists("deletions.u.bed")){
 	}
 }
 
+# If no BAM file is produced, return the whole logs folder as a tar package
+if (fileNotOk("tophat.bam")){
+	system("tar cf logs.tar tophat_out/logs/*")	
+}
+
 if (!(file.exists("tophat-summary.txt"))){
 	#system("mv tophat_out/logs/tophat.log tophat2.log")
 	system("mv tophat.log tophat2.log")
 }
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
