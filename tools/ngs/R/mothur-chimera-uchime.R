@@ -67,9 +67,11 @@ if (dereplicate=="true"){
 	uchime.options <- paste(uchime.options, ", dereplicate=T", sep="")
 }
 
+uchime.options <- paste(uchime.options, ", processors=", chipster.threads.max, sep="")
+
 uchime.options <- paste(uchime.options, ")", sep="")
 
-# stop(paste('CHIPSTER-NOTE: ', uchime.options))
+#stop(paste('CHIPSTER-NOTE: ', uchime.options))
 
 # Write batch file
 write(uchime.options, "batch.mth", append=F)
