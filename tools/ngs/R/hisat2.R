@@ -2,7 +2,7 @@
 # INPUT read.fq: "Reads" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.log
-
+# PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
 
 # AO 30.5.2017 First version
 
@@ -20,7 +20,6 @@
 # TODO: commonet inner.distance away? maxins is by default 500
 # PARAMETER OPTIONAL use.gtf: "Use internal annotation GTF" TYPE [yes, no] DEFAULT yes (If this option is selected, TopHat will extract the transcript sequences and use Bowtie to align reads to this virtual transcriptome first. Only the reads that do not fully map to the transcriptome will then be mapped on the genome. The reads that did map on the transcriptome will be converted to genomic mappings (spliced as needed\) and merged with the novel mappings and junctions in the final TopHat output. If user provides a GTF file it is used instead of the internal annotation.)
 # PARAMETER OPTIONAL no.novel.juncs: "When GTF file is used, ignore novel junctions" TYPE [yes, no] DEFAULT no (Only look for reads across junctions indicated in the supplied GTF file.)
-# PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
 # PARAMETER OPTIONAL mate.std.dev: "Standard deviation for the inner distances between mate pairs" TYPE INTEGER DEFAULT 20 (The standard deviation for the distribution on inner distances between mate pairs. The default is 20bp.)
 # PARAMETER OPTIONAL max.multihits: "How many hits is a read allowed to have" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 20 (Instructs TopHat to allow up to this many alignments to the reference for a given read.)
 # PARAMETER OPTIONAL mismatches: "Number of mismatches allowed in final alignment" TYPE INTEGER FROM 0 TO 5 DEFAULT 2 (Final read alignments having more than this many mismatches are discarded.)
@@ -57,7 +56,18 @@ debug <- TRUE
 debugPrint("")
 debugPrint("DEBUG MODE IS ON")
 
-# Get inputname
+
+##Parse parameters and store them into hisat.parameters
+if (quality.format=="phred64") {
+	quality <- "--phred64"
+} else {
+	quality <- "--phred33"
+}
+hisat.parameters <- list(quality)
+
+debugPrint(toString(hisat.parameters))
+
+# Get input name
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 # check out if the file is compressed and if so unzip it
@@ -93,16 +103,32 @@ debugPrint("$HISAT2_INDEXES")
 #				e.g. lane1.fq,lane2.fq,lane3.fq,lane4.fq. Reads may be a mix of different lengths.
 #				If - is specified, hisat2 gets the reads from the "standard in" or "stdin" filehandle.
 #			2>> Redirects error messages from stderr to spesified location.
-command <- paste(hisat.binary, "-p" , chipster.threads.max,"-x", organism, "-U", "read.fq" , "-S", "hisat.sam",  "2>> hisat.log")
+# Note a single ' at the beginning, it allows us to use special characters like >
+command <- paste("bash -c '", hisat.binary, "-p" , chipster.threads.max,"-x", organism, "-U", "read.fq" , "-S", "hisat.sam",  "2>> hisat.log")
+system(paste("echo '",command ,"' >> hisat.log"))
+
+
+#TODO: add a ' before and after the command
+# Add parameters to the command
+for(i in 1:length(hisat.parameters)) {
+	debugPrint("Parameter:")
+	debugPrint(toString(hisat.parameters[[i]]))
+	command <- paste(command, toString(hisat.parameters[[i]]))
+}
+# Close the command with a ', because there is a opening ' also
+command <- paste(command,"'") 
+
 # Print the command into hisat.log
 system(paste("echo ",command ," >> hisat.log"))
+# Run command
 system(command)
 
 ## Run samtools
-# TODO: Check parameters
 # Convert SAM file into BAM file and index bam file
 # Parameters:
 # 	-b Output in the BAM format.
+#	-S Ignored for compatibility with previous samtools versions. Previously this option was required if input was in SAM format, but now the correct
+#		format is automatically detected by examining the first few characters of input.
 # Convert SAM to BAM
 system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
 # index bam
