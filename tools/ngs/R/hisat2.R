@@ -34,39 +34,48 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
 
+## Helper functions
+#Unzips a list of files
+unzipInputs <- function(names) {
+	for (i in 1:nrow(names)) {
+		unzipIfGZipFile(names[i,1])	
+	}
+}
+
+# Echoes command in log file if debug == TRUE
+debugPrint <- function(command) {
+	if (debug) {
+		system(paste("echo ",command, ">> debug.log"))
+	}
+}
+
 ## Options
 # Prefer fixed representation over exponential
 options(scipen = 10)
+# Debug mode, change debug to TRUE or FALSE, depending do you want debug prints or not
+debug <- TRUE
+debugPrint("")
+debugPrint("DEBUG MODE IS ON")
 
 # Get inputname
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 # check out if the file is compressed and if so unzip it
-# TODO: create a function for this
+unzipInputs(input.names)
 
-for (i in 1:nrow(input.names)) {
-	unzipIfGZipFile(input.names[i,1])	
-}
-
-# setting up HISAT binaries and paths
-hisat.binary <-(file.path(chipster.tools.path, "hisat2", "hisat2"))
-hisat.path <- c(file.path(chipster.tools.path, "hisat2"))
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
-samtools.path<- c(file.path(chipster.tools.path, "samtools"))
-# TODO: is this change permanent? or just for this instance?
-#set.path <-paste(sep="", "PATH=", hisat.path, ":", samtools.path, ":$PATH")
-#system(paste("bash -c '", set.path," '"))
+# setting up HISAT binaries (and paths)
+hisat.binary <- file.path(chipster.tools.path, "hisat2", "hisat2")
+samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
 
 # TODO: this should be determined by paramter, there is a fancy way to determine the different possibilites for GUI
 organism <- "grch37"
+# Set environment variable HISAT2_INDEXES, HISAT2 requires this
 Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2/grch37")
 
-
-system("echo 'HISAT2_INDEXES:' >> hisat.log")
-system("echo $HISAT2_INDEXES >> hisat.log")
-#setwd(file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism))
-
-
+#Print the HISAT2_INDEXES into debug
+debugPrint("")
+debugPrint("HISAT2_INDEXES:")
+debugPrint("$HISAT2_INDEXES")
 
 ## Run HISAT
 #Parameters:-p Launch NTHREADS parallel search threads (default: 1). Threads will run on separate processors/cores and synchronize when parsing reads 
@@ -84,17 +93,12 @@ system("echo $HISAT2_INDEXES >> hisat.log")
 #				e.g. lane1.fq,lane2.fq,lane3.fq,lane4.fq. Reads may be a mix of different lengths.
 #				If - is specified, hisat2 gets the reads from the "standard in" or "stdin" filehandle.
 #			2>> Redirects error messages from stderr to spesified location.
-# TODO: index path
-
-# Set HISAT2_INDEXES environment variable, where the indecies locate
 command <- paste(hisat.binary, "-p" , chipster.threads.max,"-x", organism, "-U", "read.fq" , "-S", "hisat.sam",  "2>> hisat.log")
-system(paste("echo '",command ,"' 2>> hisat.log "))
-system("echo >> hisat.log")
+# Print the command into hisat.log
+system(paste("echo ",command ," >> hisat.log"))
 system(command)
 
-# samtools binary
-
-
+## Run samtools
 # TODO: Check parameters
 # Convert SAM file into BAM file and index bam file
 # Parameters:
@@ -103,6 +107,10 @@ system(command)
 system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
 # index bam
 system(paste(samtools.binary, "sort hisat.bam"))
+# Unset environmet variable
 Sys.unsetenv("HISAT2_INDEX")
+
+# Append the debug.log into hisat.log
+system("cat debug.log >> hisat.log")
 
 #EOF
