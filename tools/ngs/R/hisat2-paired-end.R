@@ -1,5 +1,7 @@
-# TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. Takes only one reads filein ziped format or not )
+# TOOL hisat2-paired-end.R: "HISAT2 for paired  end reads" ( HISAT2 Aligns paired  end RNA-seq reads to a genome.)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
@@ -60,13 +62,31 @@ input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 # check out if the file is compressed and if so unzip it
 unzipInputs(input.names)
 
-
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
 # Reads to align
 # Parse the read names from input files
-reads.parsed <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
-hisat.parameters <-paste(hisat.parameters, "-U", reads.parsed)
+if (file.exists("reads1.txt") && file.exists("reads2.txt")){
+	# Case: list files exist
+	reads1.list <- make_input_list("reads1.txt")
+	reads2.list <- make_input_list("reads2.txt")
+	if (identical(intersect(reads1.list, reads2.list), character(0))){
+		reads1 <- paste(reads1.list, sep="", collapse=",")
+		reads2 <- paste(reads2.list, sep="", collapse=",")
+	}else{
+		stop(paste('CHIPSTER-NOTE: ', "One or more files is listed in both lists."))
+	}
+}else if (file.exists("reads002.fq") && !file.exists("reads003.fq")){
+	# Case: no list file, but only two fastq inputs
+	in.sorted <- input.names[order(input.names[,2]),]
+	reads <- grep("reads", in.sorted[,1], value = TRUE)
+	reads1 <- reads[1]
+	reads2 <- reads[2]
+}else{
+	# Case: no list files, more than two fastq inputs
+	stop(paste('CHIPSTER-NOTE: ', "List file is missing. You need to provide a list of read files for both directions."))
+}
+hisat.parameters <-paste(hisat.parameters, "-1", reads1, "-2", reads2)
 # Quality score format
 if (quality.format=="phred64") {
 	hisat.parameters <- paste(hisat.parameters, "--phred64")
@@ -110,21 +130,6 @@ hisat.binary <- file.path(chipster.tools.path, "hisat2", "hisat2")
 samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
 
 ## Run HISAT
-#Parameters:-p Launch NTHREADS parallel search threads (default: 1). Threads will run on separate processors/cores and synchronize when parsing reads 
-#				and outputting alignments. Searching for alignments is highly parallel, and speedup is close to linear. Increasing -p increases HISAT2's
-#				memory footprint. E.g. when aligning to a human genome index, increasing -p from 1 to 8 increases the memory footprint by a few hundred
-#				megabytes. This option is only available if bowtie is linked with the pthreads library (i.e. if BOWTIE_PTHREADS=0 is not specified at 
-#				build time).
-#           -q Reads (specified with <m1>, <m2>, <s>) are FASTQ files. FASTQ files usually have extension .fq or .fastq. FASTQ is the default format.
-#				See also: --solexa-quals and --int-quals.
-#           -x The basename of the index for the reference genome. The basename is the name of any of the index files up to but not including the 
-#				final .1.ht2 / etc. hisat2 looks for the specified index first in the current directory, then in the directory specified in the 
-#				HISAT2_INDEXES environment variable.
-# 			-S File to write SAM alignments to. By default, alignments are written to the "standard out" or "stdout" filehandle (i.e. the console).
-# 			-U Comma-separated list of files containing unpaired reads to be aligned, 
-#				e.g. lane1.fq,lane2.fq,lane3.fq,lane4.fq. Reads may be a mix of different lengths.
-#				If - is specified, hisat2 gets the reads from the "standard in" or "stdin" filehandle.
-#			2>> Redirects error messages from stderr to spesified location.
 # Note a single ' at the beginning, it allows us to use special characters like >
 command <- paste("bash -c '", hisat.binary)
 

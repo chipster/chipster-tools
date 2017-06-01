@@ -109,7 +109,8 @@
 		<tool>tophat2-single-end.R</tool>
 	    <tool>tophat2-with-index-building.R</tool>
 		<tool>tophat2-single-end-with-index-building.R</tool>
-		<tool>hisat2.R</tool>		
+		<tool>hisat2.R</tool>
+		<tool>hisat2-paired-end.R</tool>		
 		<tool>bwa-mem.R</tool>
 		<tool>bwa-mem-with-index-building.R</tool>
 	    <tool>bwa.R</tool>
