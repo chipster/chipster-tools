@@ -1,5 +1,5 @@
 # TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. Takes only one reads filein ziped format or not )
-# INPUT read.fq: "Reads" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
@@ -56,10 +56,19 @@ debug <- TRUE
 debugPrint("")
 debugPrint("DEBUG MODE IS ON")
 
+# Get input name
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+
+# check out if the file is compressed and if so unzip it
+unzipInputs(input.names)
+
+
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
 # Reads to align
-hisat.parameters <-paste(hisat.parameters, "-U", "read.fq" )
+# Parse the read names from input files
+reads.parsed <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
+hisat.parameters <-paste(hisat.parameters, "-U", reads.parsed)
 # Quality score
 if (quality.format=="phred64") {
 	hisat.parameters <- paste(hisat.parameters, "--phred64")
@@ -103,12 +112,6 @@ debugPrint("$HISAT2_INDEXES")
 
 # Print parameters into log
 debugPrint(toString(hisat.parameters))
-
-# Get input name
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
-
-# check out if the file is compressed and if so unzip it
-unzipInputs(input.names)
 
 # setting up HISAT binaries (and paths)
 hisat.binary <- file.path(chipster.tools.path, "hisat2", "hisat2")
