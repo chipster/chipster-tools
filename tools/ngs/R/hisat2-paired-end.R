@@ -151,8 +151,12 @@ system(command)
 #	-S Ignored for compatibility with previous samtools versions. Previously this option was required if input was in SAM format, but now the correct
 #		format is automatically detected by examining the first few characters of input.
 # Convert SAM to BAM
+debugPrint("")
+debugPrint("SAMTOOLS")
+debugPrint(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
 system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
-# index bam
+# Index bam
+debugPrint(paste(samtools.binary, "sort hisat.bam"))
 system(paste(samtools.binary, "sort hisat.bam"))
 # Unset environmet variable
 Sys.unsetenv("HISAT2_INDEX")
