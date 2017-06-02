@@ -3,6 +3,7 @@
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
+# INPUT OPTIONAL splicesites.txt: "List of known splice sites" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
@@ -10,6 +11,7 @@
 # PARAMETER OPTIONAL min.intron.length: "Minimum intron length" TYPE INTEGER FROM 1 TO 1000 DEFAULT 20 (Sets minimum intron length. Default: 20)
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (Sets maximum intron length. Default: 500000)
 # PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
+# PARAMETER OPTIONAL max.multihits: "How many hits is a read allowed to have" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 5 (Instructs HISAT2 to allow up to this many alignments to the reference for a given read.)
 
 # AO 30.5.2017 First version
 
@@ -119,6 +121,12 @@ hisat.parameters <- paste(hisat.parameters, "-x", "own_genome")
 # Set environment variable that defines where indexes locate, HISAT2 requires this
 # Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2")
 # We have created own genome -> no need fot environment variable
+# Known splice sites
+if (file.exists("splicesites.txt")) {
+    hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
+}
+# How many hits is a read allowed to have
+hisat.parameters <-paste(hisat.parameters, "-k", max.multihits)
 
 ## Set parameters that are not mutable via Chipster
 # Threads that hisat uses
