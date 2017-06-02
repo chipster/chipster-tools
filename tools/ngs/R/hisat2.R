@@ -1,6 +1,6 @@
 # TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. Takes only one reads filein ziped format or not )
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
-# INPUT OPTINOAL splicesites.txt: "List of known splice sites" TYPE GENERIC
+# INPUT OPTIONAL splicesites.txt: "List of known splice sites" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
