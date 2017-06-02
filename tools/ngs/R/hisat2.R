@@ -1,5 +1,6 @@
 # TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. Takes only one reads filein ziped format or not )
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
+# INPUT OPTINOAL splicesites.txt: "List of known splice sites" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
@@ -87,6 +88,10 @@ if (library.type == "fr-firststrand") {
 hisat.parameters <- paste(hisat.parameters, "-x", organism)
 # Set environment variable that defines where indexes locate, HISAT2 requires this
 Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2")
+# Known splice sites
+if (file.exists("splicesites.txt")) {
+    hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
+}
 
 ## Set parameters that are not mutable via Chipster
 # Threads that hisat uses
@@ -146,8 +151,12 @@ system(command)
 #	-S Ignored for compatibility with previous samtools versions. Previously this option was required if input was in SAM format, but now the correct
 #		format is automatically detected by examining the first few characters of input.
 # Convert SAM to BAM
+debugPrint("")
+debugPrint("SAMTOOLS")
+debugPrint(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
 system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
-# index bam
+# Index bam
+debugPrint(paste(samtools.binary, "sort hisat.bam"))
 system(paste(samtools.binary, "sort hisat.bam"))
 # Unset environmet variable
 Sys.unsetenv("HISAT2_INDEX")
