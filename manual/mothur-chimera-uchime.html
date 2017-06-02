@@ -13,24 +13,25 @@ Given a fasta-formatted alignment file, removes chimeric sequences.
 
 <h3>Parameters</h3>
 
-<p>Dereplicate (false, true) [false]</p>
-<p>Reference (bacterial, full, none) [bacterial]</p>
+<ul>
+<li>Method (vsearch, uchime) [vsearch]</li>
+<li>Reference (bacterial, full, none) [bacterial]</li>
+<li>Dereplicate (false, true) [false]</li>
+</ul>
 
 <h3>Details</h3>
 <p>
-Removes chimeric sequences from an alignment using the uchime method and the 16S rRNA Silva gold reference set. Chimeric sequences are artifacts which contain parts of several sequences.
+Removes chimeric sequences (artifacts which contain parts of several sequences) from an alignment using the vsearch or uchime method. The vsearch method is faster.
 </p>
 <p>
-The dereplicate parameter can be used when checking for chimeras by group. 
-If the dereplicate parameter is false (default), then if one group finds the sequence to be chimeric, 
-all groups find it to be chimeric. 
+You can select de novo or reference based chimera detection. As a reference you can use the bacterial subset of the 16S rRNA Silva gold reference set. For the uchime method also the full 16S rRNA Silva gold reference set is available. 
+When using the de novo approach, the tool checks for chimeras using the more abundant sequences in your data as the reference.
 </p>
 <p>
-You can choose whether you want to use the full Silva reference set, or just the bacterial sequences. 
-If you choose none, the tool checks for chimeras using the more abundant sequences as the reference.
+The dereplicate parameter is by default false, so when a sequence is detected as chimeric in one sample it is assigned chimeric all the samples. If you want to limit the assignment to the original sample, set the dereplicate parameter to true.  
 </p>
 <p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Chimera.uchime">Chimera.uchime</a> and <a href="http://www.mothur.org/wiki/Remove.seqs">Remove.seqs</a> commands of the Mothur package.
+This tool is based on the <a href="http://www.mothur.org/wiki/Chimera.vsearch">Chimera.vsearch</a>, <a href="http://www.mothur.org/wiki/Chimera.uchime">Chimera.uchime</a>, and <a href="http://www.mothur.org/wiki/Remove.seqs">Remove.seqs</a> commands of the Mothur package.
 </p>
 
 <h3>Output</h3>
