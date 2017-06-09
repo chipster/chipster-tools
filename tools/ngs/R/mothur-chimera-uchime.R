@@ -1,13 +1,12 @@
-# TOOL mothur-chimera-uchime.R: "Remove chimeric sequences" (Removes chimeric sequences from a fasta-formatted alignment using the vsearch or uchime method. You can select de novo or reference based chimera detection. As a reference you can use the bacterial subset of the 16S rRNA Silva gold reference set. For the uchime method also the full 16S rRNA Silva gold reference set is available. This tool is based on the Mothur tools Chimera.vsearch, Chimera.uchime and Remove.seqs. Please note that it can take some time to run this tool!)
+# TOOL mothur-chimera-uchime.R: "Remove chimeric sequences" (Removes chimeric sequences from a fasta-formatted alignment using the VSEARCH or the UCHIME method. You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. This tool is based on the Mothur tools Chimera.vsearch, Chimera.uchime and Remove.seqs. Please note that it can take some time to run this tool!)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.count_table: "Count table" TYPE GENERIC
 # OUTPUT OPTIONAL chimeras.removed.fasta
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial, full, none] DEFAULT bacterial (Reference sequences to use. Note that if you choose none, you have to give count table as input.)
-# PARAMETER OPTIONAL method: "Method" TYPE [vsearch, uchime] DEFAULT vsearch (Chimera detection method to use. Note that vsearch is much faster than the Uchime method.)
-# PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (False = If a sequence is flagged as chimeric in one sample, remove it from all samples.)
-
+# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "16S rRNA Silva gold bacteria", none: "none, de novo"] DEFAULT bacterial (You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. Note that if you choose none, you have to give a count table as input.)
+# PARAMETER OPTIONAL method: "Method" TYPE [vsearch, uchime] DEFAULT vsearch (Chimera detection method to use. Note that VSEARCH is much faster than the UCHIME method.)
+# PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (De novo chimera detection uses the more abundant sequences from the same sample to check the query sequence. When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false.)
 
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt
@@ -18,6 +17,7 @@
 # ML 14.3.2017 reference option (bacterial vs whole) + count-file output
 # AMS 30.5.2017 added the possibility to use more processors
 # EK 1.6.2017 added the vsearch method. Removed the input option for names and groups file as we use the more compact count file now for duplicates.
+# EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
 
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
@@ -32,34 +32,32 @@ binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 #data.path <- c(file.path(chipster.tools.path, "mothur-data"))
 #template.path <- c(file.path(data.path, "silva.gold.align"))
 
-# start building the command for the Mothur uchime and vsearch tools based on the method chosen. Set also the reference parameter name based on the method.
+# start building the command for the Mothur chimera.uchime and chimera.vsearch tools based on the method chosen.
 if (method=="vsearch"){
 	chimera.options <- paste("chimera.vsearch(fasta=a.fasta, processors=", chipster.threads.max, ",", sep="")
-	ref <- "reference"
 }
 if (method=="uchime"){
 	chimera.options <- paste("chimera.uchime(fasta=a.fasta, processors=", chipster.threads.max, ",", sep="")
-	ref <- "template"
 }
 
 if (reference=="bacterial"){
-	# bacterial reference
+	# bacterial reference in fasta format
 	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
-	template.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
-	chimera.options <- paste(chimera.options, ref,"=", template.path, sep="")
+	reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
+	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
 }
-if (reference=="full"){
+# if (reference=="full"){
 	# whole reference
-	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
-	template.path <- c(file.path(data.path, "silva.gold.align")) 
-	chimera.options <- paste(chimera.options, ref,"=", template.path, sep="")
-}
+#	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+#	reference.path <- c(file.path(data.path, "silva.gold.align")) 
+#	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
+#}
 if (reference=="none"){
 	if (file.exists("a.count_table")){
 		chimera.options <- paste(chimera.options, " count=a.count_table", sep="")
 	}
 	else {
-		stop('CHIPSTER-NOTE: In order to use the denovo option, note that you have to give a count table as input!')
+		stop('CHIPSTER-NOTE: Note that in order to use the denovo option, you have to give a count table as input!')
 	}
 }
 	
@@ -110,7 +108,7 @@ if (method=="uchime"){
 }
 
 # batch file 2 for Remove.seqs to remove chimeric sequences from the fasta file and the count file
-# note that one should add parameter dups=F so that dereplicate=T from the previous step would take effect (a sequence that was assigned as chimeric in one sample would be removed only from that sample). This requires names file, count file doesn't seem to be supported yet.
+# According to the manual should add dups=F so that dereplicate=T from the previous step would take effect, bu this seems to work correctly without (a sequence that was assigned as chimeric in one sample would be removed only from that sample). According to the manual this requires names file, but count file seems to work as well.
 if (reference=="none"){
 	write("remove.seqs(accnos=denovoaccnosfile, fasta=a.fasta, count=a.count_table)", "remove.mth", append=F)
 } else {

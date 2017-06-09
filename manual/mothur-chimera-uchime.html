@@ -15,20 +15,22 @@ Given a fasta-formatted alignment file, removes chimeric sequences.
 
 <ul>
 <li>Method (vsearch, uchime) [vsearch]</li>
-<li>Reference (bacterial, full, none) [bacterial]</li>
+<li>Reference (16S rRNA Silva gold bacteria, none) [16S rRNA Silva gold bacteria]</li>
 <li>Dereplicate (false, true) [false]</li>
 </ul>
 
 <h3>Details</h3>
-<p>
-Removes chimeric sequences (artifacts which contain parts of several sequences) from an alignment using the vsearch or uchime method. The vsearch method is faster.
+<p>Removes chimeric sequences using the UCHIME or the (faster) VSEARCH method. 
+Chimeras are sequences formed from two or more biological sequences joined together. Amplicons with chimeric sequences can form during PCR when closely related sequences are amplified. 
+The majority of chimeras are believed to arise from incomplete extension: During subsequent cycles of PCR, a partially extended strand can bind to a template derived from a different but similar sequence. 
+This then acts as a primer that is extended to form a chimeric sequence. 
 </p>
+
 <p>
-You can select de novo or reference based chimera detection. As a reference you can use the bacterial subset of the 16S rRNA Silva gold reference set. For the uchime method also the full 16S rRNA Silva gold reference set is available. 
-When using the de novo approach, the tool checks for chimeras using the more abundant sequences in your data as the reference.
-</p>
-<p>
-The dereplicate parameter is by default false, so when a sequence is detected as chimeric in one sample it is assigned chimeric all the samples. If you want to limit the assignment to the original sample, set the dereplicate parameter to true.  
+You can use the <a href="https://mothur.org/w/images/9/98/Silva.bacteria.zip">16S rRNA Silva gold bacterial set</a> as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. 
+De novo detection uses the more abundant sequences from the same sample to check the query sequence. 
+When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false. 
+If you use the Silva reference, you should be aware of their <a href="https://www.arb-silva.de/silva-license-information">dual-use license</a>: Silva is free for academic users, but commercial users need to purchase a license.
 </p>
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Chimera.vsearch">Chimera.vsearch</a>, <a href="http://www.mothur.org/wiki/Chimera.uchime">Chimera.uchime</a>, and <a href="http://www.mothur.org/wiki/Remove.seqs">Remove.seqs</a> commands of the Mothur package.
