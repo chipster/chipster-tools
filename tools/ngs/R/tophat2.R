@@ -41,16 +41,14 @@
 
 # PARAMETER OPTIONAL no.discordant: "Report only concordant alignments" TYPE [yes, no] DEFAULT yes (Report only concordant mappings.) 
 
-source(file.path(chipster.common.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
 }
-
-source(file.path(chipster.common.path, "tool-utils.R"))
 
 options(scipen = 10)
 # max.intron.length <- formatC(max.intron.length, "f", digits = 0)
