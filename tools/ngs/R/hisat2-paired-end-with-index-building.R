@@ -1,4 +1,4 @@
-# TOOL hisat2-paired-end-with-index-building.R: "HISAT2 for paired  end reads and own genome" ( HISAT2 Aligns paired  end RNA-seq reads to a genome.)
+# TOOL hisat2-paired-end-with-index-building.R: "HISAT2 for paired  end reads and own genome" (HISAT2 Aligns paired end RNA-seq reads to a genome.)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC

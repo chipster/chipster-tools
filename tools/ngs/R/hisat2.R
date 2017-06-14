@@ -1,4 +1,4 @@
-# TOOL hisat2.R: "HISAT2 for single end reads" ( HISAT Aligns single end RNA-seq reads to a genome. Takes only one reads filein ziped format or not )
+# TOOL hisat2.R: "HISAT2 for single end reads" (HISAT2 Aligns single end RNA-seq reads to a genome.)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # INPUT OPTIONAL splicesites.txt: "List of known splice sites" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
@@ -117,21 +117,7 @@ hisat.binary <- file.path(chipster.tools.path, "hisat2", "hisat2")
 samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
 
 ## Run HISAT
-#Parameters:-p Launch NTHREADS parallel search threads (default: 1). Threads will run on separate processors/cores and synchronize when parsing reads 
-#				and outputting alignments. Searching for alignments is highly parallel, and speedup is close to linear. Increasing -p increases HISAT2's
-#				memory footprint. E.g. when aligning to a human genome index, increasing -p from 1 to 8 increases the memory footprint by a few hundred
-#				megabytes. This option is only available if bowtie is linked with the pthreads library (i.e. if BOWTIE_PTHREADS=0 is not specified at 
-#				build time).
-#           -q Reads (specified with <m1>, <m2>, <s>) are FASTQ files. FASTQ files usually have extension .fq or .fastq. FASTQ is the default format.
-#				See also: --solexa-quals and --int-quals.
-#           -x The basename of the index for the reference genome. The basename is the name of any of the index files up to but not including the 
-#				final .1.ht2 / etc. hisat2 looks for the specified index first in the current directory, then in the directory specified in the 
-#				HISAT2_INDEXES environment variable.
-# 			-S File to write SAM alignments to. By default, alignments are written to the "standard out" or "stdout" filehandle (i.e. the console).
-# 			-U Comma-separated list of files containing unpaired reads to be aligned, 
-#				e.g. lane1.fq,lane2.fq,lane3.fq,lane4.fq. Reads may be a mix of different lengths.
-#				If - is specified, hisat2 gets the reads from the "standard in" or "stdin" filehandle.
-#			2>> Redirects error messages from stderr to spesified location.
+
 # Note a single ' at the beginning, it allows us to use special characters like >
 command <- paste("bash -c '", hisat.binary)
 
