@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (Sets maximum intron length. Default: 500000)
 # PARAMETER OPTIONAL library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 # PARAMETER OPTIONAL max.multihits: "How many hits is a read allowed to have" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 5 (Instructs HISAT2 to allow up to this many alignments to the reference for a given read.)
-
+# PARAMETER OPTIONAL no.softclip: "Disallow soft-clipping" TYPE [nosoft: "No soft-clipping", yessoft: "Use soft-clipping"] DEFAULT yessoft (Is soft-cliping used. By default HISAT2 may soft-clip reads near their 5' and 3' ends.)
 # AO 30.5.2017 First version
 
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
@@ -109,6 +109,10 @@ if (file.exists("splicesites.txt")) {
 }
 # How many hits is a read allowed to have
 hisat.parameters <-paste(hisat.parameters, "-k", max.multihits)
+# Allow soft-clipping, by default soft-clipping is used
+if (no.softclip=="nosoft") {
+    hisat.parameters <- paste(hisat.parameters, "--no-softclip")
+}
 
 ## Set parameters that are not mutable via Chipster
 # Threads that hisat uses
