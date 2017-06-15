@@ -114,8 +114,6 @@ hisat.parameters <- paste(hisat.parameters, "-S", "hisat.sam")
 hisat.parameters <- paste(hisat.parameters, "2>> hisat.log")
 # Suppress SAM records for reads that failed to align
 hisat.parameters <- paste(hisat.parameters, "--no-unal")
-# Print alignmment summary into file
-hisat.parameters <- paste(hisat.parameters, "--summary-file hisat.log")
 
 #Print the HISAT2_INDEXES into debug
 debugPrint("")
