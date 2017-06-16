@@ -24,10 +24,12 @@ When it identifies positions where the two reads disagree, it proceeds as follow
 <li>If one of the disagreeing bases has a quality score which is 6 or more points higher than the other, that base is reported. If not, that base is set to N.</li> 
 <li>If one of the reads suggest a gap, the other read has to have a base with a quality score over 25 to be considered real.</li>
 </ul>
-
+Note that Mothur Make.contigs tool is quite "greedy", so it will assemble contigs even if the reads are not high quality. 
+Therefore it is recommended to use this tool only for good quality reads which totally overlap. 
+Dr Patrick Schloss, the developer of Mothur, says that even with the advance in Illumina’s MiSeq technology to paired 300 nt reads, they are sticking with the paired 250 nt reads to sequence the 16S rRNA V4 region.
 <p>
-The tool figures by itself which fastq files belong to each sample. You can check this in the output file stability.file.txt. 
-If the file assignment to samples is not correct, you can make a stability.file.txt yourself and give it as input. 
+The tool figures out by itself which fastq files belong to each sample. You can check this in the output file samples-files.txt. 
+If the file assignment to samples is not correct, you can make a samples-files.txt yourself and give it as input. 
 This file has 3 columns: sample name, forward fastq file name (R1), and reverse fastq file name (R2). So it should look something like this: <br>
 sample1	sample1_L001_R1_001.fastq sample1_L001_R2_001.fastq <br>
 sample2 sample2_L001_R1_001.fastq sample2_L001_R2_001.fastq <br>
@@ -46,8 +48,8 @@ This tool is based on the <a href="http://www.mothur.org/wiki/Make.contigs">make
 <li>contigs.fasta.gz: Fasta file containing the contig sequences.</li>
 <li>contigs.summary.tsv: Summary statistics for the sequences</li>
 <li>contigs.groups: A two column list with the first column indicating the sequence names in the input file and the second column the sample that it came from.</li>
-<li>log.txt: List how many contigs each sample has.</li>
-<li>stability.file.txt: Shows how fastq files were assigned to samples.</li>
+<li>contig-numbers.txt: List how many contigs each sample has.</li>
+<li>samples-files.txt: Shows how fastq files were assigned to samples.</li>
 </ul>
 
 

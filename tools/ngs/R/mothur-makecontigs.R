@@ -1,11 +1,11 @@
-# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired reads to sequence contigs within each sample, and puts all the resulting sequences in one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can make a Tar package of your FASTQ files using the Utilities tool Make a tar package. The tool tries to assign the FASTQ files into samples based on the file names, but you can also provide a stability file containing this information, please see the manual. This tool is based on the Mothur tools make.contigs and make.file.)
+# TOOL mothur-makecontigs.R: "Combine paired reads to contigs" (Combines paired reads to sequence contigs within each sample, and puts all the resulting sequences in one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can make a Tar package of your FASTQ files using the Utilities tool Make a tar package. The tool tries to assign the FASTQ files into samples based on the file names, but you can also provide a file containing this information, please see the manual. This tool is based on the Mothur tools make.contigs and make.file.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # INPUT OPTIONAL input_list: "List of FASTQ files by sample" TYPE GENERIC
 # OUTPUT OPTIONAL contigs.summary.tsv
 # OUTPUT OPTIONAL contigs.fasta.gz
 # OUTPUT OPTIONAL contigs.groups
-# OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL stability.file.txt
+# OUTPUT OPTIONAL contig-numbers.txt
+# OUTPUT OPTIONAL samples-files.txt
 
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
@@ -50,7 +50,7 @@ if (fileOk("input_list")){
 	system(command)
 	system("cat *.logfile > log.tmp")
 	# Remove full paths from the Mothur-generated input list to make it more readable
-	system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > stability.file.txt")
+	system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples-files.txt")
 }
 
 # Run Mothur make.contigs
@@ -64,7 +64,7 @@ system("mv fastq.trim.contigs.fasta contigs.fasta")
 system("mv fastq.contigs.groups contigs.groups")
 
 # Post process output
-system("sed -n  '/Group count: / ,/Output File/p' log2.txt > log.txt")
+system("sed -n  '/Group count: / ,/Output File/p' log2.txt > contig-numbers.txt")
 
 # The summary file:
 write("summary.seqs(fasta=contigs.fasta)", "summary.mth", append=F)

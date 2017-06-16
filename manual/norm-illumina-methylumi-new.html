@@ -1,0 +1,79 @@
+<!-- saved from url=(0022)http://internet.e-mail -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+
+<h2>Normalisation / Illumina - methylumi pipeline new</h2>
+
+<h3>Description</h3>
+
+<p>Normalization for Illumina GoldenGate and Infinium methylation profiling arrays.
+Tool can handle two different input formats: a FinalReport file, or two text files, one for samples and one for controls.
+<br>
+The “Final Report” format includes all the data in a single file. 
+The tool will look for “[Header]” in the file to determine when that file format is to be used. 
+The data blocks “[Sample Methylation Profile]” and "[Control Probe Profile]"" need to be present in the “Final Report” format. 
+<br>
+The second format can be a simple tab-delimited text file with headers from BeadStudio. 
+If this format is used, the sample data and the QC data need to be in separate files.
+<br>
+The filename must end with ".txt", and you should NOT use the Import tool 
+when bringing the data into Chipster (in the Import files -window change the action to "Import directly").
+Note that dot (.) needs to be used as the decimal separator instead of comma (,)!
+</p>
+
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Chiptype (FDb.InfiniumMethylation.hg19) [FDb.InfiniumMethylation.hg19]</li>
+<li>Min. average p-val for filtering (0-1) [0.05]</li>
+<li>Image width (200-3200) [600]</li>
+<li>Image height (200-3200) [600]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>This tool adjusts color balance and background, and normalizes Illumina methylation data provided 
+either in GenomeStudio FinalReport format or as two separate tab separated files (one for samples, one for controls).
+ <br>
+The Illumina platform shows a significant dye bias in the two channels and therefore
+some normalization is required. Before the normalisation, some clean-up is done: those samples
+with average detection p-values higher than the p-val parameter value (default: 0.05) 
+are left out of the analysis.
+<br>
+The function <b>normalizeMethyLumiSet</b> is used for normalisation:
+this function looks at the median intensities in the methylated and unmethylated channels 
+(each measured in one color on the GoldenGate platform) at very low and very high beta values 
+and sets these medians equal. Using the transformed unmethylated and methylated values, 
+new beta values are calculated using the <b>ratio</b> function 
+(the same as used by Illumina in the BeadStudio software).
+
+ </p>
+
+<h3>Output</h3>
+
+<p>Four tab-delimited text files (normalized.tsv, unmethylated.tsv, methylated.tsv, phenodata.tsv) and a quality control plot (QC-plot.pdf).
+The file normalized.tsv contains normalized methylated / unmethylated ratios on log2-scale, and it is suitable for all further analyses. 
+Unmethylated.tsv and methylated.tsv contain data for unmethylated and methylated probes. 
+</p> <p>
+The QC plot shows p-values for detection for the samples; should some of the samples have clearly 
+higher detection p-values, they are failing the QC testing and one should consider removing them from the analysis.
+When using the FinalReport format as input, the QC plot also shows distributions of 
+methylated and unmethylated probes where unmethylated data is shown in green and 
+methylated data is shown in red.
+</p>
+<h3>References</h3>
+
+<p>This tool uses Bioconductor package methylumi. Please cite the articles:</p>
+
+<p>Du P, Kibbe WA, Lin SM (2008) <a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/24/13/1547">lumi: a pipeline for processing Illumina microarray, Bioinformatics, 24, 1547-1548</a>.</p> 
+<p>Du P, Zhang X, Huang CC, Jafari N, Kibbe WA, Lin SM (2010) <a href="http://www.biomedcentral.com/content/pdf/1471-2105-11-587.pdf">Comparison of Beta-value and M-value methods for quantifying
+methylation levels by microarray analysis, BMC bioinformatics, 11, 587</a>.</p> 
+
+More information of the methylumi package: <a href="https://bioconductor.org/packages/release/bioc/html/methylumi.html">https://bioconductor.org/packages/release/bioc/html/methylumi.html</a>
+
+</body>
+

@@ -7,6 +7,7 @@
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL tophat-summary.txt
 # OUTPUT OPTIONAL tophat2.log
+# OUTPUT OPTIONAL logs.tar
 # PARAMETER library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
 # PARAMETER OPTIONAL no.novel.juncs: "When GTF file is used, ignore novel junctions" TYPE [yes, no] DEFAULT no (Only look for reads across junctions indicated in the supplied GTF file.)
 # PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
@@ -32,9 +33,10 @@
 
 # OUTPUT OPTIONAL tophat2.log
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
+# check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
@@ -146,6 +148,11 @@ if (file.exists("deletions.u.bed")){
 		sorted.bed <- sort.bed(bed)
 		write.table(sorted.bed, file="deletions.bed", sep="\t", row.names=F, col.names=F, quote=F)
 	}
+}
+
+# If no BAM file is produced, return the whole logs folder as a tar package
+if (fileNotOk("tophat.bam")){
+	system("tar cf logs.tar tophat_out/logs/*")	
 }
 
 if (!(file.exists("tophat-summary.txt"))){

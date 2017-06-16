@@ -85,11 +85,13 @@
 	    <tool module="common">general_file_processing.R</tool>
         <tool module="common">concatenate.R</tool>
         <tool module="common">join_tsv_files.R</tool>
+  		<tool module="common">transpose-matrix.R</tool>      
         <tool module="common">extract_gzip_tar.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_namelist.R</tool>
 		<tool module="common">make_tar.R</tool>
 		<tool module="common">gzip.R</tool>
+		
 	</category>
 	
 	<category name="Tests" color="#d59f45">
