@@ -47,6 +47,6 @@ for (package in bioconductorPackages) {
 # install Seurat
 # the devtools depends on the nlopt library, but it's installation is broken. Luckily it's happy with the apt version: 
 # sudo apt-get install libnlopt0 libnlopt-dev
-install.packages("devtools”) # devtools has support for install_url/install_github
+install.packages("devtools") # devtools has support for install_url/install_github
 library(devtools)  
-install_github("satijalab/seurat”) # install Seurat from GitHub
+install_github("satijalab/seurat") # install Seurat from GitHub
