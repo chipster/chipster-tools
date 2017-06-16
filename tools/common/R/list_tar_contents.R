@@ -1,4 +1,4 @@
-# TOOL list_tar_contents.R: "List contents of a tar file" (List the contents of a tar package.)
+# TOOL list_tar_contents.R: "List contents of a tar file" (List the contents of a tar package. The file can be gzip compressed.)
 # INPUT file.tar: "Tar file" TYPE GENERIC
 # OUTPUT toc.txt 
 
