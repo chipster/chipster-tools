@@ -2,7 +2,7 @@ read_input_definitions <- function(){
 	# Read in the data
 	list <- scan("chipster-inputs.tsv", what="", sep="\n", comment.char="#")
 	# Separate elements by one or more whitepace
-	inputdef <- strsplit(list, "[[:space:]]+")
+	inputdef <- strsplit(list, "[\t]+")
 	# Extract the first vector element and set it as the list element name
 	names(inputdef) <- sapply(inputdef, function(list) list[[1]])
 	# Remove the first vector element from each list element
