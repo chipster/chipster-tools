@@ -3,7 +3,7 @@
 <head><title></title></head>
 <body>
 
-<h2>Seurat -clustering </h2>
+<h2>Seurat -Clustering </h2>
 
 <h3>Description</h3>
 
@@ -13,19 +13,18 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
  
  <h3>Parameters</h3>
 <ul>
-		<li>Number of principal components to use [10]<li>
-		<li>Resolution for granularity [0.6]<li>
-		<li>Min.pct [0.25]</li>
-		<li>Thresh.use [0.25]</li>
-		<li>Only positive changes [TRUE]</li>
-	
+	<li>Number of principal components to use [10]</li>
+	<li>Resolution for granularity [0.6]</li>
+	<li>Min.pct [0.25]</li>
+	<li>Thresh.use [0.25]</li>
+	<li>Only positive changes [TRUE]</li>
 </ul>
 
  <h3>Details</h3>
  
 <p>
 As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
-<br>
+<br><br>
 Seurat function <i>FindClusters</i> first constructs a KNN graph based on the euclidean distance in PCA space,
 and refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
 To cluster the cells, the function uses the smart local moving algorithm to iteratively group cell groupings together
@@ -65,12 +64,13 @@ For more details, please check:
 <br><br>
 The Seurat clustering approach was heavily inspired by these manuscripts 
 which applied graph-based clustering approaches to scRNA-seq data:<br>
-[SNN-Cliq, Xu and Su, Bioinformatics, 2015] (http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract) 
+<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">[SNN-Cliq, Xu and Su, Bioinformatics, 2015] </a> 
 and 
-<br>CyTOF data [PhenoGraph, Levine et al., Cell, 2015] (http://www.ncbi.nlm.nih.gov/pubmed/26095251). 
+<br>CyTOF data
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">[PhenoGraph, Levine et al., Cell, 2015]</a>.
 <br><br>
 Smart local moving algorithm:<br>
-[SLM, Blondel et al., Journal of Statistical Mechanics] (http://dx.doi.org/10.1088/1742-5468/2008/10/P10008).
+<a href="http://dx.doi.org/10.1088/1742-5468/2008/10/P10008">[SLM, Blondel et al., Journal of Statistical Mechanics]</a>
 
 </p>
 
