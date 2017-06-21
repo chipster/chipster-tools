@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Setup and QC </h2>
+
+<h3>Description</h3>
+
+<p>
+This tool can be used to setup the Seurat object from two possible inputs: 
+<ol>
+<li>a .tar package of a folder which contains the <b>10X Genomics</b> output files  <li>
+<li> the DGE table (from <b>)DropSeq</b>) -this can be generated with <i>Digital expression </i> tool <li>
+</ol>
+After setting up the R-object (.Robj), some quality control plots are drawn, 
+filtering and regression is performed and  
+plots to aid in estimating the statistically significant principal components are drawn.
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Project name for plotting [Project_name]<li>
+		<li>Include genes with detected expression in at least this many cells [3]<li>
+		<li>Include cells where at least this many genes are detected [200]</li>
+		<li>Perform log normalization [T]</li>
+		<li>Scale factor in the log normalization [10000]</li>
+		<li>Unique gene counts per cell upper limit cutoff [2500]</li>
+		<li>Mitochondrial genes percentage upper limit cutoff [0.05]</li>
+		<li>Bottom cutoff on x-axis for identifying variable genes [0.0125]</li>
+		<li>Top cutoff on x-axis for identifying variable genes [3]</li>
+		<li>Bottom cutoff on y-axis for identifying variable genes [0.5]</li>	
+</ul>
+	
+	
+ <h3>Details</h3>
+ 
+<p>
+As inputs, user can give <b>EITHER</b> a .tar packed <b>folder</b> of 10X Genomics files output files (barcodes.tsv, genes.tsv and matrix.mtx), 
+<b>OR</b> a (DropSeq) digital gene expression  (DGE) matrix (which one can generate using <i>Digital expression </i> tool).
+Make sure that your input is assigned correctly (under the parameters).
+</p>
+
+<p>
+After setting up the object, some basic filtering is performed. 
+At this step, user can define:
+<ul>
+	<li>Filtering genes: in how many cells a gene is required to be detected <li>
+	<li>Filtering cells: how many genes are required to be detected in a cell <li>
+	<li>Log normalization: whether to perform log normalization to data (default: yes) <li>
+	<li>Scaling for log normalization: scale each cell to this number of molecules before log transformation (default: 10000) <li>
+</ul>
+</p>
+
+<p>
+Next, some quality control plots are drawn in the QC-plots.pdf file. 
+Note that it might be easier to view this large pdf with the external viewer.
+<br>
+The first plot shows the number of genes (nGene), UMIs (nUMI) and 
+the percentage of mitochondrial genes (percent.mito) in the cells.
+The next plot compares the percent.mito and nGene to nUMI.
+These plots can be used to estimate the outliers: the upper limits for number of genes per cell and mitochondrial percentage.
+</p>
+
+<p>
+After drawing the plots, more filtering based on the number of genes is performed 
+to get rid of possible multiplets. Cells can also be filtered based on the percentage of mitochondrial genes present.
+User can determine (based on the QC plots) the upper limit for unique gene counts per cell and
+the upper limit for mitochondrial genes percentage. 
+
+</p>
+<p>
+Next "uninteresting" sources of variation are regressed out to improve downstream dimensionality reduction and clustering.
+Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
+This tool regresses on the number of detected molecules per cell as well as the percentage mitochondrial gene content.
+</p>
+
+<p>
+Next, the variable genes across the single cells are detected. 
+These highly variable genes are used on the downstream analysis.
+The detection is done by calculating the average expression and dispersion for each gene, 
+placing these genes into bins, and then calculating a z-score for dispersion within each bin.
+Dispersion plot is drawn as a third plot in the QCplots.pdf, 
+together with the number of variable genes when using the user defined cut-offs.
+Based on this plot, user is to define the cut-offs for expression (x-axis) and dispersion (y-axis) 
+to mark visual outliers.
+These setting vary based on the data type, heterogeneity in the sample, and normalization strategy. 
+For example for a UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.
+</p>
+
+<p>
+Finally, principal component analysis (PCA) is performed for the highly variable genes selected above.
+To overcome the extensive technical noise in any single gene for scRNA-seq data, 
+Seurat clusters cells based on their PCA scores, 
+with each PC essentially representing a 'metagene' that combines information across a correlated gene set. 
+Determining how many PCs to include downstream is therefore an important step, but it can be challenging and uncertain.
+Few plots are drawn to <b>PCAplots.pdf</b> to aid in this exploration of the primary sources of heterogeneity in the dataset. 
+Based on these plots the user is supposed to decide which principal components to include in the downstream analysis.
+<br>
+In the first plots, the top genes associated with the first two principal components are shown. 
+Second plot shows the principal components 1 and 2 for the cells in the dataset, and the third plot
+is a heatmap focusing on principal component 1. 
+We also list the top 5 genes associated with high/low loadings for the first 5 PCs in the <b>PCAgenes.txt</b> file.
+<br>
+Next plots can be used to make the decision on which principal components to use: 12 heatmaps are plotted, 
+focusing on the 12 first principal components, in which both cells and genes are sorted by their principal component scores.
+Here one is looking for a plot after which no changes are occurring. 
+<br>
+The last plot shows the standard deviations of the principal components. 
+Here the cutoff is where there is an elbow in the graph.
+</p>
+
+<p>
+For more details, please check the <a href="http://satijalab.org/seurat/get_started.html/">Seurat tutorialsl</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+
+<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
+<li>QCplots.pdf: Quality control plots (explained in detail above) </li>
+<li>PCAgenes.txt: Top genes associated with first principal components</li>
+<li>PCAplots.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of the PCs for the downstream analysis. </li>
+</ul>
+
+
+
+</body>
+
