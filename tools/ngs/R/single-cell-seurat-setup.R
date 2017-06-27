@@ -10,11 +10,12 @@
 # PARAMETER OPTIONAL mingenes: "Include cells where at least this many genes are detected" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
 # PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
-# PARAMETER OPTIONAL genecountcutoff: "Unique gene counts per cell upper limit cutoff" TYPE INTEGER DEFAULT 2500 (Filter out potential mutliplets, that is, cells that have more than this many unique gene counts.)
+# PARAMETER OPTIONAL genecountcutoff: "Unique gene counts per cell upper limit cutoff" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
 # PARAMETER OPTIONAL mitocutoff: "Mitochondrial genes percentage upper limit cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
 # PARAMETER OPTIONAL xlowcutoff: "Bottom cutoff on x-axis for identifying variable genes" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL xhighcutoff: "Top cutoff on x-axis for identifying variable genes" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL ylowcutoff: "Bottom cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # RUNTIME R-3.3.2
 
 
@@ -64,7 +65,6 @@ seurat_obj <- new("seurat", raw.data = dat)
 seurat_obj <- Setup(seurat_obj, min.cells = mincells, min.genes = mingenes, 
 		do.logNormalize = lognorm, total.expr = totalexpr, project = project.name)
 
-# HUOM: jos log norm = FALSE, tarvitaanko total.exp?
 
 # QC
 # % of mito genes
@@ -76,8 +76,13 @@ pdf(file="QCplots.pdf", , width=13, height=7)
 VlnPlot(seurat_obj, c("nGene", "nUMI", "percent.mito"), nCol = 3) 
 par(mfrow = c(1, 2))
 GenePlot(seurat_obj, "nUMI", "percent.mito")
+abline(h=mitocutoff, col="blue")
 GenePlot(seurat_obj, "nUMI", "nGene")
+abline(h=genecountcutoff, col="blue")
 #dev.off() # close the pdf
+
+
+# Tästä poikki? kuvat uudestaan ablinejen kanssa seuraavaan työkaluun.
 
 # Filter out cells that have unique gene counts over threshold (default = 2,500)
 # Other type of filtering could be included as well.
@@ -89,6 +94,9 @@ seurat_obj <- SubsetData(seurat_obj, subset.name = "percent.mito", accept.high =
 # for example, by batch (if applicable) & cell alignment rate (provided by DropSeq tools for Drop-seq data).
 # Here: number of detected molecules and mito gene expression.
 seurat_obj <- RegressOut(seurat_obj, latent.vars = c("nUMI", "percent.mito"))
+
+
+# tästä poikki?
 
 # Detection of variable genes across the single cells
 # Identifies genes that are outliers on a 'mean variability plot'. 
@@ -116,9 +124,17 @@ sink()
 pdf(file="PCAplots.pdf", , width=9, height=12) 
 VizPCA(seurat_obj, 1:2)
 PCAPlot(seurat_obj, 1, 2)
-PCHeatmap(seurat_obj, pc.use = 1, cells.use = 100, do.balanced = TRUE)
+
+# Need to check the number of cells at this point.
+cells_left <- dim(seurat_obj@raw.data)[2]
+if (cells_left > 500) {
+	PCHeatmap(seurat_obj, pc.use = 1, cells.use = 100, do.balanced = TRUE)
+	PCHeatmap(seurat_obj, pc.use = 1:num.of.heatmaps, cells.use = 500, do.balanced = TRUE, label.columns = FALSE, use.full = FALSE)
+}else{
+	PCHeatmap(seurat_obj, pc.use = 1, cells.use = cells_left, do.balanced = TRUE)
+	PCHeatmap(seurat_obj, pc.use = 1:num.of.heatmaps, cells.use = cells_left, do.balanced = TRUE, label.columns = FALSE, use.full = FALSE)
+}
 # fig.height=12,fig.width=9 
-PCHeatmap(seurat_obj, pc.use = 1:12, cells.use = 500, do.balanced = TRUE, label.columns = FALSE, use.full = FALSE)
 PCElbowPlot(seurat_obj)
 dev.off() # close the pdf
 
