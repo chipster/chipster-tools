@@ -82,7 +82,7 @@ abline(h=genecountcutoff, col="blue")
 #dev.off() # close the pdf
 
 
-# Tästä poikki? kuvat uudestaan ablinejen kanssa seuraavaan työkaluun.
+# cut here?
 
 # Filter out cells that have unique gene counts over threshold (default = 2,500)
 # Other type of filtering could be included as well.
@@ -96,7 +96,7 @@ seurat_obj <- SubsetData(seurat_obj, subset.name = "percent.mito", accept.high =
 seurat_obj <- RegressOut(seurat_obj, latent.vars = c("nUMI", "percent.mito"))
 
 
-# tästä poikki?
+# cut here?
 
 # Detection of variable genes across the single cells
 # Identifies genes that are outliers on a 'mean variability plot'. 
@@ -126,7 +126,7 @@ VizPCA(seurat_obj, 1:2)
 PCAPlot(seurat_obj, 1, 2)
 
 # Need to check the number of cells at this point.
-cells_left <- dim(seurat_obj@raw.data)[2]
+cells_left <- dim(seurat_obj@data@Dim)[2]
 if (cells_left > 500) {
 	PCHeatmap(seurat_obj, pc.use = 1, cells.use = 100, do.balanced = TRUE)
 	PCHeatmap(seurat_obj, pc.use = 1:num.of.heatmaps, cells.use = 500, do.balanced = TRUE, label.columns = FALSE, use.full = FALSE)
