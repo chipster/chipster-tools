@@ -30,6 +30,7 @@ plots to aid in estimating the statistically significant principal components ar
 		<li>Bottom cutoff on x-axis for identifying variable genes [0.0125]</li>
 		<li>Top cutoff on x-axis for identifying variable genes [3]</li>
 		<li>Bottom cutoff on y-axis for identifying variable genes [0.5]</li>	
+		<li>Number of principal components to plot as heatmaps [12]</li>			
 </ul>
 	
 	
@@ -102,9 +103,9 @@ Second plot shows the principal components 1 and 2 for the cells in the dataset,
 is a heatmap focusing on principal component 1. 
 We also list the top 5 genes associated with high/low loadings for the first 5 PCs in the <b>PCAgenes.txt</b> file.
 <br>
-Next plots can be used to make the decision on which principal components to use: 12 heatmaps are plotted, 
+Next plots can be used to make the decision on which principal components to use: by default, 12 heatmaps are plotted, 
 focusing on the 12 first principal components, in which both cells and genes are sorted by their principal component scores.
-Here one is looking for a plot after which no changes are occurring. 
+Here one is looking for a plot after which no changes are occurring. User can change the number of heatmaps to plot.
 <br>
 The last plot shows the standard deviations of the principal components. 
 Here the cutoff is where there is an elbow in the graph.

@@ -17,6 +17,7 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
 	<li>Resolution for granularity [0.6]</li>
 	<li>Min.pct [0.25]</li>
 	<li>Thresh.use [0.25]</li>
+	<li>Which test to use for finding marker genes [bimod, roc, t, tobit, poisson, negbinom]</li>
 	<li>Only positive changes [TRUE]</li>
 </ul>
 
@@ -34,7 +35,8 @@ with the goal of optimizing the standard modularity function.
 The <b>resolution</b> parameter sets the 'granularity' of the downstream clustering, 
 with increased values leading to a greater number of clusters. 
 We find that setting this parameter between 0.6-1.2 typically returns good results for single cell datasets 
-of around 3K cells. Optimal resolution often increases for larger datasets.
+of around 3K cells. Optimal resolution often increases for larger datasets 
+-use a value above (below) 1.0 if you want to obtain a larger (smaller) number of communities.
 <br>
 The <b>principal components to use</b> need to be decided by the user based on the PCAplots from the Seurat setup -tool.
 </p>
@@ -55,10 +57,22 @@ and the <b>thresh.test</b> parameter requires a gene to be differentially expres
 between the two groups. Both of these parameters can be set to 0, but with a dramatic increase in time - 
 since this will test a large number of genes that are unlikely to be highly discriminatory. 
 The marker genes for each recognized cluster are written in the <b>markers.tsv</b> file. 
-By default only positive markers are listed.
+<br>By default only positive markers are listed.
+<br>For testing, Seurat currently implements "bimod" (likelihood-ratio test for single cell gene expression, McDavid et al., Bioinformatics, 2011, default), 
+"roc" (standard AUC classifier), "t" (Students t-test), 
+and "tobit" (Tobit-test for differential gene expression, as in Trapnell et al., Nature Biotech, 2014), 
+"poisson", and "negbinom". 
+The latter two options should only be used on UMI datasets, and assume an underlying poisson or negative-binomial distribution.
 </p>
 
-
+<p>
+To get the markers for a specific cluster, you can use the tool <a href="http://86.50.169.69:8081/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
+For example, to get the markers for cluster 2, fill in the parameters accordingly: <br>
+Column to filter by = cluster <br>
+Does the first column have a title = no <br>
+Cutoff = 2 <br>
+Filtering criteria = equal-to  <br>
+</p>
 <p>
 For more details, please check:
 <br><br>

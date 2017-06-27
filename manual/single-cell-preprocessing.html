@@ -7,8 +7,12 @@
 
 <h3>Description</h3>
 
-<p>This tool removes reads where the cell or molecular barcode has low quality bases, 
-trims adapters and polyA tails.
+<p>This tool converts the FASTQ file to unaligned BAM file, 
+tags the reads with the cellular and molecular barcodes,
+removes reads where the cell or molecular barcode has low quality bases, trims adapters and polyA tails,
+converts the preprocessed BAM file back into a FASTQ format for alignment,
+and trims too short reads from the FASTQ file. 
+As an output: unaligned, tagged and trimmed BAM file, trimmed FASTQ file and summary and plots of the process.
  </p>
  
  <h3>Parameters</h3>
