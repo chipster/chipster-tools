@@ -31,6 +31,7 @@ load("seurat_obj.Robj")
 #  Cluster the cells
 # First set the directory for this step.
 library(tools)
+dir <- getwd()
 dir <- file_path_as_absolute(dir)
 seurat_obj <- FindClusters(seurat_obj, pc.use=1:pcs_use, resolution = res, print.output= 0, save.SNN= T, temp.file.location = dir)
 
