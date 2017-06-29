@@ -126,7 +126,8 @@ VizPCA(seurat_obj, 1:2)
 PCAPlot(seurat_obj, 1, 2)
 
 # Need to check the number of cells at this point.
-cells_left <- seurat_obj@data@Dim[2]
+# cells_left <- seurat_obj@data@Dim[2] 
+cells_left <- dim(seurat_obj@raw.data)[2]
 if (cells_left > 500) {
 	PCHeatmap(seurat_obj, pc.use = 1, cells.use = 100, do.balanced = TRUE)
 	PCHeatmap(seurat_obj, pc.use = 1:num.of.heatmaps, cells.use = 500, do.balanced = TRUE, label.columns = FALSE, use.full = FALSE)
