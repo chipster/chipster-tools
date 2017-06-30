@@ -8,8 +8,7 @@
 <h3>Description</h3>
 
 <p>This tool aligns single end reads or paired-end reads to selected reference genome using the BWA MEM algorithm.
-The reads have to be supplied in fastq format. If just one reads file is defined then single-end analysis is performed.
-If two reads files are defined, then paired end analysis is performed.
+The reads have to be supplied in FASTQ format.
 </p>
 
 <h3>Alignment parameters</h3>
@@ -56,14 +55,14 @@ R1 and R2 reads correctly by file name.
 
 <p><b>If you have more than two FASTQ files</b> (or wish to perform single-end alignment for two files), you will 
 need to provide a list of filenames of the FASTQ files; one list for single-end alignment, and two for 
-paired-end alignment (one file for read1 files, and another one for the read2 files) as a text file 
+paired-end alignment (one file for R1 files, and another one for the R2 files) as a text file 
 (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  
 <strong><a href="http://chipster.csc.fi/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. 
 The read pairs must be ordered identically in both lists. 
 </p>
 <p>
-To run, Select the list file/files (R1files.txt and R2files.txt) and ALL FASTQ files, and assign the list files correctly. 
-When assigning the list files, they are automatically inactivated in the "reads" file list.
+To run, select the list file/files (R1files.txt and R2files.txt) and ALL FASTQ files, and assign the list files correctly. 
+When assigning the list files, they are automatically inactivated in the "Reads" file list.
 </p>
 
 <h3>Output</h3>

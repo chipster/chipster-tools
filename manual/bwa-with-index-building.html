@@ -7,7 +7,8 @@
 
 <h3>Description</h3>
 
-<p>Aligns single end reads to the reference genome sequence given by the user. The alignment is constructed using the BWA aln algorithm. The genome needs to be supplied in fasta format and the reads in fastq format.
+<p>Aligns single end reads to the reference genome sequence given by the user. The alignment is constructed using the BWA aln algorithm. 
+The genome needs to be supplied in FASTA format and the reads in FASTQ format.
 </p>
 
 <h3>Parameters</h3>
@@ -34,14 +35,13 @@
 <h3>Details</h3>
 
 <p>This tool uses <a href="http://bio-bwa.sourceforge.net/bwa.shtml">BWA short read aligner</a> to align a set 
-of FASTQ formatted sequences against a fasta formatted reference sequence. Aligning is performed with Burrows-Wheeler Transform based BWA aln algoritm that allows gaps in the alignments. 
-This algorithm that is designed for short queries up to ~200bp with low error rate (&lt;3%). 
-
-
-Aligning is performed with one of the 
-two available Burrows-Wheeler Transform based algorithms. Both of the algorithms allow gaps in the alignments. 
-By default this tool uses <b>aln</b> algorithm that is designed for short queries up to ~200bp with low error 
-rate \(&lt;3\%\).  
+of FASTQ formatted sequences against a FASTA formatted reference sequence. Aligning is performed with Burrows-Wheeler 
+Transform based BWA <b>aln</b> algoritm that allows gaps in the alignments. This algorithm is designed for short queries up 
+to ~200bp with low error rate (&lt;3%). </p>
+<p>
+It is possible to give the tool more than one FASTQ file. The tool will run the alignment for each file separately, 
+and finally merge the resulting BAM files.
+</p>
 
 <p>Note that this aligner is more accurate but significantly slower than Bowtie</p>
 
