@@ -15,6 +15,7 @@ def main():
     input_names = read_input_definitions()
     output_names = {}
     include_list = []
+    include_list_raw = []
     # by default, extract all
     someonly = False
 
