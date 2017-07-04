@@ -9,14 +9,15 @@
 # PARAMETER OPTIONAL num.barcodes: "Number of barcodes" TYPE INTEGER DEFAULT 2000 (Roughly 2x the number of cells)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
 # PARAMETER OPTIONAL num.core.barcodes: "Number of core barcodes" TYPE INTEGER DEFAULT 100 (How many barcodes)
-# PARAMETER OPTIONAL num.genes: "Number of genes per cell" TYPE INTEGER DEFAULT 100 (How many genes per cell required)
-
+# PARAMETER OPTIONAL num.genes: "Number of genes per cell" TYPE INTEGER DEFAULT 0 (How many genes per cell required)
+# PARAMETER OPTIONAL num.transcripts: "Number of transcripts per cell" TYPE INTEGER DEFAULT 0 (How many transcripts per cell required)
 
 # OUTPUT OPTIONAL log.txt
 
 
 # ML 12.10.2016 created
 # ML 09.05.2017 combined detecting bead synthesis error here
+# ML 04.07.2017 added num.transcripts parameter
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
@@ -31,7 +32,17 @@ system(command)
 # command start
 command.start <- paste(path.dropseq, "/DigitalExpression I=cleaned.bam O=digital_expression.txt.gz SUMMARY=digital_expression_summary.txt", sep="")
 # parameters
-command.parameters <- paste("NUM_CORE_BARCODES=", num.core.barcodes, "MIN_NUM_GENES_PER_CELL=", num.genes)
+command.parameters <- paste("NUM_CORE_BARCODES=", num.core.barcodes, "MIN_NUM_GENES_PER_CELL=", num.genes, "MIN_NUM_TRANSCRIPTS_PER_CELL=", num.transcripts)
+#command.parameters <- ""
+#if (num.core.barcodes != "empty"){
+#	command.parameters <- paste(command.parameters, "NUM_CORE_BARCODES=", num.core.barcodes)
+#}else if (num.genes != "empty"){
+#	command.parameters <- paste(command.parameters, "MIN_NUM_GENES_PER_CELL=", num.genes)
+#}else if (num.transcripts != "empty"){
+#	command.parameters <- paste(command.parameters, "MIN_NUM_TRANSCRIPTS_PER_CELL=", num.transcripts)
+#}
+
+
 # run the tool
 command <- paste(command.start, command.parameters, " 2>> log.txt")
 system(command)
