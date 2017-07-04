@@ -150,25 +150,33 @@ system("mv alignment.sorted.bam bwa.bam")
 system("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Substitute display names to log for clarity
-for (i in 1:nrow(input.names)) {
-	sed.command <- paste("s/", input.names[i,1], "/", input.names[i,2], "/", sep="")
-	system(paste("sed -i", sed.command, "bwa.log"))
+displayNamesToFile("bwa.log")
+
+# Handle output names
+#
+# read input names
+inputnames <- read_input_definitions()
+
+# Determine base name
+
+# Default name if neither special case match. 
+# Special cases are for compatibility with older versions of the script
+basename <- "bwa_multi"
+
+# Special case 1: Only one input
+if (fileNotOk("reads002.fq")){
+	basename <- strip_name(inputnames$reads001.fq)
+}
+# Special case 2: Paired end and only two inputs	
+if (paired.end && fileNotOk("reads003.fq")){
+	basename <- paired_name(strip_name(inputnames$reads001.fq), strip_name(inputnames$reads002.fq))
 }
 
+# Make a matrix of output names
+outputnames <- matrix(NA, nrow=2, ncol=2)
+outputnames[1,] <- c("bwa.bam", paste(basename, ".bam", sep =""))
+outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 
-## Handle output names
-##
-## read input names
-#inputnames <- read_input_definitions()
-#
-## Determine base name
-#basename <- strip_name(inputnames$reads.fastq)
-#
-## Make a matrix of output names
-#outputnames <- matrix(NA, nrow=2, ncol=2)
-#outputnames[1,] <- c("bwa.bam", paste(basename, ".bam", sep =""))
-#outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
-#
-## Write output definitions file
-#write_output_definitions(outputnames)
+# Write output definitions file
+write_output_definitions(outputnames)
 

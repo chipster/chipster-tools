@@ -1,6 +1,6 @@
-# TOOL bwa-with-index-building.R: "BWA-backtrack for single end reads and own genome" (BWA-backtrack aligns paired end reads to genomes with BWA ALN algorithm. Results are sorted and indexed bam files. 
+# TOOL bwa-with-index-building.R: "BWA-backtrack for single end reads and own genome" (BWA-backtrack aligns paired end reads to genomes with BWA ALN algorithm. If more than one FASTQ file is provided, each file is first aligned separately, and the BAM files are then merged. Results are sorted and indexed bam files. 
 # Note that this BWA tool requires that you have imported the reference genome to Chipster in fasta format. If you would like to align reads against publicly available genomes, please use the tool \"BWA for single end reads\".)
-# INPUT reads.txt: "Reads to align" TYPE GENERIC 
+# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC 
 # INPUT genome.txt: "Reference genome" TYPE GENERIC
 # OUTPUT bwa.bam 
 # OUTPUT bwa.bam.bai 
@@ -25,20 +25,24 @@
 # AMS 19.6.2012 Added unzipping
 # AMS 11.11.2013 Added thread support
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
-# Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+# check out if the file is compressed and if so unzip it
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
+
 # read input names
 inputnames <- read_input_definitions()
-
-unzipIfGZipFile("reads.txt")
-unzipIfGZipFile("genome.txt")
 
 # bwa settings
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+
 command.start <- paste("bash -c '", bwa.binary)
 
 
@@ -91,26 +95,41 @@ mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e"
 command.end <- paste( bwa.genome , "reads.txt 1> alignment.sai 2>> bwa.log'")
 system("echo Running the alignment with command: >> bwa.log")
 
-# run bwa alignment
-bwa.command <- paste(command.start, mode.parameters, command.end)
-echo.command <- paste("echo '",bwa.command ,"'  >> bwa.log")
-system(echo.command)
-#stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(bwa.command)
+# Run BWA for each input
+for (i in 1:nrow(input.names)) {
+	# command ending
+	sai.file <- paste(c(as.character(i), ".sai"), collapse="")
+	sam.file <- paste(c(as.character(i), ".sam"), collapse="")
+	bam.file <- paste(c(as.character(i), ".bam"), collapse="")
+	command.end <- paste(bwa.genome, input.names[i,1], "1>", sai.file, "2>> bwa.log'")
+	
+	# run bwa alignment
+	bwa.command <- paste(command.start, mode.parameters, command.end)
+	
+	system(bwa.command)
+	
+	# sai to sam conversion
+	samse.parameters <- paste("samse -n", alignment.no )
+	samse.end <- paste(bwa.genome, sai.file, input.names[i,1], ">", sam.file, "2>>bwa.log'" )
+	samse.command <- paste( command.start, samse.parameters , samse.end )
+	system(samse.command)
+	
+	# convert sam to bam
+	system(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
+}
 
+# Join bam files
+if (fileOk("2.bam")){
+	# more than one bam exists, so join them
+	system("ls *.bam > bam.list")
+	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+}else{
+	# only one bam, so just rename it
+	system("mv 1.bam alignment.bam")
+}
 
-# sai to sam conversion
-samse.parameters <- paste("samse -n", alignment.no )
-samse.end <- paste(bwa.genome, "alignment.sai reads.txt 1> alignment.sam 2>> bwa.log'" )
-samse.command <- paste( command.start, samse.parameters , samse.end )
-system(samse.command)
-
-		
-# samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
-
-# convert sam to bam
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+# Change file named in BAM header to display names
+displayNamesToBAM("alignment.bam")
 
 # sort bam
 system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
@@ -122,16 +141,20 @@ system(paste(samtools.binary, "index alignment.sorted.bam"))
 system("mv alignment.sorted.bam bwa.bam")
 system("mv alignment.sorted.bam.bai bwa.bam.bai")
 
-# Handle output names
-#
-source(file.path(chipster.common.path, "tool-utils.R"))
+# Substitute display names to log for clarity
+displayNamesToFile("bwa.log")
+
+## Handle output names
 
 # read input names
 inputnames <- read_input_definitions()
 
-# Determine base name
-basename <- strip_name(inputnames$reads.txt)
-
+if (fileNotOk("reads002.fq")){
+	# Determine base name
+	basename <- strip_name(inputnames$reads001.fq)
+}else{
+	basename <- "bwa_multi"
+}
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)
 outputnames[1,] <- c("bwa.bam", paste(basename, ".bam", sep =""))
@@ -139,3 +162,4 @@ outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+

@@ -7,7 +7,7 @@
 
 <h3>Description</h3>
 
-<p>Aligns paired-end reads to the reference genome sequence given by the user. The alignment is constructed using the BWA aln algorithm. The genome needs to be supplied in fasta format and the reads in two fastq files.
+<p>Aligns paired-end reads to the reference genome sequence given by the user. The alignment is constructed using the BWA aln algorithm. The genome needs to be supplied in fasta format and the reads in FASTQ files.
 </p>
 
 <h3>Parameters</h3>
@@ -37,12 +37,29 @@
 
 <h3>Details</h3>
 
-<p>This tool uses <a href="http://bio-bwa.sourceforge.net/bwa.shtml">BWA short read aligner</a> to align two sets of 
-FASTQ formatted sequences against a fasta-formatted reference sequence. The first read file should contain all the 
-first reads of the read pairs and the second read file all the pairs for the first reads in the same order as in the first read file. 
-</p><p> 
-A BWA index is automatically calculated for the given reference genome or sequence set. Aligning is performed with
- the Burrows-Wheeler Transform based <b>aln</b> algorithm that allows gaps in the alignments.</p>
+<p>This tool uses <a href="http://bio-bwa.sourceforge.net/bwa.shtml">BWA short read aligner</a> to align a set 
+of FASTQ formatted sequences against a against a FASTA formatted reference sequence.
+Aligning is performed with Burrows-Wheeler Transform based BWA <b>aln</b> algorithm that allows gaps in the alignments. 
+This algorithm is designed for short queries up to ~200bp with low error rate (&lt;3%).
+</p>
+<p>
+It is possible to give the tool more than one FASTQ file pair. The tool will run the alignment for each
+file pair separately, and finally merge the resulting BAM files.
+</p>
+<p>
+If you provide two FASTQ files, the tool will try to assign R1 and R2 reads correctly by file name. 
+<p>
+
+<p><b>If you have more than two FASTQ files</b>, you will need to provide lists of filenames of the FASTQ files as text files; one file 
+for R1 files, and another one for the R2 files (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  
+<strong><a href="http://chipster.csc.fi/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. 
+The read pairs must be ordered identically in both lists. 
+</p>
+<p>
+To run, select the genome file, list files (R1files.txt and R2files.txt) and ALL FASTQ files, and assign the files correctly. 
+When assigning the genome and list files, they are automatically inactivated in the "reads" file list.
+</p>
+
 
 <h3>Output</h3>
 

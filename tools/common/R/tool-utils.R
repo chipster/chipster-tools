@@ -220,3 +220,16 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE){
 		}
 	}
 }
+
+# Changes the file names in a text file to display names according to chipster-inputs.tsv
+#
+displayNamesToFile <- function(input.file){
+	
+	# Read input names
+	input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+	# Go through input names and change names
+	for (i in 1:nrow(input.names)) {
+		sed.command <- paste("s/", input.names[i,1], "/", input.names[i,2], "/", sep="")
+		system(paste("sed -i", sed.command, input.file))
+	}
+}
