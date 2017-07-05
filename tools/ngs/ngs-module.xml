@@ -244,6 +244,8 @@
 		<tool>single-cell-digital-expression.R</tool>	   	
 		<tool>single-cell-bam-tag-histogram.R</tool>	
 		<tool>single-cell-seurat-setup.R</tool>	   	
+		<tool>single-cell-seurat-filter-regress.R</tool>	   	
+		<tool>single-cell-seurat-pca.R</tool>	   	
 		<tool>single-cell-seurat-clustering.R</tool>	
 		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
 		<tool>single-cell-seurat-gene-plots.R</tool>			  		
