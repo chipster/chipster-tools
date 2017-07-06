@@ -44,7 +44,7 @@ seurat_obj <- RegressOut(seurat_obj, latent.vars = c("nUMI", "percent.mito"))
 # and calculates z-scores for dispersion within each bin. 
 # The purpose of this is to identify variable genes while controlling for the strong relationship 
 # between variability and average expression.
-pdf(file="Dispersion_plot.pdf", , width=13, height=7) 
+pdf(file="Dispersion_plot.pdf") # width=13, height=7
 seurat_obj <- MeanVarPlot(seurat_obj ,fxn.x = expMean, fxn.y = logVarDivMean, x.low.cutoff = xlowcutoff, 
 		x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.contour = F)
 # y.high.cutoff = yhighcutoff,
