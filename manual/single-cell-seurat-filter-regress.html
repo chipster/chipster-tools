@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Filtering, regression and detection of variable genes </h2>
+
+<h3>Description</h3>
+
+<p>
+As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
+<br><br>
+<p>
+This tool filters out cells, and regresses out uninteresting sources of variation. 
+It then detects highly variable genes across the single cells, 
+which are used for performing the principal component analysis in the next tool.
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Unique gene counts per cell upper limit cutoff [2500]</li>
+		<li>Mitochondrial genes percentage upper limit cutoff [0.05]</li>
+		<li>Bottom cutoff on x-axis for identifying variable genes [0.0125]</li>
+		<li>Top cutoff on x-axis for identifying variable genes [3]</li>
+		<li>Bottom cutoff on y-axis for identifying variable genes [0.5]</li>	
+</ul>
+	
+	
+ <h3>Details</h3>
+ 
+<p>
+As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
+</p>
+
+<p>
+You can use the QC-plots.pdf to estimate the cut-offs for this tool: 
+the upper limits for number of genes per cell and mitochondrial percentage.
+</p>
+
+<p>
+First, the tool performs <b>filtering</b> based on the number of genes 
+to get rid of possible multiplets. Cells can also be filtered based on the percentage of mitochondrial genes present.
+User can determine (based on the QC plots) the upper limit for unique gene counts per cell and
+the upper limit for mitochondrial genes percentage. 
+</p>
+
+<p>
+Next, the <b>"uninteresting" sources of variation are regressed out</b> to improve downstream dimensionality reduction and clustering.
+Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
+This tool regresses on the number of detected molecules per cell as well as the percentage mitochondrial gene content.
+</p>
+
+<p>
+Next, the <b>variable genes across the single cells are detected</b>. 
+These highly variable genes are used on the downstream analysis (in the next tools).
+The detection is done by calculating the average expression and dispersion for each gene, 
+placing these genes into bins, and then calculating a z-score for dispersion within each bin.
+Dispersion plot is drawn in the Dispersion.pdf, 
+together with the number of variable genes when using the user defined cut-offs.
+Based on this plot, user is to define the cut-offs for expression (x-axis) and dispersion (y-axis) 
+to mark visual outliers.
+These setting vary based on the data type, heterogeneity in the sample, and normalization strategy. 
+For example for a UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.
+</p>
+
+
+<p>
+For more details, please check the <a href="http://satijalab.org/seurat/get_started.html/">Seurat tutorials</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+
+<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
+<li>PCAgenes.txt: Top genes associated with first principal components</li>
+<li>Dispersion.pdf: The dispersion vs average expression plot, also lists the number of highly variable genes. </li>
+</ul>
+
+
+
+</body>
+
