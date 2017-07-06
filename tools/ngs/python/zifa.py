@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL dataType: "Is the input data just count data or is it the logarithm of the count data." TYPE [count:"count", logarithmic:"logarithmic"] DEFAULT count (Is the input data just count data or is it the logarithm of the count data.)
 # PARAMETER OPTIONAL header: "Is the first row and column of input data text, not actual data." TYPE [header:"header", noHeader:"no header"] DEFAULT header (Is there a header in the input data; first row and columns are not actual data)
 # PARAMETER OPTIONAL p0Thresh: "Filters out genes that are zero in more than this proportion of samples" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.95 (Filters out genes that are zero in more than this proportion of samples)
-# PARAMETER OPTIONAL singleSigma: "If True, fit only a single variance parameter." TYPE INTEGER FROM 0 TO 1 DEFAULT 0 (If True, fit only a single variance parameter zero-inflated PPCA rather than a different on for every gene.)
+# PARAMETER OPTIONAL singleSigma: "SingleSigma, if True, fit only a single variance parameter." TYPE INTEGER FROM 0 TO 1 DEFAULT 0 (If True, fit only a single variance parameter zero-inflated PPCA rather than a different on for every gene.)
 
 # AO 4.7.2017 First version
 
@@ -50,7 +50,7 @@ if dataType == "count":
     myData = log2(myData + 1)
 if block == "no":
     # run ZIFA
-    Zhat, params = ZIFA.fitModel(myData, latentDimension, singleSigma = singleSigma) 
+    Zhat, params = ZIFA.fitModel(myData, latentDimension, singleSigma) 
 else:
     if blockNumber == 0:
         # run block_ZIFA, with default number of blocks

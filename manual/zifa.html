@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>ZIFA, Zero Inflated Factor Analysis</h2>
+
+<h3>Description</h3>
+<p>Zero-inflated dimensionality reduction algorithm for single-cell data.
+</p>
+
+<h3>Parameters</h3> 
+<ul>
+<li>How many latent dimensions is wanted. [3]</li>
+<li>To fit or not to fit with block algorithm (yes, no) [no]</li>
+<li>To how many blocks genes are divided into [0]</li>
+<li>Is the input data just count data or is it the logarithm of count data (count, logarithm) [count]</li>
+<li>Is the first row and column of input data text, not actual data. (header, no header) [header]</li>
+<li>Filters out genes that are zero in more than this proportion of samples (0-1) [0.95]</li>
+<li>SingleSigma, if True, fit only single variance parameter (0,1) [0]</li>
+</ul>
+
+<h3>Details</h3>
+<p>
+ZIFA is a dimensionality-reduction method for single-cell data. It explicitly models the dropout characteristics. There are two versions of ZIFA "normal" and block.
+ The block version is recommended when there are more than a few thousand genes.</p>
+
+<p>Runtime for block ZIFA on the full single-cell dataset from Pollen et al, 2014 (~250 samples, ~20,000 genes) is approximately 15 minutes on a quadcore Mac Pro.
+Runtime for block ZIFA is roughly linear in the number of samples and the number of genes, and quadratic in the block size. Decreasing the block size may decrease runtime but will also produce less reliable results.</p>
+
+<h3>Output</h3>
+<p>
+This tool returns the following files:
+</p>
+<ul>
+<li>output.tsv: .tsv file containing the coordinates of each cell in the latent space.</li>
+<li>hisat.log: Summary</li>
+</ul>
+ 
+<h3>Reference</h3>
+<p>This tool is based on the <a href="https://github.com/epierson9/ZIFA">ZIFA</a> package. Please cite the following article:
+Emma Pierson and Christopher Yau <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0805-z"> ZIFA: Dimensionality reduction for zero-inflated single-cell gene expression analysis</a> Genome biology 2015. 
+</p>
+ 
+</body>
