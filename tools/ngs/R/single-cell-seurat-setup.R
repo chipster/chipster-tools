@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "BETA Seurat -Setup and QC" (Setup the Seurat object, quality control, filter and regress the cells, determine statistically significant principal components. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
+# TOOL single-cell-seurat-setup.R: "BETA Seurat -Setup and QC" (Setup the Seurat object and examine quality control plots. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table from DropSeq" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf 
@@ -10,13 +10,14 @@
 # PARAMETER OPTIONAL mingenes: "Include cells where at least this many genes are detected" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
 # PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
-# PARAMETER OPTIONAL genecountcutoff: "Unique gene counts per cell upper limit cutoff" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
-# PARAMETER OPTIONAL mitocutoff: "Mitochondrial genes percentage upper limit cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
 # RUNTIME R-3.3.2
 
 
 # PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
 # OUTPUT OPTIONAL log.txt
+# PARAMETER OPTIONAL genecountcutoff: "Unique gene counts per cell upper limit cutoff" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
+# PARAMETER OPTIONAL mitocutoff: "Mitochondrial genes percentage upper limit cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
+
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -73,9 +74,9 @@ pdf(file="QCplots.pdf", , width=13, height=7)
 VlnPlot(seurat_obj, c("nGene", "nUMI", "percent.mito"), nCol = 3) 
 par(mfrow = c(1, 2))
 GenePlot(seurat_obj, "nUMI", "percent.mito")
-abline(h=mitocutoff, col="blue")
+# abline(h=mitocutoff, col="blue")
 GenePlot(seurat_obj, "nUMI", "nGene")
-abline(h=genecountcutoff, col="blue")
+# abline(h=genecountcutoff, col="blue")
 #dev.off() # close the pdf
 
 
