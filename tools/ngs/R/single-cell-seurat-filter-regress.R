@@ -2,11 +2,11 @@
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
-# PARAMETER OPTIONAL genecountcutoff: "Unique gene counts per cell upper limit cutoff" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
-# PARAMETER OPTIONAL mitocutoff: "Mitochondrial genes percentage upper limit cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
-# PARAMETER OPTIONAL xlowcutoff: "Bottom cutoff on x-axis for identifying variable genes" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL xhighcutoff: "Top cutoff on x-axis for identifying variable genes" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL ylowcutoff: "Bottom cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
+# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial gene ratio" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
+# PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
 # RUNTIME R-3.3.2
 
 

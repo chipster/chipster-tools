@@ -6,8 +6,8 @@
 # OUTPUT OPTIONAL PCAgenes.txt
 # OUTPUT OPTIONAL seurat_obj.Robj
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots.)
-# PARAMETER OPTIONAL mincells: "Include genes with detected expression in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
-# PARAMETER OPTIONAL mingenes: "Include cells where at least this many genes are detected" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
+# PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
+# PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
 # PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
 # RUNTIME R-3.3.2
