@@ -3,32 +3,13 @@
 <head><title></title></head>
 <body>
 
-<h2>Preprocessing single cell DropSeq FASTQ files</h2>
+<h2>Seurat -Find group specific markers</h2>
 
 <h3>Description</h3>
 
-<p>This tool converts the FASTQ file to unaligned BAM file, 
-tags the reads with the cellular and molecular barcodes,
-removes reads where the cell or molecular barcode has low quality bases, trims adapters and polyA tails,
-converts the preprocessed BAM file back into a FASTQ format for alignment,
-and trims too short reads from the FASTQ file. 
-As an output: unaligned, tagged and trimmed BAM file, trimmed FASTQ file and summary and plots of the process.
+<p>This tool removes reads where the cell or molecular barcode has low quality bases, 
+trims adapters and polyA tails.
  </p>
- 
- <h3>Parameters</h3>
-<ul>
-		<li>Base range for cell barcode [1-12]</li>
-		<li>Base range for molecule barcode [13-20]</li>
-		<li>Base quality [10]</li>
-		<li>Adapter sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
-		<li>Mismatches in adapter [0]</li>
-		<li>Number of bases to check in adapter [5]</li>
-		<li>Mismatches in polyA [0]</li>
-		<li>Number of bases to check in polyA [6]</li>
-		<li>Minimum length of reads to keep [50]</li>	
-	</ul>
- 
- <h3>Details</h3>
  
 <p>This tool is a combination of several tools: DropSeq (TagBamWithReadSequenceExtended, FilterBam) , 
 Picard (FASTQ to BAM, BAM to FASTQ) and Trimmomatic (MINLEN). 
@@ -104,6 +85,19 @@ and the <a href="https://broadinstitute.github.io/picard/command-line-overview.h
 
 </p>
 
+
+<h3>Parameters</h3>
+<ul>
+		<li>Base range for cell barcode [1-12]</li>
+		<li>Base range for molecule barcode [13-20]</li>
+		<li>Base quality [10]</li>
+		<li>Adapter sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
+		<li>Mismatches in adapter [0]</li>
+		<li>Number of bases to check in adapter [5]</li>
+		<li>Mismatches in polyA [0]</li>
+		<li>Number of bases to check in polyA [6]</li>
+		<li>Minimum length of reads to keep [50]</li>	
+	</ul>
 
 
 <h3>Output</h3>

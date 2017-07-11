@@ -1,9 +1,10 @@
-# TOOL bwa-mem.R: "BWA MEM for single or paired end reads" (Aligns reads to genomes using the BWA MEM algorithm. If just one read file is given, then a single end analysis is run. If two read files are given, then mapping is done in paired end mode. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser. 
+# TOOL bwa-mem.R: "BWA MEM for single or paired end reads" (Aligns reads to genomes using the BWA MEM algorithm. If just one read file is given, then a single end analysis is run. If two read files are given, then mapping is done in paired end mode. If more than two read files are given, you also need to provide a list of filenames of the FASTQ files for each direction. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser. 
 # Note that this BWA tool uses publicly available genomes. If you would like to align reads against your own reference genome, please use the tool \"BWA MEM for single or paired end data with own genome\".)
-# INPUT reads.fastq: "Read file 1" TYPE GENERIC 
-# INPUT OPTIONAL reads2.fastq: "Read file 2 for paired end reads" TYPE GENERIC 
-# OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
+# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
+# OUTPUT OPTIONAL bwa.bam 
+# OUTPUT OPTIONAL bwa.bam.bai 
 # OUTPUT bwa.log
 # PARAMETER organism: "Organism" TYPE ["FILES genomes/indexes/bwa .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bwa/default .fa" (Genome that you would like to align your reads against.)
 # PARAMETER OPTIONAL minseedlen: "Minimum seed length" TYPE INTEGER DEFAULT 19 (Matches shorter than this will be missed when looking for maximal exact matches or MEMs in the first alignment phase.)
@@ -20,21 +21,23 @@
 
 # KM 28.08.2015
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads.fastq")
 
-pe_check.command <- ("ls reads2.fastq 2>/dev/null | wc -l")
-
-paired.end <- system(pe_check.command, intern = TRUE )
-
-if ( paired.end == 1 ){
-	unzipIfGZipFile("reads2.fastq")
+# check out if the file is compressed and if so unzip it
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
 }
 
-# bwa
+# bwa binary
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
+# bwa genome
 bwa.genome <- file.path(chipster.tools.path, "genomes", "indexes", "bwa", organism)
+# samtools binary
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+
 #command.start <- paste("bash -c '", bwa.binary)
 command.start <-(bwa.binary)
 
@@ -69,28 +72,72 @@ if ( nchar(rgid) < 1 ){
 		stop("CHIPSTER-NOTE: Please define identifier for read group")	
 	}
 }
-# command ending
-command.end <- paste(bwa.genome, "reads.fastq 1> alignment.sam 2>> bwa.log")
-if ( paired.end == 1 ){
-	command.end <- paste(bwa.genome, "reads.fastq reads2.fastq 1> alignment.sam 2>> bwa.log")
-}	
-	
-bwa.command <- paste(command.start, bwa.parameters, command.end)
 
-echo.command <- paste("echo '", bwa.binary, bwa.parameters, bwa.genome, "reads.fastq ' > bwa.log" )
-if ( paired.end == 1 ){
-  echo.command <- paste("echo '", bwa.binary, bwa.parameters, bwa.genome, "reads.fastq reads2.fastq ' > bwa.log" )
+# Input files
+
+if (fileOk("reads1.txt")){
+	if (fileNotOk("reads2.txt")){
+		# Case: One list file -> multiple single-end alignments
+		reads1.list <- make_input_list("reads1.txt")
+		paired.end <- FALSE
+	
+	}else{
+		# Case: Two list files -> multiple paired-end alignments
+		reads1.list <- make_input_list("reads1.txt")
+		reads2.list <- make_input_list("reads2.txt")
+		paired.end <- TRUE
+		if (!(identical(intersect(reads1.list, reads2.list), character(0)))){
+			stop(paste('CHIPSTER-NOTE: ', "One or more files is listed in both lists."))	
+		}
+	}	
+}else if (fileNotOk("reads002.fq")){
+	# Case: No list file, one fastq -> single single-end alignment
+	reads1.list <- paste("reads001.fq")
+	paired.end <- FALSE
+}else if (fileNotOk("reads003.fq")){
+	# Case: No list file, two fastq  -> single paired-end alignment
+	in.sorted <- input.names[order(input.names[,2]),]
+	reads <- grep("reads", in.sorted[,1], value = TRUE)
+	reads1.list <- reads[1]
+	reads2.list <- reads[2]
+	paired.end <- TRUE
+}else{
+	# Case: No list files, more than two fastq inputs -> error
+	stop(paste('CHIPSTER-NOTE: ', "More than two FASTQ files selected, but no list file(s) provided."))
 }
 
-#stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(echo.command)
-system(bwa.command)
+for (i in 1:length(reads1.list)) {
+	# command ending
+	sam.file <- paste(c(as.character(i), ".sam"), collapse="")
+	bam.file <- paste(c(as.character(i), ".bam"), collapse="")
 		
-# samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+	if (paired.end){
+		command.end <- paste(bwa.genome, reads1.list[i], reads2.list[i], "1>", sam.file, "2>> bwa.log")
+	}else{
+		command.end <- paste(bwa.genome, reads1.list[i], "1>", sam.file, "2>> bwa.log")
+	}
+	# run bwa alignment
+	bwa.command <- paste(command.start, bwa.parameters, command.end)
+	
+	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
+	system(bwa.command)
+	
+	# convert sam to bam
+	system(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
+}		
 
-# convert sam to bam
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+# Join bam files
+if (fileOk("2.bam")){
+	# more than one bam exists, so join them
+	system("ls *.bam > bam.list")
+	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+}else{
+	# only one bam, so just rename it
+	system("mv 1.bam alignment.bam")
+}
+
+# Change file named in BAM header to display names
+displayNamesToBAM("alignment.bam")
 
 # sort bam
 system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
@@ -102,15 +149,28 @@ system(paste(samtools.binary, "index alignment.sorted.bam"))
 system("mv alignment.sorted.bam bwa.bam")
 system("mv alignment.sorted.bam.bai bwa.bam.bai")
 
+# Substitute display names to log for clarity
+displayNamesToFile("bwa.log")
+
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
-
 # read input names
 inputnames <- read_input_definitions()
 
 # Determine base name
-basename <- strip_name(inputnames$reads.fastq)
+
+# Default name if neither special case match. 
+# Special cases are for compatibility with older versions of the script
+basename <- "bwa_multi"
+
+# Special case 1: Only one input
+if (fileNotOk("reads002.fq")){
+	basename <- strip_name(inputnames$reads001.fq)
+}
+# Special case 2: Paired end and only two inputs	
+if (paired.end && fileNotOk("reads003.fq")){
+	basename <- paired_name(strip_name(inputnames$reads001.fq), strip_name(inputnames$reads002.fq))
+}
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)

@@ -32,6 +32,17 @@ repo.bioc <- "http://www.bioconductor.org"
 #Unlike R, RScript does not seem to load the method-package, why some try-catches can crash
 library(methods)
 
+# CRAN packages and their dependencies
+cranPackages = c(
+		"devtools" # support for install_url/install_github
+)
+
+for (package in cranPackages) {
+	smart.install.packages(package=package, mirror=repo.cran)
+	#library(package, character.only = TRUE)
+	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
+}
+
 # Bioconductor packages and their dependencies
 bioconductorPackages = c(
 		"Biobase",
@@ -44,4 +55,8 @@ for (package in bioconductorPackages) {
 	#detach(paste("package:", package, sep = ""), character.only = TRUE, unload=TRUE)
 }
 
-
+# install Seurat
+# the devtools depends on the nlopt library, but it's installation is broken. Luckily it's happy with the apt version: 
+# sudo apt-get install libnlopt0 libnlopt-dev
+library(devtools)  
+install_github("satijalab/seurat") # install Seurat from GitHub

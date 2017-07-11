@@ -5,19 +5,14 @@
 
 <h2>Analysing differential expression with RNA-seq data</h2>
 
-<br><br>
-CuffDiff, eXpress, aligners...???
-<br><br>
-
 <p>
-We have gathered all of our learning material for RNA-seq data analysis to this page to 
-help you out to get started!
+We have gathered all of our learning material for RNA-seq data analysis to this page to help you out to get started!
 <br>
 If RNA-seq is a whole new topic to you, we would suggest checking out the
  <a href= "https://www.youtube.com/watch?v=Cb37UU7ahe0&t=4s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=6"> introduction to RNA-seq webinar</a> (1h), 
-where the very basic steps are explained -this video covers also the 101 of using Chipster.
+which introduces the steps of differential expression analysis -this video covers also the 101 of using Chipster.
 <br><br>
-After the webinar, a hands-on approach might be handy -for that we suggest going through our course exercises
+After the webinar, you might like to try the analysis tools yourself -for that we suggest going through our course exercises
 (listed below). Open the excercises pdf document, log in to Chipster, and just follow the instructions!
 <br><br>
 Some parts of the analysis can raise more questions -we have tried to clarify those steps with more 
@@ -26,38 +21,17 @@ detailed instructions and tutorials. Please find the links to those on this page
 <h3>Course material</h3>
 <p>
 Please find below the links to our RNA-seq course materials.<br>
-Course example sessions are available on Chipster (File -> Open example session -> "course_RNAseq..."). 
+Course example sessions are available in Chipster (File -> Open example session -> "course_RNAseq..."). 
 <ul>
 <li>Introduction to RNA-seq data analysis with Chipster <a href= "https://kannu.csc.fi/index.php/s/zqHXWdr32yOA5xo">course slides and exercises</a></li>
 <li>Introduction to RNA-seq data analysis, command line tools + R/Bioconductor  <a href= "https://kannu.csc.fi/index.php/s/4oGtgfglXOOjCzI">course slides, exercises and some test data</a></li>
 </ul>
 </p>
 
-<h3>Getting started with Chipster</h3>
-<p>
-<ul>
-<li>Do you have a user account? <a href= "http://chipster.csc.fi/access.shtml">Instructions for getting access</a> </li>
-<li>Getting started <a href= "https://www.youtube.com/watch?v=mgK1eo1YW4I">tutorial video</a> (12 min)</li>
-<li>Opening Chipster with Mac: <a href= "https://www.youtube.com/watch?v=4uAJJ3HEc4w">tutorial video</a> (2 min)</li>
-<li>Saving and opening your sessions: <a href= "http://chipster.csc.fi/manual/sessions.html">Manual page</a> and <a href="https://www.youtube.com/watch?v=KOeSRSBy-LU">tutorial video</a> (2 min)</li>
-<li>What's in there? <a href= "http://chipster.csc.fi/manual/tools-ngs.html#RNA">List of tools</a></li>
-</ul>
-</p>
-
-<h3>Importing your data to Chipster</h3>
-<p>
-<ul>
-<li>Importing your files to Chipster: <a href= "http://chipster.csc.fi/manual/import-ngs.html">Manual</a></li>
-<li>Have your data at Taito? <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Video tutorial</a> (12 min)</li>
-</ul>
-</p>
-
 <h3>Tutorial videos</h3>
-<p>
-We have a <a href= "https://www.youtube.com/playlist?list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF">RNA-seq playlist</a> in our Youtube channel. 
+
+We have an <a href= "https://www.youtube.com/playlist?list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF">RNA-seq playlist</a> in our YouTube channel. 
 This list includes tutorials for some common analysis needs:
-
-
 <ul>
 <li>Beginner's introduction to RNA-seq data analysis <a href= "https://www.youtube.com/watch?v=Cb37UU7ahe0&t=4s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=6"> Webinar</a> (1h)</li>
 <li>Differential expression analysis tools for RNA-seq <a href= "https://www.youtube.com/watch?v=kPDy4FYF1yY&t=16s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=1">tutorial video</a> (3 min)</li>
@@ -66,55 +40,76 @@ This list includes tutorials for some common analysis needs:
 <!--  <li>Upper-quartile normalization (yes, no) [yes]</li>-->
 </ul>
 </p>
-
-
-<h3>Analysis steps</h3>
+<h3>Getting started with Chipster</h3>
 <p>
-<img src="RNA-seq-basic-steps.png"> <br><br>
-Typical analysis steps include:
+<ul>
+<li>Do you have a user account? <a href= "http://chipster.csc.fi/access.shtml">Instructions for getting access</a> </li>
+<li>Getting started <a href= "https://www.youtube.com/watch?v=mgK1eo1YW4I">tutorial video</a> (12 min)</li>
+<li>Opening Chipster with Mac: <a href= "https://www.youtube.com/watch?v=4uAJJ3HEc4w">tutorial video</a> (2 min)</li>
+<li>Saving and opening your sessions: <a href= "http://chipster.csc.fi/manual/sessions.html">Manual page</a> and <a href="https://www.youtube.com/watch?v=KOeSRSBy-LU">tutorial video</a> (2 min)</li>
+<li>What tools are available? <a href= "http://chipster.csc.fi/manual/tools-ngs.html#RNA">List of tools</a></li>
+</ul>
+</p>
+
+<h3>Importing your data to Chipster</h3>
+<p>
+<ul>
+<li>Importing your files to Chipster: <a href= "http://chipster.csc.fi/manual/import-ngs.html">Manual</a></li>
+<li>Have your data already in CSC's Taito cluster, how to run Chipster there? <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Video tutorial</a> (12 min)</li>
+</ul>
+</p>
+
+<h3>Analysis steps for finding differentially expressed genes</h3>
+
+These steps take you from raw reads to differentially expressed genes (please find a figure showing the different steps and file formats at the end of the page):
 <ol>
-<li><b>Quality control of the raw data (FASTQ files): </b><br>
-	Check whether there's need for trimming or filtering of your reads, and gain information about the reads (number of reads, quality encoding, strandedness and inner distance) <br>
-	Tools (under Quality control category): 
-	<a href= "http://chipster.csc.fi/manual/fastqc.html">FASTQC </a> (most used, very clear), 
-	<a href= "http://chipster.csc.fi/manual/fastx-statistics.html">FASTX </a>, 
-	<a href= "http://chipster.csc.fi/manual/prinseq-statistics.html">PRINSEQ </a> (bit more info on duplicates) 
-	You can also check out whether your data was produced using a stranded protocol and what is the inner distance of your paired reads using 
-	 <a href= "http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html"> RNA-seq strandedness inference and inner distance estimation using RseQC</a></li>
+
+<li><b>Quality control of raw reads </b><br>
+	Check the number, quality encoding, strandedness and inner distance of your reads, and inspect them for base quality, biases and adapters.<br>
+	Tools under Quality control category (input FASTQ files):
+	<ul> 
+	<li><a href= "http://chipster.csc.fi/manual/fastqc.html">FastQC </a> is clear and fast.</li>
+	<li><a href= "http://chipster.csc.fi/manual/prinseq-statistics.html">PRINSEQ</a></li>
+	<li><a href= "http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html"> RNA-seq strandedness inference and inner distance estimation using RseQC</a> 
+	checks if the data was produced using a stranded protocol and what is the inner distance of paired reads. This information is important for the subsequent alignment and quantitation steps.</li>
+	</ul>
+</li>
 <br>
-<li><b>Preprocessing of the raw data (FASTQ files): </b><br>
-	If you noticed some needs for trimming or filtering of your data, like poor quality reads or 
-	adapter sequences, you can get rid of them now -after this, run the quality control tool(s) again to see
-	whether the problem was solved. Most of the problems can be dealt with in the alignment step too,
-	but by getting rid of the poor quality data here your files are smaller and thus maybe a bit faster to work with. <br>
-	Tools (under Preprocessing category): 
-	<a href= "http://chipster.csc.fi/manual/trimmomatic.html">Trimmomatic </a> (several options, quite fast), 
-	PRINSEQ <a href= "http://chipster.csc.fi/manual/prinseq-trimmer.html">trimming</a> and
-	<a href= "http://chipster.csc.fi/manual/prinseq-filter.html">filtering</a> are in separate tools,
-	and so are FASTX tools.</li>
+<li><b>Preprocessing raw reads </b><br>
+	If the reads contain low quality bases or adapter sequences, you might like to trim or filter them. 
+	Note that when preprocessing paired end data, you need to give the two read files simultaneously to the analysis tool in order to preserve the order of read pairs.<br>
+	Trimming or filtering is not absolutely necessary, because many bad quality reads are either removed or dealt with when aligning reads to the reference genome in the next step.
+	This depends on the aligner used, as aligners differ in their ability to cope with mismatching bases. 
+	<br>
+	Tools under Preprocessing category (input FASTQ files):
+   	<ul>
+	<li><a href= "http://chipster.csc.fi/manual/trimmomatic.html">Trimmomatic</a> has several options for trimming and filtering and it is fast.</li>
+	<li><a href= "http://chipster.csc.fi/manual/prinseq-trimmer.html">PRINSEQ trimming</a> is slower.</li>
+	<li><a href= "http://chipster.csc.fi/manual/prinseq-filter.html">PRINSEQ filtering</a> is slower.</li>
+	</ul>
 <br>
-<li><b>Alignment (from FASTQ to BAM files): </b><br>	
-	 Next you align your FASTQ files against a reference genome. <br>
-	 Choose the reference genome, and remember to use same reference also later on! If your reference genome is not available, 
-	 you can import it separately and use the "own genome" version of the tool. 
-	 If your genome is used by many users, you can also contact us and ask if it could be added.<br>
-	 In case you have <b> paired end</b> data, select both read1 and read 2 files for a particular sample as input for the aligner. 
-	 Make sure you choose the correct tool, there are separate tools for single end and paired end data. <br>
-	 In case you have <b> several FASTQ files per sample</b> (Illumina NextSeq generates 8 files per sample in case of paired end data),
-	 you need to first generate list files (one for read 1 files and another for read 2 files), and give those list files and all the FASTQ files as input.
-	 Please read the manual for the <a href= "http://chipster.csc.fi/manual/make_namelist.html">Utilities/Make a list of file names</a> tool for more info! <br>
-	 Aligners also benefit from the information regarding the library prep: the strandedness and inner distance of the paired end reads. 
-	 Since the <b>strandedness / library type</b> issue can easily get a bit confusing due to incoherent nomenclature, we gathered a summary <a href="http://chipster.csc.fi/manual/library-type-summary.html">here</a>!
+<li><b>Alignment of reads to reference genome</b><br>
+	 Chipster offers a large selection of reference genomes. If your reference genome is not available, you can import it as a fasta file and use the "own genome" version of the alignment tool. 
+	 You can also ask us to add the genome in Chipster if it is publicly available and commonly used.<br> 
+	 Note that some sequencing platforms generate <b>several FASTQ files per sample</b>. For example, Illumina NextSeq generates 8 files per sample for paired end data. 
+	 In this case you need to first generate file name lists (one for read 1 files and another for read 2 files), and give those list files and all the FASTQ files as input for the aligner.
+	 Please read the manual for the <a href= "http://chipster.csc.fi/manual/make_namelist.html">Utilities/Make a list of file names</a> tool for more info. <br>
+	 Note that aligners need <b>strandedness / library type</b> information in order to align reads correctly. As there are two possible strandedness types 
+	 and several kits for producing stranded sequencing libraries, we have made a <a href="http://chipster.csc.fi/manual/library-type-summary.html">summary of strandedness options and nomenclature</a>.
 	 <br>
-	 Tools (under Alignment category):
-	 TopHat2 (recommended for RNA-seq), Bowtie, BWA. Coming: STAR ?? <br></li>
+	 Tools under Alignment category, note that there are separate TopHat tools for single and paired end data, and for user-supplied reference genome (input FASTQ files):
+	 <ul>
+	 <li><a href= "http://chipster.csc.fi/manual/tophat2.html">TopHat for paired end reads</a> and other TopHat tools.</li>
+	 <li>Coming soon: STAR and HISAT2 aligners</li>
+	 </ul>
 <br>
-<li><b>Alignment level quality control (for BAM files): </b><br>	
-	Check the alignment quality to see how well the reads mapped to the reference, how many are on exons or in the junctions.
- 	 <br>
-	 Tools (under Quality control category): 
-	 <a href= "http://chipster.csc.fi/manual/rseqc.html">RSeQC </a>, 
-	 <a href= "http://chipster.csc.fi/manual/picard-collectmultiplemetrics.html">CalculateMultipleMetrics (Picard))</a></li>
+<li><b>Alignment level quality control: </b><br>	
+	 Check what proportion of the reads mapped to exons, is the coverage uniform over transcript length, and whether novel splice sites were found.
+	 Tools under Quality control category (input BAM files):
+	 <ul> 
+	 <li><a href= "http://chipster.csc.fi/manual/rseqc.html">RSeQC </a> 
+	 <li><a href= "http://chipster.csc.fi/manual/picard-collectmultiplemetrics.html">CalculateMultipleMetrics (Picard)</a></li>
+	 </ul>
 <br>
 <li><b>Quantitation (for BAM files): </b><br>	
 	Next we want to count the reads per gene/transcript. The quantitation is done separately for each BAM file.
@@ -161,8 +156,7 @@ Typical analysis steps include:
 	 <a href= "http://chipster.csc.fi/manual/deseq2-pca-heatmap.html">PCA and heatmap of samples using DESeq2) </a> </li> 
 <br>
 <li><b>Differential expression analysis (for the count table): </b><br>
-<br>
-MISSAHAN OLIS SE HYVA SLAIDI MIKÄ TEHTIIN SEIJAN OHJEIDEN PERUSTEELLA?	
+<br>	
 <br> KEHTAISKO PYYTAA SEIJALTA LYHYTTA VIDEOTA TAI NOTEBOOKIA AIHEESTA? TASTA JA SIITA linear modeling?
 <br>
 	Time for statistics! It is actually fairly tricky thing to estimate the differential expression due to a couple of things:
@@ -191,7 +185,8 @@ MISSAHAN OLIS SE HYVA SLAIDI MIKÄ TEHTIIN SEIJAN OHJEIDEN PERUSTEELLA?
 <li><b>Visualising your data: </b><br>	
 <a href= "https://www.youtube.com/watch?v=PzZQVVD812w">Video tutorial for interactive visualisations</a> (7 min)
 		</li> 
-</ol
+</ol>
+<img src="RNA-seq-basic-steps.png"> <br><br>
 
 </p>
 

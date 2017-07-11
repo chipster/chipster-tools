@@ -93,9 +93,9 @@ if (discordant.file== "yes"){
 	parameters <- paste(parameters, "--un-conc discordant")
 }
 
-if (unaligned.file== "yes"){
-	parameters <- paste(parameters, "--un unaligned")
-}
+#if (unaligned.file== "yes"){
+#	parameters <- paste(parameters, "--un unaligned")
+#}
 
 
 # output parameters
@@ -128,10 +128,10 @@ system(paste(samtools.binary, "index alignment.sorted.bam"))
 system("mv alignment.sorted.bam bowtie2.bam")
 system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 
-if (unaligned.file== "yes"){
-	system("mv unaligned.1 unaligned_1.fq")
-	system("mv unaligned.2 unaligned_2.fq")
-}
+#if (unaligned.file== "yes"){
+#	system("mv unaligned.1 unaligned_1.fq")
+#	system("mv unaligned.2 unaligned_2.fq")
+#}
 
 if (discordant.file== "yes"){
 	system("mv discordant.1 discordant_1.fq")
