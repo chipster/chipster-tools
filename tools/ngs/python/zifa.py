@@ -2,6 +2,7 @@
 # INPUT data: "Observed zero-inflated data" TYPE GENERIC
 # OUTPUT OPTIONAL zifa.log
 # OUTPUT OPTIONAL output.tsv
+# OUTPUT OPTIONAL plot.pdf
 # PARAMETER OPTIONAL latentDimension: "How many latent dimensions is wanted" TYPE INTEGER FROM 1 TO 100 DEFAULT 3 (Number of latent dimensions)
 # PARAMETER OPTIONAL block: "To fit or not to fit with block algorithm" TYPE [yes:"yes", no:"no"] DEFAULT no (Is block algorithm used to fit ZIFA or not.)
 # PARAMETER OPTIONAL blockNumber: "To how many blocks genes are divided into." TYPE INTEGER FROM 0 TO 100000 DEFAULT 0 (How many blocks is used when running in block mode. If zero, the default block size is used that is: number of genes divided by 500.)
@@ -13,10 +14,15 @@
 # AO 4.7.2017 First version
 
 import sys
-from ZIFA import ZIFA
-from ZIFA import block_ZIFA
+import matplotlib
+# Force matplotlib to not use any XWindows backend.
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from numpy import genfromtxt, savetxt, log2
 from math import log
+
+from ZIFA import ZIFA
+from ZIFA import block_ZIFA
 
 # Copy std out to zifa.log
 class Logger(object):
@@ -71,5 +77,13 @@ print(Zhat)
 
 # save results into tsv file,delimiter is \t and the file name that is associated with file handle f is output.tsv. fmt='%f' means that numbers are in floating point format.
 savetxt(f, Zhat, delimiter='\t', fmt='%f') 
+
+fig = plt.figure(figsize = [5, 5])
+plt.scatter(Zhat[:,0], Zhat[:,1], color = 'red', s = 4)    
+plt.xlim([-4,4])
+plt.ylim([-4,4])
+plt.title('ZIFA Estimated Latent Positions')
+fig.savefig('plot.pdf')
+
 
 #EOF
