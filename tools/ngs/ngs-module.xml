@@ -240,9 +240,9 @@
 	    <!--<tool>picard-sortsam.R</tool>	--> 
 		<tool>picard-merge-bam-alignment.R</tool>	    
 		<tool>single-cell-tag-read-with-gene-exon.R</tool>	   	
-		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	-->   	
+		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
+		<tool>single-cell-bam-tag-histogram.R</tool>	  	
 		<tool>single-cell-digital-expression.R</tool>	   	
-		<tool>single-cell-bam-tag-histogram.R</tool>	
 		<tool>single-cell-seurat-setup.R</tool>	   	
 		<tool>single-cell-seurat-filter-regress.R</tool>	   	
 		<tool>single-cell-seurat-pca.R</tool>	   	
