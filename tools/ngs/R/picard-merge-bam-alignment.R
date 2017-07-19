@@ -1,4 +1,4 @@
-# TOOL picard-merge-bam-alignment.R: "Merge BAM alignment" (Merge sorted BAM alignment and unaligned, tagged BAM file. Make sure the input files are assigned correctly!)
+# TOOL picard-merge-bam-alignment.R: "Merge aligned and unaligned BAM" (Merge sorted BAM alignment and unaligned, tagged BAM file. Make sure the input files are assigned correctly!)
 # INPUT unmapped.bam: "Unmapped BAM" TYPE GENERIC
 # INPUT aligned.bam: "Aligned BAM" TYPE GENERIC
 # OUTPUT OPTIONAL merged.bam     
@@ -9,9 +9,33 @@
 
 # 2016-10-31 ML
 # 2017-05-08 ML add sort BAM to this tool
+# 2017-07-19 ML Naming of outputs according to the input names
 
 ## NOTE!!! Add the reference genomes!!! Like this:
 # PARAMETER organism: "Genome" TYPE [Arabidopsis_thaliana.TAIR10.30, Bos_taurus.UMD3.1.83, Canis_familiaris.CanFam3.1.83, Drosophila_melanogaster.BDGP6.83, Felis_catus.Felis_catus_6.2.83, Gallus_gallus.Galgal4.83, Gasterosteus_aculeatus.BROADS1.83, Halorubrum_lacusprofundi_atcc_49239.GCA_000022205.1.30, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38.83, Medicago_truncatula.GCA_000219495.2.30, Mus_musculus.GRCm38.83, Oryza_sativa.IRGSP-1.0.30, Ovis_aries.Oar_v3.1.83, Populus_trichocarpa.JGI2.0.30, Rattus_norvegicus.Rnor_5.0.79, Rattus_norvegicus.Rnor_6.0.83, Schizosaccharomyces_pombe.ASM294v2.30, Solanum_tuberosum.3.0.30, Sus_scrofa.Sscrofa10.2.83, Vitis_vinifera.IGGP_12x.30, Yersinia_enterocolitica_subsp_palearctica_y11.GCA_000253175.1.30, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.GCA_000834295.1.30] DEFAULT Homo_sapiens.GRCh38.83 (Genome or transcriptome that you would like to align your reads against.)
+
+
+# Handle output names
+# Source read_input_definitions and strip_name functions
+source(file.path(chipster.common.path, "tool-utils.R"))
+# read input names and strip file extension
+inputnames <- read_input_definitions()
+input1name <- inputnames$unmapped.bam
+input1namestripped <-strip_name(input1name)
+#write the input file name into log
+write(input1namestripped, file = "log.txt")
+
+# Make a matrix of output names
+# These override the default ones
+outputnames <- matrix(NA, nrow=1, ncol=2)
+outputnames[1,] <- c("merged.bam", paste(input1namestripped, "_merged.bam", sep = ""))
+#outputnames[2,] <- c("tagging_and_trimming_summary.txt", "tagging_and_trimming_summary.txt")
+#outputnames[3,] <- c("tagging_and_trimming_histograms.pdf", "tagging_and_trimming_histograms.pdf")
+#outputnames[4,] <- c("unaligned_tagged.bam", paste(input1namestripped, ".bam", sep =  ""))
+
+
+# Write output definitions file
+write_output_definitions(outputnames)
 
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
