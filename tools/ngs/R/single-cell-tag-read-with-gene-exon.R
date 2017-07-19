@@ -1,4 +1,4 @@
-# TOOL single-cell-tag-read-with-gene-exon.R: "Tag read with gene exon" (Adds a BAM tag GE onto reads when the read overlaps the exon of a gene. This tag contains the name of the gene, as reported in the GTF annotations file. )
+# TOOL single-cell-tag-read-with-gene-exon.R: "Tag read with gene names" (Adds a BAM tag GE onto reads when the read overlaps the exon of a gene. This tag contains the name of the gene, as reported in the GTF annotations file. )
 # INPUT merged.bam: "Merged BAM" TYPE GENERIC
 # INPUT OPTIONAL own.gtf: "Own GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL merged_tagged.bam
