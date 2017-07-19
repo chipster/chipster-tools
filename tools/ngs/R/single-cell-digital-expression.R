@@ -1,4 +1,4 @@
-# TOOL single-cell-digital-expression.R: "Digital expression" (Extracting Digital Gene Expression DGE data from an aligned library.)
+# TOOL single-cell-digital-expression.R: "Create digital gene expression matrix" (Extracting Digital Gene Expression DGE data from an aligned library.)
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL digital_expression.txt.gz
 # OUTPUT OPTIONAL digital_expression.tsv
