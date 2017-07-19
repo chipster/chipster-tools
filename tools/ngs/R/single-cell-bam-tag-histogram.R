@@ -1,14 +1,15 @@
-# TOOL single-cell-bam-tag-histogram.R: "BAM tag histogram" (Extracts the reads per cell barcode and draw a cumulative distribution plot. The plot helps to select how many cells to include in the DGE matrix.)
+# TOOL single-cell-bam-tag-histogram.R: "Estimate number of usable cells" (Extracts the reads per cell barcode and draw a cumulative distribution plot. The plot helps to select how many cells to include in the DGE matrix.)
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL cell_readcounts.txt.gz
-# OUTPUT OPTIONAL tag_histogram.pdf
-# OUTPUT OPTIONAL inflectionPoint.txt
+# OUTPUT OPTIONAL inflectionPoint.pdf
 # PARAMETER OPTIONAL x_axis_max: "Max to x axis" TYPE INTEGER FROM 0 TO 500000 DEFAULT 1500 (Upper limit for x-axis in the histogram. If you cannot see the knee in the curve, try tuning this parameter.) 
 
 
 # OUTPUT OPTIONAL CumCellReadCount.pdf
+# OUTPUT OPTIONAL inflectionPoint.txt
 
 # ML 12.10.2016 created
+# ML 19.7.2017 Change tool name and add the inflection point information to the pdf
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
@@ -45,10 +46,10 @@ print(infl[1,2])
 
 
 # Plot Cumulative Read proportion of cells 
-pdf(file="tag_histogram.pdf")
+pdf(file="inflectionPoint.pdf")
 cellIds = 1:length(x)
 plot(cellIds, x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]",
-		ylab="cumulative fraction of reads", xlim=c(1,length(x)))
+		ylab="cumulative fraction of reads", xlim=c(1,length(x)), main=paste("Inflection point: ", infl[1,2]))
 
 abline(v=infl[1,2],col="red")
 abline(h=x[infl[1,2]],col="red")
@@ -58,8 +59,8 @@ axis(2, at=x[infl[1,2]],labels=round(x[infl[1,2]],2),col="red",las=2)
 
 dev.off()
 
-#write inflectionPoint.txt 
-write.table(infl[1,2],"inflectionPoint.txt",col.names = c("InflectionPoint"),row.names=F)
+## write inflectionPoint.txt 
+# write.table(infl[1,2],"inflectionPoint.txt",col.names = c("InflectionPoint"),row.names=F)
 
 
 
