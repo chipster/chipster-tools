@@ -9,7 +9,7 @@
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL num.barcodes: "Number of barcodes" TYPE INTEGER DEFAULT 2000 (Roughly 2x the number of cells)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
-# PARAMETER OPTIONAL num.core.barcodes: "Number of core barcodes" TYPE INTEGER DEFAULT 100 (How many barcodes)
+# PARAMETER OPTIONAL num.core.barcodes: "Number of core barcodes" TYPE INTEGER DEFAULT 100 (How many reads per cell barcode required)
 # PARAMETER OPTIONAL num.genes: "Number of genes per cell" TYPE INTEGER DEFAULT 0 (How many genes per cell required)
 # PARAMETER OPTIONAL num.transcripts: "Number of transcripts per cell" TYPE INTEGER DEFAULT 0 (How many transcripts per cell required)
 
