@@ -249,7 +249,8 @@
 		<tool>single-cell-seurat-clustering.R</tool>	
 		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
 		<tool>single-cell-seurat-gene-plots.R</tool>			  		
-		<tool>zifa.py</tool>	   	
+		<tool>zifa.py</tool>
+		<tool>seurat_zifa.R</tool>
 	</category>
 
 </module>
