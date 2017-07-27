@@ -3,6 +3,7 @@
 # OUTPUT OPTIONAL ZIFAplots.pdf
 # OUTPUT OPTIONAL ZIFAgenes.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
+# OUTPUT OPTIONAL coordinates.tsv
 # PARAMETER OPTIONAL latentDimensions: "How many latent dimensions is wanted" TYPE INTEGER FROM 1 TO 100 DEFAULT 3 (Number of latent dimensions)
 # PARAMETER OPTIONAL p0Thresh: "Filters out genes that are zero in more than this proportion of samples" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.95 (Filters out genes that are zero in more than this proportion of samples)
 # RUNTIME R-3.3.2
@@ -18,6 +19,17 @@
 # 3. Move ZIFA's results back to Seurat object
 # 4. Visualize the results
 
+# In addition to R packages this script requires also Python because ZIFA is written in Python.
+# The following python modules are required:
+# ZIFA, from https://github.com/epierson9/ZIFA
+# pandas
+# numpy
+#
+# ZIFA also requires: 
+# pylab
+# scipy
+# numpy
+# scikits.learn
 
 library(Seurat) # For Seurat objects
 library(rPython) # For Python integration
@@ -29,25 +41,20 @@ library(plyr) # For generic name conversion
 
 # Load the object that contains the data
 load("seurat_obj.Robj")
-# Lets take just 100 cells
-# TODO: remove when ready and substitute this with seurat_obj
-zifa.subset <- SubsetData(seurat_obj, max.cells.per.ident=100)
 # Get a list of wanted genes
-genes <- zifa.subset@var.genes
-
-## Filter genes in the same way as in Seurat's PCA script
+genes <- seurat_obj@var.genes
+# Filter genes in the same way as in Seurat's PCA script
 # Take only unique ones
-genes <- unique(genes[genes%in%rownames(zifa.subset@scale.data)])
+genes <- unique(genes[genes%in%rownames(seurat_obj@scale.data)])
 # Calculate variance
-genes.var <- apply(zifa.subset@scale.data[genes,],1,var)
+genes.var <- apply(seurat_obj@scale.data[genes,],1,var)
 # Use only genes that have larger than 0 variance, i.e. there are different values
 genes.use <- genes[genes.var>0]
 # Take only non NAs
 genes.use <- genes.use[!is.na(genes.use)]
-
 # Read data from raw.data, take only genes specified by var.genes, and the same cells as in scale.data
 # ZIFA wants raw count data or log2 data, lets use raw count data so we avoid conversion errors
-zifa.data <- zifa.subset@raw.data[genes.use, colnames(zifa.subset@scale.data)]
+zifa.data <- seurat_obj@raw.data[genes.use, colnames(seurat_obj@scale.data)]
 # Create matrix
 zifa.matrix  <- matrix(data=zifa.data, nrow=zifa.data@Dim[1], byrow=FALSE, dimnames=zifa.data@Dimnames)
 # Save the .tsv for ZIFA
@@ -57,15 +64,13 @@ write.table(zifa.matrix, file='seurat_to_zifa.tsv', quote=FALSE, sep='\t', row.n
 
 
 # 2.
-# Here we use rPython to run ZIFA. ZIFA is written in Python so therefore we have to use python.
+# Here we use rPython to run ZIFA. ZIFA is written in Python therefore we have to use python.
 # ZIFA's results are saved into files: rotated_data.tsv and rotation_matrix.tsv
 # rotated_data.tsv contains the new coordinates of the cells in the latent dimensions
 # rotation_matrix is the matrix that is used to map high-dimensional gene space data to the latent space. 
 # The map from gene space to latent space is just a matrix multiplication: rotation_matrix * gene_data = rotated_data
-latentDimensions <- 2
-p0Thresh <- 0.95
+# User defines the values of latentDimensions and p0Thresh
 
-# TODO: remove unnecessary parameters
 python.assign('latent_dimensions', latentDimensions)
 #python.assign('n_blocks', 0)
 python.assign('p0_thresh', p0Thresh)
@@ -79,20 +84,17 @@ python.exec('import numpy as np')
 python.exec('zifa_data = pd.read_csv(\'seurat_to_zifa.tsv\', sep=\'\\t\', header=0)')
 # Convert expression data to correct format, count -> log2
 python.exec('zifa_data = np.log2(zifa_data + 1)')
-# TODO: remove this when in production
-# Filter the zeros away, these is for the development version only, in real case zeros are already filtered
+# Filter the non expressive genes away the same way as it is done in ZIFA.
+# By doing this we do not lose the names of the samples when running ZIFA.
 python.exec('zifa_data = zifa_data.loc[np.asarray((np.abs(zifa_data.values) < 1e-6).mean(axis = 1) <= p0_thresh),:]')
 # Read the cells's and genes' names
 python.exec('cells = zifa_data.columns')
 python.exec('genes = zifa_data.index')
 # Transpose the data, because ZIFA wants the data in different form
 python.exec('zifa_data = zifa_data.T')
-# TODO: Should non-block ZIFA be added?
-# TODO: add n_blocks
 # Run ZIFA
 python.exec('rotated_data, params = block_ZIFA.fitModel(zifa_data.values, latent_dimensions, p0_thresh=p0_thresh, singleSigma=single_sigma)')
 # Write results into a file
-# TODO: cells could be fetched from the Seurat object
 # Create a dataframe, so  we can write cells' names
 python.exec('rotated_data = pd.DataFrame(data = rotated_data, index = cells)')
 # This monster opens a file 'zifa_results.tsv' and writes the df dataframe into it with a to_csv function using tabs and writing also the cells' names (indexes)
@@ -106,47 +108,46 @@ python.exec('with open(\'rotation_matrix.tsv\', \'w\') as f: \n\t rotation_matri
 
 # 3.
 # Read ZIFA's outputs in R and insert the data into Seurat object
-# TODO: Should we calculate also the standard deviation of samples in latent dimension, as in PCA?
-# In PCA sdev is used to asses how much there is information in each PC.
+
 zifa.rotated.data <- read.table(file='rotated_data.tsv', sep='\t', header=TRUE, row.names=1)
 zifa.rotation.matrix <- read.table(file='rotation_matrix.tsv', sep='\t', header=TRUE, row.names=1)
-# Rename coordinates, so they are in same format that PCA produces in Seurat
-# TODO: remove hard coded values, replace with generic solution
-zifa.rotated.data <- rename(zifa.rotated.data, c('X0'='PC1', 'X1'='PC2'))
-zifa.rotation.matrix <- rename(zifa.rotation.matrix, c('X0'='PC1', 'X1'='PC2'))
+# Rename coordinates, so they are in the same format that PCA produces in Seurat e.g. "PC1", "PC2", ...
+latent.dimensions <- ncol(zifa.rotated.data)
+for (dimension in 1:latent.dimensions) {
+	new.name <- paste('PC', dimension, sep="")
+	colnames(zifa.rotated.data)[dimension] <- new.name
+	colnames(zifa.rotation.matrix)[dimension] <- new.name
+}
 # Calculate the standard deviation of the cells in each dimension
 # Standard deviation is not so important for ZIFA as it is for PCA, but 
-# lets calculate it, so we can visualize it if we want to.
+# lets calculate it, so we can visualize it if we want to
+# We have to also rename it, so it is compatible with Seurat
 zifa.sdev <- apply(zifa.rotated.data, 2, sd)
 zifa.sdev <- data.frame(zifa.sdev)
 zifa.sdev <- rename(zifa.sdev, c('zifa.sdev'='sdev'))
-
 # Assign rotated data into Seurat objects pca.rot
 # NOTE Seurat naming conventions are confusing, .rot is usually the rotation matrix, not the rotated data
-# TODO: replace subset with the acutal object, when the development is done
-zifa.subset@pca.rot <- zifa.rotated.data
-zifa.subset@pca.x <- zifa.rotation.matrix
-zifa.subset@pca.obj <- list(zifa.sdev)
+seurat_obj@pca.rot <- zifa.rotated.data
+seurat_obj@pca.x <- zifa.rotation.matrix
+seurat_obj@pca.obj <- list(zifa.sdev)
 
 
 # 4. 
 # Visualize and print results the same way as in the PCA tool
 
-# Print results into a ZIFAgenes
+# Print results into a ZIFAgenes.txt
 sink('ZIFAgenes.txt')
-PrintPCA(zifa.subset, pcs.print=1:2, genes.print=5, use.full=FALSE)
+PrintPCA(seurat_obj, pcs.print=1:2, genes.print=5, use.full=FALSE)
 sink()
-
-# TODO: PDF-printing does not work on own laptop, jpegs work
-# This might be just an issue on laptop
 # Save visualizations into a pdf
 pdf(file="ZIFAplots.pdf")
-VizPCA(zifa.subset, pcs.use=1:2, num.genes=30, use.full=FALSE)
-PCAPlot(zifa.subset, 1, 2)
-PCHeatmap(zifa.subset, pc.use=1, cells.use=20, do.balanced=TRUE)
-PCElbowPlot(zifa.subset)
+VizPCA(seurat_obj, pcs.use=1:2, num.genes=30, use.full=FALSE)
+PCAPlot(seurat_obj, 1, 2)
+PCHeatmap(seurat_obj, pc.use=1, cells.use=20, do.balanced=TRUE)
+PCElbowPlot(seurat_obj)
 # Close the pdf file
 dev.off()
-
 # Save the Roj for the next tool
 save(seurat_obj, file="seurat_obj_2.Robj")
+
+#EOF
