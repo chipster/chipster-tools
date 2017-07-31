@@ -18,8 +18,9 @@ import matplotlib
 # Force matplotlib to not use any XWindows backend.
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from numpy import genfromtxt, savetxt, log2
+from numpy import genfromtxt, savetxt, log2, transpose
 from math import log
+import pandas as pd
 
 from ZIFA import ZIFA
 from ZIFA import block_ZIFA
@@ -45,25 +46,29 @@ sys.stdout = Logger()
 
 ## Check parameters
 if header == "header":
-    # read a file 'data' that is in .tsv format, and skip first row
-    myData = genfromtxt('data', delimiter = '\t', skip_header = 1)
-    # delete first column
-    myData = myData[:,1:]
-else:
+    # Read the first row and column, without the first object that is the corner
     # read a file 'data' that is in .tsv format
-    myData = genfromtxt('data', delimiter = '\t')
+#    myData = genfromtxt('data', delimiter = '\t', skip_header = 1)
+    myData = pd.read_csv('data', sep = '\t', header = 1)
+#    cells = myData.columns.values
+    # delete first column, first row is already trimmed away
+#    myData = myData[1:,:]
+else:
+    # TODO: use also pandas
+    # No header
+    myData = genfromtxt('data', delimiter = '\t', skip_header = 0)
 if dataType == "count": 
     myData = log2(myData + 1)
 if block == "no":
     # run ZIFA
-    Zhat, params = ZIFA.fitModel(myData, latentDimension, singleSigma) 
+    Zhat, params = ZIFA.fitModel(transpose(myData), latentDimension, singleSigma) 
 else:
     if blockNumber == 0:
         # run block_ZIFA, with default number of blocks
-        Zhat, params = block_ZIFA.fitModel(myData, latentDimension, p0_thresh = p0Thresh, singleSigma = singleSigma)
+        Zhat, params = block_ZIFA.fitModel(transpose(myData), latentDimension, p0_thresh = p0Thresh, singleSigma = singleSigma)
     else:
         # run block_ZIFA 
-        Zhat, params = block_ZIFA.fitModel(myData, latentDimension, n_blocks = blockNumber, p0_thresh = p0Thresh, singleSigma = singleSigma) 
+        Zhat, params = block_ZIFA.fitModel(transpose(myData), latentDimension, n_blocks = blockNumber, p0_thresh = p0Thresh, singleSigma = singleSigma) 
 
 ## Write results to a file
 # open a file called workfile, with write permissions 'w'
@@ -75,8 +80,23 @@ print(myData)
 # print the output of ZIFA, this shows in zifa.log
 print(Zhat) 
 
+## OLD TODO: remove this comment
 # save results into tsv file,delimiter is \t and the file name that is associated with file handle f is output.tsv. fmt='%f' means that numbers are in floating point format.
-savetxt(f, Zhat, delimiter='\t', fmt='%f') 
+
+# if there was a header in the input include it also in output
+#savetxt(f, Zhat, delimiter='\t', fmt='%f', header = 
+# Use pandas module to write "indecies" aka row names into file, lets first write it to a csv, that is the filetype that pandas know how to handle, and then convert it to a tsv that is the default filetype in Chipster.
+# Convert myData into data frame, that can be saved as tsv with index
+
+# TODO: add pca display option
+if header == "header":
+#    df = pd.DataFrame(data = Zhat, index = cells)
+    df = pd.DataFrame(data = Zhat)
+    df.to_csv(f, sep = '\t')
+# Write without index
+else:
+    df = DataFrame(data = Zhat)
+    df.to_csv(f, sep = '\t')
 
 fig = plt.figure(figsize = [5, 5])
 plt.scatter(Zhat[:,0], Zhat[:,1], color = 'red', s = 4)    
