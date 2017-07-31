@@ -148,6 +148,7 @@
 		<tool>cuffcompare2.R</tool>
 		<tool>cuffdiff2.R</tool>
 		<tool>cuffdiff2_with_replicates.R</tool>
+                <tool>stringtie.R</tool>
 		<tool module="common">annotate-cpdb.py</tool>
 	</category>
 
