@@ -150,7 +150,7 @@ command <- paste(command, hisat.parameters)
 # Close the command with a ', because there is a opening ' also
 command <- paste(command,"'") 
 # Print the command to the hisat.log file
-system(paste("echo ",command ," >> hisat.log"))
+debugPrint(command)
 
 # Run command
 system(command)
@@ -164,12 +164,17 @@ system(command)
 # Convert SAM to BAM
 debugPrint("")
 debugPrint("SAMTOOLS")
-debugPrint(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
-system(paste(samtools.binary, "view -bS hisat.sam > hisat.bam"))
-# Index bam
-debugPrint(paste(samtools.binary, "sort hisat.bam"))
-system(paste(samtools.binary, "sort hisat.bam"))
-# Unset environmet variable
+samtools.view.command <- paste(samtools.binary, "view -bS hisat.sam > hisat.bam")
+debugPrint(samtools.view.command)
+system(samtools.view.command)
+# Index bam, this produces a "hisat.sorted.bam" file
+samtools.sort.command <- paste(samtools.binary, "sort hisat.bam hisat.sorted")
+debugPrint(samtools.sort.command)
+system(samtools.sort.command)
+
+# Rename result files
+system("mv hisat.sorted.bam hisat.bam")
+
 Sys.unsetenv("HISAT2_INDEX")
 
 # Append the debug.log into hisat.log
