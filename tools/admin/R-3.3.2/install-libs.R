@@ -60,3 +60,6 @@ for (package in bioconductorPackages) {
 # sudo apt-get install libnlopt0 libnlopt-dev
 library(devtools)  
 install_github("satijalab/seurat") # install Seurat from GitHub
+
+# install rPython
+library(rPython)
