@@ -26,13 +26,12 @@
 # numpy
 #
 # ZIFA also requires: 
-# pylab
+# pylab (pylab wont install, matplotlib is used instead)
 # scipy
 # numpy
 # scikits.learn
 
 library(Seurat) # For Seurat objects
-library(rPython) # For Python integration
 library(plyr) # For generic name conversion 
 
 
@@ -64,53 +63,39 @@ write.table(zifa.matrix, file='seurat_to_zifa.tsv', quote=FALSE, sep='\t', row.n
 
 
 # 2.
-# Here we use rPython to run ZIFA. ZIFA is written in Python therefore we have to use python.
+# Here we run ZIFA. ZIFA is written in Python therefore we have to use python.
 # ZIFA's results are saved into files: rotated_data.tsv and rotation_matrix.tsv
 # rotated_data.tsv contains the new coordinates of the cells in the latent dimensions
 # rotation_matrix is the matrix that is used to map high-dimensional gene space data to the latent space. 
 # The map from gene space to latent space is just a matrix multiplication: rotation_matrix * gene_data = rotated_data
+
 # User defines the values of latentDimensions and p0Thresh
 
-python.assign('latent_dimensions', latentDimensions)
-#python.assign('n_blocks', 0)
-python.assign('p0_thresh', p0Thresh)
-python.assign('single_sigma', 0)
-# Import required modules
-python.exec('from ZIFA import ZIFA, block_ZIFA')
-python.exec('import pandas as pd')
-python.exec('import numpy as np')
-# Read the data from a file
-# We have to escape the apostrophes in the command, because it is wrapped inside of quotation itself
-python.exec('zifa_data = pd.read_csv(\'seurat_to_zifa.tsv\', sep=\'\\t\', header=0)')
-# Convert expression data to correct format, count -> log2
-python.exec('zifa_data = np.log2(zifa_data + 1)')
-# Filter the non expressive genes away the same way as it is done in ZIFA.
-# By doing this we do not lose the names of the samples when running ZIFA.
-python.exec('zifa_data = zifa_data.loc[np.asarray((np.abs(zifa_data.values) < 1e-6).mean(axis = 1) <= p0_thresh),:]')
-# Read the cells's and genes' names
-python.exec('cells = zifa_data.columns')
-python.exec('genes = zifa_data.index')
-# Transpose the data, because ZIFA wants the data in different form
-python.exec('zifa_data = zifa_data.T')
-# Run ZIFA
-python.exec('rotated_data, params = block_ZIFA.fitModel(zifa_data.values, latent_dimensions, p0_thresh=p0_thresh, singleSigma=single_sigma)')
-# Write results into a file
-# Create a dataframe, so  we can write cells' names
-python.exec('rotated_data = pd.DataFrame(data = rotated_data, index = cells)')
-# This monster opens a file 'zifa_results.tsv' and writes the df dataframe into it with a to_csv function using tabs and writing also the cells' names (indexes)
-# \n is linebreak and \t is tab
-python.exec('with open(\'rotated_data.tsv\', \'w\') as f: \n\t rotated_data.to_csv(f, sep=\'\\t\', index=True, mode=\'w\')')
-# We want also the rotation matrix, that is used to produce the low dimensional linear combination from the original data
-python.exec('rotation_matrix = pd.DataFrame(data = params[\'A\'], index = genes)')
-# Write the rotation matrix in the same way as the rotated data aka zifa_results.tsv above
-python.exec('with open(\'rotation_matrix.tsv\', \'w\') as f: \n\t rotation_matrix.to_csv(f, sep=\'\\t\', index=True, mode=\'w\')')
+# Call zifa.py from common/python
+# Arguments are: 
+# 1st latent_dimension, 
+# 2nd p0_thresh, 
+# 3rd single_sigma, 
+# 4th path to input tsv, 
+# 5th rotated_data_path, 
+# 6th rotation_matrix_path
+
+python.common.path <- file.path(chipster.common.path, "../", "python")
+zifa.path <- file.path(python.common.path, "zifa.py")
+zifa.matrix.path <- file.path(getwd(), "seurat_to_zifa.tsv")
+zifa.rotated.data.path <- file.path(getwd(), "rotated_data.tsv")
+zifa.rotation.matrix.path <- file.path(getwd(), "rotation_matrix.tsv")
+
+# Run zifa
+system(paste("/mnt/tools/Python-2.7.12/bin/python", zifa.path, latentDimensions, p0Thresh, 0, zifa.matrix.path, zifa.rotated.data.path, zifa.rotation.matrix.path), intern = TRUE)
+# ZIFA produces rotated_data.tsv and rotation_matrix.tsv files
 
 
 # 3.
 # Read ZIFA's outputs in R and insert the data into Seurat object
 
-zifa.rotated.data <- read.table(file='rotated_data.tsv', sep='\t', header=TRUE, row.names=1)
-zifa.rotation.matrix <- read.table(file='rotation_matrix.tsv', sep='\t', header=TRUE, row.names=1)
+zifa.rotated.data <- read.table(file=zifa.rotated.data.path, sep='\t', header=TRUE, row.names=1)
+zifa.rotation.matrix <- read.table(file=zifa.rotation.matrix.path, sep='\t', header=TRUE, row.names=1)
 # Rename coordinates, so they are in the same format that PCA produces in Seurat e.g. "PC1", "PC2", ...
 latent.dimensions <- ncol(zifa.rotated.data)
 for (dimension in 1:latent.dimensions) {
