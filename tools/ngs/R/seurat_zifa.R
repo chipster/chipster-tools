@@ -1,4 +1,4 @@
-# TOOL seurat_zifa.R: "Zero Inflated Factor Analysis" (Dimensionality reduction tool for single cell data.)
+# TOOL seurat_zifa.R: "Zero Inflated Factor Analysis, for Seurat pipeline" (Dimensionality reduction tool for single cell data.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL ZIFAplots.pdf
 # OUTPUT OPTIONAL ZIFAgenes.txt
@@ -87,6 +87,12 @@ zifa.rotated.data.path <- file.path(getwd(), "rotated_data.tsv")
 zifa.rotation.matrix.path <- file.path(getwd(), "rotation_matrix.tsv")
 
 # Run zifa
+
+# If one wants to add new parameters: 
+# Now single_sigma is hard coded to be 0, that can be changeg to be a parameter
+# If one wants to use the non-block version of ZIFA, it has to be done in the zifa.py script not here
+# An alternative solution for a non-block ZIFA could be to write a totally seprate non_block_zifa.py script that calls ZIFA.fitModel instead of block_ZIFA.fitModel
+# An example of this can be found in zifa.py in the ngs/python directory
 system(paste("/mnt/tools/Python-2.7.12/bin/python", zifa.path, latentDimensions, p0Thresh, 0, zifa.matrix.path, zifa.rotated.data.path, zifa.rotation.matrix.path), intern = TRUE)
 # ZIFA produces rotated_data.tsv and rotation_matrix.tsv files
 
@@ -103,7 +109,7 @@ for (dimension in 1:latent.dimensions) {
 	colnames(zifa.rotated.data)[dimension] <- new.name
 	colnames(zifa.rotation.matrix)[dimension] <- new.name
 }
-# Calculate the standard deviation of the cells in each dimension
+# Calculate the standard deviation of the cells for each dimension
 # Standard deviation is not so important for ZIFA as it is for PCA, but 
 # lets calculate it, so we can visualize it if we want to
 # We have to also rename it, so it is compatible with Seurat

@@ -4,6 +4,12 @@ import pandas as pd
 import numpy as np
 import sys
 
+# This script runs ZIFA. It reads a tsv that contains the expression data (genes * cells).
+# It ouputs two files: rotated_data and rotation_matrix. The rotated data is (latent dimension * cells)
+# and it contains the coordinates in the new coordinate system. rotation_matrix is a matrix that is used to produce the rotated_data. 
+# (rotated_data = rotation_matrix*input)
+# This script is written for seurat_zifa.R script
+
 # Read arguments
 # Arguments:  
 # 1: latent_dimensions, 
@@ -19,6 +25,7 @@ single_sigma = int(sys.argv[3])
 input_tsv_path = sys.argv[4]
 rotated_data_path = sys.argv[5]
 rotation_matrix_path = sys.argv[6]
+
 # Read the data from a file
 zifa_data = pd.read_csv(input_tsv_path, sep='\t', header=0)
 # Convert expression data to correct format, count -> log2

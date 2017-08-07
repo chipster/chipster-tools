@@ -1,4 +1,4 @@
-# TOOL zifa.py: "Zero Inflated Factor Analysis" (Dimensionality reduction tool for single cell data.)
+# TOOL zifa.py: "Zero Inflated Factor Analysis, for independent usage" (Dimensionality reduction tool for single cell data.)
 # INPUT data: "Observed zero-inflated data" TYPE GENERIC
 # OUTPUT OPTIONAL zifa.log
 # OUTPUT OPTIONAL output.tsv
@@ -12,6 +12,8 @@
 # PARAMETER OPTIONAL singleSigma: "SingleSigma, if True, fit only a single variance parameter." TYPE INTEGER FROM 0 TO 1 DEFAULT 0 (If True, fit only a single variance parameter zero-inflated PPCA rather than a different on for every gene.)
 
 # AO 4.7.2017 First version
+
+# This is a version of ZIFA that can be run independently from Seurat.
 
 import sys
 import matplotlib
@@ -80,9 +82,6 @@ print(myData)
 # print the output of ZIFA, this shows in zifa.log
 print(Zhat) 
 
-## OLD TODO: remove this comment
-# save results into tsv file,delimiter is \t and the file name that is associated with file handle f is output.tsv. fmt='%f' means that numbers are in floating point format.
-
 # if there was a header in the input include it also in output
 #savetxt(f, Zhat, delimiter='\t', fmt='%f', header = 
 # Use pandas module to write "indecies" aka row names into file, lets first write it to a csv, that is the filetype that pandas know how to handle, and then convert it to a tsv that is the default filetype in Chipster.
@@ -99,6 +98,7 @@ else:
     df.to_csv(f, sep = '\t')
 
 fig = plt.figure(figsize = [5, 5])
+# Plot the cells in the first two latent dimensions
 plt.scatter(Zhat[:,0], Zhat[:,1], color = 'red', s = 4)    
 plt.xlim([-4,4])
 plt.ylim([-4,4])
