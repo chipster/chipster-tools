@@ -1,4 +1,4 @@
-# TOOL samtools-snp-indel-single.R: "Call SNPs and short INDELs" (Calls SNPs and short INDELs for one or more diploid individuals. Alignment records are grouped by sample identifiers in @RG header lines. If sample identifiers are absent, each input file is regarded as one sample. You can provide your own reference sequence in FASTA format or choose one of the provided reference genomes. This tool is based on the SAMtools package.)
+# TOOL samtools-snp-indel-single.R: "Call SNPs and INDELs with SAMtools" (Calls SNPs and short INDELs for one or more diploid individuals. Alignment records are grouped by sample identifiers in @RG header lines. If sample identifiers are absent, each input file is regarded as one sample. You can provide your own reference sequence in FASTA format or choose one of the provided reference genomes. This tool is based on the SAMtools package.)
 # INPUT alignment{...}.bam: "Sorted BAM files" TYPE BAM 
 # INPUT OPTIONAL ownref.fa: "Reference sequence FASTA" TYPE GENERIC
 # OUTPUT variants.vcf
