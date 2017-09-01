@@ -7,7 +7,7 @@
 # OUTPUT OPTIONAL synthesis_stats.txt
 # OUTPUT OPTIONAL synthesis_stats_summary.txt
 # OUTPUT OPTIONAL log.txt
-# PARAMETER OPTIONAL num.barcodes: "Number of barcodes" TYPE INTEGER DEFAULT 2000 (Roughly 2x the number of cells)
+# PARAMETER OPTIONAL num.barcodes: "Number of barcodes" TYPE INTEGER DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. We use roughly 2 times the anticipated number cells, as we empirically found that this allows us to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode.)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
 # PARAMETER OPTIONAL num.core.barcodes: "Number of core barcodes" TYPE INTEGER DEFAULT 100 (How many reads per cell barcode required)
 # PARAMETER OPTIONAL num.genes: "Number of genes per cell" TYPE INTEGER DEFAULT 0 (How many genes per cell required)
