@@ -24,9 +24,9 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
  <h3>Details</h3>
  
 <p>
-As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
+As input, give the Seurat R-object (Robj) from the Seurat PCA -tool.
 <br><br>
-Seurat function <i>FindClusters</i> first constructs a KNN graph based on the euclidean distance in PCA space,
+Seurat function <i>FindClusters</i> first constructs a KNN graph based on the Euclidean distance in PCA space,
 and refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
 To cluster the cells, the function uses the smart local moving algorithm to iteratively group cell groupings together
 with the goal of optimizing the standard modularity function.
@@ -38,7 +38,7 @@ We find that setting this parameter between 0.6-1.2 typically returns good resul
 of around 3K cells. Optimal resolution often increases for larger datasets 
 -use a value above (below) 1.0 if you want to obtain a larger (smaller) number of communities.
 <br>
-The <b>principal components to use</b> need to be decided by the user based on the PCAplots from the Seurat setup -tool.
+The <b>principal components to use</b> need to be decided by the user based on the PCAplots from the Seurat PCA -tool.
 </p>
 
 <p>

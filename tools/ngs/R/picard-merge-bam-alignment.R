@@ -20,7 +20,7 @@
 source(file.path(chipster.common.path, "tool-utils.R"))
 # read input names and strip file extension
 inputnames <- read_input_definitions()
-input1name <- inputnames$unmapped.bam
+input1name <- inputnames$aligned.bam # aligned.bam or unmapped.bam for the name?
 input1namestripped <-strip_name(input1name)
 #write the input file name into log
 write(input1namestripped, file = "log.txt")
