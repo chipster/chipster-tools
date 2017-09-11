@@ -42,16 +42,31 @@ indicating the number of genes and transcripts observed.
 </p>
 
 <p>
+<br><br>
+Method: <br>
+1) For each gene, find the molecular barcodes on the exons of that gene.  <br>
+2) Determine how many HQ mapped reads are assigned to each barcode.  <br>
+3) Collapse barcodes by edit distance.  <br>
+4) Throw away barcodes with less than threshold # of reads. <br>
+5) Count the number of remaining unique molecular barcodes for the gene. 
+<br> <br>
+This program requires a tag for what gene a read is on, a molecular barcode tag, and a exon tag. 
+ The exon and gene tags may not be present on every read. <br><br>
+
+</p>
+
+<p>
 <b>The selection of the sets of cells:</b> <br>
+Choose first the selection criteria (<b>How to filter the DGE matrix</b>):
 		<ul>
-		<li>Number of core barcodes: Counts the number of reads per cell barcode and only includes cells that 
-		have at least this many reads.</li>
-		<li>Number of genes per cell: Select cells that have at least this many genes.</li>
+		<li>Number of core barcodes: Counts the number of reads per cell barcode and include N top cells with most reads.</li>
+		<li>Min number of genes per cell: Select cells that have at least this many genes.</li>
 		</ul>
+Then set the <b>filtering parameter</b>. 		
  </p>
 
 <p>
-For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">Drop-seq manual.</a>
 </p>
 
 

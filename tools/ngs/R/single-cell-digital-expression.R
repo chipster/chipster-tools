@@ -9,12 +9,15 @@
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL num.barcodes: "Number of barcodes" TYPE INTEGER DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. We use roughly 2 times the anticipated number cells, as we empirically found that this allows us to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode.)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
+# PARAMETER OPTIONAL filtering.type: "How to filter the DGE matrix" TYPE [MIN_NUM_GENES_PER_CELL:"Min number of genes per cell" , NUM_CORE_BARCODES:"Number of core barcodes"] DEFAULT MIN_NUM_GENES_PER_CELL (How to filter the DGE matrix, based on minimum number of reads per cell, or by choosing the top N cells with most reads. Set the number in the Filtering parameter field below.)
+# PARAMETER OPTIONAL filter.param: "Filtering parameter" TYPE INTEGER DEFAULT 0 (The corresponding parameter for filtering the DGE matrix.)
+
+
+# OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL num.core.barcodes: "Number of core barcodes" TYPE INTEGER DEFAULT 100 (How many reads per cell barcode required)
 # PARAMETER OPTIONAL num.genes: "Number of genes per cell" TYPE INTEGER DEFAULT 0 (How many genes per cell required)
 # PARAMETER OPTIONAL num.transcripts: "Number of transcripts per cell" TYPE INTEGER DEFAULT 0 (How many transcripts per cell required)
-
-# OUTPUT OPTIONAL log.txt
-
+#  MIN_NUM_TRANSCRIPTS_PER_CELL:"Min number of transcripts per cell" 
 
 # ML 12.10.2016 created
 # ML 09.05.2017 combined detecting bead synthesis error here
@@ -33,7 +36,7 @@ system(command)
 # command start
 command.start <- paste(path.dropseq, "/DigitalExpression I=cleaned.bam O=digital_expression.txt.gz SUMMARY=digital_expression_summary.txt", sep="")
 # parameters
-command.parameters <- paste("NUM_CORE_BARCODES=", num.core.barcodes, "MIN_NUM_GENES_PER_CELL=", num.genes, "MIN_NUM_TRANSCRIPTS_PER_CELL=", num.transcripts)
+command.parameters <- paste(filtering.type, "=", filter.param, sep="")
 #command.parameters <- ""
 #if (num.core.barcodes != "empty"){
 #	command.parameters <- paste(command.parameters, "NUM_CORE_BARCODES=", num.core.barcodes)
@@ -42,7 +45,6 @@ command.parameters <- paste("NUM_CORE_BARCODES=", num.core.barcodes, "MIN_NUM_GE
 #}else if (num.transcripts != "empty"){
 #	command.parameters <- paste(command.parameters, "MIN_NUM_TRANSCRIPTS_PER_CELL=", num.transcripts)
 #}
-
 
 # run the tool
 command <- paste(command.start, command.parameters, " 2>> log.txt")
