@@ -1,7 +1,7 @@
 # TOOL hisat2.R: "HISAT2 for single end reads" (HISAT2 Aligns single end RNA-seq reads to a genome.)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
-# INPUT OPTIONAL splicesites.txt: "List of known splice sites" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
+# OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
@@ -14,6 +14,7 @@
 
 # AO 30.5.2017 First version
 
+# INPUT OPTIONAL splicesites.txt: "List of known splice sites" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
@@ -33,6 +34,7 @@
 ## Source required functions
 source(file.path(chipster.common.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
 
 ## Helper functions
 #Unzips a list of files
@@ -153,22 +155,32 @@ system(command)
 # Convert SAM to BAM
 debugPrint("")
 debugPrint("SAMTOOLS")
-samtools.view.command <- paste(samtools.binary, "view -bS hisat.sam > hisat.bam")
+samtools.view.command <- paste(samtools.binary, "view -bS hisat.sam > hisat.tmp.bam")
 debugPrint(samtools.view.command)
 system(samtools.view.command)
 # Index bam, this produces a "hisat.sorted.bam" file
-samtools.sort.command <- paste(samtools.binary, "sort hisat.bam hisat.sorted")
+samtools.sort.command <- paste(samtools.binary, "sort hisat.tmp.bam hisat.sorted")
 debugPrint(samtools.sort.command)
 system(samtools.sort.command)
 
-# Rename result files
-system("mv hisat.sorted.bam hisat.bam")
+# Do not return empty BAM files
+if (fileOk("hisat.sorted.bam", minsize=100)){
+	# Rename result files
+	system("mv hisat.sorted.bam hisat.bam")
+	# Change file names in BAM header to display names
+	displayNamesToBAM("hisat.bam")
+	# Index BAM
+	system(paste(samtools.binary, "index hisat.bam > hisat.bam.bai"))
+}
 
 # Unset environmet variable
 Sys.unsetenv("HISAT2_INDEX")
 
 # Append the debug.log into hisat.log
 system("cat debug.log >> hisat.log")
+
+# Substitute display names to log for clarity
+displayNamesToFile("hisat.log")
 
 #EOF
 
