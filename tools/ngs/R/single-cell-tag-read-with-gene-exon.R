@@ -2,10 +2,9 @@
 # INPUT merged.bam: "Merged BAM" TYPE GENERIC
 # INPUT OPTIONAL own.gtf: "Own GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL merged_tagged.bam
-# PARAMETER OPTIONAL organism: "GTF" TYPE [Homo_sapiens.GRCh38.87, Mus_musculus.GRCm38.87] DEFAULT Homo_sapiens.GRCh38.87 (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
-
-
 # OUTPUT OPTIONAL log.txt
+# PARAMETER OPTIONAL organism: "GTF" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
+
 
 # ML 12.10.2016 created
 # ML 04.07.2017 added option to use own GTF
