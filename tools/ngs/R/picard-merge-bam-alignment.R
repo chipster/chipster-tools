@@ -1,5 +1,5 @@
 # TOOL picard-merge-bam-alignment.R: "Merge aligned and unaligned BAM" (Merge sorted BAM alignment and unaligned, tagged BAM file. Make sure the input files are assigned correctly!)
-# INPUT unmapped.bam: "Unmapped BAM" TYPE GENERIC
+# INPUT unmapped.bam: "Unaligned BAM" TYPE GENERIC
 # INPUT aligned.bam: "Aligned BAM" TYPE GENERIC
 # OUTPUT OPTIONAL merged.bam     
 # PARAMETER OPTIONAL reference: "Reference" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Use same reference as in the alignment!)
