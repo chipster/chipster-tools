@@ -2,13 +2,17 @@
 # INPUT merged.bam: "Merged BAM" TYPE GENERIC
 # INPUT OPTIONAL own.gtf: "Own GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL merged_tagged.bam
-# PARAMETER OPTIONAL organism: "GTF" TYPE [Homo_sapiens.GRCh38.87, Mus_musculus.GRCm38.87] DEFAULT Homo_sapiens.GRCh38.87 (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
+# OUTPUT OPTIONAL merged_tagged.bam.bai
+# PARAMETER OPTIONAL organism: "GTF" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
 
 
 # OUTPUT OPTIONAL log.txt
 
 # ML 12.10.2016 created
 # ML 04.07.2017 added option to use own GTF
+
+## Source required functions
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
@@ -31,10 +35,15 @@ if (file.exists("own.gtf")){
 	command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, organism, ".gtf TAG=GE  2>> log.txt", sep="")
 }
 
-
 # run the tool
 system(command)
 
+# Only index if BAM not empty to prevent returning an empty .bai file
+if (fileOk("merged_tagged.bam", minsize=100)){
+	# Index BAM
+	samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+	system(paste(samtools.binary, "index merged_tagged.bam > merged_tagged.bam.bai"))
+}
 # stop(paste('CHIPSTER-NOTE: ', command))
 
 #EOF

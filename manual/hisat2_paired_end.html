@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Alignment / HISAT2 for paired-end reads</h2>
+
+<h3>Description</h3>
+<p>This tool aligns Illumina paired end RNA-seq read to publicly available genomes.
+</p>
+<p> You need to supply the reads in two or more FASTQ files. Files can be compressed with gzip. You may also need two list files to assign the 
+FASTQ files to each direction. 
+</p>
+<p>List files are optional if you provide just two FASTQ files. Chipster will try to assign the files to directions based on file names. 
+This assumes the files are named so that the beginning of the name is identical and the directions are specified with _1 and _2, 
+<i>e.g.</i> Abc123_1, Abc123_2. If your files are named differently, you need to provide list files to make sure the files are assigned 
+correctly (see Details for more information).
+</p>
+
+<h3>Parameters</h3> 
+<ul>
+<li>Genome (list of supported genomes) [latest human]</li>
+<li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
+<li>Minimum intron length [20]</li>
+<li>Maximum intron length [500000]</li>
+<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
+<li>How many hits is a read allowed to have (1-1000000) [5]</li>
+<li>Is soft-clipping used (yes, no) [yes] </li>
+<li>Is long anchors required (yes, no) [no]</li>
+</ul>
+
+<h3>Details</h3>
+<p>
+HISAT2 is a fast and sensitive alignment program for mapping next-generation sequencing reads (whole-genome, transcriptome, and exome sequencing data) against the general human population (as well as against a single reference genome). Based on GCSA (an extension of BWT for a graph), HISAT2 was designed and implemented a graph FM index (GFM). In addition to using one global GFM index that represents general population, HISAT2 uses a large set of small GFM indexes that collectively cover the whole genome (each index representing a genomic region of 56 Kbp, with 55,000 indexes needed to cover human population). These small indexes (called local indexes) combined with several alignment strategies enable effective alignment of sequencing reads. This new indexing scheme is called Hierarchical Graph FM index (HGFM). HISAT 2 was developed based on the HISAT and Bowtie2 implementations. HISAT2 outputs alignments in SAM format, enabling interoperation with a large number of other tools (e.g. SAMtools, GATK) that use SAM. HISAT2 is distributed under the GPLv3 license, and it runs on the command line under Linux, Mac OS X and Windows.
+</p>
+
+<p>After running HISAT2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
+
+<h3>Output</h3>
+<p>
+This tool returns the following files:
+<ul>
+<li>hisat.bam: BAM file containing the alignments.</li>
+<li>hisat.log: Summary of the alignment results</li>
+</ul>
+</p>
+ 
+<h3>Reference</h3>
+
+<p>This tool is based on the <a href="https://ccb.jhu.edu/software/hisat2/">HISAT2</a> package. Please cite the following article:
+Kim D, Langmead B and Salzberg SL. <a href="http://www.nature.com/nmeth/journal/vaop/ncurrent/full/nmeth.3317.html"> HISAT: a fast spliced aligner with low memory requirements</a> Nature Methods 2015. 
+</p>
+ 
+</body>
