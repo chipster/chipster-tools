@@ -11,7 +11,7 @@
 tags the reads with the cellular and molecular barcodes,
 removes reads where the cell or molecular barcode has low quality bases, trims adapters and polyA tails,
 converts the preprocessed BAM file back into a FASTQ format for alignment,
-and trims too short reads from the FASTQ file. 
+and filters out too short reads from the FASTQ file. 
 As an output: unaligned, tagged and trimmed BAM file, trimmed FASTQ file and summary and plots of the process.
  </p>
  
@@ -30,7 +30,7 @@ As an output: unaligned, tagged and trimmed BAM file, trimmed FASTQ file and sum
  
  <h3>Details</h3>
  
-<p>This tool is a combination of several tools: DropSeq (TagBamWithReadSequenceExtended, FilterBam) , 
+<p>This tool is a combination of several tools: DropSeq (TagBamWithReadSequenceExtended, FilterBam), 
 Picard (FASTQ to BAM, BAM to FASTQ) and Trimmomatic (MINLEN). 
 <br> The steps are:
 <ol>
@@ -38,27 +38,27 @@ Picard (FASTQ to BAM, BAM to FASTQ) and Trimmomatic (MINLEN).
 		<li>Tag the reads in the BAM file with the cellular and molecular barcodes </li>
 		<li>Filter and trim the reads in the BAM file</li>
 		<li>Convert the tagged and trimmed BAM file back into a FASTQ file for the alignment</li>
-		<li>Trim too short reads of the FASTQ file </li>
+		<li>Filter out too short reads of the FASTQ file </li>
 </ol>
 </p>
 
 <p>
 Since the FASTQ format cannot hold the information about the cellular and molecular barcodes (or "tags"), 
-we need to transform the FASTQ files into a BAM file. The BAM format tags can be used to held this information.
+we need to transform the FASTQ files into a BAM file. The BAM format tags can be used to hold this information.
 In this format we can also do some trimming and filtering for the reads.
 However, the aligners take as input only FASTQ format, which is why we need to transform the trimmed & filtered
 BAM back to FASTQ format. 
 </p>
 <p>
 After this preprocessing step, we will have one unaligned, tagged and trimmed BAM file 
-(that holds the information of the molecular and cellular barcodes in it), and a FASTQ file ready for alignment.
-After the alignment, these two files are merged using the Merge BAM alignment tool.
+that holds the information of the molecular and cellular barcodes in the tags, and a FASTQ file ready for alignment.
+After the alignment, these two files are merged using the tool Merge aligned and unaligned BAM.
 </p>
 
 <br><br>
 <p>
 In the second step, <b>Tag the reads with cellular and molecular barcodes </b> 
-the tool extracts bases from the cell/molecular barcode encoding read,
+the tool extracts bases from th read which contains the cell and molecular barcodes,
  and creates a new BAM tag with those bases on the g​enome read.​ 
  We use the BAM tag XM for molecular barcodes, and XC for cell barcodes. 
  </p>
@@ -69,16 +69,16 @@ On the second iteration, the molecular barcode is extracted from bases determine
 parameter (default 13-­20) of the barcode read.
 </p>
 <p>
-The tool also tags the reads in which the quality drops below the base quality threshold.
+The tool also tags reads where the base quality in the barcode drops below a threshold.
 The number of bases that fall below the threshold is marked in the XQ tag. 
-This information can be used later on in the filtering tools.
+This information is used in the subsequent filtering step.
 </p>
 <br><br>
 <p>
 In the third step, <b>Filter and trim the reads in the BAM file</b>, several things are performed:
 <br>
-<b>First</b>, the information added to the XQ tag in Tag BAM tool is used to filter out reads where more than one (1)
-base have quality below the threshold used in this Tag BAM tool (default: 10). 
+<b>First</b>, the information added to the XQ tag in Tag BAM tool is used to filter out reads where more than one
+base in the barcode have quality below the threshold used in this Tag BAM tool (default: 10). 
 <br>
 <b>Next</b>, any user determined sequences are trimmed away. 
 User can determine how many mismatches are allowed in these sequences (default: 0), 
@@ -86,7 +86,7 @@ and how long stretch of the sequence there has to be in the read at least (defau
 The SMART Adapter sequence is offered as a default.
 <br>
 <b>Lastly</b>, trailing polyA tails are hard clipped from the reads. 
-The tools searches for contiguous A's from the end of the read. User is again allowed to
+The tool searches for contiguous A's from the end of the read. User is again allowed to
 determine the number of mismatches allowed (default: 0) and how many A's there at least need to be 
 for the clipping to happen (default: 6).
 </p>
@@ -110,7 +110,7 @@ and the <a href="https://broadinstitute.github.io/picard/command-line-overview.h
 
 <ul>
 
-<li>[input_name].bam : Tagged, trimmed & filtered unaligned BAM </li>
+<li>[input_name].bam: Tagged, trimmed & filtered unaligned BAM </li>
 <li>[input_name].fq.gz: Trimmed and filtered FASTQ file </li>
 <li>tagging_and_trimming_summary.txt: Summary of the tagging and trimming steps</li>
 <li>tagging_and_trimming_histograms.pdf: Graphics presenting the failed bases in tagging steps, and adapters and polyAs trimmed </li>

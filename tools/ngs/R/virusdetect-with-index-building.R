@@ -28,6 +28,7 @@
 # PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs.)
 # PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequences to the reference sequences.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
+# PARAMETER OPTIONAL sn_tag: "Use input names in output file names" TYPE [yes: Yes, no: No] DEFAULT yes (Name the output files according to the input sequence file.)
 # PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT no (Collect all the output into a single tar formatted file.)
 
 # 13.11.2016 KM, created
@@ -51,6 +52,12 @@ vd.parameters <- paste("--reference", reference, "--thread-num", chipster.thread
 
 system("date > vd.log")
 
+#check that output options don't conflict
+#if (save_tar == "yes" ){
+#	if (sn_tag == "yes" ){
+#		stop("CHIPSTER-NOTE: You can't use tar archive outout formta together with input file name based result file names")
+#	}
+#}
 
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
 unzipIfGZipFile("hostgenome")
@@ -204,10 +211,17 @@ if ( save_tar == "yes") {
 	system ("mv blastx_matches.tsv vd_output/")
 	system ("mv hostgenome_bwa_index.tar vd_output/")
 	system ("mv *.pdf vd_output/")
-	#system ("mv vd.log vd_output/")
-	system ("cd vd_output; tar cf virusdetect_results.tar ./*; mv virusdetect_results.tar ../virusdetect_results.tar ")
+	system ("cp vd.log vd_output/")
+	
 	seq_ifn <- strip_name(inputnames$inputseq)
-	# Make a matrix of output names
+	if ( sn_tag == "yes") {
+		pdf_name_command <- paste('cd vd_output; for n in *; do mv $n ', seq_ifn, '_$n ; done', sep = "")
+		echo.command <- paste("echo '",pdf_name_command, " '>> vd.log" )
+		system(echo.command)
+		system(pdf_name_command)	 
+	}
+	system ("cd vd_output; tar cf virusdetect_results.tar ./*; mv virusdetect_results.tar ../virusdetect_results.tar ")
+	
 	outputnames <- matrix(NA, nrow=1, ncol=2)
 	outputnames[1,] <- c("virusdetect_results.tar", paste(seq_ifn, "_VD_results.tar", sep =""))
 	# Write output definitions file
@@ -215,7 +229,36 @@ if ( save_tar == "yes") {
 	system ("echo Result collectin ready >> vd.log")
 	system ("ls -l >> vd.log")	
 }
-
+if ( sn_tag == "yes") {
+	seq_ifn <- strip_name(inputnames$inputseq)
+	system('ls -l >> vd.log')
+	pdf_name_command <- paste('for n in *.pdf; do mv $n ', seq_ifn, '_$n ; done', sep = "")
+	echo.command <- paste("echo '",pdf_name_command, " '>> vd.log" )
+	system(echo.command)
+	system(pdf_name_command)
+	system('ls -l >> vd.log')
+	# Make a matrix of output names
+	outputnames <- matrix(NA, nrow=17, ncol=2)
+	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
+	outputnames[2,] <- c("virusderect_matches_blastn.fa", paste(seq_ifn, "virusderect_matches_blastn.fa", sep ="_"))
+	outputnames[3,] <- c("virusderect_matches_blastx.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
+	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
+	outputnames[5,] <- c("blastn_matching_references.fa", paste(seq_ifn, "blastn_matching_references.fa", sep ="_"))
+	outputnames[6,] <- c("blastn_matching_references.fa.fai", paste(seq_ifn, "blastn_matching_references.fa.fai", sep ="_"))
+	outputnames[7,] <- c("blastn_matching_references.html", paste(seq_ifn, "blastn_matching_references.html", sep ="_"))
+	outputnames[8,] <- c("blastx_matching_references.fa", paste(seq_ifn, "blastx_matching_references.fa", sep ="_"))
+	outputnames[9,] <- c("blastx_matching_references.fa.fai", paste(seq_ifn, "blastx_matching_references.fa.fai", sep ="_"))
+	outputnames[10,] <- c("blastx_matching_references.html", paste(seq_ifn, "blastx_matching_references.html", sep ="_"))
+	outputnames[11,] <- c("blastn_matches.bam.bai", paste(seq_ifn, "blastn_matches.bam.bai", sep ="_"))
+	outputnames[12,] <- c("blastn_matches.bam", paste(seq_ifn, "blastn_matches.bam", sep ="_"))
+	outputnames[13,] <- c("blastx_matches.bam", paste(seq_ifn, "blastx_matches.bam", sep ="_"))
+	outputnames[14,] <- c("blastx_matches.bam.bai", paste(seq_ifn, "blastx_matches.bam.bai", sep ="_"))
+	outputnames[15,] <- c("blastn_matches.tsv", paste(seq_ifn, "blastn_matches.tsv", sep ="_"))
+	outputnames[16,] <- c("blastx_matches.tsv", paste(seq_ifn, "blastx_matches.tsv", sep ="_"))
+	outputnames[17,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
+	# Write output definitions file
+	write_output_definitions(outputnames)	
+}
 
 
 
