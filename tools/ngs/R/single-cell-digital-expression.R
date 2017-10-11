@@ -7,7 +7,7 @@
 # OUTPUT OPTIONAL synthesis_stats.txt
 # OUTPUT OPTIONAL synthesis_stats_summary.txt
 # OUTPUT OPTIONAL log.txt
-# PARAMETER OPTIONAL num.barcodes: "Number of barcodes" TYPE INTEGER DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. We use roughly 2 times the anticipated number cells, as we empirically found that this allows us to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode.)
+# PARAMETER OPTIONAL num.barcodes: "Estimate the number of barcodes for correction" TYPE INTEGER DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. It is advisable to use roughly 2 times the anticipated number cells, as it was empirically found out that this allows to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode.)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
 # PARAMETER OPTIONAL filtering.type: "How to filter the DGE matrix" TYPE [MIN_NUM_GENES_PER_CELL:"Min number of genes per cell" , NUM_CORE_BARCODES:"Number of core barcodes"] DEFAULT MIN_NUM_GENES_PER_CELL (How to filter the DGE matrix, based on minimum number of reads per cell, or by choosing the top N cells with most reads. Set the number in the Filtering parameter field below.)
 # PARAMETER OPTIONAL filter.param: "Filtering parameter" TYPE INTEGER DEFAULT 0 (The corresponding parameter for filtering the DGE matrix.)
@@ -24,6 +24,10 @@
 # ML 04.07.2017 added num.transcripts parameter
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
+
+if (filter.param < 1) { 
+	stop(paste('CHIPSTER-NOTE: ', "Please set a reasonable number to the filtering parameter."))	
+}
 
 # STEP 1: Detect bead synthesis errors:
 # command 
