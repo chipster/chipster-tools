@@ -121,7 +121,7 @@ system(command)
 # pdf(file="Trimming_histogram.pdf")
 polyA_trim_summary <- read.table("adapter_trim_summary.txt",header = TRUE,"\t", skip = 6)
 polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
-plot(polyA_trim_summary2, type = "h", col = "red", lwd = 10, main="Adapter trimming")
+plot(polyA_trim_summary2, type = "h", col = "red", lwd = 10, main="Adapter trimming", xlab="Length of the adapter sequence found", ylab="Number of reads")
 
 # PolyATrimmer:
 # command start
@@ -134,7 +134,7 @@ system(command)
 # make a plot:
 polyA_trim_summary <- read.table("polyA_trimming_report.txt",header = TRUE,"\t", skip = 6)
 polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
-plot(polyA_trim_summary2, type = "h", col = "red", lwd = 5, main="polyA trimming")
+plot(polyA_trim_summary2, type = "h", col = "red", lwd = 5, main="polyA trimming", xlab="Length of the polyA sequence found", ylab="Number of reads")
 dev.off() # close the pdf
 
 # STEP 4: BAM to FASTQ
