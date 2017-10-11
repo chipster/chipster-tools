@@ -68,8 +68,9 @@ pdf(file="inflectionPoint.pdf")
 cellIds = 1:length(x)
 plot(cellIds, x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]",
 		ylab="cumulative fraction of reads", xlim=c(1,length(x)), 
-		main=paste("Inflection point: ", infl[1,2], ", covers ", per_reads, " % of reads. \n Total number of cell barcodes detected: ", 
-				num_barcodes, "\n  Number of barcodes used to compute the inflection point: ",x_axis_max  ))
+		main=paste("Inflection point: ", infl[1,2], ", covers ", per_reads, " % of reads.", 
+		 "\n  Number of barcodes used to compute the inflection point: ",x_axis_max, 
+		"\n Total number of cell barcodes detected: ", num_barcodes ))
 #     sub=paste("Total number of cell barcodes detected: ", num_barcodes), cex.sub=1.5 )
 
 abline(v=infl[1,2],col="red")
