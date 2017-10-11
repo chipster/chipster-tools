@@ -7,7 +7,7 @@
 # OUTPUT OPTIONAL tagging_and_trimming_summary.txt
 # PARAMETER base_range_cell: "Base range for cell barcode" TYPE STRING DEFAULT 1-12 (Which bases correspond to the cell barcode)
 # PARAMETER base_range_mol: "Base range for molecule barcode" TYPE STRING DEFAULT 13-20 (Which bases correspond to the molecule barcode)
-# PARAMETER OPTIONAL base_quality: "Barcode quality filtering\: Minimum base quality required from the adapter bases" TYPE INTEGER DEFAULT 10 (The tool marks in the XQ tag how many bases in the barcode fall below this threshold. Barcodes and reads with bad quality bases are filtered out.)
+# PARAMETER OPTIONAL base_quality: "Barcode quality filtering\: Min base quality required for the barcode bases" TYPE INTEGER DEFAULT 10 (The tool marks in the XQ tag how many bases in the barcode fall below this threshold. Barcodes and reads with bad quality bases are filtered out.)
 # PARAMETER OPTIONAL sequence: "Adapter trimming\: sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Adapter sequence to trim off. As a default, SMART adapter sequence.)
 # PARAMETER OPTIONAL mismatches: "Adapter trimming\: Mismatches allowed in the adapter sequence" TYPE INTEGER DEFAULT 0 (How many mismatches allowed in the adapter sequence)
 # PARAMETER OPTIONAL num_bases: "Adapter trimming\: Number of bases to check in adapter" TYPE INTEGER DEFAULT 5 (How many bases to check of the adapter sequence)
