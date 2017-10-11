@@ -15,16 +15,27 @@ This tool filters out cells, and regresses out uninteresting sources of variatio
 It then detects highly variable genes across the single cells, 
 which are used for performing the principal component analysis in the next tool.
 </p>
+
+<p>
+PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to 
+average expression and dispersion (bottom three parameters) is an iterative process. 
+Start with some values, see how it goes and run the tool again with different parameters.) 
+
+</p>
  
  <h3>Parameters</h3>
+ <p>
 <ul>
 		<li>Unique gene counts per cell upper limit cutoff [2500]</li>
 		<li>Mitochondrial genes percentage upper limit cutoff [0.05]</li>
-		<li>Bottom cutoff on x-axis for identifying variable genes [0.0125]</li>
-		<li>Top cutoff on x-axis for identifying variable genes [3]</li>
-		<li>Bottom cutoff on y-axis for identifying variable genes [0.5]</li>	
+		<li>Minimum average expression level for a variable gene, x min [0.0125]</li>
+		<li>Maximum average expression level for a variable gene, x max [3]</li>
+		<li>Minimum dispersion for a variable gene, y min [0.5]</li>	
 </ul>
+	The bottom three parameters (x min, x max, y min) are used to select the variable genes. You might need to run
+	the tool again if the initial guess with the parameters doesn't give good number of variable genes.
 	
+	</p>
 	
  <h3>Details</h3>
  
@@ -58,9 +69,15 @@ placing these genes into bins, and then calculating a z-score for dispersion wit
 Dispersion plot is drawn in the Dispersion.pdf, 
 together with the number of variable genes when using the user defined cut-offs.
 Based on this plot, user is to define the cut-offs for expression (x-axis) and dispersion (y-axis) 
-to mark visual outliers.
+to mark visual outliers. Note that the plot can be a bit misleading, as the variable genes (selected based on the
+x min, x max and y min parameters) are drawn with their gene name, whereas the other, un-selected genes are only
+drawn as dots.
+</p>
+<p>
+Note that this is an iterative process -you have to first draw the image with one set of parameters and then run 
+the tool again if there's a need to change the parameters.
 These setting vary based on the data type, heterogeneity in the sample, and normalization strategy. 
-For example for a UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.
+<b>For example for a UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.</b>
 </p>
 
 

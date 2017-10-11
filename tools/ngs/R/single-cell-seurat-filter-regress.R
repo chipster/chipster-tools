@@ -1,12 +1,12 @@
-# TOOL single-cell-seurat-filter-regress.R: "BETA Seurat -Filtering, regression and detection of variable genes" (Filter and regress the cells, then detect the highly variable genes across the single cells.)
+# TOOL single-cell-seurat-filter-regress.R: "BETA Seurat -Filtering, regression and detection of variable genes" (Filter and regress the cells, then detect the highly variable genes across the single cells. PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to average expression and dispersion with the bottom three parameters is an iterative process. Start with some values, see how it goes and run the tool again with different parameters.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
 # PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial gene ratio" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
-# PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene, x min" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene, x max" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene, y min" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
 # RUNTIME R-3.3.2
 
 
