@@ -54,11 +54,11 @@ vd.parameters <- paste("--reference", reference, "--thread-num", chipster.thread
 system("date > vd.log")
 
 
-if (save_tar == "yes" ){
-	if (sn_tag == "yes" ){
-	stop("CHIPSTER-NOTE: You can't use tar archive outout formta together with input file name based result file names")
-  }
-}
+#if (save_tar == "yes" ){
+#	if (sn_tag == "yes" ){
+#	stop("CHIPSTER-NOTE: You can't use tar archive outout formta together with input file name based result file names")
+#  }
+#}
 
 
 
@@ -196,6 +196,9 @@ if ( save_log == "no") {
 }
 
 if ( save_tar == "yes") {
+	if ( sn_tag == "yes") {
+		seq_ifn <- strip_name(inputnames$inputseq)
+	}
 	system ("echo Collecting results >> vd.log") 
 	system ("ls -l >> vd.log")
 	system ("mkdir vd_output")
@@ -218,6 +221,13 @@ if ( save_tar == "yes") {
 	system ("mv hostgenome_bwa_index.tar vd_output/")
 	system ("mv *.pdf vd_output/")
 	#system ("mv vd.log vd_output/")
+	seq_ifn <- strip_name(inputnames$inputseq)
+	if ( sn_tag == "yes") {
+		pdf_name_command <- paste('cd vd_output; for n in *; do mv $n ', seq_ifn, '_$n ; done', sep = "")
+		echo.command <- paste("echo '",pdf_name_command, " '>> vd.log" )
+		system(echo.command)
+		system(pdf_name_command)	 
+	}
 	system ("cd vd_output; tar cf virusdetect_results.tar ./*; mv virusdetect_results.tar ../virusdetect_results.tar ")
 	seq_ifn <- strip_name(inputnames$inputseq)
 	# Make a matrix of output names
