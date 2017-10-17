@@ -15,6 +15,62 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 17.10.2017: What is new in Chipster 3.13</h2>
+ 	<p>
+		<b>Summary:</b> For the last 10 months we have been adding many new tools and improvements, especially for single cell RNA-seq and 16S rRNA data, which have been actively modified based on the feedback kindly provided by 
+		Chipster user community in Finland. Given the large number of modifications and subversions of Chipster 3.11, we decided to number the new version as 3.13 instead of 3.12. Chipster 3.13 allows the analysis of DropSeq and Chromium 
+		10X single cell RNA-seq data from raw reads to clustering and marker gene detection based on the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">DropSeq</a> and 
+		<a href="http://satijalab.org/seurat/">Seurat</a> packages.
+	</p>
+	
+	<ul>
+		<li><div class=header-item>New analysis tools</div>		
+			<ul>
+				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 aligner for RNA-seq reads</a> HISAT2 is faster than the TopHat2 aligner. Chipster has currently HISAT2 indexes for human and mouse genomes, but you can also provide 
+				your own genome. We recommend using your own genome only for small genomes, because making HISAT2 indexes requires a lot of memory.</li>
+				<li><a href="single-cell-preprocessing.html">Single cell RNA-seq / Preprocessing DropSeq FASTQ files</a> Tags the reads with the cellular and molecular barcodes, removes reads where the cell or molecular barcode has low quality bases, 
+				trims adapters and polyA tails.</li>
+				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a> Adds the cell and molecular barcode and other tags that were lost during the alignment to the aligned BAM file.</li>
+				<li><a href="single-cell-tag-read-with-gene-exon.html">Single cell RNA-seq / Tag reads with gene names</a> Adds a BAM tag GE to reads when a read overlaps an exon of a gene.</li>
+				<li><a href="single-cell-bam-tag-histogram.html">Single cell RNA-seq / Estimate number of usable cells</a> Extracts the number of reads per cell barcode and draws a cumulative distribution plot.</li>
+				<li><a href="single-cell-digital-expression.html">Single cell RNA-seq / Create digital gene expression matrix</a> Identifies and corrects bead synthesis errors and extracts digital gene expression values from a BAM file.</li>				
+				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> Constructs a Seurat object from either .tar package of 10X Genomics output files or DGE table from DropSeq.</li>
+				<li><a href="single-cell-seurat-filter-regress.html">Single cell RNA-seq / Seurat -Filtering, regression and detection of variable genes</a> Filters cells, regresses out uninteresting sources of variation, and detects highly variable genes which are needed for PCA.</li>
+				<li><a href="single-cell-seurat-pca.html">Single cell RNA-seq / Seurat -PCA</a> Principal component analysis using highly variable genes.</li>
+				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat -Clustering</a> Clusters cells, does non-linear dimensional reduction tSNE for visualization, and finds marker genes for the clusters.</li>
+				<li><a href="single-cell-seurat-gene-plot.html">Single cell RNA-seq / Seurat -Visualize biomarkers</a> Visualizes selected marker genes with violin and feature plots.</li>
+				<li><a href="mothur-fastqinfo.html">16s rRNA sequencing / Split FASTQ file to FASTA and QUAL files</a> Given a FASTQ file, produces a FASTA file and QUAL file using the Mothur tool fastq.info.</li>
+				<li><a href="mothur-classify-counttable.html">16s rRNA sequencing / Produce count table and phenodata</a> Generates a count table and a phenodata file, which you can use to assign samples to different experimental groups.</li>				
+				<li><a href="check-fastq.html">Quality control / Check FASTQ file for errors</a> Performs validity checks for a FASTQ file to spot some common problems.</li>
+				<li><a href="merge-fastq.html">Utilities / Merge FASTQ</a> Merges FASTQ files, optionally in alphabetical order.</li>
+				<li><a href="list_tar_contents.html">Utilities / List contents of a tar file</a> List the contents of a tar package.</li>
+				<li><a href="gzip.html">Utilities / Compress a file with gzip</a> Compresses a file with gzip.</li>
+				<li><a href="row_count.html">Utilities / Row count</a> Counts how many lines there are in a txt or tsv file.</li>
+			</ul> 
+		</li>	 
+		<li><div class=header-item>Improvements to analysis tools</div>		
+			<ul>
+				<li>Most of the tools in the 16s rRNA sequencing category have been modified in order to work with paired end MiSeq data according to the Mothur MiSeq SOP.</li>
+				<li>BWA aligners can now take several FASTQ files as input. For paired end reads you need to provide file name lists for read1 files and read2 files.</li>
+				<li><a href="extract_gzip_tar.html">Utilities / Extract .tar or .tar.gz file</a> You can now extract only selected files from a tar package.</li>
+				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> Output files are named based on sample names.</li>
+			</ul> 
+		</li>
+		<li><div class=header-item>Updates to reference genomes and analysis packages</div>
+			<ul>
+				<li>Reference data has been updated to Ensembl v90.</li>
+				<li>VirusDetect has been updated to v1.7 and its database has been updated v220.</li>
+			</ul>
+		</li>
+			<li><div class=header-item>Improvements to user interface</div>		
+			<ul>
+				<li>Spreadsheet visualization: In addition to the number of rows also the number of columns is indicated.</li>
+				<li>3D scatter plot visualization: Group 2 is colored in red instead of green.</li>
+			</ul>		
+	</ul>
+	<hr />
+
+
 <h2>Version update 19.12.2016: What is new in Chipster 3.11</h2>
 
  	<p>
