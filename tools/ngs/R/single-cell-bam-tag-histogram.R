@@ -2,7 +2,8 @@
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL cell_readcounts.txt.gz
 # OUTPUT OPTIONAL inflectionPoint.pdf
-# PARAMETER OPTIONAL x_axis_max: "Max to x axis" TYPE INTEGER FROM 0 TO 500000 DEFAULT 1500 (Upper limit for x-axis in the histogram. If you cannot see the knee in the curve, try tuning this parameter.) 
+# PARAMETER OPTIONAL select_cells: "Select only a number of top cell barcodes for plotting" TYPE [TRUE, FALSE] DEFAULT FALSE (Switch to TRUE if you want to select the number of the top cell barcodes, and set the number in the parameter below. You might want to do this if you suspect that there are lots of nonsense cell barcodes in your data.)
+# PARAMETER OPTIONAL number_cells: "Number of cell barcodes to use" TYPE INTEGER FROM 0 TO 500000 DEFAULT 0 (How many cell barcodes to use when drawing the knee plot. If you suspect that there are lots of nonsense cell barcodes in your data, you can try tuning this parameter to a number closer to expected number of actual beads in your data. NOTE that if you did not select TRUE in the parameter above, this parameter does nothing.) 
 
 
 # OUTPUT OPTIONAL CumCellReadCount.pdf
@@ -22,13 +23,12 @@ command <- paste(command, " 2>> log.txt")
 system(command)
 
 #a=read.table("100cells_numReads_perCell_XC_mq_10.txt.gz", header=F, stringsAsFactors=F) x=cumsum(a$V1)
-a=read.table("cell_readcounts.txt.gz", header=F, stringsAsFactors=F) 
-x=cumsum(a$V1)
-x=x/max(x)
+#a=read.table("cell_readcounts.txt.gz", header=F, stringsAsFactors=F) 
+#x=cumsum(a$V1)
+#x=x/max(x)
 #pdf(file="tag_histogram.pdf")
 #plot(1:length(x), x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]", ylab="cumulative fraction of reads", xlim=c(1,x_axis_max))
 #dev.off()
-
 
 
 # Using Dawit's script:
@@ -37,19 +37,41 @@ library("inflection")
 # read in the cellReadCounts File
 cellReadCountsFile <- "cell_readcounts.txt.gz" # added, by Maria
 a=read.table(cellReadCountsFile, header=F, stringsAsFactors=F)
-x=cumsum(a$V1)
-x=x/max(x)
+# total number of barcodes:
+num_barcodes <- dim(a)[1]
+
+if (select_cells == TRUE) { 
+	if (number_cells < 10) { 
+		stop(paste('CHIPSTER-NOTE: ', "You wanted to select the number of cells to use -please set a reasonable (bigger) number to the parameter."))	
+	}else if (number_cells > num_barcodes) { 
+		stop(paste('CHIPSTER-NOTE: ', "You wanted to select the number of cells to use, but the number you chose exceeded the number of barcodes in the dataset."))	
+	}else {
+		a2 <- a[1:number_cells,]
+		x=cumsum(a2$V1)
+		x=x/max(x)
+		x_axis_max <- number_cells
+	}
+} else{ 
+	x=cumsum(a$V1)
+	x=x/max(x)
+	x_axis_max <- num_barcodes
+}
 
 # inflection point finding using extreme distance estimator(ede) from inflection package
 infl = ede(1:length(x),x,0)
-print(infl[1,2])
+# print(infl[1,2])
 
+# percentage of reads covered by cells in the inflection point:
+per_reads <- round(x[infl[1,2]], digits=2)*100
 
-# Plot Cumulative Read proportion of cells 
 pdf(file="inflectionPoint.pdf")
 cellIds = 1:length(x)
 plot(cellIds, x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]",
-		ylab="cumulative fraction of reads", xlim=c(1,length(x)), main=paste("Inflection point: ", infl[1,2]))
+		ylab="cumulative fraction of reads", xlim=c(1,length(x)), 
+		main=paste("Inflection point: ", infl[1,2], ", covers ", per_reads, " % of reads.", 
+		 "\n  Number of barcodes used to compute the inflection point: ",x_axis_max, 
+		"\n Total number of cell barcodes detected: ", num_barcodes ))
+#     sub=paste("Total number of cell barcodes detected: ", num_barcodes), cex.sub=1.5 )
 
 abline(v=infl[1,2],col="red")
 abline(h=x[infl[1,2]],col="red")

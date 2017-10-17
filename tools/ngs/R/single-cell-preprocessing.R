@@ -7,8 +7,8 @@
 # OUTPUT OPTIONAL tagging_and_trimming_summary.txt
 # PARAMETER base_range_cell: "Base range for cell barcode" TYPE STRING DEFAULT 1-12 (Which bases correspond to the cell barcode)
 # PARAMETER base_range_mol: "Base range for molecule barcode" TYPE STRING DEFAULT 13-20 (Which bases correspond to the molecule barcode)
-# PARAMETER OPTIONAL base_quality: "Barcode quality filtering\: Minimum base quality required from the adapter bases" TYPE INTEGER DEFAULT 10 (The tool marks in the XQ tag how many bases in the barcode fall below this threshold. Barcodes and reads with bad quality bases are filtered out.)
-# PARAMETER OPTIONAL sequence: "Adapter trimming\: sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Adapter sequence to trim off. As a default, SMART adapter sequence.)
+# PARAMETER OPTIONAL base_quality: "Barcode quality filtering\: Min quality required for each base" TYPE INTEGER DEFAULT 10 (The tool marks in the XQ tag how many bases in the barcode fall below this threshold. Barcodes and reads with bad quality bases are filtered out.)
+# PARAMETER OPTIONAL sequence: "Adapter trimming\: Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Adapter sequence to trim off. As a default, SMART adapter sequence.)
 # PARAMETER OPTIONAL mismatches: "Adapter trimming\: Mismatches allowed in the adapter sequence" TYPE INTEGER DEFAULT 0 (How many mismatches allowed in the adapter sequence)
 # PARAMETER OPTIONAL num_bases: "Adapter trimming\: Number of bases to check in adapter" TYPE INTEGER DEFAULT 5 (How many bases to check of the adapter sequence)
 # PARAMETER OPTIONAL mismatches_polyA: "PolyA trimming\: Mismatches allowed in the polyA sequence" TYPE INTEGER DEFAULT 0 (How many mismatches allowed in the polyA sequence)
@@ -121,7 +121,7 @@ system(command)
 # pdf(file="Trimming_histogram.pdf")
 polyA_trim_summary <- read.table("adapter_trim_summary.txt",header = TRUE,"\t", skip = 6)
 polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
-plot(polyA_trim_summary2, type = "h", col = "red", lwd = 10, main="Adapter trimming")
+plot(polyA_trim_summary2, type = "h", col = "red", lwd = 10, main="Adapter trimming", xlab="Length of the adapter sequence found", ylab="Number of reads")
 
 # PolyATrimmer:
 # command start
@@ -134,7 +134,7 @@ system(command)
 # make a plot:
 polyA_trim_summary <- read.table("polyA_trimming_report.txt",header = TRUE,"\t", skip = 6)
 polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
-plot(polyA_trim_summary2, type = "h", col = "red", lwd = 5, main="polyA trimming")
+plot(polyA_trim_summary2, type = "h", col = "red", lwd = 5, main="polyA trimming", xlab="Length of the polyA sequence found", ylab="Number of reads")
 dev.off() # close the pdf
 
 # STEP 4: BAM to FASTQ
