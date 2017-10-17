@@ -1,4 +1,4 @@
-# TOOL single-cell-digital-expression.R: "Create digital gene expression matrix" (Extracting Digital Gene Expression DGE data from an aligned library.)
+# TOOL single-cell-digital-expression.R: "Create digital gene expression matrix" (Corrects bead synthesis errors and extracts gene expression values from a BAM file where reads have been tagged with gene names. The resulting Digital Gene Expression matrix, DGE, can be used for further analysis with the Seural tools.)
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL digital_expression.txt.gz
 # OUTPUT OPTIONAL digital_expression.tsv
@@ -6,11 +6,10 @@
 # OUTPUT OPTIONAL cleaned.bam
 # OUTPUT OPTIONAL synthesis_stats.txt
 # OUTPUT OPTIONAL synthesis_stats_summary.txt
-# OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL num.barcodes: "Number of barcodes to correct for bead synthesis error" TYPE INTEGER DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. It is advisable to use roughly 2 times the anticipated number cells, as it was empirically found out that this allows to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode.)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
 # PARAMETER OPTIONAL filtering.type: "How to filter the DGE matrix" TYPE [MIN_NUM_GENES_PER_CELL:"Min number of genes per cell" , NUM_CORE_BARCODES:"Number of core barcodes"] DEFAULT MIN_NUM_GENES_PER_CELL (How to filter the DGE matrix, based on minimum number of reads per cell, or by choosing the top N cells with most reads. Set the number in the Filtering parameter field below.)
-# PARAMETER OPTIONAL filter.param: "Filtering parameter" TYPE INTEGER DEFAULT 0 (The corresponding parameter for filtering the DGE matrix.)
+# PARAMETER OPTIONAL filter.param: "Filtering threshold" TYPE INTEGER DEFAULT 0 (The corresponding parameter for filtering the DGE matrix.)
 
 
 # OUTPUT OPTIONAL log.txt

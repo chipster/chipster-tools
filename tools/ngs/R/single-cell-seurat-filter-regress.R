@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
-# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial gene ratio" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
+# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript ratio" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells where the ratio of mitochondrial transcripts is higher than this.)
 # PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene, x min" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene, x max" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene, y min" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
