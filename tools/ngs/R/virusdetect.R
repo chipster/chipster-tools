@@ -49,7 +49,7 @@ inputnames <- read_input_definitions()
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 vd.binary <- c(file.path(chipster.tools.path, "virusdetect", "virus_detect.pl"))
 #vd.binary <- c(file.path("/opt/chipster/tools_local/virusdetect", "virus_detect.pl"))
-vd.parameters <- paste("--reference", reference, "--thread-num", chipster.threads.max, "--coverage-cutoff", coverage_cutoff, "--depth-cutoff", depth_cutoff, "--hsp-cover", hsp_cover )
+vd.parameters <- paste("--reference", reference, "--thread_num", chipster.threads.max, "--coverage_cutoff", coverage_cutoff, "--depth_cutoff", depth_cutoff, "--hsp_cover", hsp_cover )
 
 system("date > vd.log")
 
@@ -137,7 +137,6 @@ if (file.exists("result_inputseq/blastx.html")){
 	system(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); weasyprint $file ${bln}.bx.pdf; done;")
 	
 }
-
 
 
 if ( blast_ref == "yes") {
@@ -235,7 +234,7 @@ if ( save_tar == "yes") {
 	outputnames[1,] <- c("virusdetect_results.tar", paste(seq_ifn, "_VD_results.tar", sep =""))
 	# Write output definitions file
 	write_output_definitions(outputnames)
-	system ("echo Result collectin ready >> vd.log")
+	system ("echo Result collecti ready >> vd.log")
 	system ("ls -l >> vd.log")
 	
 }

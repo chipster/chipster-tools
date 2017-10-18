@@ -48,7 +48,7 @@ inputnames <- read_input_definitions()
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 vd.binary <- c(file.path(chipster.tools.path, "virusdetect", "virus_detect.pl"))
 #vd.binary <- c(file.path("/opt/chipster/tools_local/virusdetect", "virus_detect.pl"))
-vd.parameters <- paste("--reference", reference, "--thread-num", chipster.threads.max, "--coverage-cutoff", coverage_cutoff, "--depth-cutoff", depth_cutoff, "--hsp-cover", hsp_cover )
+vd.parameters <- paste("--reference", reference, "--thread_num", chipster.threads.max, "--coverage_cutoff", coverage_cutoff, "--depth_cutoff", depth_cutoff, "--hsp_cover", hsp_cover )
 
 system("date > vd.log")
 
