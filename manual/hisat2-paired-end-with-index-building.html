@@ -19,36 +19,50 @@ correctly (see Details for more information).
 
 <h3>Parameters</h3> 
 <ul>
-<li>Genome (list of supported genomes) [latest human]</li>
+<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
+<li>How many hits is a read allowed to have (1-1000000) [5]</li>
 <li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
 <li>Minimum intron length [20]</li>
 <li>Maximum intron length [500000]</li>
-<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
-<li>How many hits is a read allowed to have (1-1000000) [5]</li>
-<li>Is soft-clipping used (yes, no) [yes] </li>
-<li>Is long anchors required (yes, no) [no]</li>
+<li>Allow soft clipping (yes, no) [yes] </li>
+<li>Are long anchors required (yes, no) [no]</li>
 </ul>
 
 <h3>Details</h3>
 <p>
-HISAT2 is a fast and sensitive alignment program for mapping next-generation sequencing reads (whole-genome, transcriptome, and exome sequencing data) against the general human population (as well as against a single reference genome). Based on GCSA (an extension of BWT for a graph), HISAT2 was designed and implemented a graph FM index (GFM). In addition to using one global GFM index that represents general population, HISAT2 uses a large set of small GFM indexes that collectively cover the whole genome (each index representing a genomic region of 56 Kbp, with 55,000 indexes needed to cover human population). These small indexes (called local indexes) combined with several alignment strategies enable effective alignment of sequencing reads. This new indexing scheme is called Hierarchical Graph FM index (HGFM). HISAT 2 was developed based on the HISAT and Bowtie2 implementations. HISAT2 outputs alignments in SAM format, enabling interoperation with a large number of other tools (e.g. SAMtools, GATK) that use SAM. HISAT2 is distributed under the GPLv3 license, and it runs on the command line under Linux, Mac OS X and Windows.
+HISAT2 (hierarchical indexing for spliced alignment of transcripts) is a highly efficient system for aligning reads from RNA sequencing experiments. 
+HISAT uses an indexing scheme based on the Burrows-Wheeler transform and the Ferragina-Manzini (FM) index, employing two types of indexes for alignment: 
+a whole-genome FM index to anchor each alignment and numerous local FM indexes for very rapid extensions of these alignments. 
+HISAT's hierarchical index for the human genome contains 48,000 local FM indexes, each representing a genomic region of ~64,000 bp.
 </p>
-
+<p>
+HISAT2 searches by default for up to 5 distinct, primary alignments for each read, but you can change this number. 
+Primary alignments mean alignments whose alignment score is equal or higher than any other alignments. It is possible that multiple distinct alignments have the same score. 
+The alignment score for a paired-end alignment equals the sum of the alignment scores of the individual mates. 
+Note that HISAT2 does not "find" alignments in any specific order, so for reads that have more than 5 distinct, valid alignments, 
+HISAT2 does not guarantee that the 5 alignments reported are the best possible in terms of alignment score. 
+By default soft clipping is allowed, meaning that the ends of the read don't need to align if this increases the alignment score.
+</p>
+<p>
+If you are planning to do transcriptome assembly afterwards, you should set the long anchor parameter to yes.
+With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short anchors, which helps transcript assemblers improve significantly in computation and memory usage.
+</p>
 <p>After running HISAT2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
 
 <h3>Output</h3>
 <p>
 This tool returns the following files:
 <ul>
-<li>hisat.bam: BAM file containing the alignments.</li>
+<li>hisat.bam: BAM file containing the alignments</li>
+<li>hisat.bam.bai: Index for the BAM file</li>
 <li>hisat.log: Summary of the alignment results</li>
 </ul>
 </p>
  
 <h3>Reference</h3>
 
-<p>This tool is based on the <a href="https://ccb.jhu.edu/software/hisat2/">HISAT2</a> package. Please cite the following article:
-Kim D, Langmead B and Salzberg SL. <a href="http://www.nature.com/nmeth/journal/vaop/ncurrent/full/nmeth.3317.html"> HISAT: a fast spliced aligner with low memory requirements</a> Nature Methods 2015. 
+<p>This tool is based on the <a href="https://ccb.jhu.edu/software/hisat2/manual.shtml">HISAT2</a> package. Please cite the following article:
+Kim D, Langmead B and Salzberg SL. <a href="http://www.nature.com/nmeth/journal/vaop/ncurrent/full/nmeth.3317.html"> HISAT: a fast spliced aligner with low memory requirements</a> Nature Methods 2015.
 </p>
  
 </body>
