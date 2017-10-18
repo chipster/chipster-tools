@@ -1,4 +1,4 @@
-# TOOL single-cell-tag-read-with-gene-exon.R: "Tag reads with gene names" (Adds a BAM tag GE to reads which overlap an exon of a gene. This tag contains the name of the gene, as reported in the GTF genome annotation file. )
+# TOOL single-cell-tag-read-with-gene-exon.R: "Tag reads with gene names" (Adds a BAM tag GE with a gene name to reads which overlap an exon of a gene. The names are extracted from GTF genome annotation files. Chipster provides Ensembl-based GTFs, but you can also give your own.)
 # INPUT merged.bam: "Merged BAM" TYPE GENERIC
 # INPUT OPTIONAL own.gtf: "Own GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL merged_tagged.bam
