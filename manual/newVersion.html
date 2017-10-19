@@ -17,7 +17,7 @@ div.header-item {
 
 <h2>Version update 17.10.2017: What is new in Chipster 3.13</h2>
  	<p>
-		<b>Summary:</b> For the last 10 months we have been adding many new tools and improvements, especially for single cell RNA-seq and 16S rRNA data, which have been actively modified based on the feedback kindly provided by 
+		<b>Summary:</b> For the last 10 months we have been adding many new tools and improvements, especially for single cell RNA-seq data, which have been actively modified based on the feedback kindly provided by 
 		Chipster user community in Finland. Given the large number of modifications and subversions of Chipster 3.11, we decided to number the new version as 3.13 instead of 3.12. Chipster 3.13 allows the analysis of DropSeq and Chromium 
 		10X single cell RNA-seq data from raw reads to clustering and marker gene detection based on the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">DropSeq</a> and 
 		<a href="http://satijalab.org/seurat/">Seurat</a> packages.
@@ -26,7 +26,7 @@ div.header-item {
 	<ul>
 		<li><div class=header-item>New analysis tools</div>		
 			<ul>
-				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 aligner for RNA-seq reads</a> HISAT2 is faster than the TopHat2 aligner. Chipster has currently HISAT2 indexes for human and mouse genomes.</li>
+				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 aligner for RNA-seq reads</a> HISAT2 is faster than the TopHat2 aligner. Chipster has currently ready made HISAT2 indexes for human and mouse genomes, but you can also give your own reference genome is fasta format.</li>
 				<li><a href="single-cell-preprocessing.html">Single cell RNA-seq / Preprocessing DropSeq FASTQ files</a> Tags the reads with the cellular and molecular barcodes, removes reads where the cell or molecular barcode has low quality bases, 
 				trims adapters and polyA tails.</li>
 				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a> Adds the cell and molecular barcode and other tags that were lost during the alignment to the aligned BAM file.</li>
