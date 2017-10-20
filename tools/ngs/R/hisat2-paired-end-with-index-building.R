@@ -195,5 +195,28 @@ system("cat debug.log >> hisat.log")
 # Substitute display names to log for clarity
 displayNamesToFile("hisat.log")
 
+# Handle output names
+#
+
+# read input names
+inputnames <- read_input_definitions()
+
+# Determine base name
+name1 <- unlist(strsplit(reads1, ","))
+base1 <- strip_name(inputnames[[name1[1]]])
+
+name2 <- unlist(strsplit(reads2, ","))
+base2 <- strip_name(inputnames[[name2[1]]])
+
+basename <- paired_name(base1, base2)
+
+# Make a matrix of output names
+outputnames <- matrix(NA, nrow=2, ncol=2)
+outputnames[1,] <- c("hisat.bam", paste(basename, ".bam", sep =""))
+outputnames[2,] <- c("hisat.bam.bai", paste(basename, ".bam.bai", sep =""))
+
+# Write output definitions file
+write_output_definitions(outputnames)
+
 #EOF
 
