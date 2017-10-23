@@ -40,9 +40,8 @@ location on the other strand, your reads are counted for that wrong gene.
 category to help you. The tool aligns subsets of the input FASTQ files against the reference genome, 
 and this alignment is then compared to the reference annotation to deduce the strandedness. Check out the
  <a href="http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html">help page</a> of this tool for more information! <br>
-<b>In Tophat:</b> Check the mapping rate after the TopHat alignment (in Chipster, open file tophat-summary.txt). 
-Note that you can 
-run TopHat with the different parameters to a small part of the data and then compare the results. <br>
+<b>In aligners like HISAT2 and Tophat:</b> Check the mapping rate. Note that you can take a small subset of your reads and
+run HISAT2/TopHat with the different parameters and compare the results. <br>
 <b>In HTSeq:</b> Check the number of reads that are not counted for any gene (=the "no-feature reads").  
 (In Chipster, open file htseq-count-info.txt). 
 </p>
@@ -57,7 +56,7 @@ Information regarding the strand is not conserved
 <b>Kits: </b> <br>
 TruSeq RNA Sample Prep kit <br>
 <b>Parameters:</b> <br>
-TopHat / Cufflinks / Cuffdiff: library-type fr-unstranded <br>
+HISAT2 / TopHat / Cufflinks / Cuffdiff: library-type fr-unstranded <br>
 HTSeq: stranded -- no <br> </p>
 
 <p><b><u>Directional, first strand:</u></b><br>
@@ -72,7 +71,7 @@ TruSeq Stranded mRNA Sample Prep Kit<br>
 NEB Ultra Directional RNA Library Prep Kit <br>
 Agilent SureSelect Strand-Specific <br>
 <b>Parameters:</b><br>
-TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
+HISAT2 / TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
 HTSeq: stranded -- reverse<br> </p>
 
 <p><b><u>Directional, second strand:</u></b><br>
@@ -85,7 +84,7 @@ ScriptSeq v2 RNA-Seq Library Preparation Kit <br>
 SMARTer Stranded Total RNA <br>
 Encore Complete RNA-Seq Library Systems<br>
 <b>Parameters:</b><br>
-TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
+HISAT2 / TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
 HTSeq: stranded -- yes<br></p>
 
 <p>Note also that the --fr/--rf/--ff or "Order of mates to align" parameter in Bowtie has similar 
