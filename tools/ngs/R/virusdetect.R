@@ -191,10 +191,17 @@ if (file.exists("result_inputseq/inputseq.blastx.xls")){
 
 #Undetermined
 if (file.exists("result_inputseq/undetermined.html")){
-	system("mv result_inputseq/undetermined.html undetermined.html")
+	system("echo '<html>' > undetermined.html")
+    system("awk '{ if ( NR > 1 ) print $0 }' result_inputseq/undetermined.html >> undetermined.html")
+	system("echo '</html>' >> undetermined.html")
 }
+
+
 if (file.exists("result_inputseq/undetermined_blast.html")){
-	system("mv result_inputseq/undetermined_blast.html undetermined_blast.html")
+	
+	system("echo '<html>' > undetermined_blast.html")
+	system("awk '{ if ( NR > 1 ) print $0 }' result_inputseq/undetermined_blast.html >> undetermined_blast.html")
+	system("echo '</html>' >> undetermined_blast.html")
 }
 
 
