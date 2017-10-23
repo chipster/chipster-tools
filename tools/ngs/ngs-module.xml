@@ -106,24 +106,26 @@
 		<tool>bowtie2-paired-end.R</tool>
 		<tool>bowtie2-with-index-building.R</tool>
 	    <tool>bowtie2-paired-end-with-index-building.R</tool>
-		<tool>tophat2.R</tool>
-		<tool>tophat2-single-end.R</tool>
-	    <tool>tophat2-with-index-building.R</tool>
-		<tool>tophat2-single-end-with-index-building.R</tool>
 		<tool>hisat2.R</tool>
 		<tool>hisat2-paired-end.R</tool>		
 		<tool>hisat2-single-end-with-index-building.R</tool>		
-		<tool>hisat2-paired-end-with-index-building.R</tool>	
+		<tool>hisat2-paired-end-with-index-building.R</tool>
+		<!--<tool>star-single-end.R</tool>-->
+		<!--<tool>star-paired-end.R</tool>-->	
 		<tool>bwa-mem.R</tool>
 		<tool>bwa-mem-with-index-building.R</tool>
-	    <tool>bwa.R</tool>
-		<tool>bwa-paired-end.R</tool>
-		<tool>bwa-with-index-building.R</tool>
-		<tool>bwa-paired-end-with-index-building.R</tool>
 		<tool>bowtie.R</tool>
 		<tool>bowtie-paired-end.R</tool>
 		<tool>bowtie-with-index-building.R</tool>
 		<tool>bowtie-paired-end-with-index-building.R</tool>
+		<tool>tophat2.R</tool>
+		<tool>tophat2-single-end.R</tool>
+	    <tool>tophat2-with-index-building.R</tool>
+		<tool>tophat2-single-end-with-index-building.R</tool>
+	    <tool>bwa.R</tool>
+		<tool>bwa-paired-end.R</tool>
+		<tool>bwa-with-index-building.R</tool>
+		<tool>bwa-paired-end-with-index-building.R</tool>
 	</category>
 	
 	<category name="Variants" color="#80a3b7">
