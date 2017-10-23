@@ -7,9 +7,9 @@
 # OUTPUT OPTIONAL alignment.bam.bai
 # OUTPUT OPTIONAL Log_progress.txt
 # OUTPUT OPTIONAL Log_final.txt
-# PARAMETER organism: "Genome" TYPE [Homo_sapiens.GRCh38] DEFAULT Homo_sapiens.GRCh38 (Genome or transcriptome that you would like to align your reads against.)
-# PARAMETER alignments.per.read: "Maximum alignments per read" TYPE INTEGER DEFAULT 10 (Maximum number of multiple alignments allowed for a read: if exceeded, the read is considered unmapped.)
-# PARAMETER mismatches.per.pair: "Maximum mismatches per read pair" TYPE INTEGER DEFAULT 10 (Maximum number of mismatches per pair. Use value 999 to switch off this filter.)
+# PARAMETER organism: "Genome" TYPE [Homo_sapiens.GRCh38] DEFAULT Homo_sapiens.GRCh38 (Genome that you would like to align your reads against.)
+# PARAMETER OPTIONAL alignments.per.read: "Maximum alignments per read" TYPE INTEGER DEFAULT 10 (Maximum number of multiple alignments allowed for a read: if exceeded, the read is considered unmapped.)
+# PARAMETER OPTIONAL mismatches.per.pair: "Maximum mismatches per read pair" TYPE INTEGER DEFAULT 10 (Maximum number of mismatches per pair. Use value 999 to switch off this filter.)
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
