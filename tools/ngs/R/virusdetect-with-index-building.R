@@ -17,6 +17,7 @@
 # OUTPUT OPTIONAL blastx_matches.bam.bai
 # OUTPUT OPTIONAL blastn_matches.tsv 
 # OUTPUT OPTIONAL blastx_matches.tsv 
+# OUTPUT OPTIONAL undetermined.html
 # OUTPUT OPTIONAL hostgenome_bwa_index.tar
 # OUTPUT OPTIONAL {...}.pdf
 # OUTPUT OPTIONAL vd.log
@@ -209,6 +210,7 @@ if ( save_tar == "yes") {
 	system ("mv blastx_matches.bam.bai vd_output/")
 	system ("mv blastn_matches.tsv vd_output/")
 	system ("mv blastx_matches.tsv vd_output/")
+    system ("mv undetermined.html vd_output/")
 	system ("mv hostgenome_bwa_index.tar vd_output/")
 	system ("mv *.pdf vd_output/")
 	system ("cp vd.log vd_output/")
@@ -238,7 +240,7 @@ if ( sn_tag == "yes") {
 	system(pdf_name_command)
 	system('ls -l >> vd.log')
 	# Make a matrix of output names
-	outputnames <- matrix(NA, nrow=17, ncol=2)
+	outputnames <- matrix(NA, nrow=18, ncol=2)
 	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
 	outputnames[2,] <- c("virusderect_matches_blastn.fa", paste(seq_ifn, "virusderect_matches_blastn.fa", sep ="_"))
 	outputnames[3,] <- c("virusderect_matches_blastx.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
@@ -255,7 +257,8 @@ if ( sn_tag == "yes") {
 	outputnames[14,] <- c("blastx_matches.bam.bai", paste(seq_ifn, "blastx_matches.bam.bai", sep ="_"))
 	outputnames[15,] <- c("blastn_matches.tsv", paste(seq_ifn, "blastn_matches.tsv", sep ="_"))
 	outputnames[16,] <- c("blastx_matches.tsv", paste(seq_ifn, "blastx_matches.tsv", sep ="_"))
-	outputnames[17,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
+	outputnames[17,] <- c("undetermined.html", paste(seq_ifn, "undetermined.html", sep ="_"))
+	outputnames[18,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
 	# Write output definitions file
 	write_output_definitions(outputnames)	
 }
