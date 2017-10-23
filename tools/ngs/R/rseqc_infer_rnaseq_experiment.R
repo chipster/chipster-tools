@@ -61,19 +61,19 @@ if (pe){
 	if (ratio > 10){
 		message <- paste("\nIt seems the data is stranded. Read 1 is always on the same strand as the gene.")
 		message <- paste(message, "\n\nCorresponding parameters are:")
-		message <- paste(message, "\nTopHat, Cufflinks and Cuffdiff: library-type fr-secondstrand")
+		message <- paste(message, "\nTopHat, HISAT2, Cufflinks and Cuffdiff: library-type fr-secondstrand")
 		message <- paste(message, "\nHTSeq: stranded -- yes")
 		message <- paste(message, "\nRSeQC: 1++,1--,2+-,2-+" )
 	}else if (ratio < 0.1){
 		message <- paste("\nIt seems the data is stranded. Read 2 is always on the same strand as the gene.")
 		message <- paste(message, "\n\nCorresponding parameters are:")
-		message <- paste(message, "\nTopHat, Cufflinks and Cuffdiff: library-type fr-firststrand")
+		message <- paste(message, "\nTopHat, HISAT2, Cufflinks and Cuffdiff: library-type fr-firststrand")
 		message <- paste(message, "\nHTSeq: stranded -- reverse")
 		message <- paste(message, "\nRSeQC: 1+-,1-+,2++,2--" )
 	}else{
 		message <- paste("\nIt seems the data is unstranded.")
 		message <- paste(message, "\n\nCorresponding parameters are:")
-		message <- paste(message, "\nTopHat, Cufflinks and Cuffdiff: library-type fr-unstranded")
+		message <- paste(message, "\nTopHat, HISAT2, Cufflinks and Cuffdiff: library-type fr-unstranded")
 		message <- paste(message, "\nHTSeq: stranded -- no")
 		message <- paste(message, "\nRSeQC: none")
 	}	
@@ -81,19 +81,19 @@ if (pe){
 	if (ratio > 10){
 		message <- paste("\nIt seems the data is stranded. Read is always on the same strand as the gene.")
 		message <- paste(message, "\n\nCorresponding parameters are:")
-		message <- paste(message, "\nTopHat, Cufflinks and Cuffdiff: library-type fr-secondstrand")
+		message <- paste(message, "\nTopHat, HISAT2, Cufflinks and Cuffdiff: library-type fr-secondstrand")
 		message <- paste(message, "\nHTSeq: stranded -- yes")
 		message <- paste(message, "\nRSeQC: ++,--" )
 	}else if (ratio < 0.1){
 		message <- paste("\nIt seems the data is stranded. Read is always on the opposite strand to gene.")
 		message <- paste(message, "\n\nCorresponding parameters are:")
-		message <- paste(message, "\nTopHat, Cufflinks and Cuffdiff: library-type fr-firststrand")
+		message <- paste(message, "\nTopHat, HISAT2, Cufflinks and Cuffdiff: library-type fr-firststrand")
 		message <- paste(message, "\nHTSeq: stranded -- reverse")
 		message <- paste(message, "\nRSeQC: +-,-+" )
 	}else{
 		message <- paste("\nIt seems the data is unstranded.")
 		message <- paste(message, "\n\nCorresponding parameters are:")
-		message <- paste(message, "\nTopHat, Cufflinks and Cuffdiff: library-type fr-unstranded")
+		message <- paste(message, "\nTopHat, HISAT2, Cufflinks and Cuffdiff: library-type fr-unstranded")
 		message <- paste(message, "\nHTSeq: stranded -- no")
 		message <- paste(message, "\nRSeQC: none")
 	}	
