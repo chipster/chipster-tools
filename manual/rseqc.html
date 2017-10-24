@@ -3,14 +3,14 @@
 <head><title></title></head>
 <body>
 
-<h2>RNA-seq BAM quality metrics with RseQC</h2>
+<h2>RNA-seq quality metrics with RseQC</h2>
 
 <h3>Description</h3>
 
 <p>
 Given an RNA-seq BAM file and gene and exon locations in a BED file, this tool reports several 
 quality metrics such as coverage uniformity, gene and junction saturation, junction annotation 
-and alignment statistics. You can provide your own BED file or use one of the internal annotations.
+and alignment statistics. You can provide your own BED file or use one provided by Chipster.
 This tool is based on the RSeQC package.
 </p>
 
@@ -18,6 +18,7 @@ This tool is based on the RSeQC package.
 <ul>
 <li>Organism (list of supported organisms) [Own BED file]</li>
 <li>Chromosome names in my BAM file look like (chr1, 1) [1]</li>
+<li>Generate RPKM saturation plot (yes, no) [no]</li>
 <li>Generate inner distance plot (yes, no) [no]</li>
 </ul>
 
