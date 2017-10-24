@@ -21,9 +21,9 @@ Aligns single end RNA-seq reads using the STAR aligner. Alignment results are gi
 <h3>Details</h3>
 
 <p>This tool uses the fast STAR (Spliced Transcripts Alignment to a Reference) aligner, which can accurately detect annotated and novel splice junctions in RNA-seq data. 
-Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. 
 The tool uses a 2-pass mapping process where STAR performs the 1st pass mapping, automatically extracts splice junctions, inserts them into the genome index, and re-maps all reads in the 2nd mapping pass.
-This doesn't increase the number of detected novel junctions, but it allows more spliced reads mapping to novel junctions.
+This doesn't increase the number of detected novel junctions, but it allows more spliced reads mapping to novel junctions. 
+Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. For example the <a href = "http://www.gencodegenes.org/">GENCODE</a> GTF is recommended by the STAR developers.
 </p>
 
 <p>
@@ -38,10 +38,10 @@ Maximum number of mismatches per -parameter filters out alignments which contain
 <h3>Output</h3>
 
 <ul>
-<li>alignment.bam</li>
-<li>alignment.bam.bai</li>
-<li>Log_progress.txt</li>
-<li>Log_final.txt</li>
+<li>alignment.bam: alignments sorted by chromosomal coordinates.</li>
+<li>alignment.bam.bai: index file for the alignments</li>
+<li>Log_final.txt: summary file listing the percentage of uniquely mapped reads etc.</li>
+<li>Log_progress.txt: process summary allowing you to see for example if the 2nd pass mapping was done.</li>
 </ul>
 
 <h3>References</h3>
