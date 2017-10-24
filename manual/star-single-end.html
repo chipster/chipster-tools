@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>STAR for single end reads and human genome</h2>
+
+<h3>Description</h3>
+
+<p>
+Aligns single end RNA-seq reads using the STAR aligner. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.
+</p>
+
+<h3>Parameters</h3>
+<ul>
+<li>Genome [Homo_sapiens.GRCh38]</li>
+<li>Maximum alignments per read [10]</li>
+<li>Maximum mismatches per read [10]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>This tool uses the fast STAR (Spliced Transcripts Alignment to a Reference) aligner, which can accurately detect annotated and novel splice junctions in RNA-seq data. 
+Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. 
+The tool uses a 2-pass mapping process where STAR performs the 1st pass mapping, automatically extracts splice junctions, inserts them into the genome index, and re-maps all reads in the 2nd mapping pass.
+This doesn't increase the number of detected novel junctions, but it allows more spliced reads mapping to novel junctions.
+</p>
+
+<p>
+Maximum alignments per read -parameter sets the maximum number of loci the read is allowed to map to. Alignments (all of them) will be output
+only if the read maps to no more loci than this value. Otherwise no alignments will be output, and the read will be counted as "mapped to too many loci" in the Log_final.txt file.
+</p>
+
+<p>
+Maximum number of mismatches per -parameter filters out alignments which contain more mismatches than this number. Use value 999 to switch off this filter.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>alignment.bam</li>
+<li>alignment.bam.bai</li>
+<li>Log_progress.txt</li>
+<li>Log_final.txt</li>
+</ul>
+
+<h3>References</h3>
+
+<p>This tool uses the STAR aligner. Please cite the article:</p>
+
+<p>Alexander Dobin et al: STAR: ultrafast universal RNA-seq aligner (2013) Bioinformatics 29: 15-21.
+
+<p>Please see the <a href = "https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf">STAR manual</A> for more details.</p>
+</body>
