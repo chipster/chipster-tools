@@ -1,4 +1,4 @@
-# TOOL single-cell-bam-tag-histogram.R: "Estimate number of usable cells" (Extracts the reads per cell barcode and draw a cumulative distribution plot. The plot helps to select how many cells to include in the DGE matrix.)
+# TOOL single-cell-bam-tag-histogram.R: "Estimate number of usable cells" (Extracts the reads per cell barcode and draws a cumulative distribution plot. The plot helps to select how many cells to include in the DGE matrix.)
 # INPUT input.bam: "prepared BAM" TYPE GENERIC
 # OUTPUT OPTIONAL cell_readcounts.txt.gz
 # OUTPUT OPTIONAL inflectionPoint.pdf

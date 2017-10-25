@@ -19,7 +19,7 @@ which are used for performing the principal component analysis in the next tool.
 <p>
 PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to 
 average expression and dispersion (bottom three parameters) is an iterative process. 
-Start with some values, see how it goes and run the tool again with different parameters.) 
+Start with some values, see how it goes and run the tool again with different parameters. 
 
 </p>
  
@@ -27,13 +27,13 @@ Start with some values, see how it goes and run the tool again with different pa
  <p>
 <ul>
 		<li>Unique gene counts per cell upper limit cutoff [2500]</li>
-		<li>Mitochondrial genes percentage upper limit cutoff [0.05]</li>
+		<li>Mitochondrial transcript percentage upper limit cutoff [0.05]</li>
 		<li>Minimum average expression level for a variable gene, x min [0.0125]</li>
 		<li>Maximum average expression level for a variable gene, x max [3]</li>
 		<li>Minimum dispersion for a variable gene, y min [0.5]</li>	
 </ul>
 	The bottom three parameters (x min, x max, y min) are used to select the variable genes. You might need to run
-	the tool again if the initial guess with the parameters doesn't give good number of variable genes.
+	the tool again if the initial guess with the parameters doesn't give a good number of variable genes.
 	
 	</p>
 	
@@ -45,20 +45,20 @@ As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
 
 <p>
 You can use the QC-plots.pdf to estimate the cut-offs for this tool: 
-the upper limits for number of genes per cell and mitochondrial percentage.
+the upper limits for number of genes per cell and mitochondrial transcript percentage.
 </p>
 
 <p>
 First, the tool performs <b>filtering</b> based on the number of genes 
-to get rid of possible multiplets. Cells can also be filtered based on the percentage of mitochondrial genes present.
+to get rid of possible multiplets. Cells can also be filtered based on the percentage of mitochondrial transcripts present.
 User can determine (based on the QC plots) the upper limit for unique gene counts per cell and
-the upper limit for mitochondrial genes percentage. 
+the upper limit for mitochondrial transcript percentage. 
 </p>
 
 <p>
 Next, the <b>"uninteresting" sources of variation are regressed out</b> to improve downstream dimensionality reduction and clustering.
 Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
-This tool regresses on the number of detected molecules per cell as well as the percentage mitochondrial gene content.
+This tool regresses on the number of detected molecules per cell as well as the percentage mitochondrial transcript content.
 </p>
 
 <p>

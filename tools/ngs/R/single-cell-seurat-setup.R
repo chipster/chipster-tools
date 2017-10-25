@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "BETA Seurat -Setup and QC" (Setup the Seurat object and examine quality control plots. As an input, give either a tar package of a folder which contains the 10X output files, or a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
+# TOOL single-cell-seurat-setup.R: "BETA Seurat -Setup and QC" (Setup the Seurat object and examine quality control plots. Depending on your data type, you need to give one of the following input files. For Chromium 10x data you need to give a tar package of the 10X output file folder, please see more detailed instructions in the manual. For DropSeq data you need to give a digital gene expression matrix, which you can make with the tool Create digital gene expression matrix. Please check that your input file is assigned correctly under the parameters!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table from DropSeq" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf 

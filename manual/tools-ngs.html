@@ -62,7 +62,6 @@ allowing you to view reads and results in their genomic context.</p>
 <li> <a href="normalise-counts.html">Normalize count table </a> </li>
 <li> <a href="annotate-ensembl-ids.html">Annotate Ensembl identifiers </a> </li>
 <li> <a href="deseq2-normalized-counts-for-gene.html">Plot normalized counts for a gene</a> </li>
-<li> <a href="a5-miseq.html">A5 assembly pipeline for microbial genomes</a> </li>
 <li> <a href="samtools-index.html">Index BAM </a> </li>
 <li> <a href="samtools-sort-index-BAM.html">Sort and index BAM</a> </li>
 <li> <a href="samtools-convert-SAMtoBAM-sort-index.html">Convert SAM to BAM, sort and index</a> </li>
@@ -92,7 +91,9 @@ allowing you to view reads and results in their genomic context.</p>
 <li> <a href="ensemblfetch.html">Retrieve sequences for a given organism in Ensembl</a></li>
 <li> <a href="gunzip.html">Extract .gzip file</a></li>
 <li> <a href="extract_gzip_tar.html">Extract .gzip.tar file</a></li>
+<li><a href="gzip.html">Compress a file with gzip</a></li>
 <li> <a href="make_tar.html">Make a tar package</a></li>
+<li><a href="list_tar_contents.html">List contents of a tar file</a>
 <li> <a href="a5-miseq.html">A5 assembly pipeline for microbial genomes</a></li>
 <li> <a href="make_namelist.html">Make a list of file names</a></li>
 <li> <a href="virusdetect.html">VirusDetect</a></li>
@@ -118,24 +119,31 @@ allowing you to view reads and results in their genomic context.</p>
 <br>
 <br>
 <b><a name="alignment">Alignment</a></b>
-<li> <a href="tophat2.html">TopHat2 for paired end reads</a> </li>
-<li> <a href="tophat2-single-end.html">TopHat2 for single end reads</a></li>
-<li> <a href="tophat2.html">TopHat2 for paired end reads and own genome</a> </li>
-<li> <a href="tophat2-single-end.html">TopHat2 for single end reads and own genome</a></li>
+
 <li> <a href="bowtie2.html">Bowtie2 for single end reads</a>.</li>
 <li> <a href="bowtie2-paired-end.html">Bowtie2 for paired end reads</a>.</li>
 <li> <a href="bowtie2-with-index-building.html">Bowtie2 for single end reads and own genome</a>.</li>
 <li> <a href="bowtie2-paired-end-with-index-building.html">Bowtie2 for paired end reads and own genome</a>.</li>
+<li> <a href="hisat2.html">HISAT2 for single end reads</a>.</li>
+<li> <a href="hisat2-paired-end.html">HISAT2 for paired end reads</a>.</li>
+<li> <a href="hisat2-single-end-with-index-building.html">HISAT2 for single end reads and own genome</a>.</li>
+<li> <a href="hisat2-paired-end-with-index-building.html">HISAT2 for paired end reads and own genome</a>.</li>
+<li> <a href="star-single-end.html">STAR for single end reads and human genome</a>.</li>
+<li> <a href="star-paired-end.html">STAR for paired end reads and human genome</a>.</li>
 <li> <a href="bwa-mem.html">BWA MEM for single or paired end reads </a> </li>
 <li> <a href="bwa-mem-with-index-building.html">BWA MEM for single or paired-end reads and own genome </a> </li>
-<li> <a href="bwa.html">BWA-backtrack for single-end reads </a> </li>
-<li> <a href="bwa-paired-end.html">BWA-backtrack for paired-end reads </a> </li>
-<li> <a href="bwa-with-index-building.html">BWA-backtrack for single-end reads and own genome</a> </li>
-<li> <a href="bwa-paired-end-with-index-building.html">BWA-backtrack for paired-end reads and own genome </a> </li>
 <li> <a href="bowtie.html">Bowtie for single-end reads </a> </li>
 <li> <a href="bowtie-paired-end.html">Bowtie for paired-end reads</a> </li>
 <li> <a href="bowtie-with-index-building.html">Bowtie for single-end reads and own genome </a> </li>
 <li> <a href="bowtie-paired-end-with-index-building.html">Bowtie for paired-end reads and own genome </a> </li>
+<li> <a href="tophat2.html">TopHat2 for paired end reads</a> </li>
+<li> <a href="tophat2-single-end.html">TopHat2 for single end reads</a></li>
+<li> <a href="tophat2.html">TopHat2 for paired end reads and own genome</a> </li>
+<li> <a href="tophat2-single-end.html">TopHat2 for single end reads and own genome</a></li>
+<li> <a href="bwa.html">BWA-backtrack for single-end reads </a> </li>
+<li> <a href="bwa-paired-end.html">BWA-backtrack for paired-end reads </a> </li>
+<li> <a href="bwa-with-index-building.html">BWA-backtrack for single-end reads and own genome</a> </li>
+<li> <a href="bwa-paired-end-with-index-building.html">BWA-backtrack for paired-end reads and own genome </a> </li>
 <br>
 <br>
 <b><a name="variants">Variants</a></b>
@@ -251,11 +259,12 @@ allowing you to view reads and results in their genomic context.</p>
 <!-- <li><a href="single-cell-FilterBam.html">Filter and trim BAM</a></li> -->
 <!-- <li><a href="picard-samtofastq.html">BAM to FASTQ</a></li> -->
 <!-- <li><a href="picard-sortsam.html">Sort BAM</a></li> -->
-<li><a href="picard-merge-bam-alignment.html">Merge BAM alignment</a></li>
-<li><a href="single-cell-tag-read-with-gene-exon.html">Tag read with gene exon</a></li>
+<li><a href="picard-merge-bam-alignment.html">Merge aligned and unaligned BAM</a></li>
+<li><a href="single-cell-tag-read-with-gene-exon.html">Tag reads with gene names</a></li>
+<li><a href="single-cell-bam-tag-histogram.html">Estimate number of usable cells</a></li>
 <!-- <li><a href="single-cell-detect-bead-synthesis-erros.html">Detect bead synthesis errors</a></li> -->
-<li><a href="single-cell-digital-expression.html">Digital expression</a></li>
-<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>
+<li><a href="single-cell-digital-expression.html">Create digital gene expression matrix</a></li>
+<!--<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>-->
 <li><a href="single-cell-seurat-setup.html">Seurat -Setup and QC</a></li>
 <li><a href="single-cell-seurat-filter-regress.html">Seurat -Filtering, regression and detection of variable genes</a></li>
 <li><a href="single-cell-seurat-pca.html">Seurat -PCA</a></li>

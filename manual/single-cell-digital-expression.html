@@ -8,10 +8,10 @@
 <h3>Description</h3>
 
 <p>This Drop-seq tool does two things: <br>
-1) identifies and corrects bead synthesis errors, and <br>
-2) extracts the digital gene expression data from an aligned library.
+1) identifies and corrects bead synthesis errors <br>
+2) extracts gene expression values from a BAM file where reads have been tagged with gene names
 <br><br>
-In the <b>bead synthesis step (step 1)</b> the tool identifies cell barcodes with aberrant “fixed” UMI bases.
+In the <b>bead synthesis step (step 1)</b> the tool identifies cell barcodes with aberrant fixed UMI bases.
 If only the last UMI base is fixed as a T, the cell barcode is corrected (the last base is trimmed off) and 
 all cell barcodes with identical sequence at the first 11 bases are merged together. 
 If any other UMI base is fixed, the reads with that cell barcode are discarded.
@@ -60,7 +60,7 @@ This program requires a tag for what gene a read is on, a molecular barcode tag,
 Choose first the selection criteria (<b>How to filter the DGE matrix</b>):
 		<ul>
 		<li>Number of core barcodes: Counts the number of reads per cell barcode and include N top cells with most reads.</li>
-		<li>Min number of genes per cell: Select cells that have at least this many genes.</li>
+		<li>Min number of genes per cell: Select cells that have at least this many genes detected.</li>
 		</ul>
 Then set the <b>filtering parameter</b>. 		
  </p>
@@ -74,7 +74,7 @@ For more details, please check the <a href="http://mccarrolllab.com/wp-content/u
 <ul>	<li>Estimate the number of barcodes for correction [2000]</li>
 		<li>Sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
 		<li>How to filter the DGE matrix [Min number of genes per cell]</li>
-		<li>Filtering parameter [0]</li>
+		<li>Filtering threshold [0]</li>
 	</ul>
 
 
