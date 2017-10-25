@@ -24,8 +24,8 @@
 # OUTPUT OPTIONAL vd.log
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cuttoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
-# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cuttoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequence by assembled virus contigs.)
+# PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cutoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
+# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cutoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequence by assembled virus contigs.)
 # PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference.)  
 # PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs.)
 # PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequences to the reference sequences.)
