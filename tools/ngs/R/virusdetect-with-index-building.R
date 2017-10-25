@@ -277,11 +277,16 @@ if ( sn_tag == "yes") {
 	outputnames[16,] <- c("blastx_matches.tsv", paste(seq_ifn, "blastx_matches.tsv", sep ="_"))
 	outputnames[17,] <- c("undetermined.html", paste(seq_ifn, "undetermined.html", sep ="_"))
 	outputnames[18,] <- c("undetermined_blast.html", paste(seq_ifn, "undetermined_blast.html", sep ="_"))
-	outputnames[19,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
-	# Write output definitions file
-	write_output_definitions(outputnames)	
+	
+    if ( save_log == "yes") {
+	    outputnames[19,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
+    }
+# Write output definitions file
+write_output_definitions(outputnames)	
 }
 
-
+if ( save_log == "no") {
+	system ("rm -f vd.log")
+}
 
 

@@ -208,9 +208,6 @@ if (file.exists("result_inputseq/undetermined_blast.html")){
 #system ("ls -l >> vd.log")
 #system ("ls -l result_inputseq >> vd.log")
 
-if ( save_log == "no") {
-	system ("rm -f vd.log")
-}
 
 if ( save_tar == "yes") {
 	if ( sn_tag == "yes") {
@@ -255,7 +252,7 @@ if ( save_tar == "yes") {
 	# Write output definitions file
 	write_output_definitions(outputnames)
 	system ("echo Result collecti ready >> vd.log")
-	system ("ls -l >> vd.log")
+	system ("ls -l >> vd.log")	
 	
 }
 
@@ -287,8 +284,15 @@ if ( sn_tag == "yes") {
 	outputnames[16,] <- c("blastx_matches.tsv", paste(seq_ifn, "blastx_matches.tsv", sep ="_"))
 	outputnames[17,] <- c("undetermined.html", paste(seq_ifn, "undetermined.html", sep ="_"))
 	outputnames[18,] <- c("undetermined_blast.html", paste(seq_ifn, "undetermined_blast.html", sep ="_"))
-	outputnames[19,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
+
+	if ( save_log == "yes") {
+		outputnames[19,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
+	}
 	# Write output definitions file
 	write_output_definitions(outputnames)	
+}
+
+if ( save_log == "no") {
+	system ("rm -f vd.log")
 }
 
