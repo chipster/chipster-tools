@@ -17,18 +17,17 @@ div.header-item {
 
 <h2>Version update 25.10.2017: What is new in Chipster 3.12</h2>
  	<p>
-		<b>Summary:</b> Chipster v3.12 contains many new tools for single cell RNA-seq data, which have been actively modified based on the feedback kindly provided by 
-		the Chipster user community in Finland. You can analyze DropSeq and Chromium 
+		<b>Summary:</b> The tool categories "Single cell RNA-seq" and "16S rRNA sequencing" have undergone a major overhaul with new tools and improvements based on the feedback kindly provided by 
+		the Chipster user community in Finland. You can now analyze DropSeq and Chromium 
 		10X single cell RNA-seq data from raw reads to clustering and marker gene detection based on the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">DropSeq</a> and 
-		<a href="http://satijalab.org/seurat/">Seurat</a> packages. Chipster v3.12 contains also the HISAT2 and STAR aligners, which are much faster for RNA-seq data that TopHat2. 
+		<a href="http://satijalab.org/seurat/">Seurat</a> packages. Chipster v3.12 contains also the HISAT2 and STAR aligners for RNA-seq data, which will eventually replace TopHat2. 
 	</p>
 	
 	<ul>
 		<li><div class=header-item>New analysis tools</div>		
 			<ul>
-				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 aligner for RNA-seq reads</a> Chipster has currently ready made HISAT2 indexes for human and mouse genomes, but you can also give your own reference genome is fasta format.</li>
-				<li><a href="star-paired-end.html">Alignment / STAR for paired end reads and human genome</a> Aligns RNA-seq reads to human genome hg38 using the STAR 2-pass method.</li>
-				<li><a href="star-single-end.html">Alignment / STAR for single end reads and human genome</a> Aligns RNA-seq reads to human genome hg38 using the STAR 2-pass method.</li>				
+				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 for paired end reads</a> Aligns RNA-seq reads to human and mouse genomes, but you can also give your own reference genome is fasta format. The same tool is available also for single end reads.</li>
+				<li><a href="star-paired-end.html">Alignment / STAR for paired end reads and human genome</a> Aligns RNA-seq reads to human genome hg38 using the STAR 2-pass method. The same tool is available also for single end reads. Currently only the human genome is offered as a reference due to the size of STAR indeces.</li>				
 				<li><a href="single-cell-preprocessing.html">Single cell RNA-seq / Preprocessing DropSeq FASTQ files</a> Tags the reads with the cellular and molecular barcodes, removes reads where the cell or molecular barcode has low quality bases, 
 				trims adapters and polyA tails.</li>
 				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a> Adds the cell and molecular barcode and other tags that were lost during the alignment to the aligned BAM file.</li>

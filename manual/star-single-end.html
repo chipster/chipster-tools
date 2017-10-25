@@ -20,7 +20,7 @@ Aligns single end RNA-seq reads using the STAR aligner. Alignment results are gi
 
 <h3>Details</h3>
 
-<p>This tool uses the fast STAR (Spliced Transcripts Alignment to a Reference) aligner, which can accurately detect annotated and novel splice junctions in RNA-seq data. 
+<p>This tool uses the STAR (Spliced Transcripts Alignment to a Reference) aligner, which can accurately detect annotated and novel splice junctions in RNA-seq data. 
 The tool uses a 2-pass mapping process where STAR performs the 1st pass mapping, automatically extracts splice junctions, inserts them into the genome index, and re-maps all reads in the 2nd mapping pass.
 This doesn't increase the number of detected novel junctions, but it allows more spliced reads mapping to novel junctions. 
 Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. For example the <a href = "http://www.gencodegenes.org/">GENCODE</a> GTF is recommended by the STAR developers.
