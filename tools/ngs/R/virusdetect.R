@@ -23,7 +23,7 @@
 # OUTPUT OPTIONAL vd.log
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, Arabidopsis_thaliana.TAIR10, Bos_taurus.UMD3.1, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gallus_gallus.Gallus_gallus-5.0, Gasterosteus_aculeatus.BROADS1, Homo_sapiens.GRCh38, Medicago_truncatula.MedtrA17_4.0, Mus_musculus.GRCm38, Oryza_sativa.IRGSP-1.0, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2, Solanum_tuberosum.SolTub_3.0, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x] DEFAULT none (Host organism.)
+# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, "FILES genomes/indexes/bwa .fa"] DEFAULT none (Host organism.)
 # PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cutoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
 # PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cutoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequence by assembled virus contigs.)
 # PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference.)  
