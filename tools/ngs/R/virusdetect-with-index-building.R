@@ -262,7 +262,7 @@ if ( sn_tag == "yes") {
 	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
 	outputnames[2,] <- c("virusderect_matches_blastn.fa", paste(seq_ifn, "virusderect_matches_blastn.fa", sep ="_"))
 	outputnames[3,] <- c("virusderect_matches_blastx.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
-	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
+	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "contig_sequences.undetermined.fa", sep ="_"))
 	outputnames[5,] <- c("blastn_matching_references.fa", paste(seq_ifn, "blastn_matching_references.fa", sep ="_"))
 	outputnames[6,] <- c("blastn_matching_references.fa.fai", paste(seq_ifn, "blastn_matching_references.fa.fai", sep ="_"))
 	outputnames[7,] <- c("blastn_matching_references.html", paste(seq_ifn, "blastn_matching_references.html", sep ="_"))
