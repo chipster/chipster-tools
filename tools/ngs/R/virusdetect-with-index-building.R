@@ -84,7 +84,7 @@ if (hostgenome.filetype == "tar"){
 	write_output_definitions(outputnames)
 }
 			
-vd.parameters <- paste(vd.parameters, "--host-reference hostgenome")
+vd.parameters <- paste(vd.parameters, "--host_reference hostgenome")
 #system("ls -l >> vd.log")
 system("date >> vd.log")
 

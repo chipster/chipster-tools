@@ -90,7 +90,7 @@ if (hostorg != "none" ){
 	##system("ls -l ./virusdetect/databases/ >> vd.log 2>&1 ")
 	system("ls -l >> vd.log 2>&1 ")
 	system("date >> vd.log")
-	vd.parameters <- paste(vd.parameters, "--host-reference", hostorg)	
+	vd.parameters <- paste(vd.parameters, "--host_reference", hostorg)	
 }
 
 vd.parameters <- paste(vd.parameters, "inputseq")
