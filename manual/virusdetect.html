@@ -64,7 +64,7 @@ VirusDetect produces a large number of result files. Output related options are 
 <li><b>virusdetect_matches_blastx.fa</b> Sequences of contigs that match to virus references by BLASTX.</li>
 <li><b>undetermined.html</b> Table listing the length, siRNA size distribution and 21-22nt percentage of undetermined contigs. Potential virus contigs (21-22 nt > 50%) are indicated in green.</li>
 <li><b>undetermined_blast.html</b> Table listing contigs having hits in the virus reference database but not assigned to any reference viruses because they did not meet the coverage or depth criteria.</li>
-<li><b>contig_sequences.undetermined.fa</b> Sequences of contigs that do not match to virus references.</li>
+<li><b>undetermined_contigs.fa</b> Sequences of contigs that do not match to virus references.</li>
 <li><b>virusdetect_contigs.fa</b> Sequences of non-redundant contigs derived through reference-guided and <i>de novo</i> assemblies.</li>
 </ul>
 
@@ -76,8 +76,8 @@ If the parameter <b>Return matching reference sequences</b> is turned on, also t
 </ul>
 If the parameter <b>Return BAM formatted alignments</b> is turned on, also the following files are returned 
 <ul>
-<li><b>blastn_matches.bam</b> and <b>.bai</b>. BAM file containing the BLASTN alignment of each contig to its corresponding virus reference sequences.</li> 
-<li><b>blastx_matches.bam</b> and <b>.bai</b>. BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequences.</li> 
+<li><b>blastn_matches.bam</b> and <b>.bai</b>. BAM file containing the BLASTN alignment of each contig to its corresponding virus reference sequence.</li> 
+<li><b>blastx_matches.bam</b> and <b>.bai</b>. BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence.</li> 
 </ul>
 <p>
 Note: If you select the blastn_matching_references.fa and blastn_matches.bam, you can use the Chipster Genome Browser to visualize the BLAST results.
