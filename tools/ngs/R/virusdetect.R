@@ -186,7 +186,7 @@ if (file.exists("result_inputseq/inputseq.blastn.xls")){
 
 #blastx_matches.tsv
 if (file.exists("result_inputseq/inputseq.blastx.xls")){
-	system("mv result_inputseq/inputseq.blastx.tsv blastx_matches.tsv")
+	system("mv result_inputseq/inputseq.blastx.xls blastx_matches.tsv")
 }
 
 #Undetermined
