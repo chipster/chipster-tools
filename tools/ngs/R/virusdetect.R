@@ -1,9 +1,9 @@
 # TOOL virusdetect.R: "VirusDetect" (VirusDetect pipeline performs virus identification using sRNA sequencing data. Given a FASTQ file, it performs de novo assembly and reference-guided assembly by aligning sRNA reads to the known virus reference database. The assembled contigs are compared to the reference virus sequences for virus identification.)
 # INPUT inputseq: "Input reads file" TYPE GENERIC (Reads file)
 # OUTPUT OPTIONAL virusdetect_contigs.fa 
-# OUTPUT OPTIONAL virusdetect_matches_blastn.fa 
-# OUTPUT OPTIONAL virusdetect_matches_blastx.fa 
-# OUTPUT OPTIONAL contig_sequences.undetermined.fa 
+# OUTPUT OPTIONAL contigs_with_blastn_matches.fa 
+# OUTPUT OPTIONAL contigs_with_blastx_matches.fa 
+# OUTPUT OPTIONAL undetermined_contigs.fa 
 # OUTPUT OPTIONAL blastn_matching_references.fa 
 # OUTPUT OPTIONAL blastn_matching_references.fa.fai
 # OUTPUT OPTIONAL blastn_matching_references.html 
@@ -108,19 +108,19 @@ if (file.exists("result_inputseq/contig_sequences.fa")){
 	system("mv result_inputseq/contig_sequences.fa  ./virusdetect_contigs.fa ")
 }
 
-#virusderect_matches_blastn.fa
+#contigs_with_blastn_matches.fa
 if (file.exists("result_inputseq/contig_sequences.blastn.fa")){
-	system("mv result_inputseq/contig_sequences.blastn.fa  ./virusderect_matches_blastn.fa")
+	system("mv result_inputseq/contig_sequences.blastn.fa  ./contigs_with_blastn_matches.fa")
 }
 
-#virusderect_matches_blastx.fa
+#contigs_with_blastx_matches.fa
 if (file.exists("result_inputseq/contig_sequences.blastx.fa")){
-	system("mv result_inputseq/contig_sequences.blastx.fa  ./virusderect_matches_blastx.fa")
+	system("mv result_inputseq/contig_sequences.blastx.fa  ./contigs_with_blastx_matches.fa")
 }
 
-#contig_sequences.undetermined.fa
+#undetermined_contigs.fa
 if (file.exists("result_inputseq/contig_sequences.undetermined.fa")){
-	system("mv result_inputseq/contig_sequences.undetermined.fa  ./contig_sequences.undetermined.fa")
+	system("mv result_inputseq/contig_sequences.undetermined.fa  ./undetermined_contigs.fa")
 }
 
 #blastn_matching_references.html
@@ -217,9 +217,9 @@ if ( save_tar == "yes") {
 	system ("ls -l >> vd.log")
 	system ("mkdir vd_output")
 	system ("mv virusdetect_contigs.fa vd_output/")
-	system ("mv virusdetect_matches_blastn.fa vd_output/")
-	system ("mv virusdetect_matches_blastx.fa vd_output/")
-	system ("mv contig_sequences.undetermined.fa vd_output/")
+	system ("mv contigs_with_blastn_matches.fa vd_output/")
+	system ("mv contigs_with_blastx_matches.fa vd_output/")
+	system ("mv undetermined_contigs.fa vd_output/")
 	system ("mv blastn_matching_references.fa vd_output/")
 	system ("mv blastn_matching_references.fa.fai vd_output/")
 	system ("mv blastn_matching_references.html vd_output/")
@@ -267,9 +267,9 @@ if ( sn_tag == "yes") {
     # Make a matrix of output names
 	outputnames <- matrix(NA, nrow=19, ncol=2)
 	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
-	outputnames[2,] <- c("virusdetect_matches_blastn.fa", paste(seq_ifn, "virusdetect_matches_blastn.fa", sep ="_"))
-	outputnames[3,] <- c("virusdetect_matches_blastx.fa", paste(seq_ifn, "virusdetect_matches_blastx.fa", sep ="_"))
-	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "contig_sequences.undetermined.fa", sep ="_"))
+	outputnames[2,] <- c("contigs_with_blastn_matches.fa", paste(seq_ifn, "contigs_with_blastn_matches.fa", sep ="_"))
+	outputnames[3,] <- c("contigs_with_blastx_matches.fa", paste(seq_ifn, "contigs_with_blastx_matches.fa", sep ="_"))
+	outputnames[4,] <- c("undetermined_contigs.fa", paste(seq_ifn, "undetermined_contigs.fa", sep ="_"))
 	outputnames[5,] <- c("blastn_matching_references.fa", paste(seq_ifn, "blastn_matching_references.fa", sep ="_"))
 	outputnames[6,] <- c("blastn_matching_references.fa.fai", paste(seq_ifn, "blastn_matching_references.fa.fai", sep ="_"))
 	outputnames[7,] <- c("blastn_matching_references.html", paste(seq_ifn, "blastn_matching_references.html", sep ="_"))
