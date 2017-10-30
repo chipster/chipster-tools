@@ -1,4 +1,4 @@
-# TOOL virusdetect.R: "VirusDetect" (VirusDetect pipeline performs virus identification using sRNA sequencing data. Given a FASTQ file, it performs de novo assembly and reference-guided assembly by aligning sRNA reads to the known virus reference database. The assembled contigs are compared to the reference virus sequences for virus identification.)
+# TOOL virusdetect.R: "VirusDetect" (VirusDetect pipeline performs virus identification using sRNA sequencing data. Given a FASTQ file, it performs de novo assembly and reference-guided assembly by aligning sRNA reads to the known virus reference database. The assembled contigs are compared to the virus reference sequences with BLAST for virus identification.)
 # INPUT inputseq: "Input reads file" TYPE GENERIC (Reads file)
 # OUTPUT OPTIONAL virusdetect_contigs.fa 
 # OUTPUT OPTIONAL contigs_with_blastn_matches.fa 
@@ -18,17 +18,16 @@
 # OUTPUT OPTIONAL blastx_matches.tsv 
 # OUTPUT OPTIONAL undetermined.html
 # OUTPUT OPTIONAL undetermined_blast.html
-# OUTPUT OPTIONAL hostgenome_bwa_index.tar
 # OUTPUT OPTIONAL {...}.pdf
 # OUTPUT OPTIONAL vd.log
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, "FILES genomes/indexes/bwa .fa"] DEFAULT none (Host organism.)
-# PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cutoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
-# PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cutoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequence by assembled virus contigs.)
-# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference.)  
-# PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTx and BLASTn runs.)
-# PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the viral sequences to the reference sequences.)
+# PARAMETER OPTIONAL hostorg: "Host organism" TYPE [none, "FILES genomes/indexes/bwa .fa"] DEFAULT none (Host organism.)
+# PARAMETER OPTIONAL hsp_cover: "Minimum fraction of a contig covered by reference" TYPE DECIMAL DEFAULT 0.75 (At least this fraction of a contig has to match to the virus reference sequence by BLAST, otherwise the hit is not considered for virus assignment.)
+# PARAMETER OPTIONAL coverage_cutoff: "Minimum fraction of reference covered by contigs" TYPE DECIMAL DEFAULT 0.1 (At least this fraction of a virus reference sequence has to be covered by contigs, otherwise the virus assignment is not made.)
+# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Normalized depth cutoff for virus reference assignment.)  
+# PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTX and BLASTN matches.)
+# PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the contigs to the reference sequences.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 # PARAMETER OPTIONAL sn_tag: "Use input names in output file names" TYPE [yes: Yes, no: No] DEFAULT yes (Name the output files according to the input sequence file.)
 # PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT no (Collect all the output files into a single tar formatted file.)
@@ -232,7 +231,6 @@ if ( save_tar == "yes") {
 	system ("mv blastx_matches.bam.bai vd_output/")
 	system ("mv blastn_matches.tsv vd_output/")
 	system ("mv blastx_matches.tsv vd_output/")
-	system ("mv hostgenome_bwa_index.tar vd_output/")
 	system ("mv undetermined.html vd_output/")
 	system ("mv undetermined_blast.html vd_output/")
 	system ("mv *.pdf vd_output/")
