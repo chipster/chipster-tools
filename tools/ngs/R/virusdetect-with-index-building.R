@@ -84,7 +84,7 @@ if (hostgenome.filetype == "tar"){
 	write_output_definitions(outputnames)
 }
 			
-vd.parameters <- paste(vd.parameters, "--host-reference hostgenome")
+vd.parameters <- paste(vd.parameters, "--host_reference hostgenome")
 #system("ls -l >> vd.log")
 system("date >> vd.log")
 
@@ -212,8 +212,8 @@ if ( save_tar == "yes") {
 	system ("ls -l >> vd.log")
 	system ("mkdir vd_output")
 	system ("mv virusdetect_contigs.fa vd_output/")
-	system ("mv virusderect_matches_blastn.fa vd_output/")
-	system ("mv virusderect_matches_blastx.fa vd_output/")
+	system ("mv virusdetect_matches_blastn.fa vd_output/")
+	system ("mv virusdetect_matches_blastx.fa vd_output/")
 	system ("mv contig_sequences.undetermined.fa vd_output/")
 	system ("mv blastn_matching_references.fa vd_output/")
 	system ("mv blastn_matching_references.fa.fai vd_output/")
@@ -260,9 +260,9 @@ if ( sn_tag == "yes") {
 	# Make a matrix of output names
 	outputnames <- matrix(NA, nrow=19, ncol=2)
 	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
-	outputnames[2,] <- c("virusderect_matches_blastn.fa", paste(seq_ifn, "virusderect_matches_blastn.fa", sep ="_"))
-	outputnames[3,] <- c("virusderect_matches_blastx.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
-	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
+	outputnames[2,] <- c("virusdetect_matches_blastn.fa", paste(seq_ifn, "virusdetect_matches_blastn.fa", sep ="_"))
+	outputnames[3,] <- c("virusdetect_matches_blastx.fa", paste(seq_ifn, "virusdetect_matches_blastx.fa", sep ="_"))
+	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "contig_sequences.undetermined.fa", sep ="_"))
 	outputnames[5,] <- c("blastn_matching_references.fa", paste(seq_ifn, "blastn_matching_references.fa", sep ="_"))
 	outputnames[6,] <- c("blastn_matching_references.fa.fai", paste(seq_ifn, "blastn_matching_references.fa.fai", sep ="_"))
 	outputnames[7,] <- c("blastn_matching_references.html", paste(seq_ifn, "blastn_matching_references.html", sep ="_"))

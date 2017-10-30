@@ -23,7 +23,7 @@
 # OUTPUT OPTIONAL vd.log
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, Arabidopsis_thaliana.TAIR10, Bos_taurus.UMD3.1, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gallus_gallus.Gallus_gallus-5.0, Gasterosteus_aculeatus.BROADS1, Homo_sapiens.GRCh38, Medicago_truncatula.MedtrA17_4.0, Mus_musculus.GRCm38, Oryza_sativa.IRGSP-1.0, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2, Solanum_tuberosum.SolTub_3.0, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x] DEFAULT none (Host organism.)
+# PARAMETER OPTIONAL hostorg:  "Host organism" TYPE [none, "FILES genomes/indexes/bwa .fa"] DEFAULT none (Host organism.)
 # PARAMETER OPTIONAL hsp_cover: "Reference virus coverage cutoff" TYPE DECIMAL DEFAULT 0.75 (Coverage cutoff of a reported virus contig by reference virus sequences.)
 # PARAMETER OPTIONAL coverage_cutoff: "Assembled virus contig cutoff" TYPE DECIMAL DEFAULT 0.1 (Coverage cutoff of a reported virus reference sequence by assembled virus contigs.)
 # PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Depth cutoff of a reported virus reference.)  
@@ -90,7 +90,7 @@ if (hostorg != "none" ){
 	##system("ls -l ./virusdetect/databases/ >> vd.log 2>&1 ")
 	system("ls -l >> vd.log 2>&1 ")
 	system("date >> vd.log")
-	vd.parameters <- paste(vd.parameters, "--host-reference", hostorg)	
+	vd.parameters <- paste(vd.parameters, "--host_reference", hostorg)	
 }
 
 vd.parameters <- paste(vd.parameters, "inputseq")
@@ -186,7 +186,7 @@ if (file.exists("result_inputseq/inputseq.blastn.xls")){
 
 #blastx_matches.tsv
 if (file.exists("result_inputseq/inputseq.blastx.xls")){
-	system("mv result_inputseq/inputseq.blastx.tsv blastx_matches.tsv")
+	system("mv result_inputseq/inputseq.blastx.xls blastx_matches.tsv")
 }
 
 #Undetermined
@@ -217,8 +217,8 @@ if ( save_tar == "yes") {
 	system ("ls -l >> vd.log")
 	system ("mkdir vd_output")
 	system ("mv virusdetect_contigs.fa vd_output/")
-	system ("mv virusderect_matches_blastn.fa vd_output/")
-	system ("mv virusderect_matches_blastx.fa vd_output/")
+	system ("mv virusdetect_matches_blastn.fa vd_output/")
+	system ("mv virusdetect_matches_blastx.fa vd_output/")
 	system ("mv contig_sequences.undetermined.fa vd_output/")
 	system ("mv blastn_matching_references.fa vd_output/")
 	system ("mv blastn_matching_references.fa.fai vd_output/")
@@ -267,9 +267,9 @@ if ( sn_tag == "yes") {
     # Make a matrix of output names
 	outputnames <- matrix(NA, nrow=19, ncol=2)
 	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
-	outputnames[2,] <- c("virusderect_matches_blastn.fa", paste(seq_ifn, "virusderect_matches_blastn.fa", sep ="_"))
-	outputnames[3,] <- c("virusderect_matches_blastx.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
-	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "virusderect_matches_blastx.fa", sep ="_"))
+	outputnames[2,] <- c("virusdetect_matches_blastn.fa", paste(seq_ifn, "virusdetect_matches_blastn.fa", sep ="_"))
+	outputnames[3,] <- c("virusdetect_matches_blastx.fa", paste(seq_ifn, "virusdetect_matches_blastx.fa", sep ="_"))
+	outputnames[4,] <- c("contig_sequences.undetermined.fa", paste(seq_ifn, "contig_sequences.undetermined.fa", sep ="_"))
 	outputnames[5,] <- c("blastn_matching_references.fa", paste(seq_ifn, "blastn_matching_references.fa", sep ="_"))
 	outputnames[6,] <- c("blastn_matching_references.fa.fai", paste(seq_ifn, "blastn_matching_references.fa.fai", sep ="_"))
 	outputnames[7,] <- c("blastn_matching_references.html", paste(seq_ifn, "blastn_matching_references.html", sep ="_"))
