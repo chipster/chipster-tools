@@ -4,8 +4,11 @@
 # INPUT input_file: ".tar.gz file" TYPE GENERIC (Tar file. Can be gzip compressed.)
 # INPUT OPTIONAL file_list: "List of files to extract" TYPE GENERIC (List of files to extract. One Filename per line.)
 # OUTPUT output_file{...}: "Extracted file(s)"
-# PARAMETER OPTIONAL extract: "Files to extract" TYPE STRING (Filenames of the files to extract. If more than one, separate names with a comma (e.g. abc123_1.fq,abc123_2.fq\). Alternatively you can provide a list of filenames as a text file, one name per line.)
+# PARAMETER OPTIONAL names: "Extract by filename" TYPE STRING (Filenames of the files to extract. If more than one, separate names with a comma (e.g. abc123_1.fq,abc123_2.fq\). Alternatively you can provide a list of filenames as a text file, one name per line.)
+# PARAMETER OPTIONAL extensions: "Extract by extension" TYPE STRING (Filename extension of the files to extract (e.g .html\). If more than one, separate with a comma (e.g .txt,.log\).)
 
+import os
+import sys
 import tarfile
 import posixpath
 from tool_utils import *
@@ -19,12 +22,22 @@ def main():
     # by default, extract all
     someonly = False
 
-    # use file parameter if provided
-    if extract:
-        include_list_raw = extract.split(',')
+    # Filename list
+    if names:
+        include_list_raw = names.split(',')
         someonly = True
+        
+    # Extension list
+    if extensions:
+        someonly = True
+        os.system("tar tf input_file > toc")
+        extension_list = extensions.split(',')
+        for ext in extension_list:
+            os.system("grep " + ext +"$ toc >> selected_list")
+        with open('selected_list','r') as f:
+            include_list_raw = [l.strip() for l in f]  
 
-    # use list file if provided
+    # File of filenames
     if os.path.isfile('file_list'):
         someonly = True
         with open('file_list','r') as f:
