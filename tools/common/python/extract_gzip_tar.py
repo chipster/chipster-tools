@@ -31,9 +31,11 @@ def main():
     if extensions:
         someonly = True
         os.system("tar tf input_file > toc")
-        extension_list = extensions.split(',')
+        # Remove any * characters as they are treated literally and not as a wildcard.
+        clean_ext = extensions.translate(None, '*')
+        extension_list = clean_ext.split(',')
         for ext in extension_list:
-            os.system("grep " + ext +"$ toc >> selected_list")
+            os.system("grep -i " + ext +"$ toc >> selected_list")
         with open('selected_list','r') as f:
             include_list_raw = [l.strip() for l in f]  
 
