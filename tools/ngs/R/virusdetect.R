@@ -294,7 +294,7 @@ if ( save_tar == "yes") {
 	write_output_definitions(outputnames)
 	system ("echo ------------------------------------------------------------- >> vd.log" )
 	system ("echo Results have been collected to a single tar formatted archive file. >> vd.log")
-	system ("echo You can use tool: Extract .tar or .tar.gz file in Utilities forlder to extarct result files from the tar archive.  >> vd.log")
+	system ("echo You can use tool: Extract .tar or .tar.gz file in Utilities folder to extract result files from the tar archive. >> vd.log")
 	#system ("ls -l >> vd.log")	
 	
 }
