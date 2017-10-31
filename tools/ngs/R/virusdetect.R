@@ -227,7 +227,7 @@ if (file.exists("result_inputseq/inputseq.blastx.xls")){
 #Undetermined
 if (file.exists("result_inputseq/undetermined.html")){
 	system("echo '<html>' > undetermined.html")
-    system("awk '{ if ( NR > 1 ) print $0 }' result_inputseq/undetermined.html >> undetermined.html")
+    system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/undetermined.html >> undetermined.html")
 	system("echo '</html>' >> undetermined.html")
 	echo.command <- paste("echo ", nprefix, "undetermined.html '\t' Table listing the length, siRNA size distribution and 21-22nt percentage of undetermined contigs. Potential virus contigs are indicated in green. >> vd.log 2>&1", sep = "" )
     system(echo.command)
@@ -235,7 +235,7 @@ if (file.exists("result_inputseq/undetermined.html")){
 
 if (file.exists("result_inputseq/undetermined_blast.html")){	
 	system("echo '<html>' > undetermined_blast.html")
-	system("awk '{ if ( NR > 1 ) print $0 }' result_inputseq/undetermined_blast.html >> undetermined_blast.html")
+	system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/undetermined_blast.html >> undetermined_blast.html")
 	system("echo '</html>' >> undetermined_blast.html")
 	echo.command <- paste("echo ", nprefix, "undetermined_blast.html '\t' Table listing contigs having hits in the virus reference database but not assigned to any reference viruses because they did not meet the coverage or depth criteria. >> vd.log 2>&1", sep = "" )
 	system(echo.command)
