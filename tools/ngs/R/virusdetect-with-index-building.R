@@ -24,9 +24,9 @@
 # OUTPUT OPTIONAL vd.log
 # OUTPUT OPTIONAL virusdetect_results.tar
 # PARAMETER OPTIONAL reference: "Reference virus database" TYPE [vrl_plant: "Plant viruses", vrl_algae: "Algae viruses", vrl_bacteria: "Bacterial viruses", vrl_fungus: "Fungal viruses", vrl_invertebrate: "Invertebrate viruses", vrl_protozoa: "Protozoa viruses", vrl_vertebrate: "Vertebrate viruses"] DEFAULT vrl_plant (Reference virus database.)
-# PARAMETER OPTIONAL hsp_cover: "Minimum fraction of a contig covered by reference" TYPE DECIMAL DEFAULT 0.75 (At least this fraction of a contig has to match to the virus reference sequence by BLAST, otherwise the hit is not considered for virus assignment.)
-# PARAMETER OPTIONAL coverage_cutoff: "Minimum fraction of reference covered by contigs" TYPE DECIMAL DEFAULT 0.1 (At least this fraction of a virus reference sequence has to be covered by contigs, otherwise the virus assignment is not made.)
-# PARAMETER OPTIONAL depth_cutoff: "Depth cutoff" TYPE INTEGER DEFAULT 5 (Normalized depth cutoff for virus reference assignment.)  
+# PARAMETER OPTIONAL hsp_cover: "Minimum fraction of a contig covered by virus reference" TYPE DECIMAL DEFAULT 0.75 (At least this fraction of a contig has to match to the virus reference sequence by BLAST, otherwise the hit is not considered for virus assignment.)
+# PARAMETER OPTIONAL coverage_cutoff: "Minimum fraction of virus reference covered by contigs" TYPE DECIMAL DEFAULT 0.1 (At least this fraction of a virus reference sequence has to be covered by contigs, otherwise the virus assignment is not made.)
+# PARAMETER OPTIONAL depth_cutoff: "Minimum read depth" TYPE INTEGER DEFAULT 5 (Depth cutoff for virus reference assignment.)  
 # PARAMETER OPTIONAL blast_ref: "Return matching reference sequences" TYPE [yes: Yes, no: No] DEFAULT no (Return the reference sequences for BLASTX and BLASTN matches.)
 # PARAMETER OPTIONAL blast_bam: "Return BAM formatted alignments" TYPE [yes: Yes, no: No] DEFAULT no (Return the BAM formatted alignments of the contigs to the reference sequences.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT yes (Collect a log file about the analysis run.)
