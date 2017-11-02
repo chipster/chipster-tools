@@ -58,7 +58,8 @@ system("date > vd.log")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
 unzipIfGZipFile("hostgenome")
 hostgenome.filetype <- system("file -b hostgenome | cut -d ' ' -f2", intern = TRUE )
-			
+hg_ifn <- ("")
+
 # case 1. Ready calculated indexes in tar format
 if (hostgenome.filetype == "tar"){
 	check.command <- paste ( bwa.index.binary, "hostgenome| tail -1 ")
@@ -79,7 +80,7 @@ if (hostgenome.filetype == "tar"){
 }
 			
 vd.parameters <- paste(vd.parameters, "--host_reference hostgenome")
-#system("ls -l >> vd.log")
+#system("ls -l >> vd.log")	
 system("date >> vd.log")
 
 
@@ -163,7 +164,6 @@ if ( blast_ref == "yes") {
 		echo.command <- paste("echo ", nprefix, "blastn_matching_references.fa and .fai.'\t'Virus reference sequences that produced hits for BLASTN search with the potential virus contigs. >> vd.log 2>&1", sep = "" )
 		system(echo.command)	
 	}
-	
 	
 	#blastx.reference.fa
 	if (file.exists("result_inputseq/blastx.reference.fa")){
@@ -264,7 +264,7 @@ if ( save_tar == "yes") {
 	system ("mv blastx_matches.tsv vd_output/")
     system ("mv undetermined.html vd_output/")
 	system ("mv undetermined_blast.html vd_output/")
-	system ("mv hostgenome_bwa_index.tar vd_output/")
+	#system ("mv hostgenome_bwa_index.tar vd_output/")
 	system ("mv *.pdf vd_output/")
 	#system ("cp vd.log vd_output/")
 	seq_ifn <- strip_name(inputnames$inputseq)
@@ -296,7 +296,7 @@ if ( sn_tag == "yes") {
 	system(pdf_name_command)
 	#system('ls -l >> vd.log')
 	# Make a matrix of output names
-	outputnames <- matrix(NA, nrow=20, ncol=2)
+	outputnames <- matrix(NA, nrow=21, ncol=2)
 	outputnames[1,] <- c("virusdetect_contigs.fa", paste(seq_ifn, "virusdetect_contigs.fa", sep ="_"))
 	outputnames[2,] <- c("contigs_with_blastn_matches.fa", paste(seq_ifn, "contigs_with_blastn_matches.fa", sep ="_"))
 	outputnames[3,] <- c("contigs_with_blastx_matches.fa", paste(seq_ifn, "contigs_with_blastx_matches.fa", sep ="_"))
@@ -315,14 +315,18 @@ if ( sn_tag == "yes") {
 	outputnames[16,] <- c("blastx_matches.tsv", paste(seq_ifn, "blastx_matches.tsv", sep ="_"))
 	outputnames[17,] <- c("undetermined.html", paste(seq_ifn, "undetermined.html", sep ="_"))
 	outputnames[18,] <- c("undetermined_blast.html", paste(seq_ifn, "undetermined_blast.html", sep ="_"))
-	
-    if ( save_log == "yes") {
-	    outputnames[19,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
-		outputnames[20,] <- c("virusdetect_results.tar", paste(seq_ifn, "virusdetect_results.tar", sep ="_"))		
-	}
+	outputnames[19,] <- c("vd.log", paste(seq_ifn, "vd.log", sep ="_"))
+    outputnames[20,] <- c("virusdetect_results.tar", paste(seq_ifn, "virusdetect_results.tar", sep ="_"))	
+	outputnames[21,] <- c("hostgenome_bwa_index.tar", paste(hg_ifn, "_bwa_index.tar", sep =""))
 # Write output definitions file
 write_output_definitions(outputnames)	
 }
+
+#Do not return hostgenome file if pre-calcultaed indexes form preivious job was used.
+if (hostgenome.filetype == "tar"){
+	system ("rm -f hostgenome_bwa_index.tar")
+}
+
 
 if ( save_log == "no") {
 	system ("rm -f vd.log")
