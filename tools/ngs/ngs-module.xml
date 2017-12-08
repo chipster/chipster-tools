@@ -110,8 +110,8 @@
 		<tool>hisat2-paired-end.R</tool>		
 		<tool>hisat2-single-end-with-index-building.R</tool>		
 		<tool>hisat2-paired-end-with-index-building.R</tool>
-		<!--<tool>star-single-end.R</tool>-->
-		<!--<tool>star-paired-end.R</tool>-->	
+		<tool>star-single-end.R</tool>
+		<tool>star-paired-end.R</tool>	
 		<tool>bwa-mem.R</tool>
 		<tool>bwa-mem-with-index-building.R</tool>
 		<tool>bowtie.R</tool>
