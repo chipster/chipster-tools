@@ -14,15 +14,17 @@ Extract a tar file. The file can be gzip comressed (usually has a file extension
 <h3>Parameters</h3>
 <p>
 <ul>
-<li>Files to extract (STRING)[]</li>
+<li>Extract by filename (STRING)[]</li>
+<li>Extract by extension (STRING)[]</li>
 </ul>
 </p>
 
 <h3>Details</h3>
 <p>
 All files are extracted by default, but you can choose to extract only one or some of the files by giving the 
-names of the files to be extracted as a parameter "Files to extract". If more than one name is specified, 
-separate them with a comma (e.g. abc123_1.fq,abc123_2.fq).
+names of the files to be extracted as a parameter "Extract by filename" or filename extension as parameter "Extract 
+by extension". If more than one name or extension is specified, separate them with a comma (e.g. abc123_1.fq,abc123_2.fq
+or .html,.log).
 </p>
 <p>
 Alternatively you can provide a list of filenames as a text file, one name per line. 
@@ -31,7 +33,9 @@ Alternatively you can provide a list of filenames as a text file, one name per l
 To see the contents of a .tar file, you can use use tool "Utilities / List contents of a tar file".
 </p>
 <p>
-This tool is based on Python tarfile module. In addition to .tar.gz files, it can also extract plain tar files or arhives compressed with bz2. See the <a href="https://docs.python.org/2/library/tarfile.html">Python tarfile</a> documentation for the details about support for other formats.   
+This tool is based on Python tarfile module. In addition to .tar.gz files, it can also extract plain tar files or 
+arhives compressed with bz2. See the <a href="https://docs.python.org/2/library/tarfile.html">Python tarfile</a> 
+documentation for the details about support for other formats.   
 </p>
 
 <h3>Output</h3>
