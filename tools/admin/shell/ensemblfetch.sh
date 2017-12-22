@@ -345,7 +345,12 @@ do
       echo "$filename"_mysql.tar
     else
       url=$(grep -i "/$species/" tmp_$$/ensembl_species.txt)
-      name=$(grep -i "/$species/" tmp_$$/ensembl_species.txt | awk -F "/" '{print $(NF-2)}' )
+      if [[ $seqtype == "gtf" ]]
+      then
+         name=$(grep -i "/$species/" tmp_$$/ensembl_species.txt | awk -F "/" '{print $(NF-1)}' )
+      else
+         name=$(grep -i "/$species/" tmp_$$/ensembl_species.txt | awk -F "/" '{print $(NF-2)}' )
+      fi
       filename=$(grep -i "/$species/" tmp_$$/ensembl_species.txt | awk -F "/" '{print $(NF)}' )
       echo
       echo "Downloading data for $name"
@@ -354,7 +359,7 @@ do
       # resolve exact url, because possible http proxy doesn't support wildcards
       wildcard_name=$(basename $url)
       path=$(dirname $url)"/"
-      exact_url="$path"$(curl --proxy "" --silent --list-only $path/ | grep -E "$wildcard_name")
+      exact_url="$path"$(curl --proxy "" --silent --list-only $path/ | grep -E "$wildcard_name" | sort | tail -1)
 
       wget -o log "$exact_url" >> /dev/null
       gzipfile=$(ls $filename | grep -i $species)
