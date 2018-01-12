@@ -3,15 +3,30 @@
 <head><title></title></head>
 <body>
 
-<h2>Bowtie2 for paired-end reads</h2>
+<h2>Bowtie2 for paired-end reads and own genome</h2>
 
 <h3>Description</h3>
 
-<p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> software to align paired-end reads to a reference genome or sequence set. You need to supply the reads in two fastq files containing the reads in the same order and a fasta formatted reference sequence.
+<p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> software to align paired-end reads 
+to a reference genome or sequence set. You need to supply the reads in two or more files containing the reads in the same 
+order and a FASTA formatted reference sequence. Reads can be in either FASTA or FASTQ format, but all reads files need to be in 
+the same format.
 
 </p>
 <p>
 <p>After running Bowtie2, Chipster converts the alignment file to BAM format, and sorts and indexes it using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package.</p>
+
+<h3>Details</h3>
+<p><b>If you have more than two reads files</b>, you will need to provide a list of filenames of the reads files for each direction (one file for read1 files, and another one for the read2 files) as a text 
+file (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  <strong><a href="/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. The read 
+pairs must be ordered identically in both lists. </p>
+<p>
+Select BOTH list files (R1files.txt and R2files.txt),  ALL reads files (8 of them in the example below) and the reference FASTA, and 
+assign the list files correctly. When assigning the list files, they are automatically inactivated in the "reads" file list.
+<img src="tophat-assign-list-files.jpg"> <br>
+<br>
+<img src="tophat-list-files-demo.png"> <br>
+</p>
 
 <h3>Mapping strategy</h3>
 Bowtie2 can map the reads to the reference either by aligning the reads for they full length (end-to-end read alignment) or by using local alignments. 

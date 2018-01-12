@@ -1,6 +1,6 @@
 # TOOL bowtie2.R: "Bowtie2 for single end reads" (Bowtie2 aligns reads to genomes. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser. 
 # Note that this Bowtie2 tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie2 for single end reads and own genome\".)
-# INPUT reads1.fq: "Reads" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # OUTPUT bowtie2.bam 
 # OUTPUT bowtie2.bam.bai 
 # OUTPUT bowtie2.log 
@@ -24,9 +24,15 @@
 # AMS 04.07.2014 New genome/gtf/index locations & names
 # When updating Bowtie2 to 2.2.x, remember to change mp parameter
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads1.fq")
+
+# check out if the file is compressed and if so unzip it
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
 
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
@@ -56,12 +62,20 @@ if (unaligned.file== "yes"){
 	parameters <- paste(parameters, "--un unaligned")
 }
 
+# Check if reads are in FASTA format 
+emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads001.fq" )
+str.filetype <- system(sfcheck.command, intern = TRUE )
+if ( str.filetype == "fasta"){
+	parameters <- paste(parameters, "-f")
+}
 
-# output parameters
-#output.parameters <- paste(unaligned.output, multiread.output)
-#stop(paste('CHIPSTER-NOTE: ', parameters))
+# Input fastq names
+reads1 <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
+
 # command ending
-command.end <- paste("-x", bowtie.genome, "-U reads1.fq 1> alignment.sam 2>> bowtie2.log'")
+command.end <- paste("-x", bowtie.genome, "-U", reads1, "1> alignment.sam 2>> bowtie2.log'")
 
 # run bowtie
 bowtie.command <- paste(command.start, parameters, command.end)
@@ -83,6 +97,9 @@ system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
 # index bam
 system(paste(samtools.binary, "index alignment.sorted.bam"))
 
+# Substitute display names to BAM header for clarity
+displayNamesToBAM("alignment.sorted.bam")
+
 # rename result files
 system("mv alignment.sorted.bam bowtie2.bam")
 system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
@@ -91,15 +108,17 @@ if (unaligned.file== "yes"){
 	system("mv unaligned unaligned_1.fq")
 }
 
+# Substitute display names to log for clarity
+displayNamesToFile("bowtie2.log")
+
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
 
 # Determine base name
-basename <- strip_name(inputnames$reads1.fq)
+basename <- strip_name(inputnames$reads001.fq)
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=3, ncol=2)

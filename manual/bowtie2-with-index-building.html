@@ -7,8 +7,9 @@
 
 <h3>Description</h3>
 
-<p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> software to align single-end reads to a reference genome or sequence set. You need to supply the reads in one fastq  and a fasta formatted reference sequence.
-
+<p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> software to align single-end reads 
+to a reference genome or sequence set. You need to supply the reads in one or more files. Reads can be in either FASTA or 
+FASTQ format, but all reads files need to be in the same format. You also need to provide a FASTA formatted reference sequence.
 </p>
 <p>
 <p>After running Bowtie2, Chipster converts the alignment file to BAM format, and sorts and indexes it using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package.</p>

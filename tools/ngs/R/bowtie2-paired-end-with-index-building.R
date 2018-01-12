@@ -1,6 +1,7 @@
-# TOOL bowtie2-paired-end-with-index-building.R: "Bowtie2 for paired end reads and own genome" (Bowtie2 aligns reads to genomes or transcriptomes. Results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser.)
-# INPUT reads1.fq: "No 1 mate reads" TYPE GENERIC
-# INPUT reads2.fq: "No 2 mate reads" TYPE GENERIC
+# TOOL bowtie2-paired-end-with-index-building.R: "Bowtie2 for paired end reads and own genome" (Bowtie2 aligns reads to genomes or transcriptomes. Results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction \(e.g. 1files.txt and 2files.txt\). You can generate the lists with the tool \"Utilities \\\ Make a list of filenames\".)
+# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
 # OUTPUT bowtie2.bam 
 # OUTPUT bowtie2.bam.bai 
@@ -36,12 +37,15 @@
 
 # PARAMETER OPTIONAL unaligned.file: "Put unaligned reads to a separate file" TYPE [yes, no] DEFAULT no (Would you like to store unaligned reads to a new fastq file? Note that also multireads will be added to this file, unless you asked them to be put to a separate file.)
 
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
-unzipIfGZipFile("reads1.fq")
-unzipIfGZipFile("reads2.fq")
-unzipIfGZipFile("genome.txt")
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
 
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
@@ -104,12 +108,42 @@ if (discordant.file== "yes"){
 #	parameters <- paste(parameters, "--un unaligned")
 #}
 
+# Check if reads are in FASTA format 
+emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads001.fq" )
+str.filetype <- system(sfcheck.command, intern = TRUE )
+if ( str.filetype == "fasta"){
+	parameters <- paste(parameters, "-f")
+}
+
+# Input files
+if (file.exists("reads1.txt") && file.exists("reads2.txt")){
+	# Case: list files exist
+	reads1.list <- make_input_list("reads1.txt")
+	reads2.list <- make_input_list("reads2.txt")
+	if (identical(intersect(reads1.list, reads2.list), character(0))){
+		reads1 <- paste(reads1.list, sep="", collapse=",")
+		reads2 <- paste(reads2.list, sep="", collapse=",")
+	}else{
+		stop(paste('CHIPSTER-NOTE: ', "One or more files is listed in both lists."))
+	}
+}else if (file.exists("reads002.fq") && !file.exists("reads003.fq")){
+	# Case: no list file, but only two fastq inputs
+	in.sorted <- input.names[order(input.names[,2]),]
+	reads <- grep("reads", in.sorted[,1], value = TRUE)
+	reads1 <- reads[1]
+	reads2 <- reads[2]
+}else{
+	# Case: no list files, more than two fastq inputs
+	stop(paste('CHIPSTER-NOTE: ', "List file is missing. You need to provide a list of read files for both directions."))
+}
 
 # output parameters
 #output.parameters <- paste(unaligned.output, multiread.output)
 #stop(paste('CHIPSTER-NOTE: ', parameters))
 # command ending
-command.end <- paste("-x", bowtie2.genome, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2>> bowtie2.log'")
+command.end <- paste("-x", bowtie2.genome, "-1", reads1, "-2",  reads2, "1> alignment.sam 2>> bowtie2.log'")
 
 # run bowtie
 bowtie.command <- paste(command.start, parameters, command.end)
@@ -124,6 +158,9 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 
 # convert sam to bam
 system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+
+# Change file named in BAM header to display names
+displayNamesToBAM("alignment.bam")
 
 # sort bam
 system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
@@ -145,16 +182,21 @@ if (discordant.file== "yes"){
 	system("mv discordant.2 discordant_2.fq")
 }
 
+# Substitute display names to log for clarity
+displayNamesToFile("bowtie2.log")
+
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
-
 # read input names
 inputnames <- read_input_definitions()
 
 # Determine base name
-base1 <- strip_name(inputnames$reads1.fq)
-base2 <- strip_name(inputnames$reads2.fq)
+name1 <- unlist(strsplit(reads1, ","))
+base1 <- strip_name(inputnames[[name1[1]]])
+
+name2 <- unlist(strsplit(reads2, ","))
+base2 <- strip_name(inputnames[[name2[1]]])
+
 basename <- paired_name(base1, base2)
 
 # Make a matrix of output names
