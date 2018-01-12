@@ -107,16 +107,18 @@ else
    else
      indextype=("is")
    fi
-   $bwa_path/bwa index -a $indextype $genome 
+   $bwa_path/bwa index -a $indextype $genome > $index_path/bwa_index_$$_tmp.log
    
    #check that idexes are found
    for f in ann amb bwt pac sa ; do
        echo "$genome.$f"
        if [ -e "$genome"."$f" ]; then
          echo "$genome.$f OK"
+         rm -f $index_path/bwa_index_$$_tmp.log
        else
          echo "Indexing failed"
          echo "Index file $genome.$f not found"
+         cat $index_path/bwa_index_$$_tmp.log
          exit 1
        fi
    done
