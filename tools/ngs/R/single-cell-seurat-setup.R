@@ -15,13 +15,20 @@
 # PARAMETER OPTIONAL xlowcutoff: "Bottom cutoff on x-axis for identifying variable genes" TYPE DECIMAL DEFAULT 0.0125 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL xhighcutoff: "Top cutoff on x-axis for identifying variable genes" TYPE DECIMAL DEFAULT 3 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL ylowcutoff: "Bottom cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT 0.5 (For limiting the selection of variable genes.)
-# RUNTIME R-3.3.2
+# RUNTIME R-3.4.3
 
 
-# PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
-# OUTPUT OPTIONAL log.txt
+
+
+## PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
+## OUTPUT OPTIONAL log.txt
+
+# MUISTA POISTAA KAKS TURHAKS JÄÄNYTTÄ PARAMETRIA!
+
 
 # 2017-06-06 ML
+# 2018-01-11 ML update Seurat version to 2.2.0
+
 
 library(Seurat)
 library(dplyr)
@@ -60,17 +67,23 @@ if (file.exists("dropseq.tsv")){
 }
 
 # Initialize the Seurat object
-seurat_obj <- new("seurat", raw.data = dat)
-seurat_obj <- Setup(seurat_obj, min.cells = mincells, min.genes = mingenes, 
-		do.logNormalize = lognorm, total.expr = totalexpr, project = project.name)
+#seurat_obj <- new("seurat", raw.data = dat)
+#seurat_obj <- Setup(seurat_obj, min.cells = mincells, min.genes = mingenes, 
+#		do.logNormalize = lognorm, total.expr = totalexpr, project = project.name)
+# Huom, nämä jäi pois: do.logNormalize = lognorm, total.expr = totalexpr,
 
-# HUOM: jos log norm = FALSE, tarvitaanko total.exp?
+seurat_obj <- CreateSeuratObject(raw.data = dat, min.cells = mincells, min.genes = mingenes, 
+		 project = project.name)
 
 # QC
-# % of mito genes
-mito.genes <- grep("^MT-", rownames(seurat_obj@data), value = T)
+# % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
+mito.genes <- grep(pattern ="^MT-", x = rownames(x =seurat_obj@data), value = T, ignore.case=T)
+#if (length(mito.genes)==0) {
+#	mito.genes <- grep(pattern ="^mt-", x = rownames(x =seurat_obj@data), value = T)
+#}
 percent.mito <- colSums(expm1(seurat_obj@data[mito.genes, ]))/colSums(expm1(seurat_obj@data))
-seurat_obj <- AddMetaData(seurat_obj, percent.mito, "percent.mito")
+percent.mito <- Matrix::colSums(seurat_obj@raw.data[mito.genes, ])/Matrix::colSums(seurat_obj@raw.data)
+seurat_obj <- AddMetaData(object = seurat_obj, metadata = percent.mito, col.name = "percent.mito")
 # pdf plots
 pdf(file="QCplots.pdf", , width=13, height=7) 
 VlnPlot(seurat_obj, c("nGene", "nUMI", "percent.mito"), nCol = 3) 
@@ -79,35 +92,67 @@ GenePlot(seurat_obj, "nUMI", "percent.mito")
 GenePlot(seurat_obj, "nUMI", "nGene")
 #dev.off() # close the pdf
 
-# Filter out cells that have unique gene counts over threshold (default = 2,500)
-# Other type of filtering could be included as well.
-seurat_obj <- SubsetData(seurat_obj, subset.name = "nGene", accept.high = genecountcutoff)
-seurat_obj <- SubsetData(seurat_obj, subset.name = "percent.mito", accept.high = mitocutoff)
 
-# Regress unwanted sources of variation
-# Other type of regressing could be included as well: 
-# for example, by batch (if applicable) & cell alignment rate (provided by DropSeq tools for Drop-seq data).
-# Here: number of detected molecules and mito gene expression.
-seurat_obj <- RegressOut(seurat_obj, latent.vars = c("nUMI", "percent.mito"))
+# This part changes heavilly....
 
-# Detection of variable genes across the single cells
-# Identifies genes that are outliers on a 'mean variability plot'. 
-# First, uses a function to calculate average expression (fxn.x) and dispersion (fxn.y) for each gene. 
-# Next, divides genes into num.bin (deafult 20) bins based on their average expression, 
-# and calculates z-scores for dispersion within each bin. 
-# The purpose of this is to identify variable genes while controlling for the strong relationship 
-# between variability and average expression.
-seurat_obj <- MeanVarPlot(seurat_obj ,fxn.x = expMean, fxn.y = logVarDivMean, x.low.cutoff = xlowcutoff, 
-		x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.contour = F)
-		# y.high.cutoff = yhighcutoff,
-length(seurat_obj@var.genes)
-textplot(paste("Number of variable genes:", length(seurat_obj@var.genes)))
+#pbmc <- FilterCells(object = pbmc, subset.names = c("nGene", "percent.mito"), 
+#		low.thresholds = c(200, -Inf), high.thresholds = c(2500, 0.05))
+#			elikkäs: genecountcutoff=2500  mitocutoff=0.05 mingenes= 200
+#pbmc <- NormalizeData(object = pbmc, normalization.method = "LogNormalize", 
+#		scale.factor = 10000)
+#pbmc <- FindVariableGenes(object = pbmc, mean.function = ExpMean, dispersion.function = LogVMR, 
+#		x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5)
+#length(x = pbmc@var.genes)
+#pbmc <- ScaleData(object = pbmc, vars.to.regress = c("nUMI", "percent.mito"))
+
+#Huom, parametrit muuttuu...???
+seurat_obj <- FilterCells(object = seurat_obj, subset.names = c("nGene", "percent.mito"), 
+		low.thresholds = c(mingenes, -Inf), high.thresholds = c(genecountcutoff, mitocutoff)) #Huom, parametrit muuttuu...???
+seurat_obj <- NormalizeData(object = seurat_obj, normalization.method = "LogNormalize", 
+		scale.factor = 10000)
+seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, dispersion.function = LogVMR, 
+		x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff)
+length(x = seurat_obj@var.genes)
+seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"))
+textplot(paste("Number of variable \n genes: \n", length(seurat_obj@var.genes)), cex=0.7)
 dev.off() # close the pdf
+
+## vanha versio:
+## Filter out cells that have unique gene counts over threshold (default = 2,500)
+## Other type of filtering could be included as well.
+#seurat_obj <- SubsetData(seurat_obj, subset.name = "nGene", accept.high = genecountcutoff)
+#seurat_obj <- SubsetData(seurat_obj, subset.name = "percent.mito", accept.high = mitocutoff)
+#
+## Regress unwanted sources of variation
+## Other type of regressing could be included as well: 
+## for example, by batch (if applicable) & cell alignment rate (provided by DropSeq tools for Drop-seq data).
+## Here: number of detected molecules and mito gene expression.
+#seurat_obj <- RegressOut(seurat_obj, latent.vars = c("nUMI", "percent.mito"))
+#
+## Detection of variable genes across the single cells
+## Identifies genes that are outliers on a 'mean variability plot'. 
+## First, uses a function to calculate average expression (fxn.x) and dispersion (fxn.y) for each gene. 
+## Next, divides genes into num.bin (deafult 20) bins based on their average expression, 
+## and calculates z-scores for dispersion within each bin. 
+## The purpose of this is to identify variable genes while controlling for the strong relationship 
+## between variability and average expression.
+#seurat_obj <- MeanVarPlot(seurat_obj ,fxn.x = expMean, fxn.y = logVarDivMean, x.low.cutoff = xlowcutoff, 
+#		x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.contour = F)
+#		# y.high.cutoff = yhighcutoff,
+#length(seurat_obj@var.genes)
+#textplot(paste("Number of variable genes:", length(seurat_obj@var.genes)))
+#dev.off() # close the pdf
+
+
+
+
+
 
 # PCA
 # The variable genes = genes in seurat_object@var.genes are used as input
-seurat_obj <- PCA(seurat_obj, pc.genes = seurat_obj@var.genes, do.print = TRUE, pcs.print = 5, genes.print = 5)
-seurat_obj <- ProjectPCA(seurat_obj)
+seurat_obj <- RunPCA(object = seurat_obj, pc.genes = seurat_obj@var.genes, do.print = TRUE, pcs.print = 5, genes.print = 5)
+# seurat_obj <- ProjectPCA(seurat_obj) # not needed?
+
 #PCA genes in txt file
 sink("PCAgenes.txt")
 PrintPCA(seurat_obj, pcs.print = 1:5, genes.print = 5, use.full = TRUE)
