@@ -39,7 +39,7 @@ outputnames <- matrix(NA, nrow=4, ncol=2)
 outputnames[1,] <- c("preprocessed.fq.gz", paste(input1namestripped, ".fq.gz", sep = ""))
 outputnames[2,] <- c("tagging_and_trimming_summary.txt", "tagging_and_trimming_summary.txt")
 outputnames[3,] <- c("tagging_and_trimming_histograms.pdf", "tagging_and_trimming_histograms.pdf")
-outputnames[4,] <- c("unaligned_tagged.bam", paste(input1namestripped, ".bam", sep =  ""))
+outputnames[4,] <- c("unaligned_tagged.bam", paste(input1namestripped, "_unaligned.bam", sep =  ""))
 
 
 # Write output definitions file
