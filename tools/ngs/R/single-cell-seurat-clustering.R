@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL threshuse: "Differential expression threshold for a cluster marker gene" TYPE DECIMAL DEFAULT 0.25 (Limit testing to genes which show, on average, at least X-fold difference, in log-scale, between the two groups of cells. Increasing thresh.use speeds up the function, but can miss weaker signals.)
 # PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [bimod, roc, t, tobit, poisson, negbinom] DEFAULT bimod (Denotes which test to use. Seurat currently implements \"bimod\" \(likelihood-ratio test for single cell gene expression, McDavid et al., Bioinformatics, 2011, default\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), and \"tobit\" \(Tobit-test for differential gene expression, as in Trapnell et al., Nature Biotech, 2014\), \"poisson\", and \"negbinom\". The latter two options should only be used on UMI datasets, and assume an underlying poisson or negative-binomial distribution.)
 # PARAMETER OPTIONAL onlypos: "Only positive changes" TYPE [TRUE, FALSE] DEFAULT FALSE (Only return positive markers if set to TRUE.)
-# RUNTIME R-3.3.2
+# RUNTIME R-3.4.3
 
 
 # max.cells.per.ident ?
@@ -18,6 +18,7 @@
 
 
 # 09.06.2017 ML
+# 2018-01-11 ML update Seurat version to 2.2.0
 
 library(Seurat)
 library(dplyr)
@@ -33,7 +34,10 @@ load("seurat_obj.Robj")
 library(tools)
 dir <- getwd()
 dir <- file_path_as_absolute(dir)
-seurat_obj <- FindClusters(seurat_obj, pc.use=1:pcs_use, resolution = res, print.output= 0, save.SNN= T, temp.file.location = dir)
+# seurat_obj <- FindClusters(seurat_obj, pc.use=1:pcs_use, resolution = res, print.output= 0, save.SNN= T, temp.file.location = dir)
+seurat_obj <- FindClusters(object = seurat_obj, reduction.type = "pca", dims.use = 1:pcs_use, 
+		resolution = res, print.output = 0, save.SNN = TRUE)
+
 
 # Non-linear dimensional reduction (tSNE)
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T)
