@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "BETA Seurat -Setup and QC" (Setup the Seurat object and examine quality control plots. Depending on your data type, you need to give one of the following input files. For Chromium 10x data you need to give a tar package of the 10X output file folder, please see more detailed instructions in the manual. For DropSeq data you need to give a digital gene expression matrix, which you can make with the tool Create digital gene expression matrix. Please check that your input file is assigned correctly under the parameters!)
+# TOOL single-cell-seurat-setup.R: "BETA Seurat -Setup and QC" (Setup the Seurat object, quality control, filter and regress the cells, determine statistically significant principal components. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table from DropSeq" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf 
@@ -10,8 +10,11 @@
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
 # PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
-# RUNTIME R-3.3.2
+# RUNTIME R-3.4.3
 
+# MUISTA POISTAA KAKS TURHAKS JÄÄNYTTÄ PARAMETRIA!  do.logNormalize = lognorm, total.expr = totalexpr,
+# PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
+# PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
 
 # PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
 # OUTPUT OPTIONAL log.txt
@@ -19,8 +22,11 @@
 # PARAMETER OPTIONAL mitocutoff: "Mitochondrial genes percentage upper limit cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
 
 
+
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
+# 2018-01-11 ML update Seurat version to 2.2.0
+
 
 library(Seurat)
 library(dplyr)
@@ -30,7 +36,7 @@ library(gplots)
 # If using DropSeq data:
 if (file.exists("dropseq.tsv")){
 	dat <- read.table("dropseq.tsv", header=T, sep="\t", row.names=1)
-
+	
 # If using 10X data:
 }else if (file.exists("files.tar")){
 	
@@ -59,24 +65,23 @@ if (file.exists("dropseq.tsv")){
 }
 
 # Initialize the Seurat object
-seurat_obj <- new("seurat", raw.data = dat)
-seurat_obj <- Setup(seurat_obj, min.cells = mincells, min.genes = mingenes, 
-		do.logNormalize = lognorm, total.expr = totalexpr, project = project.name)
+# Huom, nämä siirtyi myöhemmäksi: do.logNormalize = lognorm, total.expr = totalexpr,
 
+seurat_obj <- CreateSeuratObject(raw.data = dat, min.cells = mincells, min.genes = mingenes, 
+		project = project.name)
 
 # QC
-# % of mito genes
-mito.genes <- grep("^MT-", rownames(seurat_obj@data), value = T)
-percent.mito <- colSums(expm1(seurat_obj@data[mito.genes, ]))/colSums(expm1(seurat_obj@data))
-seurat_obj <- AddMetaData(seurat_obj, percent.mito, "percent.mito")
+# % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
+mito.genes <- grep(pattern ="^MT-", x = rownames(x =seurat_obj@data), value = T, ignore.case=T)
+#percent.mito <- colSums(expm1(seurat_obj@data[mito.genes, ]))/colSums(expm1(seurat_obj@data))
+percent.mito <- Matrix::colSums(seurat_obj@raw.data[mito.genes, ])/Matrix::colSums(seurat_obj@raw.data)
+seurat_obj <- AddMetaData(object = seurat_obj, metadata = percent.mito, col.name = "percent.mito")
 # pdf plots
 pdf(file="QCplots.pdf", , width=13, height=7) 
 VlnPlot(seurat_obj, c("nGene", "nUMI", "percent.mito"), nCol = 3) 
 par(mfrow = c(1, 2))
 GenePlot(seurat_obj, "nUMI", "percent.mito")
-# abline(h=mitocutoff, col="blue")
 GenePlot(seurat_obj, "nUMI", "nGene")
-# abline(h=genecountcutoff, col="blue")
 #dev.off() # close the pdf
 
 
