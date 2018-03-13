@@ -99,12 +99,14 @@
         <tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
 		<tool>test-data-in-out3.py</tool>		
+		<tool>test-screen-output.py</tool>		
 		<tool>test-phenodata-input.py</tool>
 		<tool>test-phenodata2-input.py</tool>
 		<tool>test-phenodata-output.py</tool>
 		<tool>test-phenodata2-output.py</tool>
 		<tool>test-parameters.py</tool>
 		<tool>test-parameters.R</tool>
+		<tool>sleep.R</tool>
 	</category>	
 	
 </module>

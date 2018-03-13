@@ -192,7 +192,6 @@
 		<tool>input-output.R</tool>
 		<tool>simple-input-output.R</tool>
 		<tool>data-throughput.R</tool>
-		<tool>sleep.R</tool>
 		<tool>input-sleep-output.R</tool>
 	</category>
 </module>
