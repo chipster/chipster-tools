@@ -41,7 +41,7 @@ debugPrint <- function(command) {
 # Prefer fixed representation over exponential
 options(scipen = 10)
 # Debug mode, change debug to TRUE or FALSE, depending do you want debug prints or not
-debug <- TRUE
+debug <- FALSE
 debugPrint("")
 debugPrint("DEBUG MODE IS ON")
 

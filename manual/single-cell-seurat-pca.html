@@ -8,13 +8,8 @@
 <h3>Description</h3>
 
 <p>
-As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
-</p>
-
-<p>
-After setting up the R-object (.Robj), some quality control plots are drawn, 
-filtering and regression is performed and  
-plots to aid in estimating the statistically significant principal components are drawn.
+This tool performs principal component analysis (PCA) on the highly variable genes across the single cells, selected using 
+the tool <b>Filtering, regression and detection of variable genes</b>.
 </p>
  
  <h3>Parameters</h3>
@@ -26,33 +21,31 @@ plots to aid in estimating the statistically significant principal components ar
  <h3>Details</h3>
  
 <p>
-As input, give the Seurat R-object (Robj) from the Seurat setup -tool.
+As input, give the Seurat R-object (Robj) from the tool Seurat -Filtering, regression and detection of variable genes.
 </p>
 
 <p>
-Principal component analysis (PCA) is performed for the highly variable genes selected in 
-the <b>Filtering, regression and detection of variable genes tool</b>.
 To overcome the extensive technical noise in any single gene for scRNA-seq data, 
 Seurat clusters cells based on their PCA scores, 
 with each PC essentially representing a 'metagene' that combines information across a correlated gene set. 
-Determining how many PCs to include downstream is therefore an important step, but it can be challenging and uncertain.
-Few plots are drawn to <b>PCAplots.pdf</b> to aid in this exploration of the primary sources of heterogeneity in the dataset. 
-Based on these plots the user is supposed to decide which principal components to include in the downstream analysis.
+Determining how many PCs to include downstream is therefore an important step, but it can be challenging.
+The result file <b>PCAplots.pdf</b> contains several plots which can help to explore the primary sources of heterogeneity in the dataset and to decide 
+which principal components to include in the downstream analysis.
 </p>
 
 <p>
-In the first plots, the top genes associated with the first two principal components are shown. 
+In the first plot, the top genes associated with the first two principal components are shown. 
 Second plot shows the principal components 1 and 2 for the cells in the dataset, and the third plot
 is a heatmap focusing on principal component 1. 
 We also list the top 5 genes associated with high/low loadings for the first 5 PCs in the <b>PCAgenes.txt</b> file.
 </p>
 
 <p>
-Next plots can be used to make the decision on which principal components to use: by default, 12 heatmaps are plotted, 
+Next plots can be used to decide which principal components to use. By default, 12 heatmaps are plotted, 
 focusing on the 12 first principal components, in which both cells and genes are sorted by their principal component scores.
-User can change the number of heatmaps to plot. Explore especially the PCs which you choose for downstream analysis:
+You can change the number of heatmaps to plot. Explore especially the PCs which you choose for downstream analysis:
 heatmaps can display the 'extremes' across both genes and cells, 
-and can be useful to help exclude PCs that may be driven primarily by ribosomal/mitochondrial or cell cycle genes.
+and can be useful to exclude PCs that may be driven primarily by ribosomal/mitochondrial or cell cycle genes.
 </p>
 
 <p>
