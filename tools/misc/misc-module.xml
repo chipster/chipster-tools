@@ -107,6 +107,15 @@
 		<tool>test-parameters.py</tool>
 		<tool>test-parameters.R</tool>
 		<tool>sleep.R</tool>
+		<tool>test.R</tool>
+		<tool>no-operation.R</tool>
+		<tool>echo.R</tool>
+		<tool>fail.R</tool>
+		<tool>input-output.R</tool>
+		<tool>simple-input-output.R</tool>
+		<tool>data-throughput.R</tool>
+		<tool>input-sleep-output.R</tool>
+		
 	</category>	
 	
 </module>
