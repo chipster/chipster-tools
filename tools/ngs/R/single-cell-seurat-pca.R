@@ -4,13 +4,15 @@
 # OUTPUT OPTIONAL PCAgenes.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
-# RUNTIME R-3.3.2
+# RUNTIME R-3.4.3
 
 
 # OUTPUT OPTIONAL log.txt
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
+# 2018-01-11 ML update Seurat version to 2.2.0
+
 
 library(Seurat)
 library(dplyr)
@@ -23,8 +25,8 @@ load("seurat_obj.Robj")
 
 # PCA
 # The variable genes = genes in seurat_object@var.genes are used as input
-seurat_obj <- PCA(seurat_obj, pc.genes = seurat_obj@var.genes, do.print = TRUE, pcs.print = 5, genes.print = 5)
-seurat_obj <- ProjectPCA(seurat_obj)
+seurat_obj <- RunPCA(object = seurat_obj, pc.genes = seurat_obj@var.genes, do.print = TRUE, pcs.print = 5, genes.print = 5)
+
 #PCA genes in txt file
 sink("PCAgenes.txt")
 PrintPCA(seurat_obj, pcs.print = 1:5, genes.print = 5, use.full = TRUE)
@@ -52,4 +54,3 @@ dev.off() # close the pdf
 save(seurat_obj, file="seurat_obj_2.Robj")
 
 ## EOF
-
