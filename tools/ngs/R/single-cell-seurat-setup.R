@@ -8,18 +8,7 @@
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots.)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
-# PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
-# PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
 # RUNTIME R-3.4.3
-
-# MUISTA POISTAA KAKS TURHAKS JÄÄNYTTÄ PARAMETRIA!  do.logNormalize = lognorm, total.expr = totalexpr,
-# PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
-# PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization.)
-
-# PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
-# OUTPUT OPTIONAL log.txt
-# PARAMETER OPTIONAL genecountcutoff: "Unique gene counts per cell upper limit cutoff" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
-# PARAMETER OPTIONAL mitocutoff: "Mitochondrial genes percentage upper limit cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells with higher than this percent of mitochondrial genes present.)
 
 
 
