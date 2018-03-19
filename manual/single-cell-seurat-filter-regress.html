@@ -25,11 +25,11 @@ Start with some values, see how it goes, and run the tool again with different p
 <ul>
 		<li>Unique gene counts per cell upper limit cutoff [2500]</li>
 		<li>Mitochondrial transcript percentage upper limit cutoff [0.05]</li>
+		<li>Regress out cell cycle differences [no] </li>
 		<li>Minimum average expression level for a variable gene, x min [0.0125]</li>
 		<li>Maximum average expression level for a variable gene, x max [3]</li>
 		<li>Minimum dispersion for a variable gene, y min [0.5]</li>
-		<li>Filter out cell cycle differences [no] </li>
-			
+	
 </ul>
 	The bottom three parameters (x min, x max, y min) are used to select the variable genes. You might need to run
 	the tool again if the initial values don't give a good number of variable genes.
@@ -51,11 +51,11 @@ The tool performs the following three steps. As an input, give the Seurat R-obje
 		Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
 		This tool regresses on the number of detected molecules per cell as well as the percentage mitochondrial transcript content.
 		
-		<br>You can also choose to filter out cell cycle differences (default: no filtering).
-		By choosing <b> "all differences</b> the tool removes all signal associated with cell cycle.
+		<br>You can also choose to regress out cell cycle differences (default: no filtering).
+		By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
 		In some cases this method can impact negatively on the downstream analysis,
 		particularly in differentiating processes,where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
-		As an alternative you can choose <b>""regressing out the difference between the G2M and S phase scores"</b>. </li>
+		As an alternative you can choose <i>regressing out the difference between the G2M and S phase scores</i>. </li>
 
 
 		<li><b>Genes which are highly variable genes across the single cells are selected</b> for downstream analysis in the next tools.
@@ -63,11 +63,7 @@ The tool performs the following three steps. As an input, give the Seurat R-obje
 		placing these genes into bins, and then calculating a z-score for dispersion within each bin.
 		The result file Dispersion.pdf indicates the number of variable genes based on the user defined cut-offs. 
 		Based on this plot, you can define the cut-offs for expression (x-axis) and dispersion (y-axis) 
-		to mark visual outliers. Two plots are drawn: scaled and non-scaled graphs.</li>	
-
-		
-TYPE [no: no, all.diff: "all differences", diff.phases: "the difference between the G2M and S phase scores"] DEFAULT no (Choose to remove all signal associated with cell cycle, or the difference between the G2M and S phase scores. More info in the manual page under Help. )
-RUNTIME R-3.4.3
+		to mark visual outliers. Two plots are drawn: scaled and non-scaled graphs.</li>
 
 </ol>
 
