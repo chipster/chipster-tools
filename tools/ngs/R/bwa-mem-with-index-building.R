@@ -7,6 +7,7 @@
 # OUTPUT bwa.bam 
 # OUTPUT bwa.bam.bai 
 # OUTPUT bwa.log 
+# OUTPUT OPTIONAL bwa_index.tar
 # PARAMETER OPTIONAL minseedlen: "Minimum seed length" TYPE INTEGER DEFAULT 19 (Matches shorter than this will be missed when looking for maximal exact matches or MEMs in the first alignment phase.)
 # PARAMETER OPTIONAL bandwith: "Maximum gap length" TYPE INTEGER DEFAULT 100 (Gaps longer than this will not be found. Note also scoring matrix and hit length affect the maximum gap length, in addition to this band width parameter.)
 # PARAMETER OPTIONAL matchscore: "Match score" TYPE INTEGER DEFAULT 1 (Score for a matching base.)
@@ -32,18 +33,40 @@ for (i in 1:nrow(input.names)) {
 }
 
 
+
+# read input names
+inputnames <- read_input_definitions()
+
 # bwa
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
 samtools.binary <- file.path(chipster.tools.path, "samtools-1.2", "samtools")
 
-# Do indexing
-print("Indexing the genome...")
-system("echo Indexing the genome... > bwa.log")
-check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
-#genome.dir <- system(check.command, intern = TRUE)
-#bwa.genome <- file.path( genome.dir , "genome.txt")
-bwa.genome <- system(check.command, intern = TRUE)
+genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
+hg_ifn <- ("")
+echo.command <- paste("echo Host genome file type", genome.filetype, " > bwa.log")
+system(echo.command)
+
+new_index_created <- ("no")
+# case 1. Ready calculated indexes in tar format
+if (genome.filetype == "tar"){
+	system("echo Extarting tar formatted gemome index file >> bwa.log")
+	system("tar -tf genome.txt >> bwa.log")
+	check.command <- paste( bwa.index.binary, "genome.txt | tail -1 ")	
+	bwa.genome <- system(check.command, intern = TRUE)	
+	system("ls -l >> bwa.log")
+# case 2. Fasta file
+}else{
+	system("echo Calculating gemome indexes >> bwa.log")
+	check.command <- paste( bwa.index.binary, "genome.txt -tar| tail -1 ")
+	bwa.genome <- system(check.command, intern = TRUE)
+	cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./bwa_index.tar ", sep ="")
+	system(cp.command)
+	new_index_created <- ("yes")
+}
+echo.command <- paste("echo Internal genome name:", bwa.genome, " >> bwa.log")
+system(echo.command)
+
 
 # bwa
 command.start <-(bwa.binary)
@@ -132,6 +155,8 @@ for (i in 1:length(reads1.list)) {
 	system(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
 }		
 
+system("echo BWA ready >> bwa.log")
+system("ls -l >> bwa.log")
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
@@ -177,11 +202,16 @@ if (fileNotOk("reads002.fq")){
 if (paired.end && fileNotOk("reads003.fq")){
 	basename <- paired_name(strip_name(inputnames$reads001.fq), strip_name(inputnames$reads002.fq))
 }
-
+system("ls -l >> bwa.log")
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
+outputnames <- matrix(NA, nrow=3, ncol=2)
 outputnames[1,] <- c("bwa.bam", paste(basename, ".bam", sep =""))
 outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
+if ( new_index_created == "yes"){
+	hg_ifn <- strip_name(inputnames$genome.txt)
+	outputnames[3,] <- c("bwa_index.tar", paste(hg_ifn, "_bwa_index.tar", sep =""))
+}
+
 
 # Write output definitions file
 write_output_definitions(outputnames)

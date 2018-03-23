@@ -126,6 +126,7 @@
 		<tool>bwa-paired-end.R</tool>
 		<tool>bwa-with-index-building.R</tool>
 		<tool>bwa-paired-end-with-index-building.R</tool>
+		<tool>minimap2.R</tool>
 	</category>
 	
 	<category name="Variants" color="#80a3b7">
