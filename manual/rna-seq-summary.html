@@ -3,44 +3,18 @@
 <head><title></title></head>
 <body>
 
-<h2>Analysing differential expression with RNA-seq data</h2>
+<h2>RNA-seq data analysis to find differentially expressed genes</h2>
 
-<p>
-We have gathered all of our learning material for RNA-seq data analysis to this page to help you out to get started!
-<br>
-If RNA-seq is a whole new topic to you, we would suggest checking out the
- <a href= "https://www.youtube.com/watch?v=Cb37UU7ahe0&t=4s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=6"> introduction to RNA-seq webinar</a> (1h), 
-which introduces the steps of differential expression analysis -this video covers also the 101 of using Chipster.
-<br><br>
-After the webinar, you might like to try the analysis tools yourself -for that we suggest going through our course exercises
-(listed below). Open the excercises pdf document, log in to Chipster, and just follow the instructions!
-<br><br>
-Some parts of the analysis can raise more questions -we have tried to clarify those steps with more 
-detailed instructions and tutorials. Please find the links to those on this page!
-</p>
-<h3>Course material</h3>
-<p>
-Please find below the links to our RNA-seq course materials.<br>
-Course example sessions are available in Chipster (File -> Open example session -> "course_RNAseq..."). 
+We have gathered resources for RNA-seq data analysis here to help you getting started!
 <ul>
-<li>Introduction to RNA-seq data analysis with Chipster <a href= "https://kannu.csc.fi/index.php/s/zqHXWdr32yOA5xo">course slides and exercises</a></li>
-<li>Introduction to RNA-seq data analysis, command line tools + R/Bioconductor  <a href= "https://kannu.csc.fi/index.php/s/4oGtgfglXOOjCzI">course slides, exercises and some test data</a></li>
+	<li>If RNA-seq is a whole new topic to you, we suggest checking out the<a href= "https://www.youtube.com/watch?v=Cb37UU7ahe0&t=4s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=6"> Introduction to RNA-seq</a> webinar (1h), 
+which introduces the steps of differential expression analysis. This video covers also the 101 of using Chipster. </li>
+	<li>After the webinar, you might like to try the analysis tools yourself -for that we suggest going through our <a href= "courses.html#rna">course exercises</a>. Open the excercises pdf document, log in to Chipster, and just follow the instructions! The exercise data are available as example sessions on the Chipster server, and
+we also provide ready-made analysis sessions which you can use as a reference when doing exercises on your own. </li>
+	<li>Some analysis steps can raise more questions. Please find below more detailed instructions for each step and see also the <a href= "https://www.youtube.com/playlist?list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF">RNA-seq playlist</a> on our YouTube channel. </li>
 </ul>
-</p>
 
-<h3>Tutorial videos</h3>
-
-We have an <a href= "https://www.youtube.com/playlist?list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF">RNA-seq playlist</a> in our YouTube channel. 
-This list includes tutorials for some common analysis needs:
-<ul>
-<li>Beginner's introduction to RNA-seq data analysis <a href= "https://www.youtube.com/watch?v=Cb37UU7ahe0&t=4s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=6"> Webinar</a> (1h)</li>
-<li>Differential expression analysis tools for RNA-seq <a href= "https://www.youtube.com/watch?v=kPDy4FYF1yY&t=16s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=1">tutorial video</a> (3 min)</li>
-<li>EdgeR for multivariate experiments<a href= "https://www.youtube.com/watch?v=gJnu3xUQ7ww&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=3"> tutorial video</a> (6 min)</li>
-<li>Using the "nested" option in multivariate edgeR <a href= "https://www.youtube.com/watch?v=82G_yMkPue4&t=11s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=2">tutorial video</a> (4 min)</li>
-<!--  <li>Upper-quartile normalization (yes, no) [yes]</li>-->
-</ul>
-</p>
-<h3>Getting started with Chipster</h3>
+<h3>I Getting started with Chipster</h3>
 <p>
 <ul>
 <li>Do you have a user account? <a href= "http://chipster.csc.fi/access.shtml">Instructions for getting access</a> </li>
@@ -51,22 +25,22 @@ This list includes tutorials for some common analysis needs:
 </ul>
 </p>
 
-<h3>Importing your data to Chipster</h3>
+<h3>II Importing your data to Chipster</h3>
 <p>
 <ul>
 <li>Importing your files to Chipster: <a href= "http://chipster.csc.fi/manual/import-ngs.html">Manual</a></li>
-<li>Have your data already in CSC's Taito cluster, how to run Chipster there? <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Video tutorial</a> (12 min)</li>
+<li>If your data is already uploaded to CSC's Taito cluster, you can run Chipster there: <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Tutorial video</a> (12 min)</li>
 </ul>
 </p>
 
-<h3>Analysis steps for finding differentially expressed genes</h3>
+<h3>III Analysis steps for finding differentially expressed genes</h3>
 
 These steps take you from raw reads to differentially expressed genes (please find a figure showing the different steps and file formats at the end of the page):
 <ol>
 
 <li><b>Quality control of raw reads </b><br>
-	Check the number, quality encoding, strandedness and inner distance of your reads, and inspect them for base quality, biases and adapters.<br>
-	Tools under Quality control category (input FASTQ files):
+	Check the number, quality encoding, <a href= "library-type-summary.html">strandedness</a> and inner distance of your reads, and inspect them for base quality, biases and adapters.<br>
+	Tools under the Quality control category (input FASTQ files):
 	<ul> 
 	<li><a href= "http://chipster.csc.fi/manual/fastqc.html">FastQC </a> is clear and fast.</li>
 	<li><a href= "http://chipster.csc.fi/manual/prinseq-statistics.html">PRINSEQ</a></li>
@@ -78,113 +52,106 @@ These steps take you from raw reads to differentially expressed genes (please fi
 <li><b>Preprocessing raw reads </b><br>
 	If the reads contain low quality bases or adapter sequences, you might like to trim or filter them. 
 	Note that when preprocessing paired end data, you need to give the two read files simultaneously to the analysis tool in order to preserve the order of read pairs.<br>
-	Trimming or filtering is not absolutely necessary, because many bad quality reads are either removed or dealt with when aligning reads to the reference genome in the next step.
+	Trimming or filtering is not absolutely necessary, because many bad quality reads are removed when aligning reads to the reference genome in the next step.
 	This depends on the aligner used, as aligners differ in their ability to cope with mismatching bases. 
 	<br>
-	Tools under Preprocessing category (input FASTQ files):
+	Tools under the Preprocessing category (input FASTQ files):
    	<ul>
 	<li><a href= "http://chipster.csc.fi/manual/trimmomatic.html">Trimmomatic</a> has several options for trimming and filtering and it is fast.</li>
 	<li><a href= "http://chipster.csc.fi/manual/prinseq-trimmer.html">PRINSEQ trimming</a> is slower.</li>
 	<li><a href= "http://chipster.csc.fi/manual/prinseq-filter.html">PRINSEQ filtering</a> is slower.</li>
 	</ul>
+</li>
 <br>
 <li><b>Alignment of reads to reference genome</b><br>
 	 Chipster offers a large selection of reference genomes. If your reference genome is not available, you can import it as a fasta file and use the "own genome" version of the alignment tool. 
 	 You can also ask us to add the genome in Chipster if it is publicly available and commonly used.<br> 
-	 Note that some sequencing platforms generate <b>several FASTQ files per sample</b>. For example, Illumina NextSeq generates 8 files per sample for paired end data. 
+	 Note that some sequencing platforms generate several FASTQ files per sample. For example, Illumina NextSeq generates 8 files per sample for paired end data. 
 	 In this case you need to first generate file name lists (one for read 1 files and another for read 2 files), and give those list files and all the FASTQ files as input for the aligner.
 	 Please read the manual for the <a href= "http://chipster.csc.fi/manual/make_namelist.html">Utilities/Make a list of file names</a> tool for more info. <br>
-	 Note that aligners need <b>strandedness / library type</b> information in order to align reads correctly. As there are two possible strandedness types 
+	 Note that aligners need the strandedness / library type information in order to align reads correctly. As there are two possible strandedness types 
 	 and several kits for producing stranded sequencing libraries, we have made a <a href="http://chipster.csc.fi/manual/library-type-summary.html">summary of strandedness options and nomenclature</a>.
 	 <br>
-	 Tools under Alignment category, note that there are separate TopHat tools for single and paired end data, and for user-supplied reference genome (input FASTQ files):
+	 Tools under the Alignment category (input FASTQ files), note that there are separate HISAT2 and STAR tools for single and paired end data, and for user-supplied reference genome:
 	 <ul>
-	 <li><a href= "http://chipster.csc.fi/manual/tophat2.html">TopHat for paired end reads</a> and other TopHat tools.</li>
-	 <li>Coming soon: STAR and HISAT2 aligners</li>
+	 <li><a href= "hisat2-paired-end.html">HISAT2 for paired end reads</a>.</li>
+	 <li><a href= "star-paired-end.html">STAR for paired end reads and human genome</a>.</li>
 	 </ul>
+</li>
 <br>
-<li><b>Alignment level quality control: </b><br>	
+<li><b>Alignment level quality control </b><br>
 	 Check what proportion of the reads mapped to exons, is the coverage uniform over transcript length, and whether novel splice sites were found.
-	 Tools under Quality control category (input BAM files):
+	 Tools under the Quality control category (input BAM files):
 	 <ul> 
 	 <li><a href= "http://chipster.csc.fi/manual/rseqc.html">RSeQC </a> 
-	 <li><a href= "http://chipster.csc.fi/manual/picard-collectmultiplemetrics.html">CalculateMultipleMetrics (Picard)</a></li>
+	 <li><a href= "http://chipster.csc.fi/manual/picard-collectmultiplemetrics.html">Collect multiple metrics from BAM</a></li>
+	 </ul>
+</li>
+<br>
+<li><b>Quantitation </b><br>	
+	Count reads per gene. The quantitation is done separately for each BAM file. At this step you also need to set the library type / strandedness -make sure you choose the correct parameter!<br>
+	Tools under the RNA-seq category (input BAM file):
+	 	 <ul>  
+	 		<li><a href= "http://chipster.csc.fi/manual/htseq-count.html">Count aligned reads per genes with HTSeq</a></li> 
+	 	 </ul>
+<br>
+</li>
+<li><b>Combine all samples in one table and describe the samples using the phenodata file </b><br>	
+	Now we need to combine all the count files into a one table where rows are genes and columns are samples. 
+	Select all the blue count files (samplename.tsv) and run the tool <a href= "http://chipster.csc.fi/manual/ngs-create-experiment.html">Utilities/Define NGS experiment</a>.<br>
+	In addition to the count table this tool generates a phenodata file, which is used to describe samples in Chipster. Fill in the group column using numbers so that you mark control samples with 1 and treatment samples with 2. 
+	You can add more columns if you have more experimental factors.  
+	You also want to make sure that the Description column is, well, descriptive, and the titles there are short enough,
+	as these are as sample names in many visualisations.
+	You might like to check out our <a href= "https://www.youtube.com/watch?v=eptYuRs2qws">tutorial video</a> (3 min)
+	and <a href= "http://chipster.csc.fi/manual/visualisation-phenodata.html">manual page</a> on how to fill in the phenodata file.
+	<br>
+	 Tool under the Utilities category (input tsv files):
+	 <ul>  
+	 	 <li><a href= "http://chipster.csc.fi/manual/ngs-create-experiment.html">Define NGS experiment </a></li>
 	 </ul>
 <br>
-<li><b>Quantitation (for BAM files): </b><br>	
-	Next we want to count the reads per gene/transcript. The quantitation is done separately for each BAM file.
-	At this step you also need to report the library type / strandedness -make sure you choose the correct parameter!
-	<br>
-	 Tools (under RNA-seq category): 
-	 <a href= "http://chipster.csc.fi/manual/htseq-count.html">HTSeq </a>, 
-	 <a href= "http://chipster.csc.fi/manual/dexseq-exoncount.html">DEXSeq </a></li>
-<br>
-<li><b>Define NGS experiment (for the count files): </b><br>	
-	Now we need to combine all the count files (samplename.tsv) into a one table (ngs-data-table.tsv), 
-	where rows represent genes and columns different samples. 
-	For this, select all the blue count files and run the tool Utilities/Define NGS experiment.<br>
-	This tool generates the table and a <b>phenodata file </b>. This is your way to describe your samples in Chipster:
-	your next task is to fill in the "group" column and maybe add some more columns that describe which of your
-	samples are "controls", "treatments", from same batch/patient etc. 
-	You also want to make sure the "Description" column is, well, descriptive, and the titles there are short enough,
-	as these are used by many visualisation tools.
-	There are a few things to keep in mind when filling in the phenodata file, 
-	so it might be advisable to check out our 
-	<a href= "https://www.youtube.com/watch?v=eptYuRs2qws">video tutorial</a> (3 min)
-	and/or <a href= "http://chipster.csc.fi/manual/visualisation-phenodata.html">the manual page</a> on how to fill in the phenodata file
-	<br>
-	 Tool (under Utilities category): 
-	 <a href= "http://chipster.csc.fi/manual/ngs-create-experiment.html">Define NGS experiment </a></li>
-<br>
-	<b>HINT:</b> If your FASTQ and/or BAM files are big, at this point it might be wise to make sure your session is saved,
-	then remove the large files from your session, and save the session again with another name. 
-	It makes your session smaller and easier to handle! 
-	You can always return to the earlier session with the bigger files if you notice a need for that later on.
-	Note that the cloud sessions are not stored forever, so for longer storage, save the sessions (also) locally! 
+	<b>HINT:</b> If your FASTQ files are big, at this point it might be wise to save your session,
+	remove the FASTQ and BAM files, and save the session again with another name. It makes your session smaller and easier to handle! 
+	You can always return to the original session with the bigger files if needed.
+	Note that the cloud sessions are not stored forever, so for longer storage, save the sessions also locally! 
 	If the sessions are huge, it might be a good idea to store them in <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Taito</a>.
-	<br>  <br>
-<li><b>Experiment level quality control (for the count table): </b><br>	
+	<br><br>
+</li>
+<li><b>Experiment level quality control </b><br>	
 	Now we have our data in one table, and it is time to do some experiment level quality control 
-	-this is the exciting part where you get to see whether your samples really are expressing differently! <br>
-	<b>Note:</b> the tool expects you to use raw counts (in the count table), so don't do any normalisation!
-	 <br>
-	Check out from the PCA plot and heatmap that the samples are clustered as you would imagine them to cluster 
-	-controls in one clump and so on- and that there are no outliers. <br>
-	Now you can also see if there are some possible batch effects lurking in your data (see the Drosophila example session to see what you should be looking for.
-	If you notice something, make sure you take it into account in the statistical testing / modeling phase!
-	Tool (under Quality control category): 
-	 <a href= "http://chipster.csc.fi/manual/deseq2-pca-heatmap.html">PCA and heatmap of samples using DESeq2) </a> </li> 
+	-this is the exciting part where you get to see whether your sample groups show differential expression!
+	Check out from the PCA plot and heatmap that the sample groups separate from each other and that there are no outliers.
+	Now you can also see if there are some possible batch effects lurking in your data (see the Drosophila example session to see what you should be looking for).
+	If you notice something, make sure you take it into account in the next step!	<br>
+	Tool under the Quality control category (input count table):
+		 <ul>  
+	 	 	 <li><a href= "http://chipster.csc.fi/manual/deseq2-pca-heatmap.html">PCA and heatmap of samples using DESeq2 </a>.	Note that the tool needs raw read counts, so don't do any normalisation. </li>
+	 	 </ul> 
 <br>
-<li><b>Differential expression analysis (for the count table): </b><br>
-<br>	
-<br> KEHTAISKO PYYTAA SEIJALTA LYHYTTA VIDEOTA TAI NOTEBOOKIA AIHEESTA? TASTA JA SIITA linear modeling?
+</li>
+<li><b>Differential expression analysis </b>
 <br>
-	Time for statistics! It is actually fairly tricky thing to estimate the differential expression due to a couple of things:
-	we are testing usually thousands or tens of thousands of genes (multiple testing correction is needed), the expression values are not normally distributed
-	 (instead, negative binomial distributions and generalised linear modeling are used) and 
-	 the range in which a genes expression values vary varies from gene to gene (dispersion estimation). 
-	 Luckily, there are tools that do all these tricky things for you. <br>
-	 These tools are presented in our video tutorial: <br>
-	 <a href= "https://www.youtube.com/watch?v=kPDy4FYF1yY&t=16s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=1"> Differential expression analysis tools for RNA-seq tutorial video</a> (3 min)<br>
-	 Things get a bit trickier if you have multiple variables, like treatment, gender, batch to take into account simultaniously. 
-	 For these cases, you need to use the tool called EdgeR for multivariate experiments <br>
+	Time for statistics! It is actually quite tricky to estimate differential expression because we are testing tens of thousands of genes (multiple testing correction is needed), expression values are not normally distributed
+	 (instead, negative binomial distributions and generalised linear modeling are used), and 
+	 the range in which genes expression values vary varies from gene to gene (dispersion estimation). 
+	 Luckily, there are tools that do all these tricky things for you. These tools are presented in our video tutorial 
+	 <a href= "https://www.youtube.com/watch?v=kPDy4FYF1yY&t=16s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=1"> Differential expression analysis tools for RNA-seq</a> (3 min).<br>
+	 Things get trickier if you have multiple variables, like treatment, gender, batch to take into account simultaneously. 
+	 For these cases, you need to use the tool called <a href= "http://chipster.csc.fi/manual/ngs-dea-edger-RNA.html">Differential expression using edgeR for multivariate experiments</a>
 	 -check out the video tutorial for that 
-	 <a href= "https://www.youtube.com/watch?v=gJnu3xUQ7ww&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=3"> here</a> (6 min), <br>
+	 <a href= "https://www.youtube.com/watch?v=gJnu3xUQ7ww&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=3"> here</a> (6 min), 
 	 and a specific tutorial for cases where you need to use this "nested" option
-	 <a href= "https://www.youtube.com/watch?v=82G_yMkPue4&t=11s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=2">here</a> (4 min). <br>
-	<br><br> IF NONE OF THESE OPTIONS WORK FOR YOUR DATA, THEN....??? Oliks joku kayta omaa matriisii tyokalu?? Missa??<br><br>
-	 <b>Note:</b> the tools expect raw counts (in the count table) as input, so DON'T do any normalisation and don't use FPKM values or similar!
+	 <a href= "https://www.youtube.com/watch?v=82G_yMkPue4&t=11s&list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF&index=2">here</a> (4 min).
 	 <br>
-	Tools (under RNA-seq category): 
-		 <a href= "http://chipster.csc.fi/manual/deseq2.html">DESeq2</a>, 
-		 <a href= "http://chipster.csc.fi/manual/ngs-dea-edger-RNA.html">edgeR</a>,
-		 <a href= "http://chipster.csc.fi/manual/ngs-dea-edger-RNA.html">edgeR for multivariate analysis</a>	
-		 <a href= " http://chipster.csc.fi/manual/DEXSeq.html">DEXSeq</a>		 
-		</li>
+	Tools under the RNA-seq category (input count table). Note that these tools nead raw counts, so don't do any normalisation like FPKM.
+	<ul>  
+		<li><a href= "http://chipster.csc.fi/manual/deseq2.html">Differential expression using DESeq2</a></li> 
+		<li><a href= "http://chipster.csc.fi/manual/ngs-dea-edger-RNA.html">Differential expression using edgeR</a></li>
+		<li><a href= "http://chipster.csc.fi/manual/ngs-dea-edger-RNA.html">Differential expression using edgeR for multivariate experiments</a></li>
+	</ul>
 <br>
-<li><b>Visualising your data: </b><br>	
-<a href= "https://www.youtube.com/watch?v=PzZQVVD812w">Video tutorial for interactive visualisations</a> (7 min)
-		</li> 
+</li> 
 </ol>
 <img src="RNA-seq-basic-steps.png"> <br><br>
 
