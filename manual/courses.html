@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title>Chipster manual</title></head>
+<body>
+
+<h2>Chipster training courses</h2>
+			
+
+<p>We run several training courses on different aspects of bioinformatics every year in Finland and abroad. The courses at CSC are open for everybody, 
+but you can also contact us to discuss options for hosting a course on your site.</p>
+
+<p>We make our course materials publicly available so that anyone can download them for their own use. The materials include slides and exercises, and many courses have also lecture videos. The exercise data are available as example sessions on the Chipster server, and
+we also provide ready-made analysis sessions which you can use as a reference when doing exercises on your own. We can also provide training accounts to our Chipster server in Finland.</p>
+
+<p>We run currently the following Chipster courses (follow the links for more info). CSC runs also <a href="https://research.csc.fi/bioscience-learning-materials">other bioinformatics courses</a>, 
+you can find the upcoming courses in our <a href="https://www.csc.fi/en/web/training/events">course calendar</a>.</p>
+
+<ol>
+<li> <a href="#rna">RNA-seq data analysis</a> </li>
+<li> <a href="#single-cell">Single cell RNA-seq data analysis</a> </li>
+<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
+<li> <a href="#16S">Community analysis of 16S rRNA data</a> </li>
+<li> <a href="#variant">Variant analysis</a> </li>
+<li> <a href="#chip">ChIP-seq data analysis</a> </li>
+<li> <a href="#microarray">Microarray data analysis</a> </li>
+</ol>
+<hr>
+
+<h3><a name="rna">RNA-seq data analysis</a></h3>
+
+This course introduces RNA-seq data analysis methods, tools and file formats. It covers all the steps from quality control and alignment to quantification and differential expression analysis, and also experimental design is discussed. 
+The course takes two days (or one long day if you omit exercise sheets 3 and 4). You will learn how to 
+<ul>
+<li>check the quality of reads with FastQC and PRINSEQ</li>
+<li>remove bad quality data with Trimmomatic</li>
+<li>infer strandedness with RseQC</li>
+<li>align reads to the reference genome with HISAT2 and STAR</li>
+<li>visualize aligned reads in genomic context using the Chipster genome browser</li>
+<li>perform alignment level quality control using RseQC and SAMtools</li>
+<li>quantify expression by counting reads per genes using HTSeq</li>
+<li>check the experiment level quality with PCA plots and heatmaps</li>
+<li>analyze differential expression with DESeq2 and edgeR</li>
+<li>take multiple factors (including batch effects) into account in differential expression analysis</li>
+</ul>
+
+Course material (2017):
+<ul>
+<li><a href="https://chipster.csc.fi/material/rna/RNA-seq_data_analysis2017.pdf">slides</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBeaOg12x_kiA1BeikqiO_f">lecture videos</a></li>
+<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
+	<ol>
+		<li><a href="https://chipster.csc.fi/material/rna/exercises1_RNAseq_withChipster_ENCODE.pdf">ENCODE data with two samples</a>. These exercises cover the whole workflow.</li>
+		<li><a href="https://chipster.csc.fi/material/rna/exercises2_RNAseq_withChipster_drosophila.pdf">drosphila pasilla dataset</a>. These exercises focus on differential expression analysis and how to take confounding factors into account.</li>
+		<li><a href="https://chipster.csc.fi/material/rna/exercises3_parathyroid.pdf">parathyroid dataset</a>. As before, but even harder</li>
+		<li><a href="https://chipster.csc.fi/material/rna/exercises4_lung_lymphnode_comparison.pdf">lung and lymphnode comparison</a>. Test your new skills with minimal instructions!</li>
+	</ol>
+</ul>
+<hr>
+
+<h3><a name="single-cell">Single cell RNA-seq data analysis</a></h3>
+
+This course introduces single cell RNA-seq data analysis methods, tools and file formats. It covers the preprocessing steps of DropSeq data from raw reads to a digital gene expression matrix (DGE), and how to find sub-populations of cells using clustering with the Seurat tools. 
+Both DropSeq and 10X Genomics data are used in the exercises. The course takes one day. You will learn how to 
+<ul>
+<li>check the quality of reads with FastQC</li>
+<li>tag reads with molecular and cellular barcodes</li>
+<li>trim reads</li>
+<li>align reads to the reference genome with HISAT2 and STAR</li>
+<li>tag reads with gene names</li>
+<li>visualize aligned reads in genomic context using the Chipster genome browser</li>
+<li>estimate the number of usable cells by checking the inflection point</li>
+<li>detect bead synthesis errors</li>
+<li>create and filter DGE</li>
+<li>regress out unwanted variability</li>
+<li>detect variable genes and perform principle component analysis</li>
+<li>cluster cells and find marker genes for a cluster</li>
+</ul>
+
+Course material (2018):
+<ul>
+<li><a href="https://chipster.csc.fi/material/single-cell/single_cell_RNAseq2018.pdf">slides</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD-tnVMX_oYTCF1mWOmB8Xo">lecture and exercise videos</a></li>
+<li><a href="https://chipster.csc.fi/material/single-cell/exercises_single_cell_RNAseq2018.pdf">exercises</a>. The data is available on Chipster server in the example sessions listed in the exercise sheet.</li>
+</ul>
+<hr>
+
+<h3><a name="virusdetect">Virus detection using small RNA-seq</a></h3>
+
+This course introduces the VirusDetect pipeline covering all the analysis steps and file formats. VirusDetect allows you to detect known viruses and identify news ones by sequencing small RNAs (siRNA) in host samples. siRNA sequences are assembled to contigs and compared to known virus sequences. 
+The course takes about 5 hours. You will learn how to 
+<ul>
+<li>run VirusDetect and interpret the result files</li>
+<li>subtract reads originating from the host genome</li>
+<li>set parameters for filtering the BLAST matches</li>
+</ul>
+
+Course material (2018):
+<ul>
+<li><a href="https://chipster.csc.fi/material/virusdetect/VirusDetect2017.pdf">slides</a></li>
+<li><a href="https://www.youtube.com/watch?v=Z-zxzeQxRkQ&index=2&list=PLjiXAZO27elCYwsme8hPqdw0zCTd8mXs6&t=0s">lecture video from a webinar</a></li>
+<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
+	<ol>
+		<li><a href="https://chipster.csc.fi/material/virusdetect/exercises1_VirusDetect_potato.pdf">Potato dataset</a> with different amounts of reads.</li>
+		<li><a href="https://chipster.csc.fi/material/virusdetect/exercises2_VirusDetect_raspberry.pdf">Rasberry dataset</a> demonstrates how to provide the host genome.</li>
+	</ol>
+</ul>
+<hr>
+
+<h3><a name="16S">Community analysis of 16S rRNA data</a></h3>
+
+This course introduces community analysis of amplicon sequencing data (16S rRNA). It covers preprocessing, taxonomic classification, and statistical analysis for marker gene studies. 
+The course takes one day. You will learn how to 
+<ul>
+<li>check the quality of reads with FastQC and PRINSEQ</li>
+<li>remove bad quality data with Trimmomatic, PRINSEQ and Mothur</li>
+<li>taxonomic classification with Mothur</li>
+<li>statistical analysis for marker gene studies based on R packages vegan, rich, biodiversityR, pegas and labdsv</li>
+</ul>
+
+Course material (2017):
+<ul>
+<li>slides</li>
+	<ol>
+		<li><a href="https://chipster.csc.fi/material/16S/IntroductionToCommunityAnalysis_AnuMikkonen.pdf">Introduction to community analysis</a> by Anu Mikkonen</li>
+		<li><a href="https://chipster.csc.fi/material/16S/16S_rRNA_communityAnalysis2017.pdf">Community analysis with Chipster</a></li>
+		<li><a href="https://chipster.csc.fi/material/16S/StatisticalAnalysisOfMarkerGeneData_JarnoTuimala2017.pdf">Satistical analysis of marker gene data</a> by Jarno Tuimala</li>
+	</ol>
+<li><a href="https://www.youtube.com/watch?v=aVypnpAoAOQ&list=PLjiXAZO27elBa5zGKCpwvRXxx-kF52Iuf">lecture videos</a></li>
+<li><a href="https://chipster.csc.fi/material/16S/exercises_16S_rRNA_communityAnalysis2017.pdf">exercises</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
+</ul>
+<hr>
+
+<!--  <ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+
+<ul>
+<li><a href=""></a></li>
+<li><a href=""></a></li>
+<li><a href=""></a></li>
+<li><a href=""></a></li>
+<li><a href=""></a></li>
+</ul>
+
+<br>
+
+
+
+
+      
+ -->
+
+<!--        <li> <a href=" "> </a> </li>        -->
+
+
+</body>
+
+</html>
