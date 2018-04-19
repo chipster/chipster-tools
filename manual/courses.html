@@ -20,7 +20,7 @@ you can find the upcoming courses in our <a href="https://www.csc.fi/en/web/trai
 <li> <a href="#single-cell">Single cell RNA-seq data analysis</a> </li>
 <li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
 <li> <a href="#16S">Community analysis of 16S rRNA data</a> </li>
-<li> <a href="#variant">Variant analysis</a> </li>
+<li> <a href="#variant">Detection and annotation of genomic variants</a> </li>
 <li> <a href="#chip">ChIP-seq data analysis</a> </li>
 <li> <a href="#microarray">Microarray data analysis</a> </li>
 </ol>
@@ -112,7 +112,7 @@ This course introduces community analysis of amplicon sequencing data (16S rRNA)
 The course takes one day. You will learn how to 
 <ul>
 <li>check the quality of reads with FastQC and PRINSEQ</li>
-<li>remove bad quality data with Trimmomatic, PRINSEQ and Mothur</li>
+<li>remove bad quality data with Trimmomatic, RINSEQ and Mothur</li>
 <li>taxonomic classification with Mothur</li>
 <li>statistical analysis for marker gene studies based on R packages vegan, rich, biodiversityR, pegas and labdsv</li>
 </ul>
@@ -130,37 +130,75 @@ Course material (2017):
 </ul>
 <hr>
 
-<!--  <ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-</ul>
+<h3><a name="variant">Detection and annotation of genomic variants</a></h3>
+This course covers variant analysis from raw sequence reads to variant annotation, introducing the theory, analysis tools and file formats involved. 
+The course takes one day. You will learn how to
 
 <ul>
-<li><a href=""></a></li>
-<li><a href=""></a></li>
-<li><a href=""></a></li>
-<li><a href=""></a></li>
-<li><a href=""></a></li>
+<li>check the quality control with FastQC and PRINSEQ</li>
+<li>remove bad quality data with Trimmomatic</li>
+<li>align reads to the reference genome with BWA</li>
+<li>perform alignment level quality control with SAMtools</li>
+<li>mark duplicates with Picard</li>
+<li>call and filter variants with Samtools, BCFtools and VCFtools. Note that the GATK variant calling platform will be integrated in Chipster in 2018.</li>
+<li>annotate variants with Variant Effect Predictor (VEP)</li>
+<li>visualize variants in genomic context with the Chipster genome browser</li>
 </ul>
 
-<br>
+Course material (2016):
+<ul>
+<li>slides</li>
+	<ol>
+		<li><a href="https://chipster.csc.fi/material/variant/IntroductionToVariantAnalysis2016.pdf">Variant analysis with Chipster</a></li>
+		<li><a href="https://chipster.csc.fi/material/variant/Ensembl_Presentation.pdf">Ensembl variation data resources</a> (Variant Effect Predictor VEP described from slide 52 onwards) by Ben Moore</li>
+		<li><a href="https://chipster.csc.fi/material/variant/HOPE_lectures.pdf">Effects of variants on protein structure</a> by Hanka Venselaar</li>
+	</ol>
+<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBwER5r-HxKgFs05OUuAk05">lecture videos</a></li>
+<li><a href="https://chipster.csc.fi/material/variant/exercises_Variant_analysis_2016.pdf">exercises</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
+</ul>
+<hr>
 
+<h3><a name="chip">ChIP-seq data analysis</a></h3>
+This course covers ChIP-seq analysis from quality control and alignment to peak calling, motif detection, and pathway analysis. It introduces the theory, analysis tools and file formats involved. 
+The course takes one day. You will learn how to
 
+<ul>
+<li>check the quality control with FastQC</li>
+<li>align reads to the reference genome with Bowtie</li>
+<li>call peaks with MACS2</li>
+<li>filter peaks</li>
+<li>visualize reads and peaks in genomic context with the Chipster genome browser</li>
+<li>retrieve nearby genes</li>
+<li>pathway analysis</li>
+<li>motif detection</li>
+</ul>
 
+Course material (2016):
+<ul>
+	<li><a href="https://chipster.csc.fi/material/chip/ChIP-seq_Chipster2016.pdf">slides</a></li>
+	<li><a href="https://chipster.csc.fi/material/chip/exercises_ChIPseq_withChipster_STAT1_2016.pdf">exercises</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
+</ul>
+<hr>
 
-      
- -->
+<h3><a name="microarray">Microarray data analysis</a></h3>
+This course covers microarray data analysis from quality control and normalization to differential expression analysis, clustering and pathway analysis. It introduces the theory, analysis tools and file formats involved. 
+The course takes one and half day. You will learn how to
 
-<!--        <li> <a href=" "> </a> </li>        -->
+<ul>
+<li>perform quality control</li>
+<li>normalize data</li>
+<li>find differentially expressed genes and take batch effects into acount</li>
+<li>perform clustering</li>
+<li>visualize results in different ways</li>
+<li>pathway analysis</li>
+</ul>
+
+Course material (2016):
+<ul>
+	<li><a href="https://chipster.csc.fi/material/microarray/microarray_2016.pdf">slides (including exercises)</a>. The data is available on Chipster server in the example sessions listed in the exercises.</li>
+</ul>
+<hr>
+
 
 
 </body>
