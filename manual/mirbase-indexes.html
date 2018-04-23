@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>miRBase in Chipster alignment tools</h2>
+
+<p>Human, mouse and rat miRNA sequences from miRBase are available as reference sequence sets in the Bowtie, Bowtie2 and BWA aligners in Chipster. This page describes how the miRBase indexes for these alignment tools are made.</p>
+
+<ol>
+	<li>The latest mature miRNA sequence file is downloaded from miRBase and uncompressed. The current version in Chipster is miRBase v21.
+		<ul>
+			<li>wget ftp://mirbase.org/pub/mirbase/CURRENT/mature.fa.gz</li>
+			<li>gunzip mature.fa.gz</li>
+		</ul>	
+	</li>
+	<br>
+	<li>File mature.fa contains sequences from all the organisms included in miRBase. We select only human, mouse and rat sequences. This can be done with e.g. grep commad:
+		<ul>
+			<li>grep --no-group-separator -A 1 "Homo sapiens" mature.fa > Homo_sapiens_mirna_u.fa</li>
+			<li>grep --no-group-separator -A 1 "Mus musculus" mature.fa > Mus_musculus_mirna_u.fa</li>
+			<li>grep --no-group-separator -A 1 "Rattus norvegicus" mature.fa > Rattus_norvegicus_mirna_u.fa</li>
+		</ul>	
+	</li>
+	<br>
+	<li>The sequences in mature.fa are RNA sequences. In order to index the sequences for aligners, we need to convert them to DNA by changing U to T. There are many ways to do this. For example, one can use the FASTX tool fasta_nucleotide_changer or the EMBOSS tool 
+	biosed:
+		<ul>
+			<li>fasta_nucleotide_changer -d -i Homo_sapiens_mirna_u.fa -o Homo_sapiens_mirna.fa</li>
+			<li>biosed -targetregion U -replace T -sequence Homo_sapiens_mirna_u.fa -outseq Homo_sapiens_mirna.fa</li>
+		</ul>	
+	</li>
+	<br>
+	<li>The indexes for Bowtie, Bowtie2 and BWA can now be created in the usual manner:
+		<ul>
+			<li>bowtie-build Homo_sapiens_mirna.fa Homo_sapiens_mirna</li>
+			<li>bowtie2-build Homo_sapiens_mirna.fa Homo_sapiens_mirna</li>
+			<li>bwa index -p Homo_sapiens_mirna Homo_sapiens_mirna.fa</li>
+		</ul>	
+	</li>
+</ol>
+
+
+</body>
+
