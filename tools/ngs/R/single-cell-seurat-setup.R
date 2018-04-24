@@ -11,11 +11,10 @@
 # RUNTIME R-3.4.3
 
 
-
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
 # 2018-01-11 ML update Seurat version to 2.2.0
-
+# 2018-04-24 ML + AMS improve the input tar handling
 
 library(Seurat)
 library(dplyr)
@@ -37,27 +36,21 @@ if (file.exists("dropseq.tsv")){
 	if (length(file.list) == 0){
 		stop(paste('CHIPSTER-NOTE: ', "It seems your input file is not a valid Tar package. Please check your input file."))
 	}
-	## Check if tar package contains folders
-	#if (grepl("/", file.list[1])){
-	#	stop(paste('CHIPSTER-NOTE: ', "It seems your Tar package contains folders. The input files need to be in the root of the package, not in subfolders."))
-	#}
-
-	# Open tar package
-	system("tar xf files.tar 2>> log.txt")
-	# Check the name of the directory 
-	dir <- as.character(read.table("tar.contents")[1,1])
-
+	
+	# Open tar package. Make a folder called datadir, open the tar there so that each file 
+	# will be on the root level (remove everything from the name until the last "/" with the --xform option)
+	system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")	
+	
 	# Load the data
-	dat <- Read10X(dir)
+	dat <- Read10X("datadir/")	
 }else{
 	stop(paste('CHIPSTER-NOTE: ', "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
 }
 
 # Initialize the Seurat object
-# Huom, nämä siirtyi myöhemmäksi: do.logNormalize = lognorm, total.expr = totalexpr,
-
 seurat_obj <- CreateSeuratObject(raw.data = dat, min.cells = mincells, min.genes = mingenes, 
 		project = project.name)
+
 
 # QC
 # % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
