@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Minimap2 for mapping reads to genomes</h2>
+
+<h3>Description</h3>
+
+<p>
+Minimap2 is a fast general-purpose alignment program to map DNA and long mRNA sequences against a large reference database.  It can be used for:
+<ul>
+<li>mapping of accurate short reads (preferably longer that 100 bases)</li>
+<li>mapping 1kb genomic reads at error  rate 15% (e.g. PacBio or Oxford Nanopore genomic reads)</li>
+<li>mapping full-length noisy Direct RNA or cDNA reads</li>
+<li>mapping and comparing assembly contigs or closely related full chromosomes of hundreds of megabases in length</li>
+</ul>
+</p>
+
+<h3>Parameters</h3>
+<h4>Minimap2 parameters</h4>
+<ul>
+<li><b>Genome</b> Choose a genome form the list to be used as the reference for mapping. Optionally you can provide your own reference genome as the second input file.</li>
+<li><b>Task type</b> Defines the mapping task to perform.</li>
+</ul>
+<h4>Read group parameters</h4>
+<ul>
+<li><b>Read group identifier</b> If you want to add the read group line into the BAM file, you have to define read group identifier (DI:value).</li>
+<li><b>Sample name for read group</b> The name of the sample sequenced in this read group (SM:value).</li>
+<li><b>Platform for read group</b> With this setting you can platform or technology used to produce the read. Options: ILLUMINA, SOLID, LS454, HELICOS, PACBIO.(PT:value)</li>
+<li><b>Library identifier for read group</b> DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes.(LB:value).</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>This tool uses the Minimap2 aligner that can be used for several different alignment and mapping tasks, including mapping of read sets containing very 
+long reads (e.g. PacBio or Oxford nanopore reads).
+The Minimap2 tool in Chipster is intended only for single-end like mapping tasks where all the reads are in one input file. 
+The reads can be in FASTQ or FASTA format. </p>
+<p>
+The reference sequence set can be defined in two ways. 1) If only one input file is defined, then the reference genome is defined with 
+the <b>Genome</b> parameter that lists the genomes available in Chipster. 
+2) Alternatively, you can define a second input file that will be used as the reference sequence set. The reference sequence file should 
+be in fasta format. If the reference sequence file is provided by the user, then the value of Genome parameter is ignored.
+</p>
+<p>
+User must always select a task type from the task menu. Assigning a task type takes if use a predefined set of minimap2 parameters that 
+are optimal for a specific analysis task. The predefined task types include:
+
+<table border="2">
+<tr><td>Task</td><td>Mimimap2 parameters used</td><td>
+<tr><td>Map PacBio subreads to a genome</td><td>-ax map-pb</td></tr>
+<tr><td>Map Oxford nanopore reads to a genome</td><td>-ax map-ont</td></tr>
+<tr><td>Map PacBio Iso-seq or traditional cDNA to reference</td><td>-ax splice -uf</td></tr>
+<tr><td>Map Nanopore 2D cDNA-seq data to reference</td><td>-ax splice</td></tr>
+<tr><td>Map Nanopore Direct RNA-seq to reference</td><td>-ax splice -uf -k14</td></tr>
+<tr><td>Mapping against SIRV control reference</td><td>-ax splice --splice-flank=no </td></tr>
+<tr><td>Aligning assembly to reference genome</td><td>-ax asm5</td></tr>
+</table>
+
+As there is no obvious default analysis for which Minimap2 is used for, the task type does not have 
+any default value. In stead this value must be defined by the user for each Minimap2 task.
+
+ 
+
+
+<h3>Output</h3>
+
+<ul>
+<li>alignment.bam: alignments sorted by chromosomal coordinates.</li>
+<li>alignment.bam.bai: index file for the alignments</li>
+<li>minimap2.log: Information about the minimap2 run.</li>
+</ul>
+
+<h3>References</h3>
+
+<p>This tool uses the Minimap2 aligner. Please cite the article:</p>
+<li><a href="https://arxiv.org/pdf/1708.01492.pdf">Heng Li: Minimap2: pairwise alignment for nucleotide sequences</a></li>
+
+<p>Please see the <a href="https://lh3.github.io/minimap2/minimap2.html">Minimap2 manual</A> for more details.</p>
+</body>
+</html>
