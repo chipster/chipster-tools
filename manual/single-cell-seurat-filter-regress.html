@@ -29,9 +29,12 @@ Start with some values, see how it goes, and run the tool again with different p
 		<li>Minimum average expression level for a variable gene, x min [0.0125]</li>
 		<li>Maximum average expression level for a variable gene, x max [3]</li>
 		<li>Minimum dispersion for a variable gene, y min [0.5]</li>
+		<li>Perform log normalization [YES]</li>
+		<li>Scale factor in the log normalization [10000]</li>
+		<li>Filter out cell cycle differences [no]</li>
 	
 </ul>
-	The bottom three parameters (x min, x max, y min) are used to select the variable genes. You might need to run
+	The minimum/maximum average expression and dispersion parameters (x min, x max, y min) are used to select the variable genes. You might need to run
 	the tool again if the initial values don't give a good number of variable genes.
 	
 	</p>
@@ -46,18 +49,19 @@ The tool performs the following three steps. As an input, give the Seurat R-obje
 <ol>
 		<li><b>Filtering</b> is performed in order to remove multiplets and broken cells. 
 		You can use the QC-plots.pdf to estimate the the upper limit for the number of genes per cell and mitochondrial transcript percentage.</li>
-		
+		<br>
 		<li><b>Uninteresting sources of variation are regressed out</b> in order to improve dimensionality reduction and clustering later on.
 		Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
-		This tool regresses on the number of detected molecules per cell as well as the percentage mitochondrial transcript content.
+		This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content</i>.
 		
-		<br>You can also choose to regress out cell cycle differences (default: no filtering).
+		<br><br>You can also choose to regress out <i>cell cycle differences</i> (default: no filtering).
 		By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
 		In some cases this method can impact negatively on the downstream analysis,
 		particularly in differentiating processes,where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
-		As an alternative you can choose <i>regressing out the difference between the G2M and S phase scores</i>. </li>
+		As an alternative you can choose <i>regressing out the difference between the G2M and S phase scores</i>. 
+		<br>For more information about cell cycle filtering, check out the vignette <a href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">here</a>. </li>
 
-
+		<br>
 		<li><b>Genes which are highly variable genes across the single cells are selected</b> for downstream analysis in the next tools.
 		The detection is done by calculating the average expression and dispersion for each gene, 
 		placing these genes into bins, and then calculating a z-score for dispersion within each bin.
