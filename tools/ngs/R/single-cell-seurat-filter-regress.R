@@ -41,14 +41,13 @@ s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
 
-# tää ennen vai jälkeen cell cycle korjausta???
-# HUOM, mingenes nyt kahdessa kohtaa...? pitäiskö olla erillinen parametri vai häh....? 200
+# before or after cell cycle fixing?
 seurat_obj <- FilterCells(object = seurat_obj, subset.names = c("nGene", "percent.mito"), 
-		low.thresholds = c(mingenes, -Inf), high.thresholds = c(genecountcutoff, mitocutoff)) #Huom, parametrit muuttuu...???
+		low.thresholds = c(mingenes, -Inf), high.thresholds = c(genecountcutoff, mitocutoff)) 
 
 if (lognorm=="T") {
 	seurat_obj <- NormalizeData(object = seurat_obj, normalization.method = "LogNormalize", 
-			scale.factor = totalexpr) # olisko näille hyvä kuitenkin olla ne parametrit?
+			scale.factor = totalexpr) 
 }
 # Detection of variable genes across the single cells
 # Identifies genes that are outliers on a 'mean variability plot'. 
@@ -63,7 +62,7 @@ seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, di
 # plot.both	= Plot both the scaled and non-scaled graphs.
 length(x = seurat_obj@var.genes)
 seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
-textplot(paste("Number of variable genes: \n", length(seurat_obj@var.genes)), cex=0.8)
+textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(seurat_obj@var.genes)), halign="center", valign="center", cex=0.8)
 
 if( filter.cell.cycle != "no" ) {
 	
