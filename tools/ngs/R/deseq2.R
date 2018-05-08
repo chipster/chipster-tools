@@ -19,6 +19,7 @@
 # EK 10.2.2016, Added alpha to results()
 # ML 4.5.2016, Changed the direction of the comparison when more than 2 groups
 # ML+SS 18.10.2016, Fixed plotting & rounding and formatting when more than 2 groups
+# ML+SS 08.05.2018, comparison possible also when >9 groups
 
 #column <-"group"
 #ad_factor<-"EMPTY"
@@ -83,13 +84,18 @@ if (length(unique(groups)) == 2) {
 } else if (length(unique(groups)) > 2){
 	test_results <- dds
 	res <- NULL
-	# going through all the pairwise comparisons (i vs j)
+	# going through all the pairwise comparisons (i vs j):
 	conditions <- colData(test_results)$condition 
-	for (i in levels(conditions)[-(nlevels(conditions))])  {
-		for (j in levels(conditions)[-(1:i)]) {
-			pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j,i))) # note: j,i => j-i
-			if(is.null(res)) res <- pairwise_results else  res <- cbind(res, pairwise_results)
-			results_name <- c(results_name, paste(i,"_vs_", j, sep=""))
+	# i goes from the first group to the one before last:
+	for (i in 1: (nlevels(conditions)-1) )  {
+		# j goes through all groups starting from i:
+		for  (j in (i+1) : nlevels(conditions) ) {
+			i_label <- levels(conditions)[i]
+			j_label <- levels(conditions)[j]
+			pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j_label,i_label))) # note: j,i => j-i
+			# building the table:
+			if(is.null(res)) res <- pairwise_results else  res <-  cbind(res, pairwise_results)
+			results_name <- c(results_name, paste(i_label,"_vs_", j_label, sep=""))
 		}
 	}
 	colnames(res) <- paste(colnames(res), rep(results_name,each=6), sep=".")
