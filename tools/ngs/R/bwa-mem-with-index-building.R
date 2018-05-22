@@ -53,10 +53,25 @@ if (genome.filetype == "tar"){
 	system("echo Extarting tar formatted gemome index file >> bwa.log")
 	system("tar -tf genome.txt >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt | tail -1 ")	
-	bwa.genome <- system(check.command, intern = TRUE)	
-	system("ls -l >> bwa.log")
+	bwa.genome <- system(check.command, intern = TRUE)
+	if ( bwa.genome == "wrong_tar_content"){
+		stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")	
+	}
+	system("ls -l >> bwa.log")	
 # case 2. Fasta file
 }else{
+	#check sequece file type
+	emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+	options(scipen=999)
+	inputfile.to.check <- ("genome.txt")
+	sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
+	sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
+	str.filetype <- system(sfcheck.command, intern = TRUE )
+	
+	if ( str.filetype == "Not an EMBOSS compatible sequence file"){
+		stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
+	}
+	#Do indexing
 	system("echo Calculating gemome indexes >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt -tar| tail -1 ")
 	bwa.genome <- system(check.command, intern = TRUE)
@@ -156,7 +171,7 @@ for (i in 1:length(reads1.list)) {
 }		
 
 system("echo BWA ready >> bwa.log")
-system("ls -l >> bwa.log")
+#system("ls -l >> bwa.log")
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
@@ -202,7 +217,7 @@ if (fileNotOk("reads002.fq")){
 if (paired.end && fileNotOk("reads003.fq")){
 	basename <- paired_name(strip_name(inputnames$reads001.fq), strip_name(inputnames$reads002.fq))
 }
-system("ls -l >> bwa.log")
+#system("ls -l >> bwa.log")
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=3, ncol=2)
 outputnames[1,] <- c("bwa.bam", paste(basename, ".bam", sep =""))

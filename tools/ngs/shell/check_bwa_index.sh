@@ -67,7 +67,8 @@ then
     exit 0
   else
     echo "The tar file does not contain BWA index files"
-    tar -tf genome
+    tar -tf $genome
+    echo "wrong_tar_content" 
     exit 1
   fi 
 fi

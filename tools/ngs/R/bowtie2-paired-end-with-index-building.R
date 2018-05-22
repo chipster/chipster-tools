@@ -10,6 +10,7 @@
 # OUTPUT OPTIONAL unaligned_2.fq
 # OUTPUT OPTIONAL discordant_1.fq
 # OUTPUT OPTIONAL discordant_2.fq
+# OUTPUT OPTIONAL bowtie2_index.tar
 # PARAMETER strategy: "Alignment strategy to use" TYPE [--very-fast: "Very fast", --fast: "Fast", --sensitive: "Sensitive", --very-sensitive: "Very sensitive", --very-fast-local: "Very fast local", -fast-local: "Fast local", --sensitive-local: "Sensitive local", --very-sensitive-local: "Very sensitive local"] DEFAULT --sensitive (The alignment strategy to be used. Bowtie2 can map the reads using end-to-end or local alignments. When local alignment is used, Bowtie2 might "trim" or "clip" some read characters from one or both ends of the alignment if doing so maximizes the alignment score. Bowtie2 uses heuristics for mapping the reads to the reference genome. Several Bowtie2 parameters affect simultaneously both to the sensitivity and to computing time. In Chipster you can choose the sensitivity level from a set of pre-defined parameter combinations that allow you to tune the balance between the computing time and mapping sensitivity.)
 # PARAMETER quality.format: "Quality value format used" TYPE [--phred33: "Sanger - Phred+33", --phred64: "Illumina GA v1.3-1.5 - Phred+64", --ignore-quals: "Fixed 30 for all"] DEFAULT --phred33 (Quality scale used in the fastq-file.)
 # PARAMETER alignment.no: "How many valid alignments are reported per read" TYPE [0: "Best based on the mapping quality", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "All alignments"] DEFAULT 0 (By default, Bowtie2 reports only the best alignment of the read (based on the mapping quality\). Optionally, if there are several, equally good alignments, you can choose how many of them should be reported?)
@@ -41,24 +42,63 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
+genomeFile <- "genome.txt"     
+if (!file.exists(genomeFile)) {
+	stop("CHIPSTER-NOTE: Reference genome is not defined! Please assign value for parameter: Genome to align against")
+}
+
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
 }
 
-# bowtie
+# bowtie2
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
 bowtie2.index.binary <- file.path(chipster.module.path, "shell", "check_bowtie2_index.sh")
 
-# Do indexing
-print("Indexing the genome...")
-system("echo Indexing the genome... > bowtie2.log")
-check.command <- paste ( bowtie2.index.binary, "genome.txt| tail -1 ")
-genome.dir <- system(check.command, intern = TRUE)
-bowtie2.genome <- file.path( genome.dir , "genome.txt")
-#bowtie.genome <- c(file.path(chipster.tools.path, "bowtie2", "indexes" , genome))
 
+genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
+hg_ifn <- ("")
+echo.command <- paste("echo Host genome file type", genome.filetype, " > bowtie2.log")
+system(echo.command)
+
+
+new_index_created <- ("no")
+# case 1. Ready calculated indexes in tar format
+if (genome.filetype == "tar"){
+	system("echo Extarting tar formatted gemome index file >> bowtie2.log")
+	system("tar -tf genome.txt >> bowtie2.log")
+	check.command <- paste( bowtie2.index.binary, "genome.txt | tail -1 ")	
+	bowtie2.genome <- system(check.command, intern = TRUE)	
+	system("ls -l >> bowtie2.log")
+# case 2. Fasta file
+}else{
+   # Do indexing
+	#check sequece file type
+	emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+	options(scipen=999)
+	inputfile.to.check <- ("genome.txt")
+	sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
+	sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
+	str.filetype <- system(sfcheck.command, intern = TRUE )
+	
+	if ( str.filetype == "Not an EMBOSS compatible sequence file"){
+		stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
+	}
+	
+	
+   print("Indexing the genome...")
+   system("echo Indexing the genome... >> bowtie2.log")
+   check.command <- paste ( bowtie2.index.binary, "genome.txt -tar | tail -1 ")
+   bowtie2.genome <- system(check.command, intern = TRUE)
+   cp.command <- paste("cp ", bowtie2.genome, "_bowtie2_index.tar ./bowtie2_index.tar ", sep ="")
+   system(cp.command)
+   system("ls -l >> bowtie2.log")
+   new_index_created <- ("yes")
+}
+echo.command <- paste("echo Internal genome name:", bowtie2.genome, " >> bowtie2.log")
+system(echo.command)
 
 command.start <- paste("bash -c '", bowtie.binary)
 rdg.value <- paste (rdg.open ,rdg.ext , sep=",")
@@ -149,9 +189,15 @@ command.end <- paste("-x", bowtie2.genome, "-1", reads1, "-2",  reads2, "1> alig
 bowtie.command <- paste(command.start, parameters, command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
-echo.command <- paste("echo '", bowtie.command , "' > bowtie2.log" )
+echo.command <- paste("echo '", bowtie.command , "' >> bowtie2.log" )
 system(echo.command)
 system(bowtie.command)
+
+if (file.size("alignment.sam") < 1 ) {	
+	system("cat bowtie2.log")
+	stop("Bowtie2 failed! Check the tail of the ouput below for more information.")
+}	
+
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
@@ -200,13 +246,17 @@ base2 <- strip_name(inputnames[[name2[1]]])
 basename <- paired_name(base1, base2)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=6, ncol=2)
+outputnames <- matrix(NA, nrow=7, ncol=2)
 outputnames[1,] <- c("bowtie2.bam", paste(basename, ".bam", sep =""))
 outputnames[2,] <- c("bowtie2.bam.bai", paste(basename, ".bam.bai", sep =""))
 outputnames[3,] <- c("unaligned_1.fq", paste(base1, "_unaligned.fq", sep=""))
 outputnames[4,] <- c("unaligned_2.fq", paste(base2, "_unaligned.fq", sep=""))
 outputnames[5,] <- c("discordant_1.fq", paste(base1, "_discordant.fq", sep=""))
 outputnames[6,] <- c("discordant_2.fq", paste(base2, "_discordant.fq", sep=""))
+if ( new_index_created == "yes"){
+	hg_ifn <- strip_name(inputnames$genome.txt)
+	outputnames[7,] <- c("bowtie2_index.tar", paste(hg_ifn, "_bowtie2_index.tar", sep =""))
+}
 
 # Write output definitions file
 write_output_definitions(outputnames)
