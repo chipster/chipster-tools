@@ -45,6 +45,7 @@ for (package in cranPackages) {
 
 # Bioconductor packages and their dependencies
 bioconductorPackages = c(
+		"GEOquery"
 )
 		
 for (package in bioconductorPackages) {
