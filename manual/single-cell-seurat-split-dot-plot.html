@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Condition comparison plots </h2>
+
+<h3>Description</h3>
+
+<p>
+This tool gives you plots showing user defined markers/genes across the conditions.
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Markers to plot [CD3D, CREM, HSPH1, SELL, GIMAP5]</li>
+</ul>
+	
+	
+ <h3>Details</h3>
+  
+<p>
+As inputs, give a combined Seurat object. <br>
+</p>
+
+<p>
+Select the markers you want to inspect by listing them in the parameter row. 
+Separate the names with space and comma. As an example, the parameter is
+set to markers "CD3D, CREM, HSPH1, SELL, GIMAP5".
+</p>
+
+<p>
+The "SplitDotPlotGG" can be useful for viewing conserved cell type markers across conditions, 
+showing both the expression level and the percentage of cells in a cluster expressing any given gene.
+</p>
+
+<p>
+Another useful way to visualize the changes in gene expression is with the FeatureHeatmap function. 
+This will display FeaturePlots of the list of given genes, split by the condition.
+</p>
+
+<p>
+For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials for multiple sample analysis</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>split_dot_plot.pdf: Plots showing user defined markers/genes across the conditions </li>
+</ul>
+
+
+
+</body>
+
