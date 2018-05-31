@@ -8,6 +8,7 @@
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots.)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
+# PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT.)
 # RUNTIME R-3.4.3
 
 
@@ -43,6 +44,7 @@ if (file.exists("dropseq.tsv")){
 	
 	# Load the data
 	dat <- Read10X("datadir/")	
+	
 }else{
 	stop(paste('CHIPSTER-NOTE: ', "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
 }
@@ -50,6 +52,12 @@ if (file.exists("dropseq.tsv")){
 # Initialize the Seurat object
 seurat_obj <- CreateSeuratObject(raw.data = dat, min.cells = mincells, min.genes = mingenes, 
 		project = project.name)
+
+
+# For sample detection later on
+if (groupident != "empty") {
+	seurat_obj@meta.data$stim <- groupident
+}
 
 
 # QC
