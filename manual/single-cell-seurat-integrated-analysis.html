@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Integrated analysis </h2>
+
+<h3>Description</h3>
+
+<p>
+This tool aligns the CCA subspaces and performs integrated analysis on the data; t-SNE. clustering and visualisation of the clusters.
+
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Number of CCs to use [20]</li>
+		<li>Resolution for granularity [0.6]</li>
+</ul>
+	
+	
+ <h3>Details</h3>
+  
+<p>
+As inputs, give the combined Seurat object generated with Seurat CCA tool. <br>
+</p>
+
+<p>
+The resolution parameter sets the 'granularity' of the downstream clustering, 
+with increased values leading to a greater number of clusters. 
+Setting this parameter between 0.6-1.2 typically returns good results for single cell datasets of around 3K cells. 
+Optimal resolution often increases for larger datasets -use a value above (below) 1.0 if you want to obtain a larger 
+(smaller) number of communities.
+</p>
+
+<p>
+The number of CCs to use need to be decided by the user based on the CCAplots from the Seurat CCA -tool.
+</p>
+
+<p>
+For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials for multiple sample analysis</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+
+<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
+<li>integrated_plot.pdf: Clustering results in tSNE plot </li>
+</ul>
+
+
+
+</body>
+

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Identify conserved markers and DE genes </h2>
+
+<h3>Description</h3>
+
+<p>
+This tool gives you
+<ul>
+ <li> The cell type markers that are conserved across conditions (conserved_markers.tsv)</li> and 
+<li> The differentially expressed genes between the conditions (de-list.tsv) </li>
+</ul>
+for a given cluster. "Conditions" are the ones determined in the Setup tool with the Sample or group name parameter.
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Name of the cluster [3]</li>
+</ul>
+	
+	
+ <h3>Details</h3>
+  
+<p>
+As inputs, give the combined Seurat object. <br>
+</p>
+
+<p>
+Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter is
+set to cluster "3".
+</p>
+
+
+
+<p>
+For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials for multiple sample analysis</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
+<li>de-list.tsv: Differentially expressed genes between the conditions </li>
+</ul>
+
+
+
+</body>
+
