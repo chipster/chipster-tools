@@ -4,6 +4,7 @@
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT OPTIONAL seurat_obj_combined.Robj
 # RUNTIME R-3.4.3
+# SLOTS 3
 
 
 # SLOTS 3 (when testing at VM this tool required 18.8G)
