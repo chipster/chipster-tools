@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-CCA.R: "BETA Seurat -CCA" (This tool can be used to do the canonical correlation analysis (CCA) and to combine two Seurat objects for later joined analysis.) 
+# TOOL single-cell-seurat-CCA.R: "BETA Seurat -CCA" (This tool can be used to do the canonical correlation analysis CCA and to combine two Seurat objects for later joined analysis.) 
 # INPUT OPTIONAL seurat_obj1.Robj: "Seurat object 1" TYPE GENERIC
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf

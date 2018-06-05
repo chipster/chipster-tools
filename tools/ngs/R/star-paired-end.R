@@ -10,6 +10,7 @@
 # PARAMETER organism: "Genome" TYPE [Homo_sapiens.GRCh38.92] DEFAULT Homo_sapiens.GRCh38.92 (Genome that you would like to align your reads against.)
 # PARAMETER OPTIONAL alignments.per.read: "Maximum alignments per read" TYPE INTEGER DEFAULT 10 (Maximum number of multiple alignments allowed for a read: if exceeded, the read is considered unmapped.)
 # PARAMETER OPTIONAL mismatches.per.pair: "Maximum mismatches per read pair" TYPE INTEGER DEFAULT 10 (Maximum number of mismatches per pair. Use value 999 to switch off this filter.)
+# SLOTS 4
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
