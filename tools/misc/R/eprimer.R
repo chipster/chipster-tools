@@ -110,7 +110,7 @@ if (nchar(reverseinput) > 0 ) {
 emboss.parameters <- paste(emboss.parameters, "-reverseinput", reverseinput)
 }
 emboss.parameters <- paste(emboss.parameters, "-gcclamp", gcclamp)
-emboss.parameters <- paste(emboss.parameters, "-osize", osize)
+emboss.parameters <- paste(emboss.parameters, "-optsize", osize)
 emboss.parameters <- paste(emboss.parameters, "-minsize", minsize)
 emboss.parameters <- paste(emboss.parameters, "-maxsize", maxsize)
 emboss.parameters <- paste(emboss.parameters, "-opttm", opttm)
