@@ -21,6 +21,7 @@ After setting up the R-object (.Robj), some quality control plots are drawn.
 		<li>Project name for plotting [Project_name]</li>
 		<li>Include genes with detected expression in at least this many cells [3]</li>
 		<li>Include cells where at least this many genes are detected [200]</li>
+		<li>Sample or group name [empty]</li>
 </ul>
 	
 	
@@ -57,6 +58,11 @@ These plots can be used to estimate the outliers: the upper limits for number of
 Check the plots and determine these cut-offs, and use them in the filtering & regression tool.
 </p>
 
+<p>
+If you have multiple samples, use the "Sample or group name" parameter to name your sample. 
+These names are used later in the tools meant for multiple sample analysis, such as the CCA and integrated analysis tools.
+Choose short names, like "CTRL", "TREAT".
+</p>
 
 <p>
 For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
