@@ -26,7 +26,8 @@ This doesn't increase the number of detected novel junctions, but it allows more
 </p>
 
 <p>Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. For example the <a href = "http://www.gencodegenes.org/">GENCODE</a> GTF is recommended by the STAR developers. 
-The minimum required overhang is 1 base for annotated junctions and 8 bases for novel junctions. The tool uses STAR's parameter --outFilterType BySJout to filter out alignments which contain spurious novel junctions.
+The minimum required overhang is 1 base for annotated junctions and 8 bases for novel junctions. The tool uses STAR's parameter <i>--outFilterType BySJout</i> to filter out alignments which contain spurious novel junctions.
+It also uses the STAR parameter <i>--outSAMstrandField intronMotif</i> to add XS strand tags to spliced reads (the Cufflinks assembler needs these) and to remove unannotated non-canonical junctions for which the strand cannot be determined.
 </p>
 
 <p>
