@@ -25,14 +25,15 @@ You can generate the lists with the tool "Utilities/ Make a list of filenames". 
 <p>This tool uses the STAR (Spliced Transcripts Alignment to a Reference) aligner, which can accurately detect annotated and novel splice junctions in RNA-seq data. 
 The tool uses a 2-pass mapping process where STAR performs the 1st pass mapping, automatically extracts splice junctions, inserts them into the genome index, and re-maps all reads in the 2nd mapping pass.
 This doesn't increase the number of detected novel junctions, but it allows more spliced reads mapping to novel junctions.
-Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. For example the <a href = "http://www.gencodegenes.org/">GENCODE</a> GTF is recommended by the STAR developers.
 </p>
 
+<p>Chipster offers an Ensembl GTF file to detect annotated splice junctions, but you can also give your own. For example the <a href = "http://www.gencodegenes.org/">GENCODE</a> GTF is recommended by the STAR developers. 
+The minimum required overhang is 1 base for annotated junctions and 8 bases for novel junctions. The tool uses STAR's parameter --outFilterType BySJout to filter out alignments which contain spurious novel junctions.
+</p>
 <p>
 Maximum alignments per read -parameter sets the maximum number of loci the read is allowed to map to. Alignments (all of them) will be output
 only if the read maps to no more loci than this value. Otherwise no alignments will be output, and the read will be counted as "mapped to too many loci" in the Log_final.txt file.
 </p>
-
 <p>
 Maximum number of mismatches per pair -parameter filters out alignments which contain more mismatches than this number. Use value 999 to switch off this filter.
 </p>
