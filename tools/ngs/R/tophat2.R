@@ -23,6 +23,7 @@
 # PARAMETER OPTIONAL min.intron.length: "Minimum intron length" TYPE INTEGER FROM 4 TO 1000 DEFAULT 70 (TopHat2 will ignore donor-acceptor pairs closer than this many bases apart.)
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (TopHat2 will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
 # PARAMETER OPTIONAL no.mixed: "Report only paired alignments" TYPE [yes, no] DEFAULT yes (Only report read alignments if both reads in a pair can be mapped.)
+# PARAMETER OPTIONAL realign: "Realign reads mapped already in earlier mapping steps" TYPE [yes, no] DEFAULT no (Should TopHat map every read in all the mapping steps, meaning transcriptome, genome, and splice junctions, and report the best possible alignment found in any of these steps? This greatly increases the mapping accuracy at the expense of an increase in running time.)
 
 # EK 17.4.2012 added -G and -g options
 # MG 24.4.2012 added ability to use gtf files from Chipster server
@@ -38,6 +39,7 @@
 # AMS 07.01.2015 Removed parameter no.discordant until tophat code fixed, return tophat2.log if tophat-summary.txt not produced
 # ML 15.01.2015 Added the library-type parameter
 # AMS 29.01.2015 Removed optional outputs deletions.bed and insertions.bed
+# EK 13.06.2018 Added the realign parameter
 
 # PARAMETER OPTIONAL no.discordant: "Report only concordant alignments" TYPE [yes, no] DEFAULT yes (Report only concordant mappings.) 
 
@@ -75,6 +77,11 @@ if (mismatches > 2){
 if ( quality.format == "phred64") {
 	command.parameters <- paste(command.parameters, "--phred64-quals")
 }
+
+if ( realign == "yes") {
+	command.parameters <- paste(command.parameters, "--read-realign-edit-dist 0")
+}
+
 
 #if (no.discordant == "yes"){
 #	command.parameters <- paste(command.parameters, "--no-discordant")
