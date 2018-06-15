@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-split-dot-plot.R: "BETA Seurat -Split dot plot" (This tool gives you plots showing user defined markers/genes across the conditions.) 
+# TOOL single-cell-seurat-split-dot-plot.R: "Seurat -Visualize genes with cell type specific responses in two samples" (This tool gives you plots showing user defined markers/genes across the conditions. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma.)
@@ -27,11 +27,6 @@ FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim"
 		max.exp = 3)
 
 dev.off() # close the pdf
-
-
-#write.table(cluster_response, file="de-list.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-# Save the Robj for the next tool
-# save(combined_seurat_obj, file="seurat_obj_combined.Robj")
 
 ## EOF
 
