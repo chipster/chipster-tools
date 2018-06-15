@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-gene-plots.R: "BETA Seurat -Visualize biomarkers" (Visualize selected biomarkers with violin and feature plot.)
+# TOOL single-cell-seurat-gene-plots.R: "Seurat -Visualize biomarkers" (Visualize selected biomarkers with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
