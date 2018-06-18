@@ -27,24 +27,23 @@ Minimap2 is a fast general-purpose alignment program to map DNA and long mRNA se
 <ul>
 <li><b>Read group identifier</b> If you want to add the read group line into the BAM file, you have to define read group identifier (DI:value).</li>
 <li><b>Sample name for read group</b> The name of the sample sequenced in this read group (SM:value).</li>
-<li><b>Platform for read group</b> With this setting you can platform or technology used to produce the read. Options: ILLUMINA, SOLID, LS454, HELICOS, PACBIO.(PT:value)</li>
-<li><b>Library identifier for read group</b> DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes.(LB:value).</li>
+<li><b>Platform for read group</b> With this setting you can indicate the platform or technology used to produce the read. Options: ILLUMINA, SOLID, LS454, HELICOS, PACBIO (PT:value).</li>
+<li><b>Library identifier for read group</b> DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes (LB:value).</li>
 </ul>
 
 <h3>Details</h3>
 
-<p>This tool uses the Minimap2 aligner that can be used for several different alignment and mapping tasks, including mapping of read sets containing very 
+<p>Minimap2 aligner can be used for several different alignment and mapping tasks, including mapping of read sets containing very 
 long reads (e.g. PacBio or Oxford nanopore reads).
-The Minimap2 tool in Chipster is intended only for single-end like mapping tasks where all the reads are in one input file. 
+The Minimap2 tool in Chipster is intended only for single-end type mapping tasks where all the reads are in one input file. 
 The reads can be in FASTQ or FASTA format. </p>
 <p>
-The reference sequence set can be defined in two ways. 1) If only one input file is defined, then the reference genome is defined with 
+The reference sequence set can be defined in two ways. 1) If only one input file is defined, then the reference genome is given with 
 the <b>Genome</b> parameter that lists the genomes available in Chipster. 
-2) Alternatively, you can define a second input file that will be used as the reference sequence set. The reference sequence file should 
-be in fasta format. If the reference sequence file is provided by the user, then the value of Genome parameter is ignored.
+2) Alternatively, you can give the genome as a second input file in fasta format. If the reference sequence file is provided by the user, then the value of the Genome parameter is ignored.
 </p>
 <p>
-User must always select a task type from the task menu. Assigning a task type takes if use a predefined set of minimap2 parameters that 
+User must always select a task type from the task menu. Assigning a task type takes in use a predefined set of minimap2 parameters that 
 are optimal for a specific analysis task. The predefined task types include:
 
 <table border="2">
@@ -58,8 +57,8 @@ are optimal for a specific analysis task. The predefined task types include:
 <tr><td>Aligning assembly to reference genome</td><td>-ax asm5</td></tr>
 </table>
 
-As there is no obvious default analysis for which Minimap2 is used for, the task type does not have 
-any default value. In stead this value must be defined by the user for each Minimap2 task.
+As there is no obvious default analysis for Minimap2, the task type does not have 
+any default value. Instead this value must be defined by the user for each Minimap2 task.
 
  
 
