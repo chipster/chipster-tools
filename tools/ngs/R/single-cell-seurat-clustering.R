@@ -9,16 +9,17 @@
 # PARAMETER OPTIONAL minpct: "Min fraction of cells where a cluster marker gene is expressed" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expression)
 # PARAMETER OPTIONAL threshuse: "Differential expression threshold for a cluster marker gene" TYPE DECIMAL DEFAULT 0.25 (Limit testing to genes which show, on average, at least X-fold difference, in log-scale, between the two groups of cells. Increasing thresh.use speeds up the function, but can miss weaker signals.)
 # PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [bimod, roc, t, tobit, poisson, negbinom] DEFAULT bimod (Denotes which test to use. Seurat currently implements \"bimod\" \(likelihood-ratio test for single cell gene expression, McDavid et al., Bioinformatics, 2011, default\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), and \"tobit\" \(Tobit-test for differential gene expression, as in Trapnell et al., Nature Biotech, 2014\), \"poisson\", and \"negbinom\". The latter two options should only be used on UMI datasets, and assume an underlying poisson or negative-binomial distribution.)
-# PARAMETER OPTIONAL onlypos: "Only positive changes" TYPE [TRUE, FALSE] DEFAULT FALSE (Only return positive markers if set to TRUE.)
 # RUNTIME R-3.4.3
 
 
 # max.cells.per.ident ?
 # min.pct = 0.25, thresh.use = 0.25
+# removed: PARAMETER OPTIONAL onlypos: "Only positive changes" TYPE [TRUE, FALSE] DEFAULT FALSE (Only return positive markers if set to TRUE.)
 
 
 # 09.06.2017 ML
 # 2018-01-11 ML update Seurat version to 2.2.0
+# 2018-07-25 ML removed onlypos -parameter
 
 library(Seurat)
 library(dplyr)
@@ -46,7 +47,7 @@ TSNEPlot(seurat_obj)
 dev.off() # close the pdf
 
 # Find all markers 
-markers <- FindAllMarkers(seurat_obj, only.pos = onlypos, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25
+markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
 write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 # Save the Robj for the next tool
