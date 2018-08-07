@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-This tool produces rarefaction and rank-abundance curves and RDA plot, and compares the diversity or abundance between groups of samples using several ANOVA-type of analyses. 
+This tool produces several visualizations (rarefaction and rank-abundance curves and an RDA plot), and compares the diversity between groups of samples using several ANOVA-type of analyses. 
 It also performs indicator species analysis and contribution diversity approach.
 </p>
 
@@ -29,9 +29,9 @@ The analyses are based on the functionality of the R packages vegan, rich, biodi
 <p>
 <b>Visual data analysis</b></p> 
 <ul>
-<li>Rarefaction curve allows you to assess how much the sampling efficiency affects the number of observed taxa or OTUs. Did you sample both groups equally well?</li>
+<li>Rarefaction curve allows you to assess how much the sampling efficiency affects the number of observed taxa or OTUs, e.g. did you sample both groups equally well?</li>
 <li>Rank-abundance curve displays the relative species abundances or evenness across the groups.</li>
-<li>Redundancy Analysis (RDA) ordination plot shows if the explanatory variable group explains the difference between samples (in species abundance). 
+<li>Redundancy Analysis (RDA) ordination plot shows if the explanatory variable (group) explains the difference between samples. 
 Before running the RDA analysis, the species abundance values are standardized using the method specified by the parameter.</li>
 </ul> 
 
@@ -47,15 +47,15 @@ Before running the RDA analysis, the species abundance values are standardized u
 	Non-euclidean distances between objects and group centroids are handled by reducing the original distances to principal coordinates. This procedure has been used also as a means of assessing beta diversity.</li>
 	</ul>
 </li> 
-<li>Contribution diversity approach, splits the observed "species" (taxa or OTUs) diversity to 
+<!--  <li>Contribution diversity approach, splits the observed "species" (taxa or OTUs) diversity to 
 	<ul>
-	<li>alpha = diversity inside one ecosystem (one group of samples) </li>
-	<li>beta = change of diversity between two ecosystems (two groups of samples)</li>
-	<li>gamma = overall diversity of the whole region across ecosystems (all samples in the experiment) </li>
+	<li>alpha = sample biological diversity </li>
+	<li>beta = between sample relatedness</li>
+	<li>gamma = overall diversity of all the samples </li>
 	</ul> 
 	Additive diversity partitioning deals with the relation of mean alpha and the total (gamma) diversity. Sample specific contribution is measured by contribution diversity components. 
 	A sample that has e.g. many unique species will contribute more to gamma diversity than another sample with the same number of species, but all of which common.
-</li>
+</li>-->
 <li>Indicator species analysis tries to find the taxa that differentiates the groups best
 	<ul>
 	<li>Indicator species analysis using the Dufrene-Legendre method tries to find the "species" (taxa or OTUs) that have a high specificity to a single group. Calculates the indicator value (fidelity and relative abundance) of species.</li>
