@@ -11,7 +11,9 @@
 This tool generates a count table and a phenodata file, which you can use to assign samples to different experimental groups 
 for further statistical analysis. 
 The input for the tool is a read taxonomy assignment file that can be created with the tool 
-<a href="/manual/mothur-classifyseqs.html">Classify sequences to taxonomic units</a>, and a group file.
+<a href="/manual/mothur-classifyseqs.html">Classify sequences to taxonomic units</a>, and a group file. 
+NOTE that the tool doesn't currently take Mothur's count_table file, so the taxons are shown only for the representative sequences (unless you have classified all sequences). 
+This will be improved in September 2018, when we will also add the Mothur pipeline for producing OTU-table (dist.seqs – cluster, using opticlust - make.shared - classify.otu).
 </p>
 
 <h3>Parameters</h3>
