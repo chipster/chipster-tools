@@ -39,7 +39,7 @@ binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 # Creating the count table
 	tab<-table(dat2$V2.x, dat2$newnames)
 	tab2<-as.data.frame.matrix(tab)
-	chiptype<-c("metagenomics")
+	chiptype<-c("NGS")
 	
 # Writing the table to disk
 	write.table(tab, "counttable.tsv", col.names=T, row.names=T, sep="\t", quote=FALSE)
