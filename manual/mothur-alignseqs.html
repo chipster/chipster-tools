@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta file of 16S rRNA sequences, aligns them to the Silva 16S rRNA reference alignment template.
+Given a fasta file of 16S rRNA sequences, aligns them to the Silva 16S rRNA reference alignment template.  You can use either the full reference or just the bacterial subsection of it. You can also provide your own reference alignment fasta.
 When using the Silva reference you should be aware of their <a href="https://www.arb-silva.de/silva-license-information">dual-use license</a>: Silva is free for academic users, but commercial users need to purchase a license.
 </p>
 
@@ -21,8 +21,7 @@ When using the Silva reference you should be aware of their <a href="https://www
 
 <h3>Details</h3>
 <p> 
-Sequences in are aligned, one by one, against the Silva 16S rRNA reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment.
- You can use either the full reference or just the bacterial subsection of it. You can also provide your own reference alignment fasta. 
+Sequences in are aligned, one by one, against the Silva 16S rRNA reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment. 
 Please indicate the region of the reference alignment that your amplified region corresponds to, as this will improve the overall alignment quality and save space. 
 </p> 
 <p>
