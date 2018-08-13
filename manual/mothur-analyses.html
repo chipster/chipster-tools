@@ -8,7 +8,8 @@
 <h3>Description</h3>
 
 <p>
-Compares the diversity or abundance between groups of samples using several ANOVA-type of analyses. 
+This tool produces several visualizations (rarefaction and rank-abundance curves and an RDA plot), and compares the diversity between groups of samples using several ANOVA-type of analyses. 
+It also performs indicator species analysis and contribution diversity approach.
 </p>
 
 
@@ -21,37 +22,47 @@ Compares the diversity or abundance between groups of samples using several ANOV
 <h3>Details</h3>
 <p>
 This tool takes two input files: a count table that contains the counts of the identified species or operational taxonomic units (OTUs) in each sample, and a phenodata
-table that specifies the grouping of the samples. Statistical tests only work for a dataset that contains 2-3 groups.
-The analyses are performed using the functionality offered by the R packages vegan, rich, biodiversityR, pegas and labdsv. 
+table that describes the grouping of the samples. Statistical tests only work for datasets which contain 2-3 groups.
+The analyses are based on the functionality of the R packages vegan, rich, biodiversityR, pegas and labdsv. 
 </p>
 
 <p>
-The tool produces rank abundance curves and rarefaction curves for all groups, and an RDA ordination plot. 
+<b>Visual data analysis</b></p> 
 <ul>
-<li>Rank abundance curve is used for displaying the relative species abundances or species evenness across the groups.</li>
-<li>Rarefaction curve allows one to assess how much the sampling efficiency affects the number of observed taxa or OTUs.</li>
-<li>RDA ordination plot shows how certain environmental factors (here groups) affect the species abundance. Note that RDA might not be suitable for your particular data set, but at the moment it is the only ordination technique the tool offers.</li>
+<li>Rarefaction curve allows you to assess how much the sampling efficiency affects the number of observed taxa or OTUs, e.g. did you sample both groups equally well?</li>
+<li>Rank-abundance curve displays the relative species abundances or evenness across the groups.</li>
+<li>Redundancy Analysis (RDA) ordination plot shows if the explanatory variable (group) explains the difference between samples. 
+Before running the RDA analysis, the species abundance values are standardized using the method specified by the parameter.</li>
 </ul> 
-
-Before running the RDA analysis, the species abundance values are standardized using the method specified by the parameter. The standardized values
- are also used for running the following ANOVA type of statistical analyses, which compare the diversity or abundance between the groups: 
-<ul>
-<li>Permutational Multivariate Analysis of Variance Using Distance Matrices</li>
-<li>Analysis of Molecular Variance</li>
-<li>Multivariate homogeneity of groups dispersions (variances)</li>
-</ul> 
-</p>
 
 <p>
-Contributed diversity analysis splits the observed "species" (taxa or OTUs) diversity to 
+<b>Statistical data analysis</b></p>
 <ul>
-<li>alpha = diversity inside one ecosystem (one group of samples) </li>
-<li>beta = change of diversity between two ecosystems (two groups of samples)</li>
-<li>gamma = overall diversity of the whole region across ecosystems (all samples in the experiment) </li>
+<li>ANOVA type of statistical analyses, which compare the diversity or standardized abundance between the groups (for more information, please see the references below): 
+	<ul>
+	<li>Analysis of Molecular Variance (AMOVA). This is based on a euclidean distance matrix between sequences. Distances (or their variance, to be more exact) are partitioned according to a grouping variable 
+	into a within group and between groups variance (this is similar to standard one-way ANOVA).</li>
+	<li>Permutational Multivariate Analysis of Variance Using Distance Matrices.</li>
+	<li>Multivariate homogeneity of groups dispersions (variances). The betadisper is a multivariate analogue of Levene's test for homogeneity of variances. 
+	Non-euclidean distances between objects and group centroids are handled by reducing the original distances to principal coordinates. This procedure has been used also as a means of assessing beta diversity.</li>
+	</ul>
+</li> 
+<!--  <li>Contribution diversity approach, splits the observed "species" (taxa or OTUs) diversity to 
+	<ul>
+	<li>alpha = sample biological diversity </li>
+	<li>beta = between sample relatedness, change of diversity between samples</li>
+	<li>gamma = overall diversity of all the samples </li>
+	</ul> 
+	Additive diversity partitioning deals with the relation of mean alpha and the total (gamma) diversity. Sample specific contribution is measured by contribution diversity components. 
+	A sample that has e.g. many unique species will contribute more to gamma diversity than another sample with the same number of species, but all of which common.
+</li>-->
+<li>Indicator species analysis tries to find the taxa that differentiates the groups best
+	<ul>
+	<li>Indicator species analysis using the Dufrene-Legendre method tries to find the "species" (taxa or OTUs) that have a high specificity to a single group. Calculates the indicator value (fidelity and relative abundance) of species.</li>
+	<li>Indicator Species Analysis Minimizing Intermediate Occurrences calculates the degree of the species being present or absent in a certain group of samples.</li>
+	</ul>
+</li>
 </ul> 
-Indicator species analysis using the Dufrene-Legendre method tries to find the "species" (taxa or OTUs) that have a high specificity to a single group. 
-Indicator Species Analysis Minimizing Intermediate Occurrences calculates the degree of the species being present or absent in a certain group of samples.
-</p>
 
 
 <h3>Output</h3>
@@ -65,6 +76,12 @@ Indicator Species Analysis Minimizing Intermediate Occurrences calculates the de
 
 <h3>References</h3>
 <p>Consult the R packages vegan, rich, biodiversityR, pegas and labdsv for more details about the methods.</p>
+Excoffier, L., Smouse, P. E. and Quattro, J. M. (1992) Analysis of molecular variance inferred from metric distances among DNA haplotypes: application to human mitochondrial DNA restriction data. Genetics, 131, 479-491.<br>
+Anderson, M.J. 2001. A new method for non-parametric multivariate analysis of variance. Austral Ecology, 26: 32-46.<br>
+Anderson, M.J. (2006) Distance-based tests for homogeneity of multivariate dispersions. Biometrics 62, 245-253.<br>
+Lu, H. P., Wagner, H. H. and Chen, X. Y. 2007. A contribution diversity approach to evaluate species diversity. Basic and Applied Ecology, 8, 1-12.<br>
+Dufrene, M. and Legendre, P. 1997. Species assemblages and indicator species: the need for a flexible asymmetrical approach. Ecol. Monogr. 67(3):345-366.<br>
+Aho, K., D.W. Roberts, and T.W.Weaver. 2008. Using geometric and non-geometric internal evaluators to compare eight vegetation classification methods. J. Veg. Sci. In press.<br>
 
 </body>
 

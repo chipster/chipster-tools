@@ -51,7 +51,7 @@ if (fileOk("reads1.txt", 0) && fileOk("reads2.txt", 0)){
 }
 
 # command
-command <- paste(star.binary, "--genomeDir", path.star.index, "--readFilesIn", reads1, reads2, "--outSAMtype BAM SortedByCoordinate", "--twopassMode Basic", "--runThreadN", chipster.threads.max, "--alignSJoverhangMin 8", "--alignSJDBoverhangMin 1", "--outFilterType BySJout", "--outFilterMultimapNmax", alignments.per.read, "--outFilterMismatchNmax", mismatches.per.pair)
+command <- paste(star.binary, "--genomeDir", path.star.index, "--readFilesIn", reads1, reads2, "--outSAMtype BAM SortedByCoordinate", "--twopassMode Basic", "--runThreadN", chipster.threads.max, "--alignSJoverhangMin 8", "--alignSJDBoverhangMin 1", "--outSAMstrandField intronMotif", "--outFilterType BySJout", "--outFilterMultimapNmax", alignments.per.read, "--outFilterMismatchNmax", mismatches.per.pair)
 # Use GTF if provided
 if (fileOk("annotation.gtf")){
 	command <- paste(command, "--sjdbGTFfile annotation.gtf")

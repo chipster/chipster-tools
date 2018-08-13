@@ -15,6 +15,40 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 13.6.2018: What is new in Chipster 3.13</h2>
+ 	<p>
+		<b>Summary:</b> This version contains reference data updates and new tools for single cell RNA-seq data analysis and alignment of long reads (e.g. PacBio or Oxford Nanopore). The single cell tools allow for example the identification of common cell types across conditions and comparison of the different conditions. 
+		The example session NGS_single_cell_RNAseq_Seurat_integrated_analysis demonstrates how these tools can be used and it follows the original <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorial</a>.
+	</p>
+	
+	<ul>
+		<li><div class=header-item>New analysis tools</div>		
+			<ul>
+				<li><a href="minimap2.html">Alignment / Minimap2 for mapping reads to genomes</a> Aligns long (e.g. PacBio or Oxford Nanopore) reads to genome. You can also give your own reference genome is fasta format.</li>
+				<li><a href="single-cell-seurat-CCA.html">Single cell RNA-seq / Seurat - Combine two samples and perform CCA</a> Combines Seurat objects of two samples for integrated analysis and performs CCA.</li>
+				<li><a href="single-cell-seurat-integrated-analysis.html">Single cell RNA-seq / Seurat - Integrated analysis of two samples</a> Aligns the CCA subspaces and performs integrated analysis on the data.</li>
+				<li><a href="single-cell-seurat-diffexp-samples.html">Single cell RNA-seq / Seurat - Find conserved cluster markers and DE genes in two samples</a> Lists the cell type markers that are conserved across the two conditions, and the differentially expressed genes between the two conditions for a user defined cluster.</li>
+				<li><a href="single-cell-seurat-split-dot-plot.html">Single cell RNA-seq / Seurat - Visualize genes with cell type specific responses in two samples</a> Plots user defined markers/genes across the conditions.</li>
+			</ul> 
+		</li>	 
+		<li><div class=header-item>Improvements to analysis tools</div>		
+			<ul>
+				<li><a href="single-cell-seurat-filter-regress.html">Single cell RNA-seq / Seurat -Filtering, regression and detection of variable genes</a> You can now regress out cell cycle differences.</li>
+				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> Improved handling of tar package of 10X Genomics output files.</li>
+				<li>BWA aligners with own genome output now the genome index as a tar file and allow you to use it as input in subsequent alignment runs to save time.</li>
+			</ul> 
+		</li>
+		<li><div class=header-item>Updates to reference genomes and analysis packages</div>
+			<ul>
+				<li>Reference genomes have been updated to Ensembl v92.</li>
+				<li>miRBase has been updated to v22.</li>
+				<li>All Seurat-based tools for single cell RNA-seq have been updated to Seurat v2.3 and R v3.4.3.</li>
+				<li>TagCleaner has been updated to v0.16.</li>
+			</ul>
+		</li>		
+	</ul>
+	<hr />
+
 <h2>Version update 25.10.2017: What is new in Chipster 3.12</h2>
  	<p>
 		<b>Summary:</b> The tool categories "Single cell RNA-seq" and "16S rRNA sequencing" have undergone a major overhaul with new tools and improvements based on the feedback kindly provided by 

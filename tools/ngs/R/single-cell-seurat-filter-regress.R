@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-filter-regress.R: "BETA Seurat -Filtering, regression and detection of variable genes" (This tool filters out cells and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to average expression and dispersion with the bottom three parameters is an iterative process. Start with some values, see how it goes and run the tool again with different parameters.) 
+# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filtering, regression and detection of variable genes" (This tool filters out cells and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to average expression and dispersion with the bottom three parameters is an iterative process. Start with some values, see how it goes and run the tool again with different parameters.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
@@ -61,8 +61,9 @@ seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, di
 # do.text	= Add text names of variable genes to plot (default is TRUE)
 # plot.both	= Plot both the scaled and non-scaled graphs.
 length(x = seurat_obj@var.genes)
-seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
 textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(seurat_obj@var.genes)), halign="center", valign="center", cex=0.8)
+seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
+
 
 if( filter.cell.cycle != "no" ) {
 	

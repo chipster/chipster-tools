@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-integrated-analysis.R: "BETA Seurat -Integrated analysis" (This tool aligns the CCA subspaces and performs integrated analysis on the data.) 
+# TOOL single-cell-seurat-integrated-analysis.R: "Seurat -Integrated analysis of two samples" (This tool aligns the CCA subspaces and performs integrated analysis on the data. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL seurat_obj_combined.Robj
@@ -6,12 +6,6 @@
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.6 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # RUNTIME R-3.4.3
 
-
-
-
-# PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
-# OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL de-list.tsv
 
 
 # 2018-16-05 ML
@@ -45,30 +39,7 @@ p1 <- TSNEPlot(data.combined, do.return = T, pt.size = 0.5, group.by = "stim")
 p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = 0.5)
 plot_grid(p1, p2)
 
-
 dev.off() # close the pdf
-
-
-## Differentially expressed genes across conditions -pitää antaa mistä klusterista tämä halutaan.
-#cluster <- "3"
-#data.combined@meta.data$celltype.stim <- paste0(data.combined@ident, "_", 
-#		data.combined@meta.data$stim)
-#data.combined <- StashIdent(data.combined, save.name = "celltype")
-#data.combined <- SetAllIdent(data.combined, id = "celltype.stim")
-#
-#lvls <- levels(as.factor(data.combined@meta.data$stim))
-#ident1 <- paste(cluster,"_", lvls[1], sep="")
-#ident2 <- paste(cluster,"_", lvls[2], sep="")
-#cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, 
-#		print.bar = FALSE)
-## head(clustser_response, 15)
-## show_rows <- 20
-#cluster_response_rows <- head(cluster_response) #, show_rows)
-#
-## write.table(cbind(sig[,1:ndat], round(sig[, (ndat+1):(nmax-2)], digits=2), format(sig[, (nmax-1):nmax], digits=4, scientific=T)), file="de-list-deseq2.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-#write.table(cluster_response_rows, file="de-list.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-#
-#diff_exp.tsv
 
 # Save the Robj for the next tool
 save(data.combined, file="seurat_obj_combined.Robj")

@@ -1,16 +1,16 @@
-# TOOL minimap2.R: "Minimap2 for mapping reads to genomes" (This tool aligns reads to genomes using the Minimap2 algorithm. Minimap2 is deverloped especially for long reads. If just one input file is given, then the tool assumes that it contains the reads to be aligned and that the refreces genome is selected with the Genome parameter. If two input files are given the other one will be used as the file contang query sequences and the other as containg the reference sequeces.  The input reads file can be in FASTQ or FASTA format. Reference genome should be in fasta format.. Results are sorted and indexed BAM files. .)
+# TOOL minimap2.R: "Minimap2 for mapping reads to genomes" (Aligns reads to genomes using the Minimap2 algorithm. Minimap2 is developed especially for long reads. If just one input file is given, then the tool assumes that it contains the reads to be aligned and that the reference genome is selected with the Genome parameter. If two input files are given, the second one is assumed to contain the reference genome.  The input reads file can be in FASTQ or FASTA format. Reference genome should be in fasta format. Results are sorted and indexed BAM files.)
 # INPUT reads.fq : "Reads" TYPE GENERIC
 # INPUT OPTIONAL genome.fasta: "Reference genome" TYPE GENERIC
 # OUTPUT OPTIONAL minimap2.bam 
 # OUTPUT OPTIONAL minimap2.bam.bai 
 # OUTPUT OPTIONAL minimap2.log 
-# PARAMETER OPTIONAL chipster_genome: "Genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bowtie2/default .fa" (Genome that you would like to align your reads against. This parameter is ignored if you provide yout own refrence genome as the second input file.)
-# PARAMETER OPTIONAL task: "Task type" TYPE [ map-pb: "Map PacBio subreads to a genome", map-ont: "Map Oxford nanopore reads to a genome", splice_2: "Map PacBio Iso-seq or traditional cDNA to reference", splice: "Map Nanopore 2D cDNA-seq data to reference",  splice_3: "Map Nanopore Direct RNA-seq to reference",  splice_4: "Mapping against SIRV control reference", asm5: "Aligning assembly to reference genome" ] DEFAULT none (Mapping or aligment task to be performed)
+# PARAMETER OPTIONAL chipster_genome: "Genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bowtie2/default .fa" (Genome that you would like to align your reads against. This parameter is ignored if you provide your own reference genome as the second input file.)
+# PARAMETER OPTIONAL task: "Task type" TYPE [ map-pb: "Map PacBio subreads to a genome", map-ont: "Map Oxford Nanopore reads to a genome", splice_2: "Map PacBio Iso-seq or traditional cDNA to reference", splice: "Map Nanopore 2D cDNA-seq data to reference",  splice_3: "Map Nanopore Direct RNA-seq to reference",  splice_4: "Mapping against SIRV control reference", asm5: "Aligning assembly to reference genome" ] DEFAULT none (Mapping or aligment task to be performed)
 # PARAMETER OPTIONAL rgid: "Read group identifier" TYPE STRING (Read group identifier. If you want to add the read group line in the BAM file, you have to give this information.)
 # PARAMETER OPTIONAL rgsm: "Sample name for read group" TYPE STRING (The name of the sample sequenced in this read group. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rgpl: "Platform for read group" TYPE [ none: "Not defined", ILLUMINA, SOLID, LS454, HELICOS, PACBIO] DEFAULT none (Platform\/technology used to produce the read. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rglb: "Library identifier for read group" TYPE STRING (DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
-# PARAMETER OPTIONAL save_log: "Collect a log file about the Mimimap run" TYPE [yes: Yes, no: No] DEFAULT yes (Collect a log file about the Mimimap2 run.)
+# PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT yes (Collect a log file about the Mimimap2 mapping process.)
 
 # KM 6.3.2018
 
@@ -28,7 +28,15 @@ source(file.path(chipster.common.path, "bam-utils.R"))
 
 # minimap2
 #minimap2.binary <- file.path(chipster.tools.path, "minimap2", "minimap2")
-minimap2.binary <- file.path("/opt/chipster/tools_local/minimap2-2.9_x64-linux/minimap2")
+#minimap2.binary <- file.path("chipster.tools.path,/opt/chipster/tools_local/minimap2-2.9_x64-linux/minimap2")
+
+conda.path <- file.path( chipster.tools.path,"miniconda3","conda_execute")
+conda.env <- ("chipster_tools")
+conda.tool <- ("minimap2")
+conda.def <- paste(conda.env, "/", conda.tool, sep="")
+minimap2.binary <- paste(conda.path, conda.def )
+
+
 samtools.binary <- file.path(chipster.tools.path, "samtools-1.2", "samtools")
 
 # User should allways decide the analysis mode

@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-samples.R: "BETA Seurat -Identify conserved markers and DE genes" (This tool lists the cell type markers that are conserved across conditions, and the differentially expressed genes between the conditions for a user defined cluster.) 
+# TOOL single-cell-seurat-diffexp-samples.R: "Seurat -Find conserved cluster markers and DE genes in two samples" (This tool lists the cell type markers that are conserved across the two conditions, and the differentially expressed genes between the two conditions for a user defined cluster. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL conserved_markers.tsv
@@ -6,12 +6,6 @@
 # RUNTIME R-3.4.3
 
 
-
-
-# PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
-# OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL integrated_plot.pdf
-# OUTPUT OPTIONAL seurat_obj_combined.Robj
 
 # 2018-16-05 ML
 
@@ -46,7 +40,6 @@ cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident
 # cluster_response_rows <- head(cluster_response) #, show_rows)
 
 write.table(cluster_response, file="de-list.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-
 
 # Save the Robj for the next tool
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")

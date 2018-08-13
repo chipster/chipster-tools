@@ -4,8 +4,8 @@
 # OUTPUT OPTIONAL contigs.summary.tsv
 # OUTPUT OPTIONAL contigs.fasta.gz
 # OUTPUT OPTIONAL contigs.groups
-# OUTPUT OPTIONAL contig-numbers.txt
-# OUTPUT OPTIONAL samples-files.txt
+# OUTPUT OPTIONAL contig.numbers.txt
+# OUTPUT OPTIONAL samples.fastqs.txt
 
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
@@ -50,7 +50,7 @@ if (fileOk("input_list")){
 	system(command)
 	system("cat *.logfile > log.tmp")
 	# Remove full paths from the Mothur-generated input list to make it more readable
-	system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples-files.txt")
+	system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples.fastqs.txt")
 }
 
 # Run Mothur make.contigs
@@ -64,7 +64,7 @@ system("mv fastq.trim.contigs.fasta contigs.fasta")
 system("mv fastq.contigs.groups contigs.groups")
 
 # Post process output
-system("sed -n  '/Group count: / ,/Output File/p' log2.txt > contig-numbers.txt")
+system("sed -n  '/Group count: / ,/Output File/p' log2.txt > contig.numbers.txt")
 
 # The summary file:
 write("summary.seqs(fasta=contigs.fasta)", "summary.mth", append=F)
