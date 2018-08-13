@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL adapter.file: "Adapter set" TYPE [none: "none", TruSeq2-SE.fa: "TruSeq2-SE", TruSeq3-SE.fa: "TruSeq3-SE", TruSeq2-PE.fa: "TruSeq2-PE", TruSeq3-PE.fa: "TruSeq3-PE", TruSeq3-PE-2.fa: "TruSeq3-PE-2", NexteraPE-PE.fa: "NexteraPE-PE"] DEFAULT none (Cut adapter and other Illumina-specific sequences from the read. You will also need to provide cutting parameters.)
 # PARAMETER OPTIONAL illuminaclip: "Adapter clipping parameters" TYPE STRING (You will need to supply minimum three parameters: <seed mismatches>:<palindrome clip threshold>:<simple clip threshold>. There are also two optional parameters that affect palindrome mode only: <min adapter length> and <keep both reads>. Value for <keep both reads> is given as true/false. Values are separated by colons, e.g. 2:30:10 or 2:30:10:1:true)
 # PARAMETER OPTIONAL phred.scale: "Quality scale used in the fastq file" TYPE [phred33: "phred + 33", phred64: "phred + 64"] DEFAULT phred33 (Quality scale used in the fastq file.)
-# PARAMETER OPTIONAL leading: "Minumum quality to keep a leading base" TYPE INTEGER (Cut bases off the start of a read, if below a threshold quality.)
+# PARAMETER OPTIONAL leading: "Minimum quality to keep a leading base" TYPE INTEGER (Cut bases off the start of a read, if below a threshold quality.)
 # PARAMETER OPTIONAL trailing: "Minumum quality to keep a trailing base" TYPE INTEGER (Cut bases off the end of a read, if below a threshold quality.)
 # PARAMETER OPTIONAL crop: "Number of bases to keep from the start" TYPE INTEGER (Cut the read to a specified length.)
 # PARAMETER OPTIONAL headcrop: "Number of bases to remove from the start" TYPE INTEGER (Cut the specified number of bases from the start of the read.)
