@@ -141,3 +141,5 @@ system("gzip aligned.fasta")
 system("grep -A 10 Start log_raw.txt > aligned-summary2.tsv")
 # Remove one tab to get the column naming look nice:
 system("sed 's/^		/	/' aligned-summary2.tsv > aligned-summary.tsv")
+
+
