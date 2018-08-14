@@ -78,6 +78,7 @@
 	</category>
 	
 	<category name="Utilities" color="#629a9b">
+		<tool>fixed_text_conversions.R</tool>
 	    <tool>taxonomy_tool.R</tool>
     	<tool>emboss_files.R</tool>
 	    <tool module="common">select_columns.R</tool> 

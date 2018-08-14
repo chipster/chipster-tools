@@ -208,6 +208,7 @@
 	    <tool>mothur-sffinfo.R</tool>
 	    <tool>mothur-fastqinfo.R</tool>	      
     	<tool>merge-fasta-qual.R</tool>
+    	<tool module="misc">fixed_text_conversions.R</tool>
 	</category>
 	
 	<category name="CNA-seq" color="#83010b">
