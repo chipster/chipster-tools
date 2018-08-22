@@ -202,7 +202,8 @@
 		<tool>mothur-precluster.R</tool>		
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
-		<tool>mothur-classify-counttable.R</tool>	
+		<tool>mothur-classify-counttable.R</tool>
+		<tool>mothur-classify-counttable_2018-07-12.R</tool>	
 	    <tool>mothur-analyses.R</tool>
 	    <tool>mothur-summaryseqs.R</tool>
 	    <tool>mothur-sffinfo.R</tool>
