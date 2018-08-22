@@ -5,12 +5,13 @@
 # OUTPUT OPTIONAL classification-summary.tsv
 # OUTPUT OPTIONAL picked.fasta 
 # OUTPUT OPTIONAL picked.count_table
-# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL picked-summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db"] DEFAULT bacterial (Silva reference set to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 # PARAMETER OPTIONAL toremove: "Remove lineages" TYPE STRING DEFAULT empty (List of lineages to remove. You must wrap your taxon in quotes so mothur knows to ignore the semicolon characters. For example try Chloroplast-mitochondria-Archaea-Eukaryota-unknown.)
 
 # OUTPUT counttable.tsv: counttable.tsv
+# OUTPUT OPTIONAL log.txt
 
 
 # EK 18.06.2013
@@ -18,6 +19,7 @@
 # ML 21.12.2016 update (new Silva version)
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 23.3.2017 detach the last steps to another tool (mothur-classify-counttable.R), add iters-parameter and remove.lineage option
+# EK 22.8.2018 added processors-parameter and made link in the working directory to the reference files
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -27,25 +29,34 @@ unzipIfGZipFile("a.fasta")
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 
 if (reference=="bacterial"){
-	# new bacterial references:
+	# bacterial references (Silva v102):
 	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
 	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 	taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+	# copy to working dir because mothur generates more files to the same directory
+	system(paste("ln -s ", template.path, " silva.bacteria.fasta"))
+	system(paste("ln -s ", taxonomy.path, " silva.bacteria.silva.tax"))
+	template.path <- "silva.bacteria.fasta"
+	taxonomy.path <- "silva.bacteria.silva.tax"
 }
 if (reference=="full"){
-	# new whole references:
+	# whole references (Silva v123):
 	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
 	template.path <- c(file.path(data.path, "silva.nr_v123.align")) 
 	taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
+	# copy to working dir because mothur generates more files to the same directory
+	system(paste("ln -s ", template.path, " silva.nr_v123.align"))
+	system(paste("ln -s ", taxonomy.path, " silva.nr_v123.tax"))
+	template.path <- "silva.nr_v123.align"
+	taxonomy.path <- "silva.nr_v123.tax"
 }
 
 # batch file
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 if (file.exists("a.count_table")){
-	write(paste("classify.seqs(fasta=a.fasta, count=a.count_table, iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
-	
+	write(paste("classify.seqs(fasta=a.fasta, count=a.count_table, processors=", chipster.threads.max,", iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 }else {
-	write(paste("classify.seqs(fasta=a.fasta, iters=", iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
+	write(paste("classify.seqs(fasta=a.fasta, processors=", chipster.threads.max,", iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	
 }
 
@@ -101,9 +112,9 @@ if (toremove!="empty"){
 	
 	# write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	if (file.exists("picked.count_table")){
-		write(paste("classify.seqs(fasta=picked.fasta, count=picked.count_table, iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
+		write(paste("classify.seqs(fasta=picked.fasta, count=picked.count_table, processors=", chipster.threads.max,", iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	}else {
-		write(paste("classify.seqs(fasta=picked.fasta, iters=", iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)	
+		write(paste("classify.seqs(fasta=picked.fasta, processors=", chipster.threads.max,", iters=", iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)	
 	}
 	
 	# command
@@ -126,18 +137,18 @@ if (toremove!="empty"){
 		system("mv picked.silva.wang.tax.summary classification-summary.tsv")
 	}
 	
-#	# batch file 3 -summary 
-#	write("summary.seqs(fasta=picked.fasta, count=picked.count_table)", "summary.mth", append=F)
-#	
-#	# command 3
-#	command3 <- paste(binary, "summary.mth", "> log_raw.txt")
-#	# run
-#	system(command3)
-#	
-#	# Post process output
-#	system("grep -A 10 Start log_raw.txt > picked-summary.tsv")
-#	# Remove one tab to get the column naming look nice:
-#	system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
+	# batch file 3 -summary 
+	write("summary.seqs(fasta=picked.fasta, count=picked.count_table)", "summary.mth", append=F)
+	
+	# command 3
+	command3 <- paste(binary, "summary.mth", "> log_raw.txt")
+	# run
+	system(command3)
+	
+	# Post process output
+	system("grep -A 10 Start log_raw.txt > picked-summary2.tsv")
+	# Remove one tab to get the column naming look nice:
+	system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
 	
 }
 	
