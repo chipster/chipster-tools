@@ -12,13 +12,16 @@
 
 # EK 05.06.2013
 # ML 21.12.2016 update (new Silva version)
-# ML 4.1.2016 new, whole Silva reference
+# ML 4.1.2017 new, whole Silva reference
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 15.3.2017 add pcr.seqs options
+# EK 22.8.2018 add processors parameter to pcr.seqs and align.seqs
+
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
-
-
 # OUTPUT log.txt
+
+
+
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -50,14 +53,14 @@ if (!is.na(start) | !is.na(end)){
 	pcrseqs.options <- ""
 	if (reference=="own"){
 		if (file.exists("reference.fasta")) {
-		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=reference.fasta, keepdots=F", sep="")
+		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=reference.fasta, processors=", chipster.threads.max,", keepdots=F", sep="")
 		} else{
 		stop('CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!')
 		}
 	} else {
 		# if using full or bacterial silva reference:
 		#pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=", template.path, sep="")	
-		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=template.fasta, keepdots=F", sep="")	
+		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=template.fasta, processors=", chipster.threads.max,", keepdots=F", sep="")	
 	}
 
 	if (!is.na(start)){
@@ -110,7 +113,7 @@ if (!is.na(start) | !is.na(end)){
 
 
 # batch file 2 -align.seqs
-write(paste("align.seqs(fasta=reads.fasta, reference=custom.reference.fasta)", sep=""), "batch.mth", append=F)
+write(paste("align.seqs(fasta=reads.fasta, processors=", chipster.threads.max,", reference=custom.reference.fasta)", sep=""), "batch.mth", append=F)
 # write(paste("align.seqs(fasta=reads.fasta, template=", template.path, ")", sep=""), "batch.mth", append=F)
 
 # command
