@@ -15,7 +15,7 @@
 # ML 4.1.2017 new, whole Silva reference
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 15.3.2017 add pcr.seqs options
-# EK 22.8.2018 add processors parameter to pcr.seqs and align.seqs
+# EK 22.8.2018 updated Silva to v132, add processors parameter to pcr.seqs and align.seqs
 
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
 # OUTPUT log.txt
@@ -39,7 +39,7 @@ if (reference=="bacterial"){
 if (reference=="full"){
 	# new whole references:
 	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
-	template.path <- c(file.path(data.path, "silva.nr_v123.align")) 
+	template.path <- c(file.path(data.path, "silva.nr_v132.align")) 
 }
 
 # create a symlink, because otherwise the modified reference will go to the reference folder

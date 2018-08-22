@@ -5,7 +5,6 @@
 # OUTPUT OPTIONAL classification-summary.tsv
 # OUTPUT OPTIONAL picked.fasta 
 # OUTPUT OPTIONAL picked.count_table
-# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL picked-summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db"] DEFAULT bacterial (Silva reference set to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
@@ -21,7 +20,7 @@
 # ML 21.12.2016 update (new Silva version)
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 23.3.2017 detach the last steps to another tool (mothur-classify-counttable.R), add iters-parameter and remove.lineage option
-# EK 22.8.2018 added processors-parameter and made link in the working directory to the reference files
+# EK 22.8.2018 updated Silva to v 132, added processors-parameter and made link in the working directory to the reference files
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -42,15 +41,15 @@ if (reference=="bacterial"){
 	taxonomy.path <- "silva.bacteria.silva.tax"
 }
 if (reference=="full"){
-	# whole references (Silva v123):
+	# whole references (Silva v132):
 	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
-	template.path <- c(file.path(data.path, "silva.nr_v123.align")) 
-	taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
+	template.path <- c(file.path(data.path, "silva.nr_v132.align")) 
+	taxonomy.path <- c(file.path(data.path, "silva.nr_v132.tax"))
 	# copy to working dir because mothur generates more files to the same directory
-	system(paste("ln -s ", template.path, " silva.nr_v123.align"))
-	system(paste("ln -s ", taxonomy.path, " silva.nr_v123.tax"))
-	template.path <- "silva.nr_v123.align"
-	taxonomy.path <- "silva.nr_v123.tax"
+	system(paste("ln -s ", template.path, " silva.nr_v132.align"))
+	system(paste("ln -s ", taxonomy.path, " silva.nr_v132.tax"))
+	template.path <- "silva.nr_v132.align"
+	taxonomy.path <- "silva.nr_v132.tax"
 }
 
 # batch file
@@ -80,8 +79,8 @@ system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
 
 # Postprocess output
 if (reference=="full"){
-	system("mv a.nr_v123.wang.taxonomy sequences-taxonomy-assignment.txt")
-	system("mv a.nr_v123.wang.tax.summary classification-summary.tsv")
+	system("mv a.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
+	system("mv a.nr_v132.wang.tax.summary classification-summary.tsv")
 }
 if (reference=="bacterial"){
 	system("mv a.silva.wang.taxonomy sequences-taxonomy-assignment.txt")
@@ -131,8 +130,8 @@ if (toremove!="empty"){
 	
 	# Postprocess output
 	if (reference=="full"){
-		system("mv picked.nr_v123.wang.taxonomy sequences-taxonomy-assignment.txt")
-		system("mv picked.nr_v123.wang.tax.summary classification-summary.tsv")
+		system("mv picked.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
+		system("mv picked.nr_v132.wang.tax.summary classification-summary.tsv")
 	}
 	if (reference=="bacterial"){
 		system("mv picked.silva.wang.taxonomy sequences-taxonomy-assignment.txt")
