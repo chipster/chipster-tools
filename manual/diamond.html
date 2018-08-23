@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Sequence similarity search with DIAMOND</h2>
+
+<h3>Description</h3>
+
+<p>
+DIAMOND is sequence similarity search tool for protein sequence. It performs a BLAST like sequence database search that is nearly 
+as sensitive as BLAST but significantly faster. In Chipster this tool can be use to search matching sequences from SwissProt, TrEMBL and NR databses or 
+from a protein sequence file provided by the user.
+</p>
+
+<h3>Parameters</h3>
+
+<li><b>Maximum number of hits</b> Maximum number of hits to reports for on e query sequence. </li>
+<li><b>e-value</b> e-value limit to select significant hits</li>
+<li><b>Output format</b> Options: BLAST pairwise, BLAST XML, BLAST tabular, DIAMOND alignment archive, SAM </li>
+<li><b>Report unaligned sequences</b> Create a sequence file containing those query sequences that did not had any matches. </li>
+<li><b>Search mode</b> The Fast mode was mainly designed for short reads. For longer sequences, sensitive or more-sensitive modes are recommended.
+<li><b>Matrix</b> Scoring matrix to be used</li>
+<li><b>Collect a log file</b></li>
+
+<h3>Details</h3>
+
+<p>
+<li>The runtime of the program is not linear in the size of the query file and it is much more efficient for large query files than for smaller ones.</li>
+<li>Low complexity masking is applied to the query and reference sequences by default. Masked residues appear in the output as X.</li>
+<li>More detailed description about DIAMOND search tool can be found form the <a href="https://github.com/bbuchfink/diamond">DIAMOND github page</a>.</li>
+</p>
+
+
+
+
+</body>
+
