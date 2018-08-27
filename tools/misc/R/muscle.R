@@ -83,7 +83,7 @@ command.full <- paste(muscle.binary, " -in sequence ", muscle.options, " 2>>alig
 system(command.full)
 
 if (njtree == "yes"){
-	command.full <- paste(conda.path, conda.def, "-maketree -in", outfile, " -out newick_tree.txt -cluster neighborjoining 2>>alignment.log" )
+	command.full <- paste(muscle.binary, "-maketree -in", outfile, " -out newick_tree.txt -cluster neighborjoining 2>>alignment.log" )
 	system(command.full)
 	
 }

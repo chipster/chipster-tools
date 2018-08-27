@@ -1,4 +1,4 @@
-# TOOL diamond.R: "Sequence similarity search with DIAMOND" ( Sequence similarity search with DIAMONDsoftware.)
+# TOOL diamond.R: "DIMAOND protein sequence similarity search" ( Sequence similarity search with DIAMONDsoftware.)
 # INPUT sequence: "Query sequences" TYPE GENERIC 
 # INPUT OPTIONAL reference: "Reference proteins" TYPE GENERIC 
 # OUTPUT OPTIONAL diamond.txt
@@ -15,6 +15,7 @@
 # PARAMETER OPTIONAL smode: "Search mode" TYPE [ fast: "Fast", sensitive: "Sensitive", moresensitive: "More sensitive" ] DEFAULT fast (Search mode)
 # PARAMETER OPTIONAL matrix: "Matrix" TYPE [BLOSUM45: "BLOSUM45", BLOSUM50: "BLOSUM50", BLOSUM62: "BLOSUM62", BLOSUM80: "BLOSUM80", BLOSUM90: "BLOSUM90"] DEFAULT BLOSUM62 (Weight matrix assigns a score for aligning pairs of residues, and determines overall alignment score. Experimentation has shown that the BLOSUM62 matrix is among the best for detecting most weak protein similarities. For particularly long and weak alignments, the BLOSUM45 matrix may prove superior. For proteins, shorter than 85 residues, the BLOSUM80 matrix may provide better hits"  )
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
+# PARAMETER OPTIONAL keep_index: "Save the DIAMOND index" TYPE [yes: yes, no: no] DEFAULT no (Write the DIAMOND indexes of the refrence paritein set to a file for re-use.)
 
 use_remote_index <- ("yes")
 keep_index <- ("no")
@@ -102,15 +103,34 @@ if (use_remote_index == "yes"){
   db_in_chipster <- paste( "/tmp/diamond", dbfile, sep="/" )
 
   #Check if download is needed
+  dl.path <- paste(  index_url, dbfile, sep="/" )	
+  md5file <- paste(dbfile, "md5", sep=".")
+  md5.path <- paste( dl.path, "md5", sep="." )
   if(!file.exists(db_in_chipster)){
   #Download the indexex
-	dl.path <- paste( index_url, dbfile, sep="/" )
 	wget.command <- paste("p=$(pwd); cd /tmp/diamond; wget", dl.path, "&>>${p}/diamond.log" )
 	system(wget.command)
+	wget.command <- paste("p=$(pwd); cd /tmp/diamond; wget", md5.path, "&>>${p}/diamond.log" )
+	system(wget.command)
   }else{
-	system("echo Database already downloaded >> diamond.log")
-	system("ls -l /tmp/diamond >> diamond.log")
-  }
+	#check md5 file
+    wget.command <- paste("wget -O md5test ", md5.path, "&>>${p}/diamond.log" )	
+	system(wget.command)
+	diff.command <- paste("diff md5test /tmp/diamond/", md5file, " | wc -l ", sep="")
+	md5comparison <- system(diff.command,  intern = TRUE )
+	if( md5comparison == 0){
+		system("echo Database already downloaded >> diamond.log")
+		system("ls -l /tmp/diamond >> diamond.log")
+		system("rm -f md5test")
+	}else{
+		system("rm -f md5test")
+		rm.command <- paste( "rm -f /tmp/diamond/", dbfile, "*", sep="")
+		system(rm.command)
+	    wget.command <- paste("p=$(pwd); cd /tmp/diamond; wget", dl.path, "&>>${p}/diamond.log" )	
+	    system("echo New version of the database downloaded >> diamond.log")
+	    system("ls -l /tmp/diamond >> diamond.log")
+    }
+}
   
 }  
 
@@ -161,7 +181,6 @@ if ( outformat == "100" ){
 if ( outformat == "101" ){
 	outfile <- ("diamond.sam")
 }
-#muscle.binary <- paste(conda.path, "conda_muscle")
 
 diamond.options <- paste( method, " --query sequence --out ", outfile," --outfmt ", outformat," -p 4 -d ", db, sep="")
 if( use_remote_index == "yes"){
