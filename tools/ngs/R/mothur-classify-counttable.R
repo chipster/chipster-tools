@@ -2,8 +2,8 @@
 # INPUT OPTIONAL picked.count_table: "Mothur count file" TYPE MOTHUR_COUNT
 # INPUT OPTIONAL sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
 # OUTPUT counttable.tsv: counttable.tsv
-# OUTPUT counttable_transposed.tsv: counttable_transposed.tsv
 # OUTPUT META phenodata.tsv: phenodata.tsv
+# OUTPUT OPTIONAL counttable_transposed.tsv: counttable_transposed.tsv
 # PARAMETER OPTIONAL cutlevel: "Cutting level for taxonomic names" TYPE INTEGER FROM 0 TO 9 DEFAULT 0 (Cutting level for taxonomic names for the count table. 0 means retain full names, e.g. Bacteria;Actinobacteria;Actinobacteria;Coriobacteridae;Coriobacteriales;Coriobacterineae;Coriobacteriaceae;Slackia;unclassified.)
 # PARAMETER OPTIONAL rarefy: "Rarefy counts" TYPE [yes, no] DEFAULT no (Should sequence counts be rarefied? Normally your samples have different number of sequences. If you select yes here, the count table will be subsampled so that each sample has the same number of sequences as your smallest sample.)
 # PARAMETER OPTIONAL binarytable: "Produce binary table instead of counts" TYPE [yes, no] DEFAULT no (Should the actual sequence counts be converted to 0 and 1, indicating the presence and absence of species? This kind of binary table is typically used when studying the co-occurence of species.)
