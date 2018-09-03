@@ -2,15 +2,19 @@
 # INPUT OPTIONAL picked.count_table: "Mothur count file" TYPE MOTHUR_COUNT
 # INPUT OPTIONAL sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
 # OUTPUT counttable.tsv: counttable.tsv
+# OUTPUT counttable_transposed.tsv: counttable_transposed.tsv
 # OUTPUT META phenodata.tsv: phenodata.tsv
 # PARAMETER OPTIONAL cutlevel: "Cutting level for taxonomic names" TYPE INTEGER FROM 0 TO 9 DEFAULT 0 (Cutting level for taxonomic names for the count table. 0 means retain full names, e.g. Bacteria;Actinobacteria;Actinobacteria;Coriobacteridae;Coriobacteriales;Coriobacterineae;Coriobacteriaceae;Slackia;unclassified.)
-# PARAMETER OPTIONAL binarytable: "Produce binary table instead of counts" TYPE [yes, no] DEFAULT no (Should the actual sequence counts be converted to 0 and 1, indicating the presence and absence of species? This kind of binary table is typically used when studying the co-presence of species.)
+# PARAMETER OPTIONAL rarefy: "Rarefy counts" TYPE [yes, no] DEFAULT no (Should sequence counts be rarefied? Normally your samples have different number of sequences. If you select yes here, the count table will be subsampled so that each sample has the same number of sequences as your smallest sample.)
+# PARAMETER OPTIONAL binarytable: "Produce binary table instead of counts" TYPE [yes, no] DEFAULT no (Should the actual sequence counts be converted to 0 and 1, indicating the presence and absence of species? This kind of binary table is typically used when studying the co-occurence of species.)
 
 
 # OUTPUT OPTIONAL log.txt
 
 # ML 23.3.2017 detach from mothur-classify.seqs
 # JT 25.8.2018 change the way counttable is generated, add the binary option
+# EK 30.8.2018 added transposed count table compatible with edgeR and DESeq2 tools
+# JT 31.8.2018 added rarefy parameter
 
 library(reshape2)
 
@@ -53,6 +57,18 @@ b <- dcast(a, Group.2~Group.1)
 rownames(b) <- b$Group.2
 b <- b[,-1]
 
+# Rarefying
+#if(nmax == 0 & rarefy == "yes") {  # we can add nmax parameter later
+#	nmax <- min(rowSums(b))
+#}
+if(rarefy == "yes") {
+	nmax <- min(rowSums(b))
+	btmp <- apply(b, 1, function(x) rep(colnames(b), times=x))
+	btmp <- lapply(btmp, function(x) sample(x, size=nmax, replace=F))
+	btmp <- lapply(btmp, function(x) table(factor(x, levels=colnames(b))))
+	b <- t(do.call(cbind, btmp))
+}
+
 # Produce binary table (0/1) showing only if a specie is present or absent, rather than the actual sequence counts        
 if(binarytable == "yes") {
 	b[b>0] <- 1
@@ -63,6 +79,14 @@ tab <- b
 # Writing the table to disk
 write.table(tab, "counttable.tsv", col.names=T, row.names=T, sep="\t", quote=FALSE)
 write.table(data.frame(sample=rownames(tab), chiptype="NGS", group=rep("", length(rownames(tab)))), "phenodata.tsv", col.names=T, row.names=F, sep="\t", quote=F)
-	
+
+# Transpose the table, add "chip." to column names to make it compatible with DESeq2 and edgeR tools, and write it to disk.
+# Rarefied counts should not be used in DEseq2 and edgeR, so we don't make the transposed table if the rarefy=yes.
+if(rarefy == "no") {
+	oldtable <- read.table("counttable.tsv",header = TRUE, sep = "\t", check.names = FALSE)
+	newtable <- t(oldtable)
+	colnames(newtable) <- paste("chip", colnames(newtable), sep = ".")
+	write.table(newtable, "counttable_transposed.tsv", quote = FALSE, sep = "\t")
+}
 	
 	
