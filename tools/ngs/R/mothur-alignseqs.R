@@ -1,11 +1,11 @@
-# TOOL mothur-alignseqs.R: "Align sequences to reference" (Given a fasta file of 16S rRNA sequences, this tool aligns them to the Silva reference alignment available on the server. Please indicate the region of the reference alignment that your amplified region corresponds to. If you opt to use your own reference alignment, please make sure the input fasta files are correctly assigned in the parameters section! The speed of this tool depends on several things, please see the manual. This tool is based on the Mothur tool align.seqs.)
+# TOOL mothur-alignseqs.R: "Align sequences to reference" (Given a fasta file of 16S rRNA sequences, this tool aligns them to the Silva reference alignment available on the server, or to a reference alignment supplied by the user. Please indicate the region of the reference alignment that your amplified region corresponds to. If you opt to use your own reference alignment, please make sure the input fasta files are correctly assigned in the parameters section! The speed of this tool depends on several things, please see the manual. This tool is based on the Mothur tool align.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL reference.fasta: "Custom reference FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT OPTIONAL custom.reference.summary.tsv
-# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db", own: "own reference in fasta format"] DEFAULT bacterial (Reference sequences to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v132", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
 
@@ -15,7 +15,7 @@
 # ML 4.1.2017 new, whole Silva reference
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 15.3.2017 add pcr.seqs options
-# EK 22.8.2018 updated Silva to v132, add processors parameter to pcr.seqs and align.seqs
+# EK 22.8.2018 updated Silva to v132, added processors parameter to pcr.seqs and align.seqs
 
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
 # OUTPUT log.txt
@@ -31,16 +31,17 @@ unzipIfGZipFile("reads.fasta")
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 
 
-if (reference=="bacterial"){
+#if (reference=="bacterial"){
 	# new bacterial references:
-	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
-	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
-}
-if (reference=="full"){
+#	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+#	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+#}
+#if (reference=="full"){
 	# new whole references:
-	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+	# data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "silva"))
 	template.path <- c(file.path(data.path, "silva.nr_v132.align")) 
-}
+#}
 
 # create a symlink, because otherwise the modified reference will go to the reference folder
 system(paste("ln -s ", template.path, " template.fasta", sep=""))
@@ -58,7 +59,7 @@ if (!is.na(start) | !is.na(end)){
 		stop('CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!')
 		}
 	} else {
-		# if using full or bacterial silva reference:
+		# if using silva reference on the server:
 		#pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=", template.path, sep="")	
 		pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=template.fasta, processors=", chipster.threads.max,", keepdots=F", sep="")	
 	}
@@ -86,7 +87,7 @@ if (!is.na(start) | !is.na(end)){
 
 }
 	
-	# rename the ref file as custom.reference.fasta 
+	# rename the reference file as custom.reference.fasta 
 	if (file.exists("template.pcr.fasta")) {
 			system("mv template.pcr.fasta custom.reference.fasta")
 	}	else if (file.exists("reference.pcr.fasta")) {
