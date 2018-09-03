@@ -17,7 +17,8 @@
 # ML 14.3.2017 reference option (bacterial vs whole) + count-file output
 # AMS 30.5.2017 added the possibility to use more processors
 # EK 1.6.2017 added the vsearch method. Removed the input option for names and groups file as we use the more compact count file now for duplicates.
-# EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
+# EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta, because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
+# EK 3.9.2018 updated silva.gold path
 
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
@@ -42,7 +43,7 @@ if (method=="uchime"){
 
 if (reference=="bacterial"){
 	# bacterial reference in fasta format
-	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva-gold"))
 	reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
 	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
 }
