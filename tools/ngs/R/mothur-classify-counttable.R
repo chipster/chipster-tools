@@ -89,4 +89,5 @@ if(rarefy == "no") {
 	write.table(newtable, "counttable_transposed.tsv", quote = FALSE, sep = "\t")
 }
 	
+
 	
