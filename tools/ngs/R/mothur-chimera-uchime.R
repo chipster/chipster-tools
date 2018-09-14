@@ -17,7 +17,8 @@
 # ML 14.3.2017 reference option (bacterial vs whole) + count-file output
 # AMS 30.5.2017 added the possibility to use more processors
 # EK 1.6.2017 added the vsearch method. Removed the input option for names and groups file as we use the more compact count file now for duplicates.
-# EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
+# EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta, because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
+# EK 3.9.2018 updated silva.gold path
 
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
@@ -42,7 +43,7 @@ if (method=="uchime"){
 
 if (reference=="bacterial"){
 	# bacterial reference in fasta format
-	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva-gold"))
 	reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
 	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
 }
@@ -52,6 +53,8 @@ if (reference=="bacterial"){
 #	reference.path <- c(file.path(data.path, "silva.gold.align")) 
 #	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
 #}
+
+# count_table is used only when reference=none. Note that chimera.vsearch doesn't work if you give it both the reference and the count_table.
 if (reference=="none"){
 	if (file.exists("a.count_table")){
 		chimera.options <- paste(chimera.options, " count=a.count_table", sep="")
@@ -108,7 +111,7 @@ if (method=="uchime"){
 }
 
 # batch file 2 for Remove.seqs to remove chimeric sequences from the fasta file and the count file
-# According to the manual should add dups=F so that dereplicate=T from the previous step would take effect, bu this seems to work correctly without (a sequence that was assigned as chimeric in one sample would be removed only from that sample). According to the manual this requires names file, but count file seems to work as well.
+# According to the manual should add dups=F so that dereplicate=T from the previous step would take effect, but this seems to work correctly without (a sequence that was assigned as chimeric in one sample would be removed only from that sample). According to the manual this requires names file, but count file seems to work as well.
 if (reference=="none"){
 	write("remove.seqs(accnos=denovoaccnosfile, fasta=a.fasta, count=a.count_table)", "remove.mth", append=F)
 } else {

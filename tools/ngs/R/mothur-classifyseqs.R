@@ -6,12 +6,12 @@
 # OUTPUT OPTIONAL picked.fasta 
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
-# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db"] DEFAULT bacterial (Silva reference set to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v132"] DEFAULT silva (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
-# PARAMETER OPTIONAL toremove: "Remove lineages" TYPE STRING DEFAULT empty (List of lineages to remove. You must wrap your taxon in quotes so mothur knows to ignore the semicolon characters. For example try Chloroplast-mitochondria-Archaea-Eukaryota-unknown.)
+# PARAMETER OPTIONAL toremove: "Remove lineages" TYPE STRING DEFAULT empty (List of lineages to remove. You must wrap your taxon in quotes so Mothur knows to ignore the semicolon characters. For example try Chloroplast-mitochondria-Archaea-Eukaryota-unknown.)
 
-# OUTPUT counttable.tsv: counttable.tsv
 # OUTPUT OPTIONAL log.txt
+# PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db"] DEFAULT bacterial (Silva reference set to use.)
 
 
 # EK 18.06.2013
@@ -19,7 +19,7 @@
 # ML 21.12.2016 update (new Silva version)
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 23.3.2017 detach the last steps to another tool (mothur-classify-counttable.R), add iters-parameter and remove.lineage option
-# EK 22.8.2018 added processors-parameter and made link in the working directory to the reference files
+# EK 22.8.2018 updated Silva to v 132, removed bacterial option, added processors-parameter, and made link in the working directory to the reference files
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -28,27 +28,28 @@ unzipIfGZipFile("a.fasta")
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 
-if (reference=="bacterial"){
+# if (reference=="bacterial"){
 	# bacterial references (Silva v102):
-	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
-	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
-	taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
+# 	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
+# 	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
+# 	taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
 	# copy to working dir because mothur generates more files to the same directory
-	system(paste("ln -s ", template.path, " silva.bacteria.fasta"))
-	system(paste("ln -s ", taxonomy.path, " silva.bacteria.silva.tax"))
-	template.path <- "silva.bacteria.fasta"
-	taxonomy.path <- "silva.bacteria.silva.tax"
-}
-if (reference=="full"){
-	# whole references (Silva v123):
-	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
-	template.path <- c(file.path(data.path, "silva.nr_v123.align")) 
-	taxonomy.path <- c(file.path(data.path, "silva.nr_v123.tax"))
+# 	system(paste("ln -s ", template.path, " silva.bacteria.fasta"))
+# 	system(paste("ln -s ", taxonomy.path, " silva.bacteria.silva.tax"))
+# 	template.path <- "silva.bacteria.fasta"
+# 	taxonomy.path <- "silva.bacteria.silva.tax"
+# }
+if (reference=="silva"){
+	# Silva v132
+	# data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "silva"))
+	template.path <- c(file.path(data.path, "silva.nr_v132.align")) 
+	taxonomy.path <- c(file.path(data.path, "silva.nr_v132.tax"))
 	# copy to working dir because mothur generates more files to the same directory
-	system(paste("ln -s ", template.path, " silva.nr_v123.align"))
-	system(paste("ln -s ", taxonomy.path, " silva.nr_v123.tax"))
-	template.path <- "silva.nr_v123.align"
-	taxonomy.path <- "silva.nr_v123.tax"
+	system(paste("ln -s ", template.path, " silva.nr_v132.align"))
+	system(paste("ln -s ", taxonomy.path, " silva.nr_v132.tax"))
+	template.path <- "silva.nr_v132.align"
+	taxonomy.path <- "silva.nr_v132.tax"
 }
 
 # batch file
@@ -71,22 +72,22 @@ system(command)
 # a.silva.wang.tax.summary
 
 
-## testi
+## test
 write("get.current()", "batch2.mth", append=F)
 system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
 
 
 # Postprocess output
-if (reference=="full"){
-	system("mv a.nr_v123.wang.taxonomy sequences-taxonomy-assignment.txt")
-	system("mv a.nr_v123.wang.tax.summary classification-summary.tsv")
+if (reference=="silva"){
+	system("mv a.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
+	system("mv a.nr_v132.wang.tax.summary classification-summary.tsv")
 }
-if (reference=="bacterial"){
-	system("mv a.silva.wang.taxonomy sequences-taxonomy-assignment.txt")
-	system("mv a.silva.wang.tax.summary classification-summary.tsv")
-}
+# if (reference=="bacterial"){
+# 	system("mv a.silva.wang.taxonomy sequences-taxonomy-assignment.txt")
+# 	system("mv a.silva.wang.tax.summary classification-summary.tsv")
+# }
 
-# batch file 2: remove lineage, if the taxons to remove were listed:
+# batch file 2: remove lineage, if the taxons to remove were listed
 
 if (toremove!="empty"){
 
@@ -102,13 +103,13 @@ if (toremove!="empty"){
 	# run
 	system(command)   
 	
-	# Output files: a.pick.fasta   a.pick.count_table
+	# Rename output files
 	system("mv a.pick.fasta picked.fasta")
 	if (file.exists("a.pick.count_table")){ 
 		system("mv a.pick.count_table picked.count_table")
 	}
 	
-	# batch file 3 -classify.seqs again:
+	# batch file 3: classify.seqs again
 	
 	# write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	if (file.exists("picked.count_table")){
@@ -122,22 +123,22 @@ if (toremove!="empty"){
 	# run
 	system(command)
 	
-	## testi
+	## test
 	write("get.current()", "batch2.mth", append=F)
 	system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
 	
 	
 	# Postprocess output
-	if (reference=="full"){
-		system("mv picked.nr_v123.wang.taxonomy sequences-taxonomy-assignment.txt")
-		system("mv picked.nr_v123.wang.tax.summary classification-summary.tsv")
+	if (reference=="silva"){
+		system("mv picked.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
+		system("mv picked.nr_v132.wang.tax.summary classification-summary.tsv")
 	}
-	if (reference=="bacterial"){
-		system("mv picked.silva.wang.taxonomy sequences-taxonomy-assignment.txt")
-		system("mv picked.silva.wang.tax.summary classification-summary.tsv")
-	}
+	# if (reference=="bacterial"){
+	# 	system("mv picked.silva.wang.taxonomy sequences-taxonomy-assignment.txt")
+	# 	system("mv picked.silva.wang.tax.summary classification-summary.tsv")
+	# }
 	
-	# batch file 3 -summary 
+	# batch file 3: summary 
 	write("summary.seqs(fasta=picked.fasta, count=picked.count_table)", "summary.mth", append=F)
 	
 	# command 3
