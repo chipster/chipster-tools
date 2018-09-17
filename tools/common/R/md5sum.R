@@ -1,11 +1,11 @@
-# TOOL md5sum.R: "Calculate an md5sums " (Calculates md5sum for a file. Alternativevely if two files are given: file and corresponding md5 sum file, checks that the file matches the MD5 checksum)
+# TOOL md5sum.R: "Calculate md5sum" (Calculates md5sum for a file. Alternativevely if two files are given: file and corresponding md5 sum file, checks that the file matches the MD5 checksum)
 # INPUT file: "File" TYPE GENERIC
 # INPUT OPTIONAL md5file: "MD5 file" TYPE GENERIC
 # OUTPUT OPTIONAL file.md5
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
-# We need to change the file name before compressing so it is preserved when uncompressing
+# 
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 

@@ -4,7 +4,8 @@
 # OUTPUT OPTIONAL file_decrypted 
 # OUTPUT OPTIONAL keyfile 
 # PARAMETER OPTIONAL task: "Select task" TYPE [encrypt: "Encrypt a file", decrypt: "Decrypt a file"] DEFAULT encrypt (Choose if the input file will be encrypted or decrypted)
-# PARAMETER OPTIONAL dkey: "Decryption key" TYPE STRING (pattern)
+# PARAMETER OPTIONAL pwlen: "Password legnth" TYPE INTEGER DEFAULT 16 (Length of the encrytion password to be generated. This fied is ignored in the case of decryption.)
+# PARAMETER OPTIONAL dkey: "Decryption password" TYPE STRING (The password string that is used to open the encryption. This fiels is ignored in ecryption.)
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
@@ -14,7 +15,7 @@ input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 if( task == "encrypt"){
     #rename input file
-	key <- stringi::stri_rand_strings(1, 16)
+	key <- stringi::stri_rand_strings(1, pwlen)
 	eccommand <- paste( 'gpg --yes --batch --passphrase="', key,'" -c file >> gpg.log', sep="" )
 	system(eccommand)
 	echo.command <- paste(" echo '", key, "' > keyfile", sep ="")
