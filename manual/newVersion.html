@@ -15,9 +15,51 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 13.9.2018: What is new in Chipster 3.14</h2>
+ 	<p>
+		<b>Summary:</b> This version contains major improvements in the community analysis tools for amplicon sequencing data (16S rRNA), and it also makes quality control easier for multisample datasets.  
+		<!--  The example session NGS_xxx demonstrates how these tools can be used.-->
+	</p>
+	
+	<ul>
+		<li><div class=header-item>New analysis tools</div>	
+			<ul>
+				<li><a href="fastqc_multiqc.html">Quality control / Read quality with MultiQC for many FASTQ files</a> Given a Tar package of FASTQ files, this tools runs FastQC for all of them and combines the results in one report using the MultiQC tool.
+				Note that you can package your FASTQ files in a Tar package using the tool Utilities / Make a Tar package.</li>
+				<li><a href="multiqc.html">Quality control / Combine reports using MultiQC</a>. Allows you to combine several quality reports in one using MultiQC. This tool takes currently mqc files produced by FastQC as input, support for other tools will be added. 
+				<li><a href="fixed_text_conversions.html">16S rRNA sequencing / Convert contig names to Mothur format</a> Combining paired end MiSeq reads to contigs using CLC Genomics Workbench produces contig names, which can be converted to Mothur format with this tool.</li>
+			</ul> 
+		</li>	 
+		<li><div class=header-item>Improvements to analysis tools</div>		
+			<ul>
+				<li><a href="mothur-classify-counttable.html">16S rRNA sequencing / Produce count table and phenodata</a> has been improved in many ways:
+					<ul>
+						<li>This tool used to count only unique sequences, now it uses Mothur's count_table file to count all sequences. 
+						If you have used to this after running the tool Extract unique sequences, we strongly recommend that you do your analysis again.</li>
+						<li>Additional output file counttable_transposed.tsv has been added. This file is suitable for the RNA-seq tools DESeq2 and edgeR in Chipster, 
+						allowing you to use their <a href="https://www.researchgate.net/publication/261372248_Waste_Not_Want_Not_Why_Rarefying_Microbiome_Data_Is_Inadmissible">recommended normalization methods for 16S data</a>. Note that you can also use it for the tool Quality control / PCA and heatmap of samples with DESeq2.</li>
+						<li>New parameter Rarefy counts. Produces a countable where sequence counts for each sample are equal and the same as in the smallest sample.</li>
+						<li>New parameter Produce binary table instead of counts. Produces a countable where detected species are marked with 1 and undetected with 0, instead of the actual sequence counts. This kind of counttable is typically used for co-occurance studies.</li>
+					</ul>
+				</li>
+				<li><a href="mothur-alignseqs.html">16S rRNA sequencing / Align sequences to reference</a> The number of processors to be used has been increased. Silva reference database has been updated to v132 and the option to use bacterial subset has been removed. 
+				<!--  The default values of the Start and End parameters have been set for the V4 region of the 16S rRNA gene.--></li>
+				<li><a href="mothur-classifyseqs.html">16S rRNA sequencing / Classify sequences to taxonomic units</a> The number of processors to be used has been increased. Silva reference database has been updated to v132 and the option to use bacterial subset has been removed.</li>
+				<li><a href="fastqc.html">Quality control / Read quality with FastQC</a> Contains new parameter Create input for MultiQC.
+			</ul> 
+		</li>
+		<li><div class=header-item>Updates to reference data and analysis packages</div>
+			<ul>
+				<li>Silva database has been updated to v132.</li>
+			</ul>
+		</li>		
+	</ul>
+	<hr />
+
 <h2>Version update 13.6.2018: What is new in Chipster 3.13</h2>
  	<p>
-		<b>Summary:</b> This version contains reference data updates and new tools for single cell RNA-seq data analysis and alignment of long reads (e.g. PacBio or Oxford Nanopore). The single cell tools allow for example the identification of common cell types across conditions and comparison of the different conditions. 
+		<b>Summary:</b> This version contains reference data updates and new tools for single cell RNA-seq data analysis and alignment of long reads (e.g. PacBio or Oxford Nanopore). 
+		The single cell tools allow for example the identification of common cell types across conditions and comparison of the different conditions. 
 		The example session NGS_single_cell_RNAseq_Seurat_integrated_analysis demonstrates how these tools can be used and it follows the original <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorial</a>.
 	</p>
 	

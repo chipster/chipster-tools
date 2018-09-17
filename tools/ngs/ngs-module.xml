@@ -2,13 +2,15 @@
 	
 	<category name="Quality control" color="#d5c796">
 		<tool>fastqc.R</tool>
+		<tool>fastqc_multiqc.R</tool>
 		<tool>fastx-statistics.R</tool>
 		<tool>prinseq-statistics.R</tool>
 		<tool>rseqc.R</tool>
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
 		<tool>deseq2-pca-heatmap.R</tool>
-		<tool>check-fastq.R</tool>		
+		<tool>check-fastq.R</tool>
+		<tool>multiqc.R</tool>
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
