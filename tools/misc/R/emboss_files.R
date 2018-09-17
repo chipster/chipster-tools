@@ -6,6 +6,11 @@
 
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("input.txt")
+source(file.path(chipster.common.path, "tool-utils.R"))
+# 
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+
+
 
 if ( ecommand == "nohtml" || ecommand == "noreturn" ||  ecommand == "nospace" || ecommand == "notab" || ecommand == "trimspace"){
 	
@@ -75,4 +80,10 @@ if ( ecommand == "lt"){
 	system("tr -d '<' <  input.txt  > output.txt ")
 }
 
+filename <- paste(input.names[1,2], ".conv.txt", sep = "")
+# And finally change Chipster display name to match original file name
+outputnames <- matrix(NA, nrow=1, ncol=2)
+outputnames[1,] <- c("output.txt", filename)
 
+# Write output definitions file
+write_output_definitions(outputnames)
