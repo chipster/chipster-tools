@@ -1,4 +1,4 @@
-# TOOL fastqc_multiqc.R: "Read quality with MultiQC using multiple FASTQ files" (The tool runs FastQC on multiple FASTQ filea, and then combines the reports using MultiQC. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. This tool is based on the FastQC and MultiQC packages.)
+# TOOL fastqc_multiqc.R: "Read quality with MultiQC for many FASTQ files" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. This tool is based on the FastQC and MultiQC packages.)
 # INPUT reads.tar: "Tar package containing FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL multiqc_report.html
 # OUTPUT OPTIONAL error_log.txt
