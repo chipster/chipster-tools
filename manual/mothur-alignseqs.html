@@ -8,13 +8,13 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta file of 16S rRNA sequences, aligns them to the Silva 16S rRNA reference alignment template.  You can use either the whole reference or just the bacterial subsection of it. You can also provide your own reference alignment fasta.
+Given a fasta file of 16S rRNA sequences, aligns them to the Silva 16S rRNA reference alignment template.  You can use either the <a href="https://mothur.org/wiki/Silva_reference_files">Silva reference</a> or provide your own reference alignment in fasta format.
 When using the Silva reference you should be aware of their <a href="https://www.arb-silva.de/silva-license-information">dual-use license</a>: Silva is free for academic users, but commercial users need to purchase a license.
 </p>
 
 <h3>Parameters</h3>
 <ul>
-<li>Reference (bacterial subset of Silva db, whole Silva db, own) [bacterial subset of Silva db]</li>
+<li>Reference (Silva v132, own) [bacterial subset of Silva db]</li>
 <li>Start position of your region of interest</li>
 <li>End position of your region of interest</li> 
 </ul>
@@ -22,7 +22,8 @@ When using the Silva reference you should be aware of their <a href="https://www
 <h3>Details</h3>
 <p> 
 Sequences in are aligned, one by one, against the Silva 16S rRNA reference set. Kmer searching with 8mers is followed by Needleman-Wunsch pairwise alignment. 
-Please indicate the region of the reference alignment that your amplified region corresponds to, as this will improve the overall alignment quality and save space. 
+Please indicate the region of the reference alignment that your amplified region corresponds to, as this will improve the overall alignment quality and save space.
+For example, for the V4 region of the 16S rRNA gene in bacteria you can set Start = 13 862 and End = 23 444.
 </p> 
 <p>
 The alignment result is given in fasta format, with periods ('.') leading up to the first base in the sequence and following the last base of the sequence.
