@@ -10,29 +10,47 @@
 <p>
 This tool generates a count table and a phenodata file, which you can use to assign samples to different experimental groups 
 for further statistical analysis. 
-The input for the tool is a read taxonomy assignment file that can be created with the tool 
-<a href="/manual/mothur-classifyseqs.html">Classify sequences to taxonomic units</a>, and Mothur's counttable file.
 </p>
 
 <h3>Parameters</h3>
-
-Cutting level for taxonomic names (0-9) [0] 
-Rarefy counts (yes, no) [no]
-Produce binary table instead of counts(yes, no) [no]
-
+<ul>
+<li>Cutting level for taxonomic names (0-9) [0] </li>
+<li>Rarefy counts (yes, no) [no]</li>
+<li>Produce binary table instead of counts(yes, no) [no]</li>
+</ul>
 <h3>Details</h3>
-<p>
--
-</p>
+
+You need to give the following two input files (they can be produced using the tool <a href="/manual/mothur-classifyseqs.html">Classify sequences to taxonomic units</a>): 
+<ul>
+<li>sequences-taxonomy-assignment.txt</li>
+<li>picked.count_table</li>
+</ul>
+You can set the cutting level for taxonomic names (0 means output all levels).<br>
+If you set the parameter Produce binary table instead of counts = yes, sequence counts are converted to 0 and 1, indicating the presence and absence of species. This kind of binary table is typically used when studying the co-occurence of species.<br>
+<br>
+Typically your samples have different number of sequences. If you choose to rarefy counts, the count table will be subsampled so that each sample will have the same number of sequences as your smallest sample. 
+Note that <a href="https://www.researchgate.net/publication/261372248_Waste_Not_Want_Not_Why_Rarefying_Microbiome_Data_Is_Inadmissible">rarefying might not be the best way to normalize microbiome data</a>, 
+and alternative methods including those implemented in the DESeq2 and edgeR Bioconductor packages have been shown to work well. 
+In Chipster these packages are available in the following tools, and you can use them for differential abundance analysis, PCA and heatmaps for microbiome data giving the file counttable_transposed.tsv as input: 
+<ul>
+<li>Quality control / PCA and heatmap of samples with DESeq2</li>
+<li>RNA-seq / Differential expression using DESeq2</li>
+<li>RNA-seq / Differential expression using edgeR</li>
+<li>RNA-seq / Differential expression using edgeR for multivariate experiments</li>
+</ul>
+<br>
+
+
 
 <h3>Output</h3>
 
 <p>The analysis output consists of the following:</p>
 <ul>
-<li>counttable.tsv: Count table where rows are samples and columns are taxonomic groups </li> 
-<li>phenodata.tsv: Phenodata file allowing the user to assign samples to experimental groups </li> 
+<li>counttable.tsv: Count table where rows are samples and columns are taxonomic groups (species). </li>
+<li>counttable_transposed.tsv: Count table where rows are species and columns are samples. This tool is suitable for the DEseq2 and edgeR -based tools in Chipster. Note that if you request to rarefy counts or produce binary table, this file is not produced. </li>
+<li>phenodata.tsv: Phenodata file allowing you to assign samples to experimental groups. </li> 
 </ul>
-</p>
+
 
 
 
