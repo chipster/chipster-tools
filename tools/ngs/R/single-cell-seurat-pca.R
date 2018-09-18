@@ -1,13 +1,13 @@
 # TOOL single-cell-seurat-pca.R: "Seurat -PCA" (Principal component analysis on the highly variable genes across the single cells.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL PCAplots.pdf
-# OUTPUT OPTIONAL PCAgenes.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # RUNTIME R-3.4.3
 
 
 # OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL PCAgenes.txt
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
