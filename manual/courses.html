@@ -6,7 +6,7 @@
 <h2>Chipster training courses</h2>
 			
 
-<p>We run several training courses on different aspects of bioinformatics every year in Finland and abroad. The courses at CSC are open for everybody, 
+<p>We run several bioinformatics courses on different topics every year in Finland and abroad. The courses at CSC are open for everybody, 
 but you can also contact us to discuss options for hosting a course on your site.</p>
 
 <p>We make our course materials publicly available so that anyone can download them for their own use. The materials include slides and exercises, and many courses have also lecture videos. The exercise data are available as example sessions on the Chipster server, and
@@ -43,10 +43,10 @@ The course takes two days (or one long day if you omit exercise sheets 3 and 4).
 <li>take multiple factors (including batch effects) into account in differential expression analysis</li>
 </ul>
 
-Course material (2017):
+Course material (2018):
 <ul>
 <li><a href="https://chipster.csc.fi/material/rna/RNA-seq_data_analysis2017.pdf">slides</a></li>
-<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBeaOg12x_kiA1BeikqiO_f">lecture videos</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBeaOg12x_kiA1BeikqiO_f">lecture videos</a> (2017)</li>
 <li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
 	<ol>
 		<li><a href="https://chipster.csc.fi/material/rna/exercises1_RNAseq_withChipster_ENCODE.pdf">ENCODE data with two samples</a>. These exercises cover the whole workflow.</li>
@@ -60,12 +60,13 @@ Course material (2017):
 
 <h3><a name="single-cell">Single cell RNA-seq data analysis</a></h3>
 
-This course introduces single cell RNA-seq data analysis methods, tools and file formats. It covers the preprocessing steps of DropSeq data from raw reads to a digital gene expression matrix (DGE), and how to find sub-populations of cells using clustering with the Seurat tools. 
-Both DropSeq and 10X Genomics data are used in the exercises. The course takes one day. You will learn how to 
+This course introduces single cell RNA-seq data analysis methods, tools and file formats. It covers the preprocessing steps of DropSeq data from raw reads to a digital gene expression matrix (DGE), 
+and how to find sub-populations of cells using clustering with the Seurat tools. You will also learn how to compare two samples and detect conserved cluster markers and differentially expressed genes in them. 
+Both DropSeq and 10X Genomics data are used in the exercises. The course takes one long day. You will learn how to 
 <ul>
 <li>check the quality of reads with FastQC</li>
-<li>tag reads with molecular and cellular barcodes</li>
-<li>trim reads</li>
+<li>tag reads with cell and molecular barcodes</li>
+<li>trim and filter reads</li>
 <li>align reads to the reference genome with HISAT2 and STAR</li>
 <li>tag reads with gene names</li>
 <li>visualize aligned reads in genomic context using the Chipster genome browser</li>
@@ -75,13 +76,21 @@ Both DropSeq and 10X Genomics data are used in the exercises. The course takes o
 <li>regress out unwanted variability</li>
 <li>detect variable genes and perform principle component analysis</li>
 <li>cluster cells and find marker genes for a cluster</li>
+<li>run canonical correlation analysis (CCA) to identify common sources of variation between two datasets</li>
+<li>align two samples for integrated analysis</li>
+<li>find conserved cluster markers for two samples</li>
+<li>find differentially expressed genes in a cluster between two samples</li>
+<li>visualize genes with cell type specific responses in two samples</li>
 </ul>
 
 Course material (2018):
 <ul>
 <li><a href="https://chipster.csc.fi/material/single-cell/single_cell_RNAseq2018.pdf">slides</a></li>
-<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD-tnVMX_oYTCF1mWOmB8Xo">lecture and exercise videos</a></li>
-<li><a href="https://chipster.csc.fi/material/single-cell/exercises_single_cell_RNAseq2018.pdf">exercises</a>. The data is available on Chipster server in the example sessions listed in the exercise sheet.</li>
+<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD-tnVMX_oYTCF1mWOmB8Xo">lecture and exercise videos</a> on one sample analysis</li>
+<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD3R5bcssgM5JTcgyytKB9M">tutorial videos</a> on integrated analysis of two samples</li>
+<li><a href="https://chipster.csc.fi/material/single-cell/Single-cell-exercises-DropSeq-2018.pdf">exercises 1: Preprocessing DropSeq data</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
+<li><a href="https://chipster.csc.fi/material/single-cell/Single-cell-exercises-Seurat-one-sample-2018.pdf">exercises 2: Clustering 10X Genomics data</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
+<li><a href="https://chipster.csc.fi/material/single-cell/Single-cell-exercises-Seurat-two-samples-2018.pdf">exercises 3: Integrated analysis of two samples using 10X Genomics data</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
 </ul>
 <hr>
 
