@@ -15,6 +15,7 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
 <ul>
 	<li>Number of principal components to use [10]</li>
 	<li>Resolution for granularity [0.6]</li>
+	<li>Perplexity, expected number of neighbors [30]</li>
 	<li>Cluster biomarker gene has to be expressed in at least this fraction of cells [0.25]</li>
 	<li>Differential expression threshold for a cluster biomarker gene [0.25]</li>
 	<li>Which test to use for finding marker genes [bimod, roc, t, tobit, poisson, negbinom]</li>
@@ -24,6 +25,8 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
  
 <p>
 As input, give the Seurat R-object (Robj) from the Seurat PCA -tool.
+<br><br>
+If you have low number of cells in your data, try lowering the perplexity parameter (the expected number of neighbours.)
 <br><br>
 Seurat function <i>FindClusters</i> first constructs a KNN graph based on the Euclidean distance in PCA space,
 and refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
