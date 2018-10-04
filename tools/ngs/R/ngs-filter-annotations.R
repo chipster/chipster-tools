@@ -10,7 +10,7 @@
 
 # Loads the normalized data
 file<-c("annotations.tsv")
-dat <- read.table(file, header=T, sep="\t", comment.char="")
+dat <- read.table(file, header=T, sep="\t", check.names=FALSE, quote="", comment.char="")
 
 if(column == " ") {
 	dat2 <- dat[grep(match.term, rownames(dat)),]
