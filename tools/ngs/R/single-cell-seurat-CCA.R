@@ -51,7 +51,7 @@ plot_grid(p1, p2)
 
 # MetageneBicorPlot examines a measure of correlation strength for each CC 
 # and find that this statistic generally saturates after a reasonable number of CCs.
-p3 <- MetageneBicorPlot(data.combined, grouping.var = "stim", dims.eval = 1:30, 
+p3 <- MetageneBicorPlot(data.combined, grouping.var = "stim", dims.eval = 1:CCstocompute, 
 		display.progress = FALSE)
 
 # As with PC selection, it is often also useful to examine heatmaps of the top genes 
