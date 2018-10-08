@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Read quality with MultiQC for many FASTQ files</h2>
+
+<h3>Description</h3>
+
+<p>This tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC.</p>
+
+<h3>Parameters</h3>
+
+<h3>Details</h3>
+
+<p>
+The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. 
+</p>
+<p>
+Input file is a single Tar package containing the FASTQ files you want to analyze. FASTQ files can be gzipped. The Tar package itself can be 
+gzipped, but it should be noted that if the individual FASTQ files are already compressed, compressing the Tar package will 
+not make it any smaller.
+</p>
+
+
+<h3>Output</h3>
+
+<p>
+An html report with plots and tables produced by the analysis modules. Please note that you have to select the visualization 
+option "Open in external browser".
+</p>
+
+<h3>Reference</h3>
+
+This tool is based on the <a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC package</a> by Simon Andrews et al., 
+and the <a href="http://multiqc.info/">MultiQC package</a> by Philip Ewels et al.
+
+</body>
+

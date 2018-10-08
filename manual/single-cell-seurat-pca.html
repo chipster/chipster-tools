@@ -14,7 +14,8 @@ the tool <b>Filtering, regression and detection of variable genes</b>.
  
  <h3>Parameters</h3>
 <ul>	
-		<li>Number of principal components to plot as heatmaps [12]</li>			
+		<li>Number of principal components to plot as heatmaps [12]</li>	
+		<li>Number of PCs to compute [20]</li>
 </ul>
 	
 	
@@ -22,6 +23,10 @@ the tool <b>Filtering, regression and detection of variable genes</b>.
  
 <p>
 As input, give the Seurat R-object (Robj) from the tool Seurat -Filtering, regression and detection of variable genes.
+</p>
+
+<p>
+If you have low number of cells in your data, you might get an error message. Try lowering the number of principal components to compute.
 </p>
 
 <p>
@@ -62,7 +67,7 @@ For more details, please check the <a href="http://satijalab.org/seurat/get_star
 <ul>
 
 <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
-<li>PCAgenes.txt: Top genes associated with first principal components</li>
+<!--  <li>PCAgenes.txt: Top genes associated with first principal components</li>-->
 <li>PCAplots.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of the PCs for the downstream analysis. </li>
 </ul>
 

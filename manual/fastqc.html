@@ -13,19 +13,29 @@
 
 <ul>
 <li>File type (bam, fastq) [fastq]</li>
+<li>Create input for MultiQC (yes, no) [no]</li>
 </ul>
 
 <h3>Details</h3>
 
 <p>FastQC examines reads for base quality and distribution, duplicates, length, over-represented k-mers, etc. GZip compressed fastq files are automatically detected and unzipped. 
-
 For a detailed description of the plots, please see the <a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/">FastQC manual</a>.</p>
+
+If you have several FASTQ files and you would like to combine their quality reports together, you have two options:
+<ul>
+<li>Set the parameter Create input for MultiQC = yes. This will produce an mqc file. You can then select the mqc files for samples and run the tool <a href="multiqc.html">Quality control / Combine reports using MultiQC</a></li>
+<li>Make a tar package of all the FASTQ files using the tool <a href="make_tar.html">Utilities / Make a tar package</a> and run the tool <a href="fastqc_multiqc.html">Quality control / Read quality with MultiQC for many FASTQ files</a>.</li>
+</ul>
 
 <h3>Output</h3>
 
 <p>
-An html report with plots and tables produced by the analysis modules. Please note that you have to select the visualization option "Open in external browser".
+An html report with plots and tables produced by the analysis modules. Please note that you have to select the visualization option "Open in external browser". 
 </p>
+<p>
+Optionally an mqc file which you can use as input for the tool Quality control / Combine reports using MultiQC. 
+</p>
+
 
 <h3>Reference</h3>
 

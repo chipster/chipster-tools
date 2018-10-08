@@ -12,13 +12,6 @@ This tool filters out cells and regresses out uninteresting sources of variation
 It then detects highly variable genes across the single cells, 
 which are used for performing the principal component analysis in the next tool.
 </p>
-
-<p>
-PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to 
-average expression and dispersion (bottom three parameters) is an iterative process. 
-Start with some values, see how it goes, and run the tool again with different parameters if needed. 
-
-</p>
  
  <h3>Parameters</h3>
  <p>
@@ -29,15 +22,16 @@ Start with some values, see how it goes, and run the tool again with different p
 		<li>Minimum average expression level for a variable gene, x min [0.0125]</li>
 		<li>Maximum average expression level for a variable gene, x max [3]</li>
 		<li>Minimum dispersion for a variable gene, y min [0.5]</li>
-		<li>Perform log normalization [YES]</li>
+		<li>Perform log normalization [yes]</li>
 		<li>Scale factor in the log normalization [10000]</li>
 		<li>Filter out cell cycle differences [no]</li>
 	
 </ul>
-	The minimum/maximum average expression and dispersion parameters (x min, x max, y min) are used to select the variable genes. You might need to run
-	the tool again if the initial values don't give a good number of variable genes.
-	
-	</p>
+	The minimum/maximum average expression and dispersion parameters (x min, x max, y min) are used to select the variable genes. 
+	PLEASE NOTE that you might need to run the tool several times, as setting these parameters is an iterative process. 
+	Start with some values, see how it goes, and run the tool again with different parameter values if needed.
+	<p>
+
 	
  <h3>Details</h3>
  
@@ -54,11 +48,12 @@ The tool performs the following three steps. As an input, give the Seurat R-obje
 		Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
 		This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content</i>.
 		
-		<br><br>You can also choose to regress out <i>cell cycle differences</i> (default: no filtering).
+		<br><br>You can also choose to regress out <i>cell cycle differences</i>.
 		By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
-		In some cases this method can impact negatively on the downstream analysis,
-		particularly in differentiating processes,where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
-		As an alternative you can choose <i>regressing out the difference between the G2M and S phase scores</i>. 
+		In some cases this method can negatively impact downstream analysis,
+		particularly in differentiating processes, where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
+		Alternatively you can <i>regress out the difference between the G2M and S phase scores</i>.
+		This means that signals separating non-cycling cells and cycling cells will be maintained, but differences in cell cycle phase amongst proliferating cells (which are often uninteresting), will be regressed out of the data. 
 		<br>For more information about cell cycle filtering, check out the vignette <a href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">here</a>. </li>
 
 		<br>
@@ -88,7 +83,8 @@ For more details, please check the <a href="http://satijalab.org/seurat/get_star
 <ul>
 
 <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
-<li>Dispersion.pdf: The dispersion vs average expression plots (scaled and non-scaled graphs), also lists the number of highly variable genes. </li>
+<li>Dispersion.pdf: The dispersion vs average expression plots (scaled and non-scaled graphs), also lists the number of highly variable genes. 
+If you selected to regress out cell cycle differences, PCA plots on cell cycle genes will be added in the end of this pdf.</li>
 </ul>
 
 

@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL merged.bam
 # OUTPUT OPTIONAL merged.bam.bai
 # OUTPUT OPTIONAL merge.log
-# PARAMETER OPTIONAL reference: "Reference" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Use same reference as in the alignment!)
+# PARAMETER reference: "Reference genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Use same reference as in the alignment!)
 
 # 2016-10-31 ML
 # 2017-05-08 ML add sort BAM to this tool
