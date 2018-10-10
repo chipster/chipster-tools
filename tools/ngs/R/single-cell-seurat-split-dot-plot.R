@@ -8,6 +8,12 @@
 
 # 2018-16-05 ML
 
+# For testing (not run):
+# markers.to.plot <- c("CD3D", "CREM", "HSPH1", "SELL", "GIMAP5", "CACYBP", "GNLY", 
+#		"NKG7", "CCL5", "CD8A", "MS4A1", "CD79A", "MIR155HG", "NME1", "FCGR3A", 
+#		"VMO1", "CCL2", "S100A9", "HLA-DQA1", "GPR183", "PPBP", "GNG11", "HBA2", 
+#		"HBB", "TSPAN13", "IL3RA", "IGJ")
+
 library(Seurat)
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
@@ -15,10 +21,6 @@ load("combined_seurat_obj.Robj")
 #combined_seurat_obj <- data.combined
 
 markers.to.plot <- unlist(strsplit(markers, ", "))
-#markers.to.plot <- c("CD3D", "CREM", "HSPH1", "SELL", "GIMAP5", "CACYBP", "GNLY", 
-#		"NKG7", "CCL5", "CD8A", "MS4A1", "CD79A", "MIR155HG", "NME1", "FCGR3A", 
-#		"VMO1", "CCL2", "S100A9", "HLA-DQA1", "GPR183", "PPBP", "GNG11", "HBA2", 
-#		"HBB", "TSPAN13", "IL3RA", "IGJ")
 pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
 sdp <- SplitDotPlotGG(data.combined, grouping.var = "stim", genes.plot = rev(markers.to.plot), cols.use = c("blue", 
 				"red"), x.lab.rot = T, plot.legend = T, dot.scale = 8, do.return = T)
