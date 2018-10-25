@@ -14,9 +14,16 @@ this tool assigns sequences to taxonomic units (~ species).
 
 <h3>Parameters</h3>
 
-<p>Reference (silva.nr_v132) [silva.nr_v132]</p>
-<p>Number of iterations (10-1000) [100]</p>
-<p>Remove lineages (empty)</p>
+<ul>
+<li>Reference (silva.nr_v132) [silva.nr_v132]</li>
+<li>Number of iterations (10-1000) [100]</li>
+<li>Remove taxon Chloroplast (yes/no) [yes]</li>
+<li>Remove taxon Mitochondria (yes/no) [yes]</li>
+<li>Remove taxon Archae (yes/no) [yes]</li>
+<li>Remove taxon Eukaryota (yes/no) [yes]</li>
+<li>Remove taxon unknown (yes/no) [yes]</li>
+<li>Remove other lineages (string) [empty]</li>
+</ul>
 
 <h3>Details</h3>
 <p>
@@ -28,9 +35,10 @@ The bootstrap confidence score is calculated with 100 iterations by default.
 This low number of iterations is used as a default to make the tool faster, please consider using higher number (1000 for example).
 </p>
 <p>
-With the <b>Remove lineages</b> parameter you can remove unwanted organisms/sequences from the data. 
-List the unwanted lineages in the text field, for example: Chloroplast-mitochondria-Archaea-Eukaryota-unknown.
-
+With the <b>Remove</b> parameters you can remove unwanted organisms/sequences from the data. 
+Some common options are provided as yes/no parameters. You can list others in the "Remove other lineages" 
+text field. Use dots (.) instead of semicolons (;) in names. Use dash (-) to separate taxons. For example: 
+Bacteria.Firmicutes.-Bacteria.Bacteroidetes. 
 </p>
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Classify.seqs">classify.seqs</a> 
