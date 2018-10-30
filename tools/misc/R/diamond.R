@@ -7,15 +7,15 @@
 # OUTPUT OPTIONAL diamond.log
 # OUTPUT OPTIONAL unaligned.fasta
 # OUTPUT OPTIONAL reference.dmnd
-# PARAMETER OPTIONAL db: "Reference database" TYPE [ swiss: "SwissProt", trembl: "TrEMBL", nr: "NR"] DEFAULT swiss (Reference database. This parameter is ignored if referense sequece set is give as file)
+# PARAMETER OPTIONAL db: "Reference database" TYPE [ swiss: "SwissProt", trembl: "TrEMBL", nr: "NR"] DEFAULT swiss (Reference database. This parameter is ignored if the reference sequence set is given as a file)
 # PARAMETER OPTIONAL maxtargetseqs: "Maximum number of hits" TYPE INTEGER DEFAULT 500 (Maximum number hits to report for one query sequence)
 # PARAMETER OPTIONAL evalue: "e-value" TYPE DECIMAL DEFAULT 0.001 (E-value threshold )
-# PARAMETER OPTIONAL outformat: "Output format" TYPE [ 0: "BLAST pairwise", 5: "BLAST XML", 6: "BLAST tabular", 100: "DIAMOND alignment archive", 101: "SAM"] DEFAULT 0 (Multiple sequence alingment file format)
-# PARAMETER OPTIONAL unal: "Report unaligned sequences" TYPE [ yes: "yes", no: "no" ] DEFAULT no (Collect to a sequences file those query sequences that did not had any matches)
+# PARAMETER OPTIONAL outformat: "Output format" TYPE [ 0: "BLAST pairwise", 5: "BLAST XML", 6: "BLAST tabular", 100: "DIAMOND alignment archive", 101: "SAM"] DEFAULT 0 (Output file format)
+# PARAMETER OPTIONAL unal: "Report unaligned sequences" TYPE [ yes: "yes", no: "no" ] DEFAULT no (Collect query sequences, that didn't have any matches, to a separate output file.)
 # PARAMETER OPTIONAL smode: "Search mode" TYPE [ fast: "Fast", sensitive: "Sensitive", moresensitive: "More sensitive" ] DEFAULT fast (Search mode)
 # PARAMETER OPTIONAL matrix: "Matrix" TYPE [BLOSUM45: "BLOSUM45", BLOSUM50: "BLOSUM50", BLOSUM62: "BLOSUM62", BLOSUM80: "BLOSUM80", BLOSUM90: "BLOSUM90"] DEFAULT BLOSUM62 (Weight matrix assigns a score for aligning pairs of residues, and determines overall alignment score. Experimentation has shown that the BLOSUM62 matrix is among the best for detecting most weak protein similarities. For particularly long and weak alignments, the BLOSUM45 matrix may prove superior. For proteins, shorter than 85 residues, the BLOSUM80 matrix may provide better hits"  )
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
-# PARAMETER OPTIONAL keep_index: "Save the DIAMOND index" TYPE [yes: yes, no: no] DEFAULT no (Write the DIAMOND indexes of the refrence paritein set to a file for re-use.)
+# PARAMETER OPTIONAL keep_index: "Save the DIAMOND index" TYPE [yes: yes, no: no] DEFAULT no (Write the DIAMOND indexes of the reference protein set to a file for re-use.)
 
 use_remote_index <- ("yes")
 keep_index <- ("no")
