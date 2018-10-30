@@ -8,7 +8,12 @@
 # OUTPUT OPTIONAL picked-summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v132"] DEFAULT silva (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
-# PARAMETER OPTIONAL toremove: "Remove lineages" TYPE STRING DEFAULT empty (List of lineages to remove. You must wrap your taxon in quotes so Mothur knows to ignore the semicolon characters. For example try Chloroplast-mitochondria-Archaea-Eukaryota-unknown.)
+# PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
+# PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
+# PARAMETER OPTIONAL remove.archaea: "Remove taxon Archaea" TYPE [yes, no] DEFAULT yes (Remove taxon Archaea.)
+# PARAMETER OPTIONAL remove.eukaryota: "Remove taxon Eukaryota" TYPE [yes, no] DEFAULT yes (Remove taxon Eukaryota.)
+# PARAMETER OPTIONAL remove.unknown: "Remove taxon unknown" TYPE [yes, no] DEFAULT yes (Remove taxon unknown.)
+# PARAMETER OPTIONAL remove.other: "Remove other lineages" TYPE STRING DEFAULT empty (List of other lineages to remove. You must use dots \(\".\"\) instead of semicolons \(\";\"\). Use dash \(\"-\"\) to separate taxons. For example: Bacteria.Firmicutes.-Bacteria.Bacteroidetes. )
 
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db"] DEFAULT bacterial (Silva reference set to use.)
@@ -29,11 +34,11 @@ unzipIfGZipFile("a.fasta")
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 
 # if (reference=="bacterial"){
-	# bacterial references (Silva v102):
+# bacterial references (Silva v102):
 # 	data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva.bacteria"))
 # 	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 # 	taxonomy.path <- c(file.path(data.path, "silva.bacteria.silva.tax"))
-	# copy to working dir because mothur generates more files to the same directory
+# copy to working dir because mothur generates more files to the same directory
 # 	system(paste("ln -s ", template.path, " silva.bacteria.fasta"))
 # 	system(paste("ln -s ", taxonomy.path, " silva.bacteria.silva.tax"))
 # 	template.path <- "silva.bacteria.fasta"
@@ -55,9 +60,9 @@ if (reference=="silva"){
 # batch file
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 if (file.exists("a.count_table")){
-	write(paste("classify.seqs(fasta=a.fasta, count=a.count_table, processors=", chipster.threads.max,", iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
+	write(paste("classify.seqs(fasta=a.fasta, count=a.count_table,  processors=", chipster.threads.max, ", iters=", iters, ", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 }else {
-	write(paste("classify.seqs(fasta=a.fasta, processors=", chipster.threads.max,", iters=",iters,", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
+	write(paste("classify.seqs(fasta=a.fasta, processors=", chipster.threads.max, ", iters=", iters, ", template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 	
 }
 
@@ -76,7 +81,7 @@ system(command)
 write("get.current()", "batch2.mth", append=F)
 system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
 
-
+system("ls -l >> log.txt")
 # Postprocess output
 if (reference=="silva"){
 	system("mv a.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
@@ -88,15 +93,39 @@ if (reference=="silva"){
 # }
 
 # batch file 2: remove lineage, if the taxons to remove were listed
+toremove <- ""
 
-if (toremove!="empty"){
+if (remove.chloroplast == "yes"){
+	toremove <- paste(toremove, "Chloroplast", sep ="-")
+}
+if (remove.mitochondria == "yes"){
+	toremove <- paste(toremove, "Mitochondria", sep ="-")
+}
+if (remove.archaea == "yes"){
+	toremove <- paste(toremove, "Archaea", sep ="-")
+}
+if (remove.eukaryota == "yes"){
+	toremove <- paste(toremove, "Eukaryota", sep ="-")
+}
+if (remove.unknown == "yes"){
+	toremove <- paste(toremove, "unknown", sep ="-")
+}
+if (remove.other != "empty"){
+	# Change periods to semicolons. Semicolons are not accepted in STRING input.
+	remove.other <- gsub(".", ";", remove.other, fixed = TRUE)
+	toremove <- paste(toremove, remove.other, sep="-")
+}
 
+if (toremove!=""){
+	# Remove leading dash
+	toremove <- substring(toremove, 2)
+	
 	if (file.exists("a.count_table")){
 		write(paste("remove.lineage(fasta=a.fasta, count=a.count_table, taxonomy=sequences-taxonomy-assignment.txt, taxon=",toremove ,")", sep=""), "batch.mth", append=F)
 	}else {
 		write(paste("remove.lineage(fasta=a.fasta, taxonomy=sequences-taxonomy-assignment.txt, taxon=",toremove ,")", sep=""), "batch.mth", append=F)
 	}
-
+	
 	# command
 	command <- paste(binary, "batch.mth", ">> log.txt 2>&1")
 	
@@ -119,7 +148,7 @@ if (toremove!="empty"){
 	}
 	
 	# command
-	command <- paste(binary, "batch.mth", "> log.txt 2>&1")
+	command <- paste(binary, "batch.mth", ">> log.txt 2>&1")
 	# run
 	system(command)
 	
@@ -152,5 +181,3 @@ if (toremove!="empty"){
 	system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
 	
 }
-	
-
