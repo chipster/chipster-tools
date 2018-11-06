@@ -1,4 +1,4 @@
-# TOOL subset-fastq.R: "Make a subset of FASTQ" (Returns a subsample of N reads from a FASTQ file. Tool is based on the seqtk package.)
+# TOOL subset-fastq.R: "Make a subset of FASTQ" (Returns a subsample of N reads from a FASTQ file. Tool is based on the seqtk package. When using paired-end data, use same random seed to keep pairing.)
 # INPUT reads.fastq: "FASTQ file" TYPE GENERIC
 # OUTPUT subset.fastq.gz 
 # PARAMETER n.seq: "Size of subset" TYPE INTEGER DEFAULT 100000 (Number of reads to return from the FASTQ file.)
