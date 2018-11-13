@@ -61,10 +61,11 @@ seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, di
 # do.text	= Add text names of variable genes to plot (default is TRUE)
 # plot.both	= Plot both the scaled and non-scaled graphs.
 length(x = seurat_obj@var.genes)
-textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(seurat_obj@var.genes)), halign="center", valign="center", cex=0.8)
+textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(seurat_obj@var.genes), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=0.8)
 seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
 
 
+## cell cycle filtering:
 if( filter.cell.cycle != "no" ) {
 	
 	# Cell cycle genes, get the scores & visualise:

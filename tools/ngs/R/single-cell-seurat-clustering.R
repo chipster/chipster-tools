@@ -46,6 +46,10 @@ seurat_obj <- FindClusters(object = seurat_obj, reduction.type = "pca", dims.use
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
 pdf(file="tSNEplot.pdf") 
 TSNEPlot(seurat_obj)
+
+# Number of cells:
+textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
+
 dev.off() # close the pdf
 
 # Find all markers 

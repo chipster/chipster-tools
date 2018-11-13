@@ -52,6 +52,10 @@ if (cells_left > 500) {
 }
 # fig.height=12,fig.width=9 
 PCElbowPlot(seurat_obj)
+
+# Number of cells:
+textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
+
 dev.off() # close the pdf
 
 # Save the Robj for the next tool

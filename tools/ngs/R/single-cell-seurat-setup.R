@@ -72,6 +72,10 @@ VlnPlot(seurat_obj, c("nGene", "nUMI", "percent.mito"), nCol = 3)
 par(mfrow = c(1, 2))
 GenePlot(seurat_obj, "nUMI", "percent.mito")
 GenePlot(seurat_obj, "nUMI", "nGene")
+
+# Number of cells:
+textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2)
+
 #dev.off() # close the pdf
 
 
