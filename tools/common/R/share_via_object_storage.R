@@ -1,4 +1,4 @@
-# TOOL share_via_object_storage.R: "Share a file" (Uploads selected file to Object Storage service of Chipster and gennerates a public link for the file)
+# TOOL share_via_object_storage.R: "Share a file" (Uploads the selected file to Object Storage service of Chipster and generates a public link for the file.)
 # INPUT file: File TYPE GENERIC 
 # OUTPUT link.html 
 # OUTPUT OPTIONAL file.md5
@@ -8,10 +8,17 @@
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
+s3.conf.file<- file.path(chipster.common.path, "../../admin/shell/s3.conf")
+
+s3cmd.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "s3cmd")
+s3cmd.binary <- paste(s3cmd.binary, "-c", s3.conf.file)
+
+
 #Check s3cmd and configuration
-s3cmd_conf <- as.integer(system("s3cmd --dump-config 2> /dev/null | wc -l", intern = TRUE))
+s3check.command <- paste(s3cmd.binary, "--dump-config 2> /dev/null | wc -l")
+s3cmd_conf <- as.integer(system(s3check.command, intern = TRUE))
 if ( s3cmd_conf < 1 ){
-	stop("CHIPSTER-NOTE: Share a file tool has not been configured for this Chipster server.")
+	stop(paste("CHIPSTER-NOTE: Share a file tool has not been configured for this Chipster server.", s3check.command ))
 }
 
 # 
@@ -35,7 +42,7 @@ cat(exp_date, file="log.txt", append=TRUE, sep="\n")
 
 bname1 <- paste("chitemp", then, key, sep="-")
 bname <- paste("s3://", bname1, sep="")
-s3command <- paste("s3cmd mb -P ", bname, " 2>&1  >> log.txt" )
+s3command <- paste( s3cmd.binary ,"mb -P ", bname, " 2>&1  >> log.txt" )
 #echo.command <- paste ("echo ' ", s3command, "' >> log.txt" )
 #system(echo.command)
 system(s3command)
@@ -45,13 +52,13 @@ system(paste("cp file ", fname ))
 
 system("ls -l >> log.txt")
 
-s3command <- paste("s3cmd put -P ", fname, bname, " >> log.txt" )
+s3command <- paste(s3cmd.binary, "put -P ", fname, bname, " >> log.txt" )
 system(s3command)
 
 if ( add_md5sum == "yes" ){
 	md5file <- paste(fname, ".md5", sep="")
 	system(paste("md5sum ", fname, " > ", md5file ))
-	s3command <- paste("s3cmd put -P ", md5file, bname, " >> log.txt" )
+	s3command <- paste(s3cmd.binary, "put -P ", md5file, bname, " >> log.txt" )
 	system(s3command)
 }
 
@@ -80,7 +87,7 @@ cat("</html>",file="link.html", append=TRUE, sep="\n")
 
 
 #Clean old stuff
-s3command <- paste("s3cmd ls | grep 's3://chitemp-' | awk '{print $3}' | awk -F '-' '{ if ( $2 < ", now, " ) print $0 }' > rb-list.tmp " )
+s3command <- paste(s3cmd.binary, "ls | grep 's3://chitemp-' | awk '{print $3}' | awk -F '-' '{ if ( $2 < ", now, " ) print $0 }' > rb-list.tmp " )
 system(s3command)
 system("echo removing outdated buckets: >> log.txt")
 system("cat rb-list.tmp >> log.txt")

@@ -127,6 +127,7 @@ if (use_remote_index == "yes"){
 		rm.command <- paste( "rm -f /tmp/diamond/", dbfile, "*", sep="")
 		system(rm.command)
 	    wget.command <- paste("p=$(pwd); cd /tmp/diamond; wget", dl.path, "&>>${p}/diamond.log" )	
+		system(wget.command)
 	    system("echo New version of the database downloaded >> diamond.log")
 	    system("ls -l /tmp/diamond >> diamond.log")
     }
