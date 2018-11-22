@@ -56,6 +56,10 @@ seqcount.exe <- file.path(emboss.path, "seqcount -filter query.fa")
 str.queryseq <- system(seqcount.exe, intern = TRUE )
 num.queryseq <- as.integer(str.queryseq)
 
+
+#In blast command outputformat is used as a string
+#in job control as a number
+outfmt.string <- outfmt
 outfmt <- as.integer(outfmt)
 #round(num.queryseq)
 
@@ -67,7 +71,7 @@ if (num.queryseq > 10){
 outfmt.is.table <- paste("no")
 
 if (outfmt == 6)  {
-   outfmt <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')	
+   outfmt.string <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')	
    outfmt.is.table <- paste("yes")
 }
 #These parameters have allways some value
@@ -75,7 +79,7 @@ general.parameters <- paste("-chipster_path /opt/chipster -remote -no_slurm -que
 general.parameters <- paste( general.parameters, "-task", task)
 general.parameters <- paste( general.parameters, "-evalue ", evalue)
 general.parameters <- paste( general.parameters, "-dust" , dust)
-general.parameters <- paste( general.parameters, "-outfmt" , outfmt )
+general.parameters <- paste( general.parameters, "-outfmt" , outfmt.string )
 general.parameters <- paste( general.parameters, "-num_threads" , chipster.threads.max )
 
 optional.parameters <- paste(" ")

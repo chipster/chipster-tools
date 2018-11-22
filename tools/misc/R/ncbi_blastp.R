@@ -53,6 +53,10 @@ seqcount.exe <- file.path(emboss.path, "seqcount -filter query.fa")
 str.queryseq <- system(seqcount.exe, intern = TRUE )
 num.queryseq <- as.integer(str.queryseq)
 
+
+#In blast command outputformat is used as a string
+#in job control as a number
+outfmt.string <- outfmt
 outfmt <- as.integer(outfmt)
 #round(num.queryseq)
 
@@ -64,12 +68,13 @@ if (num.queryseq > 10){
 #Modify table format
 outfmt.is.table <- paste("no")
 
+
 if (outfmt == 6)  {
-   outfmt <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')	
+   outfmt.string <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')	
    outfmt.is.table <- paste("yes")
 }
 #These parameters have allways some value
-general.parameters <- paste("-chipster_path /opt/chipster -remote -no_slurm -query query.fa -out blast_results -db ", db, " -task", task, "-evalue ", evalue, "-matrix", matrix, "-word_size" , word_size , "-seg" , seg , "-outfmt" , outfmt )
+general.parameters <- paste("-chipster_path /opt/chipster -remote -no_slurm -query query.fa -out blast_results -db ", db, " -task", task, "-evalue ", evalue, "-matrix", matrix, "-word_size" , word_size , "-seg" , seg , "-outfmt" , outfmt.string )
 general.parameters <- paste( general.parameters, "-num_threads" , chipster.threads.max )
 optional.parameters <- paste(" ")
 
@@ -144,6 +149,8 @@ system("ls -l >> blast.log")
 if (outfmt < 5) {
 	test.command <- paste("echo renaming as html. outformat is ", outfmt, ">> blast.log")
 	system (test.command)
+	c=outfmt+2
+	system(paste("echo ",c , ">> blast.log"))
 	system ("mv blast_results blast_results.html")	
 }
 
