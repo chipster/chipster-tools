@@ -1,4 +1,4 @@
-# TOOL cuffdiff2.R: "Differential expression using Cuffdiff" (Given GTF and BAM files, Cuffdiff performs differential expression analysis of genes and transcripts using the Cufflinks algorithm. .)
+# TOOL cuffdiff2.R: "Differential expression using Cuffdiff" (Given GTF and BAM files, Cuffdiff performs differential expression analysis of genes and transcripts using the Cufflinks algorithm.)
 # INPUT treatment1.bam: "Treatment BAM" TYPE BAM
 # INPUT control1.bam: "Control BAM" TYPE BAM
 # INPUT OPTIONAL annotation.gtf: "Annotation GTF" TYPE GTF

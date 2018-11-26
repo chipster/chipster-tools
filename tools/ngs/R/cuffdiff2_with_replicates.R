@@ -1,4 +1,4 @@
-# TOOL cuffdiff2_with_replicates.R: "Differential expression using Cuffdiff with replicates" (Given GTF and BAM files, Cuffdiff performs differential expression analysis of genes and transcripts using the Cufflinks algorithm. You will need to provide a list of filenames of replicate BAM files belonging for each group. You can use the tool Utilities\/\"Make a list of filenames\" to generate the lists.)
+# TOOL cuffdiff2_with_replicates.R: "Differential expression using Cuffdiff with replicates" (Given GTF and BAM files, Cuffdiff performs differential expression analysis of genes and transcripts using the Cufflinks algorithm. You will need to provide a list of filenames of replicate BAM files belonging for each group. You can use the tool \"Utilities\/Make a list of filenames\" to generate the lists.)
 # INPUT alignment{...}.bam: "BAM files" TYPE BAM
 # INPUT OPTIONAL sample1.txt: "List of Group 1 replicates" TYPE GENERIC
 # INPUT OPTIONAL sample2.txt: "List of Group 2 replicates" TYPE GENERIC
