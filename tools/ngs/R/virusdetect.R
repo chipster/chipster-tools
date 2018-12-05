@@ -150,7 +150,9 @@ if (file.exists("result_inputseq/blastn.html")){
 	echo.command <- paste("echo ", nprefix, "blastn_matching_references.html '\t'Table listing reference viruses that have corresponding virus contigs identified by BLASTN.  >> vd.log 2>&1", sep = "" )
 	system(echo.command)
 	system("echo '\t\t\t\t'In addition, a pdf formatted report file is returned for each match. >> vd.log 2>&1")
-	system(" for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); weasyprint $file ${bln}.bn.pdf; done;")
+	for.command <- paste("for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); ", chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bn.pdf >> vd.log 2>&1; done;", sep = "")
+    system(for.command)
+	#system(" for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); /opt/chipster/tools/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bn.pdf >> vd.log 2>&1; done;")
 }
 
 #blastx_matching_references.html
@@ -161,7 +163,9 @@ if (file.exists("result_inputseq/blastx.html")){
 	echo.command <- paste("echo ", nprefix, "blastx_matching_references.html '\t'Table listing reference viruses that have corresponding virus contigs identified by BLASTX. >> vd.log 2>&1", sep = "" )
 	system(echo.command)
 	system("echo '\t\t\t\t'In addition, a pdf formatted report file is returned for each match. >> vd.log 2>&1")
-	system(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); weasyprint $file ${bln}.bx.pdf; done;")
+	for.command <- paste(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); ", chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bx.pdf; done;", sep="")
+	system(for.command)
+	#system(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); /opt/chipster/tools/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bx.pdf; done;")
 	
 }
 
