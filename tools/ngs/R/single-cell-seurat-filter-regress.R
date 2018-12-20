@@ -22,6 +22,7 @@
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2018-02-19 ML Cell cycle filtering, plot dispersion plots without gene names and both scaled & non-scaled version, add parameters for normalisation
 # 2018-11-07 ML Update the cutoffs for variable genes: xmin = 0.0125->0.1, x.high.cutoff = 3 -> 8, y.cutoff = 0.5 -> 1
+# 2018-12-20 ML ScaleData: scale all changes in one command
 
 library(Seurat)
 library(dplyr)
@@ -62,16 +63,21 @@ seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, di
 # plot.both	= Plot both the scaled and non-scaled graphs.
 length(x = seurat_obj@var.genes)
 textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(seurat_obj@var.genes), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=0.8)
-seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
 
 
 ## cell cycle filtering:
-if( filter.cell.cycle != "no" ) {
+
+if( filter.cell.cycle == "no" ) {
+	seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
+} else{
 	
 	# Cell cycle genes, get the scores & visualise:
 	# Note: in the very beginning we read in the table and set s.genes and gm2.genes
 	# http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
 
+	# This step needed here, as RunPCA needs to access Object@scale.data:
+	seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
+	
 	# Check that there were some S or G2M genes in the list of variable genes:
 	if (length(s.genes[!is.na(match(s.genes, seurat_obj@var.genes))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, seurat_obj@var.genes))]) <1 ) {
 		stop(paste('CHIPSTER-NOTE: ', "There were no enough cell cycle genes for correction in the list of variable genes."))
@@ -88,14 +94,14 @@ if( filter.cell.cycle != "no" ) {
 
 		# Option 1: remove all the difference:
 		if (filter.cell.cycle == "all.diff"){
-			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score"), 
-					display.progress = FALSE)
+			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nUMI", "percent.mito"), 
+					display.progress = FALSE)			
 			seurat_obj <- RunPCA(object = seurat_obj, pc.genes = c(s.genes, g2m.genes), do.print = FALSE)
 			PCAPlot(object = seurat_obj, plot.title = "After cell cycle correction (method: remove all)") # HUOM, size
 		# Option 2: regressing out the difference between the G2M and S phase scores:	
 		}else if (filter.cell.cycle == "diff.phases"){
 			seurat_obj@meta.data$CC.Difference <- seurat_obj@meta.data$S.Score - seurat_obj@meta.data$G2M.Score
-			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = "CC.Difference", display.progress = FALSE)
+			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nUMI", "percent.mito"), display.progress = FALSE)			
 			seurat_obj <- RunPCA(object = seurat_obj, pc.genes = c(s.genes, g2m.genes), do.print = FALSE)
 			PCAPlot(object = seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)") # HUOM size
 		}
