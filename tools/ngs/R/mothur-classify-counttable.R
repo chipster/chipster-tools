@@ -15,7 +15,7 @@
 # JT 25.8.2018 change the way counttable is generated, add the binary option
 # EK 30.8.2018 added transposed count table compatible with edgeR and DESeq2 tools
 # JT 31.8.2018 added rarefy parameter
-# JT 20.12.2018 remove those species whose rarefied counts are zero in all samples
+# JT 20.12.2018 remove those species whose rarefied counts are zero in all samples, the same seed is used so that the results don't vary from run to run.
 
 library(reshape2)
 
