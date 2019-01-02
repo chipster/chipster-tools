@@ -16,6 +16,12 @@ The purpose of this tool is to use information from the unmapped BAM to fix up a
 In short, this tool can be used to add the cell and molecular barcode and other tags  
 that were lost during the alignment to the aligned BAM file.
 </p>
+
+<p>After merging, Drop-seq tool TagReadWithGeneExon adds a BAM tag GE to reads which overlap an exon of a gene. 
+This tag contains the gene name, as reported in the GTF genome annotation file. 
+For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+</p>
+
  
 <p>
 Note that this tool ignores secondary alignments.</p>
@@ -31,13 +37,15 @@ For more details, please check the <a href="https://broadinstitute.github.io/pic
 <h3>Parameters</h3>
 <ul>
 		<li>Reference [Homo_sapiens.GRCh38] (Homo_sapiens.GRCh38, Mus_musculus.GRCm38)</li>
-		
+				<li>Organism [other]</li>
 	</ul>
+Chipster provides Ensembl-based GTF files for many organisms in the pull-down menu. If you would like to use your own GTF, set the organism parameter to other and check that your GTF file has been correctly assigned in the parameter panel.
+		
 
 
 <h3>Output</h3>
 
 <ul>
-<li>merged.bam: Merged BAM </li></ul>
+<li>merged.bam: Merged BAM file where reads overlapping an exon are tagged with gene name.</li></ul>
 
 </body>
