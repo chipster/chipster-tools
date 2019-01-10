@@ -3,11 +3,12 @@
 # tools will use these numbers rather than summing the counts from the count table.)
 # INPUT sample{...}.tsv: "Individual sample files with counts" TYPE GENERIC 
 # OUTPUT ngs-data-table.tsv: "Data table with read counts" 
-# OUTPUT META phenodata.tsv: "Experiment description file" 
-# PARAMETER experiment_type: "Type of experiment" TYPE [chip_seq: ChIP-seq, rna_seq: RNA-seq, mirna_seq: miRNA-seq] DEFAULT rna_seq (Experiment type.)
-# PARAMETER alignment_type: "Does your data contain genomic coordinates" TYPE [genome: yes, other: no] DEFAULT other (Does your data table contain genomic coordinates. Genomic coordinates can either be stored at separate columns or be part of the IDs.)
-# PARAMETER impute_with: "Impute missing data" TYPE INTEGER FROM 0 TO 1000000 DEFAULT 0 (The value that is used for a sequence read that is not present in a sample.)
+# OUTPUT META phenodata.tsv: "Experiment description file"
 # PARAMETER count_column: "Count column" TYPE COLUMN_SEL DEFAULT EMPTY (Data column containing count data.)
+# PARAMETER alignment_type: "Does your data contain genomic coordinates" TYPE [genome: yes, other: no] DEFAULT other (Does your data table contain genomic coordinates. Genomic coordinates can either be stored at separate columns or be part of the IDs.)
+# PARAMETER experiment_type: "Type of experiment" TYPE [chip_seq: ChIP-seq, rna_seq: RNA-seq, mirna_seq: miRNA-seq] DEFAULT rna_seq (Experiment type.)
+# PARAMETER OPTIONAL impute_with: "Impute missing data" TYPE INTEGER FROM 0 TO 1000000 DEFAULT 0 (The value that is used for a sequence read that is not present in a sample.)
+
 
 # MG 21.3.2011, takes as an input a set of files with read counts. Can also take read sequence, genomic location (chr, start, end) and length 
 # MG, modified to deal with data that was aligned to other than a genome
