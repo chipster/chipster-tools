@@ -16,6 +16,13 @@ if (dump == "aligned") {
 }
 
 sra.path <- file.path(chipster.tools.path, "sratoolkit", "bin")
+#turn of cacheing
+sra.binary <- file.path(sra.path, "vdb-config")
+command.full <- paste(sra.binary, '-s /repository/user/cache-disabled=true 1>>srafetch.log 2>>srafetch.log')
+cat(command.full, "\n", file="srafetch.log", append=TRUE)
+system(command.full)
+
+#Run the actual command
 sra.binary <- file.path(sra.path, "fastq-dump")
 command.full <- paste(sra.binary, dump.param, '--split-files --gzip', entry_id,  '1>>srafetch.log 2>>srafetch.log')
 cat(command.full, "\n", file="srafetch.log", append=TRUE)

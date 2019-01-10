@@ -23,6 +23,13 @@ if ( primary == "yes"){
 
    	
 sra.path <- file.path(chipster.tools.path, "sratoolkit", "bin")
+#turn of cacheing
+sra.binary <- file.path(sra.path, "vdb-config")
+command.full <- paste(sra.binary, '-s /repository/user/cache-disabled=true 1>>srafetch.log 2>>srafetch.log')
+cat(command.full, "\n", file="srafetch.log", append=TRUE)
+system(command.full)
+
+#run the actual command
 sra.binary <- file.path(sra.path, "sam-dump")
 command.full <- paste(sra.binary, dump.par, entry_id, ' > sra_tmp.sam 2> srafetch2.tmp' )
 echo.command <- paste('echo "',command.full, ' "> srafetch.log' )

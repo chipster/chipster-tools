@@ -57,7 +57,7 @@ outfmt.string <- outfmt
 outfmt <- as.integer(outfmt)
 #round(num.queryseq)
 
-if (num.queryseq > 10){
+if (num.queryseq > 100000){
 	stop(paste('Too many query sequences. Maximun is 10 but your file contains ', num.queryseq ))
 }
 
