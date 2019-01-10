@@ -67,7 +67,7 @@ system("echo Indexing the genome... > bowtie2.log")
 check.command <- paste ( bowtie2.index.binary, "genome.txt| tail -1 ")
 genome.dir <- system(check.command, intern = TRUE)
 bowtie2.genome <- file.path( genome.dir , "genome.txt")
-
+bowtie2.genome <- dirname(bowtie2.genome)
 
 # command start
 command.start <- paste("bash -c '", set.path, tophat.binary)

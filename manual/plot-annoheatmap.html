@@ -3,7 +3,7 @@
 <head><title></title></head>
 <body>
 
-<h2>Visualisation / Annotated heatmap</h2>
+<h2>Annotated heatmap</h2>
 
 <h3>Description</h3>
 
@@ -13,10 +13,10 @@ please run the tool "Clustering / Hierachical" and double-click on the result fi
 <h3>Parameters</h3>
 
 <ul>
-<li>Annotation column from the phenodata matrix [EMPTY]</li>
+<li>Phenodata column for optional annotation[EMPTY]</li>
 <li>Number of groups to color to the tree [2] </li>
 <li>Coloring scheme (Red-Green, Red-Black-Green, Red-White-Blue, Black-White) [Green-Red]</li>
-<li>Cluster samples only [no]</li>
+<li>Cluster samples only [yes]</li>
 <li>Scale data [row]</li>
 <li>Distance [pearson]</li>
 <li>Agglomeration method to be used in clustering [average]</li>
@@ -26,22 +26,22 @@ please run the tool "Clustering / Hierachical" and double-click on the result fi
 
 <h3>Details</h3>
 
-<p>First both chips and genes are clustered using the chosen distance metric and agglomeration method. These clusterings are then visualized 
-as a heatmap, where every gene on every chip is colored according to its expression level in the data. Please note that while this tool can 
-be applied to a dataset containing up 20 000 genes/samples, the text doesn't scale accordingly. For large data sets it is recommended to use
+<p>First both samples and genes are clustered using the chosen distance metric and agglomeration method. These clusterings are then visualized 
+as a heatmap, where every gene is colored according to its expression level. Please note that while this tool can 
+be applied to a dataset containing up 20 000 genes/samples, the text doesn't scale accordingly. For large datasets it is recommended to use
 the "Clustering / Hierachical " tool instead.</p>
 
-<p>Sample annotation information can be added by setting the annotation column to something else than EMPTY. Currently, sample information such as annotation or experimental group
+<p>Sample annotation information can be added by setting the phenodata column to something else than EMPTY. Currently, sample information such as annotation or experimental group
 and mean values can be added to plot.
 </p>
 
 <p>The tool also automatically splits the tree into a specified number of groups, and visualizes the dendrogram leading to these groups with 
-different colors, if number of groups to color to the tree is set to something higher than 0. 
+different colors, if number of groups is set to something higher than 0. 
 </p>
 
 <h3>Output</h3>
 
-<p>A color PNG image containing the heatmap:</p>
+<p>A pdf file containing the heatmap:</p>
 
 <img src="heatmapanno.png">
 
