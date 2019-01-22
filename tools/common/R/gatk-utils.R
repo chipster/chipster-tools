@@ -13,7 +13,9 @@ formatGatkVcf <- function(input.vcf){
 	# Bgzip
 	system(paste(bgzip.binary, input.vcf))
 	# Index
-	system(paste(tabix.binary, input.vcf))
+	gz.name <- paste(input.vcf, ".gz", sep="")
+	system(paste(tabix.binary, "-p vcf", gz.name))
+	
 }
 
 # Formast a FASTA format reference sequence to be compatible with GATK
