@@ -23,14 +23,14 @@ formatGatkVcf <- function(input.vcf){
 #
 # Note that e.g for input file "example.fa" you end up with files "example.fa.fai" and "example.fa.dict".
 #
-formatGatkFasta <- function(input.vcf){
+formatGatkFasta <- function(fasta){
 	source(file.path(chipster.common.path, "zip-utils.R"))
 	picard.binary <- c(file.path(chipster.tools.path, "picard-tools", "picard.jar"))
 	samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 	# Uncompress
-	unzipIfGZipFile(input.vcf)
+	unzipIfGZipFile(fasta)
 	# Index
-	system(paste(samtools.binary, "faidx", sequence))
+	system(paste(samtools.binary, "faidx", fasta))
 	# Create dictionary file
-	system(paste("java -jar", picard.binary, "CreateSequenceDictionary", paste("R=", sequence, sep="", collapse=""), paste("O=", sequence, ".dict", sep="", collapse="")))
+	system(paste("java -jar", picard.binary, "CreateSequenceDictionary", paste("R=", fasta, sep="", collapse=""), paste("O=", fasta, ".dict", sep="", collapse="")))
 }
