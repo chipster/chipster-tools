@@ -1,5 +1,5 @@
-# TOOL gatk4-genotypegvcfs.R: "Perform joint genotyping on gVCF files with GATK4" (This tool is based on the GATK tools GenomicsDBImport and GenotypeGVCFs.)
-# INPUT variants{...}.g.vcf: "gVCF files" TYPE GENERIC
+# TOOL gatk4-genotypegvcfs.R: "Perform joint genotyping on gVCF files with GATK4" (This tool is based on the GATK tool GenotypeGVCFs.)
+# INPUT gdb.tar: "GenomicsDB" TYPE GENERIC
 # INPUT reference.fasta: "Reference genome" TYPE GENERIC
 # OUTPUT OPTIONAL jointcalls.vcf
 # OUTPUT OPTIONAL gatk_log.txt
@@ -9,42 +9,24 @@
 
 # AMS 12.07.2016
 
+source(file.path(chipster.common.path, "gatk-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
-for (i in 1:nrow(input.names)) {
-	unzipIfGZipFile(input.names[i,1])	
-}
 
 # binaries
-gatk.binary <- c(file.path(chipster.tools.path, "GATK", "GenomeAnalysisTK.jar"))
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
-picard.binary <- c(file.path(chipster.tools.path, "picard-tools", "picard.jar"))
-
-# Check if GATK is installed
-if (file.exists(gatk.binary) == FALSE){
-	source(file.path(chipster.common.path, "gatk-utils.R"))
-	message <- noGatkMessage()
-	stop(paste('CHIPSTER-NOTE: ', message))
-}
+gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 
 # Pre-process input files
 #
-# Index fasta
-system(paste(samtools.binary, "faidx reference.fasta"))
-# Create dict file
-system(paste("java -jar", picard.binary, "CreateSequenceDictionary R=reference.fasta O=reference.dict"))
-# gVCF file(s)
-inputs <- paste("")
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
-for (i in 1:nrow(input.names)) {
-	if (grepl(".vcf", input.names[i,1])){
-		# Add input to command
-		inputs <- paste(inputs, "-V", input.names[i,1])
-	}	
-}
+# Reference fasta
+formatGatkFasta("reference.fasta")
+system("mv reference.fasta.dict reference.dict")
+
+# GenomicDB tar file
+system("mkdir gdb")
+system("tar xf gdb.tar -C gdb --strip-components=1")
 
 # Command
-command <- paste("java -jar", gatk.binary, "-T GenotypeGVCFs", "-R reference.fasta", inputs)
+command <- paste(gatk.binary, "GenotypeGVCFs", "-R reference.fasta", "-V gendb://gdb")
 
 # Options
 command <- paste(command, "-ploidy", gatk.ploidy)
@@ -53,7 +35,7 @@ if (nchar(gatk.interval) > 0 ){
 	command <- paste(command, "-ip", gatk.padding)
 }
 
-command <- paste(command, "-o jointcalls.vcf")
+command <- paste(command, "-O jointcalls.vcf")
 
 # Capture stderr
 command <- paste(command, "2>> error.txt")
@@ -63,5 +45,6 @@ system(command)
 
 # Return error message if no result
 if (file.exists("jointcalls.vcf") == FALSE){
+	system("ls -l >> error.txt")
 	system("mv error.txt gatk_log.txt")
 }

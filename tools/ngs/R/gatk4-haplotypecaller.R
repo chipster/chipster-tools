@@ -1,4 +1,4 @@
-# TOOL gatk4-haplotypecaller.R: "Call SNPs and INDELs with GATK HaplotypeCaller" (Calls germline SNPs and INDELs simultaneously via local de-novo assembly of haplotypes in an active region. This tool is based on the GATK4 package.)
+# TOOL gatk4-haplotypecaller.R: "Call SNPs and INDELs with GATK4 HaplotypeCaller" (Calls germline SNPs and INDELs simultaneously via local de-novo assembly of haplotypes in an active region. This tool is based on the GATK4 package.)
 # INPUT alignment{...}.bam: "BAM files" TYPE BAM
 # INPUT OPTIONAL reference: "Reference genome" TYPE GENERIC
 # OUTPUT OPTIONAL variants.vcf
@@ -18,6 +18,7 @@
 
 # AMS 11.07.2016
 
+source(file.path(chipster.common.path, "gatk-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("reference")
 
@@ -48,10 +49,10 @@ if (organism == "other"){
 
 # Pre-process input files
 #
-# Index fasta
-system(paste(samtools.binary, "faidx reference.fasta"))
-# Create dictionary file
-system(paste("java -jar", picard.binary, "CreateSequenceDictionary R=reference.fasta O=reference.dict"))
+# FASTA
+formatGatkFasta("reference.fasta")
+system("mv reference.fasta.dict reference.dict")
+
 # BAM file(s)
 inputs <- paste("")
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
