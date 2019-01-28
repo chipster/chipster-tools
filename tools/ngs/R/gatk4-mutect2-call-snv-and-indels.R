@@ -1,10 +1,10 @@
 # TOOL gatk4-mutect2-call-snv-and-indels.R: "Call somatic SNVs and INDELs with GATK4 Mutect2" (Call somatic short variants via local assembly of haplotypes. Short variants include single nucleotide (SNV\) and insertion and deletion (indel\) variants. Tool is based on GATK4 Mutect2 tool.)
-# INPUT sample.bam: "Sample BAM file" TYPE BAM
-# INPUT OPTIONAL control.bam: "Control BAM file" TYPE BAM
-# INPUT reference: "Reference genome" TYPE GENERIC
-# INPUT OPTIONAL germline_resource.vcf: "Germline resource" TYPE GENERIC
-# INPUT OPTIONAL normal_panel.vcf: "Normal panel" TYPE GENERIC
-# INPUT OPTIONAL gatk_interval.vcf: "VCF file to use for intervals" TYPE GENERIC
+# INPUT sample.bam: "Tumor BAM file" TYPE BAM
+# INPUT OPTIONAL control.bam: "Normal BAM file" TYPE BAM
+# INPUT reference: "Reference genome FASTA" TYPE GENERIC
+# INPUT OPTIONAL germline_resource.vcf: "Germline resource VCF" TYPE GENERIC
+# INPUT OPTIONAL normal_panel.vcf: "Panel of Normals" TYPE GENERIC
+# INPUT OPTIONAL gatk_interval.vcf: "Intervals VCF" TYPE GENERIC
 # OUTPUT OPTIONAL mutect2.vcf
 # OUTPUT OPTIONAL gatk_log.txt
 # OUTPUT OPTIONAL mutect2.bam
@@ -24,16 +24,15 @@ unzipIfGZipFile("reference")
 
 # binaries
 gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
-#picard.binary <- c(file.path(chipster.tools.path, "picard-tools", "picard.jar"))
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
-#tabix.binary <- c(file.path(chipster.tools.path, "tabix", "tabix"))
-#bgzip.binary <- c(file.path(chipster.tools.path, "tabix", "bgzip"))
 
 # If user provided fasta we use it, else use internal fasta
 if (organism == "other"){
 	# If user has provided a FASTA, we use it
 	if (file.exists("reference")){
 		file.rename("reference", "reference.fasta")
+		formatGatkFasta("reference.fasta")
+		system("mv reference.fasta.dict reference.dict")
 	}else{
 		stop(paste('CHIPSTER-NOTE: ', "You need to provide a FASTA file or choose one of the provided reference genomes."))
 	}
@@ -51,10 +50,6 @@ if (organism == "other"){
 
 # Pre-process input files
 #
-# FASTA
-formatGatkFasta("reference.fasta")
-system("mv reference.fasta.dict reference.dict")
-
 # BAM file(s)
 system(paste(samtools.binary, "index sample.bam > sample.bam.bai"))
 system(paste(samtools.binary, "index control.bam > control.bam.bai"))
@@ -88,10 +83,13 @@ if (fileOk("gatk_interval.file")){
 	command <- paste(command, "-L", "gatk_interval.vcf.gz")
 }
 
-if (gatk.padding > 0){
-	command <- paste(command, "-ip", gatk.padding)
+if (nchar(gatk.interval) > 0 ){
+	command <- paste(command, "-L", gatk.interval)
+	if (gatk.padding > 0){
+		command <- paste(command, "-ip", gatk.padding)
+	}
 }
-	
+
 if (gatk.bamout == "yes"){
 	command <- paste(command, "-bamout mutect2.bam")
 }
@@ -104,6 +102,19 @@ system(command)
 
 # Return error message if no result
 if (fileNotOk("mutect2.vcf")){
+	system("ls -l >> error.txt")
 	system("mv error.txt gatk_log.txt")
 }
 
+# read input names
+inputnames <- read_input_definitions()
+
+basename <- strip_name(inputnames$sample.bam)
+
+# Make a matrix of output names
+outputnames <- matrix(NA, nrow=2, ncol=2)
+outputnames[1,] <- c("mutect2.bam", paste(basename, "_mutect2.bam", sep=""))
+outputnames[2,] <- c("mutect2.vcf", paste(basename, "_mutect2.vcf", sep=""))
+
+# Write output definitions file
+write_output_definitions(outputnames)

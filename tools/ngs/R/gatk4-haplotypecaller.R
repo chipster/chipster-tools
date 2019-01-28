@@ -73,7 +73,9 @@ command <- paste(gatk.binary, "HaplotypeCaller", "-R reference.fasta", inputs)
 command <- paste(command, "--sample-ploidy", gatk.ploidy)
 if (nchar(gatk.interval) > 0 ){
 	command <- paste(command, "-L", gatk.interval)
-	command <- paste(command, "-ip", gatk.padding)
+	if (gatk.padding > 0){
+		command <- paste(command, "-ip", gatk.padding)
+	}
 }
 command <- paste(command, "-pcr-indel-model", gatk.pcrmodel)
 if (gatk.bamout == "yes"){
