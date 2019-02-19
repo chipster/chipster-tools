@@ -22,6 +22,7 @@
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2018-07-25 ML removed onlypos -parameter
 # 2018-09-26 ML add perplexity parameter for datasets with fewer cells
+# 2019-02-18 ML add heatmap plotting
 
 library(Seurat)
 library(dplyr)
@@ -50,8 +51,6 @@ TSNEPlot(seurat_obj)
 # Number of cells:
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
 
-dev.off() # close the pdf
-
 # Find all markers 
 markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
 write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
@@ -59,5 +58,12 @@ write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col
 # Save the Robj for the next tool
 save(seurat_obj, file="seurat_obj_2.Robj")
 
+# Plot top10 genes of each cluster as a heatmap 
+top10 <- markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
+# setting slim.col.label to TRUE will print just the cluster IDS instead of
+# every cell name
+DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE)
+
+dev.off() # close the pdf
 
 # EOF
