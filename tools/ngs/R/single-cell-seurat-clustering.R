@@ -22,13 +22,12 @@
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2018-07-25 ML removed onlypos -parameter
 # 2018-09-26 ML add perplexity parameter for datasets with fewer cells
-# 2019-02-18 ML add heatmap plotting
+# 2019-02-18 ML add heatmap plotting & number of cells in each cluster
 
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
-library(tools)
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -48,12 +47,14 @@ seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perp
 pdf(file="tSNEplot.pdf") 
 TSNEPlot(seurat_obj)
 
-# Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
-
 # Find all markers 
 markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
 write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+
+# Number of cells:
+textplot(summary(as.factor(seurat_obj@meta.data$res.0.6)), halign="center", valign="center") #, cex=0.8
+title(paste("Number of cells in each cluster: \n Total number of cells: ",length(seurat_obj@cell.names)) )
+# textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
 
 # Save the Robj for the next tool
 save(seurat_obj, file="seurat_obj_2.Robj")
