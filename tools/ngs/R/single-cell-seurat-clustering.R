@@ -52,7 +52,7 @@ markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, 
 write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 # Number of cells:
-textplot(summary(as.factor(seurat_obj@meta.data$res.0.6)), halign="center", valign="center") #, cex=0.8
+textplot(as.matrix(summary(as.factor(seurat_obj@meta.data$res.0.6))), halign="center", valign="center", cex=1.0)
 title(paste("Number of cells in each cluster: \n Total number of cells: ",length(seurat_obj@cell.names)) )
 # textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
 
@@ -61,9 +61,9 @@ save(seurat_obj, file="seurat_obj_2.Robj")
 
 # Plot top10 genes of each cluster as a heatmap 
 top10 <- markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
-# setting slim.col.label to TRUE will print just the cluster IDS instead of
-# every cell name
-DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE)
+# setting slim.col.label to TRUE will print just the cluster IDS instead of every cell name
+# cex.row=4 added to avoid overlapping gene names with most cases
+DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE, cex.row=4)
 
 dev.off() # close the pdf
 
