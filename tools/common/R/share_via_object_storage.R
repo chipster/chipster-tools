@@ -91,7 +91,8 @@ s3command <- paste(s3cmd.binary, "ls | grep 's3://chitemp-' | awk '{print $3}' |
 system(s3command)
 system("echo removing outdated buckets: >> log.txt")
 system("cat rb-list.tmp >> log.txt")
-system("for f in $(cat rb-list.tmp); do s3cmd rb --recursive $f >> log.txt; done")
+forloop <- paste("for f in $(cat rb-list.tmp); do ", s3cmd.binary, " rb --recursive $f >> log.txt; done")
+system(forloop)
 
 if ( save_log == "no") {
 	system ("rm -f log.txt")
