@@ -1,4 +1,4 @@
-# TOOL illumina_download.R: "Retrieve data from Illumina BaseSpace" (Retrieve data from Illumina BaseSpace. This tool requires that you have an access token for the bs client program. Please see the manual for how to obtain it.)
+# TOOL basespace.R: "Retrieve data from Illumina BaseSpace" (Retrieve data from Illumina BaseSpace. This tool requires that you have an access token for the bs client program. Please see the manual for how to obtain it.)
 # OUTPUT OPTIONAL bs.log
 # OUTPUT OPTIONAL bs_data.tsv
 # OUTPUT OPTIONAL bs_data.txt
@@ -8,6 +8,7 @@
 # PARAMETER action: "Action" TYPE [list: "List datasets", download: "Download dataset", dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list (Action to be performed.)
 # PARAMETER apiserver: "API server" TYPE [api.basespace.illumina.com: "api.basespace.illumina.com"] DEFAULT api.basespace.illumina.com (Define the BaseSpace server to be used.) 
 # PARAMETER token: "Access token" TYPE STRING (Your personal Illumina BaseSpace access token.) 
+# PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file for debugging.)
  
 # KM 25.02.2018
 
@@ -41,6 +42,11 @@ if (action== "download"){
 }
 
 system("ls -l >> bs.log")
+
+if (save_log="no"){
+	system("rm -f bs.log")
+}
+
 
 # check that we got something
 #"fastq.files <- Sys.glob("*.fastq.gz")
