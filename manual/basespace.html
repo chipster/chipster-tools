@@ -8,49 +8,45 @@
 <h3>Description</h3>
 
 <p>
-This tool retrieves data from the <a href="https://basespace.illumina.com">Illumina BaseSpace service</a>. 
-To use this tool you need:
+This tool retrieves data from the <a href="https://basespace.illumina.com">Illumina BaseSpace service</a>. It allows you to:
 <ul>
-<li> 1. Use account in Illumina BaseSpace </li>
-<li> 2. Access Token for Illimina BaseSpace client: <b>bs</b> (details below) </li>
-</ul>
-
-This tool allows you to:
-<ul>
-<li><b>List</b> the data sets you have in the Illumina BaseSpace.</li>
-<li><b>Download</b> content of a data set as gzipped tar archive file.</li>
+<li><b>List</b> the data sets you have in Illumina BaseSpace.</li>
+<li><b>Download</b> content of a data set as a gzipped tar archive file.</li>
 <li><b>Display content of a specific data set</b> as a table.</li>
 <li><b>Display detailed information of a data set</b></li>
 </ul>
+In order to use this tool you need
+<ol>
+<li> Illumina BaseSpace user account</li>
+<li> <u>Access token</u> for the Illumina BaseSpace client <b>bs</b> (please find instructions below) </li>
+</ol>
 
 <h3>Parameters</h3>
 
-You must define the Illumina BasesSpade API server and your personal access token for every task.
+You must define the Illumina BaseSpace API server and your personal access token for every task.
 The data sets are identified by their names (id code is not accepted). In the case of data set listing,
-the name parameter is ignored and can be left blank. 
+the name parameter can be left blank. 
 
 
 <h3>Obtaining server name and access token for Illumina BaseSpace</h3>
 
-To create the Access Token you must have access to computer that has 
-<a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview"> bs client installed</a>.
-You can easily install <i>bs client</i> to your local computer or if you have CSC account, you can use
+In order to create the access token you must use a computer that has the
+<a href="https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview"> bs client</a> installed.
+You can easily install the bs client on your local computer, or if you have CSC account you can use
 the <a href="https://research.csc.fi/-/illumina-basespace">bs client installed in taito.csc.fi</a>.
 
-The access token is created with bs setup command:
+The access token is created with the following bs setup command:
 <pre>
 bs -auth
 </pre>
-<p>The command prints out a link, that you should paste to a browser program to verify your authentication.
-After the authentication, Illumina BaseSpace configuration file is created to your home directory 
-in the computer where you executed the <i>bs -auth</i> command. This configuration file contains information about the 
-server name and access token you should use.
-</p><p>
-In Taito, you can print out the content of the configuration file with command:
+<p>The command prints out a link that you should paste to a web browser to verify your authentication.
+After the authentication, Illumina BaseSpace configuration file is created in your home directory 
+on the computer where you executed the command. This configuration file contains information about the 
+server name and access token you should use in Chipster. If you do this in Taito, you can print out the content of the configuration file with command:
 <pre>cat $HOME/.basespace/default.cfg</pre>
 
 <p>
-Note, that you need to set the access token for BassSpace only once. However you must include the access token 
+Note that you need to set the access token for BaseSpace only once. However, you must include the access token 
 to every BaseSpace command in Chipster, as Chipster does not store the access token information.
 </p>
 
