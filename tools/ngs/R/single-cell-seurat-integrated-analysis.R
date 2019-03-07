@@ -4,13 +4,16 @@
 # OUTPUT OPTIONAL seurat_obj_combined.Robj
 # PARAMETER OPTIONAL num.dims: "Number of CCs to use " TYPE INTEGER DEFAULT 20 (Number of canonical correlates to use. Use the plots from CCA tool to estimate how many you wish to use.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.6 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
+# PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 0.5 (Point size for tSNE plot. )
 # RUNTIME R-3.4.3
 
 
 
 # 2018-16-05 ML
+# 2019-02-18 ML add heatmap plotting & number of cells in each cluster
 
 library(Seurat)
+library(gplots)
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
 load("combined_seurat_obj.Robj")
@@ -35,9 +38,15 @@ data.combined <- FindClusters(data.combined, reduction.type = "cca.aligned",
 		resolution = res, dims.use = 1:num.dims)
 
 # Visualization
-p1 <- TSNEPlot(data.combined, do.return = T, pt.size = 0.5, group.by = "stim")
-p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = 0.5)
+p1 <- TSNEPlot(data.combined, do.return = T, pt.size = point.size, group.by = "stim")
+p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = point.size)
 plot_grid(p1, p2)
+
+# Number of cells:
+textplot(as.matrix(summary(as.factor(data.combined@meta.data$res.0.6))), halign="center", valign="center", cex=1.2)
+title(paste("Number of cells in each cluster: \n Total number of cells: ",length(data.combined@cell.names)) )
+# textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
+
 
 dev.off() # close the pdf
 
