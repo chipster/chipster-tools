@@ -1,3 +1,4 @@
 /.project
 /build/
 .gradle/
+deploy/node_modules

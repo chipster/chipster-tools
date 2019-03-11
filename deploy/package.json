@@ -1,0 +1,14 @@
+{
+  "name": "chipster-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "targz": "^1.0.1"
+  }
+}
