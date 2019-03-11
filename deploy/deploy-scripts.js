@@ -33,7 +33,9 @@ function makePackage(packageFile, callback) {
       dest: packageFile,
       tar: {
         // follow symlinks
-        dereference: true
+        dereference: true,
+        dmode: 0755, // needed in windows
+        fmode: 0644 // needed in windows
       }
     },
     function(err) {
@@ -47,12 +49,11 @@ function makePackage(packageFile, callback) {
 }
 
 function reloadAll(stdinFile, subproject, callback) {
+  // chmod is neeeded only if somebody has uploaded a tar without correct file modes
   var remoteScript = `
-  rm -rf tools
-  mkdir tools
-  pushd tools
-  tar -xz
-  popd
+  chmod -R ugo+rwx tools
+  rm -rf tools/*
+  tar -xz -C tools
   `;
 
   reload(remoteScript, stdinFile, subproject, callback);
@@ -69,9 +70,12 @@ function reloadFile(file, subproject, callback) {
 function reload(remoteScript, stdinFile, subproject, callback) {
   console.log("Uploading to toolbox-" + subproject + "...");
 
+  logTailStartsMark = "LOG TAIL STARTS";
+
   remoteScript += `
   echo "Reloading..."
   touch .reload/touch-me-to-reload-tools
+  echo ` + logTailStartsMark + `
   tail -f logs/chipster.log & sleep 5; kill %%
   echo Done
   `;
@@ -80,11 +84,13 @@ function reload(remoteScript, stdinFile, subproject, callback) {
     "rsh",
     "dc/toolbox-" + subproject,
     "bash",
+    "-e",
     "-c",
     remoteScript
   ]);
 
   var reloadStarted = false;
+  var logTailStarted = false;
 
   child.stdout.on("data", function(data) {
     var stop = false;
@@ -93,6 +99,11 @@ function reload(remoteScript, stdinFile, subproject, callback) {
     // line after each data block
     var lines = data.replace(/\n$/, "").split("\n");
     for (var line of lines) {
+
+      if (line.indexOf(logTailStartsMark) != -1) {
+        logTailStarted = true;
+      }
+
       // skip messages until the reload is started
       if (line.indexOf("tool reload requested") != -1) {
         reloadStarted = true;
@@ -105,7 +116,8 @@ function reload(remoteScript, stdinFile, subproject, callback) {
         stop = true;
       }
 
-      if (reloadStarted) {
+      // show output until log tailing starts. Then skip all old log messages until the tool reload starts
+      if (!logTailStarted || reloadStarted) {
         process.stdout.write(line + "\n");
       }
 
@@ -252,11 +264,19 @@ function main(args, confPath) {
           for (dir of getDirectoriesRecursive(dir)) {
             watchDir(dir, filename => {
               console.log("Reload file " + filename);
+              // convert windows paths
+              filename = path.relative("", filename).replace(/\\/g, "/");
+              console.log("Remote path " + filename);
               reloadFile(filename, subproject, () => {});
             });
           }
         } else {
-          let packageFile = path.join("build", "tools.tar.gz");
+          let packageDir = "build";
+          if (!fs.existsSync(packageDir)){
+            fs.mkdirSync(packageDir);
+          }
+          let packageFile = path.join(packageDir, "tools.tar.gz");
+          
           makePackage(packageFile, () => {
             reloadAll(packageFile, subproject, () => {
               fs.unlink(packageFile, err => {
