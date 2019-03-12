@@ -4,6 +4,14 @@ const execFile = require("child_process").execFile;
 const homedir = require("os").homedir();
 const path = require("path");
 
+/**
+ * Deploy tool scripts to Chipster running in OKD
+ *
+ * There are two modes
+ *  1. Default: Deploy all tools and exit
+ *  2. --watch: Watch tool script changes and deploy changed files one by one
+ */
+
 let originalProject;
 
 function flatten(lists) {
@@ -17,7 +25,13 @@ function getDirectories(srcpath) {
     .filter(path => fs.statSync(path).isDirectory());
 }
 
-// https://stackoverflow.com/a/40896897
+/**
+ * Get all directories under the srcpath
+ *
+ * https://stackoverflow.com/a/40896897
+ *
+ * @param {string} srcpath
+ */
 function getDirectoriesRecursive(srcpath) {
   return [
     srcpath,
@@ -25,6 +39,12 @@ function getDirectoriesRecursive(srcpath) {
   ];
 }
 
+/**
+ * Package all files in the directory "tools" to a .tar.gz file
+ *
+ * @param {string} packageFile
+ * @callback callback
+ */
 function makePackage(packageFile, callback) {
   console.log("Packaging...");
   targz.compress(
@@ -48,7 +68,14 @@ function makePackage(packageFile, callback) {
   );
 }
 
-function reloadAll(stdinFile, subproject, callback) {
+/**
+ * Reload all tools from the .tar.gz package
+ *
+ * @param {string} packageFile path to local .tar.gz file
+ * @param {string} subproject subproject name to find the correct toolbox instance
+ * @callback callback
+ */
+function reloadAll(packageFile, subproject, callback) {
   // chmod is neeeded only if somebody has uploaded a tar without correct file modes
   var remoteScript = `
   chmod -R ugo+rwx tools
@@ -56,9 +83,16 @@ function reloadAll(stdinFile, subproject, callback) {
   tar -xz -C tools
   `;
 
-  reload(remoteScript, stdinFile, subproject, callback);
+  reload(remoteScript, packageFile, subproject, callback);
 }
 
+/**
+ * Reload a single tool script
+ *
+ * @param {string} file path to file to replace under the tools directory in linux format
+ * @param {string} subproject subproject name to find the correct toolbox instance
+ * @callback callback
+ */
 function reloadFile(file, subproject, callback) {
   var remoteScript = "";
   remoteScript += "rm -f " + file + "\n";
@@ -67,15 +101,32 @@ function reloadFile(file, subproject, callback) {
   reload(remoteScript, file, subproject, callback);
 }
 
+/**
+ * Reload tools in the toolbox of the given subproject
+ *
+ * Tool scripts can be updated using the stdinFile and remoteScript before the
+ * reload.
+ *
+ * After the reload is triggered, we try to parse the relevant section from the
+ * toolbox log.
+ *
+ * @param {string} remoteScript bash script executed in the toolbox container
+ * @param {string} stdinFile path to local file that is passed to the stdin of the remoteScript
+ * @param {string} subproject name to find the correct toolbox instance
+ * @callback callback called when the reload has finished
+ */
 function reload(remoteScript, stdinFile, subproject, callback) {
   console.log("Uploading to toolbox-" + subproject + "...");
 
   logTailStartsMark = "LOG TAIL STARTS";
 
-  remoteScript += `
+  remoteScript +=
+    `
   echo "Reloading..."
   touch .reload/touch-me-to-reload-tools
-  echo ` + logTailStartsMark + `
+  echo ` +
+    logTailStartsMark +
+    `
   tail -f logs/chipster.log & sleep 5; kill %%
   echo Done
   `;
@@ -99,7 +150,6 @@ function reload(remoteScript, stdinFile, subproject, callback) {
     // line after each data block
     var lines = data.replace(/\n$/, "").split("\n");
     for (var line of lines) {
-
       if (line.indexOf(logTailStartsMark) != -1) {
         logTailStarted = true;
       }
@@ -142,6 +192,16 @@ function reload(remoteScript, stdinFile, subproject, callback) {
   stdinStream.pipe(child.stdin);
 }
 
+/**
+ * Watch all file changes in all directories under the directory
+ *
+ * Wait 100 milliseconds to see if there are more changes to come. When no
+ * new changes are noticed during that time, a callback is called with the
+ * filename of the last change.
+ *
+ * @param {string} dir
+ * @callback callback
+ */
 function watchDir(dir, callback) {
   fs.watch(dir, (event, filename) => {
     if (filename) {
@@ -152,7 +212,15 @@ function watchDir(dir, callback) {
   });
 }
 
-var timeout;
+let timeout;
+/**
+ * Call the function when this method hasn't been called again in the wait time
+ *
+ * TODO get rid of the global timeout variable
+ *
+ * @callback func
+ * @param {number} wait in milliseconds
+ */
 function debounce(func, wait) {
   if (timeout) {
     // cancel previous update, because of new one
@@ -164,6 +232,14 @@ function debounce(func, wait) {
   }, wait);
 }
 
+/**
+ * Get a value of the field in object
+ *
+ * Throw error if the field is not found (or the value is null).
+ *
+ * @param {Object} obj
+ * @param {string} key
+ */
 function getConfiguration(obj, key) {
   if (obj[key] == null) {
     throw new Error(
@@ -173,6 +249,12 @@ function getConfiguration(obj, key) {
   return obj[key];
 }
 
+/**
+ * Change to given OKD project
+ *
+ * @param {string} project
+ * @callback callback
+ */
 function changeProject(project, callback) {
   console.log("Change to OKD project " + project);
 
@@ -190,9 +272,17 @@ function changeProject(project, callback) {
   );
 }
 
+/**
+ * Login to OKD if necessary
+ *
+ * @param {string} host
+ * @param {string} token
+ * @callback callback
+ */
 function login(host, token, callback) {
   console.log("Check if logged in to oc");
 
+  // use "whoami" to check if logged in already (took about 1 second vs. 3 seconds to login)
   execFile("oc", ["whoami"], (error, stdout, stderr) => {
     if (error) {
       console.log("Login to " + host);
@@ -213,9 +303,18 @@ function login(host, token, callback) {
   });
 }
 
+/**
+ * Change to a OKD project if necessary
+ *
+ * Store the original project in the global variable "originalProject".
+ *
+ * @param {string} project
+ * @callback callback
+ */
 function checkProject(project, callback) {
   console.log("Check current project in oc");
 
+  // check first to see if change is necessary (took 0.2 seconds vs. 2 seconds to change it)
   const child = execFile("oc", ["project", "-q"], (error, stdout, stderr) => {
     if (error) {
       console.log(stdout);
@@ -272,11 +371,11 @@ function main(args, confPath) {
           }
         } else {
           let packageDir = "build";
-          if (!fs.existsSync(packageDir)){
+          if (!fs.existsSync(packageDir)) {
             fs.mkdirSync(packageDir);
           }
           let packageFile = path.join(packageDir, "tools.tar.gz");
-          
+
           makePackage(packageFile, () => {
             reloadAll(packageFile, subproject, () => {
               fs.unlink(packageFile, err => {
