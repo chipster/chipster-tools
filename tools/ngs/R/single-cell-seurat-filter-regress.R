@@ -23,6 +23,7 @@
 # 2018-02-19 ML Cell cycle filtering, plot dispersion plots without gene names and both scaled & non-scaled version, add parameters for normalisation
 # 2018-11-07 ML Update the cutoffs for variable genes: xmin = 0.0125->0.1, x.high.cutoff = 3 -> 8, y.cutoff = 0.5 -> 1
 # 2018-12-20 ML ScaleData: scale all changes in one command
+# 2019-03-13 EK Removed names of variable genes from dispersion plot
 
 library(Seurat)
 library(dplyr)
@@ -58,7 +59,8 @@ if (lognorm=="T") {
 # The purpose of this is to identify variable genes while controlling for the strong relationship 
 # between variability and average expression.
 seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, dispersion.function = LogVMR, 
-		x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = TRUE )
+		#x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = TRUE )
+		x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = FALSE )
 # do.text	= Add text names of variable genes to plot (default is TRUE)
 # plot.both	= Plot both the scaled and non-scaled graphs.
 length(x = seurat_obj@var.genes)
