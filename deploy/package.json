@@ -9,6 +9,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "chipster-cli-js": "0.0.1",
+    "request": "^2.88.0",
     "targz": "^1.0.1"
   }
 }

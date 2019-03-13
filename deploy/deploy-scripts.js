@@ -1,15 +1,19 @@
 const targz = require("targz");
 const fs = require("fs");
 const execFile = require("child_process").execFile;
-const homedir = require("os").homedir();
 const path = require("path");
+var request = require("request");
+const utils = require(path.resolve(__dirname, "./deploy-utils.js"));
+const WsClient = require("chipster-cli-js/lib/ws-client.js").default;
+const ChipsterUtils = require("chipster-cli-js/lib/chipster-utils.js").default;
 
 /**
  * Deploy tool scripts to Chipster running in OKD
  *
- * There are two modes
+ * There are different modes
  *  1. Default: Deploy all tools and exit
  *  2. --watch: Watch tool script changes and deploy changed files one by one
+ *  3. --run: Watch tool script changes and deploy changed files and restart the latest job
  */
 
 let originalProject;
@@ -243,7 +247,7 @@ function debounce(func, wait) {
 function getConfiguration(obj, key) {
   if (obj[key] == null) {
     throw new Error(
-      "configuration key not found: " + key + " from " + confPath
+      "configuration key not found: " + key + " from " + utils.getConfigPath()
     );
   }
   return obj[key];
@@ -333,67 +337,274 @@ function checkProject(project, callback) {
   });
 }
 
-function main(args, confPath) {
-  fs.readFile(confPath, "utf8", (err, data) => {
-    if (err) {
-      if (err.code == "ENOENT") {
-        console.log("configuration file not found: " + confPath);
-        process.exit(1);
+function watchAndReload(subproject, callback) {
+  var dir = "tools";
+  console.log("Watching file changes in directory '" + dir + "'...");
+  for (dir of getDirectoriesRecursive(dir)) {
+    watchDir(dir, filename => {
+      console.log("Reload file " + filename);
+      // convert windows paths
+      filename = path.relative("", filename).replace(/\\/g, "/");
+      console.log("Remote path " + filename);
+      reloadFile(filename, subproject, () => callback(filename));
+    });
+  }
+}
+
+function packageAndReloadAll(subproject) {
+  let packageDir = "build";
+  if (!fs.existsSync(packageDir)) {
+    fs.mkdirSync(packageDir);
+  }
+  let packageFile = path.join(packageDir, "tools.tar.gz");
+
+  makePackage(packageFile, () => {
+    reloadAll(packageFile, subproject, () => {
+      fs.unlink(packageFile, err => {
+        if (err) {
+          throw err;
+        }
+      });
+      if (originalProject != null) {
+        changeProject(originalProject, () => {});
+      }
+    });
+  });
+}
+
+function getChipsterPassword(subproject, chipsterUsername, callback) {
+  console.log("Get Chipster password");
+  utils.runAndGetOutput(
+    "oc",
+    [
+      "rsh",
+      "dc/auth-" + subproject,
+      "bash",
+      "-e",
+      "-c",
+      "set -o pipefail; cat security/users | grep '^" +
+        chipsterUsername +
+        ":' | cut -d ':' -f 2"
+    ],
+    password => {
+      callback(password.trim());
+    }
+  );
+}
+
+function getChipsterToken(subproject, chipsterUsername, project, callback) {
+  getChipsterPassword(subproject, chipsterUsername, password => {
+    console.log("Log in to Chipster as " + chipsterUsername);
+    chipsterRequest(
+      "post",
+      "auth",
+      "tokens",
+      subproject,
+      project,
+      chipsterUsername,
+      password,
+      null,
+      resp => {
+        callback(JSON.parse(resp).tokenKey);
+      }
+    );
+  });
+}
+
+function chipsterRequest(
+  method,
+  service,
+  path,
+  subproject,
+  project,
+  username,
+  password,
+  body,
+  callback
+) {
+  let uri =
+    "https://" +
+    service +
+    "-" +
+    subproject +
+    "-" +
+    project +
+    ".rahtiapp.fi/" +
+    path;
+  request[method](
+    uri,
+    {
+      auth: {
+        user: username,
+        pass: password
+      },
+      json: body != null,
+      body: body
+    },
+    (error, response, body) => {
+      if (!error && response.statusCode >= 200 && response.statusCode <= 299) {
+        callback(body);
       } else {
-        throw err;
+        msg = "Chipster request failed " + method + " " + uri + "\n";
+        if (response != null) {
+          msg += " http status: " + response.statusCode + "\n";
+        }
+
+        if (error != null) {
+          msg += " error: " + error + "\n";
+        }
+
+        if (body != null) {
+          msg += " body: " + error + "\n";
+        }
+        throw new Error(msg);
       }
     }
-    try {
-      var obj = JSON.parse(data);
-    } catch (err) {
-      console.log("configuration file parsing failed", confPath, "\n", err);
-      process.exit(1);
-    }
+  );
+}
 
+function getLatestSession(subproject, project, token, callback) {
+  chipsterRequest(
+    "get",
+    "session-db",
+    "sessions",
+    subproject,
+    project,
+    "token",
+    token,
+    null,
+    resp => {
+      let sessions = JSON.parse(resp);
+
+      sessions.sort(function compare(a, b) {
+        var dateA = new Date(a.accessed);
+        var dateB = new Date(b.accessed);
+        return dateB - dateA;
+      });
+      callback(sessions[0]);
+    }
+  );
+}
+
+function getLatestJob(subproject, project, token, sessionId, callback) {
+  chipsterRequest(
+    "get",
+    "session-db",
+    "sessions/" + sessionId + "/jobs",
+    subproject,
+    project,
+    "token",
+    token,
+    null,
+    resp => {
+      let jobs = JSON.parse(resp);
+
+      jobs.sort(function compare(a, b) {
+        var dateA = new Date(a.created);
+        var dateB = new Date(b.created);
+        return dateB - dateA;
+      });
+
+      callback(jobs[0]);
+    }
+  );
+}
+
+function runJob(subproject, project, token, sessionId, job, callback) {
+  chipsterRequest(
+    "post",
+    "session-db",
+    "sessions/" + sessionId + "/jobs",
+    subproject,
+    project,
+    "token",
+    token,
+    job,
+    resp => {
+      console.log("job created", resp);
+      callback(resp.jobId);
+    }
+  );
+}
+
+function followJob(sessionId, jobId, token, subproject, job) {
+  ChipsterUtils.getRestClient(
+    "https://" + subproject + "-" + project + ".rahtiapp.fi",
+    token
+  ).subscribe(
+    restClient => {
+      let wsClient = new WsClient(restClient);
+      wsClient.connect(sessionId);
+
+      wsClient.getJobState$(jobId).subscribe(
+        job => {
+          console.log("*", job.state, "(" + (job.stateDetail || "") + ")");
+        },
+        err => console.error("failed to get the job state", err),
+        () => {
+          wsClient.disconnect();
+        }
+      );
+
+      wsClient.getJobScreenOutput$(jobId).subscribe(
+        output => {
+          process.stdout.write(output);
+        },
+        err => console.debug("job screen output error", err)
+      );
+      wsClient.getJobOutputDatasets$(jobId).subscribe(
+        dataset => {
+          console.log(
+            "* dataset created: " + dataset.name.padEnd(24) + dataset.datasetId
+          );
+        },
+        err => console.debug("job output file error", err)
+      );
+    },
+    err => console.log("rest client error", err)
+  );
+}
+
+function watchAndRun(subproject, chipsterUserId, project, callback) {
+  let chipsterUsername = chipsterUserId.split("/")[1];
+  getChipsterToken(subproject, chipsterUsername, project, token => {
+    watchAndReload(subproject, () => {
+      getLatestSession(subproject, project, token, session => {
+        getLatestJob(subproject, project, token, session.sessionId, job => {
+          job.state = "NEW";
+          job.jobId = null;
+          console.log(
+            "Rerun latest job " + job.toolId + " in session " + session.name
+          );
+          runJob(subproject, project, token, session.sessionId, job, jobId => {
+            followJob(session.sessionId, jobId, token, subproject, project);
+          });
+        });
+      });
+    });
+  });
+}
+
+function main(args) {
+  utils.getConfig(obj => {
     var host = getConfiguration(obj, "okdHost");
     var token = getConfiguration(obj, "okdToken");
     var project = getConfiguration(obj, "okdProject");
     var subproject = getConfiguration(obj, "subproject");
+    var chipsterUserId = getConfiguration(obj, "chipsterUsername");
 
     login(host, token, () => {
       checkProject(project, () => {
         if (args.includes("--watch")) {
-          var dir = "tools";
-          console.log("Watching file changes in directory '" + dir + "'...");
-          for (dir of getDirectoriesRecursive(dir)) {
-            watchDir(dir, filename => {
-              console.log("Reload file " + filename);
-              // convert windows paths
-              filename = path.relative("", filename).replace(/\\/g, "/");
-              console.log("Remote path " + filename);
-              reloadFile(filename, subproject, () => {});
-            });
-          }
+          watchAndReload(subproject, () => {});
+        } else if (args.includes("--run")) {
+          watchAndRun(subproject, chipsterUserId, project, () => {});
         } else {
-          let packageDir = "build";
-          if (!fs.existsSync(packageDir)) {
-            fs.mkdirSync(packageDir);
-          }
-          let packageFile = path.join(packageDir, "tools.tar.gz");
-
-          makePackage(packageFile, () => {
-            reloadAll(packageFile, subproject, () => {
-              fs.unlink(packageFile, err => {
-                if (err) {
-                  throw err;
-                }
-              });
-              if (originalProject != null) {
-                changeProject(originalProject, () => {});
-              }
-            });
-          });
+          packageAndReloadAll(subproject);
         }
       });
     });
   });
 }
 
-let confPath = path.join(homedir, ".chipster", "deploy-scripts.json");
-
-main(process.argv, confPath);
+main(process.argv);

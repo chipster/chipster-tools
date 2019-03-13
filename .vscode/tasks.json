@@ -14,6 +14,12 @@
       "type": "shell",
       "command": "node deploy/deploy-scripts-launcher.js --watch",
       "problemMatcher": ["$tsc-watch"]
+    },
+    {
+      "label": "deploy-scripts-run",
+      "type": "shell",
+      "command": "node deploy/deploy-scripts-launcher.js --run",
+      "problemMatcher": ["$tsc-watch"]
     }
   ]
 }
