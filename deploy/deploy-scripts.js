@@ -6,6 +6,24 @@ var request = require("request");
 const utils = require(path.resolve(__dirname, "./deploy-utils.js"));
 const WsClient = require("chipster-cli-js/lib/ws-client.js").default;
 const ChipsterUtils = require("chipster-cli-js/lib/chipster-utils.js").default;
+const {
+  of,
+  bindCallback,
+  bindNodeCallback,
+  Subject,
+  merge,
+  forkJoin
+} = require("rxjs");
+const {
+  mergeMap,
+  catchError,
+  debounceTime,
+  map,
+  tap,
+  finalize,
+  toArray,
+  takeUntil
+} = require("rxjs/operators");
 
 /**
  * Deploy tool scripts to Chipster running in OKD
@@ -47,29 +65,19 @@ function getDirectoriesRecursive(srcpath) {
  * Package all files in the directory "tools" to a .tar.gz file
  *
  * @param {string} packageFile
- * @callback callback
  */
-function makePackage(packageFile, callback) {
+function makePackage(packageFile) {
   console.log("Packaging...");
-  targz.compress(
-    {
-      src: "tools",
-      dest: packageFile,
-      tar: {
-        // follow symlinks
-        dereference: true,
-        dmode: 0755, // needed in windows
-        fmode: 0644 // needed in windows
-      }
-    },
-    function(err) {
-      if (err) {
-        throw err;
-      } else {
-        callback();
-      }
+  return bindNodeCallback(targz.compress)({
+    src: "tools",
+    dest: packageFile,
+    tar: {
+      // follow symlinks
+      dereference: true,
+      dmode: 0755, // needed in windows
+      fmode: 0644 // needed in windows
     }
-  );
+  });
 }
 
 /**
@@ -77,9 +85,8 @@ function makePackage(packageFile, callback) {
  *
  * @param {string} packageFile path to local .tar.gz file
  * @param {string} subproject subproject name to find the correct toolbox instance
- * @callback callback
  */
-function reloadAll(packageFile, subproject, callback) {
+function reloadAll(packageFile, subproject) {
   // chmod is neeeded only if somebody has uploaded a tar without correct file modes
   var remoteScript = `
   chmod -R ugo+rwx tools
@@ -87,7 +94,7 @@ function reloadAll(packageFile, subproject, callback) {
   tar -xz -C tools
   `;
 
-  reload(remoteScript, packageFile, subproject, callback);
+  return reload(remoteScript, packageFile, subproject);
 }
 
 /**
@@ -95,14 +102,13 @@ function reloadAll(packageFile, subproject, callback) {
  *
  * @param {string} file path to file to replace under the tools directory in linux format
  * @param {string} subproject subproject name to find the correct toolbox instance
- * @callback callback
  */
-function reloadFile(file, subproject, callback) {
+function reloadFile(file, subproject, onlyErrors) {
   var remoteScript = "";
   remoteScript += "rm -f " + file + "\n";
   remoteScript += "cat - > " + file + "\n";
 
-  reload(remoteScript, file, subproject, callback);
+  return reload(remoteScript, file, subproject, onlyErrors);
 }
 
 /**
@@ -117,10 +123,9 @@ function reloadFile(file, subproject, callback) {
  * @param {string} remoteScript bash script executed in the toolbox container
  * @param {string} stdinFile path to local file that is passed to the stdin of the remoteScript
  * @param {string} subproject name to find the correct toolbox instance
- * @callback callback called when the reload has finished
  */
-function reload(remoteScript, stdinFile, subproject, callback) {
-  console.log("Uploading to toolbox-" + subproject + "...");
+function reload(remoteScript, stdinFile, subproject, onlyErrors = false) {
+  console.log("Reload toolbox-" + subproject);
 
   logTailStartsMark = "LOG TAIL STARTS";
 
@@ -135,7 +140,7 @@ function reload(remoteScript, stdinFile, subproject, callback) {
   echo Done
   `;
 
-  var child = execFile("oc", [
+  let child = execFile("oc", [
     "rsh",
     "dc/toolbox-" + subproject,
     "bash",
@@ -144,16 +149,19 @@ function reload(remoteScript, stdinFile, subproject, callback) {
     remoteScript
   ]);
 
-  var reloadStarted = false;
-  var logTailStarted = false;
+  let reloadStarted = false;
+  let logTailStarted = false;
+  let onlyErrorsBuffer = "";
 
-  child.stdout.on("data", function(data) {
-    var stop = false;
+  let subject = new Subject();
+
+  child.stdout.on("data", data => {
+    let stop = false;
     // read data line by line to react to specific log messages
     // remove the last newline before splitting, because that would create an extra empty
     // line after each data block
-    var lines = data.replace(/\n$/, "").split("\n");
-    for (var line of lines) {
+    let lines = data.replace(/\n$/, "").split("\n");
+    for (let line of lines) {
       if (line.indexOf(logTailStartsMark) != -1) {
         logTailStarted = true;
       }
@@ -172,7 +180,11 @@ function reload(remoteScript, stdinFile, subproject, callback) {
 
       // show output until log tailing starts. Then skip all old log messages until the tool reload starts
       if (!logTailStarted || reloadStarted) {
-        process.stdout.write(line + "\n");
+        if (onlyErrors) {
+          onlyErrorsBuffer += line + "\n";
+        } else {
+          process.stdout.write(line + "\n");
+        }
       }
 
       if (stop) {
@@ -181,59 +193,47 @@ function reload(remoteScript, stdinFile, subproject, callback) {
       }
     }
   });
-  child.stderr.on("data", function(data) {
-    process.stderr.write(data);
+  child.stderr.on("data", data => {
+    // silence these repeating messages
+    if (
+      data.indexOf("Defaulting container name to ") == -1 &&
+      data.indexOf(" to see all of the containers in this pod.") == -1
+    ) {
+      process.stderr.write(data);
+    }
   });
-  child.on("close", function(code, signal) {
-    callback();
+  child.on("close", (code, signal) => {
+    subject.next();
+    subject.complete();
   });
 
-  child.on("error", function(err) {
-    throw err;
+  child.on("error", err => {
+    if (onlyErrors) {
+      process.stdout.write(onlyErrorsBuffer);
+    }
   });
 
   var stdinStream = fs.createReadStream(stdinFile);
   stdinStream.pipe(child.stdin);
+
+  return subject;
 }
 
 /**
  * Watch all file changes in all directories under the directory
  *
- * Wait 100 milliseconds to see if there are more changes to come. When no
- * new changes are noticed during that time, a callback is called with the
- * filename of the last change.
- *
  * @param {string} dir
- * @callback callback
  */
-function watchDir(dir, callback) {
+function watchDir(dir) {
+  let subject = new Subject();
   fs.watch(dir, (event, filename) => {
     if (filename) {
-      debounce(() => {
-        callback(path.resolve(dir, filename));
-      }, 100);
+      let absolutePath = path.resolve(dir, filename);
+      let relativePath = path.relative("", absolutePath);
+      subject.next(relativePath);
     }
   });
-}
-
-let timeout;
-/**
- * Call the function when this method hasn't been called again in the wait time
- *
- * TODO get rid of the global timeout variable
- *
- * @callback func
- * @param {number} wait in milliseconds
- */
-function debounce(func, wait) {
-  if (timeout) {
-    // cancel previous update, because of new one
-    clearTimeout(timeout);
-  }
-  timeout = setTimeout(() => {
-    timeout = null;
-    func();
-  }, wait);
+  return subject;
 }
 
 /**
@@ -257,23 +257,10 @@ function getConfiguration(obj, key) {
  * Change to given OKD project
  *
  * @param {string} project
- * @callback callback
  */
-function changeProject(project, callback) {
+function changeProject(project) {
   console.log("Change to OKD project " + project);
-
-  const child = execFile(
-    "oc",
-    ["project", project],
-    (error, stdout, stderr) => {
-      if (error) {
-        console.log(stdout);
-        console.log(stderr);
-        throw error;
-      }
-      callback();
-    }
-  );
+  return utils.run("oc", ["project", project]);
 }
 
 /**
@@ -281,30 +268,17 @@ function changeProject(project, callback) {
  *
  * @param {string} host
  * @param {string} token
- * @callback callback
  */
-function login(host, token, callback) {
+function login(host, token) {
   console.log("Check if logged in to oc");
 
   // use "whoami" to check if logged in already (took about 1 second vs. 3 seconds to login)
-  execFile("oc", ["whoami"], (error, stdout, stderr) => {
-    if (error) {
-      console.log("Login to " + host);
-      execFile(
-        "oc",
-        ["login", host, "--token=" + token],
-        (error, stdout, stderr) => {
-          if (error) {
-            console.log(stdout);
-            console.log(stderr);
-            throw error;
-          }
-          callback();
-        }
-      );
-    }
-    callback();
-  });
+  return utils.runAndGetOutput("oc", ["whoami"]).pipe(
+    catchError(err => {
+      console.log("Log in");
+      return utils.run("oc", ["login", host, "--token=" + token]);
+    })
+  );
 }
 
 /**
@@ -313,102 +287,99 @@ function login(host, token, callback) {
  * Store the original project in the global variable "originalProject".
  *
  * @param {string} project
- * @callback callback
  */
-function checkProject(project, callback) {
+function checkProject(project) {
   console.log("Check current project in oc");
 
   // check first to see if change is necessary (took 0.2 seconds vs. 2 seconds to change it)
-  const child = execFile("oc", ["project", "-q"], (error, stdout, stderr) => {
-    if (error) {
-      console.log(stdout);
-      console.log(stderr);
-      throw error;
-    }
-
-    let currentProject = stdout.trim();
-    if (currentProject != project) {
-      originalProject = currentProject;
-      console.log("current project is " + currentProject);
-      changeProject(project, callback);
-    } else {
-      callback();
-    }
-  });
+  return utils.runAndGetOutput("oc", ["project", "-q"]).pipe(
+    mergeMap(stdout => {
+      let currentProject = stdout.trim();
+      if (currentProject != project) {
+        originalProject = currentProject;
+        console.log("current project is " + currentProject);
+        return changeProject(project);
+      } else {
+        return of(null);
+      }
+    })
+  );
 }
 
-function watchAndReload(subproject, callback) {
+function watchAndReload(subproject, onlyErrors = false) {
   var dir = "tools";
   console.log("Watching file changes in directory '" + dir + "'...");
-  for (dir of getDirectoriesRecursive(dir)) {
-    watchDir(dir, filename => {
-      console.log("Reload file " + filename);
+  let dirWatches$ = getDirectoriesRecursive(dir).map(watchDir);
+  return merge(...dirWatches$).pipe(
+    // wait 100 ms and discard this event if there is a new one
+    debounceTime(100),
+    mergeMap(filename => {
+      console.log("Update file " + filename);
       // convert windows paths
-      filename = path.relative("", filename).replace(/\\/g, "/");
-      console.log("Remote path " + filename);
-      reloadFile(filename, subproject, () => callback(filename));
-    });
-  }
+      filename = filename.replace(/\\/g, "/");
+      return reloadFile(filename, subproject, onlyErrors);
+    })
+  );
 }
 
 function packageAndReloadAll(subproject) {
   let packageDir = "build";
-  if (!fs.existsSync(packageDir)) {
-    fs.mkdirSync(packageDir);
-  }
   let packageFile = path.join(packageDir, "tools.tar.gz");
 
-  makePackage(packageFile, () => {
-    reloadAll(packageFile, subproject, () => {
-      fs.unlink(packageFile, err => {
-        if (err) {
-          throw err;
-        }
-      });
-      if (originalProject != null) {
-        changeProject(originalProject, () => {});
+  return bindNodeCallback(fs.access)(packageDir).pipe(
+    catchError(err => {
+      if (err.code == "ENOENT") {
+        return bindNodeCallback(fs.mkdir)(packageDir);
+      } else {
+        return throwError(err);
       }
-    });
-  });
-}
-
-function getChipsterPassword(subproject, chipsterUsername, callback) {
-  console.log("Get Chipster password");
-  utils.runAndGetOutput(
-    "oc",
-    [
-      "rsh",
-      "dc/auth-" + subproject,
-      "bash",
-      "-e",
-      "-c",
-      "set -o pipefail; cat security/users | grep '^" +
-        chipsterUsername +
-        ":' | cut -d ':' -f 2"
-    ],
-    password => {
-      callback(password.trim());
-    }
+    }),
+    mergeMap(() => makePackage(packageFile)),
+    mergeMap(() => reloadAll(packageFile, subproject)),
+    mergeMap(() => bindNodeCallback(fs.unlink)(packageFile)),
+    mergeMap(() => {
+      if (originalProject != null) {
+        return changeProject(originalProject, () => {});
+      } else {
+        return of(null);
+      }
+    })
   );
 }
 
-function getChipsterToken(subproject, chipsterUsername, project, callback) {
-  getChipsterPassword(subproject, chipsterUsername, password => {
-    console.log("Log in to Chipster as " + chipsterUsername);
-    chipsterRequest(
-      "post",
-      "auth",
-      "tokens",
-      subproject,
-      project,
-      chipsterUsername,
-      password,
-      null,
-      resp => {
-        callback(JSON.parse(resp).tokenKey);
-      }
-    );
-  });
+function getChipsterPassword(subproject, chipsterUsername) {
+  console.log("Get Chipster password");
+  args = [
+    "rsh",
+    "dc/auth-" + subproject,
+    "bash",
+    "-e",
+    "-c",
+    "set -o pipefail; cat security/users | grep '^" +
+      chipsterUsername +
+      ":' | cut -d ':' -f 2"
+  ];
+
+  return utils.runAndGetOutput("oc", args).pipe(map(stdout => stdout.trim()));
+}
+
+function getChipsterToken(subproject, chipsterUsername, project) {
+  return getChipsterPassword(subproject, chipsterUsername).pipe(
+    mergeMap(password => {
+      console.log("Log in to Chipster as " + chipsterUsername);
+      return chipsterRequest(
+        "post",
+        "auth",
+        "tokens",
+        subproject,
+        project,
+        chipsterUsername,
+        password,
+        null
+      );
+    }),
+    map(resp => JSON.parse(resp).tokenKey)
+  );
 }
 
 function chipsterRequest(
@@ -419,8 +390,7 @@ function chipsterRequest(
   project,
   username,
   password,
-  body,
-  callback
+  body
 ) {
   let uri =
     "https://" +
@@ -431,27 +401,29 @@ function chipsterRequest(
     project +
     ".rahtiapp.fi/" +
     path;
-  request[method](
-    uri,
-    {
-      auth: {
-        user: username,
-        pass: password
-      },
-      json: body != null,
-      body: body
+
+  requestOptions = {
+    method: method,
+    uri: uri,
+    auth: {
+      user: username,
+      pass: password
     },
-    (error, response, body) => {
-      if (!error && response.statusCode >= 200 && response.statusCode <= 299) {
-        callback(body);
+    json: body != null,
+    body: body
+  };
+
+  return bindNodeCallback(request)(requestOptions).pipe(
+    map(responseAndBody => {
+      let response = responseAndBody[0];
+      let body = responseAndBody[1];
+
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        return body;
       } else {
         msg = "Chipster request failed " + method + " " + uri + "\n";
         if (response != null) {
           msg += " http status: " + response.statusCode + "\n";
-        }
-
-        if (error != null) {
-          msg += " error: " + error + "\n";
         }
 
         if (body != null) {
@@ -459,12 +431,12 @@ function chipsterRequest(
         }
         throw new Error(msg);
       }
-    }
+    })
   );
 }
 
-function getLatestSession(subproject, project, token, callback) {
-  chipsterRequest(
+function getLatestSession(subproject, project, token) {
+  return chipsterRequest(
     "get",
     "session-db",
     "sessions",
@@ -472,22 +444,57 @@ function getLatestSession(subproject, project, token, callback) {
     project,
     "token",
     token,
-    null,
-    resp => {
-      let sessions = JSON.parse(resp);
+    null
+  ).pipe(
+    map(body => {
+      let sessions = JSON.parse(body);
 
       sessions.sort(function compare(a, b) {
         var dateA = new Date(a.accessed);
         var dateB = new Date(b.accessed);
         return dateB - dateA;
       });
-      callback(sessions[0]);
-    }
+      return sessions[0];
+    })
   );
 }
 
-function getLatestJob(subproject, project, token, sessionId, callback) {
-  chipsterRequest(
+function getDataset(subproject, project, token, sessionId, datasetId) {
+  return chipsterRequest(
+    "get",
+    "session-db",
+    "sessions/" + sessionId + "/datasets/" + datasetId,
+    subproject,
+    project,
+    "token",
+    token,
+    null
+  ).pipe(
+    map(body => {
+      return JSON.parse(body);
+    })
+  );
+}
+
+function getJob(subproject, project, token, sessionId, jobId) {
+  return chipsterRequest(
+    "get",
+    "session-db",
+    "sessions/" + sessionId + "/jobs/" + jobId,
+    subproject,
+    project,
+    "token",
+    token,
+    null
+  ).pipe(
+    map(body => {
+      return JSON.parse(body);
+    })
+  );
+}
+
+function getLatestJob(subproject, project, token, sessionId) {
+  return chipsterRequest(
     "get",
     "session-db",
     "sessions/" + sessionId + "/jobs",
@@ -495,9 +502,10 @@ function getLatestJob(subproject, project, token, sessionId, callback) {
     project,
     "token",
     token,
-    null,
-    resp => {
-      let jobs = JSON.parse(resp);
+    null
+  ).pipe(
+    map(body => {
+      let jobs = JSON.parse(body);
 
       jobs.sort(function compare(a, b) {
         var dateA = new Date(a.created);
@@ -505,13 +513,13 @@ function getLatestJob(subproject, project, token, sessionId, callback) {
         return dateB - dateA;
       });
 
-      callback(jobs[0]);
-    }
+      return jobs[0];
+    })
   );
 }
 
-function runJob(subproject, project, token, sessionId, job, callback) {
-  chipsterRequest(
+function runJob(subproject, project, token, sessionId, job) {
+  return chipsterRequest(
     "post",
     "session-db",
     "sessions/" + sessionId + "/jobs",
@@ -519,92 +527,151 @@ function runJob(subproject, project, token, sessionId, job, callback) {
     project,
     "token",
     token,
-    job,
-    resp => {
-      console.log("job created", resp);
-      callback(resp.jobId);
-    }
-  );
+    job
+  ).pipe(map(resp => resp.jobId));
 }
 
-function followJob(sessionId, jobId, token, subproject, job) {
-  ChipsterUtils.getRestClient(
+function followJob(jobId, wsClient) {
+  let screenOutput$ = wsClient
+    .getJobScreenOutput$(jobId)
+    // wait for stdout flush
+    .pipe(tap(output => process.stdout.write(output)));
+
+  let outputDatasets$ = wsClient.getJobOutputDatasets$(jobId).pipe(
+    tap(dataset => {
+      console.log(
+        "* dataset created: " + dataset.name.padEnd(24) + dataset.datasetId
+      );
+    }),
+    //TODO find out why this doesn't complete when there are no outputs, e.g. when the job fails
+    takeUntil(wsClient.getJobState$(jobId).pipe(toArray()))
+  );
+
+  let jobState$ = wsClient.getJobState$(jobId).pipe(
+    tap(job => {
+      console.log("*", job.state, "(" + (job.stateDetail || "") + ")");
+    })
+  );
+
+  return forkJoin(
+    screenOutput$.pipe(
+      // emit even if empty
+      toArray(),
+      mergeMap(() => of(null))
+    ),
+    outputDatasets$.pipe(
+      toArray(),
+      mergeMap(() => of(null))
+    ),
+    jobState$.pipe(
+      toArray(),
+      mergeMap(() => of(null))
+    )
+  ).pipe(tap(() => wsClient.disconnect()));
+}
+
+function getWsClient(subproject, project, chipsterToken, sessionId) {
+  return ChipsterUtils.getRestClient(
     "https://" + subproject + "-" + project + ".rahtiapp.fi",
-    token
-  ).subscribe(
-    restClient => {
-      let wsClient = new WsClient(restClient);
-      wsClient.connect(sessionId);
-
-      wsClient.getJobState$(jobId).subscribe(
-        job => {
-          console.log("*", job.state, "(" + (job.stateDetail || "") + ")");
-        },
-        err => console.error("failed to get the job state", err),
-        () => {
-          wsClient.disconnect();
-        }
-      );
-
-      wsClient.getJobScreenOutput$(jobId).subscribe(
-        output => {
-          process.stdout.write(output);
-        },
-        err => console.debug("job screen output error", err)
-      );
-      wsClient.getJobOutputDatasets$(jobId).subscribe(
-        dataset => {
-          console.log(
-            "* dataset created: " + dataset.name.padEnd(24) + dataset.datasetId
-          );
-        },
-        err => console.debug("job output file error", err)
-      );
-    },
-    err => console.log("rest client error", err)
+    chipsterToken
+  ).pipe(
+    map(restClient => {
+      // patch these methods in RestClient, for some reason these reqeusts get stuck during a job
+      restClient.getJob = (sessionId, jobId) => {
+        return getJob(subproject, project, chipsterToken, sessionId, jobId);
+      };
+      restClient.getDataset = (sessionId, datasetId) => {
+        return getDataset(
+          subproject,
+          project,
+          chipsterToken,
+          sessionId,
+          datasetId
+        );
+      };
+      wsClient = new WsClient(restClient);
+      // this doesn't wait, hopefully wsClient handles this internally
+      wsClient.connect(sessionId, true);
+      return wsClient;
+    })
   );
 }
 
-function watchAndRun(subproject, chipsterUserId, project, callback) {
+function runLatestJob(subproject, project, chipsterToken, session) {
+  let wsClient;
+  let job2;
+
+  return getLatestJob(
+    subproject,
+    project,
+    chipsterToken,
+    session.sessionId
+  ).pipe(
+    tap(job => {
+      job.state = "NEW";
+      job.jobId = null;
+      console.log(
+        "Restart latest job " + job.toolId + " in session " + session.name
+      );
+      job2 = job;
+    }),
+    mergeMap(() =>
+      getWsClient(subproject, project, chipsterToken, session.sessionId)
+    ),
+    tap(wc => (wsClient = wc)),
+    mergeMap(() =>
+      runJob(subproject, project, chipsterToken, session.sessionId, job2)
+    ),
+    mergeMap(jobId => followJob(jobId, wsClient))
+  );
+}
+
+function watchAndRun(subproject, chipsterUserId, project, okdToken) {
   let chipsterUsername = chipsterUserId.split("/")[1];
-  getChipsterToken(subproject, chipsterUsername, project, token => {
-    watchAndReload(subproject, () => {
-      getLatestSession(subproject, project, token, session => {
-        getLatestJob(subproject, project, token, session.sessionId, job => {
-          job.state = "NEW";
-          job.jobId = null;
-          console.log(
-            "Rerun latest job " + job.toolId + " in session " + session.name
-          );
-          runJob(subproject, project, token, session.sessionId, job, jobId => {
-            followJob(session.sessionId, jobId, token, subproject, project);
-          });
-        });
-      });
-    });
-  });
+  return getChipsterToken(subproject, chipsterUsername, project, okdToken).pipe(
+    mergeMap(chipsterToken => {
+      return watchAndReload(subproject, true).pipe(
+        mergeMap(() => getLatestSession(subproject, project, chipsterToken)),
+        mergeMap(session =>
+          runLatestJob(subproject, project, chipsterToken, session)
+        )
+      );
+    })
+  );
 }
 
 function main(args) {
-  utils.getConfig(obj => {
-    var host = getConfiguration(obj, "okdHost");
-    var token = getConfiguration(obj, "okdToken");
-    var project = getConfiguration(obj, "okdProject");
-    var subproject = getConfiguration(obj, "subproject");
-    var chipsterUserId = getConfiguration(obj, "chipsterUsername");
-
-    login(host, token, () => {
-      checkProject(project, () => {
+  let token;
+  let project;
+  let subproject;
+  let chipsterUserId;
+  utils
+    .getConfig()
+    .pipe(
+      mergeMap(obj => {
+        let host = getConfiguration(obj, "okdHost");
+        token = getConfiguration(obj, "okdToken");
+        project = getConfiguration(obj, "okdProject");
+        subproject = getConfiguration(obj, "subproject");
+        chipsterUserId = getConfiguration(obj, "chipsterUsername");
+        return login(host, token);
+      }),
+      mergeMap(() => checkProject(project)),
+      mergeMap(() => {
         if (args.includes("--watch")) {
-          watchAndReload(subproject, () => {});
+          return watchAndReload(subproject).pipe(
+            tap(() => console.log("Watching file changes..."))
+          );
         } else if (args.includes("--run")) {
-          watchAndRun(subproject, chipsterUserId, project, () => {});
+          return watchAndRun(subproject, chipsterUserId, project, token).pipe(
+            tap(() => console.log("Watching file changes..."))
+          );
         } else {
-          packageAndReloadAll(subproject);
+          return packageAndReloadAll(subproject);
         }
-      });
-    });
-  });
+      })
+    )
+    .subscribe(null, err => console.log(err));
 }
 
 main(process.argv);

@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 const utils = require("./deploy-utils.js");
+const { bindNodeCallback, of } = require("rxjs");
+const { mergeMap } = require("rxjs/operators");
 
 /**
  * Simple launcher script for deploy-scripts.js
@@ -10,31 +12,41 @@ const utils = require("./deploy-utils.js");
  */
 
 // bump up this number to trigger "npm install" on all machines
-const currentNodeModulesVersion = 3;
+const currentNodeModulesVersion = 6;
 
-function main(argv, confPath) {
+function main(argv) {
+  updateNodeModulesIfNecessary()
+    .pipe(mergeMap(() => deployScripts(argv)))
+    .subscribe(() => {}, err => console.log(err.message ? err.message : err));
+}
+
+function updateNodeModulesIfNecessary() {
   const nodeModulesVersionKey = "nodeModulesVersion";
 
-  utils.getConfig(obj => {
-    console.log("Check if node_modules is up-to-date");
-    if (
-      obj[nodeModulesVersionKey] == null ||
-      obj[nodeModulesVersionKey] < currentNodeModulesVersion
-    ) {
-      console.log("Update node_modules");
-      utils.run("npm", ["install"], "deploy", () => {
-        obj[nodeModulesVersionKey] = currentNodeModulesVersion;
-        fs.writeFileSync(
-          utils.getConfigPath(),
-          JSON.stringify(obj, null, 2),
-          "utf8"
+  return utils.getConfig().pipe(
+    mergeMap(obj => {
+      console.log("Check if node_modules is up-to-date");
+      if (
+        obj[nodeModulesVersionKey] == null ||
+        obj[nodeModulesVersionKey] < currentNodeModulesVersion
+      ) {
+        console.log("Update node_modules");
+
+        return utils.run("npm", ["install"], "deploy").pipe(
+          mergeMap(() => {
+            obj[nodeModulesVersionKey] = currentNodeModulesVersion;
+            return bindNodeCallback(fs.writeFile)(
+              utils.getConfigPath(),
+              JSON.stringify(obj, null, 2),
+              "utf8"
+            );
+          })
         );
-        deployScripts(argv);
-      });
-    } else {
-      deployScripts(argv);
-    }
-  });
+      } else {
+        return of(null);
+      }
+    })
+  );
 }
 
 /**
@@ -42,11 +54,11 @@ function main(argv, confPath) {
  * @param {string[]} argv full argument array of parent process
  */
 function deployScripts(argv) {
-  utils.run(
+  let script = "deploy-scripts.js";
+  return utils.run(
     "node",
-    [path.join("deploy", "deploy-scripts.js"), ...argv.slice(2)],
-    null,
-    () => {}
+    [path.join("deploy", script), ...argv.slice(2)],
+    null
   );
 }
 
