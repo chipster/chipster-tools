@@ -15,7 +15,8 @@ const {
   map,
   tap,
   toArray,
-  takeUntil
+  takeUntil,
+  take
 } = require("rxjs/operators");
 
 /**
@@ -306,7 +307,7 @@ function watchAndReload(subproject, toolsDir, onlyErrors = false) {
     // wait 100 ms and discard this event if there is a new one
     debounceTime(100),
     mergeMap(filename => {
-      console.log("Update file " + filename);
+      console.log("Update tool " + filename);
       // convert windows paths
       filename = filename.replace(/\\/g, "/");
       return reloadFile(filename, subproject, onlyErrors);
@@ -377,6 +378,8 @@ function sortByDate(array, field) {
 }
 
 function followJob(jobId, wsClient) {
+  let datasets = [];
+
   let screenOutput$ = wsClient
     .getJobScreenOutput$(jobId)
     // wait for stdout flush
@@ -387,6 +390,7 @@ function followJob(jobId, wsClient) {
       console.log(
         "* dataset created: " + dataset.name.padEnd(24) + dataset.datasetId
       );
+      datasets.push(dataset);
     }),
     //TODO find out why this doesn't complete when there are no outputs, e.g. when the job fails
     takeUntil(wsClient.getJobState$(jobId).pipe(toArray()))
@@ -412,7 +416,16 @@ function followJob(jobId, wsClient) {
       toArray(),
       mergeMap(() => of(null))
     )
-  ).pipe(tap(() => wsClient.disconnect()));
+  ).pipe(
+    tap(() => wsClient.disconnect()),
+    map(() => {
+      let jobObjects = {
+        jobId: jobId,
+        datasets: datasets
+      };
+      return jobObjects;
+    })
+  );
 }
 
 function getRestClientPatched(isClient, token, serviceLocatorUri) {
@@ -420,27 +433,36 @@ function getRestClientPatched(isClient, token, serviceLocatorUri) {
 
   // patch this methods in RestClient, for some reason authenticated reqeusts get stuck in the default implementation
   restClient.get = (uri, headers) => {
-    let options = {
-      method: "get",
-      uri: uri,
-      headers: headers
-    };
-    //TODO why authenticated requests get stuck if we do this with bindNodeCallback()?
-    let subject = new Subject();
-    request(options, (error, response, body) => {
-      if (error) {
-        console.log("request error", options.method, options.uri, err);
-        subject.error(err);
-      }
-      subject.next({
-        response: response,
-        body: body
-      });
-    });
-
-    return subject.pipe(map(restClient.handleResponse));
+    return httpRequest("get", uri, headers, restClient);
   };
+
+  restClient.delete = (uri, headers) => {
+    return httpRequest("delete", uri, headers, restClient);
+  };
+
   return restClient;
+}
+
+function httpRequest(method, uri, headers, restClient) {
+  let options = {
+    method: method,
+    uri: uri,
+    headers: headers
+  };
+  //TODO why authenticated requests get stuck if we do this with bindNodeCallback()?
+  let subject = new Subject();
+  request(options, (error, response, body) => {
+    if (error) {
+      console.log("request error", options.method, options.uri, err);
+      subject.error(err);
+    }
+    subject.next({
+      response: response,
+      body: body
+    });
+  });
+
+  return subject.pipe(map(restClient.handleResponse));
 }
 
 /**
@@ -479,6 +501,35 @@ function getRestClient(webServerUri, chipsterToken) {
     );
 }
 
+function deleteJob(restClient, jobObjects) {
+  if (jobObjects) {
+    let msg = "Delete the previous job ";
+    if (jobObjects.datasets.length > 0) {
+      msg += "and its " + jobObjects.datasets.length + " output file(s)";
+    }
+    console.log(msg);
+    requests = [];
+
+    // complete the observables with take(1) so that forkJoin emits
+    // httpRequest() doesn't complete the observable, because that is what RestClient seems to assume
+    requests.push(
+      restClient.deleteJob(jobObjects.sessionId, jobObjects.jobId).pipe(take(1))
+    );
+
+    jobObjects.datasets.forEach(d => {
+      requests.push(
+        restClient
+          .deleteDataset(jobObjects.sessionId, d.datasetId)
+          .pipe(take(1))
+      );
+    });
+
+    return forkJoin(requests);
+  } else {
+    return of(null);
+  }
+}
+
 function getWsClient(restClient, sessionId) {
   let wsClient = new WsClient(restClient);
   // this doesn't wait, hopefully wsClient handles this internally
@@ -502,13 +553,18 @@ function runLatestJob(session, restClient) {
     map(() => getWsClient(restClient, session.sessionId)),
     tap(wc => (wsClient = wc)),
     mergeMap(() => restClient.postJob(session.sessionId, job2)),
-    mergeMap(jobId => followJob(jobId, wsClient))
+    mergeMap(jobId => followJob(jobId, wsClient)),
+    map(o => {
+      o.sessionId = session.sessionId;
+      return o;
+    })
   );
 }
 
 function watchAndRun(subproject, chipsterUserId, project, toolsDir) {
   let chipsterUsername = chipsterUserId.split("/")[1];
   let webServerUri = "https://" + subproject + "-" + project + ".rahtiapp.fi";
+  let previousJobObjects;
   return getChipsterPassword(subproject, chipsterUsername).pipe(
     mergeMap(password => {
       return loginChipster(webServerUri, chipsterUsername, password);
@@ -519,8 +575,12 @@ function watchAndRun(subproject, chipsterUserId, project, toolsDir) {
     }),
     mergeMap(restClient => {
       return watchAndReload(subproject, toolsDir, true).pipe(
+        mergeMap(() => deleteJob(restClient, previousJobObjects)),
         mergeMap(() => getLatestSession(restClient)),
-        mergeMap(session => runLatestJob(session, restClient))
+        mergeMap(session => runLatestJob(session, restClient)),
+        tap(jo => {
+          previousJobObjects = jo;
+        })
       );
     })
   );
