@@ -5,22 +5,15 @@ const path = require("path");
 var request = require("request");
 const utils = require(path.resolve(__dirname, "./deploy-utils.js"));
 const WsClient = require("chipster-cli-js/lib/ws-client.js").default;
-const ChipsterUtils = require("chipster-cli-js/lib/chipster-utils.js").default;
-const {
-  of,
-  bindCallback,
-  bindNodeCallback,
-  Subject,
-  merge,
-  forkJoin
-} = require("rxjs");
+const RestClient = require("chipster-nodejs-core/src/rest-client.js")
+  .RestClient;
+const { of, bindNodeCallback, Subject, merge, forkJoin } = require("rxjs");
 const {
   mergeMap,
   catchError,
   debounceTime,
   map,
   tap,
-  finalize,
   toArray,
   takeUntil
 } = require("rxjs/operators");
@@ -306,10 +299,9 @@ function checkProject(project) {
   );
 }
 
-function watchAndReload(subproject, onlyErrors = false) {
-  var dir = "tools";
-  console.log("Watching file changes in directory '" + dir + "'...");
-  let dirWatches$ = getDirectoriesRecursive(dir).map(watchDir);
+function watchAndReload(subproject, toolsDir, onlyErrors = false) {
+  printWatch(toolsDir);
+  let dirWatches$ = getDirectoriesRecursive(toolsDir).map(watchDir);
   return merge(...dirWatches$).pipe(
     // wait 100 ms and discard this event if there is a new one
     debounceTime(100),
@@ -363,172 +355,25 @@ function getChipsterPassword(subproject, chipsterUsername) {
   return utils.runAndGetOutput("oc", args).pipe(map(stdout => stdout.trim()));
 }
 
-function getChipsterToken(subproject, chipsterUsername, project) {
-  return getChipsterPassword(subproject, chipsterUsername).pipe(
-    mergeMap(password => {
-      console.log("Log in to Chipster as " + chipsterUsername);
-      return chipsterRequest(
-        "post",
-        "auth",
-        "tokens",
-        subproject,
-        project,
-        chipsterUsername,
-        password,
-        null
-      );
-    }),
-    map(resp => JSON.parse(resp).tokenKey)
-  );
+function getLatestSession(restClient) {
+  return restClient
+    .getSessions()
+    .pipe(map(sessions => sortByDate(sessions, "accessed")[0]));
 }
 
-function chipsterRequest(
-  method,
-  service,
-  path,
-  subproject,
-  project,
-  username,
-  password,
-  body
-) {
-  let uri =
-    "https://" +
-    service +
-    "-" +
-    subproject +
-    "-" +
-    project +
-    ".rahtiapp.fi/" +
-    path;
-
-  requestOptions = {
-    method: method,
-    uri: uri,
-    auth: {
-      user: username,
-      pass: password
-    },
-    json: body != null,
-    body: body
-  };
-
-  return bindNodeCallback(request)(requestOptions).pipe(
-    map(responseAndBody => {
-      let response = responseAndBody[0];
-      let body = responseAndBody[1];
-
-      if (response.statusCode >= 200 && response.statusCode <= 299) {
-        return body;
-      } else {
-        msg = "Chipster request failed " + method + " " + uri + "\n";
-        if (response != null) {
-          msg += " http status: " + response.statusCode + "\n";
-        }
-
-        if (body != null) {
-          msg += " body: " + error + "\n";
-        }
-        throw new Error(msg);
-      }
-    })
-  );
+function getLatestJob(restClient, sessionId) {
+  return restClient
+    .getJobs(sessionId)
+    .pipe(map(jobs => sortByDate(jobs, "created")[0]));
 }
 
-function getLatestSession(subproject, project, token) {
-  return chipsterRequest(
-    "get",
-    "session-db",
-    "sessions",
-    subproject,
-    project,
-    "token",
-    token,
-    null
-  ).pipe(
-    map(body => {
-      let sessions = JSON.parse(body);
-
-      sessions.sort(function compare(a, b) {
-        var dateA = new Date(a.accessed);
-        var dateB = new Date(b.accessed);
-        return dateB - dateA;
-      });
-      return sessions[0];
-    })
-  );
-}
-
-function getDataset(subproject, project, token, sessionId, datasetId) {
-  return chipsterRequest(
-    "get",
-    "session-db",
-    "sessions/" + sessionId + "/datasets/" + datasetId,
-    subproject,
-    project,
-    "token",
-    token,
-    null
-  ).pipe(
-    map(body => {
-      return JSON.parse(body);
-    })
-  );
-}
-
-function getJob(subproject, project, token, sessionId, jobId) {
-  return chipsterRequest(
-    "get",
-    "session-db",
-    "sessions/" + sessionId + "/jobs/" + jobId,
-    subproject,
-    project,
-    "token",
-    token,
-    null
-  ).pipe(
-    map(body => {
-      return JSON.parse(body);
-    })
-  );
-}
-
-function getLatestJob(subproject, project, token, sessionId) {
-  return chipsterRequest(
-    "get",
-    "session-db",
-    "sessions/" + sessionId + "/jobs",
-    subproject,
-    project,
-    "token",
-    token,
-    null
-  ).pipe(
-    map(body => {
-      let jobs = JSON.parse(body);
-
-      jobs.sort(function compare(a, b) {
-        var dateA = new Date(a.created);
-        var dateB = new Date(b.created);
-        return dateB - dateA;
-      });
-
-      return jobs[0];
-    })
-  );
-}
-
-function runJob(subproject, project, token, sessionId, job) {
-  return chipsterRequest(
-    "post",
-    "session-db",
-    "sessions/" + sessionId + "/jobs",
-    subproject,
-    project,
-    "token",
-    token,
-    job
-  ).pipe(map(resp => resp.jobId));
+function sortByDate(array, field) {
+  array.sort(function compare(a, b) {
+    var dateA = new Date(a[field]);
+    var dateB = new Date(b[field]);
+    return dateB - dateA;
+  });
+  return array;
 }
 
 function followJob(jobId, wsClient) {
@@ -570,43 +415,82 @@ function followJob(jobId, wsClient) {
   ).pipe(tap(() => wsClient.disconnect()));
 }
 
-function getWsClient(subproject, project, chipsterToken, sessionId) {
-  return ChipsterUtils.getRestClient(
-    "https://" + subproject + "-" + project + ".rahtiapp.fi",
-    chipsterToken
-  ).pipe(
-    map(restClient => {
-      // patch these methods in RestClient, for some reason these reqeusts get stuck during a job
-      restClient.getJob = (sessionId, jobId) => {
-        return getJob(subproject, project, chipsterToken, sessionId, jobId);
-      };
-      restClient.getDataset = (sessionId, datasetId) => {
-        return getDataset(
-          subproject,
-          project,
-          chipsterToken,
-          sessionId,
-          datasetId
-        );
-      };
-      wsClient = new WsClient(restClient);
-      // this doesn't wait, hopefully wsClient handles this internally
-      wsClient.connect(sessionId, true);
-      return wsClient;
-    })
-  );
+function getRestClientPatched(isClient, token, serviceLocatorUri) {
+  let restClient = new RestClient(isClient, token, serviceLocatorUri);
+
+  // patch this methods in RestClient, for some reason authenticated reqeusts get stuck in the default implementation
+  restClient.get = (uri, headers) => {
+    let options = {
+      method: "get",
+      uri: uri,
+      headers: headers
+    };
+    //TODO why authenticated requests get stuck if we do this with bindNodeCallback()?
+    let subject = new Subject();
+    request(options, (error, response, body) => {
+      if (error) {
+        console.log("request error", options.method, options.uri, err);
+        subject.error(err);
+      }
+      subject.next({
+        response: response,
+        body: body
+      });
+    });
+
+    return subject.pipe(map(restClient.handleResponse));
+  };
+  return restClient;
 }
 
-function runLatestJob(subproject, project, chipsterToken, session) {
+/**
+ * Like ChipsterUtils.login(), but using the patched RestClient
+ *
+ * @param {*} webServerUri
+ * @param {*} username
+ * @param {*} password
+ */
+function loginChipster(webServerUri, username, password) {
+  // get the service locator address
+  return getRestClientPatched(webServerUri)
+    .getServiceLocator(webServerUri)
+    .pipe(
+      // get token
+      mergeMap(serviceLocatorUrl => {
+        let guestClient = getRestClientPatched(true, null, serviceLocatorUrl);
+        return guestClient.getToken(username, password);
+      })
+    );
+}
+
+/**
+ * * Like ChipsterUtils.getRestClient(), but using the patched RestClient
+ *
+ * @param {*} webServerUri
+ * @param {*} chipsterToken
+ */
+function getRestClient(webServerUri, chipsterToken) {
+  return getRestClientPatched(true, null, null)
+    .getServiceLocator(webServerUri)
+    .pipe(
+      map(serviceLocatorUri => {
+        return getRestClientPatched(true, chipsterToken, serviceLocatorUri);
+      })
+    );
+}
+
+function getWsClient(restClient, sessionId) {
+  let wsClient = new WsClient(restClient);
+  // this doesn't wait, hopefully wsClient handles this internally
+  wsClient.connect(sessionId, true);
+  return wsClient;
+}
+
+function runLatestJob(session, restClient) {
   let wsClient;
   let job2;
 
-  return getLatestJob(
-    subproject,
-    project,
-    chipsterToken,
-    session.sessionId
-  ).pipe(
+  return getLatestJob(restClient, session.sessionId).pipe(
     tap(job => {
       job.state = "NEW";
       job.jobId = null;
@@ -615,28 +499,36 @@ function runLatestJob(subproject, project, chipsterToken, session) {
       );
       job2 = job;
     }),
-    mergeMap(() =>
-      getWsClient(subproject, project, chipsterToken, session.sessionId)
-    ),
+    map(() => getWsClient(restClient, session.sessionId)),
     tap(wc => (wsClient = wc)),
-    mergeMap(() =>
-      runJob(subproject, project, chipsterToken, session.sessionId, job2)
-    ),
+    mergeMap(() => restClient.postJob(session.sessionId, job2)),
     mergeMap(jobId => followJob(jobId, wsClient))
   );
 }
 
-function watchAndRun(subproject, chipsterUserId, project, okdToken) {
+function watchAndRun(subproject, chipsterUserId, project, toolsDir) {
   let chipsterUsername = chipsterUserId.split("/")[1];
-  return getChipsterToken(subproject, chipsterUsername, project, okdToken).pipe(
+  let webServerUri = "https://" + subproject + "-" + project + ".rahtiapp.fi";
+  return getChipsterPassword(subproject, chipsterUsername).pipe(
+    mergeMap(password => {
+      return loginChipster(webServerUri, chipsterUsername, password);
+    }),
+    map(token => token.tokenKey),
     mergeMap(chipsterToken => {
-      return watchAndReload(subproject, true).pipe(
-        mergeMap(() => getLatestSession(subproject, project, chipsterToken)),
-        mergeMap(session =>
-          runLatestJob(subproject, project, chipsterToken, session)
-        )
+      return getRestClient(webServerUri, chipsterToken);
+    }),
+    mergeMap(restClient => {
+      return watchAndReload(subproject, toolsDir, true).pipe(
+        mergeMap(() => getLatestSession(restClient)),
+        mergeMap(session => runLatestJob(session, restClient))
       );
     })
+  );
+}
+
+function printWatch(dir) {
+  console.log(
+    "Watch file changes in directory '" + dir + "'... (Ctrl+C to interrupt)"
   );
 }
 
@@ -645,6 +537,9 @@ function main(args) {
   let project;
   let subproject;
   let chipsterUserId;
+
+  toolsDir = "tools";
+
   utils
     .getConfig()
     .pipe(
@@ -659,13 +554,16 @@ function main(args) {
       mergeMap(() => checkProject(project)),
       mergeMap(() => {
         if (args.includes("--watch")) {
-          return watchAndReload(subproject).pipe(
-            tap(() => console.log("Watching file changes..."))
+          return watchAndReload(subproject, toolsDir).pipe(
+            tap(() => printWatch(toolsDir))
           );
         } else if (args.includes("--run")) {
-          return watchAndRun(subproject, chipsterUserId, project, token).pipe(
-            tap(() => console.log("Watching file changes..."))
-          );
+          return watchAndRun(
+            subproject,
+            chipsterUserId,
+            project,
+            toolsDir
+          ).pipe(tap(() => printWatch(toolsDir)));
         } else {
           return packageAndReloadAll(subproject);
         }
