@@ -7,19 +7,19 @@
       "label": "deploy-scripts",
       "type": "shell",
       "command": "node deploy/deploy-scripts-launcher.js",
-      "problemMatcher": ["$tsc-watch"]
+      "problemMatcher": []
     },
     {
       "label": "deploy-scripts-watch",
       "type": "shell",
       "command": "node deploy/deploy-scripts-launcher.js --watch",
-      "problemMatcher": ["$tsc-watch"]
+      "problemMatcher": []
     },
     {
       "label": "deploy-scripts-run",
       "type": "shell",
       "command": "node deploy/deploy-scripts-launcher.js --run",
-      "problemMatcher": ["$tsc-watch"]
+      "problemMatcher": []
     }
   ]
 }
