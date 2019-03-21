@@ -41,8 +41,7 @@ system(paste(samtools.binary, "index tumor.bam > tumor.bam.bai"))
 
 
 # Run CollectSequencingArtifactMetrics
-command <- paste(gatk.binary, "CollectSequencingArtifactMetrics", "-R reference.fasta", "-I tumor.bam", "-O artifact_metrics")
-
+command <- paste(gatk.binary, "CollectSequencingArtifactMetrics", "-R reference.fasta", "-I tumor.bam", "-O artifact_metrics.txt")
 
 runExternal(command)
 

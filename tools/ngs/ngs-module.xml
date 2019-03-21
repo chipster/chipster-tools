@@ -143,19 +143,19 @@
 		<tool>gatk4-haplotypecaller.R</tool>
 		<tool>gatk4-genomicsdbiimport.R</tool>
 		<tool>gatk4-genotypegvcfs.R</tool>
-		<tool>gatk4-calculatetargetcoverage.R</tool>
-		<tool>gatk4-callsegments.R</tool>
-		<tool>gatk4-createpanelofnormals.R</tool>
+		<tool>gatk4-mutect2-call-snv-and-indels.R</tool>
+		<tool>gatk4-createsomaticpanelofnormals.R</tool>
+		<tool>gatk4-getpileupsummaries.R</tool>
+		<tool>gatk4-estimate-contamination.R</tool>
+		<tool>gatk4-filtermutectcalls.R</tool>
+		<tool>gatk4-filterbyorientation.R</tool>
+		<tool>gatk4-collectsequencingartifactmetrics.R</tool>
 		<tool>gatk4-normalizesomaticreadcounts.R</tool>
 		<tool>gatk4-padtargets.R</tool>
 		<tool>gatk4-performsegmentation.R</tool>
 		<tool>gatk4-plotsegmentedcopyratio.R</tool>
-		<tool>gatk4-estimate-contamination.R</tool>
-		<tool>gatk4-filterbyorientation.R</tool>
-		<tool>gatk4-filtermutectcalls.R</tool>
-		
-		
-		<tool>gatk4-mutect2-call-snv-and-indels.R</tool>
+		<tool>gatk4-calculatetargetcoverage.R</tool>
+		<tool>gatk4-callsegments.R</tool>
 	</category>
 	
 	<category name="RNA-seq" color="#0177b7">

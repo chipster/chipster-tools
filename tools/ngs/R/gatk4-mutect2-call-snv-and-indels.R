@@ -16,6 +16,10 @@
 # PARAMETER OPTIONAL gatk.padding: "Interval padding" TYPE INTEGER DEFAULT 0 (Amount of padding in bp to add to each interval.)
 # PARAMETER OPTIONAL gatk.bamout: "Output assembled haplotypes as BAM" TYPE [yes, no] DEFAULT no (Output assembled haplotypes as BAM.)
 
+
+## PARAMETER gatk.afofalleles: "Allele fraction of alleles not in germline resource" TYPE DECIMAL DEFAULT -1 (Population allele fraction assigned to alleles not found in germline resource. Only applicable if germline resource file is provided. -1 = use default value. Default for case-only calling is 5e-8 and for matched-control calling 1e-5.)
+
+
 source(file.path(chipster.common.path, "gatk-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -69,6 +73,9 @@ command <- paste(gatk.binary, "Mutect2", "-O mutect2.vcf", "-R reference.fasta",
 
 if (fileOk("germline_resource")){
 	command <- paste(command, "--germline_resource germline_resource.vcf.gz")
+	#if (gatk.afofalleles != -1) {
+	#	command <- paste(command, "--af-of-alleles-not-in-resource", gatk.afofalleles)
+	#}
 }
 
 if (fileOk("normal_panel")){
