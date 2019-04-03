@@ -9,10 +9,6 @@
 
 # 28.8.2013
 
-# Parameters for testing purposes
-#setwd("C:\\Users\\tuimaja\\Desktop\\merged")
-#decostandm<-"hellinger"
-
 # Read the input data
 dat<-read.table("counttable.tsv", header=T, sep="\t", row.names=1)
 phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
