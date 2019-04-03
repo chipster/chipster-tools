@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Variants / Call somatic SNVs and INDELs with GATK4 Mutect2</h2>
+
+<h3>Description</h3>
+
+<p>Call somatic short variants via local assembly of haplotypes. Short variants include single nucleotide (SNV) and insertion and deletion (indel) variants.</p>
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Reference sequence () [human]</li>
+<li>Chromosome names in my BAM file look like (1, chr1) [chr1]</li>
+<li>Sample sample name (String) []</li>
+<li>Control sample name (String) []</li>
+<li>Genomic intervals /String []</li>
+<li>Interval padding (Integer) [0]</li>
+<li>Output assembled haplotypes as BAM (yes, no) [no]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+Call somatic short variants via local assembly of haplotypes. Short variants include 
+single nucleotide (SNV) and insertion and deletion (indel) variants. The caller combines 
+the DREAM challenge-winning somatic genotyping engine of the original MuTect 
+<a href = "https://www.nature.com/articles/nbt.2514">(Cibulskis et al., 2013)</a> 
+with the assembly-based machinery of HaplotypeCaller. 
+</p>
+<p>
+Based on GATK4 Mutect2 tool. For more detailed information, see <a href = "https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_mutect_Mutect2.php">GATK documentation</a>,
+</p>
+
+<h3>Output</h3>
+
+<p>
+<ul>
+<li>VCF file with the variants</li>
+<li>BAM file (optional) with asembled haplotypes</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+
+<p>This tool is based on the <a href = "https://software.broadinstitute.org/gatk/gatk4">GATK4 package</a>.</p>
+<p>
+For instructions on citing GATK4, please see <a href = "https://software.broadinstitute.org/gatk/documentation/article?id=11027">GATK FAQ</a> 
+</p>
+
+</body>
+

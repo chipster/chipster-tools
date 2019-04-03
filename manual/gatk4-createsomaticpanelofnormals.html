@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Variants / Create Somatic Panel of Normals</h2>
+
+<h3>Description</h3>
+
+<p>
+Create a panel of normals (PoN) containing germline and artifactual sites for use with Mutect2. 
+</p>
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Minumum sample count (Integer) [2]</li>
+</ul>
+
+
+<h3>Details</h3>
+
+<p>
+Create a panel of normals (PoN) containing germline and artifactual sites for use with Mutect2. 
+The tool takes multiple normal sample callsets produced by Mutect2's tumor-only mode and collates 
+sites present in two or more samples into a sites-only VCF. The PoN captures common artifactual and 
+germline variant sites. Mutect2 then uses the PoN to filter variants at the site-level.
+</p>
+<p>
+Based on GATK4 CreateSomaticPanelOfNormals tool. For more detailed information, see <a href = "https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">GATK documentation</a>,
+</p>
+
+<h3>Output</h3>
+
+<p>
+<ul>
+<li>VCF file with the PoN</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+
+<p>This tool is based on the <a href = "https://software.broadinstitute.org/gatk/gatk4">GATK4 package</a>.</p>
+<p>
+For instructions on citing GATK4, please see <a href = "https://software.broadinstitute.org/gatk/documentation/article?id=11027">GATK FAQ</a> 
+</p>
+
+</body>
+

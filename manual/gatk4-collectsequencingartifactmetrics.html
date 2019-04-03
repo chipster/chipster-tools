@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Variants / Generate sequencing artifact metrics for filtering by orientation bias with GATK4</h2>
+
+<h3>Description</h3>
+<p>
+Generate sequencing artifact metrics for filtering by orientation bias with GATK4
+</p>
+
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Reference sequence () [human]</li>
+<li>Chromosome names in my BAM file look like (1, chr1) [chr1]</li>
+</ul>
+
+
+<h3>Details</h3>
+
+<p>
+Collect metrics to quantify single-base sequencing artifacts. 
+</p>
+<p>
+Quantify substitution errors caused by mismatched base pairings during various stages of sample / library prep. 
+We measure two distinct error types - artifacts that are introduced before the addition of the read1/read2 
+adapters ("pre adapter") and those that are introduced after target selection ("bait bias"). For each of 
+these, we provide summary metrics as well as detail metrics broken down by reference context (the ref 
+bases surrounding the substitution event). For a deeper explanation, see Costello et al. 2013: 
+<a href= "http://www.ncbi.nlm.nih.gov/pubmed/23303777">http://www.ncbi.nlm.nih.gov/pubmed/23303777</a> 
+</p>
+<p>
+Based on GATK4 CollectSequencingArtifactMetrics (Picard) tool. For more detailed information, see <a href = "https://software.broadinstitute.org/gatk/documentation/tooldocs/current/picard_analysis_artifacts_CollectSequencingArtifactMetrics.php">GATK documentation</a>,
+</p>
+
+<h3>Output</h3>
+
+<p>
+<ul>
+<li>Artifact metrics file</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+
+<p>This tool is based on the <a href = "https://software.broadinstitute.org/gatk/gatk4">GATK4 package</a>.</p>
+<p>
+For instructions on citing GATK4, please see <a href = "https://software.broadinstitute.org/gatk/documentation/article?id=11027">GATK FAQ</a> 
+</p>
+
+</body>
+
