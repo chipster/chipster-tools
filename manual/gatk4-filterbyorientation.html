@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Variants / Filter Mutect2 calls by orientation bias with GATK4</h2>
+
+<h3>Description</h3>
+
+<p>
+Additionally filter Mutect2 somatic variant calls for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination.
+</p>
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Artifacts on the forward strand (String) []</li>
+</ul>
+
+
+<h3>Details</h3>
+
+<p>
+Additionally filter Mutect2 somatic variant calls for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination.
+</p>
+<p>
+This tool is complementary to FilterMutectCalls and if run, should be run after FilterMutectCalls. The tool requires 
+the pre-adapter detailed metrics calculated by Picard CollectSequencingArtifactMetrics and specification of the base 
+substitution(s) to consider for orientation bias. For a given base substitution specified with the --artifact-modes 
+argument, the tool considers both the forward and reverse complement for filtering. That is, specifying --artifact-modes 
+'G/T' means the tool considers G to T and A to C artifacts for filtering.
+</p>
+<p>
+The metrics from CollectSequencingArtifactMetrics give a global view across a sample's genome that empowers decision 
+making in ways site-specific analyses cannot. The detailed metrics measure orientation bias for all three-base contexts 
+and help determine whether variant filtering for a sequence context is necessary.
+</p>
+<p>
+The most common artifact to consider for filtering is the OxoG (8-Oxoguanine) artifact. OxoG artifacts stem from oxidation 
+of guanine to 8-oxoguanine, which results in G to T transversions. If samples were derived from histological slides, then 
+consider the FFPE (formalin-fixed paraffin-embedded) artifact. FFPE artifacts stem from formaldehyde deamination of cytosines, 
+which results in C to T transitions. 
+</p>
+<p>
+Based on GATK4 FilterByOrientationBias tool. For more detailed information, see <a href = "https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_exome_FilterByOrientationBias.php">GATK documentation</a>,
+</p>
+
+<h3>Output</h3>
+
+<p>
+<ul>
+<li>VCF file with filtered calls</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+
+<p>This tool is based on the <a href = "https://software.broadinstitute.org/gatk/gatk4">GATK4 package</a>.</p>
+<p>
+For instructions on citing GATK4, please see <a href = "https://software.broadinstitute.org/gatk/documentation/article?id=11027">GATK FAQ</a> 
+</p>
+
+</body>
+
