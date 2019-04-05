@@ -13,7 +13,7 @@
 # KM 25.02.2018
 
 
-bs.binary <- file.path("/opt/chipster/tools_local", "bs/bin/bs")
+bs.binary <- file.path(chipster.tools.path, "bs/bin/bs")
 #turn of cacheing
 bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep="" )
 
