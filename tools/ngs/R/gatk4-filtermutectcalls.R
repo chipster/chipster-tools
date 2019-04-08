@@ -1,4 +1,4 @@
-# TOOL gatk4-filtermutectcalls.R: "Filter Mutect2 calls with GATK4" (Filter variants in a Mutect2 VCF callset. Tool is based on GATK4 FilterMutectCalls.)
+# TOOL gatk4-filtermutectcalls.R: "GATK4 -Filter Mutect2 calls" (Filter variants in a Mutect2 VCF callset. Tool is based on GATK4 FilterMutectCalls.)
 # INPUT input.vcf: "Mutect2 calls" TYPE GENERIC
 # INPUT contaminationtable: "Contamination table" TYPE GENERIC
 # OUTPUT OPTIONAL mutect2_filtered.vcf

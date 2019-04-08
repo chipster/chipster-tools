@@ -1,4 +1,4 @@
-# TOOL gatk4-collectsequencingartifactmetrics.R: "Generate sequencing artifact metrics for filtering by orientation bias with GATK4" (Generate metrics for filtering by orientation bias with GATK4. Tool is based on GATK4  CollectSequencingArtifactMetrics.)
+# TOOL gatk4-collectsequencingartifactmetrics.R: "GATK4 -Generate sequencing artifact metrics for filtering by orientation bias" (Generate metrics for filtering by orientation bias with GATK4. Tool is based on GATK4  CollectSequencingArtifactMetrics.)
 # INPUT tumor.bam: "Tumor BAM" TYPE BAM
 # INPUT reference: "Reference genome FASTA" TYPE GENERIC
 # OUTPUT OPTIONAL artifact_metrics.txt

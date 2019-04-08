@@ -1,4 +1,4 @@
-# TOOL gatk4-estimate-contamination.R: "Estimate contamination with GATK4" (Calculates the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries. Input is a pileup table in TSV format. You can also provide an optional matched control pileup table. The resulting contamination table is used with FilterMutectCalls. Tool is based on GATK4 CalculateContamination.)
+# TOOL gatk4-estimate-contamination.R: "GATK4 -Estimate contamination" (Calculates the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries. Input is a pileup table in TSV format. You can also provide an optional matched control pileup table. The resulting contamination table is used with FilterMutectCalls. Tool is based on GATK4 CalculateContamination.)
 # INPUT tumor.tsv: "Tumor pileup table" TYPE GENERIC
 # INPUT OPTIONAL normal.tsv: "Normal pileup table" TYPE GENERIC
 # OUTPUT OPTIONAL CalculateContamination.tsv

@@ -1,4 +1,4 @@
-# TOOL gatk4-mutect2-call-snv-and-indels.R: "Call somatic SNVs and INDELs with GATK4 Mutect2" (Call somatic short variants via local assembly of haplotypes. Short variants include single nucleotide (SNV\) and insertion and deletion (indel\) variants. Tool is based on GATK4 Mutect2 tool.)
+# TOOL gatk4-mutect2-call-snv-and-indels.R: "GATK4 -Call somatic SNVs and INDELs with Mutect2" (Call somatic short variants via local assembly of haplotypes. Short variants include single nucleotide (SNV\) and insertion and deletion (indel\) variants. Tool is based on GATK4 Mutect2 tool.)
 # INPUT sample.bam: "Tumor BAM file" TYPE BAM
 # INPUT OPTIONAL control.bam: "Normal BAM file" TYPE BAM
 # INPUT reference: "Reference genome FASTA" TYPE GENERIC

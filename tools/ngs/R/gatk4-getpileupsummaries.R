@@ -1,4 +1,4 @@
-# TOOL gatk4-getpileupsummaries.R: "Tabulate pileup metrics for inferring contamination with GATK4" (Summarizes counts of reads that support reference, alternate and other alleles for given sites. Results can be used with CalculateContamination. Tool is based on GATK4 GetPileupSummaries.)
+# TOOL gatk4-getpileupsummaries.R: "GATK4 -Tabulate pileup metrics for inferring contamination" (Summarizes counts of reads that support reference, alternate and other alleles for given sites. Results can be used with CalculateContamination. Tool is based on GATK4 GetPileupSummaries.)
 # INPUT reads.bam: "BAM file" TYPE BAM
 # INPUT variants.vcf: "Variants VCF" TYPE GENERIC
 # INPUT OPTIONAL intervals.vcf: "Intervals VCF" TYPE GENERIC

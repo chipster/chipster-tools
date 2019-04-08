@@ -1,4 +1,4 @@
-# TOOL gatk4-filterbyorientation.R: "Filter Mutect2 calls by orientation bias with GATK4" (Additionally filter Mutect2 somatic variant calls for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination. Tool is based on GATK4 FilterByOrientationBias.)
+# TOOL gatk4-filterbyorientation.R: "GATK4 -Filter Mutect2 calls by orientation bias" (Additionally filter Mutect2 somatic variant calls for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination. Tool is based on GATK4 FilterByOrientationBias.)
 # INPUT input.vcf: "Mutect calls" TYPE GENERIC
 # INPUT metrics_file: "Detail metrics file" TYPE GENERIC
 # OUTPUT OPTIONAL Mutect2.filtered.unbiased.vcf
