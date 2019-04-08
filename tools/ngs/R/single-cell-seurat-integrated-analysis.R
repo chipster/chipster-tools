@@ -11,6 +11,7 @@
 
 # 2018-16-05 ML
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
+# 2019-04-08 ML number of cells in each cluster in each sample
 
 library(Seurat)
 library(gplots)
@@ -42,11 +43,20 @@ p1 <- TSNEPlot(data.combined, do.return = T, pt.size = point.size, group.by = "s
 p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = point.size)
 plot_grid(p1, p2)
 
-# Number of cells:
-textplot(as.matrix(summary(as.factor(data.combined@meta.data$res.0.6))), halign="center", valign="center", cex=1.2)
-title(paste("Number of cells in each cluster: \n Total number of cells: ",length(data.combined@cell.names)) )
-# textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
+# Number of cells per clusters in each group:
+meta_data_table <- data.combined@meta.data
+stim_levels <- levels(as.factor(meta_data_table$stim))
+cluster_levels <- levels(as.factor(meta_data_table$res.0.6))
+cell_counts <- matrix(nrow = length(cluster_levels), ncol =  length(stim_levels)+1)
+colnames(cell_counts) <- c(stim_levels, "TOTAL")
+rownames(cell_counts) <- c(cluster_levels)
+for (i in stim_levels) {
+	cell_counts[,i] <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,]$res.0.6)))
+}
+cell_counts[, ncol(cell_counts)] <- rowSums(cell_counts, na.rm= TRUE) 
 
+textplot(cell_counts, halign="center", valign="center", cex=1.2)
+title(paste("Number of cells in each cluster: \n Total number of cells: ",length(data.combined@cell.names)) )
 
 dev.off() # close the pdf
 
