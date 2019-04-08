@@ -15,18 +15,30 @@ if (dump == "aligned") {
 	dump.param <- "--unaligned"
 }
 
-sra.path <- file.path(chipster.tools.path, "sratoolkit", "bin")
+sra.path <- file.path(chipster.tools.path, "sratoolkit.2.9.4-ubuntu64", "bin")
 #turn of cacheing
 sra.binary <- file.path(sra.path, "vdb-config")
 command.full <- paste(sra.binary, '-s /repository/user/cache-disabled=true 1>>srafetch.log 2>>srafetch.log')
 cat(command.full, "\n", file="srafetch.log", append=TRUE)
 system(command.full)
 
+#check storage resources and needs
+freespace <- system(" df ./ | awk '{print $4}' ", intern = TRUE )
+sra.binary <- file.path(sra.path, "vdb-dumb")
+commad.full <- paste(sra.binary, ' --info ', entry_id, '| grep -w size | tr -d ","', " | awk '{print $3}'")
+srasize <-system(command.full)
+space_needed = 4*srasize
+
+if ( freespace < space_needed ){
+	stop("CHIPSTER-NOTE: THe SRA entry you are trying to retrieve is too larage for the chipster server")
+}
+
 #Run the actual command
-sra.binary <- file.path(sra.path, "fastq-dump")
-command.full <- paste(sra.binary, dump.param, '--split-files --gzip', entry_id,  '1>>srafetch.log 2>>srafetch.log')
+sra.binary <- file.path(sra.path, "fasterq-dump")
+command.full <- paste(sra.binary, dump.param, '--split-files ', entry_id,  '1>>srafetch.log 2>>srafetch.log')
 cat(command.full, "\n", file="srafetch.log", append=TRUE)
 system(command.full)
+system("gzip *.fastq")
 
 # check that we got something
 fastq.files <- Sys.glob("*.fastq.gz")
