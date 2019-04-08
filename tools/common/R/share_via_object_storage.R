@@ -43,6 +43,7 @@ cat(exp_date, file="log.txt", append=TRUE, sep="\n")
 bname1 <- paste("chitemp", then, key, sep="-")
 bname <- paste("s3://", bname1, sep="")
 s3command <- paste( s3cmd.binary ,"mb -P ", bname, " 2>&1  >> log.txt" )
+cat(s3command, file="log.txt", append=TRUE, sep="\n")
 #echo.command <- paste ("echo ' ", s3command, "' >> log.txt" )
 #system(echo.command)
 system(s3command)
@@ -54,6 +55,7 @@ system("ls -l >> log.txt")
 
 s3command <- paste(s3cmd.binary, "put -P ", fname, bname, " >> log.txt" )
 system(s3command)
+cat(s3command, file="log.txt", append=TRUE, sep="\n")
 
 if ( add_md5sum == "yes" ){
 	md5file <- paste(fname, ".md5", sep="")
