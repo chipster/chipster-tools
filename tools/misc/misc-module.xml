@@ -3,14 +3,15 @@
 	<category name="Data retrieval" color="#e7df70">
 	   <tool>edirect_fetch.py</tool>
  	   <tool module="common">srafetch.R</tool>
+ 	   <tool module="common">enafetch.R</tool>
 	   <tool module="common">srabamfetch.R</tool>
        <tool module="common">ensemblfetch.R</tool>
 	   <tool>dbfetch.R</tool>
-	   <tool>dbfetch_list.R</tool>
+	   <tool>dbfetch_list.R</tool> 
 	   <tool>entret_list.R</tool>
 	   <tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 	   <tool module="common">share_via_object_storage.R</tool>
-	   <tool module="common">illumina_download.R</tool>	   
+	   <tool module="common">basespace.R</tool>	   
 	</category>
 	
 	<category name="BLAST" color="#d59f45">
