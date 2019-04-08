@@ -1,4 +1,4 @@
-# TOOL star-single-end.R: "STAR for single end reads and human genome" (Aligns single end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser. )
+# TOOL star-single-end.R: "STAR for single end reads" (Aligns single end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser. )
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL annotation.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL alignment.bam
