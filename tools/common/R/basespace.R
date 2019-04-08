@@ -13,7 +13,7 @@
 # KM 25.02.2018
 
 
-bs.binary <- file.path(chipster.tools.path, "bs/bin/bs")
+bs.binary <- file.path(chipster.tools.path, "basespace/bin/bs")
 #turn of cacheing
 bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep="" )
 
@@ -43,7 +43,7 @@ if (action== "download"){
 
 system("ls -l >> bs.log")
 
-if (save_log="no"){
+if (save_log=="no"){
 	system("rm -f bs.log")
 }
 
