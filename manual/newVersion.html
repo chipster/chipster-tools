@@ -15,6 +15,59 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 8.4.2019: What is new in Chipster 3.15</h2>
+ 	<p>
+		<b>Summary:</b> This version contains new tools for calling somatic variants (SNPs and INDELs) using the GATK4 Mutect2 pipeline. It also has tools for retrieving data from Illumina BaseSpace and ENA. Many  
+		single cell RNA-seq data analysis tools have been improved. All the reference genomes have been updated to Ensembl v95, 
+		and genome indexes for new organisms have been added in the START and HISAT2 aligners.   
+		<!--  The example xxx demonstrates how these tools can be used.-->
+	</p>
+	
+	<ul>
+		<li><div class=header-item>New analysis tools</div>	
+			<ul>
+				<li><a href="gatk4-collectsequencingartifactmetrics.html">Variants / GATK4 -Generate sequencing artifact metrics for filtering by orientation bias</a> This tool is based on GATK4  CollectSequencingArtifactMetrics.</li>
+				<li><a href="gatk4-createsomaticpanelofnormals.html">Variants / GATK4 -Create Somatic Panel of Normals</a> Create a panel of normals (PoN) containing germline and artifactual sites for use with Mutect2. The tool takes multiple normal sample callsets produced by Mutect2's tumor-only mode and collates sites present in two or more samples into a sites-only VCF. The PoN captures common artifactual and germline variant sites. Mutect2 then uses the PoN to filter variants at the site-level. Tool is based on GATK4 createSomaticPanelOfNormals.</li>
+				<li><a href="gatk4-estimate-contamination.html">Variants / GATK4 -Estimate contamination</a> Calculates the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries. Input is a pileup table in TSV format. You can also provide an optional matched control pileup table. The resulting contamination table is used with FilterMutectCalls. Tool is based on GATK4 CalculateContamination.</li>
+				<li><a href="gatk4-filterbyorientation.html">Variants / GATK4 -Filter Mutect2 calls by orientation bias</a> Additionally filter Mutect2 somatic variant calls for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination. Tool is based on GATK4 FilterByOrientationBias.</li>
+				<li><a href="gatk4-filtermutectcalls.R.html">Variants / GATK4 -Filter Mutect2 calls</a> Filter variants in a Mutect2 VCF callset. Tool is based on GATK4 FilterMutectCalls.</li>
+				<li><a href="gatk4-getpileupsummaries.html">Variants / GATK4 -Tabulate pileup metrics for inferring contamination</a> Summarizes counts of reads that support reference, alternate and other alleles for given sites. Results can be used with CalculateContamination. Tool is based on GATK4 GetPileupSummaries.</li>
+				<li><a href="gatk4-mutect2-call-snv-and-indels.html">Variants / GATK4 -Call somatic SNVs and INDELs with Mutect2</a> Call somatic short variants via local assembly of haplotypes. Short variants include single nucleotide (SNV) and insertion and deletion (indel) variants. Tool is based on GATK4 Mutect2 tool.</li>
+				<li><a href="diamond.html">Sequence similarity search / DIAMOND protein sequence similarity search</a>, faster than BLAST.</li>
+				<li><a href="share_via_object_storage.html">Utilities / Share a file</a> generates a public url for a file using the Object Storage service of Chipster so that you can share individual result files.</li>
+				<li><a href="basespace.html">Data retrieval / Retrieve data from Illumina BaseSpace</a> This tool requires that you have an access token for the bs client program. Please see the manual for how to obtain it.</li>
+				<li><a href="enafetch.html">Data retrieval / Retrieve datasets from ENA</a> retrieve data from the ENA database based on the entry ID or name.</li>
+<!-- 			<li><a href=".html"> / </a> .
+				<li><a href=".html"> / </a> . -->				
+			</ul> 
+		</li>
+
+		<li><div class=header-item>Improvements to analysis tools</div>		
+			<ul>
+				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a> tags reads with gene names so a separate tool for that is not needed any more.</li>
+				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> indicates the number of cells.</li>
+				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat -Clustering</a> reports the number of cells per cluster and produces a heatmap.</li>
+				<li><a href="single-cell-seurat-CCA.html">Single cell RNA-seq / Seurat -Combine two samples and perform CCA</a> has parameters for the number of CCs for computing and heatmaps.</li>																
+				<li><a href="mothur-classifyseqs.html">16S rRNA sequencing / Classify sequences to taxonomic units</a> allows you to tick boxes in order to remove lineages.</li>
+				<li><a href="mothur-classify-counttable.html">16S rRNA sequencing / Produce count table and phenodata</a> uses now a fixed seed for rarefaction in order to give consistant results. Species with zero counts are not reported.</li>
+				<li>HISAT2 aligners have reference genome index for rat.</li>
+				<li>STAR aligners have reference genome indexes for rat and mouse.</li>
+				<li>Bowtie, Bowtie2 and BWA aligners have reference indexes for human, mouse and rat miRBase.</li>
+			</ul> 
+		</li>
+		<li><div class=header-item>Updates to reference data</div>
+			<ul>
+				<li>All reference genomes have been updated to Ensembl v95.</li>
+				<li>VirusDetect database has been updated to v227.</li>
+			</ul>
+		</li>
+		<li><div class=header-item>Improvements to user interface</div>		
+			<ul>
+				<li>Import tool allows you to copy the same function (Use Import tool or Import directly) to all files.</li>
+			</ul>		
+	</ul>
+	<hr />
+
 <h2>Version update 13.9.2018: What is new in Chipster 3.14</h2>
  	<p>
 		<b>Summary:</b> This version contains major improvements in the community analysis tools for amplicon sequencing data (16S rRNA), and it also makes quality control easier for multisample datasets.  
