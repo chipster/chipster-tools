@@ -208,6 +208,7 @@
 		<tool>single-cell-seurat-integrated-analysis.R</tool>	
 		<tool>single-cell-seurat-diffexp-samples.R</tool>	
 		<tool>single-cell-seurat-split-dot-plot.R</tool>
+		<tool>single-cell-seurat-featureplot.R</tool>		
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
