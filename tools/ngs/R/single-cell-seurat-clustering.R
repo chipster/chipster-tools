@@ -43,19 +43,29 @@ seurat_obj <- FindClusters(object = seurat_obj, reduction.type = "pca", dims.use
 		resolution = res, print.output = 0, save.SNN = TRUE)
 
 
-# Non-linear dimensional reduction (tSNE)
+# Non-linear dimensional reduction (tSNE) & number of cells in clusters
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
+
+# Calculate number of cells per cluster from object@ident
+cell.num <- table(seurat_obj@ident)
+
+# Add cell number per cluster to cluster labels
+ClusterLabels = paste("Cluster", names(cell.num), paste0("(n = ", cell.num, ")"))
+
+# Order legend labels in plot in the same order as 'ClusterLabels'
+ClusterBreaks = names(cell.num)
+
+# Plot tSNE with new legend labels for clusters
 pdf(file="tSNEplot.pdf") 
-TSNEPlot(seurat_obj, pt.size = point.size)
+TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(seurat_obj@cell.names))) +
+		scale_colour_discrete(breaks = ClusterBreaks, 
+				labels = ClusterLabels) +
+		labs(x = "t-SNE 1",
+				y = "t-SNE 2")
 
 # Find all markers 
 markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
 write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-
-# Number of cells:
-textplot(as.matrix(summary(as.factor(seurat_obj@meta.data$res.0.6))), halign="center", valign="center", cex=1.0)
-title(paste("Number of cells in each cluster: \n Total number of cells: ",length(seurat_obj@cell.names)) )
-# textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2) #, cex=0.8
 
 # Save the Robj for the next tool
 save(seurat_obj, file="seurat_obj_2.Robj")
