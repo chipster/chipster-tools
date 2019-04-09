@@ -26,13 +26,13 @@ div.header-item {
 	<ul>
 		<li><div class=header-item>New analysis tools</div>	
 			<ul>
-				<li><a href="gatk4-collectsequencingartifactmetrics.html">Variants / GATK4 -Generate sequencing artifact metrics for filtering by orientation bias</a> quantifies substitution errors caused by mismatched base pairings during various stages of sample / library prep.</li>
+				<li><a href="gatk4-mutect2-call-snv-and-indels.html">Variants / GATK4 -Call somatic SNVs and INDELs with Mutect2</a> calls somatic short variants via local assembly of haplotypes.</li>			
 				<li><a href="gatk4-createsomaticpanelofnormals.html">Variants / GATK4 -Create Somatic Panel of Normals</a> creates a panel of normals (PoN) containing germline and artifactual variant sites. Mutect2 then uses the PoN to filter variants at the site-level.</li>
 				<li><a href="gatk4-getpileupsummaries.html">Variants / GATK4 -Tabulate pileup metrics for inferring contamination</a> summarizes counts of reads that support reference, alternate and other alleles for given sites.</li>
-				<li><a href="gatk4-estimate-contamination.html">Variants / GATK4 -Estimate contamination</a> calculates the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries. The resulting contamination table is used with FilterMutectCalls.</li>
-				<li><a href="gatk4-mutect2-call-snv-and-indels.html">Variants / GATK4 -Call somatic SNVs and INDELs with Mutect2</a> calls somatic short variants via local assembly of haplotypes.</li>				
+				<li><a href="gatk4-estimate-contamination.html">Variants / GATK4 -Estimate contamination</a> calculates the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries. The resulting contamination table is used with FilterMutectCalls.</li>				
 				<li><a href="gatk4-filtermutectcalls.html">Variants / GATK4 -Filter Mutect2 calls</a> filters somatic variants in a Mutect2 VCF callset.</li>
-				<li><a href="gatk4-filterbyorientation.html">Variants / GATK4 -Filter Mutect2 calls by orientation bias</a> additionally filters Mutect2 somatic variants for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination.</li>
+				<li><a href="gatk4-collectsequencingartifactmetrics.html">Variants / GATK4 -Generate sequencing artifact metrics for filtering by orientation bias</a> quantifies substitution errors caused by mismatched base pairings during various stages of sample / library prep.</li>
+				<li><a href="gatk4-filterbyorientation.html">Variants / GATK4 -Filter Mutect2 calls by orientation bias</a> filters Mutect2 somatic variants for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination.</li>
 				<li><a href="diamond.html">Sequence similarity search / DIAMOND protein sequence similarity search</a>, faster than BLAST.</li>
 				<li><a href="basespace.html">Data retrieval / Retrieve data from Illumina BaseSpace</a> This tool requires that you have an access token for the bs client program. Please see the manual for how to obtain it.</li>
 				<li><a href="enafetch.html">Data retrieval / Retrieve datasets from ENA</a> retrieves data from the ENA database based on the entry ID or name.</li>
