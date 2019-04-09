@@ -46,17 +46,17 @@ plot_grid(p1, p2)
 # Number of cells per clusters in each group:
 meta_data_table <- data.combined@meta.data
 stim_levels <- levels(as.factor(meta_data_table$stim))
-cluster_levels <- levels(as.factor(meta_data_table$res.0.6))
+cluster_levels <- levels(as.factor(meta_data_table[,grep('res', names(meta_data_table))]))
 cell_counts <- matrix(nrow = length(cluster_levels), ncol =  length(stim_levels)+1)
 colnames(cell_counts) <- c(stim_levels, "TOTAL")
 rownames(cell_counts) <- c(cluster_levels)
+
 for (i in stim_levels) {
-	cell_counts[,i] <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,]$res.0.6)))
+	cell_counts[,i] <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,grep('res', names(meta_data_table))])))
 }
 cell_counts[, ncol(cell_counts)] <- rowSums(cell_counts, na.rm= TRUE) 
-
 textplot(cell_counts, halign="center", valign="center", cex=1.2)
-title(paste("Number of cells in each cluster: \n Total number of cells: ",length(data.combined@cell.names)) )
+title(paste("Total number of cells: ",length(data.combined@cell.names), "\n Number of cells in each cluster:" ) )
 
 dev.off() # close the pdf
 
