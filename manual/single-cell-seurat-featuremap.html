@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat - Visualise features in tSNE plot </h2>
+
+<h3>Description</h3>
+
+<p>
+Color single cells on a tSNE dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc. 
+As input the user gives the Seurat R-object (.Robj) after the clustering step, 
+and selects the feature of interest.
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Feature</li>
+		<li>Point size in tSNE plot</li>
+</ul>
+
+ <h3>Details</h3>
+ 
+<p>
+The resulting tSNE dimension reduction plot colors the single cells according the selected features 
+available in Seurat objects, such as
+ percentage of mitochondrial genes (percent.mito), number of unique molecular identifiers (nUMI),
+ number of genes expressed (nGene) or effect on the first principal components (PCA1 and PCA2).
+ The plot can be used to visually estimate how the features may effect on the clustering results.
+ <br>Size of the dots representing the cells can be altered.
+</p>
+
+
+<p>
+For more details, please check the <a href="https://www.rdocumentation.org/packages/Seurat/versions/2.3.4/topics/FeaturePlot">the original tool documentation</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>tSNEplot.pdf: tSNE plot colored based on the selected feature </li>
+</ul>
+
+
+
+</body>
+
