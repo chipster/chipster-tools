@@ -134,12 +134,19 @@
 	</category>
 	
 	<category name="Variants" color="#80a3b7">
-		<tool>samtools-snp-indel-single.R</tool> 
+		<tool>gatk4-mutect2-call-snv-and-indels.R</tool>
+		<tool>gatk4-createsomaticpanelofnormals.R</tool>
+		<tool>gatk4-getpileupsummaries.R</tool>
+		<tool>gatk4-estimate-contamination.R</tool>
+		<tool>gatk4-filtermutectcalls.R</tool>
+		<tool>gatk4-collectsequencingartifactmetrics.R</tool>
+		<tool>gatk4-filterbyorientation.R</tool>										
 		<tool>vcftools.R</tool>
         <tool>annotate-variant.R</tool>
 		<tool module="common">vep.py</tool>
 		<tool>bcftools-intersect-vcf.R</tool>	
 		<tool>vcftools-reports.R</tool>
+		<tool>samtools-snp-indel-single.R</tool>
 	</category>
 	
 	<category name="RNA-seq" color="#0177b7">
