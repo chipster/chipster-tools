@@ -1,4 +1,4 @@
-# TOOL vcftools-reports.R: "Calculate statistics on VCF file" (Given a VCF file, this tool calculates several statistics such as allele frequency and count, LD measure, and p-value for HWE. It can also produce the number and density of SNPs in bins of defined size. This tool is based on the VCFtools package.)
+# TOOL vcftools-reports.R: "Calculate statistics on VCF file with VCFtools" (Given a VCF file, this tool calculates several statistics such as allele frequency and count, LD measure, and p-value for HWE. It can also produce the number and density of SNPs in bins of defined size. This tool is based on the VCFtools package.)
 # INPUT input.vcf: "VCF file" TYPE GENERIC 
 # OUTPUT OPTIONAL vcftools.log
 # OUTPUT OPTIONAL vcftools.frq.tsv
