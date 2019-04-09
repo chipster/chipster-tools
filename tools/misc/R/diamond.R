@@ -1,4 +1,4 @@
-# TOOL diamond.R: "DIMAOND protein sequence similarity search" (Sequence similarity search with DIAMOND software.)
+# TOOL diamond.R: "DIAMOND protein sequence similarity search" (Sequence similarity search with the DIAMOND software.)
 # INPUT sequence: "Query sequences" TYPE GENERIC 
 # INPUT OPTIONAL reference: "Reference proteins" TYPE GENERIC 
 # OUTPUT OPTIONAL diamond.txt
