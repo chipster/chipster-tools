@@ -9,14 +9,10 @@
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
 # PARAMETER OPTIONAL minpct: "Min fraction of cells where a cluster marker gene is expressed" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expression)
 # PARAMETER OPTIONAL threshuse: "Differential expression threshold for a cluster marker gene" TYPE DECIMAL DEFAULT 0.25 (Limit testing to genes which show, on average, at least X-fold difference, in log-scale, between the two groups of cells. Increasing thresh.use speeds up the function, but can miss weaker signals.)
-# PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [bimod, roc, t, tobit, poisson, negbinom] DEFAULT bimod (Denotes which test to use. Seurat currently implements \"bimod\" \(likelihood-ratio test for single cell gene expression, McDavid et al., Bioinformatics, 2011, default\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), and \"tobit\" \(Tobit-test for differential gene expression, as in Trapnell et al., Nature Biotech, 2014\), \"poisson\", and \"negbinom\". The latter two options should only be used on UMI datasets, and assume an underlying poisson or negative-binomial distribution.)
+# PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST, DESeq2] DEFAULT wilcox (Denotes which test to use. Seurat currently implements \"wilcox\" \(Wilcoxon rank sum test, default\), \"bimod\" \(likelihood-ratio test for single cell gene expression\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), \"tobit\" \(Tobit-test for differential gene expression\), \"MAST\" \(GLM-framework that treates cellular detection rate as a covariate\), \"DESeq2\" \(DE based on a model using the negative binomial distribution\), \"poisson\", and \"negbinom\". The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE plot. )
 # RUNTIME R-3.4.3
 
-
-# max.cells.per.ident ?
-# min.pct = 0.25, thresh.use = 0.25
-# removed: PARAMETER OPTIONAL onlypos: "Only positive changes" TYPE [TRUE, FALSE] DEFAULT FALSE (Only return positive markers if set to TRUE.)
 
 
 # 09.06.2017 ML
@@ -24,6 +20,7 @@
 # 2018-07-25 ML removed onlypos -parameter
 # 2018-09-26 ML add perplexity parameter for datasets with fewer cells
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
+# 2019-04-10 ML add more test.types (wilcox, MAST, DESeq2), wilcox changed as the default
 
 library(Seurat)
 library(dplyr)
@@ -65,17 +62,24 @@ TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells
 
 # Find all markers 
 markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
-write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
-# Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_2.Robj")
+if(length(warnings())>0){ # or !is.null(warnings())
+	stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
+}
+
+write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 # Plot top10 genes of each cluster as a heatmap 
 top10 <- markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
-# setting slim.col.label to TRUE will print just the cluster IDS instead of every cell name
-# cex.row=4 added to avoid overlapping gene names with most cases
+# setting slim.col.label to TRUE will print just the cluster IDS instead of
+# every cell name
+pdf(file="tSNEplot.pdf")
 DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE, cex.row=4)
 
 dev.off() # close the pdf
+
+
+# Save the Robj for the next tool
+save(seurat_obj, file="seurat_obj_2.Robj")
 
 # EOF

@@ -18,7 +18,7 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
 	<li>Perplexity, expected number of neighbors [30]</li>
 	<li>Cluster biomarker gene has to be expressed in at least this fraction of cells [0.25]</li>
 	<li>Differential expression threshold for a cluster biomarker gene [0.25]</li>
-	<li>Which test to use for finding marker genes [bimod, roc, t, tobit, poisson, negbinom]</li>
+	<li>Which test to use for finding marker genes [wilcox]</li>
 </ul>
 
  <h3>Details</h3>
@@ -60,11 +60,19 @@ between the two groups. Both of these parameters can be set to 0, but with a dra
 since this will test a large number of genes that are unlikely to be highly discriminatory. 
 The marker genes for each recognized cluster are written in the <b>markers.tsv</b> file. 
 <br>
-<br>For testing, Seurat currently implements "bimod" (likelihood-ratio test for single cell gene expression, McDavid et al., Bioinformatics, 2011, default), 
-"roc" (standard AUC classifier), "t" (Students t-test), 
-and "tobit" (Tobit-test for differential gene expression, as in Trapnell et al., Nature Biotech, 2014), 
-"poisson", and "negbinom". 
-The latter two options should only be used on UMI datasets, and assume an underlying poisson or negative-binomial distribution.
+<br>For testing, Seurat currently implements: 
+<ul>
+	<li>"wilcox" : Wilcoxon rank sum test (default)</li>
+	<li>"bimod" : Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
+	<li>"roc" : Standard AUC classifier</li>
+	<li>"t" : Student's t-test</li>
+	<li>"tobit" : Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
+	<li>"poisson" : Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
+	<li>"negbinom" : Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
+	<li>"MAST : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
+	<li>"DESeq2 : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
+</ul>
+<b>"Poisson" and "negbiom" options should ONLY be used on UMI datasets </b>, and assume an underlying poisson or negative-binomial distribution.
 </p>
 
 <p>
