@@ -157,7 +157,7 @@
 		<tool>filter-by-column-value.R</tool>
 		<tool>delete-columns.R</tool>
 		<tool>delete-and-subtract-columns.R</tool>
-		<tool>merge-tables.R</tool>
+		<tool module="common">merge-tables.R</tool>
 		<tool>merge-datasets.R</tool>
 		<tool>merge-pheno-and-data.R</tool>
 		<tool>extract-genes-from-clustering.R</tool>
