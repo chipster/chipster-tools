@@ -55,6 +55,7 @@ system("gunzip *.gz")
 
 #fastq files are stored to a subdrectory. Copy them to current directory (but keep them gzipped)
 system("cp ./*/* ./")
+system("cp ./*/*/* ./")
 ## check that we got something
 #gz.files <- Sys.glob("*.gz")
 #if (length(gz.files) == 0) {
