@@ -70,6 +70,7 @@
 		<tool module="common">srafetch.R</tool>
 	    <tool module="common">srabamfetch.R</tool>
 		 -->
+		<tool module="common">enafetch.R</tool>
 		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
@@ -81,6 +82,8 @@
 		<tool module="common">make_namelist.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
+	    <tool module="common">share_via_object_storage.R</tool>
+	    <tool module="common">basespace.R</tool>	   
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
