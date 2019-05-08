@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Heatmap for RNA-seq</h2>
+
+<h3>Description</h3>
+
+<p>
+Draw a heatmap and dendrogram of the genes of interest. As input, give the list of genes of interest and 
+the RAW COUNTS. The tool will first perform a normalisation / transformation for the values.
+</p>
+
+
+<h3>Parameters</h3>
+
+<ul>
+<li> Transformation method (variance stabilizing transformation, regularized log transformation, no transformation - only DESeq2 normalization) [variance stabilizing transformation]</li>
+<li> Annotation column (Phenodata column used for plotting the sample names</li>
+<li> Image width </li>
+<li> Image height </li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+This tool takes as input a table of raw counts and a list of genes of interest (.tsv format). 
+The count table has to be associated with a phenodata file describing the experimental groups. 
+These files are best created by the tool "Utilities / Define NGS experiment", 
+which combines count files for different samples to one table, and creates a phenodata file for it.
+The list of genes of interest can be generated for example with the differential expression tools, 
+such as DeSeq2 or edgeR and filtering tool (Utilities / Filter table by column value). 
+You might want to limit the list to some tens of genes.
+</p>
+
+<p>
+The tool first transforms the raw read counts using the DESeq2 Bioconductor package. The input file has to contain all the genes, not just differentially expressed ones. 
+Note that you can use the resulting transformed values only for visualization and clustering, <b>not for differential expression analysis</b> which needs raw counts. 
+<br>
+For more information about the transformation part, please study the manual for  <a href="https://chipster.csc.fi/manual/deseq2-transform.html">Transform read counts tool.</a>
+<br>
+This information is then merged with the list of genes of interest, and then the heatmap is drawn. 
+</p>
+
+<p>
+You can tune the size of the heatmap with the image size parameters. The heatmap scales accordingly. 
+You can also choose the naming for the samples from the phenodata columns: 
+usually it is wise to use some short names in the description column and use that.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>heatmap.pdf</li>
+<li>transformed-counts.tsv</li>
+</ul>
+
+<h3><br>References</h3>
+
+<p>This tool uses the DESeq2 package. Please read the following article for more detailed information:</p>
+
+<p> M Love, W Huber and S Anders: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/">Moderated estimation of fold change and
+dispersion for RNA-Seq data with DESeq2.</a> Genome Biol. 2014 15:550</p> 
+
+</body>
