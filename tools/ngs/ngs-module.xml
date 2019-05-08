@@ -9,6 +9,7 @@
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
 		<tool>deseq2-pca-heatmap.R</tool>
+		<tool>heatmap-for-rnaseq.R</tool>
 		<tool>check-fastq.R</tool>
 		<tool>multiqc.R</tool>
 	</category>
@@ -34,6 +35,7 @@
 		<tool module="common">select_columns.R</tool>
 		<tool module="common">sort_and_select_columns.R</tool>
 		<tool module="common">join_tsv_files.R</tool>
+		<tool module="common">merge-tables.R</tool>
 		<tool module="common">general_file_processing.R</tool>	
 		<tool>row_count.R</tool>
 		<tool>process-preprocessed-counts.R</tool>
