@@ -83,8 +83,8 @@ function makePackage(packageFile) {
 function reloadAll(packageFile, subproject) {
   // chmod is neeeded only if somebody has uploaded a tar without correct file modes
   var remoteScript = `
-  chmod -R ugo+rwx tools
-  rm -rf tools/*
+  rm -rf tools
+  mkdir tools
   tar -xz -C tools
   `;
 
