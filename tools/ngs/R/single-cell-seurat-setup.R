@@ -15,6 +15,7 @@
 # 2017-07-05 ML split into separate tool
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2018-04-24 ML + AMS improve the input tar handling
+# 2019-05-22 ML update Seurat version to 3.0
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions. If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
