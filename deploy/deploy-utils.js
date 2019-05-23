@@ -12,7 +12,6 @@ exports.getConfigPath = function() {
 
 exports.getConfig = function() {
   let confPath = this.getConfigPath();
-
   let subject = new Subject();
 
   fs.readFile(confPath, "utf8", (err, data) => {
@@ -26,9 +25,11 @@ exports.getConfig = function() {
       }
     } else {
       try {
-        subject.next(JSON.parse(data));
+        let parsed = JSON.parse(data);
+        subject.next(parsed);
         subject.complete();
       } catch (err) {
+        console.log("conf parse error", err);
         throwError(
           new Error("configuration file parsing failed", confPath, "\n", err)
         );
