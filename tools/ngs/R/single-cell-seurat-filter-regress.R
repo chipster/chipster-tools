@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
-# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript ratio" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells where the ratio of mitochondrial transcripts is higher than this.)
+# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out cells where the percentage of mitochondrial transcripts is higher than this.)
 # PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene, x min" TYPE DECIMAL DEFAULT 0.1 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene, x max" TYPE DECIMAL DEFAULT 8 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene, y min" TYPE DECIMAL DEFAULT 1 (For limiting the selection of variable genes.)
@@ -24,6 +24,8 @@
 # 2018-11-07 ML Update the cutoffs for variable genes: xmin = 0.0125->0.1, x.high.cutoff = 3 -> 8, y.cutoff = 0.5 -> 1
 # 2018-12-20 ML ScaleData: scale all changes in one command
 # 2019-03-13 EK Removed names of variable genes from dispersion plot
+# 2019-05-22 ML update Seurat version to 3.0
+
 
 library(Seurat)
 library(dplyr)
@@ -43,9 +45,12 @@ s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
 
-# before or after cell cycle fixing?
-seurat_obj <- FilterCells(object = seurat_obj, subset.names = c("nGene", "percent.mito"), 
-		low.thresholds = c(mingenes, -Inf), high.thresholds = c(genecountcutoff, mitocutoff)) 
+# seurat_obj <- FilterCells(object = seurat_obj, subset.names = c("nGene", "percent.mito"), 
+#		low.thresholds = c(mingenes, -Inf), high.thresholds = c(genecountcutoff, mitocutoff)) 		
+# v3: new function, subset
+# pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)	
+seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff)	
+# note: changed the parameter for mito% : 0.05 -> 5...
 
 if (lognorm=="T") {
 	seurat_obj <- NormalizeData(object = seurat_obj, normalization.method = "LogNormalize", 
@@ -54,13 +59,18 @@ if (lognorm=="T") {
 # Detection of variable genes across the single cells
 # Identifies genes that are outliers on a 'mean variability plot'. 
 # First, uses a function to calculate average expression (fxn.x) and dispersion (fxn.y) for each gene. 
-# Next, divides genes into num.bin (deafult 20) bins based on their average expression, 
+# Next, divides genes into num.bin (default 20) bins based on their average expression, 
 # and calculates z-scores for dispersion within each bin. 
 # The purpose of this is to identify variable genes while controlling for the strong relationship 
 # between variability and average expression.
+
 seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, dispersion.function = LogVMR, 
 		#x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = TRUE )
 		x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = FALSE )
+# v3: new function, FindVariableGenes -> FindVariableFeatures
+# pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
+seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = 2000)
+
 # do.text	= Add text names of variable genes to plot (default is TRUE)
 # plot.both	= Plot both the scaled and non-scaled graphs.
 length(x = seurat_obj@var.genes)
