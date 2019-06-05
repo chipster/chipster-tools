@@ -52,8 +52,9 @@ colnames(cell_counts) <- c(stim_levels, "TOTAL")
 rownames(cell_counts) <- c(cluster_levels)
 
 for (i in stim_levels) {
-	cell_counts[,i] <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,grep('res', names(meta_data_table))])))
-}
+  number_of_cells_in_clusters_of_i <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,grep('res', names(meta_data_table))])))
+  cell_counts[row.names(number_of_cells_in_clusters_of_i),i] <- number_of_cells_in_clusters_of_i
+  }
 cell_counts[, ncol(cell_counts)] <- rowSums(cell_counts, na.rm= TRUE) 
 textplot(cell_counts, halign="center", valign="center", cex=1.2)
 title(paste("Total number of cells: ",length(data.combined@cell.names), "\n Number of cells in each cluster:" ) )

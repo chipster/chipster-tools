@@ -3,42 +3,40 @@ const homedir = require("os").homedir();
 const fs = require("fs");
 const spawn = require("child_process").spawn;
 const execFile = require("child_process").execFile;
-const {
-  Subject,
-  of,
-  bindCallback,
-  bindNodeCallback,
-  throwError
-} = require("rxjs");
-const { map, mergeMap, catchError } = require("rxjs/operators");
+const { Subject, of, bindCallback, throwError } = require("rxjs");
+const { map, mergeMap } = require("rxjs/operators");
 
 exports.getConfigPath = function() {
   return path.join(homedir, ".chipster", "deploy-scripts.json");
 };
 
-exports.getConfig = function(callback) {
+exports.getConfig = function() {
   let confPath = this.getConfigPath();
+  let subject = new Subject();
 
-  return bindNodeCallback(fs.readFile)(confPath, "utf8").pipe(
-    map(data => {
+  fs.readFile(confPath, "utf8", (err, data) => {
+    if (err) {
+      if (err.code == "ENOENT") {
+        subject.throwError(
+          new Error("configuration file not found: " + confPath)
+        );
+      } else {
+        subject.throwError(err);
+      }
+    } else {
       try {
-        return JSON.parse(data);
+        let parsed = JSON.parse(data);
+        subject.next(parsed);
+        subject.complete();
       } catch (err) {
+        console.log("conf parse error", err);
         throwError(
           new Error("configuration file parsing failed", confPath, "\n", err)
         );
       }
-    }),
-    catchError(err => {
-      if (err.code == "ENOENT") {
-        return throwError(
-          new Error("configuration file not found: " + confPath)
-        );
-      } else {
-        return throwError(err);
-      }
-    })
-  );
+    }
+  });
+  return subject;
 };
 
 /**
