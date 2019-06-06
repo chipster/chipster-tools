@@ -5,17 +5,20 @@
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
 # PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out cells where the percentage of mitochondrial transcripts is higher than this.)
-# PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene, x min" TYPE DECIMAL DEFAULT 0.1 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene, x max" TYPE DECIMAL DEFAULT 8 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene, y min" TYPE DECIMAL DEFAULT 1 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL num.features: "Number of variable features to return" TYPE INTEGER DEFAULT 2000 (How many features returned per dataset.)
 # PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
 # PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization. Used in normalisation step.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Filter out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Choose to remove all signal associated with cell cycle, or the difference between the G2M and S phase scores. More info in the manual page under Help. )
 # RUNTIME R-3.4.3
 
 
+
 # PARAMETER OPTIONAL yhighcutoff: "Top cutoff on y-axis for identifying variable genes" TYPE DECIMAL DEFAULT Inf (For limiting the selection of variable genes.)
 # OUTPUT OPTIONAL log.txt
+# PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene, x min" TYPE DECIMAL DEFAULT 0.1 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene, x max" TYPE DECIMAL DEFAULT 8 (For limiting the selection of variable genes.)
+# PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene, y min" TYPE DECIMAL DEFAULT 1 (For limiting the selection of variable genes.)
+
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -36,7 +39,7 @@ library(gplots)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
-pdf(file="Dispersion_plot.pdf") # , width=13, height=7) 
+pdf(file="Dispersion_plot.pdf", width=13, height=7) 
 
 # For cell cycle filtering, read in a list of cell cycle markers, from Tirosh et al, 2015
 cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
@@ -64,58 +67,75 @@ if (lognorm=="T") {
 # The purpose of this is to identify variable genes while controlling for the strong relationship 
 # between variability and average expression.
 
-seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, dispersion.function = LogVMR, 
-		#x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = TRUE )
-		x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = FALSE )
-# v3: new function, FindVariableGenes -> FindVariableFeatures
-# pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 2000)
-seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = 2000)
+# seurat_obj <- FindVariableGenes(object = seurat_obj, mean.function = ExpMean, dispersion.function = LogVMR, 
+#		#x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = TRUE )
+# 		x.low.cutoff = xlowcutoff, x.high.cutoff = xhighcutoff, y.cutoff = ylowcutoff, do.text = FALSE, plot.both = FALSE )
+# v3: new function, FindVariableGenes -> FindVariableFeatures, only one parameter instead of x and y cutoffs (=simplified)
+seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = num.features)
 
-# do.text	= Add text names of variable genes to plot (default is TRUE)
-# plot.both	= Plot both the scaled and non-scaled graphs.
-length(x = seurat_obj@var.genes)
-textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(seurat_obj@var.genes), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=0.8)
+# Dispersion plot:
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(seurat_obj), 10)
+
+# plot variable features with and without labels
+plot1 <- VariableFeaturePlot(seurat_obj)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+CombinePlots(plots = list(plot1, plot2))
+
+textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign="center", valign="center")
+# v3: seurat_obj@var.genes ->  VariableFeatures(object = seurat_obj), seurat_obj@cell.names -> colnames(x = seurat_obj) 
+
+## Scaling the data & cell cycle filtering:
+# v3:
+# pbmc <- ScaleData(pbmc, features = all.genes)
+# pbmc <- ScaleData(pbmc, vars.to.regress = "percent.mt")
+
+# if filter.cell.cycle == "no", also anyhow RunPCA needs to access Object@scale.data:
+seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), display.progress = FALSE)
 
 
-## cell cycle filtering:
-
-if( filter.cell.cycle == "no" ) {
-	seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
-} else{
-	
-	# Cell cycle genes, get the scores & visualise:
+if( filter.cell.cycle != "no" ) {	
+	# Cell cycle genes, get the scores & visualize:
 	# Note: in the very beginning we read in the table and set s.genes and gm2.genes
 	# http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
 
-	# This step needed here, as RunPCA needs to access Object@scale.data:
-	seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nUMI", "percent.mito"), display.progress = FALSE)
-	
 	# Check that there were some S or G2M genes in the list of variable genes:
-	if (length(s.genes[!is.na(match(s.genes, seurat_obj@var.genes))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, seurat_obj@var.genes))]) <1 ) {
+	if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) <1 ) {
 		stop(paste('CHIPSTER-NOTE: ', "There were no enough cell cycle genes for correction in the list of variable genes."))
+	
 	} else{
-		seurat_obj <- CellCycleScoring(object = seurat_obj, s.genes = s.genes, g2m.genes = g2m.genes, 
-				set.ident = TRUE)
-	#	 Visualize the distribution of cell cycle markers across
+		seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+		# Visualize the distribution of cell cycle markers across
 		# JoyPlot(object = seurat_obj, features.plot = c("PCNA", "TOP2A", "MCM6", "MKI67"), nCol = 2)  # Not all genes found, JoyPlot has been replaced with RidgePlot 
 		# Visualize in PCA:
-		seurat_obj <- RunPCA(object = seurat_obj, pc.genes = c(s.genes, g2m.genes), do.print = FALSE)
-		PCAPlot(object = seurat_obj, plot.title = "PCA on cell cycle genes")
+		# seurat_obj <- RunPCA(object = seurat_obj, pc.genes = c(s.genes, g2m.genes), do.print = FALSE)
+		# PCAPlot(object = seurat_obj, plot.title = "PCA on cell cycle genes")
+		# v3:
+		# PCA plot 1: before filtering cell cycle effect
+		seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
+		DimPlot(seurat_obj, plot.title = "PCA on cell cycle genes")
 
 		# Remove the cell cycle scores:
 
 		# Option 1: remove all the difference:
 		if (filter.cell.cycle == "all.diff"){
-			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nUMI", "percent.mito"), 
-					display.progress = FALSE)			
-			seurat_obj <- RunPCA(object = seurat_obj, pc.genes = c(s.genes, g2m.genes), do.print = FALSE)
-			PCAPlot(object = seurat_obj, plot.title = "After cell cycle correction (method: remove all)") # HUOM, size
+			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), 
+					display.progress = FALSE)	
+			# PCA plot 2A: after filtering, all:	
+			seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
+			# old version: PCAPlot(object = seurat_obj, plot.title = "After cell cycle correction (method: remove all)") # HUOM, size
+			DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: remove all)")
+			
 		# Option 2: regressing out the difference between the G2M and S phase scores:	
 		}else if (filter.cell.cycle == "diff.phases"){
-			seurat_obj@meta.data$CC.Difference <- seurat_obj@meta.data$S.Score - seurat_obj@meta.data$G2M.Score
-			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nUMI", "percent.mito"), display.progress = FALSE)			
-			seurat_obj <- RunPCA(object = seurat_obj, pc.genes = c(s.genes, g2m.genes), do.print = FALSE)
-			PCAPlot(object = seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)") # HUOM size
+			# seurat_obj@meta.data$CC.Difference <- seurat_obj@meta.data$S.Score - seurat_obj@meta.data$G2M.Score
+			seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
+			# v3: object@meta.data$name -> object$name
+			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), display.progress = FALSE)			
+			# PCA plot 2B: after filtering, difference:	
+			seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE)
+			# old version: PCAPlot(object = seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)") # HUOM size
+			DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)")
 		}
 	} 
 } 
