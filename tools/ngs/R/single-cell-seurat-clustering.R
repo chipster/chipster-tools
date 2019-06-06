@@ -73,7 +73,7 @@ write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col
 top10 <- markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 # setting slim.col.label to TRUE will print just the cluster IDS instead of
 # every cell name
-pdf(file="tSNEplot.pdf")
+#### pdf(file="tSNEplot.pdf")
 DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE, cex.row=4)
 
 dev.off() # close the pdf
