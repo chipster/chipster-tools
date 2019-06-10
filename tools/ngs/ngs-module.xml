@@ -147,7 +147,7 @@
 		<tool>gatk4-collectsequencingartifactmetrics.R</tool>
 		<tool>gatk4-filterbyorientation.R</tool>										
 		<tool>vcftools.R</tool>
-        <tool>annotate-variant.R</tool>
+       <!--<tool>annotate-variant.R</tool>-->
 		<tool module="common">vep.py</tool>
 		<tool>bcftools-intersect-vcf.R</tool>	
 		<tool>vcftools-reports.R</tool>
@@ -256,7 +256,7 @@
 		<tool>cna-define-experiment.R</tool>
 		<tool>cna-filter-bins.R</tool>
 		<tool>cna-correct.R</tool>
-		<tool>cna-normalize.R</tool>
+		<!--<tool>cna-normalize.R</tool>-->
 		<tool>cna-plot-profile.R</tool>
 		<tool>cna-segment.R</tool>
 		<tool>cna-call-aberrations.R</tool>
