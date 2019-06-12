@@ -586,6 +586,13 @@ function runLatestJob(session, restClient, webServerUri, chipsterUserId) {
 
 function watchAndRun(subproject, chipsterUserId, project, toolsDir) {
   let chipsterUsername = chipsterUserId.split("/")[1];
+  if (!chipsterUsername) {
+    throw new Error(
+      "userId '" +
+        chipsterUserId +
+        "' is not valid. Must be in form AUTH/USERNAME"
+    );
+  }
   let webServerUri = "https://" + subproject + "-" + project + ".rahtiapp.fi";
   let previousJobObjects;
   return getChipsterPassword(subproject, chipsterUsername).pipe(
