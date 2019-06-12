@@ -3,7 +3,7 @@ const homedir = require("os").homedir();
 const fs = require("fs");
 const spawn = require("child_process").spawn;
 const execFile = require("child_process").execFile;
-const { Subject, of, bindCallback, throwError } = require("rxjs");
+const { Subject, of, bindCallback } = require("rxjs");
 const { map, mergeMap } = require("rxjs/operators");
 
 exports.getConfigPath = function() {
