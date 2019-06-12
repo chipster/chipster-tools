@@ -356,16 +356,39 @@ function getChipsterPassword(subproject, chipsterUsername) {
   return utils.runAndGetOutput("oc", args).pipe(map(stdout => stdout.trim()));
 }
 
-function getLatestSession(restClient) {
-  return restClient
-    .getSessions()
-    .pipe(map(sessions => sortByDate(sessions, "accessed")[0]));
+function getLatestSession(restClient, webServerUri, chipsterUserId) {
+  return restClient.getSessions().pipe(
+    map(sessions => {
+      const last = sortByDate(sessions, "accessed")[0];
+      if (last) {
+        return last;
+      }
+      throw new Error(
+        "last session not found. Please login to " +
+          webServerUri +
+          " as " +
+          chipsterUserId +
+          " and open a session"
+      );
+    })
+  );
 }
 
-function getLatestJob(restClient, sessionId) {
-  return restClient
-    .getJobs(sessionId)
-    .pipe(map(jobs => sortByDate(jobs, "created")[0]));
+function getLatestJob(restClient, session, webServerUri, chipsterUserId) {
+  return restClient.getJobs(session.sessionId).pipe(
+    map(jobs => {
+      const last = sortByDate(jobs, "created")[0];
+      if (last) {
+        return last;
+      }
+      throw new Error(
+        "last job not found from session '" +
+          session.name +
+          "' in " +
+          webServerUri
+      );
+    })
+  );
 }
 
 function sortByDate(array, field) {
@@ -537,11 +560,11 @@ function getWsClient(restClient, sessionId) {
   return wsClient;
 }
 
-function runLatestJob(session, restClient) {
+function runLatestJob(session, restClient, webServerUri, chipsterUserId) {
   let wsClient;
   let job2;
 
-  return getLatestJob(restClient, session.sessionId).pipe(
+  return getLatestJob(restClient, session, webServerUri, chipsterUserId).pipe(
     tap(job => {
       job.state = "NEW";
       job.jobId = null;
@@ -576,8 +599,12 @@ function watchAndRun(subproject, chipsterUserId, project, toolsDir) {
     mergeMap(restClient => {
       return watchAndReload(subproject, toolsDir, true).pipe(
         mergeMap(() => deleteJob(restClient, previousJobObjects)),
-        mergeMap(() => getLatestSession(restClient)),
-        mergeMap(session => runLatestJob(session, restClient)),
+        mergeMap(() =>
+          getLatestSession(restClient, webServerUri, chipsterUserId)
+        ),
+        mergeMap(session =>
+          runLatestJob(session, restClient, webServerUri, chipsterUserId)
+        ),
         tap(jo => {
           previousJobObjects = jo;
         })
