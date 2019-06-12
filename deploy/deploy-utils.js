@@ -17,11 +17,9 @@ exports.getConfig = function() {
   fs.readFile(confPath, "utf8", (err, data) => {
     if (err) {
       if (err.code == "ENOENT") {
-        subject.throwError(
-          new Error("configuration file not found: " + confPath)
-        );
+        subject.error(new Error("configuration file not found: " + confPath));
       } else {
-        subject.throwError(err);
+        subject.error(err);
       }
     } else {
       try {
@@ -30,7 +28,7 @@ exports.getConfig = function() {
         subject.complete();
       } catch (err) {
         console.log("conf parse error", err);
-        throwError(
+        subject.error(
           new Error("configuration file parsing failed", confPath, "\n", err)
         );
       }
