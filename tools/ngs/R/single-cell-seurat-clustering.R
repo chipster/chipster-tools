@@ -21,6 +21,7 @@
 # 2018-09-26 ML add perplexity parameter for datasets with fewer cells
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
 # 2019-04-10 ML add more test.types (wilcox, MAST, DESeq2), wilcox changed as the default
+# 2019-06-12 ML Seurat v3
 
 library(Seurat)
 library(dplyr)
@@ -36,15 +37,22 @@ library(tools)
 dir <- getwd()
 dir <- file_path_as_absolute(dir)
 # seurat_obj <- FindClusters(seurat_obj, pc.use=1:pcs_use, resolution = res, print.output= 0, save.SNN= T, temp.file.location = dir)
-seurat_obj <- FindClusters(object = seurat_obj, reduction.type = "pca", dims.use = 1:pcs_use, 
-		resolution = res, print.output = 0, save.SNN = TRUE)
+# v2:
+# seurat_obj <- FindClusters(object = seurat_obj, reduction.type = "pca", dims.use = 1:pcs_use, 
+#		resolution = res, print.output = 0, save.SNN = TRUE)
+seurat_obj <- FindNeighbors(seurat_obj, dims = 1:pcs_use)
+seurat_obj <- FindClusters(seurat_obj, resolution = res)
 
 
 # Non-linear dimensional reduction (tSNE) & number of cells in clusters
+# v2:
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
+# UMAP plot would require installing a package:	
+# seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
 
 # Calculate number of cells per cluster from object@ident
-cell.num <- table(seurat_obj@ident)
+# cell.num <- table(seurat_obj@ident)
+cell.num <- Idents(object = seurat_obj)
 
 # Add cell number per cluster to cluster labels
 ClusterLabels = paste("Cluster", names(cell.num), paste0("(n = ", cell.num, ")"))
@@ -54,14 +62,17 @@ ClusterBreaks = names(cell.num)
 
 # Plot tSNE with new legend labels for clusters
 pdf(file="tSNEplot.pdf") 
-TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(seurat_obj@cell.names))) +
-		scale_colour_discrete(breaks = ClusterBreaks, 
-				labels = ClusterLabels) +
-		labs(x = "t-SNE 1",
-				y = "t-SNE 2")
+# TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj)))) +
+# 		scale_colour_discrete(breaks = ClusterBreaks, 
+# 				labels = ClusterLabels) +
+# 		labs(x = "t-SNE 1",
+# 				y = "t-SNE 2")
+TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
+# UMAP plot would require installing a package:				
+# DimPlot(seurat_obj, reduction = "umap")				
 
 # Find all markers 
-markers <- FindAllMarkers(seurat_obj, min.pct = minpct, thresh.use = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
+markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
 
 if(length(warnings())>0){ # or !is.null(warnings())
 	stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
@@ -70,12 +81,13 @@ if(length(warnings())>0){ # or !is.null(warnings())
 write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 # Plot top10 genes of each cluster as a heatmap 
-top10 <- markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
+top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 # setting slim.col.label to TRUE will print just the cluster IDS instead of
 # every cell name
-pdf(file="tSNEplot.pdf")
-DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE, cex.row=4)
-
+#### pdf(file="tSNEplot.pdf")
+# v2:
+# DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE, cex.row=4)
+DoHeatmap(object = seurat_obj, features = top10$gene) + NoLegend()
 dev.off() # close the pdf
 
 
