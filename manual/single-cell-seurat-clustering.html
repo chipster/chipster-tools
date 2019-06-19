@@ -56,7 +56,7 @@ You can also require that the change in expression has to be at least certain pe
 Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large number of genes that are unlikely to be highly discriminatory. 
 The marker genes for each cluster are written in the markers.tsv file. 
 <br>
-<br>For testing, Seurat currently implements: 
+<br>Seurat currently implements the following tests: 
 <ul>
 	<li>"wilcox" : Wilcoxon rank sum test (default)</li>
 	<li>"bimod" : Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
@@ -65,14 +65,14 @@ The marker genes for each cluster are written in the markers.tsv file.
 	<li>"tobit" : Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
 	<li>"poisson" : Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
 	<li>"negbinom" : Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
-	<li>"MAST : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
-	<li>"DESeq2 : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
+	<li>"MAST" : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
+	<li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
 </ul>
-<b>"Poisson" and "negbiom" options should ONLY be used on UMI datasets </b>, and assume an underlying poisson or negative-binomial distribution.
+<b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively.
 </p>
 
 <p>
-To get the markers for a specific cluster, you can use the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
+The result file contains marker genes for all the clusters. You can retrieve markers for a specific cluster using the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
 For example, to get the markers for cluster 2, fill in the parameters accordingly: <br>
 Column to filter by = cluster <br>
 Does the first column have a title = no <br>
@@ -84,15 +84,10 @@ Filtering criteria = equal-to  <br>
 For more details, please check:<br>
 The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
 <br><br>
-The Seurat clustering approach was heavily inspired by these manuscripts 
-which applied graph-based clustering approaches to scRNA-seq data:<br>
-<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">[SNN-Cliq, Xu and Su, Bioinformatics, 2015] </a> 
-and 
-<br>CyTOF data
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">[PhenoGraph, Levine et al., Cell, 2015]</a>.
+The Seurat clustering approach was heavily inspired by the manuscripts 
+<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and 
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a> which applied graph-based clustering approaches to scRNA-seq data and CyTOF data, respectively.<br>
 <br><br>
-Smart local moving algorithm:<br>
-<a href="http://dx.doi.org/10.1088/1742-5468/2008/10/P10008">[SLM, Blondel et al., Journal of Statistical Mechanics]</a>
 
 </p>
 
