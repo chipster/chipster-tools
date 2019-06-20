@@ -256,7 +256,7 @@
 		<tool>cna-define-experiment.R</tool>
 		<tool>cna-filter-bins.R</tool>
 		<tool>cna-correct.R</tool>
-		<!--<tool>cna-normalize.R</tool>-->
+		<tool>cna-normalize.R</tool>
 		<tool>cna-plot-profile.R</tool>
 		<tool>cna-segment.R</tool>
 		<tool>cna-call-aberrations.R</tool>
