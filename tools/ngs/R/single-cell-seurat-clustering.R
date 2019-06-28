@@ -22,11 +22,14 @@
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
 # 2019-04-10 ML add more test.types (wilcox, MAST, DESeq2), wilcox changed as the default
 # 2019-06-15 EK changed name to include marker gene detection
+# 2019-06-28 EK Add point size parameter for tSNE plot in the code
 
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+
+point.size
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -55,7 +58,7 @@ ClusterBreaks = names(cell.num)
 
 # Plot tSNE with new legend labels for clusters
 pdf(file="tSNEplot.pdf") 
-TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(seurat_obj@cell.names))) +
+TSNEPlot(object = seurat_obj, do.return = T, pt.size = point.size, plot.title = paste("Number of cells: ", length(seurat_obj@cell.names))) +
 		scale_colour_discrete(breaks = ClusterBreaks, 
 				labels = ClusterLabels) +
 		labs(x = "t-SNE 1",
