@@ -21,7 +21,7 @@ library(gplots)
 load("seurat_obj.Robj")
 
 # If multiple genes are listed: (separate words from "," and remove whitespace)
-if(grep(",", biomarker) != 0) {
+if(length(grep(",", biomarker)) != 0) {
    biomarker <- trimws(unlist(strsplit(biomarker, ",")))
 }
 
