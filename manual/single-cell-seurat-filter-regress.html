@@ -3,52 +3,51 @@
 <head><title></title></head>
 <body>
 
-<h2>Seurat -Filtering, regression and detection of variable genes </h2>
+<h2>Seurat -Filter, normalize, regress and detect variable genes </h2>
 
 <h3>Description</h3>
 
 <p>
-This tool filters out cells and regresses out uninteresting sources of variation. 
-It then detects highly variable genes across the single cells, 
-which are used for performing the principal component analysis in the next tool.
+This tool filters out cells, normalizes gene expression values, and regresses out uninteresting sources of variation. 
+It then detects highly variable genes across the cells, which are used for performing principal component analysis in the next step.
 </p>
  
  <h3>Parameters</h3>
  <p>
 <ul>
-		<li>Unique gene counts per cell upper limit cutoff [2500]</li>
-		<li>Mitochondrial transcript percentage upper limit cutoff [0.05]</li>
-		<li>Regress out cell cycle differences [no] </li>
-		<li>Minimum average expression level for a variable gene, x min [0.0125]</li>
-		<li>Maximum average expression level for a variable gene, x max [3]</li>
-		<li>Minimum dispersion for a variable gene, y min [0.5]</li>
-		<li>Perform log normalization [yes]</li>
-		<li>Scale factor in the log normalization [10000]</li>
-		<li>Filter out cell cycle differences [no]</li>
+		<li>Keep cells which express at least this many genes [200] </li>
+		<li>Filter out cells which have higher unique gene count [2500]</li>
+		<li>Filter out cells which have higher mitochondrial transcript ratio [0.05]</li>
+		<li>Perform global scaling normalization [yes]</li>
+		<li>Scale factor in the normalization [10000]</li>
+		<li>Minimum average expression level for a variable gene, x min [0.1]</li>
+		<li>Maximum average expression level for a variable gene, x max [8]</li>
+		<li>Minimum dispersion for a variable gene, y min [1]</li>
+		<li>Regress out cell cycle differences (all differences, the difference between the G2M and S phase scores)[no] </li>
 	
 </ul>
-	The minimum/maximum average expression and dispersion parameters (x min, x max, y min) are used to select the variable genes. 
-	PLEASE NOTE that you might need to run the tool several times, as setting these parameters is an iterative process. 
-	Start with some values, see how it goes, and run the tool again with different parameter values if needed.
-	<p>
 
 	
  <h3>Details</h3>
  
 <p>
-The tool performs the following three steps. As an input, give the Seurat R-object (Robj) from the Seurat setup -tool.
+The tool performs the following four steps. As an input, give the Seurat R-object (Robj) from the Seurat setup -tool.
 </p>
 
 
 <ol>
-		<li><b>Filtering</b> is performed in order to remove multiplets and broken cells. 
+		<li><b>Filtering</b> is performed in order to remove empties, multiplets and broken cells. 
 		You can use the QC-plots.pdf to estimate the the upper limit for the number of genes per cell and mitochondrial transcript percentage.</li>
 		<br>
-		<li><b>Uninteresting sources of variation are regressed out</b> in order to improve dimensionality reduction and clustering later on.
+		<li><b>Expression values are normalized</b> accross the cells using global scaling normalization: gene’s expression value in a cell is divided by the the total number of transcripts in that cell,
+		the ratio is multiplied by a scale factor (10,000 by default) and log-transformed.
+		</li>
+		<br>
+		<li><b>Uninteresting sources of variation in the expression values are regressed out</b> in order to improve dimensionality reduction and clustering later on.
 		Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
 		This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content</i>.
 		
-		<br><br>You can also choose to regress out <i>cell cycle differences</i>.
+		<br>You can also choose to regress out <i>cell cycle differences</i>.
 		By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
 		In some cases this method can negatively impact downstream analysis,
 		particularly in differentiating processes, where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
@@ -57,21 +56,13 @@ The tool performs the following three steps. As an input, give the Seurat R-obje
 		<br>For more information about cell cycle filtering, check out the vignette <a href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">here</a>. </li>
 
 		<br>
-		<li><b>Genes which are highly variable genes across the single cells are selected</b> for downstream analysis in the next tools.
-		The detection is done by calculating the average expression and dispersion for each gene, 
-		placing these genes into bins, and then calculating a z-score for dispersion within each bin.
+		<li><b>Genes which are highly variable across the cells are detected</b> by calculating the average expression and dispersion for each gene, 
+		placing these genes into bins, and then calculating a z-score for dispersion within each bin. The minimum/maximum average expression and dispersion parameters (x min, x max, y min) are then used to select the variable genes. 
+		PLEASE NOTE that you might need to run the tool several times, as setting these parameters is an iterative process.
 		The result file Dispersion.pdf indicates the number of variable genes based on the user defined cut-offs. 
-		Based on this plot, you can define the cut-offs for expression (x-axis) and dispersion (y-axis) 
-		to mark visual outliers. Two plots are drawn: scaled and non-scaled graphs.</li>
+		These settings vary based on the data type, heterogeneity in the sample, and normalization strategy. For example for UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.</li>
 
 </ol>
-
-<p>
-Note that the step 3 is an iterative process -you have to first draw the image with one set of parameters and then run 
-the tool again if there's a need to change the parameters.
-These settings vary based on the data type, heterogeneity in the sample, and normalization strategy. 
-<b>For example for UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.</b>
-</p>
 
 
 <p>
@@ -83,7 +74,7 @@ For more details, please check the <a href="http://satijalab.org/seurat/get_star
 <ul>
 
 <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
-<li>Dispersion.pdf: The dispersion vs average expression plots (scaled and non-scaled graphs), also lists the number of highly variable genes. 
+<li>Dispersion.pdf: The dispersion vs average expression plots, also lists the number of highly variable genes. 
 If you selected to regress out cell cycle differences, PCA plots on cell cycle genes will be added in the end of this pdf.</li>
 </ul>
 

@@ -1,15 +1,15 @@
-# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filtering, regression and detection of variable genes" (This tool filters out cells and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to average expression and dispersion with the bottom three parameters is an iterative process. Start with some values, see how it goes and run the tool again with different parameters.) 
+# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filter, normalize, regress and detect variable genes" (This tool filters out cells, normalizes expression values, and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to average expression and dispersion with the bottom three parameters is an iterative process. Start with some values, see how it goes and run the tool again with different parameters.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
 # PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript ratio" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Filter out cells where the ratio of mitochondrial transcripts is higher than this.)
+# PARAMETER OPTIONAL lognorm: "Perform global scaling normalization" TYPE [T:yes, F:no] DEFAULT T (Select no only if your data is already log transformed. For raw data, select yes.)
+# PARAMETER OPTIONAL totalexpr: "Scale factor in the normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules during normalization.)
 # PARAMETER OPTIONAL xlowcutoff: "Minimum average expression level for a variable gene, x min" TYPE DECIMAL DEFAULT 0.1 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL xhighcutoff: "Maximum average expression level for a variable gene, x max" TYPE DECIMAL DEFAULT 8 (For limiting the selection of variable genes.)
 # PARAMETER OPTIONAL ylowcutoff: "Minimum dispersion for a variable gene, y min" TYPE DECIMAL DEFAULT 1 (For limiting the selection of variable genes.)
-# PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
-# PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization. Used in normalisation step.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Filter out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Choose to remove all signal associated with cell cycle, or the difference between the G2M and S phase scores. More info in the manual page under Help. )
 # RUNTIME R-3.4.3
 
@@ -24,6 +24,7 @@
 # 2018-11-07 ML Update the cutoffs for variable genes: xmin = 0.0125->0.1, x.high.cutoff = 3 -> 8, y.cutoff = 0.5 -> 1
 # 2018-12-20 ML ScaleData: scale all changes in one command
 # 2019-03-13 EK Removed names of variable genes from dispersion plot
+# 2019-06-13 EK Add normalization in tool name, changed the order of parameters
 
 library(Seurat)
 library(dplyr)
