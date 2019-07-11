@@ -12,54 +12,80 @@
 # 2018-16-05 ML
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
 # 2019-04-08 ML number of cells in each cluster in each sample
+# 09.07.2019 ML Seurat v3
 
 library(Seurat)
 library(gplots)
+library(ggplot2)
+require(cowplot)
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
 load("combined_seurat_obj.Robj")
 #combined_seurat_obj <- data.combined
 
-# Align CCA subspaces
-data.combined <- AlignSubspace(data.combined, reduction.type = "cca", grouping.var = "stim", 
-		dims.align = 1:num.dims)
-
-# We can visualize the aligned CCA and perform an integrated analysis.
+# t-SNE and Clustering
+# data.combined <- RunUMAP(data.combined, reduction = "pca", dims = 1:20)
+data.combined <- RunTSNE(data.combined, reduction = "pca", dims = 1:20)
+data.combined <- FindNeighbors(data.combined, reduction = "pca", dims = 1:20)
+data.combined <- FindClusters(data.combined, resolution = 0.5)
+# Visualization
 pdf(file="integrated_plot.pdf", , width=13, height=7)  # open pdf
-p1 <- VlnPlot(object = data.combined, features.plot = "ACC1", group.by = "stim", 
-		do.return = TRUE)
-p2 <- VlnPlot(object = data.combined, features.plot = "ACC2", group.by = "stim", 
-		do.return = TRUE)
+# p1 <- DimPlot(data.combined, reduction = "umap", group.by = "stim")
+# p2 <- DimPlot(data.combined, reduction = "umap", label = TRUE)
+p1 <- DimPlot(data.combined, reduction = "tsne", group.by = "stim")
+p2 <- DimPlot(data.combined, reduction = "tsne", label = TRUE)
 plot_grid(p1, p2)
+# Show both conditions in separate plots:
+DimPlot(data.combined, reduction = "tsne", split.by = "stim")
+
+cell_counts <- table(Idents(data.combined), data.combined$stim)
+
+textplot(cell_counts, halign="center", valign="center", cex=1)
+title(paste("Total number of cells: ",length(colnames(x = data.combined)), "\n Number of cells in each cluster:" ) )
+
+dev.off()
+
+
+## Align CCA subspaces
+#data.combined <- AlignSubspace(data.combined, reduction.type = "cca", grouping.var = "stim", 
+#		dims.align = 1:num.dims)
+
+## We can visualize the aligned CCA and perform an integrated analysis.
+#pdf(file="integrated_plot.pdf", , width=13, height=7)  # open pdf
+#p1 <- VlnPlot(object = data.combined, features.plot = "ACC1", group.by = "stim", 
+#		do.return = TRUE)
+#p2 <- VlnPlot(object = data.combined, features.plot = "ACC2", group.by = "stim", 
+#		do.return = TRUE)
+#plot_grid(p1, p2)
 
 # t-SNE and Clustering
-data.combined <- RunTSNE(data.combined, reduction.use = "cca.aligned", dims.use = 1:num.dims, 
-		do.fast = T)
-data.combined <- FindClusters(data.combined, reduction.type = "cca.aligned", 
-		resolution = res, dims.use = 1:num.dims)
+# data.combined <- RunTSNE(data.combined, reduction.use = "cca.aligned", dims.use = 1:num.dims, 
+#		do.fast = T)
+# data.combined <- FindClusters(data.combined, reduction.type = "cca.aligned", 
+#		resolution = res, dims.use = 1:num.dims)
 
 # Visualization
-p1 <- TSNEPlot(data.combined, do.return = T, pt.size = point.size, group.by = "stim")
-p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = point.size)
-plot_grid(p1, p2)
+# p1 <- TSNEPlot(data.combined, do.return = T, pt.size = point.size, group.by = "stim")
+# p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = point.size)
+# plot_grid(p1, p2)
 
 # Number of cells per clusters in each group:
-meta_data_table <- data.combined@meta.data
-stim_levels <- levels(as.factor(meta_data_table$stim))
-cluster_levels <- levels(as.factor(meta_data_table[,grep('res', names(meta_data_table))]))
-cell_counts <- matrix(nrow = length(cluster_levels), ncol =  length(stim_levels)+1)
-colnames(cell_counts) <- c(stim_levels, "TOTAL")
-rownames(cell_counts) <- c(cluster_levels)
+#meta_data_table <- data.combined@meta.data
+#stim_levels <- levels(as.factor(meta_data_table$stim))
+#cluster_levels <- levels(as.factor(meta_data_table[,grep('res', names(meta_data_table))]))
+#cell_counts <- matrix(nrow = length(cluster_levels), ncol =  length(stim_levels)+1)
+#colnames(cell_counts) <- c(stim_levels, "TOTAL")
+#rownames(cell_counts) <- c(cluster_levels)
 
-for (i in stim_levels) {
-  number_of_cells_in_clusters_of_i <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,grep('res', names(meta_data_table))])))
-  cell_counts[row.names(number_of_cells_in_clusters_of_i),i] <- number_of_cells_in_clusters_of_i
-  }
-cell_counts[, ncol(cell_counts)] <- rowSums(cell_counts, na.rm= TRUE) 
-textplot(cell_counts, halign="center", valign="center", cex=1.2)
-title(paste("Total number of cells: ",length(data.combined@cell.names), "\n Number of cells in each cluster:" ) )
+#for (i in stim_levels) {
+#  number_of_cells_in_clusters_of_i <- as.matrix(summary(as.factor(meta_data_table[meta_data_table$stim == i,grep('res', names(meta_data_table))])))
+#  cell_counts[row.names(number_of_cells_in_clusters_of_i),i] <- number_of_cells_in_clusters_of_i
+#  }
+#cell_counts[, ncol(cell_counts)] <- rowSums(cell_counts, na.rm= TRUE) 
+#textplot(cell_counts, halign="center", valign="center", cex=1.2)
+#title(paste("Total number of cells: ",length(data.combined@cell.names), "\n Number of cells in each cluster:" ) )
 
-dev.off() # close the pdf
+#dev.off() # close the pdf
 
 # Save the Robj for the next tool
 save(data.combined, file="seurat_obj_combined.Robj")

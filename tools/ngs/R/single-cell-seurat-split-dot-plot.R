@@ -5,8 +5,8 @@
 # RUNTIME R-3.4.3
 
 
-
 # 2018-16-05 ML
+# 09.07.2019 ML Seurat v3
 
 # For testing (not run):
 # markers.to.plot <- c("CD3D", "CREM", "HSPH1", "SELL", "GIMAP5", "CACYBP", "GNLY", 
@@ -22,11 +22,20 @@ load("combined_seurat_obj.Robj")
 
 markers.to.plot <- unlist(strsplit(markers, ", "))
 pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
-sdp <- SplitDotPlotGG(data.combined, grouping.var = "stim", genes.plot = rev(markers.to.plot), cols.use = c("blue", 
-				"red"), x.lab.rot = T, plot.legend = T, dot.scale = 8, do.return = T)
+# sdp <- SplitDotPlotGG(data.combined, grouping.var = "stim", genes.plot = rev(markers.to.plot), cols.use = c("blue", 
+#				"red"), x.lab.rot = T, plot.legend = T, dot.scale = 8, do.return = T)
 
-FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
-		max.exp = 3)
+DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, 
+	split.by = "stim") + RotatedAxis()
+
+# FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
+#		max.exp = 3)
+
+# v2;
+# FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, 
+#    cols = c("grey", "red"))
+
+FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9")
 
 dev.off() # close the pdf
 

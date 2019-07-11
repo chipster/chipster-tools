@@ -52,13 +52,13 @@ seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perp
 
 # Calculate number of cells per cluster from object@ident
 # cell.num <- table(seurat_obj@ident)
-cell.num <- Idents(object = seurat_obj)
+# cell.num <- Idents(object = seurat_obj)
 
 # Add cell number per cluster to cluster labels
-ClusterLabels = paste("Cluster", names(cell.num), paste0("(n = ", cell.num, ")"))
+# ClusterLabels = paste("Cluster", names(cell.num), paste0("(n = ", cell.num, ")"))
 
 # Order legend labels in plot in the same order as 'ClusterLabels'
-ClusterBreaks = names(cell.num)
+# ClusterBreaks = names(cell.num)
 
 # Plot tSNE with new legend labels for clusters
 pdf(file="tSNEplot.pdf") 
@@ -69,7 +69,12 @@ pdf(file="tSNEplot.pdf")
 # 				y = "t-SNE 2")
 TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
 # UMAP plot would require installing a package:				
-# DimPlot(seurat_obj, reduction = "umap")				
+# DimPlot(seurat_obj, reduction = "umap")	
+# Number of cells in each cluster:
+cell_counts <- table(Idents(seurat_obj))
+textplot(cell_counts, halign="center", valign="center", cex=1)
+title(paste("Total number of cells: ",length(colnames(x = seurat_obj)), "\n Number of cells in each cluster:" ) )
+
 
 # Find all markers 
 markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos

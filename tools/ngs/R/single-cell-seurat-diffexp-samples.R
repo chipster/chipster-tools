@@ -8,6 +8,7 @@
 
 
 # 2018-16-05 ML
+# 11.07.2019 ML Seurat v3
 
 library(Seurat)
 
@@ -17,27 +18,37 @@ load("combined_seurat_obj.Robj")
 
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
+DefaultAssay(data.combined) <- "RNA"
 nk.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", 
-		print.bar = FALSE)
+		verbose = FALSE)
 #head(nk.markers)
 write.table(nk.markers, file="conserved_markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
 # cluster <- "3"
-data.combined@meta.data$celltype.stim <- paste0(data.combined@ident, "_", 
-		data.combined@meta.data$stim)
-data.combined <- StashIdent(data.combined, save.name = "celltype")
-data.combined <- SetAllIdent(data.combined, id = "celltype.stim")
+# v2: 
+#data.combined@meta.data$celltype.stim <- paste0(data.combined@ident, "_", 
+#		data.combined@meta.data$stim)
+#data.combined <- StashIdent(data.combined, save.name = "celltype")
+#data.combined <- SetAllIdent(data.combined, id = "celltype.stim")
+#
+#lvls <- levels(as.factor(data.combined@meta.data$stim))
+#ident1 <- paste(cluster,"_", lvls[1], sep="")
+#ident2 <- paste(cluster,"_", lvls[2], sep="")
+#cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, 
+#		print.bar = FALSE)
 
-lvls <- levels(as.factor(data.combined@meta.data$stim))
+# v3:
+data.combined$celltype.stim <- paste(Idents(data.combined), data.combined$stim, sep = "_")
+data.combined$celltype <- Idents(data.combined)
+Idents(data.combined) <- "celltype.stim"
+
+lvls <- levels(as.factor(data.combined$stim))
 ident1 <- paste(cluster,"_", lvls[1], sep="")
 ident2 <- paste(cluster,"_", lvls[2], sep="")
-cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, 
-		print.bar = FALSE)
-# head(clustser_response, 15)
-# show_rows <- 20
-# cluster_response_rows <- head(cluster_response) #, show_rows)
+cluster.response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE)
+# head(cluster.response, n = 15)
 
 write.table(cluster_response, file="de-list.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
