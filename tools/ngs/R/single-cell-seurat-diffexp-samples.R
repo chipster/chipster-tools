@@ -47,7 +47,7 @@ Idents(data.combined) <- "celltype.stim"
 lvls <- levels(as.factor(data.combined$stim))
 ident1 <- paste(cluster,"_", lvls[1], sep="")
 ident2 <- paste(cluster,"_", lvls[2], sep="")
-cluster.response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE)
+cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE)
 # head(cluster.response, n = 15)
 
 write.table(cluster_response, file="de-list.tsv", sep="\t", row.names=T, col.names=T, quote=F)
