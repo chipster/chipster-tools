@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "Seurat -Setup and QC" (Setup the Seurat object, quality control, filter and regress the cells, determine statistically significant principal components. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
+# TOOL single-cell-seurat-setup.R: "Seurat -Setup and QC" (Setup the Seurat object, quality control and  filter the cells. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table from DropSeq" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf 
@@ -7,7 +7,7 @@
 # OUTPUT OPTIONAL seurat_obj.Robj
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
-# PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names!)
+# PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-3.4.3
 
 
@@ -17,7 +17,8 @@
 # 2018-04-24 ML + AMS improve the input tar handling
 # 2019-05-22 ML update Seurat version to 3.0
 
-# Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions. If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
+# Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions. 
+# If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 
 
@@ -65,34 +66,24 @@ if (groupident != "empty") {
 
 # QC
 # % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
-# mito.genes <- grep(pattern ="^MT-", x = rownames(x =seurat_obj@data), value = T, ignore.case=T)
-#percent.mito <- colSums(expm1(seurat_obj@data[mito.genes, ]))/colSums(expm1(seurat_obj@data))
-# percent.mito <- Matrix::colSums(seurat_obj@raw.data[mito.genes, ])/Matrix::colSums(seurat_obj@raw.data)
-# seurat_obj <- AddMetaData(object = seurat_obj, metadata = percent.mito, col.name = "percent.mito")
-# v3: new way to add metadata, [[ ]] operator
+# NOTE: The pattern provided works for human gene names. You may need to adjust depending on your system of interest
 seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-")
 
 # pdf plots
 pdf(file="QCplots.pdf", , width=13, height=7) 
-# VlnPlot(seurat_obj, c("nGene", "nUMI", "percent.mito"), nCol = 3) 
-# v3: new names for the features
+
+# VlnPlot
 VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
-# par(mfrow = c(1, 2))
-# GenePlot(seurat_obj, "nUMI", "percent.mito")
-# GenePlot(seurat_obj, "nUMI", "nGene")
-# v3: new function FeatureScatter
+# FeatureScatter (v3)
 plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt")
 plot2 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 CombinePlots(plots = list(plot1, plot2))
 
 # Number of cells:
-# textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(seurat_obj@cell.names)), halign="center", valign="center", cex=2)
-# v3: object@cell.names -> colnames(x = object) 
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x=seurat_obj))), halign="center", valign="center", cex=2)
 
 dev.off() # close the pdf
-
 
 # Save the Robj for the next tool
 save(seurat_obj, file="seurat_obj.Robj")

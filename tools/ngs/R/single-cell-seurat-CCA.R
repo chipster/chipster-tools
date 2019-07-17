@@ -3,6 +3,7 @@
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT seurat_obj_combined.Robj
+# PARAMETER OPTIONAL num.features: "Number of variable features to return" TYPE INTEGER DEFAULT 2000 (How many features returned per dataset.)
 # PARAMETER OPTIONAL CCstocompute: "How many CCs to compute" TYPE INTEGER DEFAULT 20 (Number of canonical vectors to calculate)
 # PARAMETER OPTIONAL CCstovisualise: "How many CCs to visualise as heatmaps" TYPE INTEGER DEFAULT 9 (How many canonical components you want to visualise as heatmaps.)
 # RUNTIME R-3.4.3
@@ -30,7 +31,9 @@ seurat_obj2 <- seurat_obj
 # subset, NormalizeData and FindVariableFeatures already happens in first 2..?
 # stim <- subset(stim, subset = nFeature_RNA > 500)
 # stim <- NormalizeData(stim, verbose = FALSE)
-group1  <- FindVariableFeatures(seurat_obj1, selection.method = "vst", nfeatures = 2000)
+
+# IS THIS NECESSARY HERE? already done in the filter-regress tool!!
+group1  <- FindVariableFeatures(seurat_obj1, selection.method = "vst", nfeatures = num.features)
 group2 <- FindVariableFeatures(seurat_obj2, selection.method = "vst", nfeatures = 2000)
 
 # v2:

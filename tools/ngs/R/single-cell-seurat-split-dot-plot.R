@@ -22,20 +22,22 @@ load("combined_seurat_obj.Robj")
 
 markers.to.plot <- unlist(strsplit(markers, ", "))
 pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
-# sdp <- SplitDotPlotGG(data.combined, grouping.var = "stim", genes.plot = rev(markers.to.plot), cols.use = c("blue", 
-#				"red"), x.lab.rot = T, plot.legend = T, dot.scale = 8, do.return = T)
 
+# Dot plot:
 DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, 
 	split.by = "stim") + RotatedAxis()
 
 # FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
 #		max.exp = 3)
 
-# v2;
-# FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, 
-#    cols = c("grey", "red"))
-
+# Feature plot:
 FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9")
+
+## Comparison violin plot:
+#immune.combined$celltype <- Idents(immune.combined)
+#plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", 
+#    pt.size = 0, combine = FALSE)
+#CombinePlots(plots = plots, ncol = 1)
 
 dev.off() # close the pdf
 

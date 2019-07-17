@@ -6,15 +6,13 @@
 # RUNTIME R-3.4.3
 
 
-
 # 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
 
 library(Seurat)
 
-# Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
+# Load the R-Seurat-objects
 load("combined_seurat_obj.Robj")
-#combined_seurat_obj <- data.combined
 
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
@@ -26,20 +24,6 @@ write.table(nk.markers, file="conserved_markers.tsv", sep="\t", row.names=T, col
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
-# cluster <- "3"
-# v2: 
-#data.combined@meta.data$celltype.stim <- paste0(data.combined@ident, "_", 
-#		data.combined@meta.data$stim)
-#data.combined <- StashIdent(data.combined, save.name = "celltype")
-#data.combined <- SetAllIdent(data.combined, id = "celltype.stim")
-#
-#lvls <- levels(as.factor(data.combined@meta.data$stim))
-#ident1 <- paste(cluster,"_", lvls[1], sep="")
-#ident2 <- paste(cluster,"_", lvls[2], sep="")
-#cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, 
-#		print.bar = FALSE)
-
-# v3:
 data.combined$celltype.stim <- paste(Idents(data.combined), data.combined$stim, sep = "_")
 data.combined$celltype <- Idents(data.combined)
 Idents(data.combined) <- "celltype.stim"
