@@ -27,11 +27,7 @@ if(length(grep(",", biomarker)) != 0) {
 
 # Violin plot:
 pdf(file="biomarker_plot.pdf") 
-# v2:
-# VlnPlot(object = seurat_obj, features.plot = biomarker)
 VlnPlot(seurat_obj, features = biomarker)
-# v2:
-# FeaturePlot(object = seurat_obj, features.plot =biomarker, cols.use=c("grey", "blue"), pt.size=5, reduction.use = "tsne")
 FeaturePlot(seurat_obj, features = biomarker, pt.size=point.size) 
 dev.off() # close the pdf
 

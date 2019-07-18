@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filtering, regression and detection of variable genes" (This tool filters out cells, normalises the data and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells.) 
+# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filtering, regression and detection of variable genes" (This tool filters out cells, normalises the data and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. You can use the plots from the Setup tool to estimate the parameter values.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
@@ -59,13 +59,12 @@ plot1 <- VariableFeaturePlot(seurat_obj)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 CombinePlots(plots = list(plot1, plot2))
 
-textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign="center", valign="center")
+textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign="center", valign="center", cex=2)
 
 ## Scaling the data & cell cycle filtering:
 
 # if filter.cell.cycle == "no", also anyhow RunPCA needs to access Object@scale.data:
 seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), display.progress = FALSE)
-
 
 if( filter.cell.cycle != "no" ) {	
 	# Cell cycle genes, get the scores & visualize:
@@ -111,6 +110,6 @@ if( filter.cell.cycle != "no" ) {
 dev.off() # close the pdf
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj.Robj")
+save(seurat_obj, file="seurat_obj_2.Robj")
 
 ## EOF

@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL tSNEplot.pdf
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL markers.tsv
-# PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool.)
+# PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.6 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
 # PARAMETER OPTIONAL minpct: "Min fraction of cells where a cluster marker gene is expressed" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expression)
@@ -32,14 +32,12 @@ library(gplots)
 load("seurat_obj.Robj")
 
 #  Cluster the cells
+# Not necessary for v3? 
 # First set the directory for this step.
-library(tools)
-dir <- getwd()
-dir <- file_path_as_absolute(dir)
-# seurat_obj <- FindClusters(seurat_obj, pc.use=1:pcs_use, resolution = res, print.output= 0, save.SNN= T, temp.file.location = dir)
-# v2:
-# seurat_obj <- FindClusters(object = seurat_obj, reduction.type = "pca", dims.use = 1:pcs_use, 
-#		resolution = res, print.output = 0, save.SNN = TRUE)
+# library(tools)
+# dir <- getwd()
+# dir <- file_path_as_absolute(dir)
+
 seurat_obj <- FindNeighbors(seurat_obj, dims = 1:pcs_use)
 seurat_obj <- FindClusters(seurat_obj, resolution = res)
 
@@ -47,9 +45,10 @@ seurat_obj <- FindClusters(seurat_obj, resolution = res)
 # Non-linear dimensional reduction (tSNE) & number of cells in clusters
 # v2:
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
-# UMAP plot would require installing a package:	
+# UMAP plot would require installing a package, via reticulate::py_install(packages ='umap-learn')
 # seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
 
+# not working at v3 anymore:
 # Calculate number of cells per cluster from object@ident
 # cell.num <- table(seurat_obj@ident)
 # cell.num <- Idents(object = seurat_obj)
@@ -62,19 +61,16 @@ seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perp
 
 # Plot tSNE with new legend labels for clusters
 pdf(file="tSNEplot.pdf") 
-# TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj)))) +
-# 		scale_colour_discrete(breaks = ClusterBreaks, 
-# 				labels = ClusterLabels) +
-# 		labs(x = "t-SNE 1",
-# 				y = "t-SNE 2")
+
 TSNEPlot(object = seurat_obj, do.return = T, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
+
 # UMAP plot would require installing a package:				
 # DimPlot(seurat_obj, reduction = "umap")	
+
 # Number of cells in each cluster:
 cell_counts <- table(Idents(seurat_obj))
 textplot(cell_counts, halign="center", valign="center", cex=1)
 title(paste("Total number of cells: ",length(colnames(x = seurat_obj)), "\n Number of cells in each cluster:" ) )
-
 
 # Find all markers 
 markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
@@ -87,11 +83,8 @@ write.table(as.matrix(markers), file = "markers.tsv", sep="\t", row.names=T, col
 
 # Plot top10 genes of each cluster as a heatmap 
 top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
-# setting slim.col.label to TRUE will print just the cluster IDS instead of
-# every cell name
-#### pdf(file="tSNEplot.pdf")
-# v2:
-# DoHeatmap(object = seurat_obj, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE, cex.row=4)
+
+# Heatmap
 DoHeatmap(object = seurat_obj, features = top10$gene) + NoLegend()
 dev.off() # close the pdf
 
