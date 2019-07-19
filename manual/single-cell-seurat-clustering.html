@@ -3,22 +3,23 @@
 <head><title></title></head>
 <body>
 
-<h2>Seurat -Clustering </h2>
+<h2>Seurat -Clustering and detection of cluster marker genes</h2>
 
 <h3>Description</h3>
 
 <p>
-This tool clusters the cells, does non-linear dimensional reduction and finds markers for the clusters.
+This tool clusters cells, visualizes the result in a tSNE plot, and finds marker genes for the clusters.
+	
 </p>
  
  <h3>Parameters</h3>
 <ul>
 	<li>Number of principal components to use [10]</li>
 	<li>Resolution for granularity [0.6]</li>
-	<li>Perplexity, expected number of neighbors [30]</li>
-	<li>Cluster biomarker gene has to be expressed in at least this fraction of cells [0.25]</li>
-	<li>Differential expression threshold for a cluster biomarker gene [0.25]</li>
-	<li>Which test to use for finding marker genes [wilcox]</li>
+	<li>Perplexity, expected number of neighbors for tSNE plot [30]</li>
+	<li>Point size in tSNE plot [30]</li>	
+	<li>Min fraction of cells where a cluster marker gene is expressed [0.25]</li>
+	<li>Differential expression threshold for a cluster marker gene [0.25]</li>	<li>Which test to use for finding marker genes [wilcox]</li>
 </ul>
 
  <h3>Details</h3>
@@ -26,15 +27,18 @@ This tool clusters the cells, does non-linear dimensional reduction and finds ma
 <p>
 As input, give the Seurat R-object (Robj) from the Seurat PCA -tool.
 <br><br>
+Cells are clustered using principal components (PCs) rather than genes. 
+Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
+That tool also produces PC heatmaps and the elbow plot, which help you to decide the number of PCs to use.	
+<br><br>
 If you have low number of cells in your data, try lowering the perplexity parameter (the expected number of neighbours.)
 <br><br>
-Seurat function <i>FindClusters</i> first constructs a KNN graph based on the Euclidean distance in PCA space,
-and refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
-To cluster the cells, the function uses the smart local moving algorithm to iteratively group cell groupings together
-with the goal of optimizing the standard modularity function.
-(See the links below for more information).
+Graph-based clustering is performed using the Seurat function FindClusters, which first constructs a KNN graph using the Euclidean distance in PCA space,
+and then refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
+It then cuts the graph in clusters using the Leuvain algorithm which optimizes the standard modularity function
+(please see the links below for more information).
 <br>
-The <b>resolution</b> parameter sets the 'granularity' of the downstream clustering, 
+The <b>resolution</b> parameter sets the 'granularity', 
 with increased values leading to a greater number of clusters. 
 We find that setting this parameter between 0.6-1.2 typically returns good results for single cell datasets 
 of around 3K cells. Optimal resolution often increases for larger datasets 
@@ -44,23 +48,23 @@ The <b>principal components to use</b> need to be decided by the user based on t
 </p>
 
 <p>
-Non-linear dimensional reduction (tSNE) is used for visualizing and exploring the dataset. Cells within the graph-based 
-cluster determined above should co-localize on the tSNE plot -this is because the tSNE aims to place cells with similar 
-local neighborhoods in high-dimensional space together in low-dimensional space. 
-Same user-defined PCs are used here as with the clustering step.
+In order to visualize the clusters, non-linear dimensional reduction is performed using tSNE on the same PCs as used for the graph-based clustering, and the tSNE plot is then colored by the clustering results. 
+Cells belonging to the same cluster should co-localize on the tSNE plot, because tSNE aims to place cells, which have a similar 
+local neighborhood in high-dimensional space, together in low-dimensional space. The perplexity parameter is a guess 
+about the number of close neighbors each cell has, so it allows you to balance attention between local and global aspects of the data (<a href="https://distill.pub/2016/misread-tsne/">read more</a>). 
+If you have low number of cells, try lowering the perplexity value.
 The tSNE result is visualized in the <b>tSNEplot.pdf</b>.
 </p>
 
 <p>
-Next, Seurat function <i>FindAllMarkers</i> is used to identify the positive and negative markers for the clusters compared
-to all other cells.
-The <b>min.pct</b> parameter requires a gene to be detected at a minimum percentage in either of the two groups of cells, 
-and the <b>thresh.test</b> parameter requires a gene to be differentially expressed (on average) by some amount 
-between the two groups. Both of these parameters can be set to 0, but with a dramatic increase in time - 
-since this will test a large number of genes that are unlikely to be highly discriminatory. 
-The marker genes for each recognized cluster are written in the <b>markers.tsv</b> file. 
+Next, Seurat function FindAllMarkers is used to identify positive and negative marker genes for the clusters. 
+These genes are differentially expressed between a cluster and all the other cells. You can filter out genes prior to statistical testing
+by requiring that a gene has to be expressed in at least a certain fraction of cells in either of the two groups (min.pct=0.25).
+You can also require that the change in expression has to be at least certain percentage between the groups (thresh.test=0.25). 
+Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large number of genes that are unlikely to be highly discriminatory. 
+The marker genes for each cluster are written in the <b>markers.tsv</b> file. 
 <br>
-<br>For testing, Seurat currently implements: 
+<br>Seurat currently implements the following tests: 
 <ul>
 	<li>"wilcox" : Wilcoxon rank sum test (default)</li>
 	<li>"bimod" : Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
@@ -69,14 +73,14 @@ The marker genes for each recognized cluster are written in the <b>markers.tsv</
 	<li>"tobit" : Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
 	<li>"poisson" : Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
 	<li>"negbinom" : Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
-	<li>"MAST : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
-	<li>"DESeq2 : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
+	<li>"MAST" : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
+	<li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
 </ul>
-<b>"Poisson" and "negbiom" options should ONLY be used on UMI datasets </b>, and assume an underlying poisson or negative-binomial distribution.
-</p>
+<b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively.
+	</p>
 
 <p>
-To get the markers for a specific cluster, you can use the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
+The result file contains marker genes for all the clusters. You can retrieve markers for a specific cluster using the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
 For example, to get the markers for cluster 2, fill in the parameters accordingly: <br>
 Column to filter by = cluster <br>
 Does the first column have a title = no <br>
@@ -88,24 +92,18 @@ Filtering criteria = equal-to  <br>
 For more details, please check:<br>
 The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
 <br><br>
-The Seurat clustering approach was heavily inspired by these manuscripts 
-which applied graph-based clustering approaches to scRNA-seq data:<br>
-<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">[SNN-Cliq, Xu and Su, Bioinformatics, 2015] </a> 
-and 
-<br>CyTOF data
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">[PhenoGraph, Levine et al., Cell, 2015]</a>.
-<br><br>
-Smart local moving algorithm:<br>
-<a href="http://dx.doi.org/10.1088/1742-5468/2008/10/P10008">[SLM, Blondel et al., Journal of Statistical Mechanics]</a>
-
+The Seurat clustering approach was heavily inspired by the manuscripts 
+	<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and 
+	<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a> which applied graph-based clustering approaches to scRNA-seq data and CyTOF data, respectively.<br>
+	
 </p>
 
 <h3>Output</h3>
 
 <ul>
 <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
-<li>tSNEplot.pdf: Quality control plots (explained in detail above) </li>
-<li>markers.tsv: Top markers</li>
+<<li>tSNEplot.pdf: Cluster visualization in tSNE plot, heatmap showing the expression of ten top marker genes (in terms of fold change) for each cluster. </li>
+<li>markers.tsv: Top marker genes</li>
 </ul>
 
 

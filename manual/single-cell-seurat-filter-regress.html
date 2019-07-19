@@ -3,14 +3,14 @@
 <head><title></title></head>
 <body>
 
-<h2>Seurat -Filtering, regression and detection of variable genes </h2>
+<h2>Seurat -Filter, normalize, regress and detect variable genes </h2>
 
 <h3>Description</h3>
 
 <p>
-This tool filters out cells and regresses out uninteresting sources of variation. 
-It then detects highly variable genes across the single cells, 
-which are used for performing the principal component analysis in the next tool.
+This tool filters out cells, normalizes gene expression values, and regresses out uninteresting sources of variation. 
+It then detects highly variable genes across the cells, which are used for performing principal component 
+analysis in the next step.	
 </p>
  
  <h3>Parameters</h3>
@@ -23,6 +23,8 @@ which are used for performing the principal component analysis in the next tool.
 		<li>Perform log normalization [yes]</li>
 		<li>Scale factor in the log normalization [10000]</li>
 	
+
+		
 </ul>
 	<p>
 
@@ -30,7 +32,7 @@ which are used for performing the principal component analysis in the next tool.
  <h3>Details</h3>
  
 <p>
-The tool performs the following three steps. As an input, give the Seurat R-object (Robj) from the Seurat setup -tool.
+The tool performs the following four steps. As an input, give the Seurat R-object (Robj) from the Seurat setup -tool.
 </p>
 
 
@@ -38,11 +40,17 @@ The tool performs the following three steps. As an input, give the Seurat R-obje
 		<li><b>Filtering</b> is performed in order to remove multiplets and broken cells. 
 		You can use the QC-plots.pdf to estimate the the upper limit for the number of genes per cell and mitochondrial transcript percentage.</li>
 		<br>
-		<li><b>Uninteresting sources of variation are regressed out</b> in order to improve dimensionality reduction and clustering later on.
-		Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
-		This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content</i>.
+		<li><b>Expression values are normalized</b> accross the cells using global scaling normalization: gene’s expression value in a 
+			cell is divided by the the total number of transcripts in that cell, the ratio is multiplied by a scale factor 
+			(10,000 by default) and log-transformed.
+		</li>
+			<br>
+		<li><b>Uninteresting sources of variation in the expression values are regressed out</b> in order to improve 
+			dimensionality reduction and clustering later on.
+			Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
+			This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content.</i>.
 		
-		<br><br>You can also choose to regress out <i>cell cycle differences</i>.
+		<br>You can also choose to regress out <i>cell cycle differences</i>.
 		By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
 		In some cases this method can negatively impact downstream analysis,
 		particularly in differentiating processes, where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
@@ -75,7 +83,7 @@ For more details, please check the <a href="http://satijalab.org/seurat/get_star
 <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
 <li>Dispersion.pdf: The variation vs average expression plots (in the second plot, the 10 most highly variable genes are labeled).
 If you selected to regress out cell cycle differences, PCA plots on cell cycle genes before and after the regression 
-will be added in the end of this pdf.</li>
+will be added in the end of this pdf. Also lists the number of highly variable genes. </li>
 </ul>
 
 

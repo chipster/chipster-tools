@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filtering, regression and detection of variable genes" (This tool filters out cells, normalises the data and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. You can use the plots from the Setup tool to estimate the parameter values.) 
+# TOOL single-cell-seurat-filter-regress.R: "Seurat -Filter, normalize, regress and detect variable genes" (This tool filters out cells, normalizes expression values, and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the single cells. PLEASE NOTE that you might need to run the tool couple of times, as setting the max and min limits to average expression and dispersion with the bottom three parameters is an iterative process. Start with some values, see how it goes and run the tool again with different parameters.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
@@ -19,6 +19,7 @@
 # 2018-11-07 ML Update the cutoffs for variable genes: xmin = 0.0125->0.1, x.high.cutoff = 3 -> 8, y.cutoff = 0.5 -> 1
 # 2018-12-20 ML ScaleData: scale all changes in one command
 # 2019-03-13 EK Removed names of variable genes from dispersion plot
+# 2019-06-13 EK Add normalization in tool name, changed the order of parameters
 # 2019-05-22 ML update Seurat version to 3.0
 
 
