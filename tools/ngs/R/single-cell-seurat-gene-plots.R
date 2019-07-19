@@ -20,6 +20,10 @@ library(gplots)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
+if (exists("data.combined") ){
+	seurat_obj <- data.combined
+}
+
 # If multiple genes are listed: (separate words from "," and remove whitespace)
 if(length(grep(",", biomarker)) != 0) {
    biomarker <- trimws(unlist(strsplit(biomarker, ",")))

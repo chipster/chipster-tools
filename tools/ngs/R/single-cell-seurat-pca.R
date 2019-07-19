@@ -25,6 +25,10 @@ library(gplots)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
+if (exists("data.combined") ){
+	seurat_obj <- data.combined
+}
+
 # PCA
 # The variable genes are used as input
 seurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj))

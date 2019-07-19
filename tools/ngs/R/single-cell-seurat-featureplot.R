@@ -15,6 +15,10 @@ library(gplots)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
+if (exists("data.combined") ){
+	seurat_obj <- data.combined
+}
+
 # Plot tSNE 
 pdf(file="tSNEplot.pdf") 
 FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size)

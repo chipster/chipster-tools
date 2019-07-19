@@ -31,6 +31,10 @@ library(gplots)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
+if (exists("data.combined") ){
+	seurat_obj <- data.combined
+}
+
 #  Cluster the cells
 # Not necessary for v3? 
 # First set the directory for this step.
@@ -43,7 +47,6 @@ seurat_obj <- FindClusters(seurat_obj, resolution = res)
 
 
 # Non-linear dimensional reduction (tSNE) & number of cells in clusters
-# v2:
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
 # UMAP plot would require installing a package, via reticulate::py_install(packages ='umap-learn')
 # seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
