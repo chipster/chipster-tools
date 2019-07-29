@@ -33,7 +33,7 @@ toQDNAseqCopyNumbers <- function(df, chiptype, level="any") {
   m[rownames(input),] <- chip
   bins@data$use <- FALSE
   bins@data[rownames(df), "use"] <- TRUE
-  object <- new("QDNAseqCopyNumbers", bins=bins, copynumber=QDNAseq:::unlog2adhoc(m), phenodata=data.frame(samples, row.names=samples))
+  object <- new("QDNAseqCopyNumbers", bins=bins, copynumber=QDNAseq:::log2adhoc(m, inv = TRUE), phenodata=data.frame(samples, row.names=samples))
   if (level == "copynumber")
     return(object)
   segmented <- as.matrix(df[, grep("^segmented\\.", colnames(df)), drop=FALSE])
@@ -45,7 +45,7 @@ toQDNAseqCopyNumbers <- function(df, chiptype, level="any") {
     }
   }
   m[rownames(input),] <- segmented
-  assayDataElement(object, "segmented") <- QDNAseq:::unlog2adhoc(m)
+  assayDataElement(object, "segmented") <- QDNAseq:::log2adhoc(m, inv = TRUE)
   if (level == "segmented")
     return(object)
   calls <- as.matrix(df[, grep("^flag\\.", colnames(df)), drop=FALSE])
@@ -148,5 +148,7 @@ fromQDNAseqCopyNumbers <- function(object) {
   }
   df
 }
+
+colMedians <- matrixStats::colMedians
 
 # EOF

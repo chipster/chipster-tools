@@ -19,13 +19,15 @@ This tool clusters cells, visualizes the result in a tSNE plot, and finds marker
 	<li>Perplexity, expected number of neighbors for tSNE plot [30]</li>
 	<li>Point size in tSNE plot [30]</li>	
 	<li>Min fraction of cells where a cluster marker gene is expressed [0.25]</li>
-	<li>Differential expression threshold for a cluster marker gene [0.25]</li>	<li>Which test to use for finding marker genes [wilcox]</li>
+	<li>Differential expression threshold for a cluster marker gene [0.25]</li>
+	<li>Which test to use for finding marker genes [wilcox]</li>
 </ul>
 
  <h3>Details</h3>
  
 <p>
-As input, give the Seurat R-object (Robj) from the Seurat PCA -tool.
+Cells are clustered using principal components (PCs) rather than genes. Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
+That tool also produces PC heatmaps and the elbow plot, which help you to decide the number of PCs to use.
 <br><br>
 Cells are clustered using principal components (PCs) rather than genes. 
 Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
@@ -39,12 +41,11 @@ It then cuts the graph in clusters using the Leuvain algorithm which optimizes t
 (please see the links below for more information).
 <br>
 The <b>resolution</b> parameter sets the 'granularity', 
-with increased values leading to a greater number of clusters. 
-We find that setting this parameter between 0.6-1.2 typically returns good results for single cell datasets 
+with increased values leading to more clusters. 
+It has been found that setting this parameter between 0.6-1.2 typically returns good results for single cell datasets 
 of around 3K cells. Optimal resolution often increases for larger datasets 
 -use a value above (below) 1.0 if you want to obtain a larger (smaller) number of communities.
 <br>
-The <b>principal components to use</b> need to be decided by the user based on the PCAplots from the Seurat PCA -tool.
 </p>
 
 <p>
@@ -77,7 +78,7 @@ The marker genes for each cluster are written in the <b>markers.tsv</b> file.
 	<li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
 </ul>
 <b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively.
-	</p>
+</p>
 
 <p>
 The result file contains marker genes for all the clusters. You can retrieve markers for a specific cluster using the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
@@ -93,16 +94,17 @@ For more details, please check:<br>
 The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
 <br><br>
 The Seurat clustering approach was heavily inspired by the manuscripts 
-	<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and 
-	<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a> which applied graph-based clustering approaches to scRNA-seq data and CyTOF data, respectively.<br>
-	
+<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and 
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a> which applied graph-based clustering approaches to scRNA-seq data and CyTOF data, respectively.<br>
+<br><br>
+
 </p>
 
 <h3>Output</h3>
 
 <ul>
 <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
-<<li>tSNEplot.pdf: Cluster visualization in tSNE plot, heatmap showing the expression of ten top marker genes (in terms of fold change) for each cluster. </li>
+<li>tSNEplot.pdf: Cluster visualization in tSNE plot, heatmap showing the expression of ten top marker genes (in terms of fold change) for each cluster. </li>
 <li>markers.tsv: Top marker genes</li>
 </ul>
 

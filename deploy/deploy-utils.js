@@ -3,7 +3,7 @@ const homedir = require("os").homedir();
 const fs = require("fs");
 const spawn = require("child_process").spawn;
 const execFile = require("child_process").execFile;
-const { Subject, of, bindCallback, throwError } = require("rxjs");
+const { Subject, of, bindCallback } = require("rxjs");
 const { map, mergeMap } = require("rxjs/operators");
 
 exports.getConfigPath = function() {
@@ -12,24 +12,23 @@ exports.getConfigPath = function() {
 
 exports.getConfig = function() {
   let confPath = this.getConfigPath();
-
   let subject = new Subject();
 
   fs.readFile(confPath, "utf8", (err, data) => {
     if (err) {
       if (err.code == "ENOENT") {
-        subject.throwError(
-          new Error("configuration file not found: " + confPath)
-        );
+        subject.error(new Error("configuration file not found: " + confPath));
       } else {
-        subject.throwError(err);
+        subject.error(err);
       }
     } else {
       try {
-        subject.next(JSON.parse(data));
+        let parsed = JSON.parse(data);
+        subject.next(parsed);
         subject.complete();
       } catch (err) {
-        throwError(
+        console.log("conf parse error", err);
+        subject.error(
           new Error("configuration file parsing failed", confPath, "\n", err)
         );
       }

@@ -3,7 +3,6 @@
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT seurat_obj_combined.Robj
-# PARAMETER OPTIONAL num.features: "Number of variable features to return" TYPE INTEGER DEFAULT 2000 (How many features returned per dataset.)
 # PARAMETER OPTIONAL CCstocompute: "How many CCs to compute" TYPE INTEGER DEFAULT 20 (Number of canonical vectors to calculate)
 # RUNTIME R-3.4.3
 # SLOTS 3
@@ -11,6 +10,7 @@
 
 # SLOTS = 3: when testing at VM this tool required 18.8G)
 # Not used atm: PARAMETER OPTIONAL CCstovisualise: "How many CCs to visualise as heatmaps" TYPE INTEGER DEFAULT 9 (How many canonical components you want to visualise as heatmaps.)
+# Not used atm: PARAMETER OPTIONAL num.features: "Number of variable features to return" TYPE INTEGER DEFAULT 2000 (How many features returned per dataset.)
 
 
 # 2018-08-05 ML

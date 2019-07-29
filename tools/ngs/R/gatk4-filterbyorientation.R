@@ -45,7 +45,7 @@ basename <- strip_name(inputnames$input.vcf)
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)
 outputnames[1,] <- c("filtered.vcf", paste(basename, "_filtered_unbiased.vcf", sep=""))
-outputnames[2,] <- c("filtered.vcf.summary", paste(basename, "_filtered_unbiased_summary.txt", sep=""))
+outputnames[2,] <- c("filtered.vcf.summary", paste(basename, "_filtered_unbiased_summary.tsv", sep=""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

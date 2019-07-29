@@ -21,13 +21,14 @@ require(cowplot)
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
 load("combined_seurat_obj.Robj")
-#combined_seurat_obj <- data.combined
+# combined_seurat_obj <- data.combined
 
 # t-SNE and Clustering
 # data.combined <- RunUMAP(data.combined, reduction = "pca", dims = 1:20)
-data.combined <- RunTSNE(data.combined, reduction = "pca", dims = 1:20)
-data.combined <- FindNeighbors(data.combined, reduction = "pca", dims = 1:20)
+data.combined <- RunTSNE(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
+data.combined <- FindNeighbors(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Dimensions of reduction to use as input
 data.combined <- FindClusters(data.combined, resolution = 0.5)
+
 # Visualization
 pdf(file="integrated_plot.pdf", , width=13, height=7)  # open pdf
 # p1 <- DimPlot(data.combined, reduction = "umap", group.by = "stim")

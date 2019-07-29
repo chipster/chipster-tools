@@ -18,6 +18,7 @@
 #
 
 import socket
+import os
 from subprocess import Popen, PIPE
 import xml.etree.ElementTree as ET
 
@@ -45,9 +46,11 @@ def main():
     # append query string to the argument list
     query.append(query_str)
     
-    # run the query command
+    # run the query  command
     # save standard output and error streams to variables xml and err
-    esearch_process = Popen(query, stdout=PIPE, stderr=PIPE)
+    my_env = os.environ.copy()
+    my_env["EMAIL"] = "chipster@csc.fi" 
+    esearch_process = Popen(query, stdout=PIPE, stderr=PIPE, env=my_env)
     xml, err = esearch_process.communicate()
     if err:
         # something in error stream, give up

@@ -26,7 +26,7 @@ analysis in the next step.
 
 		
 </ul>
-	<p>
+</p>
 
 	
  <h3>Details</h3>
@@ -37,7 +37,7 @@ The tool performs the following four steps. As an input, give the Seurat R-objec
 
 
 <ol>
-		<li><b>Filtering</b> is performed in order to remove multiplets and broken cells. 
+		<li><b>Filtering</b> is performed in order to remove empties, multiplets and broken cells. 
 		You can use the QC-plots.pdf to estimate the the upper limit for the number of genes per cell and mitochondrial transcript percentage.</li>
 		<br>
 		<li><b>Expression values are normalized</b> accross the cells using global scaling normalization: gene’s expression value in a 
@@ -59,18 +59,21 @@ The tool performs the following four steps. As an input, give the Seurat R-objec
 		<br>For more information about cell cycle filtering, check out the vignette <a href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">here</a>. </li>
 
 		<br>
-		<li><b>Genes which are highly variable genes across the single cells are selected</b> for downstream analysis in the next tools.
-		The detection is done by calculating the average expression and dispersion for each gene, 
-		placing these genes into bins, and then calculating a z-score for dispersion within each bin.
-		The result file Dispersion.pdf indicates the number of variable genes based on the user defined cut-offs. 
-		Based on this plot, you can define the cut-offs for expression (x-axis) and dispersion (y-axis) 
-		to mark visual outliers. Two plots are drawn: scaled and non-scaled graphs.
+		<li><b>Genes which are highly variable across the cells are detected</b> by calculating the average expression and dispersion for each gene, 
+		placing these genes into bins, and then calculating a z-score for dispersion within each bin. 
+		These settings vary based on the data type, heterogeneity in the sample, and normalization strategy. 
+		For example for UMI data normalized to a total of 10 000 molecules, one would expect ~2,000 variable genes.</li>
+		These will be used in downstream analysis, like PCA.
+		
 		The procedure used in Seurat3 is described in detail <a href="https://www.biorxiv.org/content/early/2018/11/02/460147.full.pdf">here</a>.
-		By default, the tool returns 2,000 features per dataset. This is expected number of variable genes 
-		for UMI data normalised to a total of 10 000 molecules. These will be used in downstream analysis, like PCA.
+		
 	</li>
 
 </ol>
+
+
+</ol>
+
 
 <p>
 For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.

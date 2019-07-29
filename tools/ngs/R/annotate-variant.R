@@ -14,6 +14,7 @@
 # 09.09.2015	ML 			Add rsIDs to result table
 # 10.09.2015	ML			Polyphen predictions
 # 28.04.2017 	ML 			Update / fix (changes in readVcf output format)
+# 10.6.2018 	ML			Bug fix
 
 
 # Read data
@@ -23,9 +24,9 @@ vcf<-readVcf("input.vcf", genome)
 
 # Correct the chromosome names: 
 if(length(grep("chr", vcf@rowRanges@seqnames@values))>=1) {
- #  vcf2<-vcf
- #  rd<-rowRanges(vcf)
-# } else {
+   vcf2<-vcf
+   rd<-rowRanges(vcf)
+} else {
 vcf2 <- vcf
 seqlevelsStyle(vcf2) <- "UCSC" 
 	
