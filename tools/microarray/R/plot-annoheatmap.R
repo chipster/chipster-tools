@@ -4,6 +4,7 @@
 # OUTPUT heatmap.pdf: heatmap.pdf
 # PARAMETER column: "Annotation column" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column to be used for the annotation)
 # PARAMETER number.of.groups: "Number of groups" TYPE INTEGER FROM 0 TO 20 DEFAULT 2 (How many groups to color to the tree)
+# PARAMETER OPTIONAL use.genenames: "Represent genes with" TYPE [ids: "gene IDs", symbols: "gene names"] DEFAULT ids (Choose whether you want to print gene IDs or gene symbols in the row names of the heatmap.)
 # PARAMETER OPTIONAL coloring.scheme: "Coloring scheme" TYPE [Green-Red: Green-Red, Green-Black-Red: Green-Black-Red, Blue-White-Red: Blue-White-Red, Black-White: Black-White, None: None] DEFAULT Green-Red (Coloring scheme for the heatmap. Set to None to remove the heatmap entirely from the plot.)
 # PARAMETER OPTIONAL cluster.samples.only: "Cluster samples only" TYPE [yes: yes, no: no] DEFAULT yes (Disables clustering on the genes. This option is convenient if you want to retain a predefined gene order or make a sample clustering heatmap with more than 10000 genes.)
 # PARAMETER OPTIONAL hm.scale: "Scale data" TYPE [none: none, row: row, column: column] DEFAULT row (Indicates if the values should be centered and scaled in either the row direction or the column direction, or none. Affects only data visualistion, not the actual clustering.)
@@ -22,6 +23,11 @@ dat<-read.table(file, header=T, sep="\t", row.names=1)
 # Separates expression values and flags
 calls<-dat[,grep("flag", names(dat))]
 dat2<-dat[,grep("chip", names(dat))]
+
+# Use gene symbols as rownames instead of gene IDs
+if (use.genenames == "symbols") {
+  rownames(dat2)<-dat$symbol
+}
 
 # Sanity checks
 if (nrow(dat2) > 20000 & cluster.samples.only=="no") {
