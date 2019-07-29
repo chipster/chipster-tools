@@ -34,7 +34,8 @@ library(methods)
 
 # CRAN packages and their dependencies
 cranPackages = c(
-		"Seurat"
+		"Seurat",
+		"dplyr"
 )
 
 for (package in cranPackages) {
