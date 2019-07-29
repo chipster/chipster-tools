@@ -14,6 +14,8 @@
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the image.)
 
 # MK 17.10.2013 Annotated Heatmap
+# ML 29.07.2019 Add option to use gene symbols as row names
+
 library("Heatplus")
 
 # Loads the normalized data

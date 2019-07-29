@@ -12,10 +12,11 @@
 
 
 # JTT 3.10.2007: Heatmap
-# MG, 21.4.2010: to increase the gene/sample limit and adjust column width to number of genes and have the option to cluster samples only
+# MG 21.04.2010: to increase the gene/sample limit and adjust column width to number of genes and have the option to cluster samples only
 # MG 25.11.2010: Increased the gene/sample limit to 20000
 # OH 10.10.2012: removed dependency library("amap"), added library("MKmisc), added parameter hm.scale, see parameter scale of heatmap function, R: help(heatmap), added parameter distance, see parameter distfun of heatmap function, to allow for different distance measurements
 # OH 11.06.2013: switching back from function hclust (used by function heatmap) to pre-calc dendrogram with function hcluster:, visualization "plot-dendrogram.R" produced a different dendrogram than plot-heatmap.R with same parameters because of usage of different functions hcluster and hclust.
+# ML 29.07.2019: Add option to use gene symbols as row names
 
 # Renaming variables
 colpar<-coloring.scheme
