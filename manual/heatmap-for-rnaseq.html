@@ -18,6 +18,7 @@ the RAW COUNTS. The tool will first perform a normalisation / transformation for
 <ul>
 <li> Transformation method (variance stabilizing transformation, regularized log transformation, no transformation - only DESeq2 normalization) [variance stabilizing transformation]</li>
 <li> Annotation column (Phenodata column used for plotting the sample names</li>
+<li> Represent genes with (gene IDs, symbols) [gene IDs] </li>
 <li> Image width </li>
 <li> Image height </li>
 </ul>
@@ -45,8 +46,13 @@ This information is then merged with the list of genes of interest, and then the
 
 <p>
 You can tune the size of the heatmap with the image size parameters. The heatmap scales accordingly. 
+<br>
 You can also choose the naming for the samples from the phenodata columns: 
 usually it is wise to use some short names in the description column and use that.
+<br>
+Genes are shown as the rownames in the heatmap. By default, the the gene IDs are taken from the rownames of the input file (list of genes of interest). 
+If you wish to use gene symbols/names instead, make sure they are available as column in the input file, and select the parameter accordingly.
+Note that if your gene IDs are ensembl IDs, you can create the symbol column for the input table with the tool Utilities / Annotate ensembl identifiers.
 </p>
 
 <h3>Output</h3>
