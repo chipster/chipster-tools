@@ -36,7 +36,12 @@ library(methods)
 cranPackages = c(
 		"Seurat",
 		"dplyr",
-		"pheatmap"
+		"pheatmap",
+		"Matrix",
+		"gplots",
+		"cowplot",
+		"ggplot2",
+		"umap"
 )
 
 for (package in cranPackages) {
