@@ -10,9 +10,14 @@
 <p>
 Given an RNA-seq BAM file and gene and exon locations in a BED file, this tool reports several 
 quality metrics such as coverage uniformity, gene and junction saturation, junction annotation 
-and alignment statistics. You can provide your own BED file or use one provided by Chipster.
-This tool is based on the RSeQC package.
-</p>
+and alignment statistics. This tool is based on the RSeQC package.</p>
+Note that the chromosome names in the BAM file and the BED file need to match. This is the case if you use BAM files produced by Chipster and BED files from Chipster server. 
+Both files are based on Ensembl which uses just numbers without the chr prefix. 
+<ul>
+<li>If you imported a BAM file which contains the chr prefix, you need to set the second parameter accordingly so that Chipstr will remove the prefix</li>
+<li>If you want to use your own BED file which contains the chr prefix, you need to remove the prefix first using the tool "Utilities / Modify text". 
+Set the parameters as follows: Operation = Replace text, Search string = chr, Input file format = BED.</li>
+</ul>
 
 <h3>Parameters</h3>
 <ul>
@@ -24,8 +29,8 @@ This tool is based on the RSeQC package.
 
 <h3>Details</h3>
 
-<p>
-The tool performs five different analyses and one optional one:</p>
+
+The tool performs five different analyses and one optional one (the following descriptions are from the <a href = "http://rseqc.sourceforge.net/">RSeQC homepage</a>):
 
 <h4>geneBody_coverage</h4>
 <p>
@@ -93,14 +98,9 @@ This program is used to calculate reads mapping statistics from provided BAM fil
 
 <h4>Inner_distance (optional)</h4>
 <p>
-This module is used to calculate the inner distance (or insert size) between two paired RNA reads. The distance 
-is the mRNA length between two paired fragments. 
+This module is only applicable to paired-end data and it calculates the inner distance between two paired RNA reads. The distance 
+is the mRNA length between two paired reads. 
 </p>
-<p>
-This module is only applicable to paired-end data
-</p>
-<p>(The above descriptions are from the <a href = "http://rseqc.sourceforge.net/">RSeQC homepage</A>.)</p>
-
 
 <h3>Output</h3>
 
