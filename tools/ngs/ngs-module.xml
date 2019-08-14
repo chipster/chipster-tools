@@ -9,7 +9,6 @@
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
 		<tool>deseq2-pca-heatmap.R</tool>
-		<tool>heatmap-for-rnaseq.R</tool>
 		<tool>check-fastq.R</tool>
 		<tool>multiqc.R</tool>
 	</category>
@@ -166,6 +165,7 @@
 		<tool>ngs-dea-edger-RNA.R</tool>
 		<tool>edgeR-multivariate.R</tool>
 		<tool>DEXseq.R</tool>
+		<tool>heatmap-for-rnaseq.R</tool>
 		<tool>cufflinks2.R</tool>
 		<tool>cuffmerge2.R</tool>
 		<tool>cuffcompare2.R</tool>
