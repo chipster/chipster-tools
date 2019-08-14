@@ -9,7 +9,7 @@
 
 <p>
 Draw a heatmap and dendrogram of the genes of interest. As input, give the list of genes of interest and 
-the RAW COUNTS. The tool will first perform a normalisation / transformation for the values.
+the original count file containing RAW COUNTS for all genes in all samples. The tool will first perform a normalisation / transformation for the values.
 </p>
 
 
@@ -31,8 +31,8 @@ The count table has to be associated with a phenodata file describing the experi
 These files are best created by the tool "Utilities / Define NGS experiment", 
 which combines count files for different samples to one table, and creates a phenodata file for it.
 The list of genes of interest can be generated for example with the differential expression tools, 
-such as DeSeq2 or edgeR and filtering tool (Utilities / Filter table by column value). 
-You might want to limit the list to some tens of genes.
+such as DESeq2 or edgeR and filtering tool (Utilities / Filter table by column value). 
+You might want to limit the list to tens of genes.
 </p>
 
 <p>
@@ -52,7 +52,7 @@ usually it is wise to use some short names in the description column and use tha
 <br>
 Genes are shown as the rownames in the heatmap. By default, the the gene IDs are taken from the rownames of the input file (list of genes of interest). 
 If you wish to use gene symbols/names instead, make sure they are available as column in the input file, and select the parameter accordingly.
-Note that if your gene IDs are ensembl IDs, you can create the symbol column for the input table with the tool Utilities / Annotate ensembl identifiers.
+Note that if your gene IDs are Ensembl IDs, you can create the symbol column for the input table with the tool Utilities / Annotate Ensembl identifiers.
 </p>
 
 <h3>Output</h3>
