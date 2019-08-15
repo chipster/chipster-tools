@@ -36,6 +36,8 @@ command.full <- paste(ena.binary, index.option, '-f', format, entry_id, ' 1>>ena
 }
 cat(command.full, "\n", file="enafetch.log", append=TRUE)
 system(command.full)
+#temporary bug fix. Command needs to be run twice to get both fastq files
+system(command.full)
 
 # fasta and dat files are downloaded to the current directory
 # gunzip them if needed 
