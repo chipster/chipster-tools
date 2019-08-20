@@ -26,8 +26,8 @@ str.queryseq <- system(seqcount.exe, intern = TRUE )
 num.queryseq <- as.integer(str.queryseq)
 #round(num.queryseq)
 
-if (num.queryseq > 50000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ', num.queryseq ))
+if (num.queryseq >300000){
+	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 300000 but your file contains ', num.queryseq ))
 }
 
 
