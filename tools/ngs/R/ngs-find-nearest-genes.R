@@ -10,6 +10,7 @@
 # 09.02.2012, EK
 # 08.05.2014, MK New genomes added to the list. Added BED support.
 # 11.09.2014, EK Clarified the parameters
+# 01.08.2019, ML Fixed the order of column headers of the output file
 
 # Possible additional parameters and output
 # OUTPUT unique-genes-list.tsv: "Table listing the unique genes that can be mapped with gene symbols and entrez gene ids." 
@@ -94,7 +95,7 @@ results_annotated = annotatePeakInBatch(results_ranged, AnnotationData = annotat
 results_table <- as.data.frame(results_annotated)
 # rownames(results_table) <- sub (" ", "_", results_table$name)
 results_table <- results_table[,c(-5,-13,-14)]
-table_header <- c("chromosome","region_start","region_end","region_width", "region_id","strand","ensembl_id","gene_start","gene_end","location", "distance")
+table_header <- c("chromosome","region_start","region_end","region_width", "region_id","ensembl_id","gene_start","gene_end","strand","location", "distance")
 names(results_table) <- table_header
 
 # Write output

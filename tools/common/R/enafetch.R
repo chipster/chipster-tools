@@ -16,7 +16,7 @@
 # KM 21.03.2019
 
 
-ena.path <- file.path(chipster.tools.path, "enabrowsertools/python")
+ena.path <- file.path(chipster.tools.path, "enabrowsertools/python3")
 #ena.path <- ("/opt/chipster/tools_local/enaBrowserTools-1.5.4/python")
 #turn of cacheing
 ena.binary <- file.path(ena.path, "enaDataGet")
@@ -36,6 +36,8 @@ command.full <- paste(ena.binary, index.option, '-f', format, entry_id, ' 1>>ena
 }
 cat(command.full, "\n", file="enafetch.log", append=TRUE)
 system(command.full)
+#temporary bug fix. Command needs to be run twice to get both fastq files
+#system(command.full)
 
 # fasta and dat files are downloaded to the current directory
 # gunzip them if needed 
