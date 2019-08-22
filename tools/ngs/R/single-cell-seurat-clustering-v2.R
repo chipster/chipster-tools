@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-clustering.R: "Seurat v2 -Clustering and detection of cluster marker genes" (Clusters cells, performs non-linear dimensional reduction tSNE for visualization purposes, and finds marker genes for the clusters.)
+# TOOL single-cell-seurat-clustering-v2.R: "Seurat v2 -Clustering and detection of cluster marker genes" (Clusters cells, performs non-linear dimensional reduction tSNE for visualization purposes, and finds marker genes for the clusters.)
 # INPUT seurat_obj.Robj: "Seurat object from the Setup tool" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL tSNEplot.pdf

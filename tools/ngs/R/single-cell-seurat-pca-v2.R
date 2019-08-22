@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-pca.R: "Seurat v2 -PCA" (Principal component analysis on the highly variable genes across the single cells.)
+# TOOL single-cell-seurat-pca-v2.R: "Seurat v2 -PCA" (Principal component analysis on the highly variable genes across the single cells.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL seurat_obj_2.Robj
