@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Combine two samples and perform CCA </h2>
+
+<h3>Description</h3>
+
+<p>
+This tool can be used to do the canonical correlation analysis (CCA) and to combine two Seurat objects for later joined analysis.
+
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>How many CCs to compute [20]</li>
+		<li>How many CCs to visualise as heatmaps [9]</li>
+</ul>
+	
+	
+ <h3>Details</h3>
+  
+<p>
+As inputs, give two Seurat object generated with Seurat Setup tool. <br>
+NOTE: make sure you have assigned the sample or group name in the Setup tool (use short names like "CTRL", "TREAT").
+This name will be used later on to separate the samples.
+</p>
+
+<p>
+First, we choose the genes for the alignment process: the tool takes the union of top 1000 genes with the highest 
+dispersion (=var/mean) from both datasets (/samples/Seurat objects).
+</p>
+
+<p>
+Next, the canonical correlation analysis (CCA) is performed to identify common sources of variation between the datasets.
+A combined Seurat object is generated.
+The results of CCA can be seen in the CC1 versus CC2 and in the CC1 violin plot.
+</p>
+
+<p>
+For the downstream analysis and for the next tool (integrated analysis) we need to decide which CCs to use and align.
+This is similar to the problem of choosing PCs. 
+MetageneBicorPlot shows the correlation strength of each CC -the idea is to look for a saturation point (=where the
+curve flattens).
+</p>
+
+
+<p>
+For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials for multiple sample analysis</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+
+<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in Chipster. </li>
+<li>CCAplots.pdf: CCA plot CC1 versus CC2 and a violin plot of CC1 </li>
+</ul>
+
+
+
+</body>
+
