@@ -1,4 +1,4 @@
-# TOOL heatmap-for-rnaseq.R: "Heatmap for RNA-seq results" (Draw a heatmap and dendrogram of the genes of interest. As input, give the list of genes of interest and the RAW COUNTS. The tool will first perform a transformation for the values.)
+# TOOL heatmap-for-rnaseq.R: "Heatmap for RNA-seq results" (Draw a heatmap and dendrogram of the genes of interest. As input, give the list of genes of interest and the original count table containing RAW COUNTS for all genes in all samples. The tool will first perform a transformation for the values.)
 # INPUT de-list.tsv: "List of differentially expressed genes" TYPE GENERIC
 # INPUT data.tsv: "Raw counts" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata file" TYPE GENERIC 

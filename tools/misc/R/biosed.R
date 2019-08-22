@@ -29,8 +29,8 @@ num.queryseq <- as.integer(str.queryseq)
 
 #round(num.queryseq)
 
-if (num.queryseq > 100000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 100000 but your file contains ', num.queryseq ))
+if (num.queryseq > 300000){
+	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 300000 but your file contains ', num.queryseq ))
 }
 
 emboss.binary <- file.path(emboss.path, "biosed")
