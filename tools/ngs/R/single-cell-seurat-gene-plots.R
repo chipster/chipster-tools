@@ -1,11 +1,11 @@
-# TOOL single-cell-seurat-gene-plots.R: "Seurat -Visualize cluster marker genes" (Visualize selected cluster marker genes with violin and feature plot.)
+# TOOL single-cell-seurat-gene-plots.R: "Seurat v3 -Visualize cluster marker genes" (Visualize selected cluster marker genes with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL biomarker_plot.pdf
 # PARAMETER biomarker: "Gene name\(s\)" TYPE STRING DEFAULT MS4A1 (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE plot.)
-# RUNTIME R-3.4.3
+# RUNTIME R-3.6.1
 
 
 # 13.06.2017 ML

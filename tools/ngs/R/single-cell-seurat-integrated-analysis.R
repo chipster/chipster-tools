@@ -1,11 +1,11 @@
-# TOOL single-cell-seurat-integrated-analysis.R: "Seurat -Integrated analysis of two samples" (This tool aligns the CCA subspaces and performs integrated analysis on the data. This tool can be used for two sample combined Seurat objects.) 
+# TOOL single-cell-seurat-integrated-analysis.R: "Seurat v3 -Integrated analysis of two samples" (This tool aligns the CCA subspaces and performs integrated analysis on the data. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL seurat_obj_combined.Robj
 # PARAMETER OPTIONAL num.dims: "Number of CCs to use " TYPE INTEGER DEFAULT 20 (Number of canonical correlates to use. Use the plots from CCA tool to estimate how many you wish to use.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.6 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 0.5 (Point size for tSNE plot. )
-# RUNTIME R-3.4.3
+# RUNTIME R-3.6.1
 
 
 

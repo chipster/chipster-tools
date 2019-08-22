@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-clustering.R: "Seurat -Clustering and detection of cluster marker genes" (Clusters cells, performs non-linear dimensional reduction tSNE for visualization purposes, and finds marker genes for the clusters.)
+# TOOL single-cell-seurat-clustering.R: "Seurat v3 -Clustering and detection of cluster marker genes" (Clusters cells, performs non-linear dimensional reduction tSNE for visualization purposes, and finds marker genes for the clusters.)
 # INPUT seurat_obj.Robj: "Seurat object from the Setup tool" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL tSNEplot.pdf
@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL minpct: "Min fraction of cells where a cluster marker gene is expressed" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expression)
 # PARAMETER OPTIONAL threshuse: "Differential expression threshold for a cluster marker gene" TYPE DECIMAL DEFAULT 0.25 (Limit testing to genes which show, on average, at least X-fold difference, in log2 scale, between the two groups of cells. Increasing thresh.use speeds up the function, but can miss weaker signals.)
 # PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST, DESeq2] DEFAULT wilcox (Denotes which test to use. Seurat currently implements \"wilcox\" \(Wilcoxon rank sum test, default\), \"bimod\" \(likelihood-ratio test for single cell gene expression\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), \"tobit\" \(Tobit-test for differential gene expression\), \"MAST\" \(GLM-framework that treates cellular detection rate as a covariate\), \"DESeq2\" \(DE based on a model using the negative binomial distribution\), \"poisson\", and \"negbinom\". The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
-# RUNTIME R-3.4.3
+# RUNTIME R-3.6.1
 
 
 # 09.06.2017 ML

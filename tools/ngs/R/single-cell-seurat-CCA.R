@@ -1,10 +1,10 @@
-# TOOL single-cell-seurat-CCA.R: "Seurat -Combine two samples and perform CCA" (This tool can be used to do the canonical correlation analysis CCA and to combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
+# TOOL single-cell-seurat-CCA.R: "Seurat v3 -Combine two samples and perform CCA" (This tool can be used to do the canonical correlation analysis CCA and to combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
 # INPUT OPTIONAL seurat_obj1.Robj: "Seurat object 1" TYPE GENERIC
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT seurat_obj_combined.Robj
 # PARAMETER OPTIONAL CCstocompute: "How many CCs to compute" TYPE INTEGER DEFAULT 20 (Number of canonical vectors to calculate)
-# RUNTIME R-3.4.3
+# RUNTIME R-3.6.1
 # SLOTS 3
 
 
