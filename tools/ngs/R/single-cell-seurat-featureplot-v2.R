@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-featureplot.R: "Seurat v2 -Visualise features in tSNE plot" (Color single cells on a tSNE dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.)
+# TOOL single-cell-seurat-featureplot-v2.R: "Seurat v2 -Visualise features in tSNE plot" (Color single cells on a tSNE dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL tSNEplot.pdf
 # PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mito, nUMI, nGene, orig.ident, PC1, PC2] DEFAULT bimod (Denotes which feature to use for coloring the cells.)

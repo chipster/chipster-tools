@@ -1,12 +1,12 @@
-# TOOL single-cell-seurat-split-dot-plot.R: "Seurat -Visualize genes with cell type specific responses in two samples" (This tool gives you plots showing user defined markers/genes across the conditions. This tool can be used for two sample combined Seurat objects.) 
+# TOOL single-cell-seurat-split-dot-plot.R: "Seurat v3 -Visualize genes with cell type specific responses in two samples" (This tool gives you plots showing user defined markers/genes across the conditions. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma.)
-# RUNTIME R-3.4.3
-
+# RUNTIME R-3.6.1
 
 
 # 2018-16-05 ML
+# 09.07.2019 ML Seurat v3
 
 # For testing (not run):
 # markers.to.plot <- c("CD3D", "CREM", "HSPH1", "SELL", "GIMAP5", "CACYBP", "GNLY", 
@@ -22,11 +22,22 @@ load("combined_seurat_obj.Robj")
 
 markers.to.plot <- unlist(strsplit(markers, ", "))
 pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
-sdp <- SplitDotPlotGG(data.combined, grouping.var = "stim", genes.plot = rev(markers.to.plot), cols.use = c("blue", 
-				"red"), x.lab.rot = T, plot.legend = T, dot.scale = 8, do.return = T)
 
-FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
-		max.exp = 3)
+# Dot plot:
+DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, 
+	split.by = "stim") + RotatedAxis()
+
+# FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
+#		max.exp = 3)
+
+# Feature plot:
+FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9")
+
+## Comparison violin plot:
+#immune.combined$celltype <- Idents(immune.combined)
+#plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", 
+#    pt.size = 0, combine = FALSE)
+#CombinePlots(plots = plots, ncol = 1)
 
 dev.off() # close the pdf
 

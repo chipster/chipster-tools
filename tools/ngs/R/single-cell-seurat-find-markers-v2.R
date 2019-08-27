@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-find-markers.R: "Seurat v2 -Find group specific markers" (Find the markers for a specific group.)
+# TOOL single-cell-seurat-find-markers-v2.R: "Seurat v2 -Find group specific markers" (Find the markers for a specific group.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj

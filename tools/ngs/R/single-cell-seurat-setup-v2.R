@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "Seurat v2 -Setup and QC" (Setup the Seurat object, quality control, filter and regress the cells, determine statistically significant principal components. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
+# TOOL single-cell-seurat-setup-v2.R: "Seurat v2 -Setup and QC" (Setup the Seurat object, quality control, filter and regress the cells, determine statistically significant principal components. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table from DropSeq" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf 

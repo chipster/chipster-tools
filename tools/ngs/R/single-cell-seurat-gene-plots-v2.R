@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-gene-plots.R: "Seurat v2 -Visualize cluster marker genes" (Visualize selected cluster marker genes with violin and feature plot.)
+# TOOL single-cell-seurat-gene-plots-v2.R: "Seurat v2 -Visualize cluster marker genes" (Visualize selected cluster marker genes with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj

@@ -9,6 +9,7 @@
 
 <p>
 This tool clusters cells, visualizes the result in a tSNE plot, and finds marker genes for the clusters.
+	
 </p>
  
  <h3>Parameters</h3>
@@ -28,12 +29,19 @@ This tool clusters cells, visualizes the result in a tSNE plot, and finds marker
 Cells are clustered using principal components (PCs) rather than genes. Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
 That tool also produces PC heatmaps and the elbow plot, which help you to decide the number of PCs to use.
 <br><br>
+Cells are clustered using principal components (PCs) rather than genes. 
+Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
+That tool also produces PC heatmaps and the elbow plot, which help you to decide the number of PCs to use.	
+<br><br>
+If you have low number of cells in your data, try lowering the perplexity parameter (the expected number of neighbours.)
+<br><br>
 Graph-based clustering is performed using the Seurat function FindClusters, which first constructs a KNN graph using the Euclidean distance in PCA space,
 and then refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
 It then cuts the graph in clusters using the Leuvain algorithm which optimizes the standard modularity function
 (please see the links below for more information).
 <br>
-The resolution parameter sets the granularity, with increased values leading to more clusters. 
+The <b>resolution</b> parameter sets the 'granularity', 
+with increased values leading to more clusters. 
 It has been found that setting this parameter between 0.6-1.2 typically returns good results for single cell datasets 
 of around 3K cells. Optimal resolution often increases for larger datasets 
 -use a value above (below) 1.0 if you want to obtain a larger (smaller) number of communities.
@@ -46,6 +54,7 @@ Cells belonging to the same cluster should co-localize on the tSNE plot, because
 local neighborhood in high-dimensional space, together in low-dimensional space. The perplexity parameter is a guess 
 about the number of close neighbors each cell has, so it allows you to balance attention between local and global aspects of the data (<a href="https://distill.pub/2016/misread-tsne/">read more</a>). 
 If you have low number of cells, try lowering the perplexity value.
+The tSNE result is visualized in the <b>tSNEplot.pdf</b>.
 </p>
 
 <p>
@@ -54,7 +63,7 @@ These genes are differentially expressed between a cluster and all the other cel
 by requiring that a gene has to be expressed in at least a certain fraction of cells in either of the two groups (min.pct=0.25).
 You can also require that the change in expression has to be at least certain percentage between the groups (thresh.test=0.25). 
 Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large number of genes that are unlikely to be highly discriminatory. 
-The marker genes for each cluster are written in the markers.tsv file. 
+The marker genes for each cluster are written in the <b>markers.tsv</b> file. 
 <br>
 <br>Seurat currently implements the following tests: 
 <ul>
