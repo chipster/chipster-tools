@@ -4,8 +4,8 @@
 # OUTPUT OPTIONAL minimap2.bam 
 # OUTPUT OPTIONAL minimap2.bam.bai 
 # OUTPUT OPTIONAL minimap2.log 
-# PARAMETER OPTIONAL chipster_genome: "Genome" TYPE ["FILES genomes/fasta .fa"] (Genome that you would like to align your reads against. This parameter is ignored if you provide your own reference genome as the second input file.)
-# PARAMETER OPTIONAL task: "Task type" TYPE [ none: "None", map-pb: "Map PacBio subreads to a genome", map-ont: "Map Oxford Nanopore reads to a genome", splice_2: "Map PacBio Iso-seq or traditional cDNA to reference", splice: "Map Nanopore 2D cDNA-seq data to reference",  splice_3: "Map Nanopore Direct RNA-seq to reference",  splice_4: "Mapping against SIRV control reference", asm5: "Aligning assembly to reference genome" ] DEFAULT none (Mapping or aligment task to be performed)
+# PARAMETER chipster_genome: "Genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta .fa" (Genome that you would like to align your reads against. This parameter is ignored if you provide your own reference genome as the second input file.)
+# PARAMETER task: "Task type" TYPE [ map-pb: "Map PacBio subreads to a genome", map-ont: "Map Oxford Nanopore reads to a genome", splice_2: "Map PacBio Iso-seq or traditional cDNA to reference", splice: "Map Nanopore 2D cDNA-seq data to reference",  splice_3: "Map Nanopore Direct RNA-seq to reference",  splice_4: "Mapping against SIRV control reference", asm5: "Aligning assembly to reference genome" ] (Mapping or aligment task to be performed)
 # PARAMETER OPTIONAL rgid: "Read group identifier" TYPE STRING (Read group identifier. If you want to add the read group line in the BAM file, you have to give this information.)
 # PARAMETER OPTIONAL rgsm: "Sample name for read group" TYPE STRING (The name of the sample sequenced in this read group. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rgpl: "Platform for read group" TYPE [ none: "Not defined", ILLUMINA, SOLID, LS454, HELICOS, PACBIO] DEFAULT none (Platform\/technology used to produce the read. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
@@ -13,8 +13,6 @@
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT yes (Collect a log file about the Mimimap2 mapping process.)
 
 # KM 6.3.2018
-
-# DEFAULT "SYMLINK_TARGET genomes/indexes/bowtie2/default .fa"
 
 # Handle output names
 source(file.path(chipster.common.path, "tool-utils.R"))
