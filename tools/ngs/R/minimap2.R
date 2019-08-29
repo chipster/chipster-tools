@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL minimap2.bam 
 # OUTPUT OPTIONAL minimap2.bam.bai 
 # OUTPUT OPTIONAL minimap2.log 
-# PARAMETER chipster_genome: "Genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta .fa" (Genome that you would like to align your reads against. This parameter is ignored if you provide your own reference genome as the second input file.)
+# PARAMETER chipster_genome: "Genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Genome that you would like to align your reads against. This parameter is ignored if you provide your own reference genome as the second input file.)
 # PARAMETER task: "Task type" TYPE [ map-pb: "Map PacBio subreads to a genome", map-ont: "Map Oxford Nanopore reads to a genome", splice_2: "Map PacBio Iso-seq or traditional cDNA to reference", splice: "Map Nanopore 2D cDNA-seq data to reference",  splice_3: "Map Nanopore Direct RNA-seq to reference",  splice_4: "Mapping against SIRV control reference", asm5: "Aligning assembly to reference genome" ] (Mapping or aligment task to be performed)
 # PARAMETER OPTIONAL rgid: "Read group identifier" TYPE STRING (Read group identifier. If you want to add the read group line in the BAM file, you have to give this information.)
 # PARAMETER OPTIONAL rgsm: "Sample name for read group" TYPE STRING (The name of the sample sequenced in this read group. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
