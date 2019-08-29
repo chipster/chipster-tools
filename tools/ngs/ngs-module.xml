@@ -203,6 +203,17 @@
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 		<tool>single-cell-bam-tag-histogram.R</tool>	  	
 		<tool>single-cell-digital-expression.R</tool>	   	
+		<tool>single-cell-seurat-setup-v3.R</tool>	   	
+		<tool>single-cell-seurat-filter-regress-v3.R</tool>	   	
+		<tool>single-cell-seurat-pca-v3.R</tool>	   	
+		<tool>single-cell-seurat-clustering-v3.R</tool>	
+		<tool>single-cell-seurat-gene-plots-v3.R</tool>	
+		<tool>single-cell-seurat-CCA-v3.R</tool>	
+		<tool>single-cell-seurat-integrated-analysis-v3.R</tool>	
+		<tool>single-cell-seurat-diffexp-samples-v3.R</tool>	
+		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>
+		<tool>single-cell-seurat-featureplot-v3.R</tool>	
+		<tool>single-cell-seurat-update-object-v3.R</tool>
 		<tool>single-cell-seurat-setup.R</tool>	   	
 		<tool>single-cell-seurat-filter-regress.R</tool>	   	
 		<tool>single-cell-seurat-pca.R</tool>	   	
@@ -213,17 +224,6 @@
 		<tool>single-cell-seurat-diffexp-samples.R</tool>	
 		<tool>single-cell-seurat-split-dot-plot.R</tool>
 		<tool>single-cell-seurat-featureplot.R</tool>	
-		<tool>single-cell-seurat-update-object.R</tool>
-		<tool>single-cell-seurat-setup-v2.R</tool>	   	
-		<tool>single-cell-seurat-filter-regress-v2.R</tool>	   	
-		<tool>single-cell-seurat-pca-v2.R</tool>	   	
-		<tool>single-cell-seurat-clustering-v2.R</tool>	
-		<tool>single-cell-seurat-gene-plots-v2.R</tool>	
-		<tool>single-cell-seurat-CCA-v2.R</tool>	
-		<tool>single-cell-seurat-integrated-analysis-v2.R</tool>	
-		<tool>single-cell-seurat-diffexp-samples-v2.R</tool>	
-		<tool>single-cell-seurat-split-dot-plot-v2.R</tool>
-		<tool>single-cell-seurat-featureplot-v2.R</tool>	
 		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
 	</category>
 
