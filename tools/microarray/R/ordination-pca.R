@@ -3,7 +3,7 @@
 # OUTPUT pca.tsv: pca.tsv 
 # OUTPUT variance.tsv: variance.tsv 
 # OUTPUT loadings.tsv: loadings.tsv
-# PARAMETER OPTIONAL expvar: "Amount of variation to explain" TYPE PERCENT DEFAULT 80 (Amount of experimental variation to explain)
+# PARAMETER OPTIONAL expvar: "Amount of variation to explain" TYPE INTEGER FROM 0 TO 100 DEFAULT 80 (Percentage of experimental variation to explain, as a percentage 0-100)
 # PARAMETER OPTIONAL scaling: Scaling TYPE [yes: yes, no: no] DEFAULT no (Scale the data to have a unit variance)
 # PARAMETER OPTIONAL centering: Centering TYPE [yes: yes, no: no] DEFAULT yes (Scale the data to have the same mean)
 
