@@ -31,7 +31,9 @@ DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"),
 #		max.exp = 3)
 
 # Feature plot:
-FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9")
+#FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9")
+FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, min.cutoff = "q9", cols = c("grey", "red"))
+
 
 ## Comparison violin plot:
 #immune.combined$celltype <- Idents(immune.combined)
