@@ -33,11 +33,11 @@ data.combined <- FindClusters(data.combined, resolution = 0.5)
 pdf(file="integrated_plot.pdf", , width=13, height=7)  # open pdf
 # p1 <- DimPlot(data.combined, reduction = "umap", group.by = "stim")
 # p2 <- DimPlot(data.combined, reduction = "umap", label = TRUE)
-p1 <- DimPlot(data.combined, reduction = "tsne", group.by = "stim")
-p2 <- DimPlot(data.combined, reduction = "tsne", label = TRUE)
+p1 <- DimPlot(data.combined, reduction = "tsne", group.by = "stim", pt.size = point.size)
+p2 <- DimPlot(data.combined, reduction = "tsne", label = TRUE, pt.size = point.size)
 plot_grid(p1, p2)
 # Show both conditions in separate plots:
-DimPlot(data.combined, reduction = "tsne", split.by = "stim")
+DimPlot(data.combined, reduction = "tsne", split.by = "stim", pt.size = point.size)
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
 
