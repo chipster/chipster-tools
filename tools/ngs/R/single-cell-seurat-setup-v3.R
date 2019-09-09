@@ -56,6 +56,7 @@ if (file.exists("dropseq.tsv")){
 
 # Initialize the Seurat object
 seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
+# min.features = 200 => this is done in the next tool.
 # v3: raw.data -> counts
 
 # For sample detection later on
