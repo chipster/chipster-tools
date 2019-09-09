@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-CCA-v3.R: "Seurat v3 -Combine two samples and perform CCA" (This tool can be used to do the canonical correlation analysis CCA and to combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
+# TOOL single-cell-seurat-CCA-v3.R: "Seurat v3 BETA -Combine two samples and perform CCA" (This tool can be used to do the canonical correlation analysis CCA and to combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
 # INPUT OPTIONAL seurat_obj1.Robj: "Seurat object 1" TYPE GENERIC
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
