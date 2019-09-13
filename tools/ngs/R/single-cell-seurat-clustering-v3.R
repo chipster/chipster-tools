@@ -7,7 +7,7 @@
 # PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
-# PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE plot.)
+# PARAMETER OPTIONAL point.size: "Point size in tSNE or UMAP plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE plot.)
 # PARAMETER OPTIONAL minpct: "Min fraction of cells where a cluster marker gene is expressed" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expression)
 # PARAMETER OPTIONAL threshuse: "Differential expression threshold for a cluster marker gene" TYPE DECIMAL DEFAULT 0.25 (Limit testing to genes which show, on average, at least X-fold difference, in log2 scale, between the two groups of cells. Increasing thresh.use speeds up the function, but can miss weaker signals.)
 # PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST, DESeq2] DEFAULT wilcox (Denotes which test to use. Seurat currently implements \"wilcox\" \(Wilcoxon rank sum test, default\), \"bimod\" \(likelihood-ratio test for single cell gene expression\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), \"tobit\" \(Tobit-test for differential gene expression\), \"MAST\" \(GLM-framework that treates cellular detection rate as a covariate\), \"DESeq2\" \(DE based on a model using the negative binomial distribution\), \"poisson\", and \"negbinom\". The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
@@ -41,38 +41,19 @@ if (exists("data.combined") ){
 	seurat_obj <- data.combined
 }
 
-#  Cluster the cells
-# Not necessary for v3? 
-# First set the directory for this step.
-# library(tools)
-# dir <- getwd()
-# dir <- file_path_as_absolute(dir)
+# Cluster the cells
 
 seurat_obj <- FindNeighbors(seurat_obj, dims = 1:pcs_use)
 seurat_obj <- FindClusters(seurat_obj, resolution = res)
 
 
-# Non-linear dimensional reduction (tSNE) & number of cells in clusters
+# Non-linear dimensional reduction (tSNE/UMAP) & number of cells in clusters
+# NOTE: let's do both tSNE AND UMAP so that both can be later visualized.
 seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
-# UMAP plot would require installing a package, via reticulate::py_install(packages ='umap-learn')
 seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
 
-# not working at v3 anymore:
-# Calculate number of cells per cluster from object@ident
-# cell.num <- table(seurat_obj@ident)
-# cell.num <- Idents(object = seurat_obj)
-
-# Add cell number per cluster to cluster labels
-# ClusterLabels = paste("Cluster", names(cell.num), paste0("(n = ", cell.num, ")"))
-
-# Order legend labels in plot in the same order as 'ClusterLabels'
-# ClusterBreaks = names(cell.num)
-
-# Plot tSNE with new legend labels for clusters
-pdf(file="tSNEplot.pdf") 
-
-
-# UMAP plot would require installing a package:				
+# Plot tSNE and UMAP
+pdf(file="tSNEplot.pdf") 			
 DimPlot(seurat_obj, reduction = "umap", pt.size = point.size)
 DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size)	
 #TSNEPlot(object = seurat_obj, do.return = T, pt.size = point.size, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
