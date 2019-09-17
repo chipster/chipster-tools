@@ -37,7 +37,9 @@ data.combined <- RunUMAP(data.combined, reduction = "pca", dims = 1:num.dims)  #
 data.combined <- RunTSNE(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
 
 # Clustering
+# Computing nearest neighbor graph and SNN
 data.combined <- FindNeighbors(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Dimensions of reduction to use as input
+# Modularity Optimizer by Ludo Waltman and Nees Jan van Eck -Louvain algorithm
 data.combined <- FindClusters(data.combined, resolution = res)
 
 # Visualization
