@@ -49,7 +49,7 @@ seurat_obj <- FindClusters(seurat_obj, resolution = res)
 
 # Non-linear dimensional reduction (tSNE/UMAP) & number of cells in clusters
 # NOTE: let's do both tSNE AND UMAP so that both can be later visualized.
-seurat_obj <- RunTSNE(seurat_obj, dims.use=1:pcs_use, do.fast=T, perplexity=perplex)
+seurat_obj <- RunTSNE(seurat_obj, dims = 1:pcs_use, do.fast=T, perplexity=perplex)
 seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
 
 # Plot tSNE and UMAP
