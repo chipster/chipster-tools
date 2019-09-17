@@ -25,6 +25,8 @@ library(Seurat)
 load("combined_seurat_obj.Robj")
 #combined_seurat_obj <- data.combined
 
+DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+
 markers.to.plot <- unlist(strsplit(markers, ", "))
 # pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
 pdf(file="split_dot_plot.pdf", width=12, height=12)  # open pdf
