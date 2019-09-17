@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-CCA-v3.R: "Seurat v3 BETA -Combine two samples and perform CCA" (This tool can be used to integrate data and combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
+# TOOL single-cell-seurat-CCA-v3.R: "Seurat v3 BETA -Combine two samples" (This tool can be used to integrate data and combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
 # INPUT OPTIONAL seurat_obj1.Robj: "Seurat object 1" TYPE GENERIC
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
@@ -46,7 +46,7 @@ data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
 # How to decide number of PCAs/CCAs??
 # ElbowPlot(data.combined)
 
-dev.off() # close the pdf
+# dev.off() # close the pdf
 
 # Save the Robj for the next tool
 save(data.combined, file="seurat_obj_combined.Robj")
