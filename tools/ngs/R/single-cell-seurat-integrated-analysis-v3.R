@@ -2,7 +2,7 @@
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL seurat_obj_combined.Robj
-# PARAMETER OPTIONAL num.dims: "Number of dimensions to use " TYPE INTEGER DEFAULT 20 (Number of canonical correlates to use. )
+# PARAMETER OPTIONAL num.dims: "Number of PCs to use " TYPE INTEGER DEFAULT 20 (Number of principal components to use. )
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 0.5 (Point size for dimensionality plot. )
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
