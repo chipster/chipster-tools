@@ -16,7 +16,7 @@ load("combined_seurat_obj.Robj")
 
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
-DefaultAssay(data.combined) <- "RNA"
+DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 nk.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", 
 		verbose = FALSE)
 #head(nk.markers)
