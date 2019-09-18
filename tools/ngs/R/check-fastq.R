@@ -2,6 +2,7 @@
 # INPUT reads: "FASTQ file" TYPE GENERIC
 # OUTPUT OPTIONAL fail.log
 # OUTPUT OPTIONAL pass.log
+# OUTPUT OPTIONAL duplicates.log
 
 
 # AMS 2017-03-29
@@ -58,7 +59,8 @@ if (fileNotOk("duplicates", minlines=1)){
 	alltests <- FALSE
 	system("echo FAIL >> check.log")
 	system("echo >> check.log")
-	system("echo `wc -l duplicates` >> check.log")	
+	system("echo `wc -l duplicates` >> check.log")
+	system("mv duplicates duplicates.log")
 }
 system("echo >> check.log")
 
@@ -80,9 +82,10 @@ if (alltests){
 basename <- strip_name(inputnames$reads)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
+outputnames <- matrix(NA, nrow=3, ncol=2)
 outputnames[1,] <- c("pass.log", paste(basename, "_PASS.log", sep =""))
 outputnames[2,] <- c("fail.log", paste(basename, "_FAIL.log", sep =""))
+outputnames[3,] <- c("duplicates.log", paste(basename, "_DUPLICATES.log", sep =""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
