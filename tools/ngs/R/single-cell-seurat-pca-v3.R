@@ -9,6 +9,7 @@
 
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL PCAgenes.txt
+# NOTE: num.of.pcas set to 20 to make runs faster, original default = 50.
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -31,7 +32,7 @@ if (exists("data.combined") ){
 
 # PCA
 # The variable genes are used as input
-seurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj))
+seurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj), npcs = num.of.pcas)
 
 # PCA genes in txt file
 # sink("PCAgenes.txt")
