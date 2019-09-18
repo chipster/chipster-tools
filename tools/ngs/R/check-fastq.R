@@ -50,7 +50,8 @@ system("echo >> check.log")
 
 # Check for duplicated read names
 system("echo '#Test 3: duplicated read names' >> check.log")
-system("grep \"^@\" reads |sort | uniq -c | awk '{if ($1 > 1) print $0}' > duplicates")
+#system("grep \"^@\" reads |sort | uniq -c | awk '{if ($1 > 1) print $0}' > duplicates")
+system("awk 'NR%4==1' reads |sort | uniq -c | awk '{if ($1 > 1) print $0}' > duplicates")
 if (fileNotOk("duplicates", minlines=1)){
 	system("echo PASS >> check.log")
 }else{
