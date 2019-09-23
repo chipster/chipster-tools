@@ -24,6 +24,7 @@
 # 2019-06-28 EK Add point size parameter for tSNE plot in the code
 # 2019-06-12 ML Seurat v3
 # 2019-09-09 ML UMAP
+# 2019-09-23 EK add only.pos=TRUE
 
 # for UMAP:
 library(reticulate)
@@ -64,7 +65,7 @@ textplot(cell_counts, halign="center", valign="center", cex=1)
 title(paste("Total number of cells: ",length(colnames(x = seurat_obj)), "\n Number of cells in each cluster:" ) )
 
 # Find all markers 
-markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type) # min.pct = 0.25, thresh.use = 0.25, only.pos = onlypos
+markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = TRUE) 
 
 if(length(warnings())>0){ # or !is.null(warnings())
 	stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
