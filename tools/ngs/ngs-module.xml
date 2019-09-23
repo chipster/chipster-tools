@@ -207,12 +207,12 @@
 		<tool>single-cell-seurat-filter-regress-v3.R</tool>	   	
 		<tool>single-cell-seurat-pca-v3.R</tool>	   	
 		<tool>single-cell-seurat-clustering-v3.R</tool>	
-		<tool>single-cell-seurat-gene-plots-v3.R</tool>	
+		<tool>single-cell-seurat-gene-plots-v3.R</tool>
+		<tool>single-cell-seurat-featureplot-v3.R</tool>	
 		<tool>single-cell-seurat-CCA-v3.R</tool>	
 		<tool>single-cell-seurat-integrated-analysis-v3.R</tool>	
 		<tool>single-cell-seurat-diffexp-samples-v3.R</tool>	
-		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>
-		<tool>single-cell-seurat-featureplot-v3.R</tool>	
+		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>	
 		<tool>single-cell-seurat-update-object-v3.R</tool>
 		<tool>single-cell-seurat-setup.R</tool>	   	
 		<tool>single-cell-seurat-filter-regress.R</tool>	   	
