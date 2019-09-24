@@ -8,6 +8,7 @@
 
 # 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
+# 2019-09-23 EK Add only.pos = TRUE
 
 library(Seurat)
 
@@ -17,7 +18,7 @@ load("combined_seurat_obj.Robj")
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
-nk.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", 
+nk.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = TRUE,
 		verbose = FALSE)
 #head(nk.markers)
 write.table(nk.markers, file="conserved_markers.tsv", sep="\t", row.names=T, col.names=T, quote=F)
