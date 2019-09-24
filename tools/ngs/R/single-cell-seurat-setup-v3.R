@@ -16,6 +16,7 @@
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2018-04-24 ML + AMS improve the input tar handling
 # 2019-05-22 ML update Seurat version to 3.0
+# 2019-09-24 ML correct for cases where there are NaNs in percent.mt
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions. 
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
@@ -73,8 +74,12 @@ seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-")
 # pdf plots
 pdf(file="QCplots.pdf", , width=13, height=7) 
 
-# VlnPlot
-VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+# Violinplot
+if (sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) {
+	VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+} else {
+	VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+}
 
 # FeatureScatter (v3)
 plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt")
