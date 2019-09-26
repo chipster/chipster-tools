@@ -55,7 +55,7 @@ if (cells_left > 500) {
 	DimHeatmap(seurat_obj, dims = 1:num.of.heatmaps, cells = cells_left, balanced = TRUE)
 }
 # fig.height=12,fig.width=9 
-ElbowPlot(seurat_obj)
+ElbowPlot(seurat_obj, ndims = num.of.pcas)
 
 # Number of cells:
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign="center", valign="center", cex=2) #, cex=0.8
