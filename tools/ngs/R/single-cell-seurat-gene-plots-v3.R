@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL biomarker_plot.pdf
-# PARAMETER biomarker: "Gene name\(s\)" TYPE STRING DEFAULT MS4A1 (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
+# PARAMETER biomarker: "Gene name\(s\)" TYPE STRING DEFAULT "MS4A1, LYZ" (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE and UMAP plots.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
 # RUNTIME R-3.6.1
@@ -37,7 +37,7 @@ if(length(grep(",", biomarker)) != 0) {
 }
 
 # Violin plot:
-pdf(file="biomarker_plot.pdf") 
+pdf(file="biomarker_plot.pdf", width=12, height=12) 
 VlnPlot(seurat_obj, features = biomarker)
 FeaturePlot(seurat_obj, features = biomarker, pt.size=point.size, reduction=reduction.method) 	
 dev.off() # close the pdf
