@@ -35,10 +35,32 @@ set to cluster "3".
 </p>
 
 <p>
-conserved_markers.tsv is a matrix containing a ranked list of putative conserved markers, 
+<b>de-list.tsv</b> is a table containing the differentially expressed genes for the chosen cluster, compared
+to all the other cells in the data, and associated statistics: 
+<ul>
+	<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the 
+	likelihood that the gene is in the list just be chance) </li>
+	<li><b>avg_logFC</b> = average log fold change (how much higher (lower) the expression of this gene is in the chosen
+	cluster, compared to all the other cells </li>
+	<li><b>pct.1</b> = what percentage of the cells in the chosen cluster show some expression for this gene</li>
+	<li><b>pct.2</b> = what percentage of the cells <b>not</b> in the chosen cluster (=all the other cells) show some expression for this gene</li>
+	<li><b>p-val_adj</b> = adjusted/corrected p-value. This value is multiple testing corrected: 
+	when we test over thousands of genes, we would statistically start getting some significantly differentially
+	expressed genes just by chance. There are different methods to correct for this, 
+	here a <i>Bonferroni</i> correction is used. When filtering the table and reporting your results, 
+	use this value.</li>
+</ul>
+</p>
+
+<p>
+<b>conserved_markers.tsv</b> is a table containing a ranked list of conserved markers in the chosen cluster (=genes that show changes in 
+expression in this particular cell type/cluster, regardless of the treatment/sample),
 and associated statistics: 
-p-values within each group and a combined p-value (such as Fishers combined p-value or others from the MetaDE package), 
-percentage of cells expressing the marker and average differences.
+<ul>
+	<li>the values listed above for both samples in the data </li>
+	<li> max_p-val = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+	<li> min_p-val = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+</ul>
 </p>
 
 <p>
