@@ -28,6 +28,16 @@ load("combined_seurat_obj.Robj")
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 markers.to.plot <- unlist(strsplit(markers, ", "))
+
+# Sanity check: are the requested genes available in the data:
+all.genes <- rownames(x = data.combined)
+match(markers.to.plot, all.genes)
+# if one of the genes is not in the list, print error message:
+if (!all(!is.na(match(markers.to.plot, all.genes)))) { 
+  not.found <- markers.to.plot[is.na(match(markers.to.plot, all.genes))==TRUE]
+  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found))
+  }
+
 # pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
 pdf(file="split_dot_plot.pdf", width=12, height=12)  # open pdf
 
