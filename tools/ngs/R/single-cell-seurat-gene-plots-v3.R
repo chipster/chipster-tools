@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-gene-plots-v3.R: "Seurat v3 -Visualize cluster marker genes" (Visualize selected cluster marker genes with violin and feature plot.)
+# TOOL single-cell-seurat-gene-plots-v3.R: "Seurat v3 -Visualize genes" (Visualize for example selected cluster marker genes with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
@@ -35,6 +35,16 @@ if (exists("data.combined") ){
 if(length(grep(",", biomarker)) != 0) {
    biomarker <- trimws(unlist(strsplit(biomarker, ",")))
 }
+
+# Sanity check: are the requested genes available in the data:
+all.genes <- rownames(x = seurat_obj)
+match(biomarker, all.genes)
+# if one of the genes is not in the list, print error message:
+if (!all(!is.na(match(biomarker, all.genes)))) { 
+  not.found <- biomarker[is.na(match(biomarker, all.genes))==TRUE]
+ #  print(paste("The gene you requested was not found in this dataset:", not.found))
+  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found))
+  }
 
 # Violin plot:
 pdf(file="biomarker_plot.pdf", width=12, height=12) 
