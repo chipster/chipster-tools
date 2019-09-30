@@ -1,6 +1,6 @@
-# TOOL single-cell-seurat-setup-v3.R: "Seurat v3 -Setup and QC" (Setup the Seurat object, check some quality control plots and filter the cells. As an input, give a .tar package of a folder which contains the 10X output files OR a DGE matrix for DropSeq data. Please check that your input is assigned correctly under the parameters! If you are planning to combine samples later on, make sure you name them in this tool!)
+# TOOL single-cell-seurat-setup-v3.R: "Seurat v3 -Setup and QC" (Setup the Seurat object, check some quality control plots and filter out genes. There are two options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix as input. If you are planning to combine samples later on, make sure you name them in this tool.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
-# INPUT OPTIONAL dropseq.tsv: "DGE table from DropSeq" TYPE GENERIC
+# INPUT OPTIONAL dropseq.tsv: "DGE table" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf 
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
@@ -17,6 +17,7 @@
 # 2018-04-24 ML + AMS improve the input tar handling
 # 2019-05-22 ML update Seurat version to 3.0
 # 2019-09-24 ML correct for cases where there are NaNs in percent.mt
+# 2019-09-30 EK add spport for lower case mitochondrial gene names
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions. 
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
@@ -68,8 +69,9 @@ if (groupident != "empty") {
 
 # QC
 # % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
-# NOTE: The pattern provided works for human gene names. You may need to adjust depending on your system of interest
-seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-")
+# NOTE: The pattern provided works for human and mouse gene names. You may need to adjust depending on your system of interest
+seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-")
+
 
 # pdf plots
 pdf(file="QCplots.pdf", , width=13, height=7) 
