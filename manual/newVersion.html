@@ -15,6 +15,43 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 7.10.2019: What is new in Chipster 3.16</h2>
+ 	
+		<b>Summary:</b> This version brings major improvements to single cell RNA-seq data analysis, because the single cell analysis tools have been updated to Seurat v3 and R3.6.1. 
+		<p>We would also like to encourage you to try our new <a href="https://chipster.rahtiapp.fi/home">web interface to Chipster</a>, which does not require Java (many universities do not provide Java anymore because Oracle's Java license policy changed). 
+		Users from Finnish universities can access the web based Chipster with their HAKA (university) account. 
+		Note that the analysis session format is different, so your sessions are not automatically transferred. However, we made a conversion system which allows you to upload old sessions from your laptop to the new Chipster.</p>
+		<!--  The example xxx demonstrates how these tools can be used.-->
+
+	
+	<ul>
+		<li><div class=header-item>New analysis tools</div>	
+			<ul> 
+				<li><a href="single-cell-seurat-extract-cluster.html">Single cell RNA-seq / Seurat v3 BETA -Extract cells in a cluster</a> retrieves cells for a given cluster.</li>
+				<li><a href="heatmap-for-rnaseq.html">RNA-seq / Heatmap for RNA-seq results</a> performs VST transformation and produces a heatmap.</li>			
+				<!--<li><a href=".html"> / </a> . -->				
+			</ul> 
+		</li>
+		
+		<li><div class=header-item>Improvements to analysis tools</div>		
+			<ul>
+				<li><a href="single-cell-seurat-filter-regress-v3.html">Single cell RNA-seq / Seurat v3 -Filter cells, normalize, regress and detect variable genes</a> detects highly variable genes using VST (variance stabilizing transformation).</li>			
+				<li><a href="single-cell-seurat-pca-v3.html">Single cell RNA-seq / Seurat v3 -PCA</a> allows you to specify how many PCs to plot.</li>				
+				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat v3 -Clustering and detection of cluster marker genes</a> produces now a UMAP plot in addition to tSNE, and returns only positive markers.</li>
+				<li><a href="single-cell-seurat-gene-plots-v3.html">Single cell RNA-seq / Seurat v3 -Visualize genes</a> produces a UMAP plot.</li>
+				<li><a href="single-cell-seurat-featureplot-v3.html">Single cell RNA-seq / Seurat v3 -Visualise features in UMAP plot</a> allows to color a UMAP plot based on gene expression or QC data such as the mitochondrial transcript percentage.</li>
+				<li><a href="single-cell-seurat-CCA-v3.html">Single cell RNA-seq / Seurat -Combine two samples</a> combines samples using a new approach: It performs CCA and L2 normalization to bring the samples in shared spaces, and then looks for mutual nearest neighbors.
+				These anchors are scored based on neighborhood in the PC space, and correction vectors are calculated based on anchors and scores.</li>
+				<li><a href="single-cell-seurat-integrated-analysis-v3.html">Single cell RNA-seq / Seurat v3 -Integrated analysis of two samples</a> has an option to use UMAP plot to visualize clusters.</li>
+				<li><a href="single-cell-seurat-diffexp-samples-v3.html">Single cell RNA-seq / Seurat v3 - Find conserved cluster markers and DE genes in two samples</a> returns only positive markers.</li>
+				<li><a href="single-cell-seurat-split-dot-plot-v3.html">Single cell RNA-seq / Seurat v3 -Visualize genes with cell type specific responses in two samples</a> produces UMAP and violin plots.</li>
+				<li><a href="enafetch.html">Utilities / Retrieve datasets from ENA database</a> can now handle paired end data.</li>	
+				<li><a href="infoseq.html">Misc / Sequence utilities / Display basic information about sequences</a> can now handle up to 300 000 sequences.</li>				
+			</ul> 
+		</li>		
+	</ul>
+	<hr />
+
 <h2>Version update 9.4.2019: What is new in Chipster 3.15</h2>
  	<p>
 		<b>Summary:</b> This version contains new tools for calling somatic variants (SNPs and INDELs) using the GATK4 Mutect2 pipeline. It also has tools for retrieving data from Illumina BaseSpace and ENA. Many  
