@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Extract cells in a cluster </h2>
+
+<h3>Description</h3>
+
+<p>
+This tool gives you a subset of the data: only those cells in a user defined cluster.
+
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Name of the cluster [3]</li>
+</ul>
+	
+	
+ <h3>Details</h3>
+  
+<p>
+As inputs, give the Seurat object created AFTER clustering step
+(cluster number is needed as an input parameter).
+</p>
+
+<p>
+Select the cluster you want to inspect by setting its name in the parameter field. 
+As an example, the parameter is set to cluster "3".
+</p>
+
+<p>
+You can continue analysing this subsetted R-object by running the Seurat tools again. 
+Note that the cell filtering (number of genes per cell, mito%) done in the original dataset
+effect this object as well.  
+</p>
+
+
+<h3>Output</h3>
+
+<ul>
+<li>seurat_obj_subset.Robj: The Seurat R-object containing only the cells in the chosen clustesr. Can be passed to the next Seurat tool, or imported to R. Not viewable in Chipster. </li>
+<li>QCplots.pdf: Quality control plots (similar to the ones in Setup tool.)</li>
+</ul>
+
+
+</body>
+
