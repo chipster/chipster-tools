@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-integrated-analysis-v3.R: "Seurat v3 BETA -Integrated analysis of two samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for two sample combined Seurat objects.) 
+# TOOL single-cell-seurat-integrated-analysis-v3.R: "Seurat v3 -Integrated analysis of two samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL seurat_obj_combined.Robj
