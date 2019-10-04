@@ -21,8 +21,11 @@ This tool gives you a subset of the data: only those cells in a user defined clu
  <h3>Details</h3>
   
 <p>
-As inputs, give the Seurat object created AFTER clustering step
-(cluster number is needed as an input parameter).
+As inputs, give the Seurat object created AFTER clustering step: either after
+<ul>
+ 	<li><b>Seurat v3 -Clustering and detection of cluster marker genes</b> tool,</li>
+ 	<li>or after <b>Seurat v3 -Integrated analysis of two samples</b> tool in case of two sample analysis. </li>
+</ul>
 </p>
 
 <p>
@@ -31,7 +34,17 @@ As an example, the parameter is set to cluster "3".
 </p>
 
 <p>
-You can continue analysing this subsetted R-object by running the Seurat tools again. 
+You can continue analysing this subsetted R-object by running the Seurat tools again;
+in the case you started with a single sample 
+(subsetting after <b>Seurat v3 -Clustering and detection of cluster marker genes</b> tool),
+you can start with the filtering and finding variable genes, and continue from there.
+<br>
+If you started with a combined Seurat object of two samples
+(subsetting after <b>Seurat v3 -Integrated analysis of two samples</b> tool),
+you can continue by running the after <b>Seurat v3 -Integrated analysis of two samples</b> tool again.
+</p>
+
+<p>
 Note that the cell filtering (number of genes per cell, mito%) done in the original dataset
 effect this object as well.  
 </p>
