@@ -60,9 +60,38 @@ Course material (2019):
 
 <h3><a name="single-cell">Single cell RNA-seq data analysis</a></h3>
 
-This course introduces single cell RNA-seq data analysis methods, tools and file formats. It covers the preprocessing steps of DropSeq data from raw reads to a digital gene expression matrix (DGE), 
-and how to find sub-populations of cells using clustering with the Seurat tools. You will also learn how to compare two samples and detect conserved cluster markers and differentially expressed genes in them. 
-Both DropSeq and 10X Genomics data are used in the exercises. The course takes one long day. You will learn how to 
+There are two courses for single cell RNA-seq data analysis. The more recent one focuses on the analysis of 10X data starting from the digital gene expression matrix (DGE), 
+while the older one also covers the preprocessing of DropSeq data from raw reads to a DGE. Both courses show how to find sub-populations of cells using clustering with the Seurat tools, but the older course uses Seurat v2 instead of v3.
+ You will also learn how to compare two samples and detect conserved cluster markers and differentially expressed genes in them. The course takes one day. 
+<br>
+<br>
+<u>Course 1 (September 2019)</u>
+<br>You will learn how to
+<ul>
+<li>create Seurat v3 object</li>
+<li>perform QC and filter out low quality cells</li>
+<li>normalize expression values</li>
+<li>scale data and regress out unwanted variability</li>
+<li>detect highly variable genes using VST</li>
+<li>perform principle component analysis (PCA) and select PCs to be used for clustering</li>
+<li>cluster cells and find marker genes for a cluster</li>
+<li>visualize clusters with UMAP and tSNE</li>
+<li>run canonical correlation analysis (CCA) to identify common sources of variation between two datasets</li>
+<li>integrate samples using the mutual nearest neighbor approach (anchors)</li>
+<li>find conserved cluster marker genes for two samples</li>
+<li>find differentially expressed genes in a cluster between two samples</li>
+<li>visualize genes with cell type specific responses in two samples</li>
+</ul>
+Course material:
+<ul>
+<li><a href="https://chipster.csc.fi/material/single-cell/scrnaseq20190924.pdf">slides</a> (September 2019)</li>
+<li><a href="https://chipster.csc.fi/material/single-cell/scrnaseq_exercises20190924.pdf">exercises: Clustering 10X Genomics data and Integrated analysis of two samples</a>. 
+The data are available on Chipster server in the example sessions listed in the exercise sheet.</li>
+<li>Note: excellent <a href="https://www.youtube.com/playlist?list=PLjiXAZO27elC_xnk7gVNM85I2IQl5BEJN">lecture videos covering scRNA-seq theory</a> from another course (May 2019)</li>
+</ul>
+<br>
+<u>Course 2 (March 2019)</u>
+<br>You will learn how to
 <ul>
 <li>check the quality of reads with FastQC</li>
 <li>tag reads with cell and molecular barcodes</li>
@@ -73,6 +102,7 @@ Both DropSeq and 10X Genomics data are used in the exercises. The course takes o
 <li>estimate the number of usable cells by checking the inflection point</li>
 <li>detect bead synthesis errors</li>
 <li>create and filter DGE</li>
+<li>create Seurat v2 object</li>
 <li>regress out unwanted variability</li>
 <li>detect variable genes and perform principle component analysis</li>
 <li>cluster cells and find marker genes for a cluster</li>
@@ -85,7 +115,7 @@ Both DropSeq and 10X Genomics data are used in the exercises. The course takes o
 
 Course material:
 <ul>
-<li><a href="https://chipster.csc.fi/material/single-cell/single_cell_RNAseq2019.pdf">slides</a> (2019)</li>
+<li><a href="https://chipster.csc.fi/material/single-cell/single_cell_RNAseq2019.pdf">slides</a> (March 2019)</li>
 <li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD-tnVMX_oYTCF1mWOmB8Xo">lecture and exercise videos</a> on one sample analysis</li>
 <li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD3R5bcssgM5JTcgyytKB9M">tutorial videos</a> on integrated analysis of two samples</li>
 <li><a href="https://chipster.csc.fi/material/single-cell/Single-cell-exercises-DropSeq-2018.pdf">exercises 1: Preprocessing DropSeq data</a>. The data is available on Chipster server in the example session listed in the exercise sheet.</li>
