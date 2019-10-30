@@ -48,15 +48,45 @@ The tool performs the following four steps. As an input, give the Seurat R-objec
 		<li><b>Uninteresting sources of variation in the expression values are regressed out</b> in order to improve 
 			dimensionality reduction and clustering later on.
 			Seurat implements a basic regression by constructing linear models to predict gene expression based on user-defined variables.
-			This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content.</i>.
+			This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage mitochondrial transcript content</i>.
 		
-		<br>You can also choose to regress out <i>cell cycle differences</i>.
+		<br><br>You can also choose to regress out <i>cell cycle differences</i>.
 		By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
 		In some cases this method can negatively impact downstream analysis,
 		particularly in differentiating processes, where stem cells are quiescent and differentiated cells are proliferating (or vice versa). 
 		Alternatively you can <i>regress out the difference between the G2M and S phase scores</i>.
 		This means that signals separating non-cycling cells and cycling cells will be maintained, but differences in cell cycle phase amongst proliferating cells (which are often uninteresting), will be regressed out of the data. 
-		<br>For more information about cell cycle filtering, check out the vignette <a href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">here</a>. </li>
+		<br>For more information about cell cycle filtering, check out the vignette <a href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">here</a>.
+		<br><br>
+		In current Seurat version, a list of cell cycle markers (from <a href="http://science.sciencemag.org/content/352/6282/189"> Tirosh et al, 2015 </a>) is loaded with Seurat;
+		<br>
+		s.genes
+		<br>
+		 "MCM5"     "PCNA"     "TYMS"     "FEN1"     "MCM2"    
+		 "MCM4"     "RRM1"     "UNG"      "GINS2"    "MCM6"    
+		"CDCA7"    "DTL"      "PRIM1"    "UHRF1"    "MLF1IP"  
+		"HELLS"    "RFC2"     "RPA2"     "NASP"     "RAD51AP1"
+		"GMNN"     "WDR76"    "SLBP"     "CCNE2"    "UBR7"    
+		"POLD3"    "MSH2"     "ATAD2"    "RAD51"    "RRM2"    
+		"CDC45"    "CDC6"     "EXO1"     "TIPIN"    "DSCC1"   
+		"BLM"      "CASP8AP2" "USP1"     "CLSPN"    "POLA1"   
+		"CHAF1B"   "BRIP1"    "E2F8"    
+		<br>
+		g2m.genes
+		<br>
+ 		"HMGB2"   "CDK1"    "NUSAP1"  "UBE2C"   "BIRC5"  
+		"TPX2"    "TOP2A"   "NDC80"   "CKS2"    "NUF2"   
+		"CKS1B"   "MKI67"   "TMPO"    "CENPF"   "TACC3"  
+		"FAM64A"  "SMC4"    "CCNB2"   "CKAP2L"  "CKAP2"  
+		 "AURKB"   "BUB1"    "KIF11"   "ANP32E"  "TUBB4B" 
+		"GTSE1"   "KIF20B"  "HJURP"   "CDCA3"   "HN1"    
+		"CDC20"   "TTK"     "CDC25C"  "KIF2C"   "RANGAP1"
+		"NCAPD2"  "DLGAP5"  "CDCA2"   "CDCA8"   "ECT2"   
+		"KIF23"   "HMMR"    "AURKA"   "PSRC1"   "ANLN"   
+		"LBR"     "CKAP5"   "CENPE"   "CTCF"    "NEK2"   
+		"G2E3"    "GAS2L3"  "CBX5"    "CENPA"  
+		
+		 </li>
 
 		<br>
 		<li><b>Genes which are highly variable across the cells are detected</b> by calculating the average expression and dispersion for each gene, 
