@@ -20,6 +20,9 @@ This tool can be used for two sample combined Seurat objects.
  <h3>Parameters</h3>
 <ul>
 		<li>Name of the cluster [3]</li>
+		<li>Only return positive conserved markers [TRUE]</li>
+		<li>Threshold for logFC of conserved markers [1]</li>
+		<li>Threshold for adjusted p-value of conserved markers [0.05]</li>
 </ul>
 	
 	
@@ -33,6 +36,12 @@ As inputs, give the combined Seurat object. <br>
 Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter is
 set to cluster "3".
 </p>
+
+<p>
+You can filter the conserved markers using the parameters. By default, only positive markers with
+logFC > 1 and adjusted p-value < 0.05 are listed in the table.
+</p>
+
 
 <p>
 <b>de-list.tsv</b> is a table containing the differentially expressed genes for the chosen cluster, compared
