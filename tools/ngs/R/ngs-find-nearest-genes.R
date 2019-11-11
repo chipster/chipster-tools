@@ -101,7 +101,6 @@ names(results_table) <- table_header
 # Write output
 # write.table(results_table, file="nearest-genes.tsv", sep="\t", col.names=T, row.names=T, quote=F)
 write.table(results_table, file="nearest-genes.tsv", sep="\t", col.names=T, row.names=F, quote=F)
-
 # EOF
 
 
