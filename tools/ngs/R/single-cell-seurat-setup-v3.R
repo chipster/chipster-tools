@@ -9,7 +9,6 @@
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-3.6.1
-# SLOTS 6
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -30,30 +29,30 @@ library(Matrix)
 library(gplots)
 
 # If using DropSeq data:
-if (file.exists("dropseq.tsv")){
-	dat <- read.table("dropseq.tsv", header=T, sep="\t", row.names=1)
-	
-# If using 10X data:
-}else if (file.exists("files.tar")){
-	
-	# Read the contents of the tar file into a list
-	system("tar tf files.tar > tar.contents 2>> log.txt")
-	file.list <- scan("tar.contents", what="", sep="\n")
-	
-	# Check that the input is a valid tar file
-	if (length(file.list) == 0){
-		stop(paste('CHIPSTER-NOTE: ', "It seems your input file is not a valid Tar package. Please check your input file."))
-	}
-	
-	# Open tar package. Make a folder called datadir, open the tar there so that each file 
-	# will be on the root level (remove everything from the name until the last "/" with the --xform option)
-	system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")	
-	
-	# Load the data
-	dat <- Read10X("datadir/")	
-	
-}else{
-	stop(paste('CHIPSTER-NOTE: ', "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
+if (file.exists("dropseq.tsv")) {
+  dat <- read.table("dropseq.tsv", header = TRUE, sep = "\t", row.names = 1)
+
+  # If using 10X data:
+} else if (file.exists("files.tar")) {
+
+  # Read the contents of the tar file into a list
+  system("tar tf files.tar > tar.contents 2>> log.txt")
+  file.list <- scan("tar.contents", what = "", sep = "\n")
+
+  # Check that the input is a valid tar file
+  if (length(file.list) == 0) {
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+  }
+
+  # Open tar package. Make a folder called datadir, open the tar there so that each file
+  # will be on the root level (remove everything from the name until the last "/" with the --xform option)
+  system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
+
+  # Load the data
+  dat <- Read10X("datadir/")
+
+} else {
+  stop(paste("CHIPSTER-NOTE: ", "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
 }
 
 # Initialize the Seurat object
@@ -63,7 +62,7 @@ seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = p
 
 # For sample detection later on
 if (groupident != "empty") {
-	seurat_obj@meta.data$stim <- groupident
+  seurat_obj@meta.data$stim <- groupident
 }
 
 
@@ -74,13 +73,13 @@ seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^
 
 
 # pdf plots
-pdf(file="QCplots.pdf", , width=13, height=7) 
+pdf(file = "QCplots.pdf",, width = 13, height = 7)
 
 # Violinplot
 if (sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) {
-	VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 } else {
-	VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 }
 
 # FeatureScatter (v3)
@@ -89,12 +88,12 @@ plot2 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeatur
 CombinePlots(plots = list(plot1, plot2))
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x=seurat_obj))), halign="center", valign="center", cex=2)
+textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
 
 dev.off() # close the pdf
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj.Robj")
+save(seurat_obj, file = "seurat_obj.Robj")
 
 ## EOF
 

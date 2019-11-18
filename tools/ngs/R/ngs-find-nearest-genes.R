@@ -1,4 +1,4 @@
-# TOOL ngs-find-nearest-genes.R: "Find the nearest genes for regions" (This tool takes set of genomic regions, such as ChIP-seq peaks, and fetches the nearest gene for each.)
+# TOOL ngs-find-nearest-genes.R: "Find the nearest genes for regions" (This tool takes a set of genomic regions, such as ChIP-seq peaks, and fetches the nearest gene for each.)
 # INPUT regions-list.tsv: "Table with genomic regions" TYPE GENERIC 
 # OUTPUT nearest-genes.tsv: "Table listing the nearest gene feature for each input region." 
 # PARAMETER species: "Genome" TYPE [Human_hg18: "Human (hg18\)", Human_hg19: "Human (hg19\)", Mouse_mm9: "Mouse (mm9\)", Mouse_mm10: "Mouse (mm10\)", Rat_rn4: "Rat (rn4\)", Rat_rn5: "Rat (rn5\)", Zebrafish_Zv8: "Zebrafish (Zv8\)", Zebrafish_Zv9: "Zebrafish (Zv9\)"] DEFAULT Human_hg19 (The genome to use for fetching annotations.)
@@ -67,7 +67,7 @@ if (species == "Zebrafish_Zv9") {
 	ensembl_dataset <- "drerio_gene_ensembl"
 }
 
-# Read in data from BED or tsv file and convert to BED format
+# Read in data from BED or tsv file and convert it to BED format
 if(length(grep("^column\\d+$", chr_column)) == 1 && length(grep("^column\\d+$", start_column)) == 1 && length(grep("^column\\d+$", end_column)) == 1) {
 	results_file <- read.table (file="regions-list.tsv", sep="\t", header=F)
 	chr_column <- as.numeric(gsub("^column", "", chr_column)) + 1
@@ -101,7 +101,6 @@ names(results_table) <- table_header
 # Write output
 # write.table(results_table, file="nearest-genes.tsv", sep="\t", col.names=T, row.names=T, quote=F)
 write.table(results_table, file="nearest-genes.tsv", sep="\t", col.names=T, row.names=F, quote=F)
-
 # EOF
 
 
