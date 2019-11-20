@@ -67,7 +67,8 @@ The marker genes for each cluster are written in the markers.tsv file.
 	<li>"negbinom": Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
 	<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
 </ul>
-<b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively.
+<b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively. 
+Please note that the DESeq2 method has not been included, because it was not designed for situations where there are thousands of samples (cells) and it is therefore very slow.
 </p>
 
 <p>
