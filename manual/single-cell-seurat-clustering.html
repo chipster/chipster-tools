@@ -58,21 +58,20 @@ The marker genes for each cluster are written in the markers.tsv file.
 <br>
 <br>Seurat currently implements the following tests: 
 <ul>
-	<li>"wilcox" : Wilcoxon rank sum test (default)</li>
-	<li>"bimod" : Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
-	<li>"roc" : Standard AUC classifier</li>
-	<li>"t" : Student's t-test</li>
-	<li>"tobit" : Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
-	<li>"poisson" : Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
-	<li>"negbinom" : Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
-	<li>"MAST" : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
-	<li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
+	<li>"wilcox": Wilcoxon rank sum test (default)</li>
+	<li>"bimod": Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
+	<li>"roc": Standard AUC classifier</li>
+	<li>"t": Student's t-test</li>
+	<li>"tobit": Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
+	<li>"poisson": Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
+	<li>"negbinom": Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
+	<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
 </ul>
 <b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively.
 </p>
 
 <p>
-The result file contains marker genes for all the clusters. You can retrieve markers for a specific cluster using the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a> . 
+The result file contains marker genes for all the clusters. You can retrieve markers for a specific cluster using the tool <a href="/manual/ngs-filter-results-column.html"></a>Utilities / Filter table by column value</a>. 
 For example, to get the markers for cluster 2, fill in the parameters accordingly: <br>
 Column to filter by = cluster <br>
 Does the first column have a title = no <br>

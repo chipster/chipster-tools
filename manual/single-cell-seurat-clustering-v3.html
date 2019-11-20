@@ -33,7 +33,7 @@ Cells are clustered using principal components (PCs) rather than genes.
 Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
 That tool also produces PC heatmaps and the elbow plot, which help you to decide the number of PCs to use.	
 <br><br>
-If you have low number of cells in your data, try lowering the perplexity parameter (the expected number of neighbours.)
+If you have low number of cells in your data, try lowering the perplexity parameter (the expected number of neighbours).
 <br><br>
 Graph-based clustering is performed using the Seurat function FindClusters, which first constructs a KNN graph using the Euclidean distance in PCA space,
 and then refines the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccards distance).
@@ -72,15 +72,15 @@ The marker genes for each cluster are written in the <b>markers.tsv</b> file.
 <br>
 <br>Seurat currently implements the following tests: 
 <ul>
-	<li>"wilcox" : Wilcoxon rank sum test (default)</li>
-	<li>"bimod" : Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
-	<li>"roc" : Standard AUC classifier</li>
-	<li>"t" : Student's t-test</li>
-	<li>"tobit" : Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
-	<li>"poisson" : Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
-	<li>"negbinom" : Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
-	<li>"MAST" : GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
-	<li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>
+	<li>"wilcox": Wilcoxon rank sum test (default)</li>
+	<li>"bimod": Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)</li>
+	<li>"roc": Standard AUC classifier</li>
+	<li>"t": Student's t-test</li>
+	<li>"tobit": Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
+	<li>"poisson": Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based datasets</li>
+	<li>"negbinom": Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets</li>
+	<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology, 2015)</li>
+<!--  <li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>-->	
 </ul>
 <b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying poisson and negative-binomial distribution, respectively.
 </p>
