@@ -1,89 +1,98 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
-<head><title></title></head>
+
+<head>
+	<title></title>
+</head>
+
 <body>
 
-<h2>Seurat -Find conserved cluster markers and DE genes in two samples </h2>
+	<h2>Seurat -Find conserved cluster markers and DE genes in two samples </h2>
 
-<h3>Description</h3>
+	<h3>Description</h3>
 
-<p> 
-This tool gives you
-<ul>
- <li> The cell type markers that are conserved across conditions (conserved_markers.tsv)</li> and 
-<li> The differentially expressed genes between the conditions (de-list.tsv) </li>
-</ul>
-for a given cluster. "Conditions" are the ones determined in the Setup tool with the Sample or group name parameter.
-This tool can be used for two sample combined Seurat objects.
-</p>
- 
- <h3>Parameters</h3>
-<ul>
+	<p>
+		This tool gives you
+		<ul>
+			<li> The cell type markers that are conserved across conditions (conserved_markers.tsv)</li> and
+			<li> The differentially expressed genes between the conditions (de-list.tsv) </li>
+		</ul>
+		for a given cluster. "Conditions" are the ones determined in the Setup tool with the Sample or group name
+		parameter.
+		This tool can be used for two sample combined Seurat objects.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
 		<li>Name of the cluster [3]</li>
 		<li>Only return positive conserved markers [TRUE]</li>
 		<li>Threshold for logFC of conserved markers [1]</li>
 		<li>Threshold for adjusted p-value of conserved markers [0.05]</li>
-</ul>
-	
-	
- <h3>Details</h3>
-  
-<p>
-As inputs, give the combined Seurat object. <br>
-</p>
-
-<p>
-Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter is
-set to cluster "3".
-</p>
-
-<p>
-You can filter the conserved markers using the parameters. By default, only positive markers with
-logFC > 1 and adjusted p-value < 0.05 are listed in the table.
-</p>
+		<li>Threshold for logFC of DE genes [1]</li>
+		<li>Threshold for adjusted p-value of DE genes [0.05]</li>
+	</ul>
 
 
-<p>
-<b>de-list.tsv</b> is a table containing the differentially expressed genes for the chosen cluster, compared
-to all the other cells in the data, and associated statistics: 
-<ul>
-	<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the 
-	likelihood that the gene is in the list just be chance) </li>
-	<li><b>avg_logFC</b> = average log fold change (how much higher (lower) the expression of this gene is in the chosen
-	cluster, compared to all the other cells </li>
-	<li><b>pct.1</b> = what percentage of the cells in the chosen cluster show some expression for this gene</li>
-	<li><b>pct.2</b> = what percentage of the cells <b>not</b> in the chosen cluster (=all the other cells) show some expression for this gene</li>
-	<li><b>p-val_adj</b> = adjusted/corrected p-value. This value is multiple testing corrected: 
-	when we test over thousands of genes, we would statistically start getting some significantly differentially
-	expressed genes just by chance. There are different methods to correct for this, 
-	here a <i>Bonferroni</i> correction is used. When filtering the table and reporting your results, 
-	use this value.</li>
-</ul>
-</p>
+	<h3>Details</h3>
 
-<p>
-<b>conserved_markers.tsv</b> is a table containing a ranked list of conserved markers in the chosen cluster (=genes that show changes in 
-expression in this particular cell type/cluster, regardless of the treatment/sample),
-and associated statistics: 
-<ul>
-	<li>the values listed above for both samples in the data </li>
-	<li> max_p-val = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
-	<li> min_p-val = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
-</ul>
-</p>
+	<p>
+		As inputs, give the combined Seurat object. <br>
+	</p>
 
-<p>
-For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials for multiple sample analysis</a>.
-</p>
+	<p>
+		Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter
+		is
+		set to cluster "3".
+	</p>
 
-<h3>Output</h3>
+	<p>
+		You can filter the conserved markers using the parameters. By default, only positive markers with
+		logFC > 1 and adjusted p-value < 0.05 are listed in the table. </p> <p>
+			<b>de-list.tsv</b> is a table containing the differentially expressed genes for the chosen cluster, compared
+			to all the other cells in the data, and associated statistics:
+			<ul>
+				<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
+					likelihood that the gene is in the list just be chance) </li>
+				<li><b>avg_logFC</b> = average log fold change (how much higher (lower) the expression of this gene is
+					in the chosen
+					cluster, compared to all the other cells </li>
+				<li><b>pct.1</b> = what percentage of the cells in the chosen cluster show some expression for this gene
+				</li>
+				<li><b>pct.2</b> = what percentage of the cells <b>not</b> in the chosen cluster (=all the other cells)
+					show some expression for this gene</li>
+				<li><b>p-val_adj</b> = adjusted/corrected p-value. This value is multiple testing corrected:
+					when we test over thousands of genes, we would statistically start getting some significantly
+					differentially
+					expressed genes just by chance. There are different methods to correct for this,
+					here a <i>Bonferroni</i> correction is used. When filtering the table and reporting your results,
+					use this value.</li>
+			</ul>
+	</p>
 
-<ul>
-<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
-<li>de-list.tsv: Differentially expressed genes between the conditions </li>
-</ul>
+	<p>
+		<b>conserved_markers.tsv</b> is a table containing a ranked list of conserved markers in the chosen cluster
+		(=genes that show changes in
+		expression in this particular cell type/cluster, regardless of the treatment/sample),
+		and associated statistics:
+		<ul>
+			<li>the values listed above for both samples in the data </li>
+			<li> max_p-val = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+			<li> min_p-val = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+		</ul>
+	</p>
+
+	<p>
+		For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
+			for multiple sample analysis</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+		<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
+		<li>de-list.tsv: Differentially expressed genes between the conditions </li>
+	</ul>
 
 
 
 </body>
-
