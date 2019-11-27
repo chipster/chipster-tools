@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-setup-v3.R: "Seurat v3 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are two options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix as input. If you are planning to combine samples later on, make sure you name them in this tool.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table" TYPE GENERIC
-# OUTPUT OPTIONAL QCplots.pdf 
+# OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
 # OUTPUT OPTIONAL seurat_obj.Robj
@@ -18,7 +18,7 @@
 # 2019-09-24 ML correct for cases where there are NaNs in percent.mt
 # 2019-09-30 EK add spport for lower case mitochondrial gene names
 
-# Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions. 
+# Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 
@@ -47,6 +47,11 @@ if (file.exists("dropseq.tsv")) {
   # Open tar package. Make a folder called datadir, open the tar there so that each file
   # will be on the root level (remove everything from the name until the last "/" with the --xform option)
   system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
+
+  # rename features.tsv as genes.tsv (Read10X SHOULD work with features.tsv as well, but it doesn't, yet at least)
+  if (file.exists("datadir/features.tsv")) {
+    system("mv datadir/features.tsv datadir/genes.tsv")
+  }
 
   # Load the data
   dat <- Read10X("datadir/")
