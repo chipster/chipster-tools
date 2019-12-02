@@ -4,8 +4,8 @@
 # OUTPUT OPTIONAL conserved_markers.tsv
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Only return positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
-# PARAMETER OPTIONAL logFC.conserved: "Fold change threshold for conserved markers in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Threshold for the lnFC of the conserved cluster marker genes. Genes with an average fold change smaller than this are not included in the analysis.)
-# PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Threshold for the lnFC of the DE genes. Genes with an average fold change smaller than this are not included in the analysis.)
+# PARAMETER OPTIONAL logFC.conserved: "Fold change threshold for conserved markers in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. Note that the base of log is e, so if you are interested in two-fold expression changes in linear scale, you need to enter 0.693 here.)
+# PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. Note that the base of log is e, so if you are interested in two-fold expression changes in linear scale, you need to enter 0.693 here.)
 # PARAMETER OPTIONAL pval.cutoff.conserved: "Adjusted p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the conserved cluster marker genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # RUNTIME R-3.6.1
@@ -33,10 +33,12 @@ cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, groupi
 # PARAMETER logFC.cutoff.conserved: "Threshold for logFC of conserved markers" TYPE INTEGER DEFAULT 1 (Threshold for the logFC of the conserved cluster markers: by default, fold changes smaller than 1 are filtered out.)
 # In case of negative fold changes;
 # logFC.cutoff.conserved_2 <- -logFC.cutoff.conserved
-# dat2 <- subset(cluster.markers, (CTRL_avg_logFC >= logFC.cutoff.conserved | CTRL_avg_logFC <= logFC.cutoff.conserved_2) & (STIM_avg_logFC >= logFC.cutoff.conserved | STIM_avg_logFC <= logFC.cutoff.conserved_2))
+# Note: hardcoded column names need to be changed to the stim levels in the next line
+# dat2 <- subset(cluster.markers, (CTRL_avg_logFC >= logFC.cutoff.conserved | CTRL_avg_logFC <= logFC.cutoff.conserved_2) & (STIM_avg_logFC >= logFC.cutoff.conserved | STIM_avg_logFC <= logFC.cutoff.conserved_2)) 
 
 # Filter conserved marker genes based on adj p-val:
-# dat2 <- subset(cluster.markers, (CTRL_p_val_adj < pval.cutoff.conserved & STIM_p_val_adj < pval.cutoff.conserved)) # hardcoded column names need to be changed to the stim levels
+# Note: hardcoded column names need to be changed to the stim levels
+# dat2 <- subset(cluster.markers, (CTRL_p_val_adj < pval.cutoff.conserved & STIM_p_val_adj < pval.cutoff.conserved))
 dat2 <- subset(cluster.markers, (cluster.markers[,5] < pval.cutoff.conserved & cluster.markers[,10] < pval.cutoff.conserved))
 
 # Write to table
