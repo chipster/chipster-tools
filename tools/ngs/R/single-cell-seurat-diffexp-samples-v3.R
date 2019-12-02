@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL conserved_markers.tsv
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
-# PARAMETER OPTIONAL only.positive: "Only return positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
+# PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.conserved: "Fold change threshold for conserved markers in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. Note that the base of log is e, so if you are interested in two-fold expression changes in linear scale, you need to enter 0.693 here.)
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. Note that the base of log is e, so if you are interested in two-fold expression changes in linear scale, you need to enter 0.693 here.)
 # PARAMETER OPTIONAL pval.cutoff.conserved: "Adjusted p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the conserved cluster marker genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
