@@ -3,3 +3,5 @@
 .gradle/
 deploy/node_modules
 tools/kielipankki
+deploy/build/tools.tar.gz
+tools/ngs/R/.Rapp.history

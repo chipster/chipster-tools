@@ -191,18 +191,7 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single cell RNA-seq" color="#37dddd">
-		<tool>single-cell-preprocessing.R</tool>
-		<!--<tool>picard-fastqtosam.R</tool> --> 
-		<!--<tool>single-cell-TagBam.R</tool> --> 
-		<!--<tool>single-cell-FilterBam.R</tool> --> 
-		<!--<tool>picard-samtofastq.R</tool> --> 		
-	    <!--<tool>picard-sortsam.R</tool>	--> 
-		<tool>picard-merge-bam-alignment.R</tool>	    
-		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
-		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
-		<tool>single-cell-bam-tag-histogram.R</tool>	  	
-		<tool>single-cell-digital-expression.R</tool>	   	
+	<category name="Single cell RNA-seq" color="#37dddd">	   	
 		<tool>single-cell-seurat-setup-v3.R</tool>	   	
 		<tool>single-cell-seurat-filter-regress-v3.R</tool>	   	
 		<tool>single-cell-seurat-pca-v3.R</tool>	   	
@@ -213,7 +202,14 @@
 		<tool>single-cell-seurat-integrated-analysis-v3.R</tool>	
 		<tool>single-cell-seurat-diffexp-samples-v3.R</tool>	
 		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>	
-		<tool>single-cell-seurat-update-object-v3.R</tool>
+		<tool>single-cell-seurat-extract-cluster.R</tool>
+		<!--<tool>single-cell-seurat-update-object-v3.R</tool>--> 
+		<!-- Dropseq tools: --> 
+		<tool>single-cell-preprocessing.R</tool>
+		<tool>picard-merge-bam-alignment.R</tool>	
+		<tool>single-cell-bam-tag-histogram.R</tool>	  	
+		<tool>single-cell-digital-expression.R</tool>
+		<!-- Seurat v2 tools, to be removed: --> 
 		<tool>single-cell-seurat-setup.R</tool>	   	
 		<tool>single-cell-seurat-filter-regress.R</tool>	   	
 		<tool>single-cell-seurat-pca.R</tool>	   	
@@ -225,6 +221,13 @@
 		<tool>single-cell-seurat-split-dot-plot.R</tool>
 		<tool>single-cell-seurat-featureplot.R</tool>	
 		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
+		<!--<tool>picard-fastqtosam.R</tool> --> 
+		<!--<tool>single-cell-TagBam.R</tool> --> 
+		<!--<tool>single-cell-FilterBam.R</tool> --> 
+		<!--<tool>picard-samtofastq.R</tool> --> 		
+	    <!--<tool>picard-sortsam.R</tool>	--> 
+		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
+		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">

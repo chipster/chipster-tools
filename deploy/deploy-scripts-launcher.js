@@ -32,7 +32,10 @@ function updateNodeModulesIfNecessary() {
       ) {
         console.log("Update node_modules");
 
-        return utils.run("npm", ["install"], "deploy").pipe(
+        // it's win32 also in 64 bit Windows
+        const npm = process.platform === "win32" ? "npm.cmd" : "npm"; 
+
+        return utils.run(npm, ["install"], "deploy").pipe(
           mergeMap(() => {
             obj[nodeModulesVersionKey] = currentNodeModulesVersion;
             return bindNodeCallback(fs.writeFile)(
