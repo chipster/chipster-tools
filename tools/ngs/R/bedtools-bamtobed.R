@@ -16,14 +16,22 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "bamToBed"))
 
 # options
 options <- paste("")
-if (output.type == "BEDPE") {options <- paste(optons, "-bedpe")}
-if (output.type == "BED12") {
-	options <- paste(options, "-bed12")
-	options <- paste(options, "-color", color)
+if (output.type == "BEDPE") {
+  options <- paste(options, "-bedpe")
 }
-if (split == "yes") {options <- paste(options, "-split")}
-if (ed == "yes") {options <- paste(options, "-ed")}
-if (cigar == 'yes') {options <- paste(options,"-cigar")}
+if (output.type == "BED12") {
+  options <- paste(options, "-bed12")
+  options <- paste(options, "-color", color)
+}
+if (split == "yes") {
+  options <- paste(options, "-split")
+}
+if (ed == "yes") {
+  options <- paste(options, "-ed")
+}
+if (cigar == 'yes') {
+  options <- paste(options, "-cigar")
+}
 
 # input files
 options <- paste(options, "-i", "file.a")
@@ -36,9 +44,9 @@ system(command)
 
 # Generate output/error message
 if (file.info("bamtobed.tmp")$size > 0) {
-	system("mv bamtobed.tmp bamtobed.bed")
+  system("mv bamtobed.tmp bamtobed.bed")
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+  system("mv error.tmp error.txt")
+} else {
+  system("echo \"# No results found\" > error.txt")
 }
