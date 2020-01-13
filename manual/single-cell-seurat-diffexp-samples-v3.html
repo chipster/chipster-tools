@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat -Find conserved cluster markers and DE genes in two samples </h2>
+
+	<h3>Description</h3>
+
+	<p>
+		For a given cluster this tool gives you
+		<ul>
+			<li> the cell type markers that are conserved across conditions (conserved_markers.tsv)</li>
+			<li> differentially expressed genes between the conditions (de-list.tsv) </li>
+		</ul>
+		Conditions are determined in the Setup tool with the Sample or Group name parameter.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Name of the cluster [3]</li>
+		<li>Return only positive marker genes [TRUE]</li>
+		<li>Fold change threshold for conserved markers in ln scale [0.25]</li>
+		<li>Fold change threshold for differentially expressed genes in ln scale [0.25]</li>
+		<li>Adjusted p-value cutoff for conserved markers [0.05]</li>
+		<li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
+	</ul>
+
+
+	<h3>Details</h3>
+
+	<p>
+		As inputs, give the combined Seurat object. <br>
+	</p>
+
+	<p>
+		Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter
+		is set to cluster "3".
+	</p>
+
+	<p>
+		You can filter both the conserved marker genes and the differentially expressed genes using the parameters. By default, only genes with
+		adjusted p-value < 0.05 are listed in the result table and only positive markers are kept. Note that Seurat adjusts p-values using the rather conserved Bonferroni method for multiple testing correction.
+		</p> 
+		<p>You can choose to include in the analysis only genes whose average fold change is higher than a selected value. This prefiltering speeds up the analysis
+		and narrows down the result list. Note that Seurat calculates fold change in ln scale (log base e), so if you are interested in two-fold expression changes in linear scale, 
+		you need to enter 0.693 in the parameter.
+		</p> 
+		<p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the two conditions in the selected cluster. The columns include 
+			<ul>
+				<li><b>p_val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
+					likelihood that the gene is in the list just be chance) </li>
+				<li><b>p_val_adj</b> = adjusted p-value. This value is corrected for multiple testing:
+					when we test thousands of genes, we can get some statistically significantly
+					differentially expressed genes just by chance. There are different methods to correct for this,
+					Seurat uses the Bonferroni method. When filtering the table and reporting your results,
+					use this value.</li>
+				<li><b>avg_logFC</b> = average ln fold change (how much higher or lower the expression of this gene is
+					in the chosen cluster between the conditions </li>
+				<li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene</li>
+				<li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene</li>
+			</ul>
+	</p>
+
+	<p>
+		<b>conserved_markers.tsv</b> contains a ranked list of conserved marker genes for the chosen cluster
+		(= genes that show specific expression in this particular cell type/cluster, regardless of the treatment). 
+		In addition to the columns listed above, this table contains also the following columns:
+		<ul>
+			<li> max_pval = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+			<li> min_pval = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+		</ul>
+	</p>
+
+	<p>
+		For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
+			for multiple sample analysis</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+		<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
+		<li>de-list.tsv: Differentially expressed genes between the conditions </li>
+	</ul>
+
+
+
+</body>

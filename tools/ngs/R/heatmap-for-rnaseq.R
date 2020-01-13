@@ -12,12 +12,14 @@
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 800 (Height of the image.)
 
 
-# 12.04.2017 ML
+# 12.04.2018 ML
+# 30.08.2018 ML switch to pheatmap for plotting
 
 # Functions used:
 source(file.path(chipster.common.path, "tables-utils.R"))
 source(file.path(chipster.common.path, "deseq-transform.R"))
 
+library("pheatmap")
 
 ## Normalise the raw counts 
 # Load the counts data and extract expression value columns
@@ -50,6 +52,10 @@ write.table(merged_part, "vst-transformed-counts.tsv", sep="\t", row.names=T, co
 
 # Annotated heatmap
 
+number_of_genes <- nrow(dat2)
+pdf(file="heatmap.pdf", width=image.width/72, height=image.height/72)
+#pdf(file="heatmap.pdf", width=image.width, height=image.height)
+
 col_from<-phenodata[,pmatch(column,colnames(phenodata))] # select the column from phenodata for plotting sample names
 # Use gene symbols as rownames instead of gene IDs
 if (use.genenames == "symbols") {
@@ -57,17 +63,20 @@ if (use.genenames == "symbols") {
 	stop("CHIPSTER-NOTE: Sorry, there is no symbol column available in the list of differentially expressed genes. Try using the Annotation Ensembl identifiers tool in the Utilities category and use the result file as input!")
     }else{
         row_from <- merged$symbol
+     	# version 1:
+		# heatmap(data.matrix(dat2), labCol = col_from, labRow = row_from, col = topo.colors(20))
+		# Version 2, with pheatmap
+		pheatmap(data.matrix(dat2), labels_col = col_from, labels_row = row_from, cellwidth=image.width/70 , cellheight=image.height/(number_of_genes+30))
     }
-}
-pdf(file="heatmap.pdf", width=image.width/72, height=image.height/72)
+}else{
+        # Version 1:
+		# heatmap(data.matrix(dat2), labCol = col_from, col = topo.colors(20)) 
+		# Version 2, with pheatmap
+		pheatmap(data.matrix(dat2), labels_col = col_from, cellwidth=image.width/70 , cellheight=image.height/(number_of_genes+30))
+ 
+    }
 
-# Change this to pheatmap when the package is production
-heatmap(data.matrix(dat2), labCol = col_from, labRow = row_from, col = topo.colors(20)) 
-
-# nicer version, but needs install.packages("pheatmap")
-# library("pheatmap")
-# pheatmap(data.matrix(dat2), labels_col = col_from, cellwidth=image.width/30 , cellheight=image.height/30)
- dev.off()
+dev.off()
 
 # EOF
 

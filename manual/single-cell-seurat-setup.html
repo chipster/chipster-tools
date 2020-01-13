@@ -39,20 +39,23 @@ As inputs, user can give <b>EITHER</b>
 </p>
 
 <p>
-After setting up the object, you can choose to filter the data according to 
-in how many cells the genes are required to be detected.
+After setting up the object, some basic filtering is performed. 
+At this step, user can define:
+<ul>
+	<li>Filtering genes: in how many cells a gene is required to be detected </li>
+	<li>Filtering cells: how many genes are required to be detected in a cell </li>
+</ul>
 </p>
 
 <p>
 Next, some quality control plots are drawn in the QC-plots.pdf file. 
 Note that it might be easier to view this large pdf with the external viewer.
 <br>
-The first plot shows the number of genes (nFeature), UMIs (nCount_RNA) and 
-the percentage of mitochondrial genes (percent.mt) in the cells.
-The next plot compares the percent.mt and nFeature to nCount_RNA.
-These plots can be used to estimate the outliers: the upper limits for number of genes or molecules per cell 
-and mitochondrial percentage.
-Check the plots and determine these cut-offs, and use them in the <a href="https://chipster.csc.fi/manual/single-cell-seurat-filter-regress.html">filtering & regression tool</a>.
+The first plot shows the number of genes (nGene), UMIs (nUMI) and 
+the percentage of mitochondrial genes (percent.mito) in the cells.
+The next plot compares the percent.mito and nGene to nUMI.
+These plots can be used to estimate the outliers: the upper limits for number of genes per cell and mitochondrial percentage.
+Check the plots and determine these cut-offs, and use them in the filtering & regression tool.
 </p>
 
 <p>

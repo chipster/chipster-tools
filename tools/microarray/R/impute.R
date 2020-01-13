@@ -4,8 +4,8 @@
 # PARAMETER imputation.method: "Imputation method" TYPE [mean: mean, median: median, knn: knn] DEFAULT knn (Imputation method)
 # PARAMETER row.or.col: "Row wise or column wise" TYPE [row: row, column: column] DEFAULT column (Is the mean\/median computed based on rows \(gene wise\) or columns \(array\/sample wise\).)
 # PARAMETER number.of.neighbors: "Number of neighbors" TYPE INTEGER FROM 1 TO 100000 DEFAULT 5 (Number of neighbors to use for knn imputation)
-# PARAMETER missing.row.max: "Missing values row max" TYPE PERCENT DEFAULT 20 (Maximum number of missing values on a row)
-# PARAMETER missing.column.max: "Missing values column max" TYPE PERCENT DEFAULT 20 (Maximum number of missing values on a column)
+# PARAMETER missing.row.max: "Missing values row max" TYPE INTEGER FROM 0 TO 100 DEFAULT 20 (Maximum number of missing values on a row, as a  percentage 0-100)
+# PARAMETER missing.column.max: "Missing values column max" TYPE INTEGER FROM 0 TO 100 DEFAULT 20 (Maximum number of missing values on a column, as a percentage 0-100)
 
 
 # JTT 22.06.2006: Imputation of missing values by mean or median

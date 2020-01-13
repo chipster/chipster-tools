@@ -6,9 +6,9 @@
 # OUTPUT OPTIONAL cleaned.bam
 # OUTPUT OPTIONAL synthesis_stats.txt
 # OUTPUT OPTIONAL synthesis_stats_summary.txt
-# PARAMETER filtering.type: "How to filter the DGE matrix" TYPE [MIN_NUM_GENES_PER_CELL:"Min number of genes per cell" , NUM_CORE_BARCODES:"Number of core barcodes"] DEFAULT MIN_NUM_GENES_PER_CELL (How to filter the DGE matrix, based on minimum number of genes per cell, or by choosing the top N cells which have most reads. Set the number in the Filtering parameter field below.)
-# PARAMETER filter.param: "Filtering threshold" TYPE INTEGER DEFAULT 0 (The corresponding parameter for filtering the DGE matrix.)
-# PARAMETER OPTIONAL num.barcodes: "Number of barcodes to correct for bead synthesis error" TYPE INTEGER DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. It is advisable to use roughly 2 times the anticipated number cells, as it was empirically found out that this allows to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode.)
+# PARAMETER filtering.type: "How to filter the DGE matrix" TYPE [MIN_NUM_GENES_PER_CELL:"Minimum number of genes per cell" , NUM_CORE_BARCODES:"Number of core barcodes"] DEFAULT MIN_NUM_GENES_PER_CELL (How to filter the DGE matrix, based on minimum number of genes per cell, or by choosing the top N cells which have most reads. Set the number in the Filtering parameter field below.)
+# PARAMETER filter.param: "Filtering threshold" TYPE INTEGER FROM 0 TO 20000 DEFAULT 0 (The corresponding parameter for filtering the DGE matrix. Maximum value of this parameter is limited to 20000 to avoid excessive memory usage. Contact support if you need this limit to be raised.)
+# PARAMETER OPTIONAL num.barcodes: "Number of barcodes to correct for bead synthesis error" TYPE INTEGER FROM 0 TO 50000 DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. It is advisable to use roughly 2 times the anticipated number cells, as it was empirically found out that this allows to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode. Maximum value of this parameter is limited to 50000 to avoid excessive memory usage. Contact support if you need this limit to be raised.)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
 
 
@@ -24,29 +24,29 @@
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
-if (filter.param < 1) { 
-	stop(paste('CHIPSTER-NOTE: ', "Please set a reasonable number to the filtering parameter."))	
+if (filter.param < 1) {
+  stop(paste("CHIPSTER-NOTE: ", "Please set a reasonable number to the filtering parameter."))
 }
 
 # STEP 1: Detect bead synthesis errors:
 # command 
-command <- paste(path.dropseq, "/DetectBeadSynthesisErrors I=input.bam O=cleaned.bam OUTPUT_STATS=synthesis_stats.txt SUMMARY=synthesis_stats_summary.txt NUM_BARCODES=",num.barcodes," PRIMER_SEQUENCE=", primer.sequence, " 2>>log.txt", sep="")
+command <- paste(path.dropseq, "/DetectBeadSynthesisErrors I=input.bam O=cleaned.bam OUTPUT_STATS=synthesis_stats.txt SUMMARY=synthesis_stats_summary.txt NUM_BARCODES=", num.barcodes, " PRIMER_SEQUENCE=", primer.sequence, " 2>>log.txt", sep = "")
 # run the tool
 system(command)
 
 
 # STEP 2: Digital expression matrix:
 # command start
-command.start <- paste(path.dropseq, "/DigitalExpression I=cleaned.bam O=digital_expression.txt.gz SUMMARY=digital_expression_summary.txt", sep="")
+command.start <- paste(path.dropseq, "/DigitalExpression I=cleaned.bam O=digital_expression.txt.gz SUMMARY=digital_expression_summary.txt", sep = "")
 # parameters
-command.parameters <- paste(filtering.type, "=", filter.param, sep="")
+command.parameters <- paste(filtering.type, "=", filter.param, sep = "")
 #command.parameters <- ""
 #if (num.core.barcodes != "empty"){
-#	command.parameters <- paste(command.parameters, "NUM_CORE_BARCODES=", num.core.barcodes)
+# command.parameters <- paste(command.parameters, "NUM_CORE_BARCODES=", num.core.barcodes)
 #}else if (num.genes != "empty"){
-#	command.parameters <- paste(command.parameters, "MIN_NUM_GENES_PER_CELL=", num.genes)
+# command.parameters <- paste(command.parameters, "MIN_NUM_GENES_PER_CELL=", num.genes)
 #}else if (num.transcripts != "empty"){
-#	command.parameters <- paste(command.parameters, "MIN_NUM_TRANSCRIPTS_PER_CELL=", num.transcripts)
+# command.parameters <- paste(command.parameters, "MIN_NUM_TRANSCRIPTS_PER_CELL=", num.transcripts)
 #}
 
 # run the tool
