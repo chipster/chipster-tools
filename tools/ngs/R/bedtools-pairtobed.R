@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL error.txt
 # PARAMETER abam: "File A is BAM format" TYPE [yes, no] DEFAULT no (Select yes if file A is BAM format.)
 # PARAMETER OPTIONAL ubam: "Write uncompressed BAM output" TYPE [yes,no] DEFAULT no (Write uncompressed BAM output. Default is to write compressed BAM.) 
-# PARAMETER OPTIONAL bedpe: "When using BAM input, write output as BEDPE." TYPE [yes,no] DEFAULT no (When using BAM input, write output as BEDPE. The default is to write output in BAM.) 
+# PARAMETER OPTIONAL bedpe: "When using BAM input, write output as BEDPE." TYPE [yes,no] DEFAULT no (When using BAM input, write output as BEDPE. The default is to write output as BAM.) 
 # PARAMETER OPTIONAL ed: "Use BAM total edit distance for BEDPE score" TYPE [yes, no] DEFAULT no (Use BAM total edit distance (NM tag\) for BEDPE score. Default for BEDPE is to use the minimum of of the two mapping qualities for the pair. When this option is used the total edit distance from the two mates is reported as the score.)
 # PARAMETER OPTIONAL f: "Minimum overlap" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.000000001 (Minimum overlap required as a fraction of A (e.g. 0.05\). Default is 1E-9 (effectively 1bp\))
 # PARAMETER OPTIONAL s: "Force strandedness" TYPE [yes, no] DEFAULT no (Enforce strandedness when finding overlaps. Default is to ignore stand. Not applicable with  output type inspan or outspan.)
@@ -28,28 +28,40 @@
 binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "pairToBed"))
 
 # optional options
-outputfiletype <- "bed"
+
 options <- paste("")
+
 if (abam == "yes") {
-	outputfiletype <- "bam"
-	if (ubam == "yes") {
-		options <- paste(options, "-ubam")
-	}
-	if (bed == "yes") {
-		outputfiletype <- "bed"
-		options <- paste(options, "-bedbe")		
-	}
+  if (bedpe == "yes") {
+    outputfiletype <- "bedpe"
+    options <- paste(options, "-bedpe")
+  } else {
+    outputfiletype <- "bam"
+    if (ubam == "yes") {
+      options <- paste(options, "-ubam")
+    }
+  }
+} else {
+  outputfiletype <- "bed"
 }
 
-if (ed == "yes") {options <- paste(options, "-ed")}
-options <- paste(options, "-f", f) 
-if (s == "yes") {options <- paste(options, "-s")}
-options <- paste(options, "-type", type) 
+if (ed == "yes") {
+  options <- paste(options, "-ed")
+}
+options <- paste(options, "-f", f)
+if (s == "yes") {
+  options <- paste(options, "-s")
+}
+options <- paste(options, "-type", type)
 
 # input files
-# input files
-if (abam == "yes") {options <- paste(options, "-abam file.a -b file.b")}
-if (abam == "no") {options <- paste(options, "-a file.a -b file.b")}
+
+if (abam == "yes") {
+  options <- paste(options, "-abam file.a -b file.b")
+}
+if (abam == "no") {
+  options <- paste(options, "-a file.a -b file.b")
+}
 
 
 # command
@@ -60,15 +72,18 @@ system(command)
 
 # Generate output/error message
 if (file.info("pairtobed.tmp")$size > 0) {
-	if (outputfiletype == "bed"){
-		system("mv pairtobed.tmp pairtobed.bed")
-	}
-	if (outputfiletype == "bam"){
-		system("mv pairtobed.tmp pairtobed.bam")
-	}	
+  if (outputfiletype == "bed") {
+    system("mv pairtobed.tmp pairtobed.bed")
+  }
+  if (outputfiletype == "bedpe") {
+    system("mv pairtobed.tmp pairtobed.bedpe")
+  }
+  if (outputfiletype == "bam") {
+    system("mv pairtobed.tmp pairtobed.bam")
+  }
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+  system("mv error.tmp error.txt")
+} else {
+  system("echo \"# No results found\" > error.txt")
 }
 
