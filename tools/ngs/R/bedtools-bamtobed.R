@@ -29,7 +29,7 @@ if (split == "yes") {
 if (ed == "yes") {
   options <- paste(options, "-ed")
 }
-if (cigar == 'yes') {
+if (cigar == "yes") {
   options <- paste(options, "-cigar")
 }
 
