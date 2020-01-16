@@ -9,42 +9,42 @@
 # PARAMETER apiserver: "API server" TYPE [api.basespace.illumina.com: "api.basespace.illumina.com"] DEFAULT api.basespace.illumina.com (Define the BaseSpace server to be used.) 
 # PARAMETER token: "Access token" TYPE STRING (Your personal Illumina BaseSpace access token.) 
 # PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file for debugging.)
- 
+
 # KM 25.02.2018
 
 
 bs.binary <- file.path(chipster.tools.path, "basespace/bin/bs")
 #turn of cacheing
-bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep="" )
+bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep = "")
 
-if (action== "list"){
+if (action == "list") {
   command.full <- paste(bs.command_start, 'list dataset -f csv | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
-  cat(command.full, "\n", file="bs.log", append=TRUE)
+  cat(command.full, "\n", file = "bs.log", append = TRUE)
   system(command.full)
 }
 
-if (action== "dir"){
-	command.full <- paste(bs.command_start, 'dir dataset -f csv --name', name, '  | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
-	cat(command.full, "\n", file="bs.log", append=TRUE)
-	system(command.full)
+if (action == "dir") {
+  command.full <- paste(bs.command_start, 'dir dataset -f csv --name', name, '  | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
+  cat(command.full, "\n", file = "bs.log", append = TRUE)
+  system(command.full)
 }
 
-if (action== "info"){
-	command.full <- paste(bs.command_start, 'get dataset --name', name, '  1>>bs_data.txt 2>>bs.log')
-	cat(command.full, "\n", file="bs.log", append=TRUE)
-	system(command.full)
+if (action == "info") {
+  command.full <- paste(bs.command_start, 'get dataset --name', name, '  1>>bs_data.txt 2>>bs.log')
+  cat(command.full, "\n", file = "bs.log", append = TRUE)
+  system(command.full)
 }
 
-if (action== "download"){
-	command.full <- paste(bs.command_start, 'download dataset -o download --name', name, ' -z -o bs_download 1>>bs.log 2>>bs.log')
-	cat(command.full, "\n", file="bs.log", append=TRUE)
-	system(command.full)
+if (action == "download") {
+  command.full <- paste(bs.command_start, 'download dataset --name', name, ' -z -o bs_download 1>>bs.log 2>>bs.log')
+  cat(command.full, "\n", file = "bs.log", append = TRUE)
+  system(command.full)
 }
 
 system("ls -l >> bs.log")
 
-if (save_log=="no"){
-	system("rm -f bs.log")
+if (save_log == "no") {
+  system("rm -f bs.log")
 }
 
 
