@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL hisat.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/hisat2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/hisat2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
-# PARAMETER rna.strandness: "RNA-strandness" TYPE [unstranded, FR, RF] DEFAULT unstranded (Specify strand-specific information. FR means a read corresponds to a transcript. RF means a read corresponds to the reverse complemented counterpart of a transcript. The default is unstranded.)
+# PARAMETER rna.strandness: "RNA-strandness" TYPE [unstranded, FR, RF] DEFAULT unstranded (Specify strand-specific information. FR means read 1 is always on the same strand as the gene. RF means read 2 is always on the same strand as the gene. The default is unstranded.)
 # PARAMETER quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
 # PARAMETER OPTIONAL max.multihits: "How many hits to report per read" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 5 (Instructs HISAT2 to report up to this many alignments to the reference for a given read.)
 # PARAMETER OPTIONAL min.intron.length: "Minimum intron length" TYPE INTEGER FROM 1 TO 1000 DEFAULT 20 (Sets minimum intron length. Default: 20)
