@@ -1,72 +1,97 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
-<head><title></title></head>
+
+<head>
+    <title></title>
+</head>
+
 <body>
 
-<h2>HISAT2 for paired end reads</h2>
+    <h2>HISAT2 for paired end reads</h2>
 
-<h3>Description</h3>
-<p>This tool aligns Illumina paired end reads to publicly available genomes.
-</p>
-<p> You need to supply the reads in FASTQ files. The files can be compressed with gzip. 
-Note that if you have more than two FASTQ files <i>per sample</i> (for example, Illumina NextSeq produces 8 FASTQ files per sample), you need to provide also two list files containing the file names in order to assign the 
-FASTQ files to each direction. Please produce the list files using the tool <a href="make_namelist.html">"Utilities / Make a list of file names"</a>.
-</p>
-<p>List files are optional if you have just two FASTQ files. Chipster will try to assign the files to directions based on file names. 
-This assumes the files are named so that the beginning of the name is identical and the directions are specified with _1 and _2, 
-<i>e.g.</i> Abc123_1, Abc123_2. If your files are named differently, you need to provide list files to make sure the files are assigned 
-correctly.
-</p>
+    <h3>Description</h3>
+    <p>This tool aligns Illumina paired end reads to publicly available genomes.
+    </p>
+    <p> You need to supply the reads in FASTQ files. The files can be compressed with gzip.
+        Note that if you have more than two FASTQ files <i>per sample</i> (for example, Illumina NextSeq produces 8
+        FASTQ files per sample), you need to provide also two list files containing the file names in order to assign
+        the
+        FASTQ files to each direction. Please produce the list files using the tool <a
+            href="make_namelist.html">"Utilities / Make a list of file names"</a>.
+    </p>
+    <p>List files are optional if you have just two FASTQ files. Chipster will try to assign the files to directions
+        based on file names.
+        This assumes the files are named so that the beginning of the name is identical and the directions are specified
+        with _1 and _2,
+        <i>e.g.</i> Abc123_1, Abc123_2. If your files are named differently, you need to provide list files to make sure
+        the files are assigned
+        correctly.
+    </p>
 
-<h3>Parameters</h3> 
-<ul>
-<li>Genome (list of supported genomes) [latest human]</li>
-<li>Library type (fr-unstranded, fr-firststrand, fr-secondstrand) [fr-unstranded]</li>
-<li>How many hits to report per read (1-1000000) [5]</li>
-<li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
-<li>Minimum intron length [20]</li>
-<li>Maximum intron length [500000]</li>
-<li>Allow soft clipping (yes, no) [yes] </li>
-<li>Are long anchors required (yes, no) [no]</li>
-</ul>
+    <h3>Parameters</h3>
+    <ul>
+        <li>Genome (list of supported genomes) [latest human]</li>
+        <li>RNA-strandness (unstranded, FR, RF) [unstranded]</li>
+        <li>How many hits to report per read (1-1000000) [5]</li>
+        <li>Base quality encoding used (phred+33, phred+64) [phred+33]</li>
+        <li>Minimum intron length [20]</li>
+        <li>Maximum intron length [500000]</li>
+        <li>Allow soft clipping (yes, no) [yes] </li>
+        <li>Are long anchors required (yes, no) [no]</li>
+    </ul>
 
-<h3>Details</h3>
-<p>
-HISAT2 (hierarchical indexing for spliced alignment of transcripts) is a highly efficient system for aligning reads from RNA sequencing experiments. 
-HISAT2 uses an indexing scheme based on the Burrows-Wheeler transform and the Ferragina-Manzini (FM) index, employing two types of indexes for alignment: 
-a whole-genome FM index to anchor each alignment and numerous local FM indexes for very rapid extensions of these alignments. 
-HISAT's hierarchical index for the human genome contains 48,000 local FM indexes, each representing a genomic region of ~64,000 bp.
-</p>
-<p>
-HISAT2 searches by default for up to 5 distinct, primary alignments for each read, but you can change this number. 
-Primary alignments mean alignments whose alignment score is equal or higher than any other alignments. It is possible that multiple distinct alignments have the same score. 
-The alignment score for a paired-end alignment equals the sum of the alignment scores of the individual mates. 
-Note that HISAT2 does not "find" alignments in any specific order, so for reads that have more than 5 distinct, valid alignments, 
-HISAT2 does not guarantee that the 5 alignments reported are the best possible in terms of alignment score. 
-By default soft clipping is allowed, meaning that the ends of the read don't need to align if this increases the alignment score.
-</p>
-<p>
-If you are planning to do transcriptome assembly afterwards, you should set the long anchor parameter to yes.
-With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short anchors, which helps transcript assemblers improve significantly in computation and memory usage.
-</p>
+    <h3>Details</h3>
+    <p>
+        HISAT2 (hierarchical indexing for spliced alignment of transcripts) is a highly efficient system for aligning
+        reads from RNA sequencing experiments.
+        HISAT2 uses an indexing scheme based on the Burrows-Wheeler transform and the Ferragina-Manzini (FM) index,
+        employing two types of indexes for alignment:
+        a whole-genome FM index to anchor each alignment and numerous local FM indexes for very rapid extensions of
+        these alignments.
+        HISAT's hierarchical index for the human genome contains 48,000 local FM indexes, each representing a genomic
+        region of ~64,000 bp.
+    </p>
+    <p>
+        HISAT2 searches by default for up to 5 distinct, primary alignments for each read, but you can change this
+        number.
+        Primary alignments mean alignments whose alignment score is equal or higher than any other alignments. It is
+        possible that multiple distinct alignments have the same score.
+        The alignment score for a paired-end alignment equals the sum of the alignment scores of the individual mates.
+        Note that HISAT2 does not "find" alignments in any specific order, so for reads that have more than 5 distinct,
+        valid alignments,
+        HISAT2 does not guarantee that the 5 alignments reported are the best possible in terms of alignment score.
+        By default soft clipping is allowed, meaning that the ends of the read don't need to align if this increases the
+        alignment score.
+    </p>
+    <p>
+        If you are planning to do transcriptome assembly afterwards, you should set the long anchor parameter to yes.
+        With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to
+        fewer alignments with short anchors, which helps transcript assemblers improve significantly in computation and
+        memory usage.
+    </p>
 
 
-<p>After running HISAT2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
+    <p>After running HISAT2, Chipster indexes the BAM file using the <a
+            href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be
+        visualized in the genome browser.</p>
 
-<h3>Output</h3>
-<p>
-This tool returns the following files:
-<ul>
-<li>hisat.bam: BAM file containing the alignments</li>
-<li>hisat.bam.bai: Index for the BAM file</li>
-<li>hisat.log: Summary of the alignment results</li>
-</ul>
-</p>
- 
-<h3>Reference</h3>
+    <h3>Output</h3>
+    <p>
+        This tool returns the following files:
+        <ul>
+            <li>hisat.bam: BAM file containing the alignments</li>
+            <li>hisat.bam.bai: Index for the BAM file</li>
+            <li>hisat.log: Summary of the alignment results</li>
+        </ul>
+    </p>
 
-<p>This tool is based on the <a href="https://ccb.jhu.edu/software/hisat2/manual.shtml">HISAT2</a> package. Please cite the following article:
-Kim D, Langmead B and Salzberg SL. <a href="http://www.nature.com/nmeth/journal/vaop/ncurrent/full/nmeth.3317.html"> HISAT: a fast spliced aligner with low memory requirements</a> Nature Methods 2015.
-</p>
- 
+    <h3>Reference</h3>
+
+    <p>This tool is based on the <a href="https://ccb.jhu.edu/software/hisat2/manual.shtml">HISAT2</a> package. Please
+        cite the following article:
+        Kim D, Langmead B and Salzberg SL. <a
+            href="http://www.nature.com/nmeth/journal/vaop/ncurrent/full/nmeth.3317.html"> HISAT: a fast spliced aligner
+            with low memory requirements</a> Nature Methods 2015.
+    </p>
+
 </body>
