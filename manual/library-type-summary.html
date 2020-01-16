@@ -1,110 +1,155 @@
 <html>
+
 <body>
 
-<h2>Directional RNA-seq data -which parameters to choose? </h2>
+    <h2>Directional/stranded RNA-seq data -which parameters to choose? </h2>
 
-<p>Directional RNA-seq methods are gaining popularity.  Several protocols and products are available 
-for the library preparation step, and different tools and softwares have different options to take 
-these into account.  Since this has caused a lot of confusion due to incoherent parameter naming, 
-we try to clarify this issue a bit here.</p>
+    <p>"Directional" or "stranded" RNA-seq methods are gaining popularity. Several protocols and products are available
+        for the library preparation step, and different tools and softwares have different options to take
+        these into account. Since this has caused a lot of confusion due to incoherent parameter naming,
+        we try to clarify this issue a bit here.</p>
 
-<p>To be able to select the right parameters for your data, first you need to know which library prep 
-method was used when generating your data.  In general, there are three types of library preps: 
-<ul> 
-<li>un-stranded </li>
-<li>"second-strand" = directional, where the first read of the read pair 
-(or in case of single end reads, the only read) is from the transcript strand  </li>
-<li>"first-strand" = directional, where the first read (or the only read in case of SE) is from the opposite strand. 
-</li> </ul>
-</p>
-
-<img src="library-type-pic1.png"> <br>
-<b><i>Summary of library type protocols </b>
-<br>(borrowed from: 
-<a href="http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html"
->http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html</a>)</i>
-<br> The reads on the left are from the same strand as the transcript, and their pairs on the right are from the opposing strand. 
-The number above the read states which read it is, the first (/1) or the second (/2). Thus, perhaps a bit unintuitively, the first case,
-"fr-firststrand" is such that the first read (/1) is actually from the opposing strand as the transcript, and second read (/2) is from the transcript strand.
-
-<p><b>Why is this so important? </b>If you use wrong directionality parameter, in the read counting step 
-the reads are considered to be from the wrong strand. This means that in the cases where there 
-are no genes on that other strand, you won't get any hits, and if there are genes in the same 
-location on the other strand, your reads are counted for that wrong gene. 
-</p>
-
-<p><b>How can I check I chose correctly? </b>It's a good idea to check that!  <br>
-<b>Using the tool <a href="http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html"><i>RNA-seq strandedness inference and inner distance estimation using RseQC</i></a>: 
-</b> We added this tool under the <b>Quality control </b>
-category to help you. The tool aligns subsets of the input FASTQ files against the reference genome, 
-and this alignment is then compared to the reference annotation to deduce the strandedness. Make sure you select the correct reference when running the tool. 
-Check out the
- <a href="/manual/rseqc_infer_rnaseq_experiment.html">help page</a> of this tool for more information! <br>
-<b>In aligners like HISAT2 and Tophat</b> you can also do a comparison and check the mapping rate. Take a small subset of your reads and
-run HISAT2/TopHat with the different parameters and compare the results, and check the log file. <br>
-<b>In HTSeq</b> you can also run the tool with different options and check the number of reads that are not counted for any gene (=the "no-feature reads").  
-(In Chipster, open file htseq-count-info.txt). 
-</p>
-
-<p><b>Be extra careful to assign the paired files correctly!</b> Using these parameters assumes you are giving the 
-files in specific order: read1, read2. In Chipster always check from the parameters window that your 
-files are assigned correctly. 
-</p>
-
-<p>Below we list some common library preparation kits and their corresponding parameters 
-in different tools. <b>Is your kit missing from the list?</b> If you have the data generated with that kit and figure
-out the library type, please let us know too, so we can add that kit to the list below.</p>
-
-<p><b><u> Unstranded: </u></b><br>
-Information regarding the strand is not conserved 
-(it is lost during the amplification of the mRNA fragments). <br>
-<b>Kits: </b> <br>
-TruSeq RNA Sample Prep kit <br>
-<b>Parameters:</b> <br>
-HISAT2 / TopHat / Cufflinks / Cuffdiff: library-type fr-unstranded <br>
-HTSeq: stranded -- no <br> </p>
-
-<p><b><u>Directional, first strand:</u></b><br>
-The second read (read 2) is from the original RNA strand/template, first read (read 1) is from the 
-opposite strand.
-The information of the strand is preserved as the original RNA strand is degradated due to the 
-dUTPs incorporated in the second synthesis step.<br>
-<b>Kits:</b> <br>
-All dUTP methods, NSR, NNSR<br>
-TruSeq Stranded Total RNA Sample Prep Kit<br>
-TruSeq Stranded mRNA Sample Prep Kit<br>
-NEB Ultra Directional RNA Library Prep Kit <br>
-Agilent SureSelect Strand-Specific <br>
-<b>Parameters:</b><br>
-HISAT2 / TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
-HTSeq: stranded -- reverse<br> </p>
-
-<p><b><u>Directional, second strand:</u></b><br>
-The first read (read 1) is from the original RNA strand/template, second read (read 2) is from the 
-opposite strand.
-The directionality is preserved, as different adapters are ligated to different ends of the fragment. <br>
-<b>Kits:</b><br>
-Directional Illumina (Ligation), Standard SOLiD<br>
-ScriptSeq v2 RNA-Seq Library Preparation Kit <br>
-SMARTer Stranded Total RNA <br>
-Encore Complete RNA-Seq Library Systems<br>
-NuGEN SoLo<br>
-<b>Parameters:</b><br>
-HISAT2 / TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
-HTSeq: stranded -- yes<br></p>
-
-<p>Note also that the --fr/--rf/--ff or "Order of mates to align" parameter in Bowtie has similar 
-sounding parameter options: [--fr: "Forward/reverse", --rf: "Reverse/Forward", --ff: "Forward/forward"]. 
-However, these parameters are a bit different story, as they explain how the paired end reads are 
-oriented towards each other (-> <-, -> -> or <- ->).  The default (--fr, -> <-) is appropriate for 
-Illumina's paired-end reads: it means that read 1 appears upstream of the reverse complement of read 2, 
-or vice versa.  When running TopHat, the library-type parameter is delivered to Bowtie, so the 
-user doesn't have to worry about that too much.</p>
+    <p>To be able to select the right parameters for your data, first you need to know which library prep
+        method was used when generating your data. In general, there are three types of library preps:
+        <ul>
+            <li>un-stranded </li>
+            <li>"second-strand" = directional, where the first read of the read pair
+                (or in case of single end reads, the only read) is from the transcript strand </li>
+            <li>"first-strand" = directional, where the first read (or the only read in case of SE) is from the opposite
+                strand.
+            </li>
+        </ul>
+    </p>
 
 
+    <h3>Summary of library type protocols </h3>
+    <img src="library-type-pic1.png"> <br>
+    <br>(Image borrowed from:
+    <a
+        href="http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html">http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html</a>)</i>
+    <br> The reads on the left are from the same strand as the transcript, and their pairs on the right are from the
+    opposing strand.
+    The number above the read states which read it is, the first (/1) or the second (/2). Thus, perhaps a bit
+    unintuitively, the first case,
+    "fr-firststrand" is such that the first read (/1) is actually from the opposing strand as the transcript, and second
+    read (/2) is from the transcript strand.
 
+    <p><b>Why is this so important? </b>If you use wrong directionality parameter, in the read counting step
+        the reads are considered to be from the wrong strand. This means that in the cases where there
+        are no genes on that other strand, you won't get any hits, and if there are genes in the same
+        location on the other strand, your reads are counted for that wrong gene.
+    </p>
 
+    <h3>How can I check I chose correctly? </h3>
+    It's a good idea to check that! <br>
+    <b>Using the tool <a href="http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html"><i>RNA-seq strandedness
+                inference and inner distance estimation using RseQC</i></a>:
+    </b> We added this tool under the <b>Quality control </b>
+    category to help you. The tool aligns subsets of the input FASTQ files against the reference genome,
+    and this alignment is then compared to the reference annotation to deduce the strandedness. Make sure you select the
+    correct reference when running the tool.
+    Check out the
+    <a href="/manual/rseqc_infer_rnaseq_experiment.html">help page</a> of this tool for more information! <br>
+    <b>In aligners like HISAT2 and Tophat</b> you can also do a comparison and check the mapping rate. Take a small
+    subset of your reads and
+    run HISAT2/TopHat with the different parameters and compare the results, and check the log file. <br>
+    <b>In HTSeq</b> you can also run the tool with different options and check the number of reads that are not counted
+    for any gene (=the "no-feature reads").
+    (In Chipster, open file htseq-count-info.txt).
+    </p>
 
-</body>
+    <p><b>Be extra careful to assign the paired files correctly!</b> Using these parameters assumes you are giving the
+        files in specific order: read1, read2. In Chipster always check from the parameters window that your
+        files are assigned correctly.
+    </p>
 
-</html>
+    <p>Below we list some common library preparation kits and their corresponding parameters
+        in different tools. <b>Is your kit missing from the list?</b> If you have the data generated with that kit and
+        figure
+        out the library type, please let us know too, so we can add that kit to the list below.</p>
+
+    <h4>Unstranded: </h4>
+    Information regarding the strand is not conserved
+    (it is lost during the amplification of the mRNA fragments). <br>
+    <b>Kits: </b> <br>
+    TruSeq RNA Sample Prep kit <br>
+    <b>Parameters:</b> <br>
+    TopHat / Cufflinks / Cuffdiff: library-type fr-unstranded <br>
+    HISAT2: default<br>
+    HTSeq: stranded -- no <br> </p>
+
+    <h4>Directional, first strand:</h4>
+    The second read (read 2) is from the original RNA strand/template, first read (read 1) is from the
+    opposite strand.
+    The information of the strand is preserved as the original RNA strand is degradated due to the
+    dUTPs incorporated in the second synthesis step.<br>
+    <b>Kits:</b> <br>
+    All dUTP methods, NSR, NNSR<br>
+    TruSeq Stranded Total RNA Sample Prep Kit<br>
+    TruSeq Stranded mRNA Sample Prep Kit<br>
+    NEB Ultra Directional RNA Library Prep Kit <br>
+    Agilent SureSelect Strand-Specific <br>
+    <b>Parameters:</b><br>
+    TopHat / Cufflinks / Cuffdiff: library-type fr-firststrand<br>
+    HISAT2: --rna-strandedness R (for SE) / RF (for PE) <br>
+    HTSeq: stranded -- reverse<br> </p>
+
+    <h4>Directional, second strand:</h4>
+    The first read (read 1) is from the original RNA strand/template, second read (read 2) is from the
+    opposite strand.
+    The directionality is preserved, as different adapters are ligated to different ends of the fragment. <br>
+    <b>Kits:</b><br>
+    Directional Illumina (Ligation), Standard SOLiD<br>
+    ScriptSeq v2 RNA-Seq Library Preparation Kit <br>
+    SMARTer Stranded Total RNA <br>
+    Encore Complete RNA-Seq Library Systems<br>
+    NuGEN SoLo<br>
+    <b>Parameters:</b><br>
+    TopHat / Cufflinks / Cuffdiff: library-type fr-secondstrand<br>
+    HISAT2: --rna-strandedness F (for SE) / FR (for PE) <br>
+    HTSeq: stranded -- yes<br></p>
+
+    <h3>Summary of parameters: </h3>
+
+    <table>
+        <tr>
+            <th>Tool</th>
+            <th>Unstranded</th>
+            <th>Read 1 and transcript on the same strand</th>
+            <th>Read 1 on the opposite strand</th>
+        </tr>
+        <tr>
+            <td>RSeQc</td>
+            <td>-</td>
+            <td>++,-- (SE) 1++,1--,2+-,2-+ (PE)</td>
+            <td>+-,-+ (SE) 1+-,1-+,2++,2-- (PE)</td>
+        </tr>
+        <tr>
+            <td>TopHat / Cufflinks</td>
+            <td>library-type fr-unstranded </td>
+            <td>library-type fr-secondstrand </td>
+            <td>library-type fr-firststrand </td>
+        </tr>
+        <tr>
+            <td>HISAT2</td>
+            <td>default</td>
+            <td>--rna-strandedness F (SE), FR (PE)</td>
+            <td>--rna-strandedness R (SE), RF (PE)</td>
+        </tr>
+        <tr>
+            <td>HTSeq</td>
+            <td>stranded --no</td>
+            <td>stranded --yes</td>
+            <td>stranded --reverse)</td>
+        </tr>
+    </table>
+
+    <h3>Don't get confused: Bowtie parameters </h3>
+
+    <p>Note also that the --fr/--rf/--ff or "Order of mates to align" parameter in Bowtie has similar
+        sounding parameter options: [--fr: "Forward/reverse", --rf: "Reverse/Forward", --ff: "Forward/forward"].
+        However, these parameters are a bit different story, as they explain how the paired end reads are
+        oriented towards each other (-> <-, -> -> or <- ->). The default (--fr, -> <-) is appropriate for Illumina's
+                    paired-end reads: it means that read 1 appears upstream of the reverse complement of read 2, or vice
+                    versa. When running TopHat, the library-type parameter is delivered to Bowtie, so the user doesn't
+                    have to worry about that too much.</p> </body> </html>
