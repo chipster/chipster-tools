@@ -1,5 +1,5 @@
-# TOOL samtools-change-bam-strandness.R: "Reverse XS tags in BAM" (Reverses strandedness tags (XS) in BAM. Every XS:A:+ tag is changed to XS:A:- and vice versa. If you have stranded RNA-seq data and suspect that a wrong strandedness parameter value was used when aligning the reads to genome with HISAT2 or TopHat, you can correct the XS tags in the BAM file with this tool. XS tags are used by the Cuffdiff and Cufflinks tools when assembling transcripts. Note that the XS tags are not used by HTseq tools when counting reads per genes.)
-# INPUT alignment.bam: "BAM file" TYPE GENERIC 
+# TOOL samtools-change-bam-strandness.R: "Reverse XS tags in BAM" (Reverses strandedness tags \(XS\) in BAM. Every XS:A:+ tag is changed to XS:A:- and vice versa. If you have stranded RNA-seq data and suspect that a wrong strandedness parameter value was used when aligning the reads to genome with HISAT2 or TopHat, you can correct the XS tags in the BAM file with this tool. XS tags are used by the Cuffdiff and Cufflinks tools when assembling transcripts. Note that the XS tags are not used by HTseq tools when counting reads per genes.)
+# INPUT alignment.bam: "BAM file" TYPE GENERIC
 # OUTPUT alignment-edited.bam
 # OUTPUT alignment-edited.bam.bai
 
