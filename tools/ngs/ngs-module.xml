@@ -84,7 +84,7 @@
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
 	    <tool module="common">share_via_object_storage.R</tool>
-	    <tool module="common">basespace.R</tool>	   
+	    <tool module="common">basespace.R</tool>		 
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
@@ -166,12 +166,13 @@
 		<tool>edgeR-multivariate.R</tool>
 		<tool>DEXseq.R</tool>
 		<tool>heatmap-for-rnaseq.R</tool>
+		<tool module="common">annotate-cpdb.py</tool>
 		<tool>cufflinks2.R</tool>
 		<tool>cuffmerge2.R</tool>
 		<tool>cuffcompare2.R</tool>
 		<tool>cuffdiff2.R</tool>
 		<tool>cuffdiff2_with_replicates.R</tool>
-		<tool module="common">annotate-cpdb.py</tool>
+		<tool>samtools-change-bam-strandness.R</tool>		
 	</category>
 
 	<category name="Small RNA-seq" color="#629a9b">
