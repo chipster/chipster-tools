@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>RNA-seq / Reverse XS tags in BAM</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        Reverses strandedness tags (XS) in BAM. Every XS:A:+ tag is changed to XS:A:- and vice versa.
+    </p>
+
+    <h3>Parameters</h3>
+
+    None
+
+    <h3>Details</h3>
+
+    <p>
+        Reverses strandedness tags (XS) in BAM. Every XS:A:+ tag is changed to XS:A:- and vice versa.
+    </p>
+    <p>
+        If you have stranded RNA-seq data and suspect that a wrong strandedness parameter value was used
+        when aligning the reads to genome with HISAT2 or TopHat, you can correct the XS tags in the BAM
+        file with this tool. XS tags are used by the Cuffdiff and Cufflinks tools when assembling
+        transcripts. Note that the XS tags are not used by HTseq tools when counting reads per genes.
+    </p>
+    <p>
+        In most cases running this tool is faster than running a new alignment.
+    </p>
+
+    <h3>Output</h3>
+
+    <p>The analysis output consists of the following files:</p>
+
+    <ul>
+        <li>Edited BAM file</li>
+        <li>BAM index file (.bai)</li>
+    </ul>
+
+    <h3><br>References</h3>
+
+    <p>
+        This tool is based on the <a href="http://samtools.sourceforge.net/">SAMtools package</a>.
+    </p>
+    <p>
+        Please cite the article <a href="http://www.ncbi.nlm.nih.gov/pubmed/19505943">The Sequence alignment/map (SAM)
+            format and SAMtools</a> by Li H., Handsaker B., Wysoker A., Fennell T., Ruan J., Homer N., Marth G.,
+        Abecasis G., Durbin R. and 1000 Genome Project Data Processing Subgroup (2009) Bioinformatics, 25, 2078-9.
+        [PMID: 19505943].
+    </p>
+
+</body>
+
+</html>
