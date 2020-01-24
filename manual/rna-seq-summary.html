@@ -11,7 +11,7 @@ We have gathered resources for RNA-seq data analysis here to help you getting st
 which introduces the steps of differential expression analysis. This video covers also the 101 of using Chipster. </li>
 	<li>After the webinar, you might like to try the analysis tools yourself -for that we suggest going through our <a href= "courses.html#rna">course exercises</a>. Open the excercises pdf document, log in to Chipster, and just follow the instructions! The exercise data are available as example sessions on the Chipster server, and
 we also provide ready-made analysis sessions which you can use as a reference when doing exercises on your own. </li>
-	<li>Some analysis steps can raise more questions. Please find below more detailed instructions for each step and see also the <a href= "https://www.youtube.com/playlist?list=PLjiXAZO27elABzLA0aHKS9chVA2TldoPF">RNA-seq playlist</a> on our YouTube channel. </li>
+	<li>Some analysis steps can raise more questions. Please find below more detailed instructions for each step and see also the <a href= "https://www.youtube.com/playlist?list=PLjiXAZO27elBj3KYi7ACscgOxlNkNOxPc">RNA-seq playlist</a> on our YouTube channel. </li>
 </ul>
 
 <h3>I Getting started with Chipster</h3>
@@ -29,7 +29,6 @@ we also provide ready-made analysis sessions which you can use as a reference wh
 <p>
 <ul>
 <li>Importing your files to Chipster: <a href= "http://chipster.csc.fi/manual/import-ngs.html">Manual</a></li>
-<li>If your data is already uploaded to CSC's Taito cluster, you can run Chipster there: <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Tutorial video</a> (12 min)</li>
 </ul>
 </p>
 
@@ -40,9 +39,10 @@ These steps take you from raw reads to differentially expressed genes (please fi
 
 <li><b>Quality control of raw reads </b><br>
 	Check the number, quality encoding, <a href= "library-type-summary.html">strandedness</a> and inner distance of your reads, and inspect them for base quality, biases and adapters.<br>
-	Tools under the Quality control category (input FASTQ files):
+	Tools under the Quality control category (input FASTQ files. Note that the tools can handle zipped files, so please don't unzip them):
 	<ul> 
-	<li><a href= "http://chipster.csc.fi/manual/fastqc.html">FastQC </a> is clear and fast.</li>
+	<li><a href= "http://chipster.csc.fi/manual/fastqc.html">FastQC </a> </li> 
+	<li><a href= "fastqc_multiqc.html">Read quality with MultiQC for many FASTQ files</a> allows you to run FastQC for many FASTQ files at the same time</li>
 	<li><a href= "http://chipster.csc.fi/manual/prinseq-statistics.html">PRINSEQ</a></li>
 	<li><a href= "http://chipster.csc.fi/manual/rseqc_infer_rnaseq_experiment.html"> RNA-seq strandedness inference and inner distance estimation using RseQC</a> 
 	checks if the data was produced using a stranded protocol and what is the inner distance of paired reads. This information is important for the subsequent alignment and quantitation steps.</li>
@@ -115,7 +115,6 @@ These steps take you from raw reads to differentially expressed genes (please fi
 	remove the FASTQ and BAM files, and save the session again with another name. It makes your session smaller and easier to handle! 
 	You can always return to the original session with the bigger files if needed.
 	Note that the cloud sessions are not stored forever, so for longer storage, save the sessions also locally! 
-	If the sessions are huge, it might be a good idea to store them in <a href= "https://www.youtube.com/watch?v=riipGwF-Qxs">Taito</a>.
 	<br><br>
 </li>
 <li><b>Experiment level quality control </b><br>	
@@ -154,8 +153,6 @@ These steps take you from raw reads to differentially expressed genes (please fi
 </li> 
 </ol>
 <img src="RNA-seq-basic-steps.png"> <br><br>
-
-</p>
 
 </body>
 
