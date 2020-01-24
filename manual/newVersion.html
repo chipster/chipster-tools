@@ -15,6 +15,36 @@ div.header-item {
 </head>
 <body>
 
+<h2>Version update 24.1.2020: What is new in Chipster 3.16.3</h2>
+ 	
+		<b>Summary:</b> This is a patch due to a bug in the RNA-seq aligner HISAT2. The strandedness parameter of the HISAT2 tools was reversed, which caused the XS tags in the BAM file to be the wrong way round (+ instead of -, and vica versa). 
+		The XS tags are used by the older tools Cufflinks and Cuffdiff when they assemble transcripts and count reads per genes/transcripts. Note that counting reads per genes by HTSeq is not affected by XS tags, 
+		because it uses its own method for strandedness information. For those people who would like to rerun their Cufflinks/Cuffdiff analysis, we have made a conversion tool <a href="samtools-change-bam-strandness.html">Reverse XS tags in BAM</a>
+		which you can run on the old HISAT2 BAM files (this is faster than running the aligner again).
+		 
+		<p><b>NOTE:</b> We strongly encourage you to try the new <a href="https://chipster.rahtiapp.fi/home">Chipster Web app</a>, which will replace the Java based Chipster later this year. The Web app does not require Java (many universities do not provide Java anymore because Oracle's Java license policy changed). 
+		Users from Finnish universities can access the Chipster Web app with their HAKA (university) account. Note that the analysis session format is different, so your sessions are not automatically transferred. However, we made a conversion system which allows you to upload old sessions from your laptop to the new Chipster.</p>
+	
+	<ul>
+		<li><div class=header-item>New analysis tools</div>	
+			<ul> 
+				<li><a href="samtools-change-bam-strandness.html">RNA-seq / Reverse XS tags in BAM</a> reverses the strandedness tags in BAM file.</li>			
+				<!--<li><a href=".html"> / </a> . -->				
+			</ul> 
+		</li>
+		
+		<li><div class=header-item>Improvements to analysis tools</div>		
+			<ul>
+				<li><a href="hisat2.html">Alignment / HISAT2 for single end reads</a>: Strandedness parameter updated to use the options R and F.</li>			
+				<li><a href="hisat2-single-end-with-index-building.html">Alignment / HISAT2 for single end reads and own genome</a>: Strandedness parameter updated to use the options R and F.</li>
+				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 for paired end reads</a>:  Strandedness parameter updated to use the options RF and FR.</li>
+				<li><a href="hisat2-paired-end-with-index-building.html">Alignment / HISAT2 for paired end reads and own genome</a>: Strandedness parameter updated to use the options RF and FR.</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a>: Output file now lists strandedness parameter values R, F, RF and FR for HISAT2.</li>							
+			</ul> 
+		</li>		
+	</ul>
+	<hr />
+
 <h2>Version update 8.10.2019: What is new in Chipster 3.16</h2>
  	
 		<b>Summary:</b> This version brings major improvements to single cell RNA-seq data analysis, because the single cell analysis tools have been updated to Seurat v3 and R3.6.1. 
