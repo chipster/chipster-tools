@@ -51,11 +51,11 @@ lib_size <- as.numeric(phenodata$library_size)
 if (is.na(lib_size[1])) estimate_lib_size <- "TRUE" else estimate_lib_size <- "FALSE"
 
 # Sanity checks
-# only 2 group comparison is supported
+# Only 2 group comparison is supported
 if (length(unique(groups))==1 | length(unique(groups))>=3) {
 	stop("CHIPSTER-NOTE: You need to have exactly two groups to run this analysis")
 }
-# if no biological replicates, force common dispersion
+# If no biological replicates, force common dispersion
 if (number_samples == 2) dispersion_method <- "common" 
 
 # Create a DGEList. If no library size exist in the phenodata file, it is calculated from column totals 

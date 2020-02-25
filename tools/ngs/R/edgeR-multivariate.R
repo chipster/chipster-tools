@@ -3,6 +3,7 @@
 # INPUT META phenodata.tsv TYPE GENERIC
 # OUTPUT OPTIONAL edger-glm.tsv
 # OUTPUT OPTIONAL dispersion-edger-glm.pdf
+# OUTPUT OPTIONAL design-matrix.tsv
 # PARAMETER main.effect1: "Main effect 1" TYPE METACOLUMN_SEL DEFAULT group (Main effect 1)
 # PARAMETER OPTIONAL main.effect2: "Main effect 2" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 2)
 # PARAMETER OPTIONAL main.effect3: "Main effect 3" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 3)
@@ -11,9 +12,10 @@
 # PARAMETER OPTIONAL treat.main.effect3.as.factor: "Treat main effect 3 as factor" TYPE [no: no, yes: yes] DEFAULT yes (Should main.effect3 be treated as a factor)
 # PARAMETER OPTIONAL interactions: "Include interactions in the model" TYPE [main: "no", all: "yes", nested: "nested"] DEFAULT main (Should interactions be included in the model in addition to the main effects. "Yes" = include all interaction terms, "no" = include only main effects, "nested" = include main effect 1 and its interactions with effects 2 and 3. Use the last option when you have comparisons both between and within subjects. Please note that when using the "nested" option, you need to place the effects in particular order -see manual for more information! )
 # PARAMETER OPTIONAL normalization: "Apply TMM normalization" TYPE [yes, no] DEFAULT yes (Should normalization based on the trimmed mean of M-values \(TMM\) be performed to reduce the RNA composition effect.)
-# PARAMETER OPTIONAL filter: "Analyze only genes which have counts in at least this many samples" TYPE INTEGER FROM 0 TO 1000 DEFAULT 1 (Analyze only genes which have at least 5 counts in at least this many samples)
+# PARAMETER filter: "Filter out genes which don't have counts in at least this many samples" TYPE INTEGER FROM 1 TO 1000 DEFAULT 1 (Analyze only genes which have at least 5 counts in at least this many samples. You should set this to the number of samples in your smallest experimental group.)
 # PARAMETER OPTIONAL w: "Plot width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted image)
 # PARAMETER OPTIONAL h: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted image)
+# PARAMETER OPTIONAL print.out.desing.matrix: "Give as an output the design matrix" TYPE [no: no, yes: yes] DEFAULT no (If you wish to see what the design matrix looks like, you can choose to print that out here.)
 
 
 # JTT 8.7.2012
@@ -23,6 +25,7 @@
 # EK 19.11.2013 updated to edgeR 3.4.0 and added the counts to output
 # ML & SS 3.3.2015 added the "nested" option to the interactions
 # EK 23.10.2015, moved to R3.2.0
+# ML 18.02.2020, update to using quasi-likelihoods (glmFit -> glmQLFit and glmLRT -> glmQLFTest), option to print out design matrix
 
 
 # Loads the libraries
@@ -96,11 +99,11 @@ if(main.effect3!="EMPTY" & treat.main.effect3.as.factor=="yes") {
 	formula<-paste(formula, "as.factor(", main.effect3, ")", sep="")
 }
 
-# If there are interactions between and within the subjects (see edgeR userguide chapter 3.5)
+# The "nested" case: if there are interactions between and within the subjects (see edgeR userguide chapter 3.5)
 if(main.effect3!="EMPTY" & interactions=="nested") {
 	formula<-paste("~as.factor(", main.effect1,")+as.factor(", main.effect1, "):as.factor(", main.effect2,")+as.factor(", main.effect1, "):as.factor(", main.effect3, ")", sep="")
 
-	# modify the phenodata column for "subject", create a tmp table for this:
+	# Modify the phenodata column for "subject", create a tmp table for this:
 	tmp <- phenodata[c(main.effect1, main.effect2, main.effect3)]
 	tmp[[main.effect1]]<-factor(tmp[[main.effect1]]) # group main effect 1, (disease group,) "between" comparison
 	tmp[[main.effect2]]<-factor(tmp[[main.effect2]]) # trt main effect 2, (treatment,) the "within" comparison
@@ -108,7 +111,7 @@ if(main.effect3!="EMPTY" & interactions=="nested") {
 	
 	splitsubj<-split(tmp[[main.effect3]],tmp[[main.effect1]])
 	splitind<-lapply(splitsubj,FUN=function(ssubj) {as.numeric(factor(ssubj))} )
-	## in the anonymous function, call to factor will drop unused levels, 
+	## In the anonymous function, call to factor will drop unused levels, 
 	## and as.numeric returns only the integer codes (so the result is not a factor) to problems in unsplit
 	tmp[[main.effect3]]<-unsplit(splitind,tmp[[main.effect1]])
 	
@@ -124,7 +127,7 @@ design<-with(phenodata, model.matrix(as.formula(formula)))
 design <- design[, colSums(abs(design),na.rm = TRUE) != 0]
 
 # Estimate dispersions
-#dge <- estimateDisp(dge, design)
+# dge <- estimateDisp(dge, design) # 
 dge <- estimateGLMCommonDisp(dge, design)
 dge <- estimateGLMTrendedDisp(dge, design)
 dge <- estimateGLMTagwiseDisp(dge, design)
@@ -135,17 +138,22 @@ plotBCV(dge, main="Biological coefficient of variation")
 dev.off()
 
 # Estimate DE genes
-fit<-glmFit(dge, design)
+# Switch to using quasi-likelihood (QL) instead of likelihood (LR)
+# fit<-glmFit(dge, design) 
+fit<-glmQLFit(dge, design)
 
 # LRT
-lrt<-glmLRT(fit, coef=1)
+# Switch to using quasi-likelihood (QL) instead of likelihood (LR)
+# lrt<-glmLRT(fit, coef=1)
+lrt<-glmQLFTest(fit, coef=1)
 tt<-topTags(lrt, n=nrow(dat2))
 tt<-tt@.Data[[1]]
 colnames(tt)<-paste(colnames(tt), colnames(design)[1], sep="-")
 ttres<-tt[order(rownames(tt)),]
 
 for(i in 2:ncol(design)) {
-	lrt<-glmLRT(fit, coef=i)
+	# lrt<-glmLRT(fit, coef=i)
+	lrt<-glmQLFTest(fit, coef=i)
 	tt<-topTags(lrt, n=nrow(dat2))
 	tt<-tt@.Data[[1]]
 	colnames(tt)<-paste(colnames(tt), colnames(design)[i], sep="-")
@@ -159,8 +167,11 @@ ttres2<-round(ttres,6)
 # add count columns to the result table
 ttres2<-cbind(ttres2, getCounts(dge))
 
-
 #ttres3<-merge(dat, ttres2, by.x=0, by.y=0)
 
 write.table(ttres2, file="edger-glm.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
+# Print out the design matrix if requested:
+if (print.out.desing.matrix == "yes")  {
+	write.table(design, file="design-matrix.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+}
