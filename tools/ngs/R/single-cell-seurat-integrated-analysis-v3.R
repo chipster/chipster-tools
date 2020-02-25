@@ -3,6 +3,7 @@
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT seurat_obj_combined.Robj
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
+# OUTPUT OPTIONAL log_normalized.tsv
 # PARAMETER OPTIONAL num.dims: "Number of PCs to use " TYPE INTEGER DEFAULT 20 (Number of principal components to use. )
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation of clusters with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
@@ -11,6 +12,9 @@
 # RUNTIME R-3.6.1
 
 
+# To enable this option, please copy-paste this line above the #RUNTIME parameter:
+# PARAMETER OPTIONAL output_norm_table: "Give a table of log-normalized values with cluster and sample information" TYPE [T: yes, F: no] DEFAULT F (Returns a table with the log-normalised UMI counts for all cells and all genes, along with the information on which sample and which cluster the cell belongs to.)
+
 
 # 2018-16-05 ML
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
@@ -18,6 +22,7 @@
 # 09.07.2019 ML Seurat v3
 # 2019-09-09 ML UMAP
 # 2020-01-31 ML Add option to output average expression table
+# 2020-02-25 ML Add option to output log-normalised values table (still commented)
 
 
 # for UMAP:
@@ -69,6 +74,19 @@ if (output_aver_expr == "T") {
   write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 }
+
+# Normalised data + cluster + sample information table
+# If requested, return a table with cells as rows and cluster + sample information and log-norm expression values for all genes in columns.
+# If you want to use this option, uncomment the following section:
+#if (output_norm_table == "T") {
+#  norm_data <- GetAssayData(object = data.combined, slot = "data") # log-normalised "corrected" UMI counts
+#  sample <- data.combined@meta.data$stim # sample information
+#  cluster <- Idents(data.combined) # cluster information
+#  # norm_data_table <- rbind(t(sample), t(cluster), as.matrix(norm_data)) # combine into one table
+#  norm_data_table <- cbind.data.frame(sample, cluster, t(as.matrix(norm_data))) # combine into one table
+#  # Write to table
+#  write.table(norm_data_table, file = "log_normalized.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+#}
 
 
 # Save the Robj for the next tool
