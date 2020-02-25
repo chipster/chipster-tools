@@ -46,6 +46,7 @@
 		<tool>samtools-convert-SAMtoBAM-sort-index.R</tool>
 		<tool>samtools-subset.R</tool>
 		<tool>samtools-merge.R</tool>
+		<tool>samtools-create-sam-preview.R</tool>
 		<tool>merge-fastq.R</tool>
 		<tool module="common">concatenate.R</tool>
 		<tool>samtools-idxstats.R</tool>	
