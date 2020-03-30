@@ -10,7 +10,7 @@
     <h2>HISAT2 for single end reads with own genome</h2>
 
     <h3>Description</h3>
-    <p>This tool aligns Illumina single end RNA-seq reads to a genome provided as a FASTA file.
+    <p>This tool aligns Illumina single end RNA-seq reads to a genome provided as a genome .
         You need to supply the reads in one or more FASTQ files.
     </p>
 
@@ -53,6 +53,11 @@
         fewer alignments with short anchors, which helps transcript assemblers improve significantly in computation and
         memory usage.
     </p>
+    <p>
+        If you use a FASTA format genome, the tool will produce a .tar file with the HISAT2 indexes. If you run the tool
+        again with the same genome, you should use the .tar file as the genome input, as this saves the time needed
+        to generate the indexes.
+    </p>
     <p>After running HISAT2, Chipster indexes the BAM file using the <a
             href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be
         visualized in the genome browser.</p>
@@ -61,9 +66,10 @@
     <p>
         This tool returns the following files:
         <ul>
-            <li>hisat.bam: BAM file containing the alignments</li>
-            <li>hisat.bam.bai: Index for the BAM file</li>
+            <li>*.bam: BAM file containing the alignments</li>
+            <li>*.bam.bai: Index for the BAM file</li>
             <li>hisat.log: Summary of the alignment results</li>
+            <li>*.hisat2.tar: HISAT2 index as a tar package (only if FASTA genome provided)</li>
         </ul>
     </p>
 
