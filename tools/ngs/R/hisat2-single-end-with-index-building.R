@@ -1,9 +1,10 @@
-# TOOL hisat2-single-end-with-index-building.R: "HISAT2 for single end reads and own genome" (Aligns single end RNA-seq reads to a user-supplied genome. You need to supply the genome in FASTA format.)
+# TOOL hisat2-single-end-with-index-building.R: "HISAT2 for single end reads and own genome" (Aligns single end RNA-seq reads to a user-supplied genome. You need to supply the genome either as a FASTA format sequence or as a tar package with a HISAT2 index.)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
-# INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
+# INPUT OPTIONAL genome.txt: "Genome to align against \(fasta or HISAT2 index tar\)" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL hisat.log
+# OUTPUT OPTIONAL hisat2_index.tar
 # PARAMETER rna.strandness: "RNA-strandness" TYPE [unstranded, F, R] DEFAULT unstranded (Specify strand-specific information. F means read is always on the same strand as the gene. R means read is always on the opposite strand to the gene. The default is unstranded.)
 # PARAMETER quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
 # PARAMETER OPTIONAL max.multihits: "How many hits to report per read" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 5 (Instructs HISAT2 to report up to this many alignments to the reference for a given read.)
@@ -50,18 +51,51 @@ hisat.index.binary <- file.path(chipster.tools.path,"hisat2","hisat2-build")
 
 # Get input name
 input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+input.display.names <- read_input_definitions()
 
 # check out if the file is compressed and if so unzip it
 unzipInputs(input.names)
 
-# Do indexing
-system("echo Indexing the genome... >> hisat.log")
-system("echo >> hisat.log")
-index.command <- paste("bash -c '",hisat.index.binary,"-p",chipster.threads.max,"genome.txt","own_genome","2>>hisat.log","'")
-system(paste("echo ",index.command," >> hisat.log"))
-system(index.command)
-
-
+if (fileOk("genome.txt")) {
+  genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
+  hg_ifn <- ("")
+  echo.command <- paste("echo Host genome file type",genome.filetype," > hisat.log")
+  system(echo.command)
+  new_index_created <- ("no")
+  # case 1. Ready calculated indexes in tar format
+  if (genome.filetype == "tar") {
+    system("echo Extracting tar formatted gemome index file >> hisat.log")
+    # Untar. Folders are flattened
+    system("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
+    # Check index base name
+    if (file.exists(Sys.glob("*.1.ht2"))) {
+      f <- list.files(getwd(),pattern = "\\.1.ht2$")
+      hisat2.genome <- substr(f[1],1,nchar(f[1]) - 6)
+    } else if (file.exists(Sys.glob("*.1.ht2l"))) {
+      f <- list.files(getwd(),pattern = "\\.1.ht2l$")
+      hisat2.genome <- substr(f[1],1,nchar(f[1]) - 7)
+    } else {
+      stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Hisat2 index.")
+    }
+    # case 2. Fasta file
+  } else {
+    # Do indexing
+    system("echo Indexing the genome... >> hisat.log")
+    system("echo >> hisat.log")
+    hisat2.genome <- strip_name(input.display.names$genome.txt)
+    index.command <- paste("bash -c '",hisat.index.binary,"-p",chipster.threads.max,"genome.txt",hisat2.genome,"2>>hisat.log","'")
+    system(paste("echo ",index.command," >> hisat.log"))
+    system(index.command)
+    echo.command <- paste("echo Internal genome name:",hisat2.genome," >> hisat.log")
+    system(echo.command)
+    # Make tar package from the index
+    if (file.exists(Sys.glob("*.1.ht*"))) {
+      system("tar cf hisat2_index.tar *.ht*")
+    }
+  }
+} else {
+  stop("CHIPSTER-NOTE: Genome file not provided. Please make sure genome file is selcted and assigned to the correct input.")
+}
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
 # Reads to align
@@ -74,7 +108,7 @@ if (quality.format == "phred64") {
 } else {
   hisat.parameters <- paste(hisat.parameters,"--phred33")
 }
-# Intron length, defaluts are 20 and 500 000
+# Intron length, defaults are 20 and 500 000
 hisat.parameters <- paste(hisat.parameters,"--min-intronlen",min.intron.length)
 hisat.parameters <- paste(hisat.parameters,"--max-intronlen",max.intron.length)
 # Specify strand-specific information: the default is unstranded
@@ -85,7 +119,7 @@ if (rna.strandness == "F") {
 }
 # Organism
 # -x declares the basename of the index for reference genome
-hisat.parameters <- paste(hisat.parameters,"-x","own_genome")
+hisat.parameters <- paste(hisat.parameters,"-x",hisat2.genome)
 # Set environment variable that defines where indexes locate, HISAT2 requires this
 #Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2")
 # We have created own genome -> no need fot environment variable
@@ -177,16 +211,15 @@ displayNamesToFile("hisat.log")
 
 # Handle output names
 #
-# read input names
-inputnames <- read_input_definitions()
 
 # Determine base name
-basename <- strip_name(inputnames$reads001.fq)
+basename <- strip_name(input.display.names$reads001.fq)
 
 # Make a matrix of output names
-outputnames <- matrix(NA,nrow = 2,ncol = 2)
+outputnames <- matrix(NA,nrow = 3,ncol = 2)
 outputnames[1,] <- c("hisat.bam",paste(basename,".bam",sep = ""))
 outputnames[2,] <- c("hisat.bam.bai",paste(basename,".bam.bai",sep = ""))
+outputnames[3,] <- c("hisat2_index.tar",paste(hisat2.genome,".hisat2.tar",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

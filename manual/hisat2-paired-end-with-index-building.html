@@ -10,7 +10,8 @@
     <h2>HISAT2 for paired-end reads and own genome</h2>
 
     <h3>Description</h3>
-    <p>This tool aligns Illumina paired end RNA-seq read to a genome provided as a FASTA file.
+    <p>This tool aligns Illumina paired end RNA-seq read to a genome provided either as a FASTA format sequence or as a
+        tar package with a HISAT2 index.
         <p> You need to supply the reads in FASTQ files. The files can be compressed with gzip.
             Note that if you have more than two FASTQ files <i>per sample</i> (for example, Illumina NextSeq produces 8
             FASTQ files per sample), you need to provide also two list files containing the file names in order to
@@ -69,6 +70,11 @@
             fewer alignments with short anchors, which helps transcript assemblers improve significantly in computation
             and memory usage.
         </p>
+        <p>
+            If you use a FASTA format genome, the tool will produce a .tar file with the HISAT2 indexes. If you run the
+            tool again with the same genome, you should use the .tar file as the genome input, as this saves the time
+            needed to generate the indexes.
+        </p>
         <p>After running HISAT2, Chipster indexes the BAM file using the <a
                 href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be
             visualized in the genome browser.</p>
@@ -77,9 +83,10 @@
         <p>
             This tool returns the following files:
             <ul>
-                <li>hisat.bam: BAM file containing the alignments</li>
-                <li>hisat.bam.bai: Index for the BAM file</li>
+                <li>*.bam: BAM file containing the alignments</li>
+                <li>*.bam.bai: Index for the BAM file</li>
                 <li>hisat.log: Summary of the alignment results</li>
+                <li>*.hisat2.tar: HISAT2 index as a tar package (only if FASTA genome provided)</li>
             </ul>
         </p>
 
