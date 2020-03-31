@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>miRNA-seq / Convert miRBased BAM file to count table</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool takes a BAM file as an input, calculates the number of times each miRNA
+        is identified, and removes the ones for which the count is under the user defined threshold.</p>
+
+    <h3>Parameters</h3>
+
+    <ul>
+        <li>Count limit (0-1000) [10]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+        The tool takes as input a BAM file with reads that have been aligned against miRBase and counts
+        the number of alignments per miRNA sequence. Only reads with single alignment are included in the
+        count.</p>
+    <p>
+        User can define a threshold value for count number to be included.
+    </p>
+
+    </p>
+    <p>
+
+
+        <h3>Output</h3>
+
+        <p>
+            <ul>
+                <li>miRNA-counts.tsv: A count file suitable for differential expression analysis</li>
+            </ul>
+        </p>
+
+
+        <h3>References</h3>
+
+        <p>
+
+</body>
