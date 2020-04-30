@@ -7,47 +7,47 @@
 # OUTPUT OPTIONAL preclustered-summary.tsv
 # OUTPUT OPTIONAL preclustered.count_table 
 # PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed for every 100 bases. 1 for every 100 bp sequence is recommended.)
-
+# SLOTS 4
 
 # EK 18.06.2013
 # OUTPUT OPTIONAL log.txt
 # add if for names file in summary
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 # batch file
 preclust.options <- ""
-preclust.options <- paste(preclust.options, "pre.cluster(fasta=a.fasta")
-if (file.exists("a.names")){
-	preclust.options <- paste(preclust.options, " name=a.names", sep=",")
+preclust.options <- paste(preclust.options,"pre.cluster(fasta=a.fasta")
+if (file.exists("a.names")) {
+  preclust.options <- paste(preclust.options," name=a.names",sep = ",")
 }
-if (file.exists("a.count_table")){
-	preclust.options <- paste(preclust.options, " count=a.count_table", sep=",")
+if (file.exists("a.count_table")) {
+  preclust.options <- paste(preclust.options," count=a.count_table",sep = ",")
 }
-preclust.options <- paste(preclust.options, ", diffs=", diffs, ")", sep="")
+preclust.options <- paste(preclust.options,", diffs=",diffs,")",sep = "")
 
 # Write batch file
-write(preclust.options, "batch.mth", append=F)
+write(preclust.options,"batch.mth",append = F)
 
 
 # command
 # command <- paste(binary, "batch.mth", "> log_raw.txt 2>&1")
-command <- paste(binary, "batch.mth", "> log.txt")
+command <- paste(binary,"batch.mth","> log.txt")
 
 #run
 system(command)
 
 # Post process output
 system("mv a.precluster.fasta preclustered.fasta")
-if (file.exists("a.names")){
-	system("mv a.names preclustered.names")
+if (file.exists("a.names")) {
+  system("mv a.names preclustered.names")
 }
-if (file.exists("a.precluster.count_table")){
-	system("mv a.precluster.count_table preclustered.count_table")
+if (file.exists("a.precluster.count_table")) {
+  system("mv a.precluster.count_table preclustered.count_table")
 }
 
 #stool.trim.unique.good.filter.unique.precluster.map
@@ -55,14 +55,14 @@ if (file.exists("a.precluster.count_table")){
 # batch file 2
 #write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
 
-if (file.exists("preclustered.count_table")){
-	write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
+if (file.exists("preclustered.count_table")) {
+  write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)","summary.mth",append = F)
 } else {
-	write("summary.seqs(fasta=preclustered.fasta)", "summary.mth", append=F)
+  write("summary.seqs(fasta=preclustered.fasta)","summary.mth",append = F)
 }
 
 # command 2
-command2 <- paste(binary, "summary.mth", "> log_raw.txt")
+command2 <- paste(binary,"summary.mth","> log_raw.txt")
 
 # run
 system(command2)
