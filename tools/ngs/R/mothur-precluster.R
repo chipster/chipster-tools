@@ -1,7 +1,7 @@
 # TOOL mothur-precluster.R: "Precluster aligned sequences" (Clusters together very similar sequences in order to remove possible sequencing errors. In addition to the fasta file, you need to give count_table file or names file. This tool is based on the Mothur tool pre.cluster.)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
-# INPUT OPTIONAL a.count_table: "Count table" TYPE GENERIC
+# INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL preclustered.fasta
 # OUTPUT OPTIONAL preclustered.names
 # OUTPUT OPTIONAL preclustered-summary.tsv
@@ -10,6 +10,7 @@
 # SLOTS 4
 
 # EK 18.06.2013
+# EK 06.05.2020 Type for input count_table changed
 # OUTPUT OPTIONAL log.txt
 # add if for names file in summary
 
@@ -66,6 +67,9 @@ command2 <- paste(binary,"summary.mth","> log_raw.txt")
 
 # run
 system(command2)
+
+# zip output fasta
+# system("gzip preclustered.fasta")
 
 # Post process output
 system("grep -A 10 Start log_raw.txt > preclustered-summary2.tsv")
