@@ -1,7 +1,7 @@
 # TOOL mothur-filterseqs.R: "Filter sequence alignment" (Filters out gap columns and overhangs from a fasta formatted sequence alignment. Removing empty columns speeds up the distance calculation later. As removing columns can create new identical sequences, identical sequences are detected and removed after filtering. In addition to the FASTA file, you need to provide a count file. This tool is based on the Mothur tools filter.seqs and unique.seqs.)
-# INPUT a.align: "Aligned reads in FASTA format" TYPE GENERIC
+# INPUT a.align: "Aligned reads in FASTA format" TYPE FASTA
 # INPUT a.count_table: "Count table" TYPE MOTHUR_COUNT
-# OUTPUT filtered-unique.fasta
+# OUTPUT filtered-unique.fasta.gz
 # OUTPUT filtered-log.txt
 # OUTPUT filtered-unique-summary.tsv
 # OUTPUT filtered-unique.count_table
@@ -9,6 +9,7 @@
 # EK 05.06.2013
 # ML 17.03.2017 Add optional count-table for summary file
 # EK 22.03.2017 Added unique.seqs after filtering
+# EK 11.05.2020 Zip output fasta
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -53,6 +54,9 @@ command3 <- paste(binary, "summary.mth", "> log_raw.txt")
 
 # run
 system(command3)
+
+# zip output fasta
+system("gzip filtered-unique.fasta")
 
 # Post process output
 system("grep -A 10 Start log_raw.txt > filtered-summary2.tsv")

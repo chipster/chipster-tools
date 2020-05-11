@@ -2,7 +2,7 @@
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL preclustered.fasta
+# OUTPUT OPTIONAL preclustered.fasta.gz
 # OUTPUT OPTIONAL preclustered.names
 # OUTPUT OPTIONAL preclustered-summary.tsv
 # OUTPUT OPTIONAL preclustered.count_table 
@@ -11,6 +11,7 @@
 
 # EK 18.06.2013
 # EK 06.05.2020 Type for input count_table changed
+# EK 11.05.2020 Zip output fasta
 # OUTPUT OPTIONAL log.txt
 # add if for names file in summary
 
@@ -69,7 +70,7 @@ command2 <- paste(binary,"summary.mth","> log_raw.txt")
 system(command2)
 
 # zip output fasta
-# system("gzip preclustered.fasta")
+system("gzip preclustered.fasta")
 
 # Post process output
 system("grep -A 10 Start log_raw.txt > preclustered-summary2.tsv")

@@ -1,7 +1,7 @@
 # TOOL mothur-chimera-uchime.R: "Remove chimeric sequences" (Removes chimeric sequences from a fasta-formatted alignment using the VSEARCH or the UCHIME method. You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. This tool is based on the Mothur tools Chimera.vsearch, Chimera.uchime and Remove.seqs. Please note that it can take some time to run this tool!)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.count_table: "Count table" TYPE GENERIC
-# OUTPUT OPTIONAL chimeras.removed.fasta
+# OUTPUT OPTIONAL chimeras.removed.fasta.gz
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "16S rRNA Silva gold bacteria", none: "none, de novo"] DEFAULT bacterial (You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. Note that if you choose none, you have to give a count table as input.)
@@ -19,6 +19,7 @@
 # EK 1.6.2017 added the vsearch method. Removed the input option for names and groups file as we use the more compact count file now for duplicates.
 # EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta, because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
 # EK 3.9.2018 updated silva.gold path
+# EK 11.5.2020 Zip output fasta
 
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
@@ -142,6 +143,9 @@ command3 <- paste(binary, "summary.mth", "> log_raw.txt")
 
 # run
 system(command3)
+
+# zip output fasta
+system("gzip chimeras.removed.fasta")
 
 # Post process output
 system("grep -A 10 Start log_raw.txt > chimeras.removed.summary2.tsv")

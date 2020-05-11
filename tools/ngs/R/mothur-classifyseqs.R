@@ -3,7 +3,7 @@
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
 # OUTPUT OPTIONAL sequences-taxonomy-assignment.txt
 # OUTPUT OPTIONAL classification-summary.tsv
-# OUTPUT OPTIONAL picked.fasta 
+# OUTPUT OPTIONAL picked.fasta.gz 
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v132"] DEFAULT silva (Reference to use.)
@@ -25,6 +25,7 @@
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 23.3.2017 detach the last steps to another tool (mothur-classify-counttable.R), add iters-parameter and remove.lineage option
 # EK 22.8.2018 updated Silva to v 132, removed bacterial option, added processors-parameter, and made link in the working directory to the reference files
+# EK 11.05.2020 Zip output fasta
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -174,6 +175,9 @@ if (toremove!=""){
 	command3 <- paste(binary, "summary.mth", "> log_raw.txt")
 	# run
 	system(command3)
+	
+	# zip output fasta
+	system("gzip picked.fasta")
 	
 	# Post process output
 	system("grep -A 10 Start log_raw.txt > picked-summary2.tsv")

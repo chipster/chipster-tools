@@ -1,7 +1,7 @@
 # TOOL mothur-uniqueseqs.R: "Extract unique sequences" (Given a fasta file and group file, this tool identifies identical sequences and keeps only one representative sequence. It stores the number of times each representative sequence occurs in each sample in a count_table file. This tool is based on the Mothur tools unique.seqs and count.seqs.)
-# INPUT a.fasta: "FASTA file" TYPE GENERIC
+# INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT a.groups: "Groups file" TYPE MOTHUR_GROUPS
-# OUTPUT unique.fasta
+# OUTPUT unique.fasta.gz
 # OUTPUT OPTIONAL unique.summary.tsv
 # OUTPUT OPTIONAL unique.count_table
 
@@ -9,8 +9,9 @@
 # OUTPUT OPTIONAL log.txt
 
 # EK 06.06.2013
-# ML 17.3.2017 Combine with countseqs.R 
-# ML 22.3.2017 Remove extra input options -these functionalities are moved to the trimming tool
+# ML 17.03.2017 Combine with countseqs.R 
+# ML 22.03.2017 Remove extra input options -these functionalities are moved to the trimming tool
+# EK 11.05.2020 Zip output fasta
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -61,6 +62,9 @@ command2 <- paste(binary, "summary.mth", "> log_raw.txt")
 
 # run
 system(command2)
+
+# zip output fasta
+system("gzip unique.fasta")
 
 # Post process output
 system("grep -A 10 Start log_raw.txt > unique.summary2.tsv")
