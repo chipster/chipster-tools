@@ -2,9 +2,9 @@
 
 	<category name="Data retrieval" color="#e7df70">
 	   <tool>edirect_fetch.py</tool>
- 	   <tool module="common">srafetch.R</tool>
- 	   <tool module="common">enafetch.R</tool>
-	   <tool module="common">srabamfetch.R</tool>
+	   <tool module="common">enafetch.R</tool>
+ 	   <!-- <tool module="common">srafetch.R</tool>
+ 	   <tool module="common">srabamfetch.R</tool> -->
        <tool module="common">ensemblfetch.R</tool>
 	   <tool>dbfetch.R</tool>
 	   <tool>dbfetch_list.R</tool> 
