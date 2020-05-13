@@ -68,6 +68,7 @@
 		<tool>fi.csc.chipster.tools.ngs.SortVcf.java</tool>		
 		<tool>extract-features-from-BED.R</tool>	
 		<tool>bedtools-fastafrombed.R</tool>
+		<tool>gtftobed.R</tool>
 		<!-- 
 		<tool module="common">srafetch.R</tool>
 	    <tool module="common">srabamfetch.R</tool>
