@@ -57,6 +57,7 @@
 		<tool>samtools-consensus.R</tool>
 		<tool>unique-alignments-from-bam.R</tool>
 		<tool>bedtools-bamtobed.R</tool>
+		<tool>gtftobed.R</tool>
 		<tool>fastx-fastq-to-fasta.R</tool>
 		<tool>subset-fastq.R</tool>
 		<tool>samtools-index-fasta.R</tool>
@@ -67,8 +68,7 @@
 		<tool>fi.csc.chipster.tools.ngs.SortTsv.java</tool>
 		<tool>fi.csc.chipster.tools.ngs.SortVcf.java</tool>		
 		<tool>extract-features-from-BED.R</tool>	
-		<tool>bedtools-fastafrombed.R</tool>
-		<tool>gtftobed.R</tool>
+		<tool>bedtools-fastafrombed.R</tool>		
 		<!-- 
 		<tool module="common">srafetch.R</tool>
 	    <tool module="common">srabamfetch.R</tool>
