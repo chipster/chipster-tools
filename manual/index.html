@@ -5,74 +5,88 @@
 
 <h2>Chipster manual</h2>
 
-<p>Chipster is a versatile data analysis platform with interactive visualizations and workflows. It offers a comprehensive collection of analysis tools for next generation sequencing (NGS),
-microarray and proteomics data. The NGS functionality covers analysis from quality control and alignment to downstream applications such as pathway analysis 
-and motif detection (please see the <a href="/features.shtml">analysis tool summary</a> for details), 
-and more analysis tools are added all the time. The built-in Chipster genome browser allows users visualize reads and results in their genomic context.
-The microarray functionality covers expression, aCGH, miRNA, methylation and SNP arrays, and allows users to integrate expression data with miRNA and aCGH data. 
+<p>Chipster is an easy-to-use analysis software for high-throughput data. There are currently two interfaces: a <a href="https://chipster.rahtiapp.fi/home">Web App</a> and a <a href="https://chipster.csc.fi/">Java client</a>. The latter requires Java Web Start, and it will be phased out by 15 Nov 2020. 
+Both interfaces offer the same comprehensive collection of analysis tools for
+<ul>
+<li>RNA-seq</li>
+<li>Single cell RNA-seq</li>
+<li>Small RNA-seq (miRNA and VirusDetect)</li>
+<li>Community analysis of 16S data</li>
+<li>ChIP-seq and DNase-seq</li>
+<li>Exome and whole genome seq (variants and copy number aberrations)</li>
+<li>Microarrays</li>
+</ul> 
  
-</p>
+
 <b>General</b>
 <ul>
-<li> Getting started with Chipster: <a href="https://www.youtube.com/watch?v=mgK1eo1YW4I">Introductory video</a> </li>
+<li> Introductory videos for getting started with Chipster: <a href="https://www.youtube.com/watch?v=sAPjlTYqh-Q">Web App</a>, <a href="https://www.youtube.com/watch?v=mgK1eo1YW4I">Java client</a> </li>
 <li> <a href="courses.html">Course materials</a>: Lecture slides, videos and exercises on selected topics. 
-<li> Analysis sessions: How to continue your analysis later and share it. <a href="sessions.html">Manual</a>, <a href="https://www.youtube.com/watch?v=KOeSRSBy-LU">video</a>. </li>
-<li> Phenodata editor: Describing your experimental setup. <a href="visualisation-phenodata.html">Manual</a>, <a href="https://www.youtube.com/watch?v=eptYuRs2qws">video</a>. </li>
-<li> Workflows: How to automate and share your analysis pipelines. <a href="workflows.html">Manual</a>, <a href="https://www.youtube.com/watch?v=CxR8zbMTjbY">video</a>. </li>
-<li> Interactive visualizations. <a href="https://www.youtube.com/watch?v=PzZQVVD812w">Video</a>. </li>
 <li> <a href="https://github.com/chipster/chipster/wiki/TechnicalManual">Technical manual for admins and developers</a>: How to install your own Chipster server and integrate new tools </li>
 <li> <a href="copyright.html">Copyright</a> </li>
+<li> Java client instructions:
+	<ul>
+		<li> Analysis sessions: How to continue your analysis later and share it. <a href="sessions.html">Manual</a>, <a href="https://www.youtube.com/watch?v=KOeSRSBy-LU">video</a>. </li>
+		<li> Phenodata editor: Describing your experimental setup. <a href="visualisation-phenodata.html">Manual</a>, <a href="https://www.youtube.com/watch?v=eptYuRs2qws">video</a>. </li>
+		<li> Workflows: How to automate and share your analysis pipelines. <a href="workflows.html">Manual</a>, <a href="https://www.youtube.com/watch?v=CxR8zbMTjbY">video</a>. </li>
+		<li> Interactive visualizations. <a href="https://www.youtube.com/watch?v=PzZQVVD812w">Video</a>. </li>
+		<li> <a href="import-ngs.html">Data import</a></li>
+		<li> <a href="genomeBrowser.html">Genome browser</a>: Viewing NGS reads and results in genomic context </li>
+	</ul>
+</li>
 </ul>
+
 <b>NGS data analysis</b>
 <ul>
-<li>Tutorials</li>
-<ul>
-<li> <a href="rna-seq-summary.html">RNA-seq data analysis for differential expression</a></li>
-<li> <a href="https://www.youtube.com/channel/UCnL-Lx5gGlW01OkskZL7JEQ">RNA-seq tutorials (videos)</a></li>
-<li> <a href="/manual/cn-tutorial.pdf">CNA-seq tutorial (pdf)</a></li>
-</ul>
-<li> <a href="import-ngs.html">Data import</a></li>
-<li> <a href="genomeBrowser.html">Genome browser</a>: Viewing NGS reads and results in genomic context </li>
-<li> <a href="tools-ngs.html">Analysis tools for NGS data</a> </li>
-<ul>
-<li> <a href="tools-ngs.html#filtering">Filtering</a> </li>
-<li> <a href="tools-ngs.html#quality">Quality control</a> </li>
-<li> <a href="tools-ngs.html#utilities">Utilities</a> </li>
-<li> <a href="tools-ngs.html#regions">Matching genomic regions</a> </li>
-<li> <a href="tools-ngs.html#alignment">Alignment</a> </li>
-<li> <a href="tools-ngs.html#variants">Variants</a> </li>
-<li> <a href="tools-ngs.html#RNA">RNA-seq</a> </li>
+<li>Tutorials
 	<ul>
-	<li> <a href="library-type-summary.html">How to deal with stranded (directional) RNA-seq data?</a> </li>
+		<li> <a href="rna-seq-summary.html">RNA-seq data analysis for differential expression</a></li>
+		<li> <a href="library-type-summary.html">Dealing with stranded (directional) RNA-seq data</a> </li>
+		<li> RNA-seq data analysis step by steps (<a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBj3KYi7ACscgOxlNkNOxPc">videos</a>)</li>
+		<li> Community analysis of 16S data step by steps (<a href="https://www.youtube.com/playlist?list=PLjiXAZO27elA5SthFXdP7s2FuIgpx9kWF">videos</a>)</li>
+		<li> <a href="/manual/cn-tutorial.pdf">CNA-seq tutorial (pdf)</a></li>
 	</ul>
-<li> <a href="tools-ngs.html#miRNA">miRNA-seq</a> </li>
-<li> <a href="tools-ngs.html#ChIP">ChIP-, DNase-, and Methyl-seq</a> </li>
-<li> <a href="tools-ngs.html#CNA">CNA-seq</a> </li>
-<li> <a href="tools-ngs.html#meta">16S rRNA sequencing</a> </li>
-<li> <a href="tools-ngs.html#singlecell">Single cell sequencing</a> </li>
+</li>	
+<li> <a href="tools-ngs.html">Analysis tools for NGS data</a>
+	<ul>
+		<li> <a href="tools-ngs.html#quality">Quality control</a> </li>
+		<li> <a href="tools-ngs.html#filtering">Filtering</a> </li>
+		<li> <a href="tools-ngs.html#utilities">Utilities</a> </li>
+		<li> <a href="tools-ngs.html#regions">Matching sets of genomic regions</a> </li>
+		<li> <a href="tools-ngs.html#alignment">Alignment</a> </li>
+		<li> <a href="tools-ngs.html#variants">Variants</a> </li>
+		<li> <a href="tools-ngs.html#RNA">RNA-seq</a> </li>
+		<li> <a href="tools-ngs.html#miRNA">Small RNA-seq</a> </li>
+		<li> <a href="tools-ngs.html#singlecell">Single cell RNA-seq</a> </li>
+		<li> <a href="tools-ngs.html#ChIP">ChIP- and DNase-seq</a> </li>
+		<li> <a href="tools-ngs.html#CNA">CNA-seq</a> </li>
+		<li> <a href="tools-ngs.html#meta">16S rRNA sequencing</a> </li>
+
+	</ul>
+</li>	
 </ul>
-</ul>
+
 <b>Microarray data analysis</b>
 <ul>
-<li> <a href="supported-chips.html">Supported microarray types</a> </li>
-<li> <a href="/case-studies/">Example analysis sessions</a> </li>
-<li> <a href="import.html">Data import</a> </li>
-<li> <a href="tutorials.html">Tutorials</a></li>
-<li> Getting started with Chipster: <a href="basic-functionality.html">5 minute tour</a> </li>
-<li> <a href="tools.html">Analysis tools for microarray data</a> </li>
-<ul>
-<li> <a href="tools.html#normalization">Normalization</a> </li>
-<li> <a href="tools.html#quality">Quality control</a> </li>
-<li> <a href="tools.html#preprocessing">Preprocessing</a> </li>
-<li> <a href="tools.html#statistics">Statistics</a> </li>
-<li> <a href="tools.html#clustering">Clustering</a> </li>
-<li> <a href="tools.html#annotation">Annotation</a> </li>
-<li> <a href="tools.html#pathways">Pathways</a> </li>
-<li> <a href="tools.html#promoter">Promoter analysis</a> </li>
-<li> <a href="tools.html#visualization">Visualization</a> </li>
-<li> <a href="tools.html#utilities">Utilities</a> </li>
-<li> <a href="tools.html#acgh">aCGH</a> </li>
-</ul>
+	<li> <a href="supported-chips.html">Supported microarray types</a> </li>
+	<li> <a href="/case-studies/">Example analysis sessions</a> </li>
+	<li> <a href="import.html">Data import</a> (Java client) </li>
+	<li> <a href="tutorials.html">Tutorials</a> (Java client)</a></li>
+	<li> Getting started with Chipster: <a href="basic-functionality.html">5 minute tour</a> (Java client)</li>
+	<li> <a href="tools.html">Analysis tools for microarray data</a> </li>
+	<ul>
+		<li> <a href="tools.html#normalization">Normalization</a> </li>
+		<li> <a href="tools.html#quality">Quality control</a> </li>
+		<li> <a href="tools.html#preprocessing">Preprocessing</a> </li>
+		<li> <a href="tools.html#statistics">Statistics</a> </li>
+		<li> <a href="tools.html#clustering">Clustering</a> </li>
+		<li> <a href="tools.html#annotation">Annotation</a> </li>
+		<li> <a href="tools.html#pathways">Pathways</a> </li>
+		<li> <a href="tools.html#promoter">Promoter analysis</a> </li>
+		<li> <a href="tools.html#visualization">Visualization</a> </li>
+		<li> <a href="tools.html#utilities">Utilities</a> </li>
+		<li> <a href="tools.html#acgh">aCGH</a> </li>
+	</ul>
 </ul>
 
 <!--<li>Supporting material</li>
