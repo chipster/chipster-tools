@@ -1,14 +1,21 @@
-# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference and inner distance estimation using RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. For paired-end reads the inner distance distribution is also calculated.)
+# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference and inner distance estimation using RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files. For paired-end reads the inner distance distribution is also calculated.)
 # INPUT reads1.fq: "Read 1 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
+# INPUT OPTIONAL user_genome: "Genome to align against" TYPE GENERIC
+# INPUT OPTIONAL user_bed: "BED file" TYPE GENERIC
 # OUTPUT experiment_data.txt
 # OUTPUT OPTIONAL inner_distance.pdf
-# PARAMETER organism: "Genome" TYPE ["FILES genomes/bed .bed"] DEFAULT "SYMLINK_TARGET genomes/bed/default .bed" (Genome or transcriptome that you would like to align your reads against.)
+# PARAMETER organism: "Organism" TYPE [other: "Own reference files", "FILES genomes/bed .bed"] DEFAULT other (Choose one of the reference organisms or provide your own reference genome and BED file. It is also possible to use own BED file with one of the provided reference genomes.)
+
+# Functions 
+source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.path,"zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("reads1.fq")
 unzipIfGZipFile("reads2.fq")
+unzipIfGZipFile("user_genome")
+unzipIfGZipFile("user_bed")
 
 # Is the submitted data paired end?
 pe <- FALSE
@@ -23,9 +30,28 @@ if (pe) {
   system(paste(seqtk.binary,"sample -s 15 reads2.fq 200000 > subset.reads2.fq"))
 }
 
+# Was genome file provided
+if (fileOk("user_genome")) {
+  if (fileOk("user_bed")) {
+    bowtie.index.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2-build"))
+    command.indexing <- paste(bowtie.index.binary,"-f","user_genome","user_genome")
+    system(command.indexing)
+  } else {
+    stop(paste('CHIPSTER-NOTE: ',"If you provide you own reference genome FASTA, you must also povide a matching BED file."))
+  }
+}
 # Align against reference genome
 bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
-bowtie.genome <- c(file.path(chipster.tools.path,"genomes","indexes","bowtie2",organism))
+
+if (organism != "other") {
+  bowtie.genome <- c(file.path(chipster.tools.path,"genomes","indexes","bowtie2",organism))
+} else {
+  if (fileOk("user_genome")) {
+    bowtie.genome <- "user_genome"
+  } else {
+    stop(paste('CHIPSTER-NOTE: ',"Select one of the provided reference genome or provide your own FASTA and BED files."))
+  }
+}
 bowtie.command <- paste("bash -c '",bowtie.binary,"-p",chipster.threads.max,"-x",bowtie.genome)
 if (pe) {
   bowtie.command <- paste(bowtie.command,"-1 subset.reads1.fq -2 subset.reads2.fq")
@@ -35,13 +61,21 @@ if (pe) {
 bowtie.command <- paste(bowtie.command,"-S alignment.sam 2>> bowtie2.log'")
 system(bowtie.command)
 
-internal.bed <- file.path(chipster.tools.path,"genomes","bed",paste(organism,".bed",sep = "",collapse = ""))
-
+if (organism != "other") {
+  bed <- file.path(chipster.tools.path,"genomes","bed",paste(organism,".bed",sep = "",collapse = ""))
+} else {
+  # Only BED provided
+  if (fileNotOk("user_genome")) {
+    # Remove chr prefix from chromosome names if present to match internal genomes
+    system(paste("sed -i /\"^chr\"//I user_bed"))
+  }
+  bed <- paste("user_bed")
+}
 # Infer experiment
 # tools-bin RSeQC
 ie.binary <- c(file.path(chipster.tools.path,"rseqc","infer_experiment.py"))
 
-ie.command <- paste(ie.binary,"-i alignment.sam -r",internal.bed,"> experiment_data.txt")
+ie.command <- paste(ie.binary,"-i alignment.sam -r",bed,"> experiment_data.txt")
 system(ie.command)
 
 # Add some helpful explanation to the output
@@ -120,7 +154,7 @@ write(message,file = "experiment_data.txt",append = TRUE)
 if (pe) {
   # tools-bin RSeQC
   ie.binary <- c(file.path(chipster.tools.path,"rseqc","inner_distance.py"))
-  id.command <- paste(ie.binary,"-i alignment.sam -r",internal.bed," -o id")
+  id.command <- paste(ie.binary,"-i alignment.sam -r",bed," -o id")
   system(id.command)
   try(source("id.inner_distance_plot.r"),silent = TRUE)
   system("mv id.inner_distance_plot.pdf inner_distance.pdf")
