@@ -57,6 +57,7 @@
 		<tool>samtools-consensus.R</tool>
 		<tool>unique-alignments-from-bam.R</tool>
 		<tool>bedtools-bamtobed.R</tool>
+		<tool>gtftobed.R</tool>
 		<tool>fastx-fastq-to-fasta.R</tool>
 		<tool>subset-fastq.R</tool>
 		<tool>samtools-index-fasta.R</tool>
@@ -67,7 +68,7 @@
 		<tool>fi.csc.chipster.tools.ngs.SortTsv.java</tool>
 		<tool>fi.csc.chipster.tools.ngs.SortVcf.java</tool>		
 		<tool>extract-features-from-BED.R</tool>	
-		<tool>bedtools-fastafrombed.R</tool>
+		<tool>bedtools-fastafrombed.R</tool>		
 		<!-- 
 		<tool module="common">srafetch.R</tool>
 	    <tool module="common">srabamfetch.R</tool>
@@ -157,23 +158,22 @@
 	<category name="RNA-seq" color="#0177b7">
 		<tool>htseq-count.R</tool>
 		<tool>htseq-count-own-gtf.R</tool>
-		<tool>dexseq-exoncount.R</tool>
-		<tool>dexseq-exoncount-own-gtf.R</tool>
-		<tool>express.R</tool>
-		<tool>deseq2-transform.R</tool>
-		<tool>deseq2.R</tool>		
-		<!--<tool>dea-deseq.R</tool>-->
+		<tool>deseq2.R</tool>
 		<tool>ngs-dea-edger-RNA.R</tool>
 		<tool>edgeR-multivariate.R</tool>
-		<tool>DEXseq.R</tool>
 		<tool>heatmap-for-rnaseq.R</tool>
 		<tool module="common">annotate-cpdb.py</tool>
+		<tool>deseq2-transform.R</tool>
+		<tool>dexseq-exoncount.R</tool>
+		<tool>dexseq-exoncount-own-gtf.R</tool>
+		<tool>DEXseq.R</tool>
 		<tool>cufflinks2.R</tool>
 		<tool>cuffmerge2.R</tool>
 		<tool>cuffcompare2.R</tool>
 		<tool>cuffdiff2.R</tool>
 		<tool>cuffdiff2_with_replicates.R</tool>
-		<tool>samtools-change-bam-strandness.R</tool>		
+		<tool>samtools-change-bam-strandness.R</tool>
+		<tool>express.R</tool>		
 	</category>
 
 	<category name="Small RNA-seq" color="#629a9b">
