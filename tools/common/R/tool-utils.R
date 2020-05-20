@@ -233,3 +233,22 @@ displayNamesToFile <- function(input.file) {
     system(paste("sed -i",sed.command,input.file))
   }
 }
+
+# Formats and prints out the command to stdout. Input names are substituted with
+# display names to aid readability and help spot input assignment errors.
+#
+documentCommand <- function(command.string) {
+  # Substitute input names
+  input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+  for (i in 1:nrow(input.names)) {
+    command.string <- gsub(input.names[i,1],input.names[i,2],command.string)
+  }
+  cat("##","COMMAND:",command.string,"\n")
+}
+
+# Prints out version information.
+#
+documentVersion <- function(application,version.string) {
+  cat("##","VERSION:",application,"\n")
+  cat("##",version.string,"\n")
+}
