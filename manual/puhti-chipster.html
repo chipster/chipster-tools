@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title>Chipster manual</title></head>
+<body>
+
+<h2>Importing data from CSC's Puhti server to Chipster using Allas</h2>
+
+<p>The easiest way to move a file from Puhti to Chipster is to first upload the data as a publicly available object in Allas and then download it from Allas to Chipster.
+Please follow the steps below and you can also watch a <a href="https://a3s.fi/kkmattil-2001057-pub/FromPuhtiToChipster.mov">tutorial video</a>. </p>
+
+<ol>
+	<li>Log in to Puhti and move to the directory where your data file is.</li>
+	<li>Open the connection to Allas with commands <b>module load allas</b> and <b>allas-conf</b>.</li>
+	<li>Upload your file to the public storage area (bucket) of Allas. This can be done with commands <b>a-publish your-file</b> or <b>a-flip your-file</b>. 
+		The file uploaded with a-flip will be removed after a few days (if you run the a-flip command again), while the file uploaded with a-publish will be stored permanently in Allas.
+		<ul>
+			<li>By default a file is uploaded to a standard location in Allas that is named using the project and user names.
+				In case of a-publish you can use the option -b to define your own Allas location.
+				This allows you to use a hard-to-guess random Allas locations and download links for your data in order to increase the security. For example <b>a-publish your-file -b ds0ew0rii04k4gjkuerw8f</b></li>
+		</ul></li>
+	<li>Copy the URL provided by a-flip or a-publish command.</li>
+	<li>Open Chipster and go to your session.</li>
+	<li>Click on <b>Add file</b> and select the option <b>Download from URL</b>. Paste the URL you copied from the a-flip or a-publish output to the URL field and click <b>Download</b>.</li>
+</ol>
+Please note that this approach is recommended only for non-sensitive data that can be put temporarily on the internet.
+</body>
+
+</html>
