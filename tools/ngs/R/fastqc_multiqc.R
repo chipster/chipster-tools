@@ -1,39 +1,44 @@
-# TOOL fastqc_multiqc.R: "Read quality with MultiQC for many FASTQ files" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. This tool is based on the FastQC and MultiQC packages.)
-# INPUT reads.tar: "Tar package containing FASTQ files" TYPE GENERIC
+# TOOL fastqc_multiqc.R: "Read quality with MultiQC for many FASTQ files" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input can be FASTQ files or tar files containing FASTQ files. Files can be gzipped. Please make sure you don't have duplicate FASTQ file names. This tool is based on the FastQC and MultiQC packages.)
+# INPUT reads{...}.fq: "FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL multiqc_report.html
 # OUTPUT OPTIONAL error_log.txt
 
 # 2018.09.10 AMS
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path,"tool-utils.R"))
+#source(file.path(chipster.common.path,"zip-utils.R"))
 
-
-# Read the contents of the tar file into a list
-system("tar tf reads.tar > tar.contents 2>> log.txt")
-file.list <- scan("tar.contents", what="", sep="\n")
-
-# Check that the input is a valid tar file
-if (length(file.list) == 0){
-	stop(paste('CHIPSTER-NOTE: ', "It seems your input file is not a valid Tar package. Please check your input file."))
+# Rename input files to get the original banes in the report
+input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+for (i in 1:nrow(input.names)) {
+  system(paste("mv --backup=numbered",input.names[i,1],input.names[i,2]))
 }
 
-# Open tar package. Folders are flattened.
-system("tar xf reads.tar --xform='s#^.+/##x' 2>> log.txt")	
+# Try opening the input files as tar packages.
+system("ls *.tar *.tar.* *.tgz |xargs -i tar xf {} --xform='s#^.+/##x' 2>/dev/null")
 
 # binary
-fastqc.binary <- file.path(chipster.tools.path, "FastQC", "fastqc")
-# Needs a link in tools like RSeQC
-multiqc.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "multiqc")
+fastqc.binary <- file.path(chipster.tools.path,"FastQC","fastqc")
+multiqc.binary <- file.path(chipster.tools.path,"multiqc","multiqc")
+
+# Document versions
+version <- system(paste(fastqc.binary,"--version"),intern = TRUE)
+documentVersion("FastQC",version)
+version <- system(paste(multiqc.binary,"--version"),intern = TRUE)
+documentVersion("MultiQC",version)
 
 # commands
-fastqc.command <- paste(fastqc.binary, "-f fastq --noextract *")
-multiqc.command <- paste(multiqc.binary, ".")
+fastqc.command <- paste(fastqc.binary,"-f fastq --noextract *")
+multiqc.command <- paste(multiqc.binary,".")
+
+documentCommand(fastqc.command)
+documentCommand(multiqc.command)
 
 # run
 runExternal(fastqc.command)
 runExternal(multiqc.command)
 
-if(fileNotOk("multiqc_report.html")){
-	system("mv stderr.log error_log.txt")
+if (fileNotOk("multiqc_report.html")) {
+  system("mv stderr.log error_log.txt")
 }
 
