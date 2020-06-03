@@ -15,6 +15,8 @@
 # 12.02.2010 MG, Created
 # 09.05.2014 MK, Added several new organisms. Added possibility to annotate Ensembl IDs as well.
 # 25.06.2014 EK, Clarified parameters.
+# 03.06.2020 ML, fix broken url (http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:004352 =>  http://amigo.geneontology.org/amigo/term/GO:0043524)
+
 
 # load packages
 library(genome, character.only=T)
@@ -70,7 +72,7 @@ if (ontology == 'biological_process' || ontology == 'all') {
 			go.table$ontology <- 'biological process'
 			colnames(go.table) <- colnames(output)
 			output <- rbind(output, go.table)
-			go.table$description <- paste('<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=', rownames(go.table), '">', go.table$description, '</a>', sep='')
+			go.table$description <- paste('<a href="http://amigo.geneontology.org/amigo/term/', rownames(go.table), '">', go.table$description, '</a>', sep='')
 			HTML(go.table, file='hypergeo-go.html', append=TRUE, Border=0, innerBorder=1)
 		}
 	}
@@ -89,7 +91,7 @@ if (ontology == 'molecular_function' || ontology == 'all') {
 			go.table$ontology <- 'molecular function'
 			colnames(go.table) <- colnames(output)
 			output <- rbind(output, go.table)
-			go.table$description <- paste('<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=', rownames(go.table), '">', go.table$description, '</a>', sep='')
+			go.table$description <- paste('<a href="http://amigo.geneontology.org/amigo/term/', rownames(go.table), '">', go.table$description, '</a>', sep='')
 			HTML(go.table, file='hypergeo-go.html', append=TRUE, Border=0, innerBorder=1)
 		}
 	}
@@ -108,7 +110,7 @@ if (ontology == 'cellular_component' || ontology == 'all') {
 			go.table$ontology <- 'cellular component'
 			colnames(go.table) <- colnames(output)
 			output <- rbind(output, go.table)
-			go.table$description <- paste('<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=', rownames(go.table), '">', go.table$description, '</a>', sep='')
+			go.table$description <- paste('<a href="http://amigo.geneontology.org/amigo/term/', rownames(go.table), '">', go.table$description, '</a>', sep='')
 			HTML(go.table, file='hypergeo-go.html', append=TRUE, Border=0, innerBorder=1)
 		}
 	}
