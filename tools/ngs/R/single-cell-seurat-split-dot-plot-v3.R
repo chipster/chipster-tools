@@ -8,6 +8,7 @@
 
 # 2018-16-05 ML
 # 09.07.2019 ML Seurat v3
+# 2020-06-17 ML Add ridge plot visualisation
 
 # For testing (not run):
 # markers.to.plot <- c("CD3D", "CREM", "HSPH1", "SELL", "GIMAP5", "CACYBP", "GNLY", 
@@ -61,6 +62,9 @@ FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cu
 data.combined$celltype <- Idents(data.combined)
 plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype",  pt.size = 0, combine = FALSE)
 CombinePlots(plots = plots, ncol = 1)
+
+## Ridge plot:
+RidgePlot(data.combined, features = markers.to.plot, ncol = 2)
 
 dev.off() # close the pdf
 

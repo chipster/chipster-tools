@@ -13,6 +13,7 @@
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2019-06-28 EK Add point size parameter for tSNE plot
 # 2019-06-13 ML Seurat v3
+# 2020-06-18 ML Add ridge plot
 
 # for UMAP:
 library(reticulate)
@@ -46,10 +47,19 @@ if (!all(!is.na(match(biomarker, all.genes)))) {
   stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found))
   }
 
-# Violin plot:
+# open pdf
 pdf(file="biomarker_plot.pdf", width=12, height=12) 
+
+# Violin plot:
 VlnPlot(seurat_obj, features = biomarker)
+
+# Feature plot:
 FeaturePlot(seurat_obj, features = biomarker, pt.size=point.size, reduction=reduction.method) 	
-dev.off() # close the pdf
+
+# Ridge plot:
+RidgePlot(seurat_obj, features = biomarker, ncol = 2)
+
+# close the pdf
+dev.off() 
 
 # EOF
