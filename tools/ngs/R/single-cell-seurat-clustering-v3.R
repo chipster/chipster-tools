@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-clustering-v3.R: "Seurat v3 -Clustering and detection of cluster marker genes" (Clusters cells, performs tSNE and UMAP for visualization purposes, and finds marker genes for the clusters.)
+# TOOL single-cell-seurat-clustering-v3.R: "Seurat v3 -Clustering and detection of cluster marker genes" (Clusters cells, performs tSNE and UMAP for visualization purposes, and finds positive marker genes for the clusters.)
 # INPUT seurat_obj.Robj: "Seurat object from the Setup tool" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL clusterPlot.pdf
