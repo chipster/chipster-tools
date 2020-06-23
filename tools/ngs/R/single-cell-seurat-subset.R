@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-subset.R: "Seurat v3 BETA -Subset Seurat objects based on gene expression" (Subset cells in a Seurat object based on the expression level of a gene/feature. Gene name and expression threshold are given as parameters.)
+# TOOL single-cell-seurat-subset.R: "Seurat v3 BETA -Subset Seurat objects based on gene expression" (Subset cells in a Seurat object based on the expression level of a gene or feature. Gene name and expression threshold are given as parameters.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL subset_plot.pdf
