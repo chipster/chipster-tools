@@ -195,7 +195,8 @@
 	
 	<category name="Single cell RNA-seq" color="#37dddd">	   	
 		<tool>single-cell-seurat-setup-v3.R</tool>	   	
-		<tool>single-cell-seurat-filter-regress-v3.R</tool>	   	
+		<tool>single-cell-seurat-filter-regress-v3.R</tool>	
+		<tool>single-cell-seurat-sctransform.R</tool>	
 		<tool>single-cell-seurat-pca-v3.R</tool>	   	
 		<tool>single-cell-seurat-clustering-v3.R</tool>	
 		<tool>single-cell-seurat-gene-plots-v3.R</tool>
