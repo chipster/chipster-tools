@@ -23,61 +23,69 @@
 # OUTPUT OPTIONAL reads.trim.names
 # OUTPUT OPTIONAL trim.unique.qual
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
+
+# check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+version <- system(paste(binary,"--version"),intern = TRUE)
+documentVersion("Mothur",version)
 
 # Add options
 trimseqs.options <- ""
-trimseqs.options <- paste(trimseqs.options, "trim.seqs(fasta=reads.fasta, oligos=reads.oligos")
-if (file.exists("reads.qual")){
-	trimseqs.options <- paste(trimseqs.options, " qfile=reads.qual", sep=",")
+trimseqs.options <- paste(trimseqs.options,"trim.seqs(fasta=reads.fasta, oligos=reads.oligos")
+if (file.exists("reads.qual")) {
+  trimseqs.options <- paste(trimseqs.options," qfile=reads.qual",sep = ",")
 }
-if (flip == "yes"){
-	trimseqs.options <- paste(trimseqs.options, " flip=T", sep=",")
+if (flip == "yes") {
+  trimseqs.options <- paste(trimseqs.options," flip=T",sep = ",")
 }
-if (!is.na(qaverage)){
-	trimseqs.options <- paste(trimseqs.options, ", qaverage=", qaverage, sep="")
+if (!is.na(qaverage)) {
+  trimseqs.options <- paste(trimseqs.options,", qaverage=",qaverage,sep = "")
 }
-if (!is.na(qwindowaverage)){
-	trimseqs.options <- paste(trimseqs.options, ", qwindowaverage=", qwindowaverage, sep="")
+if (!is.na(qwindowaverage)) {
+  trimseqs.options <- paste(trimseqs.options,", qwindowaverage=",qwindowaverage,sep = "")
 }
-if (!is.na(qwindowsize)){
-	trimseqs.options <- paste(trimseqs.options, ", qwindowsize=", qwindowsize, sep="")
+if (!is.na(qwindowsize)) {
+  trimseqs.options <- paste(trimseqs.options,", qwindowsize=",qwindowsize,sep = "")
 }
-if (!is.na(qstepsize)){
-	trimseqs.options <- paste(trimseqs.options, ", qstepsize=", qstepsize, sep="")
+if (!is.na(qstepsize)) {
+  trimseqs.options <- paste(trimseqs.options,", qstepsize=",qstepsize,sep = "")
 }
-if (!is.na(maxambig)){
-	trimseqs.options <- paste(trimseqs.options, ", maxambig=", maxambig, sep="")
+if (!is.na(maxambig)) {
+  trimseqs.options <- paste(trimseqs.options,", maxambig=",maxambig,sep = "")
 }
-if (!is.na(maxhomop)){
-	trimseqs.options <- paste(trimseqs.options, ", maxhomop=", maxhomop, sep="")
+if (!is.na(maxhomop)) {
+  trimseqs.options <- paste(trimseqs.options,", maxhomop=",maxhomop,sep = "")
 }
-if (!is.na(minlength)){
-	trimseqs.options <- paste(trimseqs.options, ", minlength=", minlength, sep="")
+if (!is.na(minlength)) {
+  trimseqs.options <- paste(trimseqs.options,", minlength=",minlength,sep = "")
 }
-if (!is.na(maxlength)){
-	trimseqs.options <- paste(trimseqs.options, ", maxlength=", maxlength, sep="")
+if (!is.na(maxlength)) {
+  trimseqs.options <- paste(trimseqs.options,", maxlength=",maxlength,sep = "")
 }
-if (!is.na(pdiffs)){
-	trimseqs.options <- paste(trimseqs.options, ", pdiffs=", pdiffs, sep="")
+if (!is.na(pdiffs)) {
+  trimseqs.options <- paste(trimseqs.options,", pdiffs=",pdiffs,sep = "")
 }
-if (!is.na(bdiffs)){
-	trimseqs.options <- paste(trimseqs.options, ", bdiffs=", bdiffs, sep="")
+if (!is.na(bdiffs)) {
+  trimseqs.options <- paste(trimseqs.options,", bdiffs=",bdiffs,sep = "")
 }
-trimseqs.options <- paste(trimseqs.options, ")", sep="")
+trimseqs.options <- paste(trimseqs.options,", processors=",chipster.threads.max,sep = "")
+trimseqs.options <- paste(trimseqs.options,")",sep = "")
 
 #stop(paste('CHIPSTER-NOTE: ', trimseqs.options))
 
 # Batch file 1 for trim.seqs and unique.seqs
-write(trimseqs.options, "trim.mth", append=F)
-write("unique.seqs(fasta=reads.trim.fasta)", "trim.mth", append=T)
+documentCommand(trimseqs.options)
+write(trimseqs.options,"trim.mth",append = FALSE)
+uniqueseqs.options <- paste("unique.seqs(fasta=reads.trim.fasta)")
+documentCommand(uniqueseqs.options)
+write(uniqueseqs.options,"trim.mth",append = TRUE)
 # command
-command <- paste(binary, "trim.mth")
+command <- paste(binary,"trim.mth")
 # run
 system(command)
 # rename fasta and groups file
@@ -85,18 +93,23 @@ system("mv reads.trim.unique.fasta trim.unique.fasta")
 system("mv reads.groups trim.groups")
 
 # Batch file 2 for count.seqs
-write(paste("count.seqs(name=reads.trim.names, group=trim.groups)", sep=""), "batch.mth", append=F)
+countseqs.options <- paste("count.seqs(name=reads.trim.names, group=trim.groups)",sep = "")
+documentCommand(countseqs.options)
+write(countseqs.options,"batch.mth",append = FALSE)
 # command
-command <- paste(binary, "batch.mth", ">> log.txt")
+command <- paste(binary,"batch.mth",">> log.txt")
 # run
 system(command)
 # rename count file
 system("mv reads.trim.count_table trim.unique.count_table")
 
 # Batch file 3 for summary.seqs
-write("summary.seqs(fasta=trim.unique.fasta, count=trim.unique.count_table)", "summary.mth", append=F)
+summaryseqs.options <- paste("summary.seqs(fasta=trim.unique.fasta, count=trim.unique.count_table")
+summaryseqs.options <- paste(summaryseqs.options,", processors=",chipster.threads.max,")",sep = "")
+documentCommand(summaryseqs.options)
+write(summaryseqs.options,"summary.mth",append = FALSE)
 # command
-command <- paste(binary, "summary.mth", "> log_raw.txt")
+command <- paste(binary,"summary.mth","> log_raw.txt")
 # run
 system(command)
 
@@ -113,11 +126,3 @@ system("sed 's/^		/	/' summary.trim.unique2.tsv > summary.trim.unique.tsv")
 
 #system("mv reads.trim.names reads.trim.names.txt")
 #system("mv reads.groups reads.groups.txt")
-
-
-
-
-
-
-
-

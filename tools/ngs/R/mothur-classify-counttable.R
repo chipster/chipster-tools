@@ -21,27 +21,27 @@ library(reshape2)
 
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 
 # Count table and phenodata preparations:
 
 # Reads the data and tabulates it
-pick <- read.table("picked.count_table", header=T, sep="\t")
-tax  <- read.table("sequences-taxonomy-assignment.txt", header=F, sep="\t")
-dat  <- merge(pick, tax, by.x="Representative_Sequence", by.y="V1")
-dat$V2<-gsub(".[[:digit:]]{1,}.?[[:digit:]]?)", "", as.character(dat$V2))
+pick <- read.table("picked.count_table",header = T,sep = "\t")
+tax <- read.table("sequences-taxonomy-assignment.txt",header = F,sep = "\t")
+dat <- merge(pick,tax,by.x = "Representative_Sequence",by.y = "V1")
+dat$V2 <- gsub(".[[:digit:]]{1,}.?[[:digit:]]?)","",as.character(dat$V2))
 
 
 # Cutting the taxonomic names
-if(cutlevel==0) {
-	dat$newnames<-dat$V2
+if (cutlevel == 0) {
+  dat$newnames <- dat$V2
 } else {
-	sp<-strsplit(dat$V2, ";")
-	sp2<-rep(NA, nrow(dat))
-	for(i in 1:nrow(dat)) {
-		sp2[i]<-paste(sp[[i]][1:cutlevel], collapse=";")
-	}
-	dat$newnames<-sp2
+  sp <- strsplit(dat$V2,";")
+  sp2 <- rep(NA,nrow(dat))
+  for (i in 1:nrow(dat)) {
+    sp2[i] <- paste(sp[[i]][1:cutlevel],collapse = ";")
+  }
+  dat$newnames <- sp2
 }
 
 
@@ -51,10 +51,10 @@ data_end <- which(colnames(dat) == "V2") - 1
 names_col <- which(colnames(dat) == "newnames")
 
 # Same manipulations here
-dat <- dat[,c(names_col, data_start:data_end)]
+dat <- dat[,c(names_col,data_start:data_end)]
 datm <- melt(dat)
-a <- aggregate(datm$value, list(datm$newnames, datm$variable), function(x) sum(x, na.rm=T))
-b <- dcast(a, Group.2~Group.1)
+a <- aggregate(datm$value,list(datm$newnames,datm$variable),function(x) sum(x,na.rm = T))
+b <- dcast(a,Group.2 ~ Group.1)
 rownames(b) <- b$Group.2
 b <- b[,-1]
 
@@ -62,37 +62,36 @@ b <- b[,-1]
 #if(nmax == 0 & rarefy == "yes") {  # we can add nmax parameter later
 #	nmax <- min(rowSums(b))
 #}
-if(rarefy == "yes") {
-	nmax <- min(rowSums(b))
-	btmp <- apply(b, 1, function(x) rep(colnames(b), times=x))
-	seed <- 1234
-	set.seed(seed)
-	btmp <- lapply(btmp, function(x) sample(x, size=nmax, replace=F))
-	btmp <- lapply(btmp, function(x) table(factor(x, levels=colnames(b))))
-	b <- t(do.call(cbind, btmp))
-#	# deleted.columns <- colnames(b)[which(colSums(b)==0)] 
-	b <- b[,-which(colSums(b)==0)]
+if (rarefy == "yes") {
+  nmax <- min(rowSums(b))
+  btmp <- apply(b,1,function(x) rep(colnames(b),times = x))
+  seed <- 1234
+  set.seed(seed)
+  btmp <- lapply(btmp,function(x) sample(x,size = nmax,replace = F))
+  btmp <- lapply(btmp,function(x) table(factor(x,levels = colnames(b))))
+  b <- t(do.call(cbind,btmp))
+  #	# deleted.columns <- colnames(b)[which(colSums(b)==0)] 
+  b <- b[, - which(colSums(b) == 0)]
 }
 
 # Produce binary table (0/1) showing only if a specie is present or absent, rather than the actual sequence counts        
-if(binarytable == "yes") {
-	b[b>0] <- 1
+if (binarytable == "yes") {
+  b[b > 0] <- 1
 }
 
 tab <- b
 
 # Writing the table to disk
-write.table(tab, "counttable.tsv", col.names=T, row.names=T, sep="\t", quote=FALSE)
-write.table(data.frame(sample=rownames(tab), chiptype="NGS", group=rep("", length(rownames(tab)))), "phenodata.tsv", col.names=T, row.names=F, sep="\t", quote=F)
+write.table(tab,"counttable.tsv",col.names = T,row.names = T,sep = "\t",quote = FALSE)
+write.table(data.frame(sample = rownames(tab),chiptype = "NGS",group = rep("",length(rownames(tab)))),"phenodata.tsv",col.names = T,row.names = F,sep = "\t",quote = F)
 
 # Transpose the table, add "chip." to column names to make it compatible with DESeq2 and edgeR tools, and write it to disk.
 # Rarefied counts should not be used in DEseq2 and edgeR, so we don't make the transposed table if the rarefy=yes.
-if(rarefy == "no") {
-	oldtable <- read.table("counttable.tsv",header = TRUE, sep = "\t", check.names = FALSE)
-	newtable <- t(oldtable)
-	colnames(newtable) <- paste("chip", colnames(newtable), sep = ".")
-	write.table(newtable, "counttable_transposed.tsv", quote = FALSE, sep = "\t")
+if (rarefy == "no") {
+  oldtable <- read.table("counttable.tsv",header = TRUE,sep = "\t",check.names = FALSE)
+  newtable <- t(oldtable)
+  colnames(newtable) <- paste("chip",colnames(newtable),sep = ".")
+  write.table(newtable,"counttable_transposed.tsv",quote = FALSE,sep = "\t")
 }
-	
 
-	
+

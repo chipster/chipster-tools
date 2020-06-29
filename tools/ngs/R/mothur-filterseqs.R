@@ -11,18 +11,25 @@
 # EK 22.03.2017 Added unique.seqs after filtering
 # EK 11.05.2020 Zip output fasta
 
+source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.path,"zip-utils.R"))
+
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("a.align")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+version <- system(paste(binary,"--version"),intern = TRUE)
+documentVersion("Mothur",version)
 
 # batch file 1
-write("filter.seqs(fasta=a.align, vertical=T, trump=.)", "batch.mth", append=F)
+filterseqs.options <- paste("filter.seqs(fasta=a.align, vertical=T, trump=.")
+filterseqs.options <- paste(filterseqs.options,", processors=",chipster.threads.max,")",sep = "")
+documentCommand(filterseqs.options)
+write(filterseqs.options,"batch.mth",append = FALSE)
 
 # command
-command <- paste(binary, "batch.mth", "> log_raw.txt")
+command <- paste(binary,"batch.mth","> log_raw.txt")
 
 # run
 system(command)
@@ -33,10 +40,12 @@ system("grep -A 4 filtered log_raw.txt > filtered-log.txt")
 
 
 # batch file 2
-write("unique.seqs(fasta=a.filter.fasta, count=a.count_table)", "batch.mth", append=F)
+uniqueseq.options <- paste("unique.seqs(fasta=a.filter.fasta, count=a.count_table)")
+documentCommand(uniqueseq.options)
+write(uniqueseq.options,"batch.mth",append = FALSE)
 
 # command 2
-command2 <- paste(binary, "batch.mth", "> log.txt 2>&1")
+command2 <- paste(binary,"batch.mth","> log.txt 2>&1")
 
 # run
 system(command2)
@@ -46,11 +55,13 @@ system("mv a.filter.unique.fasta filtered-unique.fasta")
 system("mv a.filter.count_table filtered-unique.count_table")
 
 # batch file 3
-
-write("summary.seqs(fasta=filtered-unique.fasta, count=filtered-unique.count_table)", "summary.mth", append=F)
+summaryseq.options <- paste("summary.seqs(fasta=filtered-unique.fasta, count=filtered-unique.count_table")
+summaryseq.options <- paste(summaryseq.options,", processors=",chipster.threads.max,")",sep = "")
+documentCommand(summaryseq.options)
+write(summaryseq.options,"summary.mth",append = FALSE)
 
 # command 3
-command3 <- paste(binary, "summary.mth", "> log_raw.txt")
+command3 <- paste(binary,"summary.mth","> log_raw.txt")
 
 # run
 system(command3)

@@ -3,21 +3,27 @@
 # OUTPUT reads.fasta
 # OUTPUT basequalities.qual
 # OUTPUT reads.summary.tsv
-		
+
 # EK 11.04.2017
 
+source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.path,"zip-utils.R"))
+
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("a.fastq")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+version <- system(paste(binary,"--version"),intern = TRUE)
+documentVersion("Mothur",version)
 
 # batch file
-write("fastq.info(fastq=a.fastq)", "batch.mth", append=F)
+fastqinfo.options <- paste("fastq.info(fastq=a.fastq)")
+documentCommand(fastqinfo.options)
+write(fastqinfo.options,"batch.mth",append = FALSE)
 
 # command
-command <- paste(binary, "batch.mth", "> log_raw.txt")
+command <- paste(binary,"batch.mth","> log_raw.txt")
 
 # run
 system(command)
@@ -27,10 +33,12 @@ system("mv a.fasta reads.fasta")
 system("mv a.qual basequalities.qual")
 
 # batch file 2
-write("summary.seqs(fasta=reads.fasta)", "batch.mth", append=F)
+summaryseqs.options <- paste("summary.seqs(fasta=reads.fasta, processors=",chipster.threads.max,")",sep = "")
+documentCommand(summaryseqs.options)
+write(summaryseqs.options,"batch.mth",append = FALSE)
 
 # command
-command <- paste(binary, "batch.mth", "> log_raw.txt")
+command <- paste(binary,"batch.mth","> log_raw.txt")
 
 # run
 system(command)
