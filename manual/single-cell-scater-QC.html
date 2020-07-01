@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Scater QC </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool gives as an output an .pdf file with several plots that can be used to estimate
+        the quality of the data. As an input, give a Seurat object.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>-</li>
+
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        The Seurat object given as an input is converted into a Scater object (SCE).
+        After this, several QC plots are printed in the output pdf file.
+    </p>
+
+
+    <h4>Plot 1: Most expressed features</h4>
+    <p>
+        Plot shows the features with the (50) highest average expression across all cells,
+        along with their expression in each individual cell.
+        In this plot, you can check which genes are the top 50 most expressed, and detect possibly
+        overabundant genes.
+        For example, you can see if there are mitochondrial genes (MT-) that you might want to
+        remove from the analysis.
+        Y-axis lists the top genes, and x-axis the percentage of total counts.
+        Each small bar/tick represents a cell.
+        The color of the tick represents the total number of features in that cell.
+        The dot in each line shows the average epression.
+    </p>
+
+    <h4>Plot 2: Cumulative expression </h4>
+    <p>
+        Plot shows the relative proportion of the library size that is accounted for by the 1000 most highly
+        expressed features for each cell. Y-axis is the cumulative proportion and
+        x-axis number of the top expressers included. Each cell is presented as a line.
+    </p>
+
+
+    <h4>Plot 3: Comparing statistics</h4>
+    <p>
+        Several QC values plotted against each other.
+    </p>
+
+
+    <h4>Plots 4 and 5: Principal component comparisons</h4>
+    <p>
+        Here we see first 4 principal components plotted against each other.
+        The percentage of the variability of the data explained by each PC is also reported.
+        The dots representing the cells are colored based on mitochondrial % and total umber of features.
+    </p>
+
+    <h4>Plots 6-9: Explanatory factors</h4>
+    <p>
+        Here we see first 4 principal components plotted against each other.
+        The percentage of the variability of the data explained by each PC is also reported.
+        The dots representing the cells are colored based on mitochondrial % and total number of features.
+    </p>
+
+
+    <p>
+        For more details, please check the <a
+            href="https://bioconductor.org/packages/release/bioc/html/scater.html">Scater package in Bioconductor</a>
+        and the Scater article: McCarthy DJ, Campbell KR, Lun ATL, Willis QF (2017).
+        “Scater: pre-processing, quality control, normalisation and visualisation of single-cell RNA-seq data in R.”
+        Bioinformatics, 33, 1179-1186. <a href="10.1093/bioinformatics/btw777">DOI</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+            Chipster. </li>
+        <li>QCplots.pdf: Quality control plots </li>
+    </ul>
+
+
+
+</body>
