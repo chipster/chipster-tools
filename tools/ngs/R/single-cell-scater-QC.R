@@ -10,6 +10,8 @@
 
 library(Seurat)
 library(scater)
+library(mvoutlier)
+library(gplots) # for textplot
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -40,17 +42,18 @@ p3 <- plotColData(sce, x = "pct_counts_feature_control",  y = "pct_counts_in_top
 p4 <- plotRowData(sce, x = "n_cells_by_counts", y = "mean_counts")
 multiplot(p1, p2, p3, p4, cols = 2)
 
-# Not working atm, requires mvoutlier package that is not available for the current R version
-#  https://github.com/ethering/scater_1.8.4_wrappers/issues/2 
 # Identify outliers (=low quality cells): 
-# run PCA and identify outliers in PCA space
-# sce <- runPCA(sce, use_coldata = TRUE, detect_outliers = TRUE)
-# plotReducedDim(sce, use_dimred="PCA_coldata") # colour_by = "ident"
-# table(colData(sce)$outlier)
-# textplot(paste("\v \v Number of \n \v \v outlier cells detected in PCA space: \n \v \v", table(colData(sce)$outlier)), halign = "center", valign = "center", cex = 2)
-
-# run PCA with 1000 top variable genes
-# Huom, ei tarvitsisi ajaa jos on jo Seurat-objectissa tämä, voisi testata enste.
+# Run PCA and identify outliers in PCA space
+sce <- runPCA(sce, use_coldata = TRUE, detect_outliers = TRUE)
+plotReducedDim(sce, use_dimred="PCA_coldata") # colour_by = "ident"
+table(colData(sce)$outlier)
+not_outliers <- table(colData(sce)$outlier)[1]
+outliers <- table(colData(sce)$outlier)[2]
+outliers_pt <- round(outliers/(outliers+not_outliers)*100, digits = 2)
+textplot(paste("Total number of cells", outliers+not_outliers, "\n Detecting outliers in PCA space: \n Not outlier cells:", not_outliers, " \n Outlier cells:", outliers, "(", outliers_pt ,"%)" ), halign = "center", valign = "center", cex = 1)
+ 
+# Run PCA with 1000 top variable genes
+# Note: not necessary, if Seurat object already has PCs? 
 sce <- runPCA(sce, ntop = 1000, exprs_values = "logcounts", ncomponents = 20)
 
 # PCA - with different coloring, first 4 components
