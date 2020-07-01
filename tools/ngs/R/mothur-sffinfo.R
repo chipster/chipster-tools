@@ -8,24 +8,27 @@
 
 # AMS 19.06.2013
 
+source(file.path(chipster.common.path,"tool-utils.R"))
+
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+version <- system(paste(binary,"--version"),intern = TRUE)
+documentVersion("Mothur",version)
 
 # Options
 sffinfo.options <- ""
-sffinfo.options <- paste(sffinfo.options, "sffinfo(sff=reads.sff")
-if (trim == "no"){
-	sffinfo.options <- paste(sffinfo.options, " trim=F", sep=",")
+sffinfo.options <- paste(sffinfo.options,"sffinfo(sff=reads.sff")
+if (trim == "no") {
+  sffinfo.options <- paste(sffinfo.options,", trim=F",sep = ",")
 }
-sffinfo.options <- paste(sffinfo.options, ")", sep="")
-
-#stop(paste('CHIPSTER-NOTE: ', ssfinfo.options))
+sffinfo.options <- paste(sffinfo.options,")",sep = "")
 
 # Write batch file
-write(sffinfo.options, "sffinfo.mth", append=F)
+documentCommand(sffinfo.options)
+write(sffinfo.options,"sffinfo.mth",append = FALSE)
 
 # command
-command <- paste(binary, "sffinfo.mth")
+command <- paste(binary,"sffinfo.mth")
 
 # run
 system(command)

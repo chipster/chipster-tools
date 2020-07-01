@@ -15,12 +15,17 @@
 # OUTPUT OPTIONAL log.txt
 # add if for names file in summary
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
+
+# check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+version <- system(paste(binary,"--version"),intern = TRUE)
+documentVersion("Mothur",version)
+
 # batch file
 preclust.options <- ""
 preclust.options <- paste(preclust.options,"pre.cluster(fasta=a.fasta")
@@ -30,10 +35,12 @@ if (file.exists("a.names")) {
 if (file.exists("a.count_table")) {
   preclust.options <- paste(preclust.options," count=a.count_table",sep = ",")
 }
-preclust.options <- paste(preclust.options,", diffs=",diffs,")",sep = "")
+preclust.options <- paste(preclust.options,", diffs=",diffs,sep = "")
+preclust.options <- paste(preclust.options,", processors=",chipster.threads.max,")",sep = "")
 
 # Write batch file
-write(preclust.options,"batch.mth",append = F)
+documentCommand(preclust.options)
+write(preclust.options,"batch.mth",append = FALSE)
 
 
 # command
@@ -56,12 +63,13 @@ if (file.exists("a.precluster.count_table")) {
 
 # batch file 2
 #write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
-
+summaryseqs.options <- paste("summary.seqs(fasta=preclustered.fasta")
 if (file.exists("preclustered.count_table")) {
-  write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)","summary.mth",append = F)
-} else {
-  write("summary.seqs(fasta=preclustered.fasta)","summary.mth",append = F)
+  summaryseqs.options <- paste(summaryseqs.options,", count=preclustered.count_table",sep = "")
 }
+summaryseqs.options <- paste(summaryseqs.options,", processors=",chipster.threads.max,")",sep = "")
+documentCommand(summaryseqs.options)
+write("summary.seqs(fasta=preclustered.fasta)","summary.mth",append = FALSE)
 
 # command 2
 command2 <- paste(binary,"summary.mth","> log_raw.txt")

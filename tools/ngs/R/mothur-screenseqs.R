@@ -25,94 +25,98 @@
 # OUTPUT OPTIONAL screened.names
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 
+source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.path,"zip-utils.R"))
+
 # Check if fasta is zipped and unzip it if needed
-source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+version <- system(paste(binary,"--version"),intern = TRUE)
+documentVersion("Mothur",version)
 
 # Add options
 screenseqs.options <- ""
-screenseqs.options <- paste(screenseqs.options, "screen.seqs(fasta=a.fasta")
-if (file.exists("a.names")){
-	screenseqs.options <- paste(screenseqs.options, " name=a.names", sep=",")
+screenseqs.options <- paste(screenseqs.options,"screen.seqs(fasta=a.fasta")
+if (file.exists("a.names")) {
+  screenseqs.options <- paste(screenseqs.options," name=a.names",sep = ",")
 }
-if (file.exists("a.groups")){
-	screenseqs.options <- paste(screenseqs.options, " group=a.groups", sep=",")
+if (file.exists("a.groups")) {
+  screenseqs.options <- paste(screenseqs.options," group=a.groups",sep = ",")
 }
-if (file.exists("a.summary")){
-	screenseqs.options <- paste(screenseqs.options, " summary=a.summary", sep=",")
+if (file.exists("a.summary")) {
+  screenseqs.options <- paste(screenseqs.options," summary=a.summary",sep = ",")
 }
-if (file.exists("a.count")){
-	screenseqs.options <- paste(screenseqs.options, " count=a.count", sep=",")
+if (file.exists("a.count")) {
+  screenseqs.options <- paste(screenseqs.options," count=a.count",sep = ",")
 }
 # Sanity check (User can't optimize by minlength and specify a minlength at the same time)
-if (optimize != "empty"){
-	if ( (optimize == "minlength" && !is.na(minlength)) || (optimize == "start" && !is.na(start)) || (optimize == "end" && !is.na(end))){
-		stop('CHIPSTER-NOTE: You cant determine minlenght and choose to optimize according the same criteria: choose only one of these!')
-	}
-}	
-	
-if (!is.na(minlength)){
-	screenseqs.options <- paste(screenseqs.options, ", minlength=", minlength, sep="")
-}
-if (!is.na(maxlength)){
-	screenseqs.options <- paste(screenseqs.options, ", maxlength=", maxlength, sep="")
-}
-if (!is.na(end)){
-	screenseqs.options <- paste(screenseqs.options, ", end=", end, sep="")
-}
-if (!is.na(start)){
-	screenseqs.options <- paste(screenseqs.options, ", start=", start, sep="")
-}
-if (!is.na(maxambig)){
-	screenseqs.options <- paste(screenseqs.options, ", maxambig=", maxambig, sep="")
-}
-if (!is.na(maxhomop)){
-	screenseqs.options <- paste(screenseqs.options, ", maxhomop=", maxhomop, sep="")
-}
-if (optimize != "empty"){
-	screenseqs.options <- paste(screenseqs.options, ", optimize=", optimize, sep="")
-	screenseqs.options <- paste(screenseqs.options, ", criteria=", criteria, sep="")
+if (optimize != "empty") {
+  if ((optimize == "minlength" && !is.na(minlength)) || (optimize == "start" && !is.na(start)) || (optimize == "end" && !is.na(end))) {
+    stop('CHIPSTER-NOTE: You cant determine minlenght and choose to optimize according the same criteria: choose only one of these!')
+  }
 }
 
-screenseqs.options <- paste(screenseqs.options, ")", sep="")
+if (!is.na(minlength)) {
+  screenseqs.options <- paste(screenseqs.options,", minlength=",minlength,sep = "")
+}
+if (!is.na(maxlength)) {
+  screenseqs.options <- paste(screenseqs.options,", maxlength=",maxlength,sep = "")
+}
+if (!is.na(end)) {
+  screenseqs.options <- paste(screenseqs.options,", end=",end,sep = "")
+}
+if (!is.na(start)) {
+  screenseqs.options <- paste(screenseqs.options,", start=",start,sep = "")
+}
+if (!is.na(maxambig)) {
+  screenseqs.options <- paste(screenseqs.options,", maxambig=",maxambig,sep = "")
+}
+if (!is.na(maxhomop)) {
+  screenseqs.options <- paste(screenseqs.options,", maxhomop=",maxhomop,sep = "")
+}
+if (optimize != "empty") {
+  screenseqs.options <- paste(screenseqs.options,", optimize=",optimize,sep = "")
+  screenseqs.options <- paste(screenseqs.options,", criteria=",criteria,sep = "")
+}
+screenseqs.options <- paste(screenseqs.options,", processors=",chipster.threads.max,sep = "")
+screenseqs.options <- paste(screenseqs.options,")",sep = "")
 
 # stop(paste('CHIPSTER-NOTE: ', screenseqs.options))
 
 # Write batch file
-write(screenseqs.options, "trim.mth", append=F)
+documentCommand(screenseqs.options)
+write(screenseqs.options,"trim.mth",append = FALSE)
 #write("screen.seqs(fasta=reads.trim.fasta)", "trim.mth", append=T)
 
 # command
-command <- paste(binary, "trim.mth", "> log.txt 2>&1")
-
+command <- paste(binary,"trim.mth","> log.txt 2>&1")
 
 # run
 system(command)
 
 # rename the result files
 system("mv a.good.fasta screened.fasta")
-if (file.exists("a.good.count")){
-	system("mv a.good.count screened.count_table")
+if (file.exists("a.good.count")) {
+  system("mv a.good.count screened.count_table")
 }
-if (file.exists("a.good.groups")){
-	system("mv a.good.groups screened.groups")
+if (file.exists("a.good.groups")) {
+  system("mv a.good.groups screened.groups")
 }
 
 # batch file
 # write("summary.seqs(fasta=reads.trim.unique.good.fasta, name=reads.trim.good.names)", "summary.mth", append=F)
 # write("summary.seqs(fasta=screened.fasta)", "summary.mth", append=F)
-
-if (file.exists("screened.count_table")){
-	write("summary.seqs(fasta=screened.fasta, count=screened.count_table)", "summary.mth", append=F)
-} else {
-	write("summary.seqs(fasta=screened.fasta)", "summary.mth", append=F)
+summaryseqs.options <- paste("summary.seqs(fasta=screened.fasta")
+if (file.exists("screened.count_table")) {
+  summaryseqs.options <- paste(summaryseqs.options,"count=screened.count_table")
 }
-
+summaryseqs.options <- paste(summaryseqs.options,", processors=",chipster.threads.max,")",sep = "")
+documentCommand(summaryseqs.options)
+write(summaryseqs.options,"summary.mth",append = FALSE)
 # command
-command <- paste(binary, "summary.mth", "> log_raw.txt")
+command <- paste(binary,"summary.mth","> log_raw.txt")
 
 # run
 system(command)
