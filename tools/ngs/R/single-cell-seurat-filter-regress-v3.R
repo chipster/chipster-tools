@@ -2,6 +2,7 @@
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
+# OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL mingenes: "Filter out cells which have less than this many genes expressed" TYPE INTEGER DEFAULT 200 (The cells need to have at least this many genes expressed.)
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
 # PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out cells where the percentage of mitochondrial transcripts is higher than this.)
@@ -22,7 +23,7 @@
 # 2019-06-13 EK Add normalization in tool name, changed the order of parameters
 # 2019-05-22 ML Update Seurat version to 3.0
 # 2020-06-22 ML Update description
-
+# 2020-07-02 ML Always compute the cell-cycle scoring and plot the PCA
 
 library(Seurat)
 library(dplyr)
@@ -68,45 +69,51 @@ textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", len
 # (if filter.cell.cycle == "no":)
 seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), display.progress = FALSE)
 
+# Cell cycle stage scoring & PCA plot:
+# Note: in the very beginning we read in the table and set s.genes and gm2.genes
+# http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
+
+# Check that there were some S or G2M genes in the list of variable genes:
+if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) <1 ) {
+	# stop(paste('CHIPSTER-NOTE: ', "There were no enough cell cycle genes for correction in the list of variable genes."))
+	# Write a log file:
+	fileConn<-file("log.txt")
+	writeLines(c("There were no enough cell cycle genes for correction in the list of variable genes."), fileConn)
+	close(fileConn)
+} else{
+	seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+	# Visualize the distribution of cell cycle markers across
+	# Visualize in PCA:
+	# PCA plot 1: before filtering cell cycle effect
+	seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
+	plot1 <- DimPlot(seurat_obj, plot.title = "PCA on cell cycle genes") 
+} 
+
 # Cell cycle stage filtering:
 if( filter.cell.cycle != "no" ) {	
-	# Cell cycle genes, get the scores & visualize:
-	# Note: in the very beginning we read in the table and set s.genes and gm2.genes
-	# http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
+	# Remove the cell cycle scores:
 
-	# Check that there were some S or G2M genes in the list of variable genes:
-	if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) <1 ) {
-		stop(paste('CHIPSTER-NOTE: ', "There were no enough cell cycle genes for correction in the list of variable genes."))
-	
-	} else{
-		seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
-		# Visualize the distribution of cell cycle markers across
-		# Visualize in PCA:
-		# PCA plot 1: before filtering cell cycle effect
-		seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
-		plot1 <- DimPlot(seurat_obj, plot.title = "PCA on cell cycle genes") 
-
-		# Remove the cell cycle scores:
-
-		# Option 1: remove all the difference:
-		if (filter.cell.cycle == "all.diff"){
-			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), 
-					display.progress = FALSE)	
-			# PCA plot 2A: after filtering, all:	
-			seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
-			plot2 <- DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: remove all)")
-
-		# Option 2: regressing out the difference between the G2M and S phase scores:	
-		}else if (filter.cell.cycle == "diff.phases"){
-			seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
-			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), display.progress = FALSE)			
-			# PCA plot 2B: after filtering, difference:	
-			seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE)
-			plot2 <- DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)")	
-		}
+	# Option 1: remove all the difference:
+	if (filter.cell.cycle == "all.diff"){
+	seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), 
+			display.progress = FALSE)	
+	# PCA plot 2A: after filtering, all:	
+	seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
+	plot2 <- DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: remove all)")
+	CombinePlots(plots = list(plot1, plot2))
+	# Option 2: regressing out the difference between the G2M and S phase scores:	
+	}else if (filter.cell.cycle == "diff.phases"){
+		seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
+		seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), display.progress = FALSE)			
+		# PCA plot 2B: after filtering, difference:	
+		seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE)
+		plot2 <- DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)")	
 		CombinePlots(plots = list(plot1, plot2))
-	} 
-} # filter cell cycle  
+	}
+# just plot the 1 PCA plot: 
+} else { 
+	DimPlot(seurat_obj, plot.title = "PCA on cell cycle genes") 
+} 
 
 dev.off() # close the pdf
 
