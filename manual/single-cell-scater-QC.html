@@ -13,7 +13,10 @@
 
     <p>
         This tool gives as an output an .pdf file with several plots that can be used to estimate
-        the quality of the data. As an input, give a Seurat object.
+        the quality of the data. As an input, give a Seurat object. The plots vary a bit depending on
+        what values are available in the Seurat input: if the cell-cycle scores are available
+        (after the "Filter, normalize, regress and detect variable genes" -tool)
+        those are used in plotting.
     </p>
 
     <h3>Parameters</h3>
@@ -68,9 +71,18 @@
 
     <h4>Plots 6-9: Explanatory factors</h4>
     <p>
-        Here we see first 4 principal components plotted against each other.
-        The percentage of the variability of the data explained by each PC is also reported.
-        The dots representing the cells are colored based on mitochondrial % and total number of features.
+        We can investigate the relative importance of different explanatory factors with these plots.
+        In the first two plots, a density plot is created for each variable,
+        showing the distribution of R-squared across all genes.
+        Scater calculates R-squared for a factor/variable by fitting a line for each gene
+        against the factor/variable.
+        R-squared is the propotion of variance for dependant variable explained by an independent variable.
+
+        We can also identify PCs that correlate strongly to certain QC factor or meta-data values.
+        The second two plots represent these.
+        In both cases, some selected factors are plotted, and then the top 10 factors.
+        If there are cell-cycle scores present in the Seurat object given as an input, the
+        values for the phase, G2M score and S score are also plotted.
     </p>
 
 
@@ -85,9 +97,6 @@
     <h3>Output</h3>
 
     <ul>
-
-        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
-            Chipster. </li>
         <li>QCplots.pdf: Quality control plots </li>
     </ul>
 
