@@ -1,129 +1,155 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
-<head><title></title></head>
+
+<head>
+	<title></title>
+</head>
+
 <body>
 
-<h2>RNA-seq quality metrics with RseQC</h2>
+	<h2>RNA-seq quality metrics with RseQC</h2>
 
-<h3>Description</h3>
+	<h3>Description</h3>
 
-<p>
-Given an RNA-seq BAM file and gene and exon locations in a BED file, this tool reports several 
-quality metrics such as coverage uniformity, gene and junction saturation, junction annotation 
-and alignment statistics. This tool is based on the RSeQC package.</p>
-Note that the chromosome names in the BAM file and the BED file need to match. This is the case if you use BAM files produced by Chipster and BED files from Chipster server. 
-Both files are based on Ensembl which uses just numbers without the chr prefix. 
-<ul>
-<li>If you imported a BAM file which contains the chr prefix, you need to set the second parameter accordingly so that Chipstr will remove the prefix</li>
-<li>If you want to use your own BED file which contains the chr prefix, you need to remove the prefix first using the tool "Utilities / Modify text". 
-Set the parameters as follows: Operation = Replace text, Search string = chr, Input file format = BED.</li>
-</ul>
+	<p>
+		Given an RNA-seq BAM file, this tool reports several
+		quality metrics such as coverage uniformity, gene and junction saturation, junction annotation
+		and alignment statistics.
+		You can provide your own BED file <b>with gene and exon locations</b> as a second input file,
+		<b>OR</b> use one of the existing annotations by selecting the correct reference organism in the parameters.
+		(Please note, that using your own BED file as an input overwrites the reference geneome selection.)
+		This tool is based on the RSeQC package.
+	</p>
 
-<h3>Parameters</h3>
-<ul>
-<li>Organism (list of supported organisms) [Own BED file]</li>
-<li>Chromosome names in my BAM file look like (chr1, 1) [1]</li>
-<li>Generate RPKM saturation plot (yes, no) [no]</li>
-<li>Generate inner distance plot (yes, no) [no]</li>
-</ul>
-
-<h3>Details</h3>
-
-
-The tool performs five different analyses and one optional one (the following descriptions are from the <a href = "http://rseqc.sourceforge.net/">RSeQC homepage</a>):
-
-<h4>geneBody_coverage</h4>
-<p>
-Read coverage over gene body. This module is used to check if reads coverage is uniform and if 
-there is any 5'/3' bias. This module scales all transcripts to 100 nt and calculates the number 
-of reads covering each nucleotide position. Finally, it generates a plot illustrating the coverage 
-profile along the gene body. </p>
-
-<h4>junction_saturation</h4>
-<p>
-It's very important to check if current sequencing depth is deep enough to perform alternative 
-splicing analyses. For a well annotated organism, the number of expressed genes in particular tissue 
-is almost fixed so the number of splice junctions is also fixed. The fixed splice junctions can be 
-predetermined from reference gene model. All (annotated) splice junctions should be rediscovered from 
-a saturated RNA-seq data, otherwise, downstream alternative splicing analysis is problematic because low 
-abundance splice junctions are missing. This module checks for saturation by resampling 5%, 10%, 15%, ..., 
-95% of total alignments from BAM or SAM file, and then detects splice junctions from each subset and 
-compares them to reference gene model.</p>
-
-<h4>junction_annotation</h4>
-<p>
-For a given alignment file in BAM or SAM format and a reference gene model in BED format, this program will 
-compare detected splice junctions to reference gene model. splicing annotation is performed in two levels: 
-splice event level and splice junction level.</p>
-<ul>
-<li>splice event: An RNA read, especially long read, can be spliced 2 or more times, each time is called a splicing event; In this sense, 100 spliced reads can produce >= 100 splicing events.</li>
-<li>splice junction: multiple splicing events spanning the same intron can be consolidated into one splicing junction.</li>
-</ul>
-<p>
-All detected junctions can be grouped to 3 exclusive categories:</p>
-<ol>
-<li>Annotated: The junction is part of the gene model. Both splice sites, 5' splice site (5'SS) and 3' splice site (3'SS) can be annotated by reference gene model.</li>
-<li>complete_novel: Complete new junction. Neither of the two splice sites cannot be annotated by gene model</li>
-<li>partial_novel: One of the splice site (5'SS or 3'SS) is new, while the other splice site is annotated (known)</li>
-</ol>
-
-<h4>RPKM_saturation</h4>
-<p>
-The precision of any sample statistics (RPKM) is affected by sample size (sequencing depth); "resampling" or 
-"jackknifing" is a method to estimate the precision of sample statistics by using subsets of available data. 
-This module will resample a series of subsets from total RNA reads and then calculate RPKM value using each 
-subset. By doing this we are able to check if the current sequencing depth was saturated or not (or if the 
-RPKM values were stable or not) in terms of genes' expression estimation. If sequencing depth was saturated, 
-the estimated RPKM value will be stationary or reproducible. By default, this module will calculate 20 RPKM 
-values (using 5%, 10%, ... , 95%,100% of total reads) for each transcripts.</p>
-<p>
-In the output figure, Y axis is "Percent Relative Error" or "Percent Error" which is used to measures how 
-the RPKM estimated from subset of reads (i.e. RPKMobs) deviates from real expression level (i.e. RPKMreal). 
-However, in practice one cannot know the RPKMreal. As a proxy, we use the RPKM estimated from total reads 
-to approximate RPKMreal.</p>
-<p>
-All transcripts were sorted in ascending order according to expression level (RPKM). 
-Then they are divided into 4 groups: <br>
-Q1 (0-25%): Transcripts with expression level ranked below 25 percentile.<br>
-Q2 (25-50%): Transcripts with expression level ranked between 25 percentile and 50 percentile.<br>
-Q3 (50-75%): Transcripts with expression level ranked between 50 percentile and 75 percentile.<br>
-Q4 (75-100%): Transcripts with expression level ranked above 75 percentile.<br>
-</p>
-<h4>BAM_stat</h4>
-<p>
-This program is used to calculate reads mapping statistics from provided BAM file. This script determines 
-"uniquely mapped reads" from mapping quality, which quality the probability that a read is misplaced 
-(Do NOT confused with sequence quality, sequence quality measures the probability that a base-calling was wrong).
-</p>
-
-<h4>Inner_distance (optional)</h4>
-<p>
-This module is only applicable to paired-end data and it calculates the inner distance between two paired RNA reads. The distance 
-is the mRNA length between two paired reads. 
-</p>
-
-<h3>Output</h3>
-
-<p>
-<ul>
-<li>RSeQC_report.pdf: A PDF file containing the plots for the following modules:
+	<p>
+		If using your own BED reference, note that the chromosome names in the BAM file and the BED file need to match.
+		This is the case if you use BAM files produced by Chipster and BED files from Chipster server (=the reference
+		files
+		selected using the <i>Organism</i> parameter).
+		Both files are based on Ensembl which uses just numbers without the <i>chr</i> prefix.
 	<ul>
-	<li>geneBody_coverage</li>
-	<li>junction_saturation</li>
-	<li>junction_annotation (2 plots)</li>
-	<li>RPKM_saturation</li>
-	<li>Inner_distance (optional)</li>
-	</ul></li>
-<li>RSeQC.bamStat.txt: Text file with output of BAM_stat module</li>
-</ul>	
-</p>
+		<li>If you imported a BAM file which contains the <i>chr</i> prefix, you need to set the second parameter
+			accordingly so that Chipstr will remove the prefix</li>
+		<li>If you want to use your own BED file which contains the chr prefix, you need to remove the prefix first
+			using the tool "Utilities / Modify text".
+			Set the parameters as follows: Operation = Replace text, Search string = chr, Input file format = BED.</li>
+	</ul>
+	</p>
 
-<h3>References</h3>
+	<h3>Parameters</h3>
+	<ul>
+		<li>Organism (list of supported organisms) [Own BED file]</li>
+		<li>Chromosome names in my BAM file look like (chr1, 1) [1]</li>
+		<li>Generate RPKM saturation plot (yes, no) [no]</li>
+		<li>Generate inner distance plot (yes, no) [no]</li>
+	</ul>
 
-<p>This tool uses the RSeQC package. Please cite the article:</p>
+	<h3>Details</h3>
 
-<p>Wang L, Wang S, Li W* RSeQC: quality control of RNA-seq experiments Bioinformatics (2012) 28 (16): 2184-2185. doi: 10.1093/bioinformatics/bts356
 
-<p>Please see the <a href = "http://rseqc.sourceforge.net/">RSeQC homepage</A> for more details.</p>
+	The tool performs five different analyses and one optional one (the following descriptions are from the <a
+		href="http://rseqc.sourceforge.net/">RSeQC homepage</a>):
+
+	<h4>geneBody_coverage</h4>
+	<p>
+		Read coverage over gene body. This module is used to check if reads coverage is uniform and if
+		there is any 5'/3' bias. This module scales all transcripts to 100 nt and calculates the number
+		of reads covering each nucleotide position. Finally, it generates a plot illustrating the coverage
+		profile along the gene body. </p>
+
+	<h4>junction_saturation</h4>
+	<p>
+		It's very important to check if current sequencing depth is deep enough to perform alternative
+		splicing analyses. For a well annotated organism, the number of expressed genes in particular tissue
+		is almost fixed so the number of splice junctions is also fixed. The fixed splice junctions can be
+		predetermined from reference gene model. All (annotated) splice junctions should be rediscovered from
+		a saturated RNA-seq data, otherwise, downstream alternative splicing analysis is problematic because low
+		abundance splice junctions are missing. This module checks for saturation by resampling 5%, 10%, 15%, ...,
+		95% of total alignments from BAM or SAM file, and then detects splice junctions from each subset and
+		compares them to reference gene model.</p>
+
+	<h4>junction_annotation</h4>
+	<p>
+		For a given alignment file in BAM or SAM format and a reference gene model in BED format, this program will
+		compare detected splice junctions to reference gene model. splicing annotation is performed in two levels:
+		splice event level and splice junction level.</p>
+	<ul>
+		<li>splice event: An RNA read, especially long read, can be spliced 2 or more times, each time is called a
+			splicing event; In this sense, 100 spliced reads can produce >= 100 splicing events.</li>
+		<li>splice junction: multiple splicing events spanning the same intron can be consolidated into one splicing
+			junction.</li>
+	</ul>
+	<p>
+		All detected junctions can be grouped to 3 exclusive categories:</p>
+	<ol>
+		<li>Annotated: The junction is part of the gene model. Both splice sites, 5' splice site (5'SS) and 3' splice
+			site (3'SS) can be annotated by reference gene model.</li>
+		<li>complete_novel: Complete new junction. Neither of the two splice sites cannot be annotated by gene model
+		</li>
+		<li>partial_novel: One of the splice site (5'SS or 3'SS) is new, while the other splice site is annotated
+			(known)</li>
+	</ol>
+
+	<h4>RPKM_saturation</h4>
+	<p>
+		The precision of any sample statistics (RPKM) is affected by sample size (sequencing depth); "resampling" or
+		"jackknifing" is a method to estimate the precision of sample statistics by using subsets of available data.
+		This module will resample a series of subsets from total RNA reads and then calculate RPKM value using each
+		subset. By doing this we are able to check if the current sequencing depth was saturated or not (or if the
+		RPKM values were stable or not) in terms of genes' expression estimation. If sequencing depth was saturated,
+		the estimated RPKM value will be stationary or reproducible. By default, this module will calculate 20 RPKM
+		values (using 5%, 10%, ... , 95%,100% of total reads) for each transcripts.</p>
+	<p>
+		In the output figure, Y axis is "Percent Relative Error" or "Percent Error" which is used to measures how
+		the RPKM estimated from subset of reads (i.e. RPKMobs) deviates from real expression level (i.e. RPKMreal).
+		However, in practice one cannot know the RPKMreal. As a proxy, we use the RPKM estimated from total reads
+		to approximate RPKMreal.</p>
+	<p>
+		All transcripts were sorted in ascending order according to expression level (RPKM).
+		Then they are divided into 4 groups: <br>
+		Q1 (0-25%): Transcripts with expression level ranked below 25 percentile.<br>
+		Q2 (25-50%): Transcripts with expression level ranked between 25 percentile and 50 percentile.<br>
+		Q3 (50-75%): Transcripts with expression level ranked between 50 percentile and 75 percentile.<br>
+		Q4 (75-100%): Transcripts with expression level ranked above 75 percentile.<br>
+	</p>
+	<h4>BAM_stat</h4>
+	<p>
+		This program is used to calculate reads mapping statistics from provided BAM file. This script determines
+		"uniquely mapped reads" from mapping quality, which quality the probability that a read is misplaced
+		(Do NOT confused with sequence quality, sequence quality measures the probability that a base-calling was
+		wrong).
+	</p>
+
+	<h4>Inner_distance (optional)</h4>
+	<p>
+		This module is only applicable to paired-end data and it calculates the inner distance between two paired RNA
+		reads. The distance
+		is the mRNA length between two paired reads.
+	</p>
+
+	<h3>Output</h3>
+
+	<p>
+	<ul>
+		<li>RSeQC_report.pdf: A PDF file containing the plots for the following modules:
+			<ul>
+				<li>geneBody_coverage</li>
+				<li>junction_saturation</li>
+				<li>junction_annotation (2 plots)</li>
+				<li>RPKM_saturation</li>
+				<li>Inner_distance (optional)</li>
+			</ul>
+		</li>
+		<li>RSeQC.bamStat.txt: Text file with output of BAM_stat module</li>
+	</ul>
+	</p>
+
+	<h3>References</h3>
+
+	<p>This tool uses the RSeQC package. Please cite the article:</p>
+
+	<p>Wang L, Wang S, Li W* RSeQC: quality control of RNA-seq experiments Bioinformatics (2012) 28 (16): 2184-2185.
+		doi: 10.1093/bioinformatics/bts356
+
+	<p>Please see the <a href="http://rseqc.sourceforge.net/">RSeQC homepage</A> for more details.</p>
 </body>
-
