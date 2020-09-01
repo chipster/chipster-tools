@@ -1,4 +1,4 @@
-# TOOL single-cell-scater-QC.R: "Scater QC" (Quality control with Scater. This tool takes as an input an Seurat object, and gives an pdf file with several quality control plots. The content of the plot depends on the contents of the Seurat object.) 
+# TOOL single-cell-scater-QC.R: "Scater QC" (Quality control with Scater. This tool takes as an input a Seurat object, and gives a pdf file with several quality control plots. The content of the plot depends on the contents of the Seurat object.) 
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT QCplots.pdf
