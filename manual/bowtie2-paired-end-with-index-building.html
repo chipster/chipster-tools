@@ -74,7 +74,7 @@ Please check the <a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml
 <tr><td>Not concordant when mates overlap at all</td><td>--no.overlap</td><td>If one mate alignment overlaps the other at all, consider that to be non-concordant. Default: mates can overlap in a concordant alignment.</td></tr>
 <tr><td>Quality value format used</td><td>--phred33, --phred64 or --ignore-quals</td><td>Quality scale used in the fastq-file.</td></tr>
 <tr><td>How many valid alignments are reported per read</td><td>none, -k or --all</td><td>By default, Bowtie2 reports only the best alignment of the read (based on the mapping quality\). Optionally, if there are several, equally good alignments, you can choose how many of them should be reported?</td></tr>
-<tr><td>Put reads that did not align concordantly to a separate file</td><td>--un-conc</td><td>If you choose not to have alignments for reads which map to multiple positions, with this option you can to store these reads to a separate fastq file?</td></tr>
+<tr><td>Put reads that did not align concordantly to a separate file</td><td>--un-conc</td><td>Write paired-end reads that fail to align concordantly to a fastq file.</td></tr>
 <tr><td>Put unaligned reads to a separate file</td><td>--un</td><td>Would you like to store unaligned reads to a new fastq file? Note that also multireads will be added to this file, unless you asked them to be put to a separate file.</td></tr>
 </table>
 
