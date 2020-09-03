@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL macs2-peaks.tsv
 # OUTPUT OPTIONAL macs2-summits.bed
 # OUTPUT OPTIONAL macs2_narrowpeak.bed
-# OUTPUT OPTIONAL macs2_broad_peaks.bed
+# OUTPUT OPTIONAL macs2_broadpeak.bed
 # OUTPUT OPTIONAL macs2_model.pdf
 # PARAMETER file.format: "Input file format" TYPE [ELAND, BAM, BED] DEFAULT BAM (The format of the input files.)
 # PARAMETER precalculated.size: "Mappable genome size" TYPE [2.7e9: "human hg18 (2.7e9\)", 2.72e9: "human hg19 (2.72e9\)", 1.87e9: "mouse mm9 (1.87e9\)", 1.89e9: "mouse mm10 (1.89e9\)", 2.32e9: "rat rn5 (2.32e9\)", user_specified: "User specified"] DEFAULT 2.72e9 (Mappable genome size. You can use one of the precalculated ones or choose User specified and provide the size in the field below.)
@@ -30,103 +30,108 @@
 # 13.10.2014 EK, Modified to use MACS2.1.0
 
 # MACS binary
-macs.binary <- file.path(chipster.tools.path, "macs", "macs2")
+macs.binary <- file.path(chipster.tools.path,"macs","macs2")
 
 # Options
 
 # treatment data file
-options <- paste ("callpeak -t treatment.bam")
+options <- paste("callpeak -t treatment.bam")
 
 # control data file (optional)
-if (file.exists("control.bam")){
-	options <- paste(options, "-c control.bam")
+if (file.exists("control.bam")) {
+  options <- paste(options,"-c control.bam")
 }
 
 # output file prefix
-options <- paste(options, "-n macs2")
+options <- paste(options,"-n macs2")
 
 # input file format
-options <- paste(options, "-f", file.format)
+options <- paste(options,"-f",file.format)
 
 # mappable genome size
 if (precalculated.size == "user_specified") {
-	if (nchar(userspecified.size) < 1){
-		stop(paste('CHIPSTER-NOTE: ', "You need to provide a value for mappable genome size or select one of the precalculated values."))
-	}
-	genome.size <- userspecified.size
-}else{
-	genome.size <- precalculated.size
+  if (nchar(userspecified.size) < 1) {
+    stop(paste('CHIPSTER-NOTE: ',"You need to provide a value for mappable genome size or select one of the precalculated values."))
+  }
+  genome.size <- userspecified.size
+} else {
+  genome.size <- precalculated.size
 }
-options <- paste(options, "-g", genome.size)
+options <- paste(options,"-g",genome.size)
 
 # q-value cutoff
-options <- paste(options, "-q", q.value.threshold)
+options <- paste(options,"-q",q.value.threshold)
 
 # read length
 if (read.length > 0) {
-	options <- paste(options, "-s", read.length)
+  options <- paste(options,"-s",read.length)
 }
 
 # keep duplicate reads
-options <- paste(options, "--keep-dup", keep.dup)
+options <- paste(options,"--keep-dup",keep.dup)
 
 # build peak model
 if (build.model == "no") {
-	options <- paste(options, "--nomodel")
-} else{
-	options <- paste(options, "--fix-bimodal")
+  options <- paste(options,"--nomodel")
+} else {
+  options <- paste(options,"--fix-bimodal")
 }
 
 # bandwidth (only applicable to model building)
 if (build.model == "yes") {
-	options <- paste(options, "--bw", bandwidth)
-} 
+  options <- paste(options,"--bw",bandwidth)
+}
 
 # extension size
-options <- paste(options, "--extsize", ext.size)
+options <- paste(options,"--extsize",ext.size)
 
 # Set up the m-fold limits
-options <- paste(options, "-m", m.fold.lower, m.fold.upper)
+options <- paste(options,"-m",m.fold.lower,m.fold.upper)
 
 # call broad peaks
 if (broad == "yes") {
-	options <- paste(options, "--broad")
-} 
+  options <- paste(options,"--broad")
+}
 
 # common options
-options <- paste(options, "--verbose=2")
+options <- paste(options,"--verbose=2")
 
 # Run macs
-macs.command <- paste(macs.binary, options, "2> macs2-log.txt")
+macs.command <- paste(macs.binary,options,"2> macs2-log.txt")
 # stop(paste('CHIPSTER-NOTE: ', macs.command))
 system(macs.command)
 
 # Read in and parse the results (rename and the p- and q-value columns, sort)
-output <- try(read.table(file="macs2_peaks.xls", skip=0, header=TRUE, stringsAsFactors=FALSE))
+output <- try(read.table(file = "macs2_peaks.xls",skip = 0,header = TRUE,stringsAsFactors = FALSE))
 if (class(output) != "try-error") {
-	colnames(output)[7] <- "neglog10pvalue"
-	colnames(output)[9] <- "neglog10qvalue"
-	# output <- output[ order(output[,9], decreasing=TRUE), ]
-	output <- output[order(output$chr, output$start),]
-	write.table(output, file="macs2-peaks.tsv", sep="\t", quote=FALSE, row.names=FALSE)
+  colnames(output)[7] <- "neglog10pvalue"
+  colnames(output)[9] <- "neglog10qvalue"
+  # output <- output[ order(output[,9], decreasing=TRUE), ]
+  output <- output[order(output$chr,output$start),]
+  write.table(output,file = "macs2-peaks.tsv",sep = "\t",quote = FALSE,row.names = FALSE)
 }
 
 # Sort the summit BED
-source(file.path(chipster.common.path, "bed-utils.R"))
-bed <- try(read.table(file="macs2_summits.bed", skip=0, sep="\t"))
+source(file.path(chipster.common.path,"bed-utils.R"))
+bed <- try(read.table(file = "macs2_summits.bed",skip = 0,sep = "\t"))
 if (class(bed) != "try-error") {
-	colnames(bed)[1:2] <- c("chr", "start")
-	bed <- sort.bed(bed)
-	write.table(bed, file="macs2-summits.bed", sep="\t", row.names=F, col.names=F, quote=F)
+  colnames(bed)[1:2] <- c("chr","start")
+  bed <- sort.bed(bed)
+  write.table(bed,file = "macs2-summits.bed",sep = "\t",row.names = FALSE,col.names = FALSE,quote = FALSE)
 }
 
 # Add BED extension to the narrow peak format file
-if (file.exists("macs2_peaks.narrowPeak") && file.info("macs2_peaks.narrowPeak")$size > 0){
-	system ("mv macs2_peaks.narrowPeak macs2_narrowpeak.bed")
+if (file.exists("macs2_peaks.narrowPeak") && file.info("macs2_peaks.narrowPeak")$size > 0) {
+  system("mv macs2_peaks.narrowPeak macs2_narrowpeak.bed")
+}
+
+# Add BED extension to the broad peak format file
+if (file.exists("macs2_peaks.broadPeak") && file.info("macs2_peaks.broadPeak")$size > 0) {
+  system("mv macs2_peaks.broadPeak macs2_broadpeak.bed")
 }
 
 # Source the R code for plotting the MACS model
 if (build.model == "yes") {
-	try(source("macs2_model.r"), silent=TRUE)
+  try(source("macs2_model.r"),silent = TRUE)
 }
 
