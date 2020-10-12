@@ -199,6 +199,7 @@
 		<tool>single-cell-seurat-sctransform.R</tool>	
 		<tool>single-cell-seurat-pca-v3.R</tool>	   	
 		<tool>single-cell-seurat-clustering-v3.R</tool>	
+		<tool>single-cell-seurat-find-markers-v3.R</tool>
 		<tool>single-cell-seurat-gene-plots-v3.R</tool>
 		<tool>single-cell-seurat-featureplot-v3.R</tool>	
 		<tool>single-cell-seurat-CCA-v3.R</tool>	
@@ -207,7 +208,6 @@
 		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>	
 		<tool>single-cell-seurat-extract-cluster.R</tool>
 		<tool>single-cell-seurat-subset.R</tool>
-		<tool>single-cell-seurat-find-markers-v3.R</tool>
 		<!-- commented out, waiting for new tools: <tool>single-cell-scater-QC.R</tool> --> 
 		<!--<tool>single-cell-seurat-update-object-v3.R</tool>--> 
 		<!-- Dropseq tools: --> 
