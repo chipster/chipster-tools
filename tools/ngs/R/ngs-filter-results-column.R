@@ -3,7 +3,7 @@
 # OUTPUT filtered-NGS-results.tsv: filtered-NGS-results.tsv 
 # PARAMETER column: "Column to filter by" TYPE COLUMN_SEL (Data column to filter by)
 # PARAMETER has.rownames: "Does the first column have a title" TYPE [yes: no, no: yes] DEFAULT no (Specifies whether the first column has a title or not.)
-# PARAMETER cutoff: Cutoff TYPE DECIMAL FROM -10000000 TO 10000000 DEFAULT 0.05 (Cut-off for filtering)
+# PARAMETER cutoff: "Cut-off value" TYPE DECIMAL FROM -10000000 TO 10000000 DEFAULT 0.05 (Cut-off for filtering)
 # PARAMETER smaller.or.larger: "Filtering criteria" TYPE [equal-to: equal-to, smaller-than: smaller-than, larger-than: larger-than, within: within, outside: outside] DEFAULT smaller-than (Smaller or larger than the cutoff is filtered.
 # Use the "within" or "outside" options to filter symmmetrically around two cut-offs, useful for example when searching for up- and down-regulated genes.)
 
