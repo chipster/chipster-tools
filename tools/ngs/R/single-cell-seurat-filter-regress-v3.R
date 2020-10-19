@@ -1,15 +1,15 @@
-# TOOL single-cell-seurat-filter-regress-v3.R: "Seurat v3 -Filter, normalize, regress and detect variable genes" (This tool filters out cells, normalizes expression values, and regresses out uninteresting sources of variation in gene expression. It then detects highly variable genes across the cells. You can also choose to filter out the differences caused by the cell cycle stage. Before normalisation, the tool filters out potential empties, multiplets and broken cells based on the parameters.) 
+# TOOL single-cell-seurat-filter-regress-v3.R: "Seurat v3 -Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values and detects highly variable genes across the cells. Finally, it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL log.txt
-# PARAMETER OPTIONAL mingenes: "Filter out cells which have less than this many genes expressed" TYPE INTEGER DEFAULT 200 (The cells need to have at least this many genes expressed.)
-# PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have higher unique gene count" TYPE INTEGER DEFAULT 2500 (Filter out potential multiplets, that is, cells that have more than this many unique gene counts.)
-# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out cells where the percentage of mitochondrial transcripts is higher than this.)
+# PARAMETER OPTIONAL mingenes: "Filter out cells which have less than this many genes expressed" TYPE INTEGER DEFAULT 200 (Filter out empties. The cells to be kept must express at least this number of genes.)
+# PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have more than this many genes expressed" TYPE INTEGER DEFAULT 2500 (Filter out multiplets. The cells to be kept must express less than this number of genes.)
+# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out dead cells. The cells to be kept must have lower percentage of mitochondrial transcripts than this.)
+# PARAMETER OPTIONAL lognorm: "Perform global scaling normalization" TYPE [T:yes, F:no] DEFAULT T (For raw data, select yes.)
+# PARAMETER OPTIONAL totalexpr: "Scaling factor in the normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of transcripts.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 2000 (Number of features to select as top variable features, i.e. how many features returned.)
-# PARAMETER OPTIONAL lognorm: "Perform log normalization" TYPE [T:yes, F:no] DEFAULT T (Select NO only if your data is already log transformed. For raw data, select YES.)
-# PARAMETER OPTIONAL totalexpr: "Scale factor in the log normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of molecules before log normalization. Used in normalisation step.)
-# PARAMETER OPTIONAL filter.cell.cycle: "Filter out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Choose to remove all signal associated with cell cycle, or the difference between the G2M and S phase scores. More info in the manual page under Help. )
+# PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
 # RUNTIME R-3.6.1
 
 
@@ -24,6 +24,7 @@
 # 2019-05-22 ML Update Seurat version to 3.0
 # 2020-06-22 ML Update description
 # 2020-07-02 ML Always compute the cell-cycle scoring and plot the PCA
+# 2020-10-10 EK Update name, description and parameter order
 
 library(Seurat)
 library(dplyr)
@@ -75,10 +76,10 @@ seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "
 
 # Check that there were some S or G2M genes in the list of variable genes:
 if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) <1 ) {
-	# stop(paste('CHIPSTER-NOTE: ', "There were no enough cell cycle genes for correction in the list of variable genes."))
+	# stop(paste('CHIPSTER-NOTE: ', "There were not enough cell cycle genes for correction in the list of variable genes."))
 	# Write a log file:
 	fileConn<-file("log.txt")
-	writeLines(c("There were no enough cell cycle genes for correction in the list of variable genes."), fileConn)
+	writeLines(c("There were not enough cell cycle genes for correction in the list of variable genes."), fileConn)
 	close(fileConn)
 } else{
 	seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)

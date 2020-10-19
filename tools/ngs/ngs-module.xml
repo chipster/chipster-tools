@@ -201,6 +201,7 @@
 		<tool>single-cell-seurat-sctransform.R</tool>	
 		<tool>single-cell-seurat-pca-v3.R</tool>	   	
 		<tool>single-cell-seurat-clustering-v3.R</tool>	
+		<tool>single-cell-seurat-find-markers-v3.R</tool>
 		<tool>single-cell-seurat-gene-plots-v3.R</tool>
 		<tool>single-cell-seurat-featureplot-v3.R</tool>	
 		<tool>single-cell-seurat-CCA-v3.R</tool>	

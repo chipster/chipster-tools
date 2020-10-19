@@ -1,5 +1,5 @@
 # TOOL single-cell-seurat-clustering-v3.R: "Seurat v3 -Clustering and detection of cluster marker genes" (Clusters cells, performs tSNE and UMAP for visualization purposes, and finds positive marker genes for the clusters.)
-# INPUT seurat_obj.Robj: "Seurat object from the Setup tool" TYPE GENERIC
+# INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL clusterPlot.pdf
 # OUTPUT seurat_obj_2.Robj
@@ -9,9 +9,9 @@
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
-# PARAMETER OPTIONAL minpct: "Min fraction of cells where a cluster marker gene is expressed" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up the function by not testing genes that are very infrequently expression)
-# PARAMETER OPTIONAL threshuse: "Differential expression threshold for a cluster marker gene" TYPE DECIMAL DEFAULT 0.25 (Limit testing to genes which show, on average, at least X-fold difference, in natural logarithm ln scale, between the two groups of cells. Increasing thresh.use speeds up the function, but can miss weaker signals.)
-# PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST] DEFAULT wilcox (Denotes which test to use. Seurat currently implements \"wilcox\" \(Wilcoxon rank sum test, default\), \"bimod\" \(likelihood-ratio test for single cell gene expression\), \"roc\" \(standard AUC classifier\), \"t\" \(Students t-test\), \"tobit\" \(Tobit-test for differential gene expression\), \"MAST\" \(GLM-framework that treates cellular detection rate as a covariate\), \"poisson\", and \"negbinom\". The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
+# PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST] DEFAULT wilcox (Denotes which test to use. Chipster currently implements wilcox \(Wilcoxon rank sum test\), bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), t \(Students t-test\), tobit \(Tobit-test for differential gene expression\), MAST \(GLM-framework that treats cellular detection rate as a covariate\), poisson, and negbinom. The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
+# PARAMETER OPTIONAL minpct: "Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
+# PARAMETER OPTIONAL threshuse: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this fold difference, in natural logarithm scale, between the two groups of cells. Increasing the threshold speeds up testing, but can miss weaker signals.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # RUNTIME R-3.6.1
 
@@ -29,6 +29,7 @@
 # 2019-09-23 EK add only.pos=TRUE
 # 2019-11-20 EK remove DESeq2 option
 # 2020-01-31 ML Add option to output average expression table
+# 2020-10-11 EK update minpct to v3 default, update parameter descriptions
 
 # for UMAP:
 library(reticulate)
