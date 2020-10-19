@@ -68,7 +68,7 @@ textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", len
 
 ## Scaling: 
 # (if filter.cell.cycle == "no":)
-seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), display.progress = FALSE)
+seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), verbose = FALSE)
 
 # Cell cycle stage scoring & PCA plot:
 # Note: in the very beginning we read in the table and set s.genes and gm2.genes
