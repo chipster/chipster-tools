@@ -1,20 +1,23 @@
-# TOOL single-cell-scater-QC.R: "Scater QC" (Quality control with Scater. This tool takes as an input a Seurat object, and gives a pdf file with several quality control plots. The content of the plot depends on the contents of the Seurat object.) 
+# TOOL single-cell-scater-QC.R: "Scater -QC" (Quality control with Scater. This tool takes as an input an Seurat object, and gives an pdf file with several quality control plots. The content of the plot depends on the contents of the Seurat object, for example if you use object with cell cycle scores, those will be included in the plots.) 
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT QCplots.pdf
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 # 2020-06-23 ML
 
 library(Seurat)
 library(scater)
 # library(mvoutlier)
-library(gplots) # for textplot
+library(gplots) # for textplot 
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
+
 # In case it's from the 2 sample analysis, change the name of the object:
-# seurat_obj <- data.combined
+# if (exists("data.combined") ){
+#	seurat_obj <- data.combined
+# }
 
 # Transform Seurat object as Scater object:
 sce <- as.SingleCellExperiment(seurat_obj)
