@@ -215,7 +215,7 @@
 		<tool>picard-merge-bam-alignment.R</tool>	
 		<tool>single-cell-bam-tag-histogram.R</tool>	  	
 		<tool>single-cell-digital-expression.R</tool>
-		<!-- Seurat v2 tools, to be removed: --> 
+		<!-- Seurat v2 tools, commented out, to be removed later  
 		<tool>single-cell-seurat-setup.R</tool>	   	
 		<tool>single-cell-seurat-filter-regress.R</tool>	   	
 		<tool>single-cell-seurat-pca.R</tool>	   	
@@ -225,7 +225,7 @@
 		<tool>single-cell-seurat-integrated-analysis.R</tool>	
 		<tool>single-cell-seurat-diffexp-samples.R</tool>	
 		<tool>single-cell-seurat-split-dot-plot.R</tool>
-		<tool>single-cell-seurat-featureplot.R</tool>	
+		<tool>single-cell-seurat-featureplot.R</tool>-->	
 		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
 		<!--<tool>picard-fastqtosam.R</tool> --> 
 		<!--<tool>single-cell-TagBam.R</tool> --> 
