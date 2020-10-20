@@ -5,7 +5,7 @@
 # OUTPUT seurat_obj_subset.Robj
 # PARAMETER OPTIONAL gene: "Gene" TYPE STRING DEFAULT "MS4A1" (Gene or feature name for subsetting. Set below the threshold for expression value.)
 # PARAMETER OPTIONAL threshold: "Expression level threshold" TYPE DECIMAL DEFAULT 1 (Subset cells with higher than this expression in the gene selected above.)
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 # 25.03.2020 ML
 

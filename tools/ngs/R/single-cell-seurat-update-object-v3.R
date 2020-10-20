@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-update-object-v3.R: "Seurat v3 -Update Seurat objects to version 3" (Updates Seurat objects to new v3 structure, so old objects can be analyzed with the updated versions of the tools.) 
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_2.Robj
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 # 2019-07-24 ML 
 

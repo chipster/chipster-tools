@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 
 # 2018-16-05 ML

@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL totalexpr: "Scaling factor in the normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of transcripts.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 2000 (Number of features to select as top variable features, i.e. how many features returned.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 
 # 2017-06-06 ML
@@ -87,7 +87,7 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
 	# Visualize in PCA:
 	# PCA plot 1: before filtering cell cycle effect
 	seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
-	plot1 <- DimPlot(seurat_obj, plot.title = "PCA on cell cycle genes") 
+	plot1 <- DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes") 
 } 
 
 # Cell cycle stage filtering:
@@ -113,7 +113,7 @@ if( filter.cell.cycle != "no" ) {
 	}
 # just plot the 1 PCA plot: 
 } else { 
-	DimPlot(seurat_obj, plot.title = "PCA on cell cycle genes") 
+	DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes") 
 } 
 
 dev.off() # close the pdf

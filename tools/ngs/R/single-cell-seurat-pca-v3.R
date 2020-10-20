@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 20 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 
 # OUTPUT OPTIONAL log.txt

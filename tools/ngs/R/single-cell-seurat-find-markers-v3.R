@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL minpct: "Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # PARAMETER OPTIONAL threshuse: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this fold difference, in natural logarithm scale, between the two groups of cells. Increasing the threshold speeds up testing, but can miss weaker signals.)
 # PARAMETER OPTIONAL test.type: "Which test to use for detecting marker genes" TYPE [wilcox, DESeq2, MAST, bimod, roc, t, tobit, poisson, negbinom] DEFAULT wilcox (Which test to use. Seurat currently implements wilcox \(Wilcoxon rank sum test, default\), bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), t \(Students t-test\), tobit \(Tobit-test for differential gene expression\), MAST \(GLM-framework that treates cellular detection rate as a covariate\), poisson, negbinom and DESeq2. The latter three should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
-# RUNTIME R-3.6.1
+# RUNTIME R-3.6.1-single-cell
 
 
 # 13.06.2017 ML
