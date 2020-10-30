@@ -1,6 +1,6 @@
 # TOOL single-cell-seurat-setup-v3.R: "Seurat v3 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are two options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix as input. If you are planning to combine samples later on, make sure you name them in this tool.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
-# INPUT OPTIONAL dropseq.tsv: "DGE table" TYPE GENERIC
+# INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
