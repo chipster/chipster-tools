@@ -29,7 +29,7 @@ documentVersion("MultiQC",version)
 
 # commands
 fastqc.command <- paste(fastqc.binary,"-f fastq --noextract *")
-multiqc.command <- paste(multiqc.binary,"--modules fastqc .")
+multiqc.command <- paste(multiqc.binary,"--module fastqc .")
 
 documentCommand(fastqc.command)
 documentCommand(multiqc.command)
