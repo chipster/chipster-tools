@@ -3,4 +3,4 @@
 # OUTPUT output
 
 system("cp input output")
-print("lololooo")
+print("lololoo")
