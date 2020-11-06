@@ -2,13 +2,13 @@
 # INPUT genelist.tsv: genelist.tsv TYPE GENERIC
 # OUTPUT annotated.tsv: annotated.tsv 
 # PARAMETER species: Species TYPE [human: human, mouse: mouse, rat: rat] DEFAULT human (The species needs to be specified in order to annotate the Ensembl IDs.)
-# RUNTIME R-3.4.3
 
 
 # ML, 05.02.2015
 # ML, 12.11.2015, fixed
 # ML, 14.08.2018, fixed + updated to new version
 # JH (ML), 11.07.2019, fix entrezgene -> entrezgene_id
+# ML, 06.11.2020, fix (runtime back to 3.2.3 from RUNTIME R-3.4.3)
 
 # ATM only for human, mouse, rat. 
 # The ensembl IDs need to be either the row names or in the first column.
