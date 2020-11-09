@@ -3,3 +3,4 @@
 # OUTPUT output
 
 system("cp input output")
+
