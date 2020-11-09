@@ -3,4 +3,3 @@
 # OUTPUT output
 
 system("cp input output")
-print("lololoo")
