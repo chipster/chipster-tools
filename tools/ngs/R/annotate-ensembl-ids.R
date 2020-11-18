@@ -59,7 +59,7 @@ biomart_error_function <- function(e) {
 	# Note: java expects to see string "Error: " in order to pass the CHIPSTER-NOTE. 
     print("Error: The original error message from biomaRt was: ")
     print(e)
-	stop(paste("CHIPSTER-NOTE: ", "There seems to be a connection problem or lots of queries at the Ensembl mirrors. Please try again later."))
+	stop(paste("CHIPSTER-NOTE: ", "There seems to be a connection problem or lots of queries at the Ensembl mirrors. Please try again later. Note also, that smaller tables tend to work better, and tables with hundreds of rows are more likely to fail."))
 	# In case there is another, actual error, print that:
   }else { 
     print("There was problem with connecting to ensembl: ")
