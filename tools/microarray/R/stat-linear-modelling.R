@@ -4,16 +4,16 @@
 # OUTPUT limma.tsv: limma.tsv 
 # OUTPUT limma-design.tsv: limma-design.tsv 
 # PARAMETER main.effect1: "Main effect 1" TYPE METACOLUMN_SEL DEFAULT group (Main effect 1)
-# PARAMETER main.effect2: "Main effect 2" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 2)
-# PARAMETER main.effect3: "Main effect 3" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 3)
-# PARAMETER technical.replication: "Technical replication" TYPE METACOLUMN_SEL DEFAULT EMPTY (Technical replication)
-# PARAMETER pairing: "Pairing" TYPE METACOLUMN_SEL DEFAULT EMPTY (Paired samples)
-# PARAMETER treat.main.effect1.as.factor: "Treat main effect 1 as factor" TYPE [no: no, yes: yes] DEFAULT no (Should main.effect1 be treated as a factor)
-# PARAMETER treat.main.effect2.as.factor: "Treat main effect 2 as factor" TYPE [no: no, yes: yes] DEFAULT no (Should main.effect2 be treated as a factor)
-# PARAMETER treat.main.effect3.as.factor: "Treat main effect 3 as factor" TYPE [no: no, yes: yes] DEFAULT no (Should main.effect3 be treated as a factor)
-# PARAMETER adjust.p.values: "Adjust p-values" TYPE [yes: yes, no: no] DEFAULT yes (Should the p-values be adjusted for multiple comparisons)
-# PARAMETER p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, bonferroni: Bonferroni, holm: Holm, hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
-# PARAMETER interactions: "Interactions" TYPE [main: "main effects", two-way: "main effects and interactions"] DEFAULT main (What to include in the model)
+# PARAMETER OPTIONAL main.effect2: "Main effect 2" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 2)
+# PARAMETER OPTIONAL main.effect3: "Main effect 3" TYPE METACOLUMN_SEL DEFAULT EMPTY (Main effect 3)
+# PARAMETER OPTIONAL technical.replication: "Technical replication" TYPE METACOLUMN_SEL DEFAULT EMPTY (Technical replication)
+# PARAMETER OPTIONAL pairing: "Pairing" TYPE METACOLUMN_SEL DEFAULT EMPTY (Paired samples)
+# PARAMETER OPTIONAL treat.main.effect1.as.factor: "Treat main effect 1 as factor" TYPE [no: no, yes: yes] DEFAULT no (Should main.effect1 be treated as a factor)
+# PARAMETER OPTIONAL treat.main.effect2.as.factor: "Treat main effect 2 as factor" TYPE [no: no, yes: yes] DEFAULT no (Should main.effect2 be treated as a factor)
+# PARAMETER OPTIONAL treat.main.effect3.as.factor: "Treat main effect 3 as factor" TYPE [no: no, yes: yes] DEFAULT no (Should main.effect3 be treated as a factor)
+# PARAMETER OPTIONAL adjust.p.values: "Adjust p-values" TYPE [yes: yes, no: no] DEFAULT yes (Should the p-values be adjusted for multiple comparisons)
+# PARAMETER OPTIONAL p.value.adjustment.method: "p-value adjustment method" TYPE [none: none, bonferroni: Bonferroni, holm: Holm, hochberg: Hochberg, BH: BH, BY: BY] DEFAULT BH (Multiple testing correction method)
+# PARAMETER OPTIONAL interactions: "Interactions" TYPE [main: "main effects", two-way: "main effects and interactions"] DEFAULT main (What to include in the model)
 
 # PARAMETER significance [main, interactions] DEFAULT main (Which p-values to return)
 
@@ -22,6 +22,7 @@
 # MK, 22.02.2014, modified so that does not report anymore coef or p-vals for pairing information
 # OH, 12.02.2015, getting columns from phenodata using which rather than grep in order to get exact matches
 # ML, 07.11.2016, simplify the outputs
+# EK, 03.12.2020, specify optional parameters as required by Web App
 
 #main.effect1<-"group"
 #main.effect2<-"gender"
