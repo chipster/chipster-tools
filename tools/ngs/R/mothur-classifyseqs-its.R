@@ -128,12 +128,11 @@ if (toremove != "") {
 
   # batch file 3: classify.seqs again
 
-  # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
   classifyseqs.options <- paste("classify.seqs(fasta=picked.fasta")
   if (file.exists("picked.count_table")) {
     classifyseqs.options <- paste(classifyseqs.options,", count=picked.count_table")
   }
-  classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters,", template=",template.path,", taxonomy=",taxonomy.path,")",sep = "")
+  classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters, ", taxonomy=",taxonomy.path,")",sep = "")
   documentCommand(classifyseqs.options)
   write(classifyseqs.options,"batch.mth",append = FALSE)
   # command
