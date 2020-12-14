@@ -22,7 +22,7 @@
 # MK, 22.02.2014, modified so that does not report anymore coef or p-vals for pairing information
 # OH, 12.02.2015, getting columns from phenodata using which rather than grep in order to get exact matches
 # ML, 07.11.2016, simplify the outputs
-# EK, 03.12.2020, specify optional parameters as required by Web App
+# EK, 03.12.2020, specify optional parameters as required by Web App.
 
 #main.effect1<-"group"
 #main.effect2<-"gender"
