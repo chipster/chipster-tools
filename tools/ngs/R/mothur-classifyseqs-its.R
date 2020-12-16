@@ -45,7 +45,7 @@ if (reference == "own") {
   if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")){
     stop('CHIPSTER-NOTE: Provide your own reference and taxonomy files or select one of the provided ones.')
   }
-  reference_path <- "own_reference.fasta"
+  reference.path <- "own_reference.fasta"
   taxonomy.path <- "own_reference.tax"
 } else {
   # Check data path when new tools-bin ready
