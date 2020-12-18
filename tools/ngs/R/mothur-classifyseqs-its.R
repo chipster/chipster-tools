@@ -8,7 +8,6 @@
 # OUTPUT OPTIONAL picked.fasta.gz 
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
-# OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
@@ -123,7 +122,7 @@ if (toremove != "") {
   if (file.exists("picked.count_table")) {
     classifyseqs.options <- paste(classifyseqs.options,", count=picked.count_table")
   }
-  classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters, ", taxonomy=",taxonomy.path,")",sep = "")
+  classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters,", reference=",reference.path,", taxonomy=",taxonomy.path,")",sep = "")
   documentCommand(classifyseqs.options)
   write(classifyseqs.options,"batch.mth",append = FALSE)
   # command
