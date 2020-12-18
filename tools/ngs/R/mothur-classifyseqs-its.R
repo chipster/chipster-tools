@@ -9,7 +9,6 @@
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
 # OUTPUT OPTIONAL log.txt
-# PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
@@ -19,6 +18,7 @@
 # PARAMETER OPTIONAL remove.other: "Remove other lineages" TYPE STRING DEFAULT empty (List of other lineages to remove. You must use dots \(\".\"\) instead of semicolons \(\";\"\). Use dash \(\"-\"\) to separate taxons. For example: Bacteria.Firmicutes.-Bacteria.Bacteroidetes.)
 
 # AMS 18.12.2020
+# PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (Reference to use.)
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -31,6 +31,7 @@ binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
+reference <- "own"
 if (reference == "own") {
   if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")){
     stop('CHIPSTER-NOTE: Provide your own reference and taxonomy files or select one of the provided ones.')
