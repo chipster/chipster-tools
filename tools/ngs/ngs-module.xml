@@ -254,7 +254,7 @@
 	</category>
 
 
-	<category name="16S rRNA sequencing" color="#a49900">
+	<category name="Microbiome amplicon sequencing" color="#a49900">
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-makecontigs.R</tool>
 		<tool>mothur-screenseqs.R</tool>
@@ -264,6 +264,7 @@
 		<tool>mothur-precluster.R</tool>		
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
+		<tool>mothur-classifyseqs-its.R</tool>
 		<tool>mothur-classify-counttable.R</tool>
 	    <tool>mothur-analyses.R</tool>
 	    <tool>mothur-summaryseqs.R</tool>
