@@ -25,11 +25,13 @@
 # 2020-06-22 ML Update description
 # 2020-07-02 ML Always compute the cell-cycle scoring and plot the PCA
 # 2020-10-10 EK Update name, description and parameter order
+# 2020-07-02 ML Remove the plot titles, as they started giving errors. Fix the IF structure.
 
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+library(ggplot2)
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -46,7 +48,7 @@ g2m.genes <- cc.genes[44:97]
 # Subset: remove potential empties, multiplets and broken cells based on parameters.
 seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff)	
 
-# Normalisation, scaling & finding variables genes without SCTransform:
+# Normalisation, scaling & finding variables genes:
 
 if (lognorm=="T") {
 	seurat_obj <- NormalizeData(object = seurat_obj, normalization.method = "LogNormalize", scale.factor = totalexpr) 
@@ -67,7 +69,6 @@ CombinePlots(plots = list(plot1, plot2))
 textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign="center", valign="center", cex=2)
 
 ## Scaling: 
-# (if filter.cell.cycle == "no":)
 seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), verbose = FALSE)
 
 # Cell cycle stage scoring & PCA plot:
@@ -77,43 +78,47 @@ seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "
 # Check that there were some S or G2M genes in the list of variable genes:
 if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) <1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) <1 ) {
 	# stop(paste('CHIPSTER-NOTE: ', "There were not enough cell cycle genes for correction in the list of variable genes."))
-	# Write a log file:
+	# Write a log file (instead of ending with a Chipster-note, because we want the tool to finish and give the plot, when possible.)
 	fileConn<-file("log.txt")
-	writeLines(c("There were not enough cell cycle genes for correction in the list of variable genes."), fileConn)
+	writeLines(c("There are not enough cell cycle genes for correction in the list of variable genes."), fileConn)
 	close(fileConn)
+	
 } else{
 	seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
-	# Visualize the distribution of cell cycle markers across
-	# Visualize in PCA:
-	# PCA plot 1: before filtering cell cycle effect
-	seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
-	plot1 <- DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes") 
-} 
 
-# Cell cycle stage filtering:
-if( filter.cell.cycle != "no" ) {	
+	# Visualize in PCA:
+	# PCA plot 1: without/before filtering cell cycle effect
+	seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
+	plot1 <- DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes")   reduction = pca
+
+	# Cell cycle stage filtering:
+	if( filter.cell.cycle != "no" ) {	
 	# Remove the cell cycle scores:
 
-	# Option 1: remove all the difference:
-	if (filter.cell.cycle == "all.diff"){
-	seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), 
-			display.progress = FALSE)	
-	# PCA plot 2A: after filtering, all:	
-	seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
-	plot2 <- DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: remove all)")
-	CombinePlots(plots = list(plot1, plot2))
-	# Option 2: regressing out the difference between the G2M and S phase scores:	
-	}else if (filter.cell.cycle == "diff.phases"){
-		seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
-		seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), display.progress = FALSE)			
-		# PCA plot 2B: after filtering, difference:	
-		seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE)
-		plot2 <- DimPlot(seurat_obj, plot.title = "After cell cycle correction (method: difference between G2M and S phases)")	
-		CombinePlots(plots = list(plot1, plot2))
-	}
-# just plot the 1 PCA plot: 
-} else { 
-	DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes") 
+		# Option 1: remove all the difference:
+		if (filter.cell.cycle == "all.diff"){
+			# Scale again, but this time including also the cell cycle scores
+			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), verbose = FALSE)
+
+			# PCA plot 2A: after filtering, all:	
+			seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
+			ggtitle("After cell cycle correction (method: remove all)")
+			plot2 <- DimPlot(seurat_obj)#, plot.title = "After cell cycle correction (method: remove all)")
+			CombinePlots(plots = list(plot1, plot2))
+		# Option 2: regressing out the difference between the G2M and S phase scores:	
+		}else if (filter.cell.cycle == "diff.phases"){
+			seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
+			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), verbose = FALSE)			
+			# PCA plot 2B: after filtering, difference:	
+			seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE)
+			ggtitle("After cell cycle correction (method: difference between G2M and S phases)")
+			plot2 <- DimPlot(seurat_obj) #, plot.title = "After cell cycle correction (method: difference between G2M and S phases)")	
+			CombinePlots(plots = list(plot1, plot2))
+		}
+	# just plot the 1 PCA plot, if no filtering:
+	} else { 
+		DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes") 
+	} 
 } 
 
 dev.off() # close the pdf
