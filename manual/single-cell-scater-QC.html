@@ -13,10 +13,12 @@
 
     <p>
         This tool gives as an output an .pdf file with several plots that can be used to estimate
-        the quality of the data. As an input, give a Seurat object. The plots vary a bit depending on
+        the quality of the data and compare samples. As an input, give a Seurat object. The plots vary a bit depending
+        on
         what values are available in the Seurat input: if the cell-cycle scores are available
         (after the "Filter, normalize, regress and detect variable genes" -tool)
         those are used in plotting.
+        This tool transforms the Seurat object into Scater format, and computes several QC metrics.
     </p>
 
     <h3>Parameters</h3>
@@ -53,12 +55,23 @@
         Plot shows the relative proportion of the library size that is accounted for by the 1000 most highly
         expressed features for each cell. Y-axis is the cumulative proportion and
         x-axis number of the top expressers included. Each cell is presented as a line.
+        This plot can be used to to look for differences in expression distributions between samples.
     </p>
 
 
     <h4>Plot 3: Comparing statistics</h4>
     <p>
         Several QC values plotted against each other.
+        You can read in the <a
+            href="https://www.rdocumentation.org/packages/scater/versions/1.0.4/topics/calculateQCMetrics">Scater
+            documentation for calculateQCmMtrics</a>
+        what each of the QC values stands for.
+        <br>For example:
+        <br>pct_counts_top_50_features: What percentage of the total counts is accounted for by the 50 highest-count
+        features?
+        <br>pct_counts_feature_controls: Percentage of the total counts counts for the cell that come from control
+        features:
+        mt.genes (mitochondrial genes, starting with "MT") are used as controls here.
     </p>
 
 
@@ -66,7 +79,7 @@
     <p>
         Here we see first 4 principal components plotted against each other.
         The percentage of the variability of the data explained by each PC is also reported.
-        The dots representing the cells are colored based on mitochondrial % and total umber of features.
+        The dots representing the cells are colored based on mitochondrial % and total number of features.
     </p>
 
     <h4>Plots 6-9: Explanatory factors</h4>
@@ -76,7 +89,7 @@
         showing the distribution of R-squared across all genes.
         Scater calculates R-squared for a factor/variable by fitting a line for each gene
         against the factor/variable.
-        R-squared is the propotion of variance for dependant variable explained by an independent variable.
+        R-squared is the proportion of variance for dependant variable explained by an independent variable.
 
         We can also identify PCs that correlate strongly to certain QC factor or meta-data values.
         The second two plots represent these.
