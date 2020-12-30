@@ -8,7 +8,7 @@
 # OUTPUT OPTIONAL picked.fasta.gz 
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
-# PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (Reference to use.)
+# PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (Reference to use. The reference files provided by Chipster are based on the download2 option of the UNITE database, so they comprise of all quality filtered unclustered UNITE and INSD sequences for Fungi \(887 399 for UNITE v8.2\). The option UNITEv8_sh_dynamic_s is the result of a dynamic use of clustering thresholds, such that some species hypothesis are delimited at the 97 level, some at the 98 level, and so on. These choices were made manually by experts of those particular lineages of fungi.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
