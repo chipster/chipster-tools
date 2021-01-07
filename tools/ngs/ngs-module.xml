@@ -8,7 +8,9 @@
 		<tool>rseqc.R</tool>
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
+		<!--
 		<tool>deseq2-pca-heatmap.R</tool>
+		-->
 		<tool>check-fastq.R</tool>
 		<tool>multiqc.R</tool>
 	</category>
@@ -254,7 +256,7 @@
 	</category>
 
 
-	<category name="Microbiome amplicon sequencing" color="#a49900">
+	<category name="Microbial amplicon data preprocessing" color="#a49900">
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-makecontigs.R</tool>
 		<tool>mothur-screenseqs.R</tool>
@@ -265,13 +267,36 @@
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
 		<tool>mothur-classifyseqs-its.R</tool>
+		<!--
 		<tool>mothur-classify-counttable.R</tool>
 	    <tool>mothur-analyses.R</tool>
+	    -->
 	    <tool>mothur-summaryseqs.R</tool>
 	    <tool>mothur-sffinfo.R</tool>
 	    <tool>mothur-fastqinfo.R</tool>	      
     	<tool>merge-fasta-qual.R</tool>
     	<tool module="misc">fixed_text_conversions.R</tool>
+	</category>
+
+	<category name="Microbial amplicon data analyses" color="#a49900">
+		<tool>mothur-phyloseq-inputs.R</tool>
+		<tool>metabarcoding-import.R</tool>
+		<tool>metabarcoding-rarecurve-alpha.R</tool>
+		<tool>metabarcoding-rarefy-even.R</tool>
+		<tool>metabarcoding-taxon-overview.R</tool>
+		<tool>metabarcoding-filter-nonbacterial.R</tool>
+		<tool>metabarcoding-filter-individual.R</tool>		
+		<tool>metabarcoding-additional-prevalence.R</tool>		
+		<tool>metabarcoding-single-double.R</tool>
+		<tool>metabarcoding-prevalence-filter.R</tool>
+		<tool>metabarcoding-transform-otu.R</tool>
+	    <tool>metabarcoding-stacked-barplot.R</tool>
+	    <tool>metabarcoding-distance-ordination.R</tool>
+	    <tool>metabarcoding-global-permanova.R</tool>
+	    <tool>metabarcoding-permdisp.R</tool>	      
+    	<tool>metabarcoding-pairwise-permanova.R</tool>
+	<tool>metabarcoding-pairwise-tukey.R</tool>
+	<tool>metabarcoding-deseq2.R</tool>
 	</category>
 	
 	<category name="CNA-seq" color="#83010b">

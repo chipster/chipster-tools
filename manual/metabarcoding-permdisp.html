@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>PERMDISP for OTU abundance data</h2>
+
+<h3>Description</h3>
+<p>
+Performs a permutation-based test of the multivariate homogeneity of group dispersions (PERMDISP, 999 iterations), using a distance matrix derived from OTU abundance data. Accepts a single phenodata variable at a time, with the option to run three consecutive tests (for three different variables).
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Phenodata variable(s) used to specify the formula to be tested (up to three variables can be specified)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>An Rda file including <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object sample data and a distance matrix (ps_dist.Rda, produced using the tool "Distance matrices and ordinations") </li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>betadisper() and permutest() (<a href="https://cran.r-project.org/web/packages/vegan/index.html">vegan</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Text summary of PERMDISP output (permdisp.txt)</li>
+<li>Rda file with dispersion and test data (ps_disp.Rda)</li>
+</ul>
+If the PERMDISP result is statistically significant (p < 0.05), the Rda file produced by this tool (ps_disp.Rda) can be used as the input for the "Post-hoc pairwise Tukey's HSD for OTU abundance data" tool.
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">phyloseq resources and GitHub repository</a>
+</p>
+<p>
+Anderson MJ.
+<a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1541-0420.2005.00440.x">Distance‐based tests for homogeneity of multivariate dispersions. Biometrics, 2006. 62:245–253.</a> 
+</p>
+
+
+</body>
+
+</html>

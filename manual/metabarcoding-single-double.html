@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Remove OTUs with 0-2 occurrences</h2>
+
+<h3>Description</h3>
+<p>
+Prunes a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that only OTUs with >0, >1 or >2 occurrences are retained. The resulting object is saved in Rda format.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Filtering threshold (>0, >1 or >2 occurrences; the default is >2)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>prune_taxa() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Phyloseq object following pruning step (ps_pruned.Rda)</li>
+<li>Text summary of phyloseq object following pruning step (ps_pruned.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+
+</body>
+
+</html>

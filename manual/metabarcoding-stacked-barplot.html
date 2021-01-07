@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>OTU relative abundance bar plots</h2>
+
+<h3>Description</h3>
+<p>
+This tool is used to visualize OTU relative abundance data within a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object using <a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a>. The tool produces stacked bar plots that are built using a user-specified level of biological organization (with a maximum of displaying 22 taxa). Users may also specify options for faceting (up to two phenodata variables) and using a minimal OTU relative abundance (%) threshold for plotting.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Phenodata variable with unique IDs for each community profile (used to group data on the x axis)</li>
+<li>Relative abundance cut-off threshold (%) for excluding OTUs from plots (accepts integer values between 0 and 99; the default is 0)</li>
+<li>Level of biological organization for displaying taxon composition (Phylum, Class, Order, Family or Genus; the default is Phylum)</li>
+<li>Phenodata variables for plot faceting (up to two may be specified)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>tax_glom() and psmelt() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+<li>ggplot() (<a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a>)</li>
+</ul>
+Technical notes:
+<ul>
+<li>The tool expects per-column OTU abundances to add up to 1 (OTU abundances must be given as fractions with values ranging between 0-1). Data not meeting this requirement can be converted into relative abundances using the "Transform OTU counts" tool in Chipster. 
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Stacked bar plot (ps_barplot.pdf)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+
+
+</body>
+
+</html>

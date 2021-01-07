@@ -25,7 +25,8 @@
                 <li> <a href="#miRNA">miRNA-seq</a></li>
                 <li> <a href="#ChIP">ChIP- and DNase-seq</a></li>
                 <li> <a href="#CNA">CNA-seq</a></li>
-                <li> <a href="#meta">16S rRNA sequencing</a></li>
+                <li> <a href="#micropreproc">Microbial amplicon data preprocessing</a></li>
+                <li> <a href="#microanalysis">Microbial amplicon data analyses</a></li>
                 <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
         </ol>
         <hr>
@@ -39,7 +40,7 @@
                                 estimation
                                 using RseQcC</a></li>
                 <li> <a href="picard-collectmultiplemetrics.html">Collect multiple metrics from BAM</a></li>
-                <li> <a href="deseq2-pca-heatmap.html">PCA and heatmap of samples with DESeq2</a></li>
+                <!-- <li> <a href="deseq2-pca-heatmap.html">PCA and heatmap of samples with DESeq2</a></li> -->
                 <li> <a href="heatmap-for-rnaseq.html">Heatmap for RNA-seq results</a></li>
                 <li> <a href="check-fastq.html">Check FASTQC file for errors</a></li>
                 <li> <a href="multiqc.html">Combine reports using MultiQC</a></li>
@@ -271,7 +272,7 @@
                 <li><a href="acgh-plot-combined-expression.html">Plot copy number induced gene expression</a></li>
                 <br>
                 <br>
-                <b><a name="meta">16S rRNA sequencing</a></b>
+                <b><a name="micropreproc">Microbial amplicon data preprocessing</a></b>
                 <li><a href="mothur-trimseqs-uniqueseqs.html">Trim primers and barcodes and filter reads</a></li>
                 <li><a href="mothur-makecontigs.html">Combine paired reads to contigs</a></li>
                 <li><a href="mothur-screenseqs.html">Screen sequences for several criteria</a></li>
@@ -281,12 +282,33 @@
                 <li><a href="mothur-precluster.html">Precluster aligned sequences</a></li>
                 <li><a href="mothur-chimera-uchime.html">Remove chimeric sequences</a></li>
                 <li><a href="mothur-classifyseqs.html">Classify sequences to taxonomic units</li>
-                <li><a href="mothur-classify-counttable.html">Produce count table and phenodata</li>
-                <li><a href="mothur-analyses.html">Statistical analysis for marker gene studies</a></li>
+                <!--<li><a href="mothur-classify-counttable.html">Produce count table and phenodata</li> -->
+                <!-- <li><a href="mothur-analyses.html">Statistical analysis for marker gene studies</a></li> -->
                 <li><a href="mothur-summaryseqs.html">Summarize sequences</a></li>
                 <li><a href="mothur-sffinfo.html">Extract sequences from SFF file</a></li>
                 <li><a href="mothur-fastqinfo.html">Split FASTQ file to FASTA and QUAL files</a></li>
                 <li><a href="merge-fasta-qual.html">Merge FASTA or QUAL files</a></li>
+                <br>
+                <br>
+                <b><a name="microanalysis">Microbial amplicon data analyses</a></b>
+                <li><a href="mothur-phyloseq-inputs.html">Generate input files for phyloseq</a></li>
+                <li><a href="metabarcoding-import.html">Convert mothur files into phyloseq object</a></li>
+                <li><a href="metabarcoding-rarecurve-alpha.html">Sequence numbers, rarefaction curve and alpha diversity estimates</a></li>
+                <li><a href="metabarcoding-taxon-overview.html">Overview of taxon composition</a></li>
+                <li><a href="metabarcoding-rarefy-even.html">Rarefy to even depth</a></li>
+                <li><a href="metabarcoding-filter-nonbacterial.html">Filter out non-bacterial features</a></li>
+                <li><a href="metabarcoding-filter-individual.html">Filter out individual phyla</a></li>
+                <li><a href="metabarcoding-single-double.html">Remove OTUs with 0-2 occurrences</a></li>
+                <li><a href="metabarcoding-additional-prevalence.html">Additional prevalence summaries</a></li>
+                <li><a href="metabarcoding-prevalence-filter.html">Proportional prevalence filtering</a></li>
+                <li><a href="metabarcoding-transform-otu.html">Transform OTU counts</a></li>
+                <li><a href="metabarcoding-stacked-barplot.html">OTU relative abundance bar plots</a></li>
+                <li><a href="metabarcoding-distance-ordination.html">Distance matrices and ordinations</a></li>
+                <li><a href="metabarcoding-global-permanova.html">Global PERMANOVA for OTU abundance data</a></li>
+                <li><a href="metabarcoding-pairwise-permanova.html">Post-hoc pairwise PERMANOVA for OTU abundance data</a></li>
+                <li><a href="metabarcoding-permdisp.html">PERMDISP for OTU abundance data</a></li>
+                <li><a href="metabarcoding-pairwise-tukey.html">Post-hoc pairwise Tukey's HSD for OTU abundance data</a></li>
+                <li><a href="metabarcoding-deseq2.html">Differential OTU abundance analysis using DESeq2</a></li>
                 <br>
                 <br>
                 <b><a name="singlecell">Single-cell RNA-seq</a></b>

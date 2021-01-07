@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Proportional prevalence filtering</h2>
+
+<h3>Description</h3>
+<p>
+Filters out any OTUs below a user-specified prevalence threshold (%) using <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>. The resulting phyloseq object is saved in Rda format.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Prevalence threshold (%) for filtering (accepts integer values from 1 to 25; the default is 5)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>prune_taxa() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+</ul>
+For details on the steps used by this tool, see Callahan et al. (2016).
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object following prevalence filtering (ps_prevfilter.Rda)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+<p>
+Callahan BJ, Sankaran K, Fukuyama JA, McMurdie PJ, Holmes SP.
+<a href="https://f1000research.com/articles/5-1492/v2">Bioconductor Workflow for Microbiome Data Analysis: from raw reads to community analyses. F1000Research, 2016. 5:1492.</a> 
+</p>
+
+</body>
+
+</html>

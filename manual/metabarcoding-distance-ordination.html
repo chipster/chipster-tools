@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Distance matrices and ordinations</h2>
+
+<h3>Description</h3>
+<p>
+Produces a Euclidean or Bray-Curtis distance matrix using a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object. Can also be used to compute Aitchison distances (if selecting Euclidean distances for a CLR-transformed data set). The matrix is used to perform either an unconstrained ordination (non-metric multidimensional scaling, nMDS) or a constrained ordination (distance-based redundancy analysis, db-RDA). Further to producing an ordination plot and summary of the ordination results, a distance matrix is saved in Rda format.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Type of distance measure (Euclidean or Bray-Curtis; the default is Euclidean)</li>
+<li>Type of ordination (nMDS or db-RDA; the default is nMDS)</li>
+<li>Phenodata variable with unique IDs for each community profile (used for data point labels)</li>
+<li>Show sample IDs in ordination? (Yes, No; the default is Yes)</li>
+<li>Phenodata variable for grouping ordination points by colour</li>
+<li>Phenodata variable for grouping ordination points by shape</li>
+<li>Phenodata variables for db-RDA formula specification (up to 5 may be specified)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>ordinate(), distance() and plot_ordination() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+<li>geom_text_repel() (<a href="https://cran.r-project.org/web/packages/ggrepel/index.html">ggrepel</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Text summary of ordination results (ps_ordi.txt)</li>
+<li>Ordination plot (ps_ordiplot.pdf)</li>
+<li>A data frame including <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object sample data and a distance matrix (ps_dist.Rda)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">phyloseq resources and GitHub repository</a>
+</p>
+
+
+</body>
+
+</html>

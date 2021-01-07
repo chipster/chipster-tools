@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Generate input files for phyloseq</h2>
+
+<h3>Description</h3>
+
+<p>
+This tool generates input files for the R package <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>, using the Mothur tools <a href="http://mothur.org/wiki/dist.seqs/">dist.seqs</a>, <a href="http://mothur.org/wiki/cluster/">cluster</a>, <a href="http://mothur.org/wiki/make.shared/">make.shared</a> and <a href="http://mothur.org/wiki/classify.otu/">classify.otu</a>. As part of input file generation, sequences are clustered into operational taxonomic units (OTU) based on a user-defined sequence dissimilarity threshold.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Dissimilarity threshold for OTU clustering (e.g. a cut-off value of 0.03 corresponds to 97% sequence similarity). Values of 0.01 - 0.05 are accepted (default 0.03).</li>
+</ul>
+
+
+<h3>Details</h3>
+<p>
+This tool requires three input files:
+<ul>
+<li>fasta file (picked.fasta)</li>
+<li>Mothur count file (picked.count_table)</li>
+<li>Sequence taxonomy assignment file (sequences-taxonomy-assignment.txt)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Phenodata file (used to assign samples for statistical analysis)</li>
+<li>Shared file representing OTU observations in samples (file.opti_mcc.shared)</li>
+<li>Constaxonomy file with consensus taxonomies for OTUs (file.opti_mcc.0.0X.cons.taxonomy, with 0.0X corresponding to the OTU clustering threshold)</li>
+</ul>
+Note that sample groups in the phenodata file should be indicated using characters (numeric labels are currently not supported by downstream analyses).
+</p>
+
+
+<h3>References</h3>
+<p>Schloss PD, Westcott SL, Ryabin T, Hall JR, Hartmann M, Hollister EB, Lesniewski RA, Oakley BB, Parks DH, Robinson CJ, Sahl JW, Stres B, Thallinger GG, Van Horn DJ, Weber CF.
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2786419/">Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.</a> 
+</p>
+
+</body>
+
+</html>

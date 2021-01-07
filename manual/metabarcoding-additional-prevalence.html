@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Additional prevalence summaries</h2>
+
+<h3>Description</h3>
+<p>
+Produces prevalence summaries using <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> to assist with data preparation for downstream analyses. Plots total read counts against prevalence values for each phylum. Also tabulates the overall numbers of features with zero reads, one read (singletons) and two reads (doubletons).
+</p>
+
+
+<h3>Parameters</h3>
+<p>
+None
+</p>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>fast_melt() (available on the <a href="https://github.com/joey711/phyloseq/issues/818">phyloseq GitHub repository</a>)</li>
+<li>otu_table() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+<li>ggplot() (<a href="https://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a>)</li>
+</ul>
+For details on the steps used by this tool, see Callahan et al. (2016).
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Prevalence plot with 5% filtering threshold displayed as an example (ps_prevalence.pdf)</li>
+<li>Text summary of features with low prevalence and total counts (ps_low.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+<p>
+Callahan BJ, Sankaran K, Fukuyama JA, McMurdie PJ, Holmes SP.
+<a href="https://f1000research.com/articles/5-1492/v2">Bioconductor Workflow for Microbiome Data Analysis: from raw reads to community analyses. F1000Research, 2016. 5:1492.</a> 
+</p>
+
+</body>
+
+</html>

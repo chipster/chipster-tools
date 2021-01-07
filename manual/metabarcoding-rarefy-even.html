@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Rarefy to even depth</h2>
+
+<h3>Description</h3>
+
+<p>
+Resamples a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> OTU table such that all samples have the same sequencing depth, and saves the resulting object as an Rda file.
+</p>
+
+
+<h3>Parameters</h3>
+<p>
+None
+</p>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>rarefy_even_depth() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object with resampled OTU table (ps_rarefied.Rda)</li>
+<li>Text summary of <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object following rarefying to even depth (ps_rarefied.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Post-hoc pairwise PERMANOVA for OTU abundance data</h2>
+
+<h3>Description</h3>
+<p>
+Performs post-hoc pairwise permutational analyses of variance (PERMANOVA, 999 iterations), using distance matrices derived from OTU abundance data. Accepts a single phenodata variable and applies a Benjamini-Hochberg correction to account for multiple testing. This tool should only be used after obtaining a statistically significant (p < 0.05) result using the "Global PERMANOVA for OTU abundance data" tool.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Phenodata variable used for pairwise comparisons</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>An Rda file including <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object sample data and a distance matrix (ps_dist.Rda, produced using the tool "Distance matrices and ordinations") </li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>pairwise.perm.manova (<a href="https://cran.r-project.org/web/packages/RVAideMemoire/index.html">RVAideMemoire</a>)</li>
+</ul>
+</p>
+
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Text summary of pairwise PERMANOVA output (pairwise_permanova.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">phyloseq resources and GitHub repository</a>
+</p>
+<p>
+Anderson MJ.
+<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/9781118445112.stat07841">Permutational Multivariate Analysis of Variance (PERMANOVA). Wiley StatsRef: Statistics Reference Online, 2017. DOI: 10.1002/9781118445112.stat07841.</a> 
+</p>
+
+
+</body>
+
+</html>

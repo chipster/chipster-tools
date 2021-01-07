@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Overview of taxon composition</h2>
+
+<h3>Description</h3>
+
+<p>
+Tabulates the overall OTU count and a summary of taxon frequencies in a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Level of biological organization for tabulating taxon composition (Phylum, Class, Order, Family, Genus; the default is Phylum)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>ntaxa() and tax_table() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Text summary of the overall OTU count and taxon frequencies (ps_taxon.txt)</li>
+</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+
+</body>
+
+</html>

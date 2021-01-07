@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Transform OTU counts</h2>
+
+<h3>Description</h3>
+<p>
+This tool is used to transform raw OTU counts within a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object, after which the data are saved in Rda format. Four options are available: 
+<ul>
+<li>CLR transformation (with pseudocount)</li>
+<li>Relative abundance (%) conversion</li>
+<li>Hellinger transformation</li>
+<li><a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> format conversion and variance-stabilizing transformation (VST)</li>
+</ul>
+</p>
+
+<h3>Parameters</h3>
+<ul>
+<li>Choice between data transformation types [CLR, relative abundance (%), Hellinger transformation, <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> format conversion and VST; default is CLR]</li>
+<li>Phenodata variable used to specify the experimental design (when converting data to the <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> format)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>transform() (<a href="https://bioconductor.org/packages/release/bioc/html/microbiome.html">microbiome</a>)</li>
+<li>phyloseq_to_deseq2() and otu_table() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+<li>estimateSizeFactors(), estimateDispersions() and getVarianceStabilizedData() (<a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a>)</li>
+</ul>
+Technical notes:
+<ul>
+<li>The CLR transformation applies a pseudocount of min(relative abundance)/2 to zero relative abundance entries in the OTU table (see <a href="https://bioconductor.org/packages/release/bioc/html/microbiome.html">microbiome</a> for details).</li>
+<li>Converting data to into the <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> format requires a user-specified phenodata variable as part of the <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> experimental design formula.</li>
+<li>Size factors are estimated using a zero-tolerant variant of the geometric mean (see the <a href="https://github.com/joey711/phyloseq/issues/387">phyloseq GitHub repository</a> for details). 
+<li>VST is applied as described in the <a href="https://github.com/joey711/phyloseq/issues/283">phyloseq GitHub repository</a>.</li>
+<li>Data subjected to VST are separately saved as a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object (data converted to the <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> format are not VST-transformed).</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object with transformed OTU counts (ps_xxxx.Rda; possible file names are ps_clr.Rda, ps_relabund.Rda, ps_hellinger.Rda and ps_vst.Rda)</li>
+<li>OTU data converted to <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> format (deseq2.Rda)</li>
+</ul>
+The data set converted to DESeq2 format is intended for use with the "Differential OTU abundance analysis using DESeq2" tool, while the other output files can be used for alternative analyses (e.g. PERMANOVA).
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+<p>
+<a href="https://microbiome.github.io/tutorials/">Introduction to the microbiome R package</a>
+</p>
+<p>
+<a href="https://joey711.github.io/phyloseq-extensions/DESeq2.html">DESeq2 with phyloseq</a>
+</p>
+<p>
+Gloor GB, Macklaim JM, Pawlowsky-Glahn V, Egozcue JJ.
+<a href="https://www.frontiersin.org/articles/10.3389/fmicb.2017.02224/full">Microbiome datasets are compositional: and this is not optional. Frontiers in Microbiology, 2017. 8:2224.</a> 
+</p>
+<p>
+Love MI, Huber W, Anders S.
+<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8">Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 2014. 15:550.</a> 
+</p>
+
+</body>
+
+</html>

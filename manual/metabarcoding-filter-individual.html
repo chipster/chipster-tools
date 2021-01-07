@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Filter out selected phyla</h2>
+
+<h3>Description</h3>
+
+<p>
+Removes up to five user-specified phyla from a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object. Produces a taxonomy summary at the phylum level and saves the resulting object as an Rda file.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Phyla to be removed (one is required; up to five can be removed)</li>
+</ul>
+<p>
+Names of phyla to be removed are manually typed using the text field provided.
+</p>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>subset_taxa() and tax_table() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object following removal of individual phyla (ps_ind.Rda)</li>
+<li>Text summary of taxon frequencies following filtration (ps_ind_taxon.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">phyloseq resources and GitHub repository</a>
+</p>
+<p>
+Callahan BJ, Sankaran K, Fukuyama JA, McMurdie PJ, Holmes SP.
+<a href="https://f1000research.com/articles/5-1492/v2">Bioconductor Workflow for Microbiome Data Analysis: from raw reads to community analyses. F1000Research, 2016. 5:1492.</a> 
+</p>
+
+
+</body>
+
+</html>

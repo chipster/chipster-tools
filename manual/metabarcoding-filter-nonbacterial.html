@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Filter out non-bacterial features</h2>
+
+<h3>Description</h3>
+
+<p>
+Tidies a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that only bacterial OTUs are retained. Filters out OTUs that have not been classified as Bacteria (kingdom level), that have been classified as NA at the phylum level, and/or have been classified as chloroplast sequences at the class level. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting object as an Rda file.
+</p>
+
+
+<h3>Parameters</h3>
+<p>
+None
+</p>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A phyloseq object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>subset_taxa(), tax_table() and taxa_sums() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+<li>ddply() (<a href="https://cran.r-project.org/web/packages/plyr/index.html">plyr</a>)</li>
+<li>rename() (<a href="https://cran.r-project.org/web/packages/dplyr/index.html">dplyr</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object following removal of non-bacterial features (ps_bacteria.Rda)</li>
+<li>Text summary with phylum frequencies and prevalences following filtration (ps_bacteria_taxon.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+
+</body>
+
+</html>

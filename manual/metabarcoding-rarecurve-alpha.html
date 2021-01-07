@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Sequence numbers, rarefaction curve and alpha diversity estimates for phyloseq OTU data</h2>
+
+<h3>Description</h3>
+
+<p>
+Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates (observed no. of OTUs, Chao1 and Shannon indices, Pielou's evenness) for OTU abundance data stored as a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Phenodata variable tabulated with alpha diversity estimates (for improved readability)</li>
+<li>Type of data to be analyzed (raw vs rarefied to even depth; by default, assumes raw data)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>Rarefaction curve: rarecurve() (<a href="https://cran.r-project.org/web/packages/vegan/index.html">vegan</a>)</li>
+<li>Alpha diversity indices: estimate_richness() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>) and evenness() (<a href="https://bioconductor.org/packages/release/bioc/html/microbiome.html">microbiome</a>)
+</ul>
+Note that the alpha diversity estimates are only reliable when using raw OTU data, as many diversity metrics depend on the presence of singletons and doubletons in the data set under analysis.
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Rarefaction curve (ps_rarecurve.pdf)</li>
+<li>Text summary of alpha diversity indices (ps_imported.txt)</li>
+</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+<p>
+<a href="https://microbiome.github.io/tutorials/">Introduction to the microbiome R package</a>
+</p>
+
+</body>
+
+</html>

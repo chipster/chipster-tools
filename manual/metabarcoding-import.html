@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Convert mothur files into phyloseq object</h2>
+
+<h3>Description</h3>
+
+<p>
+Imports data into the <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> format using the <a href="http://www.rdocumentation.org/packages/phyloseq/versions/1.16.2/topics/import_mothur">import_mothur()</a> function in R, and saves the output as an Rda file.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Phenodata variable with unique IDs for each community profile</li>
+</ul>
+<p>
+Specifying this variable is required to correctly import phenodata variables into the phyloseq object.
+</p>
+
+<h3>Details</h3>
+<p>
+This tool requires three input files:
+<ul>
+<li>Shared file representing OTU observations in samples (file.opti_mcc.shared)</li>
+<li>Constaxonomy file with consensus taxonomies for OTUs (file.opti_mcc.0.0X.cons.taxonomy)</li>
+<li>Phenodata file (used to assign samples for statistical analysis)</li>
+</ul>
+As part of the import process, initial taxonomic rankings (Rank1 - Rank6) are renamed for clarity (Kingdom, Phylum, Class, Order, Family, Genus).
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object saved as an Rda file (ps.Rda)</li>
+<li>Text summary of imported phyloseq object, sample names and variables (ps_imported.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+<p>
+Schloss PD, Westcott SL, Ryabin T, Hall JR, Hartmann M, Hollister EB, Lesniewski RA, Oakley BB, Parks DH, Robinson CJ, Sahl JW, Stres B, Thallinger GG, Van Horn DJ, Weber CF.
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2786419/">Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.</a> 
+</p>
+
+</body>
+
+</html>
