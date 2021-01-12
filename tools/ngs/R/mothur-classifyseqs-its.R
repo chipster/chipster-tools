@@ -30,7 +30,6 @@ binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
-reference <- "own"
 if (reference == "own") {
   if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")){
     stop('CHIPSTER-NOTE: Provide your own reference and taxonomy files or select one of the provided ones.')
