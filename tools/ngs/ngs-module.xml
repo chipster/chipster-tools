@@ -8,9 +8,7 @@
 		<tool>rseqc.R</tool>
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
-		<!--
 		<tool>deseq2-pca-heatmap.R</tool>
-		-->
 		<tool>check-fastq.R</tool>
 		<tool>multiqc.R</tool>
 	</category>
