@@ -100,8 +100,6 @@
 		<tool module="common">gzip.R</tool>
 		<tool module="common">md5sum.R</tool>
 	    <tool module="common">encrypt.R</tool>
-		<tool module="common">extract_zip.py</tool>
-		<tool module="common">list_zip.py</tool>
 	</category>
 	
 	<category name="Tests" color="#d59f45">
