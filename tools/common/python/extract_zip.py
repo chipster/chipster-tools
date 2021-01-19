@@ -18,6 +18,8 @@ from tool_utils import *
 def main():
 
     document_python_version()
+    # discard stderr. zipinfo in Ubuntu 16.04 expects to get the zip file 
+    # always and prints an error when we don't give one
     document_version("zipinfo", subprocess.check_output('zipinfo 2>/dev/null | head -n 1', shell=True).decode('utf-8'))
     document_version("grep", subprocess.check_output('grep --version | head -n 1', shell=True).decode('utf-8'))
 
