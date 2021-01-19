@@ -1,6 +1,7 @@
 # TOOL list_zip.py: "List contents of a zip file" (List the contents of a zip file.)
 # INPUT input_file: ".zip file" TYPE GENERIC (Zip file.)
 # OUTPUT output_file: "List of files in the zip package"
+# PARAMETER OPTIONAL full_paths: "Keep directories" TYPE [yes: Yes, no: No] DEFAULT no (Use the whole file path for the filename.)
 # RUNTIME python3
 
 import os
@@ -24,7 +25,12 @@ def main():
                     continue
 
                 # remove paths from dataset names, because those aren't supported in client
-                list_file.write(os.path.basename(member.filename) + '\n')
+
+                dataset_name = member.filename
+                if (full_paths == 'no'):
+                    dataset_name = os.path.basename(dataset_name)
+                
+                list_file.write(dataset_name + '\n')
 
     # set dataset names
     write_output_definitions({

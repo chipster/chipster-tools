@@ -6,6 +6,7 @@
 # OUTPUT output_file{...}: "Extracted file(s)"
 # PARAMETER OPTIONAL names: "Extract by filename" TYPE STRING (Filenames of the files to extract. If more than one, separate names with a comma (e.g. abc123_1.fq,abc123_2.fq\). Alternatively you can provide a list of filenames as a text file, one name per line.)
 # PARAMETER OPTIONAL extensions: "Extract by extension" TYPE STRING (Filename extension of the files to extract (e.g .html\). If more than one, separate with a comma (e.g .txt,.log\).)
+# PARAMETER OPTIONAL full_paths: "Keep directories" TYPE [yes: Yes, no: No] DEFAULT no (Use the whole file path for the filename.)
 # RUNTIME python3
 
 import os
@@ -71,8 +72,14 @@ def main():
 
             # fixed names for output files
             output_file = 'output_file' + str(len(output_names) + 1)
-            # remove paths from dataset names, because those aren't supported in client
-            output_names[output_file] = os.path.basename(member.filename)
+
+            # dataset name for the client
+            dataset_name = member.filename
+            if full_paths == 'no':
+                # remove paths from dataset names, because those aren't supported in client
+                dataset_name = os.path.basename(dataset_name)
+            output_names[output_file] = dataset_name
+
             # extract without paths, because those could point to parent directories
             with open(output_file, 'wb') as outfile, f.open(member) as infile:
                 shutil.copyfileobj(infile, outfile)
