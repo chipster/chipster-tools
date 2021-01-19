@@ -1,6 +1,6 @@
 # TOOL extract_zip.py: "Extract .zip file" (Extract a zip file (usually has a file extension .zip.\)
 # All files are extracted by default, but you can choose to extract only one or some of the files by giving the names of the files to be extracted as a parameter. Alternatively you can provide a list of filenames as a text file, one name per line. 
-# To see the contents of a .zip file, use tool \"Misc / Utilities / List contents of a zip file\".)
+# To see the contents of a .zip file, use tool \"Utilities / List contents of a zip file\".)
 # INPUT input_file: ".zip file" TYPE GENERIC (Zip file.)
 # INPUT OPTIONAL file_list: "List of files to extract" TYPE GENERIC (List of files to extract. One filename per line.)
 # OUTPUT output_file{...}: "Extracted file(s)"
