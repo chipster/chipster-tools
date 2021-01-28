@@ -11,17 +11,33 @@
 # EK 17.6.2011
 # AMS 11.3.2014, gzip fastq outputs
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
+
+# check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.fastq")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastx_trimmer"))
+version <- system(paste(binary,"-h | sed -n 2p"),intern = TRUE)
+documentVersion("fastx_trimmer",version)
 
 # command
 quality.scale <- ifelse(quality.format == "sanger", "-Q 33", "")
 command <- paste(binary, "-f", first, "-l", last, quality.scale, "-i reads.fastq -o trimmed.fastq")
+documentCommand(command)
 
 # run
 system(command)
 system("gzip *.fastq")
+
+# Determine base name
+inputnames <- read_input_definitions()
+basename <- strip_name(inputnames$reads.fastq)
+
+# Make a matrix of output names
+outputnames <- matrix(NA,nrow = 1,ncol = 2)
+outputnames[1,] <- c("trimmed.fastq.gz",paste(basename,".trimmed.fq.gz",sep = ""))
+
+# Write output definitions file
+write_output_definitions(outputnames)
