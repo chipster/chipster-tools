@@ -161,10 +161,10 @@ for(i in 2:ncol(design)) {
 	ttres<-cbind(ttres, tt)
 }
 
-# Rounding, etc.
-ttres2<-round(ttres,6)
+# Rounding
+ttres2<-signif(ttres,6)
 
-# add count columns to the result table
+# Add count columns to the result table
 ttres2<-cbind(ttres2, getCounts(dge))
 
 #ttres3<-merge(dat, ttres2, by.x=0, by.y=0)
