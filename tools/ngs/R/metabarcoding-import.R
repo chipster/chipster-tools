@@ -7,7 +7,7 @@
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
 # RUNTIME R-3.6.1-phyloseq
 
-# JH 2020
+# JH 2020-2021
 
 # NOTE: Tax info initially listed as Rank1-Rank6
 # e.g.
@@ -43,8 +43,10 @@ ps <- merge_phyloseq(ps, phenodata)
 # 	ps <- merge_phyloseq(ps, tree)
 # }
 
-# Rename tax table columns 
-colnames(tax_table(ps)) <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+# Rename tax table columns
+# Note: Rank1 renamed as Domain_Kingdom to reflect reference database-specific
+# differences (some specify Rank1 as domain, others as kingdom)
+colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
 
 # Print out basic descriptors
 ps_samplenames <- sample_names(ps)

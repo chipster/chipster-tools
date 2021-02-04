@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Filter by taxonomic group</h2>
+
+<h3>Description</h3>
+
+<p>
+Tidies a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that OTUs only from the desired taxonomic group are retained. If bacteria are selected as the group, filters out OTUs not classified as Bacteria (domain level), classified as NA at the phylum level, and/or classified as chloroplast sequences at the class level. With the exception of chloroplast sequence removal, similar filtering steps are applied to other groups. For fungi, filtering is performed at the kingdom level (Fungi) rather than the domain level. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Taxonomic group to be retained (bacteria, archaea, eukaryotes or fungi)</li>
+</ul>
+
+<h3>Details</h3>
+<p> 
+The tool requires the following input files:
+<ul>
+<li>A phyloseq object in Rda format</li>
+<li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
+</ul>
+The tool employs the following R functions and packages:
+<ul>
+<li>subset_taxa(), tax_table() and taxa_sums() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+<li>ddply() (<a href="https://cran.r-project.org/web/packages/plyr/index.html">plyr</a>)</li>
+<li>rename() (<a href="https://cran.r-project.org/web/packages/dplyr/index.html">dplyr</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object following removal of undesired features (ps_xxxx.Rda; possible file names are ps_bacteria.Rda, ps_archaea.Rda, ps_eukaryota.Rda and ps_fungi.Rda)</li>
+<li>Text summary with phylum frequencies and prevalences following filtration (ps_xxxx_taxon.txt; possible file names are ps_bacteria_taxon.txt, ps_archaea_taxon.txt, ps_eukaryota_taxon.txt and ps_fungi_taxon.txt)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+</p>
+
+</body>
+
+</html>
+
