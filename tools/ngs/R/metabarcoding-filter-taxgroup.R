@@ -2,6 +2,12 @@
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT OPTIONAL ps_bacteria.Rda: ps_bacteria.Rda
 # OUTPUT OPTIONAL ps_bacteria_taxon.txt: ps_bacteria_taxon.txt
+# OUTPUT OPTIONAL ps_archaea.Rda: ps_archaea.Rda
+# OUTPUT OPTIONAL ps_archaea_taxon.txt: ps_archaea_taxon.txt
+# OUTPUT OPTIONAL ps_eukaryota.Rda: ps_eukaryota.Rda
+# OUTPUT OPTIONAL ps_eukaryota_taxon.txt: ps_eukaryota_taxon.txt
+# OUTPUT OPTIONAL ps_fungi.Rda: ps_fungi.Rda
+# OUTPUT OPTIONAL ps_fungi_taxon.txt: ps_fungi_taxon.txt
 # PARAMETER group: "Group to retain" TYPE [bacteria: "Bacteria", archaea: "Archaea", eukaryotes: "Eukaryotes", fungi: "Fungi"] DEFAULT empty (Taxonomic group to retain)
 # RUNTIME R-3.6.1-phyloseq
 
