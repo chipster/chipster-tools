@@ -8,7 +8,7 @@
 # OUTPUT OPTIONAL ps_eukaryota_taxon.txt
 # OUTPUT OPTIONAL ps_fungi.Rda
 # OUTPUT OPTIONAL ps_fungi_taxon.txt
-# PARAMETER group: "Group to retain" TYPE [bacteria: "Bacteria", archaea: "Archaea", eukaryotes: "Eukaryotes", fungi: "Fungi"] DEFAULT empty (Taxonomic group to retain)
+# PARAMETER group: "Group to retain" TYPE [bacteria: "Bacteria", archaea: "Archaea", eukaryotes: "Eukaryotes", fungi: "Fungi"] DEFAULT bacteria (Taxonomic group to retain)
 # RUNTIME R-3.6.1-phyloseq
 
 # JH 2020-2021
