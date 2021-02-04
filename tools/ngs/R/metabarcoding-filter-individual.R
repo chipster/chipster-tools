@@ -1,4 +1,4 @@
-# TOOL metabarcoding-filter-individual.R: "Filter out selected phyla" (Removes up to five user-specified phyla from a phyloseq object. Produces a taxonomy summary at the phylum level and saves the resulting phyloseq object as an Rda file. Requires a phyloseq object in Rda format as the input.) 
+# TOOL metabarcoding-filter-individual.R: "Remove selected phyla" (Removes up to five user-specified phyla from a phyloseq object. Produces a taxonomy summary at the phylum level and saves the resulting phyloseq object as an Rda file. Requires a phyloseq object in Rda format as the input.) 
 # INPUT ps.Rda: "Phyloseq object in .Rda format" TYPE GENERIC
 # OUTPUT ps_ind.Rda
 # OUTPUT ps_ind_taxon.txt
