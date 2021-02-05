@@ -284,7 +284,7 @@
 		<tool>metabarcoding-rarecurve-alpha.R</tool>
 		<tool>metabarcoding-rarefy-even.R</tool>
 		<tool>metabarcoding-taxon-overview.R</tool>
-		<tool>metabarcoding-filter-nonbacterial.R</tool>
+		<tool>metabarcoding-filter-taxgroup.R</tool>
 		<tool>metabarcoding-filter-individual.R</tool>		
 		<tool>metabarcoding-additional-prevalence.R</tool>		
 		<tool>metabarcoding-single-double.R</tool>

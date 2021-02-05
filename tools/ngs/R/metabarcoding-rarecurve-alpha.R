@@ -22,12 +22,16 @@ seqno <- sample_sums(ps)
 
 # Alpha diversity estimates and Pielou's evenness
 if (group_column == "empty") {
+	set.seed(1)
 	richness <- estimate_richness(ps, measures = c("Observed", "Chao1", "Shannon"))
+	set.seed(1)
 	pielou <- evenness(ps, 'pielou')
 	richness <- cbind(richness, pielou)
 }
 if (group_column != "empty") {
+	set.seed(1)
 	richness <- estimate_richness(ps, measures = c("Observed", "Chao1", "Shannon"))
+	set.seed(1)
 	pielou <- evenness(ps, 'pielou')
 	richness <- cbind(richness, pielou)	
 	colno <- pmatch(group_column, colnames(ps@sam_data)) # Get desired column no. from ps metadata
@@ -38,6 +42,7 @@ if (group_column != "empty") {
 pdf("ps_rarecurve.pdf")
 
 # Plot rarefaction curve
+set.seed(1)
 rarecurve(t(otu_table(ps)), step = 100, 
           cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs", xlab = "No. of sequences")
 

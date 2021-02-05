@@ -1,4 +1,4 @@
-# TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into six taxonomic levels \(Kingdom, Phylum, Class, Order, Family, Genus\).)
+# TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into six taxonomic levels \(Domain or Kingdom, Phylum, Class, Order, Family, Genus\).)
 # INPUT mothur_shared.shared: "Mothur shared file" TYPE GENERIC
 # INPUT mothur_consensus.taxonomy: "mothur constaxonomy file" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
@@ -7,7 +7,7 @@
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
 # RUNTIME R-3.6.1-phyloseq
 
-# JH 2020
+# JH 2020-2021
 
 # NOTE: Tax info initially listed as Rank1-Rank6
 # e.g.
@@ -43,8 +43,10 @@ ps <- merge_phyloseq(ps, phenodata)
 # 	ps <- merge_phyloseq(ps, tree)
 # }
 
-# Rename tax table columns 
-colnames(tax_table(ps)) <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+# Rename tax table columns
+# Note: Rank1 renamed as Domain_Kingdom to reflect reference database-specific
+# differences (some specify Rank1 as domain, others as kingdom)
+colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
 
 # Print out basic descriptors
 ps_samplenames <- sample_names(ps)
