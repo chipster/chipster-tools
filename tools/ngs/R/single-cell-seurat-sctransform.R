@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-sctransform.R: "Seurat v3 -SCTransform: Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)  
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
-# OUTPUT OPTIONAL seurat_obj_2.Robj
+# OUTPUT OPTIONAL seurat_obj_sctransform.Robj
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL mingenes: "Filter out cells which have less than this many genes expressed" TYPE INTEGER DEFAULT 200 (Filter out empties. The cells to be kept must express at least this number of genes.)
 # PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have more than this many genes expressed" TYPE INTEGER DEFAULT 2500 (Filter out multiplets. The cells to be kept must express less than this number of genes.)
@@ -110,6 +110,6 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
 dev.off() # close the pdf
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_2.Robj")
+save(seurat_obj, file="seurat_obj_sctransform.Robj")
 
 ## EOF

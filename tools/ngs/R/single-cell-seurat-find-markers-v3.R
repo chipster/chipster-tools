@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-find-markers-v3.R: "Seurat v3 -Find differentially expressed genes between clusters" (Find genes which are differentially expressed between given clusters.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL seurat_obj_2.Robj
+# OUTPUT OPTIONAL seurat_obj_markers.Robj
 # OUTPUT OPTIONAL markers.tsv
 # PARAMETER OPTIONAL cluster: "Cluster of interest" TYPE INTEGER DEFAULT 1 (The number of the cluster of interest.)
 # PARAMETER OPTIONAL cluster2: "Cluster to compare with" TYPE STRING DEFAULT "all others" (Number\(s\) of the cluster\(s\) to compare to. By default the cluster of interest is compared to cells in all other clusters. You can also compare to another cluster or a group of clusters, just separate the cluster numbers with a comma.)
@@ -38,6 +38,6 @@ if (cluster2 == "all others") {
 write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 # Save the Robj for the next tool -not necessary here
-# save(seurat_obj, file = "seurat_obj_2.Robj")
+# save(seurat_obj, file = "seurat_obj_markers.Robj")
 
 # EOF
