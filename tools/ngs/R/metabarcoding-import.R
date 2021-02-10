@@ -1,4 +1,4 @@
-# TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into six taxonomic levels \(Domain or Kingdom, Phylum, Class, Order, Family, Genus\).)
+# TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into up to seven taxonomic levels \(Domain or Kingdom, Phylum, Class, Order, Family, Genus and, where applicable, Species\).)
 # INPUT mothur_shared.shared: "Mothur shared file" TYPE GENERIC
 # INPUT mothur_consensus.taxonomy: "mothur constaxonomy file" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
@@ -9,7 +9,9 @@
 
 # JH 2020-2021
 
-# NOTE: Tax info initially listed as Rank1-Rank6
+# NOTE: Tax info initially listed as Rank1-Rank6 (e.g. using mothur SILVA reference) or 
+# Rank1-Rank7 (if using other references that classify data to species level)
+
 # e.g.
 #           Rank1      Rank2           Rank3         Rank4           Rank5            Rank6              
 #   Otu0001 "Bacteria" "Bacteroidetes" "Bacteroidia" "Bacteroidales" "Muribaculaceae" "Muribaculaceae_ge"
@@ -44,9 +46,20 @@ ps <- merge_phyloseq(ps, phenodata)
 # }
 
 # Rename tax table columns
-# Note: Rank1 renamed as Domain_Kingdom to reflect reference database-specific
+
+# Note 1: Rank1 renamed as Domain_Kingdom to reflect reference database-specific
 # differences (some specify Rank1 as domain, others as kingdom)
+
+# Note 2: Renaming depends on no. of taxonomic levels used (can be either 6 or 7 levels)
+
+taxlength <- length(colnames(tax_table(ps)))
+
+if (taxlength == "6"){
 colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+}
+if (taxlength == "7"){
+colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+}
 
 # Print out basic descriptors
 ps_samplenames <- sample_names(ps)
