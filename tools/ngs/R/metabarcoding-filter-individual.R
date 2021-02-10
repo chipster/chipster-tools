@@ -30,16 +30,16 @@ if (type == "species" &&
 
 filterTax <- as.character(tax1)
 
-if ( nchar(phylum2) > 0 ){
+if ( nchar(tax2) > 0 ){
 	filterTax <- c(filterTax, tax2)
 }
-if ( nchar(phylum3) > 0 ){
+if ( nchar(tax3) > 0 ){
 	filterTax <- c(filterTax, tax3)
 }
-if ( nchar(phylum4) > 0 ){
+if ( nchar(tax4) > 0 ){
 	filterTax <- c(filterTax, tax4)
 }
-if ( nchar(phylum5) > 0 ){
+if ( nchar(tax5) > 0 ){
 	filterTax <- c(filterTax, tax5)
 }
 
