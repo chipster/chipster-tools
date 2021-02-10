@@ -2,7 +2,7 @@
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL clusterPlot.pdf
-# OUTPUT seurat_obj_2.Robj
+# OUTPUT seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL markers.tsv
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
 # PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)
@@ -97,6 +97,6 @@ if (output_aver_expr == "T") {
 }
 
 # Save the Robj for the next tool
-save(seurat_obj, file = "seurat_obj_2.Robj")
+save(seurat_obj, file = "seurat_obj_clustering.Robj")
 
 # EOF

@@ -13,7 +13,7 @@
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
 # PARAMETER OPTIONAL remove.archaea: "Remove taxon Archaea" TYPE [yes, no] DEFAULT yes (Remove taxon Archaea.)
-# PARAMETER OPTIONAL remove.eukaryota: "Remove taxon Eukaryota" TYPE [yes, no] DEFAULT yes (Remove taxon Eukaryota.)
+# PARAMETER OPTIONAL remove.bacteria: "Remove taxon Bacteria" TYPE [yes, no] DEFAULT yes (Remove taxon Eukaryota.)
 # PARAMETER OPTIONAL remove.unknown: "Remove taxon unknown" TYPE [yes, no] DEFAULT yes (Remove taxon unknown.)
 # PARAMETER OPTIONAL remove.other: "Remove other lineages" TYPE STRING DEFAULT empty (List of other lineages to remove. You must use dots \(\".\"\) instead of semicolons \(\";\"\). Use dash \(\"-\"\) to separate taxons. For example: Bacteria.Firmicutes.-Bacteria.Bacteroidetes.)
 
@@ -80,8 +80,8 @@ if (remove.mitochondria == "yes") {
 if (remove.archaea == "yes") {
   toremove <- paste(toremove,"Archaea",sep = "-")
 }
-if (remove.eukaryota == "yes") {
-  toremove <- paste(toremove,"Eukaryota",sep = "-")
+if (remove.bacteria == "yes") {
+  toremove <- paste(toremove,"Bacteria",sep = "-")
 }
 if (remove.unknown == "yes") {
   toremove <- paste(toremove,"unknown",sep = "-")

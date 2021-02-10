@@ -1,4 +1,4 @@
-# TOOL fastx-trimmer.R: "Trim reads with FastX" (Trims reads to a user-specified length. Input can be a single FASTQ file or tar package containig FASTQ files. The tar package can be gzipped. This tool is based on the FASTA/Q Trimmer tool of the FASTX package.)
+# TOOL fastx-trimmer.R: "Trim reads with FastX" (Trims reads to a user-specified length. Input can be one or several FASTQ files, and the files can be in a tar package which can be gzipped. If the input files are in a tar package, then also the result files are put in a tar package. This tool is based on the FASTA/Q Trimmer tool of the FASTX package.)
 # INPUT input.file TYPE GENERIC
 # OUTPUT OPTIONAL trimmed.fq.gz
 # OUTPUT OPTIONAL trimmed.tar
