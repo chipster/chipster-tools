@@ -4,6 +4,7 @@
 # INPUT sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
 # OUTPUT META phenodata.tsv
 # OUTPUT file.opti_mcc.shared
+# OUTPUT log_distseqs.txt
 # OUTPUT OPTIONAL file.opti_mcc.0.05.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.04.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
@@ -34,7 +35,8 @@ distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
 documentCommand(distseqs.options)
 write(distseqs.options,"distseqs.mth",append = FALSE)
 command <- paste(binary,"distseqs.mth","> log_distseqs.txt")
-system(command)
+# system(command)
+runExternal(command, checkexit = TRUE)
 
 # mothur cluster
 # produces:
@@ -47,7 +49,8 @@ cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
 documentCommand(cluster.options)
 write(cluster.options,"cluster.mth",append = FALSE)
 command <- paste(binary,"cluster.mth","> log_cluster.txt")
-system(command)
+# system(command)
+runExternal(command, checkexit = TRUE)
 
 # mothur make.shared
 # produces:
