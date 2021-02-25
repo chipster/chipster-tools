@@ -70,7 +70,7 @@ if (file.exists("own.gtf")){
 # if using one of the GTFs available on Chipster:			
 }else{
 	#gtf.path <- "/opt/chipster/genomes/gtf/"
-	file.path(chipster.tools.path, "genomes", "gtf")
+	gtf.path <- file.path(chipster.tools.path, "genomes", "gtf")
 	command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, organism, ".gtf TAG=GE", sep="")
 }
 
