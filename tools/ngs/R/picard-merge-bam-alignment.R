@@ -42,7 +42,7 @@ runExternal(command, checkexit = FALSE)
 
 # Merge files (Picard):
 command <- paste("java -Xmx2g -jar ", picard.binary, " MergeBamAlignment UNMAPPED_BAM=unmapped.bam ALIGNED_BAM=aligned_sorted.bam O=merged.bam R=" ,reference, ".fa INCLUDE_SECONDARY_ALIGNMENTS=false PAIRED_RUN=false", sep="") 
-runExternal(command, capture= TRUE, checkexit = FALSE)
+runExternal(command, checkexit = FALSE)
 
 # Only index if BAM not empty to prevent returning an empty .bai file
 if (fileOk("merged.bam", minsize=100)){
@@ -106,6 +106,6 @@ outputnames[2,] <- c("merged_tagged.bam.bai", paste(input1namestripped, "_merged
 ## Write output definitions file
 write_output_definitions(outputnames)
 
-system("ls -l")
+#system("ls -l")
 
 # EOF
