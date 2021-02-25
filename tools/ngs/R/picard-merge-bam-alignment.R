@@ -2,8 +2,9 @@
 # INPUT unmapped.bam: "Unaligned BAM" TYPE BAM
 # INPUT aligned.bam: "Aligned BAM" TYPE BAM
 # INPUT OPTIONAL own.gtf: "Own GTF reference file" TYPE GENERIC
-# OUTPUT merged_tagged.bam
-# OUTPUT merged_tagged.bam.bai
+# OUTPUT OPTIONAL merged_tagged.bam
+# OUTPUT OPTIONAL merged_tagged.bam.bai
+# OUTPUT OPTIONAL stderr.log
 # PARAMETER reference: "Reference genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Use same reference as in the alignment!)
 # PARAMETER OPTIONAL organism: "Reference GTF" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
 
@@ -41,7 +42,7 @@ runExternal(command, checkexit = FALSE)
 
 # Merge files (Picard):
 command <- paste("java -Xmx2g -jar ", picard.binary, " MergeBamAlignment UNMAPPED_BAM=unmapped.bam ALIGNED_BAM=aligned_sorted.bam O=merged.bam R=" ,reference, ".fa INCLUDE_SECONDARY_ALIGNMENTS=false PAIRED_RUN=false", sep="") 
-runExternal(command, checkexit = FALSE)
+runExternal(command, capture= TRUE, checkexit = FALSE)
 
 # Only index if BAM not empty to prevent returning an empty .bai file
 if (fileOk("merged.bam", minsize=100)){
@@ -70,8 +71,8 @@ if (file.exists("own.gtf")){
 # if using one of the GTFs available on Chipster:			
 }else{
 	#gtf.path <- "/opt/chipster/genomes/gtf/"
-	gtf.path <- file.path(chipster.tools.path, "genomes", "gtf")
-	command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, organism, ".gtf TAG=GE", sep="")
+	gtf.path <- file.path(chipster.tools.path, "genomes", "gtf", organism)
+	command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, ".gtf TAG=GE", sep="")
 }
 
 # run the tool
@@ -105,6 +106,6 @@ outputnames[2,] <- c("merged_tagged.bam.bai", paste(input1namestripped, "_merged
 ## Write output definitions file
 write_output_definitions(outputnames)
 
-# system("ls -l >> log.txt")
+system("ls -l")
 
 # EOF
