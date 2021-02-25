@@ -206,17 +206,26 @@ runExternal <- function(command,env = NULL,capture = TRUE,checkexit = TRUE) {
   # Show error message if command fails
   if (checkexit) {
     if (exitcode != 0) {
-
       error <- scan("stderr.tmp",what = " ",sep = "\n")
-
-      msg <- paste("External program did not complete succesfully.\n")
-      msg <- paste(msg,"Please check your parameters, input files and input file assignment.\n\n")
-      msg <- paste(msg,"Failed command:\n")
-      msg <- paste(msg,command,"\n\n")
-      msg <- paste(msg,"Error:\n")
-      msg <- paste(msg,paste(error,collapse = "\n"))
-
-      stop(paste('CHIPSTER-NOTE: ',msg))
+      # Exit code 128+n is typically caused by sending termination signal to process
+      if (exitcode > 128){
+        msg <- paste("External program was terminated by the system.\n")
+        msg <- paste(msg,"This is usually caused by the system running out of memory.\n\n")
+        msg <- paste(msg,"Failed command:\n")
+        msg <- paste(msg,command,"\n\n")
+        msg <- paste(msg,"Error:\n")
+        msg <- paste(msg,paste(error,collapse = "\n"))
+        stop(paste('CHIPSTER-NOTE: ',msg))
+      # User errors typically cause exit code 1, but this depends on program  
+      }else{
+        msg <- paste("External program did not complete succesfully.\n")
+        msg <- paste(msg,"Please check your parameters, input files and input file assignment.\n\n")
+        msg <- paste(msg,"Failed command:\n")
+        msg <- paste(msg,command,"\n\n")
+        msg <- paste(msg,"Error:\n")
+        msg <- paste(msg,paste(error,collapse = "\n"))
+        stop(paste('CHIPSTER-NOTE: ',msg))
+      }
     }
   }
 }
