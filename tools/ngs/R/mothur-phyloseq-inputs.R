@@ -11,13 +11,13 @@
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.02.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.01.cons.taxonomy
-# OUTPUT OPTIONAL file.agc.list.0.05.cons.taxonomy
-# OUTPUT OPTIONAL file.agc.list.0.04.cons.taxonomy
-# OUTPUT OPTIONAL file.agc.list.0.03.cons.taxonomy
-# OUTPUT OPTIONAL file.agc.list.0.02.cons.taxonomy
-# OUTPUT OPTIONAL file.agc.list.0.01.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.05.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.04.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.03.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.02.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.01.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.shared
-# OUTPUT OPTIONAL file.agc.list.shared
+# OUTPUT OPTIONAL file.agc.shared
 # OUTPUT OPTIONAL log_distseqs.txt
 # PARAMETER datatype: "Type of data" TYPE [other: "Non-ITS", its: "ITS"] DEFAULT other (Choice between ITS vs other data)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
