@@ -29,6 +29,9 @@ version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
 
+# mothur dist.seqs
+# used for non-ITS data only
+
 if (datatype == "other"){ 
     distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
     distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
@@ -40,8 +43,12 @@ if (datatype == "other"){
     runExternal(command, checkexit = TRUE)
 }
 
+# mothur cluster
+# method depends on whether data are ITS or not
+# (ITS contig lengths are not equal, whereas lengths are equal for other data)
+
 if (datatype == "other"){ 
-    cluster.options <- paste("cluster(column=file.dist, count=picked.count_table") # cluster produces file.opti_mcc.list, file.opti_mcc.steps, file.opti_mcc.sensspec
+    cluster.options <- paste("cluster(column=file.dist, count=picked.count_table") # produces file.opti_mcc.list, file.opti_mcc.steps, file.opti_mcc.sensspec
     cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
     documentCommand(cluster.options)
     write(cluster.options,"cluster.mth",append = FALSE)
@@ -51,7 +58,7 @@ if (datatype == "other"){
 }
 
 if (datatype == "its"){
-    cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc")
+    cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc") # produces file.agc.unique_list.list
     cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
     documentCommand(cluster.options)
     write(cluster.options,"cluster.mth",append = FALSE)
@@ -61,27 +68,48 @@ if (datatype == "its"){
 }
 
 # mothur make.shared
-# produces:
-# file.opti_mcc.shared
+# here commands also differ because different clustering methods (above) produce different output files
 
-makeshared.options <- paste("make.shared(list=file.opti_mcc.list, count=picked.count_table")
-makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
-documentCommand(makeshared.options)
-write(makeshared.options,"makeshared.mth",append = FALSE)
-command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
-system(command)
+if (datatype == "other"){ 
+    makeshared.options <- paste("make.shared(list=file.opti_mcc.list, count=picked.count_table") # produces file.opti_mcc.shared
+    makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
+    documentCommand(makeshared.options)
+    write(makeshared.options,"makeshared.mth",append = FALSE)
+    command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
+    system(command)
+}
+
+if (datatype == "its"){
+    makeshared.options <- paste("make.shared(list=file.agc.unique_list.list, count=picked.count_table") # produces file.agc.unique_list.shared
+    makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
+    documentCommand(makeshared.options)
+    write(makeshared.options,"makeshared.mth",append = FALSE)
+    command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
+    system(command)
+}
 
 # mothur classify.otu
 # produces:
-# file.opti_mcc.[cutoff].cons.taxonomy
-# file.opti_mcc.[cutoff].cons.tax.summary
+# file.[opti_mcc or agc.unique_list].[cutoff].cons.taxonomy
+# file.[opti_mcc or agc.unique_list].[cutoff].cons.tax.summary
 
-classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
-classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
-documentCommand(classifyotu.options)
-write(classifyotu.options,"classifyotu.mth",append = FALSE)
-command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
-system(command)
+if (datatype == "other"){ 
+    classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
+    classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
+    documentCommand(classifyotu.options)
+    write(classifyotu.options,"classifyotu.mth",append = FALSE)
+    command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
+    system(command)
+}
+
+if (datatype == "its"){
+    classifyotu.options <- paste("classify.otu(list=file.agc.unique_list.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
+    classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
+    documentCommand(classifyotu.options)
+    write(classifyotu.options,"classifyotu.mth",append = FALSE)
+    command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
+    system(command)
+}
 
 # phenodata file
 # based on mothur-classify-counttable.R
