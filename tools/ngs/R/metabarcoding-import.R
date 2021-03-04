@@ -24,7 +24,6 @@ library(phyloseq)
 # Note 2: import_mothur uses default function for parsing taxonomy string (expects semi-colon delimited string)
 
 # Create phyloseq object using shared and constaxonomy file
-set.seed(1)
 ps <- import_mothur(mothur_shared_file="mothur_shared.shared",
 			mothur_constaxonomy_file="mothur_consensus.taxonomy")
 
@@ -35,7 +34,6 @@ ps <- import_mothur(mothur_shared_file="mothur_shared.shared",
 phenodata <- read.delim("phenodata.tsv")
 rownames(phenodata) <- phenodata[, samplevar[1]]
 phenodata <- sample_data(phenodata)
-set.seed(1)
 ps <- merge_phyloseq(ps, phenodata)
 
 # Merge mothur tree file into phyloseq object (currently not in use)
