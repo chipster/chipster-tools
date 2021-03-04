@@ -10,7 +10,10 @@
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.02.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.01.cons.taxonomy
+# PARAMETER datatype: "Type of data" TYPE [other: "Non-ITS", its: "ITS"] DEFAULT other (Choice between ITS vs other data)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
+
+# AMS JH EK 2020-2021
 
 # reshape2 library
 library(reshape2)
@@ -25,32 +28,37 @@ binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
-# mothur dist.seqs
-# produces:
-# file.dist
 
-distseqs.options <- paste("dist.seqs(fasta=file.fasta")
-distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
-distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
-documentCommand(distseqs.options)
-write(distseqs.options,"distseqs.mth",append = FALSE)
-command <- paste(binary,"distseqs.mth","> log_distseqs.txt")
-# system(command)
-runExternal(command, checkexit = TRUE)
+if (datatype == "other"){ 
+    distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
+    distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
+    distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
+    documentCommand(distseqs.options)
+    write(distseqs.options,"distseqs.mth",append = FALSE)
+    command <- paste(binary,"distseqs.mth","> log_distseqs.txt")
+    # system(command)
+    runExternal(command, checkexit = TRUE)
+}
 
-# mothur cluster
-# produces:
-# file.opti_mcc.list
-# file.opti_mcc.steps
-# file.opti_mcc.sensspec
+if (datatype == "other"){ 
+    cluster.options <- paste("cluster(column=file.dist, count=picked.count_table") # cluster produces file.opti_mcc.list, file.opti_mcc.steps, file.opti_mcc.sensspec
+    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
+    documentCommand(cluster.options)
+    write(cluster.options,"cluster.mth",append = FALSE)
+    command <- paste(binary,"cluster.mth","> log_cluster.txt")
+    # system(command)
+    runExternal(command, checkexit = TRUE)
+}
 
-cluster.options <- paste("cluster(column=file.dist, count=picked.count_table")
-cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
-documentCommand(cluster.options)
-write(cluster.options,"cluster.mth",append = FALSE)
-command <- paste(binary,"cluster.mth","> log_cluster.txt")
-# system(command)
-runExternal(command, checkexit = TRUE)
+if (datatype == "its"){
+    cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc")
+    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
+    documentCommand(cluster.options)
+    write(cluster.options,"cluster.mth",append = FALSE)
+    command <- paste(binary,"cluster.mth","> log_cluster.txt")
+    # system(command)
+    runExternal(command, checkexit = TRUE)
+}
 
 # mothur make.shared
 # produces:
