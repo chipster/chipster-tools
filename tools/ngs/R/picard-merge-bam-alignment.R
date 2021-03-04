@@ -23,7 +23,8 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 # runExternal writes log to stderr.log 
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
-path.reference <- "/opt/chipster/genomes/fasta" 
+#path.reference <- "/opt/chipster/genomes/fasta"
+path.reference <- file.path(chipster.tools.path, "genomes", "fasta")
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
 # create symlink
@@ -68,8 +69,9 @@ if (file.exists("own.gtf")){
 	
 # if using one of the GTFs available on Chipster:			
 }else{
-	gtf.path <- "/opt/chipster/genomes/gtf/"
-	command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, organism, ".gtf TAG=GE", sep="")
+	#gtf.path <- "/opt/chipster/genomes/gtf/"
+	gtf.path <- file.path(chipster.tools.path, "genomes", "gtf", organism)
+	command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, ".gtf TAG=GE", sep="")
 }
 
 # run the tool
@@ -103,6 +105,6 @@ outputnames[2,] <- c("merged_tagged.bam.bai", paste(input1namestripped, "_merged
 ## Write output definitions file
 write_output_definitions(outputnames)
 
-# system("ls -l >> log.txt")
+#system("ls -l")
 
 # EOF
