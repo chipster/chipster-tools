@@ -3,13 +3,19 @@
 # INPUT picked.count_table: "Mothur count file" TYPE MOTHUR_COUNT
 # INPUT sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
 # OUTPUT META phenodata.tsv
-# OUTPUT file.opti_mcc.shared
 # OUTPUT log_distseqs.txt
 # OUTPUT OPTIONAL file.opti_mcc.0.05.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.04.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.02.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.01.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.unique_list.0.05.cons.tax.summary
+# OUTPUT OPTIONAL file.agc.unique_list.0.04.cons.tax.summary
+# OUTPUT OPTIONAL file.agc.unique_list.0.03.cons.tax.summary
+# OUTPUT OPTIONAL file.agc.unique_list.0.02.cons.tax.summary
+# OUTPUT OPTIONAL file.agc.unique_list.0.01.cons.tax.summary
+# OUTPUT OPTIONAL file.opti_mcc.shared
+# OUTPUT OPTIONAL file.agc.unique_list.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "Non-ITS", its: "ITS"] DEFAULT other (Choice between ITS vs other data)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
 
