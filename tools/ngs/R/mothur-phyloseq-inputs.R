@@ -8,11 +8,11 @@
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.02.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.01.cons.taxonomy
-# OUTPUT OPTIONAL file.agc.unique_list.0.05.cons.tax.summary
-# OUTPUT OPTIONAL file.agc.unique_list.0.04.cons.tax.summary
-# OUTPUT OPTIONAL file.agc.unique_list.0.03.cons.tax.summary
-# OUTPUT OPTIONAL file.agc.unique_list.0.02.cons.tax.summary
-# OUTPUT OPTIONAL file.agc.unique_list.0.01.cons.tax.summary
+# OUTPUT OPTIONAL file.agc.unique_list.0.05.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.unique_list.0.04.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.unique_list.0.03.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.unique_list.0.02.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.unique_list.0.01.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.shared
 # OUTPUT OPTIONAL file.agc.unique_list.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "Non-ITS", its: "ITS"] DEFAULT other (Choice between ITS vs other data)
@@ -96,7 +96,7 @@ if (datatype == "its"){
 # mothur classify.otu
 # produces:
 # file.[opti_mcc or agc.unique_list].[cutoff].cons.taxonomy
-# file.[opti_mcc or agc.unique_list].[cutoff].cons.tax.summary
+# file.[opti_mcc or agc.unique_list].[cutoff].cons.taxonomy
 
 if (datatype == "other"){ 
     classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
