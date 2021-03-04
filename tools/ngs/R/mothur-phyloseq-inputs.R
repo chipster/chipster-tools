@@ -3,7 +3,6 @@
 # INPUT picked.count_table: "Mothur count file" TYPE MOTHUR_COUNT
 # INPUT sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
 # OUTPUT META phenodata.tsv
-# OUTPUT log_distseqs.txt
 # OUTPUT OPTIONAL file.opti_mcc.0.05.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.04.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
