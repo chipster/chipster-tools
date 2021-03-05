@@ -1,4 +1,6 @@
-##depends:none
+#!/bin/bash
+
+set -e
 
 # Python
   cd ${TMPDIR_PATH}/
