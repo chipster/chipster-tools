@@ -12,7 +12,7 @@
   PYTHON=Python-2.7.12
 
 # install pip
-  wget_retry -nv https://bootstrap.pypa.io/get-pip.py
+  wget_retry -nv https://bootstrap.pypa.io/2.7/get-pip.py
   ${TOOLS_PATH}/${PYTHON}/bin/python get-pip.py
 
 # Python tools
