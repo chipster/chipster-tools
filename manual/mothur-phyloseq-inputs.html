@@ -8,13 +8,13 @@
 <h3>Description</h3>
 
 <p>
-This tool generates input files for the R package <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>, using the Mothur tools <a href="http://mothur.org/wiki/dist.seqs/">dist.seqs</a>, <a href="http://mothur.org/wiki/cluster/">cluster</a>, <a href="http://mothur.org/wiki/make.shared/">make.shared</a> and <a href="http://mothur.org/wiki/classify.otu/">classify.otu</a>. As part of input file generation, sequences are clustered into operational taxonomic units (OTU) based on a user-defined sequence dissimilarity threshold. The dist.seqs tool is only used for non-ITS data. The cluster tool employs either the opticlust method (non-ITS data) or the agc method (ITS data).
+This tool generates input files for the R package <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>, using the Mothur tools <a href="http://mothur.org/wiki/dist.seqs/">dist.seqs</a>, <a href="http://mothur.org/wiki/cluster/">cluster</a>, <a href="http://mothur.org/wiki/make.shared/">make.shared</a> and <a href="http://mothur.org/wiki/classify.otu/">classify.otu</a>. As part of input file generation, sequences are clustered into operational taxonomic units (OTU) based on a user-defined sequence dissimilarity threshold. The dist.seqs tool is only used for 16S, 18S or archaeal data. The cluster tool employs either the opticlust method (16S, 18S or archaeal data) or the agc method (ITS data).
 </p>
 
 
 <h3>Parameters</h3>
 <ul>
-<li>Choice between non-ITS and ITS data (default non-ITS).</li>
+<li>Choice between 16S, 18S or archaeal vs ITS data (default 16S, 18S or archaeal).</li>
 <li>Dissimilarity threshold for OTU clustering (e.g. a cut-off value of 0.03 corresponds to 97% sequence similarity). Values of 0.01 - 0.05 are accepted (default 0.03).</li>
 </ul>
 
