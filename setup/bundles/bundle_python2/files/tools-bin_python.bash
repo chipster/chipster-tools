@@ -30,7 +30,7 @@ set -e
   cp ${TOOLS_PATH}/${PYTHON}/bin/htseq-count ${TOOLS_PATH}/${PYTHON}/bin/htseq-count_chr
   sed -i 's/HTSeq.scripts.count/HTSeq.scripts.count_chr/' ${TOOLS_PATH}/${PYTHON}/bin/htseq-count_chr
   chmod 755 ${TOOLS_PATH}/${PYTHON}/bin/htseq-count_chr
-  wget -O ${TOOLS_PATH}/${PYTHON}/lib/python2.7/site-packages/HTSeq/scripts/count_chr.py http://nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/htseq/count_chr_v2.py
+  wget -O ${TOOLS_PATH}/${PYTHON}/lib/python2.7/site-packages/HTSeq/scripts/count_chr.py http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/htseq/count_chr_v2.py
   # make links
   mkdir -p ${TOOLS_PATH}/htseq/
   ln -s ../${PYTHON}/bin/htseq-qa ${TOOLS_PATH}/htseq/htseq-qa
