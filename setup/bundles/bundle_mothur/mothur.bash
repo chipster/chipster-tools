@@ -1,4 +1,4 @@
-##depends:none
+set -e
 
 # mothur GPLv3
 cd ${TMPDIR_PATH}/
