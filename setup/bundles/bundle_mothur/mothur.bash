@@ -1,13 +1,11 @@
 ##depends:none
 
-source ../installation_files/functions.bash
-
 # mothur GPLv3
 cd ${TMPDIR_PATH}/
 
 # Retain version 1.41.3 as backup
 cd ${TMPDIR_PATH}/
-wget_retry -nv https://github.com/mothur/mothur/releases/download/v1.41.3/Mothur.linux_64.zip
+wget -nv https://github.com/mothur/mothur/releases/download/v1.41.3/Mothur.linux_64.zip
 unzip -q Mothur.linux_64.zip
 mv mothur ${TOOLS_PATH}/mothur-1.41.3
 rm -rf  __MACOSX
@@ -16,7 +14,7 @@ rm -rf  __MACOSX
 
 # Make version 1.44.3 the default
 cd ${TMPDIR_PATH}/
-wget_retry -nv https://github.com/mothur/mothur/releases/download/v1.44.3/Mothur.linux.zip
+wget -nv https://github.com/mothur/mothur/releases/download/v1.44.3/Mothur.linux.zip
 unzip -q Mothur.linux.zip
 mv mothur ${TOOLS_PATH}/mothur-1.44.3
 rm -rf  __MACOSX
