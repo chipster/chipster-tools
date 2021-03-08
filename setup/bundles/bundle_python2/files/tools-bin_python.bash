@@ -14,7 +14,7 @@ set -e
   PYTHON=Python-2.7.12
 
 # install pip
-  wget -nv https://bootstrap.pypa.io/2.7/get-pip.py
+  wget -nv https://bootstrap.pypa.io/pip/2.7/get-pip.py
   ${TOOLS_PATH}/${PYTHON}/bin/python get-pip.py
 
 # Python tools
