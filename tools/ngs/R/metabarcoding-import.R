@@ -27,9 +27,13 @@ library(phyloseq)
 ps <- import_mothur(mothur_shared_file="mothur_shared.shared",
 			mothur_constaxonomy_file="mothur_consensus.taxonomy")
 
+# Replace any "-" symbols in ps sample_names with "."
+# (Mothur prefers "." and phenodata also uses this; phenodata row names + phyloseq object sample names must match)
+
+sample_names(ps) <- gsub("-", ".", sample_names(ps))
+
 # Merge phenodata into phyloseq object
-# The phenodata file requires some modification, as
-# phyloseq wants row names to correspond to sample names
+# (The phenodata file requires some modification first for merge_phyloseq to work)
 
 phenodata <- read.delim("phenodata.tsv")
 rownames(phenodata) <- phenodata[, samplevar[1]]
