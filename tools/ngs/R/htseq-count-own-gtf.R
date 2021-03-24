@@ -7,16 +7,17 @@
 # PARAMETER stranded: "Is the data stranded and how" TYPE [reverse:"\"reverse\" in HTSeq\: the second read of a pair should map to the same strand as the gene", yes:"\"yes\" in HTSeq\: the first read should map to the same strand as the gene", no:"\"no\" in HTSeq\: the data is unstranded"] DEFAULT no (If you select NO, a read will be counted for a gene regardless of which strand it maps to. If you select YES and you have single end data, the read has to map to the same strand as the gene. For paired end data, the first read of a pair has to map to the same strand as the gene, and the second read has to map to the opposite strand. If you select REVERSE and you have paired end data, the second read has to map to the same strand as the gene, and the first read has to map to the opposite strand. You should use REVERSE for paired end data produced for example with the Illumina TruSeq Stranded kit.)
 # PARAMETER OPTIONAL mode: "Mode to handle reads overlapping more than one gene" TYPE [union, intersection-strict, intersection-nonempty] DEFAULT union (How to deal with reads that overlap more than one gene or exon?)
 # PARAMETER OPTIONAL minaqual: "Minimum alignment quality" TYPE INTEGER FROM 0 TO 100 DEFAULT 10 (Skip all reads with alignment quality lower than the given minimum value.)
-# PARAMETER OPTIONAL feature.type: "Feature type to count" TYPE [exon, CDS] DEFAULT exon (Which feature type to use, all features of other type are ignored.)
-# PARAMETER OPTIONAL id.attribute: "Feature ID to use" TYPE [gene_id, ID, GeneID, transcript_id, gene_name, transcript_name, protein_name] DEFAULT gene_id (GFF attribute to be used as feature ID. Several GFF lines with the same feature ID will be considered as parts of the same feature. The feature ID is used to identity the counts in the output table.)
+# PARAMETER OPTIONAL feature.type: "Feature type to count" TYPE [exon, CDS, gene] DEFAULT exon (Which feature type to use, all features of other type are ignored.)
+# PARAMETER OPTIONAL id.attribute: "Feature ID to use" TYPE [gene_id, ID, GeneID, transcript_id, gene_name, transcript_name, protein_name, name] DEFAULT gene_id (GFF attribute to be used as feature ID. Several GFF lines with the same feature ID will be considered as parts of the same feature. The feature ID is used to identity the counts in the output table.)
 # PARAMETER OPTIONAL print.coord: "Add chromosomal coordinates to the count table" TYPE [yes, no] DEFAULT yes (If you select yes, chromosomal coordinates are added to the output file. Given are the minimum and maximum coordinates of features, e.g. exons, associated with a given identifier)
 
 
-# 22.8.2011 TH and EK 
-# 6.5.2013 MK added chr-location information to the output
+# 22.8.2011	TH and EK 
+# 6.5.2013	MK added chr-location information to the output
 # 21.5.2014 EK updated to use HTSeq 0.6.1
-# 9.4.2015 ML added the geneID options
-# 22.9.2016 EK Clarified strandedness options
+# 9.4.2015	ML added the geneID options
+# 22.9.2016 EK clarified strandedness options
+# 24.3.2021 EK added feature and id options for own GTFs
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
