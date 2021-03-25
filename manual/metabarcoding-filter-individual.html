@@ -3,21 +3,22 @@
 <head><title></title></head>
 <body>
 
-<h2>Filter out selected phyla</h2>
+<h2>Remove selected taxa</h2>
 
 <h3>Description</h3>
 
 <p>
-Removes up to five user-specified phyla from a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object. Produces a taxonomy summary at the phylum level and saves the resulting object as an Rda file.
+Removes up to five user-specified taxa from a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object, at the desired level of biological organization. Produces a taxonomy summary of the resulting phyloseq object and saves it as an Rda file.
 </p>
 
 
 <h3>Parameters</h3>
 <ul>
-<li>Phyla to be removed (one is required; up to five can be removed)</li>
+<li>Level of biological organization for taxon removal (Phylum, Class, Order, Family, Genus or Species; the default is Phylum)</li>
+<li>Taxa to be removed (one is required; up to five can be removed)</li>
 </ul>
 <p>
-Names of phyla to be removed are manually typed using the text field provided.
+Names of taxa to be removed are manually typed using the text field provided.
 </p>
 
 <h3>Details</h3>
@@ -37,7 +38,7 @@ The tool employs the following R functions and packages:
 <p>
 The tool produces the following output files:</p>
 <ul>
-<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object following removal of individual phyla (ps_ind.Rda)</li>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object following removal of individual taxa (ps_ind.Rda)</li>
 <li>Text summary of taxon frequencies following filtration (ps_ind_taxon.txt)</li>
 </ul>
 </p>

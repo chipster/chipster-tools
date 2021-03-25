@@ -3,11 +3,12 @@
 <head><title></title></head>
 <body>
 
-<h2>Trim reads</h2>
+<h2>Trim reads with FastX</h2>
 
 <h3>Description</h3>
 
-<p>Given a FASTQ file, this tool trims reads as specified by the user.</p>
+<p>This tool trims a number of bases from either end of the read as specified by the user. As input the tool takes FASTQ files. You can give several files simultaneously, either as separate files or as a tar package, which can be gzipped. 
+If the input is a tar package, the result files will also be in a tar package.</p>
 
 <h3>Parameters</h3>
 
@@ -18,12 +19,12 @@
 
 <h3>Details</h3>
 
-<p>You can use this tool for trimming reads to a given length, and you can give as many FASTQ files at the same time as you like. If quality control tools have indicated that only some reads have low quality ends,
+<p>You can use this tool for trimming reads to a given length or removing a given number of bases from the beginning of the reads. If quality control tools have indicated that only some reads have low quality ends,
 you might prefer to use other tools like Trimmomatic which take the base quality values into account.</p>
 
 <h3>Output</h3>
 
-<p>A FASTQ file containing the trimmed reads. </p>
+<p>FASTQ files containing the trimmed reads. The result files are given as tar package if the input files were in a tar package.</p>
 
 <h3>Reference</h3>
 

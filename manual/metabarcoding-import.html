@@ -28,7 +28,10 @@ This tool requires three input files:
 <li>Constaxonomy file with consensus taxonomies for OTUs (file.opti_mcc.0.0X.cons.taxonomy)</li>
 <li>Phenodata file (used to assign samples for statistical analysis)</li>
 </ul>
-As part of the import process, initial taxonomic rankings (Rank1 - Rank6) are renamed for clarity (Kingdom, Phylum, Class, Order, Family, Genus).
+As part of the import process, initial taxonomic rankings are renamed for clarity (Domain_Kingdom, Phylum, Class, Order, Family, Genus, Species).
+The input data may include taxonomic assignments at six levels (Domain_Kingdom to Genus) or seven levels (Domain_Kingdom to Species), depending on the taxonomic reference file used.
+Assignments under the label Domain_Kingdom may consist of either domain- or kingdom-level classifications, depending on the reference employed.
+Where phyloseq object names contain "-" symbols, these are replaced with "." to ensure matching sample names between the phyloseq object and the phenodata file.
 </p>
 
 <h3>Output</h3>

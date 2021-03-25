@@ -1,15 +1,24 @@
-# TOOL mothur-phyloseq-inputs.R: "Generate input files for phyloseq" (This tool generates input files for the R package phyloseq, using the Mothur tools dist.seqs, cluster, make.shared and classify.otu. As part of input file generation, sequences are clustered into operational taxonomic units \(OTU\) based on a user-defined sequence dissimilarity threshold. Note that sample groups in the phenodata file should be indicated using characters \(numeric labels are currently not supported by downstream analyses\).)
+# TOOL mothur-phyloseq-inputs.R: "Generate input files for phyloseq" (This tool generates input files for the R package phyloseq, using the Mothur tools dist.seqs \(for 16S, 18S or archaeal data\), cluster \(opticlust for 16S, 18S and archaeal data, and agc for ITS data\), make.shared and classify.otu. As part of input file generation, sequences are clustered into operational taxonomic units \(OTU\) based on a user-defined sequence dissimilarity threshold. Note that sample groups in the phenodata file should be indicated using characters \(numeric labels are currently not supported by downstream analyses\).)
 # INPUT file.fasta: "FASTA file" TYPE GENERIC
 # INPUT picked.count_table: "Mothur count file" TYPE MOTHUR_COUNT
 # INPUT sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
 # OUTPUT META phenodata.tsv
-# OUTPUT file.opti_mcc.shared
 # OUTPUT OPTIONAL file.opti_mcc.0.05.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.04.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.03.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.02.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.0.01.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.05.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.04.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.03.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.02.cons.taxonomy
+# OUTPUT OPTIONAL file.agc.0.01.cons.taxonomy
+# OUTPUT OPTIONAL file.opti_mcc.shared
+# OUTPUT OPTIONAL file.agc.shared
+# PARAMETER datatype: "Type of data" TYPE [other: "16S, 18S or archaeal", its: "ITS"] DEFAULT other (Choice between ITS vs other data)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
+
+# AMS JH EK 2020-2021
 
 # reshape2 library
 library(reshape2)
@@ -25,52 +34,84 @@ version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
 # mothur dist.seqs
-# produces:
-# file.dist
+# used for 16S, 18S and archaeal data only
 
-distseqs.options <- paste("dist.seqs(fasta=file.fasta")
-distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
-distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
-documentCommand(distseqs.options)
-write(distseqs.options,"distseqs.mth",append = FALSE)
-command <- paste(binary,"distseqs.mth","> log_distseqs.txt")
-system(command)
+if (datatype == "other"){ 
+    distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
+    distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
+    distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
+    documentCommand(distseqs.options)
+    write(distseqs.options,"distseqs.mth",append = FALSE)
+    command <- paste(binary,"distseqs.mth","> log_distseqs.txt")
+    # system(command)
+    runExternal(command, checkexit = TRUE)
+}
 
 # mothur cluster
-# produces:
-# file.opti_mcc.list
-# file.opti_mcc.steps
-# file.opti_mcc.sensspec
 
-cluster.options <- paste("cluster(column=file.dist, count=picked.count_table")
-cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
-documentCommand(cluster.options)
-write(cluster.options,"cluster.mth",append = FALSE)
-command <- paste(binary,"cluster.mth","> log_cluster.txt")
-system(command)
+# method depends on whether data are ITS or not
+# (ITS contig lengths are not equal, whereas lengths are equal for other data)
+
+if (datatype == "other"){ 
+    cluster.options <- paste("cluster(column=file.dist, count=picked.count_table")
+    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
+    documentCommand(cluster.options)
+    write(cluster.options,"cluster.mth",append = FALSE)
+    command <- paste(binary,"cluster.mth","> log_cluster.txt")
+    # system(command)
+    runExternal(command, checkexit = TRUE)
+}
+
+if (datatype == "its"){
+    cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc")
+    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
+    documentCommand(cluster.options)
+    write(cluster.options,"cluster.mth",append = FALSE)
+    command <- paste(binary,"cluster.mth","> log_cluster.txt")
+    # system(command)
+    runExternal(command, checkexit = TRUE)
+}
 
 # mothur make.shared
-# produces:
-# file.opti_mcc.shared
+# here commands also differ because different clustering methods (above) produce different output files
 
-makeshared.options <- paste("make.shared(list=file.opti_mcc.list, count=picked.count_table")
-makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
-documentCommand(makeshared.options)
-write(makeshared.options,"makeshared.mth",append = FALSE)
-command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
-system(command)
+if (datatype == "other"){ 
+    makeshared.options <- paste("make.shared(list=file.opti_mcc.list, count=picked.count_table")
+    makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
+    documentCommand(makeshared.options)
+    write(makeshared.options,"makeshared.mth",append = FALSE)
+    command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
+    system(command)
+}
+
+if (datatype == "its"){
+    makeshared.options <- paste("make.shared(list=file.agc.list, count=picked.count_table") # produces file.agc.shared
+    makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
+    documentCommand(makeshared.options)
+    write(makeshared.options,"makeshared.mth",append = FALSE)
+    command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
+    system(command)
+}
 
 # mothur classify.otu
-# produces:
-# file.opti_mcc.[cutoff].cons.taxonomy
-# file.opti_mcc.[cutoff].cons.tax.summary
 
-classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
-classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
-documentCommand(classifyotu.options)
-write(classifyotu.options,"classifyotu.mth",append = FALSE)
-command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
-system(command)
+if (datatype == "other"){ 
+    classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
+    classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
+    documentCommand(classifyotu.options)
+    write(classifyotu.options,"classifyotu.mth",append = FALSE)
+    command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
+    system(command)
+}
+
+if (datatype == "its"){
+    classifyotu.options <- paste("classify.otu(list=file.agc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
+    classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
+    documentCommand(classifyotu.options)
+    write(classifyotu.options,"classifyotu.mth",append = FALSE)
+    command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
+    system(command)
+}
 
 # phenodata file
 # based on mothur-classify-counttable.R

@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-pca-v3.R: "Seurat v3 -PCA" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL PCAplots.pdf
-# OUTPUT OPTIONAL seurat_obj_2.Robj
+# OUTPUT OPTIONAL seurat_obj_pca.Robj
 # PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 20 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # RUNTIME R-3.6.1-single-cell
@@ -63,6 +63,6 @@ textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = s
 dev.off() # close the pdf
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_2.Robj")
+save(seurat_obj, file="seurat_obj_pca.Robj")
 
 ## EOF

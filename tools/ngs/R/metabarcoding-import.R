@@ -1,4 +1,4 @@
-# TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into six taxonomic levels \(Kingdom, Phylum, Class, Order, Family, Genus\).)
+# TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into up to seven taxonomic levels \(Domain or Kingdom, Phylum, Class, Order, Family, Genus and, where applicable, Species\).)
 # INPUT mothur_shared.shared: "Mothur shared file" TYPE GENERIC
 # INPUT mothur_consensus.taxonomy: "mothur constaxonomy file" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
@@ -7,9 +7,11 @@
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
 # RUNTIME R-3.6.1-phyloseq
 
-# JH 2020
+# JH 2020-2021
 
-# NOTE: Tax info initially listed as Rank1-Rank6
+# NOTE: Tax info initially listed as Rank1-Rank6 (e.g. using mothur SILVA reference) or 
+# Rank1-Rank7 (if using other references that classify data to species level)
+
 # e.g.
 #           Rank1      Rank2           Rank3         Rank4           Rank5            Rank6              
 #   Otu0001 "Bacteria" "Bacteroidetes" "Bacteroidia" "Bacteroidales" "Muribaculaceae" "Muribaculaceae_ge"
@@ -25,9 +27,13 @@ library(phyloseq)
 ps <- import_mothur(mothur_shared_file="mothur_shared.shared",
 			mothur_constaxonomy_file="mothur_consensus.taxonomy")
 
+# Replace any "-" symbols in ps sample_names with "."
+# (Mothur prefers "." and phenodata also uses this; phenodata row names + phyloseq object sample names must match)
+
+sample_names(ps) <- gsub("-", ".", sample_names(ps))
+
 # Merge phenodata into phyloseq object
-# The phenodata file requires some modification, as
-# phyloseq wants row names to correspond to sample names
+# (The phenodata file requires some modification first for merge_phyloseq to work)
 
 phenodata <- read.delim("phenodata.tsv")
 rownames(phenodata) <- phenodata[, samplevar[1]]
@@ -43,8 +49,21 @@ ps <- merge_phyloseq(ps, phenodata)
 # 	ps <- merge_phyloseq(ps, tree)
 # }
 
-# Rename tax table columns 
-colnames(tax_table(ps)) <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+# Rename tax table columns
+
+# Note 1: Rank1 renamed as Domain_Kingdom to reflect reference database-specific
+# differences (some specify Rank1 as domain, others as kingdom)
+
+# Note 2: Renaming depends on no. of taxonomic levels used (can be either 6 or 7 levels)
+
+taxlength <- length(colnames(tax_table(ps)))
+
+if (taxlength == "6"){
+colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+}
+if (taxlength == "7"){
+colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+}
 
 # Print out basic descriptors
 ps_samplenames <- sample_names(ps)

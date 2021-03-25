@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-integrated-analysis-v3.R: "Seurat v3 -Integrated analysis of two samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for two sample combined Seurat objects.)
 # INPUT combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integrated_plot.pdf
-# OUTPUT seurat_obj_combined.Robj
+# OUTPUT seurat_obj_combined_integrated.Robj
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
 # OUTPUT OPTIONAL log_normalized.tsv
 # PARAMETER OPTIONAL num.dims: "Number of PCs to use " TYPE INTEGER DEFAULT 20 (Number of principal components to use. )
@@ -90,7 +90,7 @@ if (output_aver_expr == "T") {
 
 
 # Save the Robj for the next tool
-save(data.combined, file = "seurat_obj_combined.Robj")
+save(data.combined, file = "seurat_obj_combined_integrated.Robj")
 
 ## EOF
 

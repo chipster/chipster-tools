@@ -41,11 +41,13 @@ merged <- merge_tables(input.names2, "no")
 
 # For debugging:
 # write.table(list.files(), "log.txt", sep="\t", row.names=T, col.names=T, quote=F)
+# write.table(merged, "vst-transformed-counts.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 
 # filter (=select columns from) the full table for printing the table & plotting:
 phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
 nro.samples <- nrow(phenodata)
-merged_part <- merged[,c(1:nro.samples,15:20)]
+merged_part <- merged[,1:nro.samples]
+# merged_part <- merged[,c(1:nro.samples,15:20)] # This would include the p-values, fold-changes etc if present in the table, but this is not the case always...
 dat2 <- merged[,1:nro.samples]
 write.table(merged_part, "vst-transformed-counts.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 

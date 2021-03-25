@@ -77,9 +77,11 @@
 		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
+		<tool module="common">extract_zip.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_tar.R</tool>
 		<tool module="common">list_tar_contents.R</tool>
+		<tool module="common">list_zip.py</tool>
 		<tool module="common">gzip.R</tool>	
 		<tool>a5-miseq.R</tool>
 		<tool module="common">make_namelist.R</tool>
@@ -282,7 +284,7 @@
 		<tool>metabarcoding-rarecurve-alpha.R</tool>
 		<tool>metabarcoding-rarefy-even.R</tool>
 		<tool>metabarcoding-taxon-overview.R</tool>
-		<tool>metabarcoding-filter-nonbacterial.R</tool>
+		<tool>metabarcoding-filter-taxgroup.R</tool>
 		<tool>metabarcoding-filter-individual.R</tool>		
 		<tool>metabarcoding-additional-prevalence.R</tool>		
 		<tool>metabarcoding-single-double.R</tool>
