@@ -10,8 +10,10 @@
 
 # EK 17.6.2011
 
-# check out if the file is compressed and if so unzip it
+source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
+
+# check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.fastq")
 
 # binary
@@ -28,3 +30,14 @@ command <- paste(binary, remove.parameter, rename.parameter, quality.scale, "-v 
 # run
 system(command)
 
+# Determine base name
+inputnames <- read_input_definitions()
+basename <- strip_name(inputnames$reads.fastq)
+
+# Make a matrix of output names
+outputnames <- matrix(NA,nrow = 2,ncol = 2)
+outputnames[1,] <- c("reads.fasta",paste(basename,".fasta",sep = ""))
+outputnames[2,] <- c("fasta.log",paste(basename,".log",sep = ""))
+
+# Write output definitions file
+write_output_definitions(outputnames)
