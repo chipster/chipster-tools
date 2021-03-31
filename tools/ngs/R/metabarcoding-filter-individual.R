@@ -1,9 +1,11 @@
-# TOOL metabarcoding-filter-individual.R: "Remove selected taxa" (Removes up to five user-specified taxa from a phyloseq object, at the desired level of biological organization. Produces a taxonomy summary of the resulting phyloseq object and saves it as an Rda file. Requires a phyloseq object in Rda format as the input.) 
+# TOOL metabarcoding-filter-individual.R: "Remove selected taxa" (This tool can be used to remove chloroplast and mitochondrial sequences from a phyloseq object, and up to five user-specified taxa at the desired level of biological organization. Produces a taxonomy summary of the resulting phyloseq object and saves it as an Rda file. Requires a phyloseq object in Rda format as the input.) 
 # INPUT ps.Rda: "Phyloseq object in .Rda format" TYPE GENERIC
 # OUTPUT ps_ind.Rda
 # OUTPUT ps_ind_taxon.txt
-# PARAMETER type: "Level of biological organization for taxon removal" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus", species: "Species"] DEFAULT phylum (Select the desired taxonomic level; default is phylum)
-# PARAMETER tax1: "Taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
+# PARAMETER OPTIONAL remove.chloroplast: "Remove class Chloroplast" TYPE [yes, no] DEFAULT yes (Remove class Chloroplast)
+# PARAMETER OPTIONAL remove.mitochondria: "Remove family Mitochondria" TYPE [yes, no] DEFAULT yes (Remove family Mitochondria)
+# PARAMETER OPTIONAL type: "Level of biological organization for manual taxon removal" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus", species: "Species"] DEFAULT phylum (Select the desired taxonomic level; default is phylum)
+# PARAMETER OPTIONAL tax1: "Taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax2: "2nd taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax3: "3rd taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax4: "4th taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
@@ -18,11 +20,21 @@ library(phyloseq)
 # Load phyloseq object
 load("ps.Rda")
 
-# if "Species" selected for taxon removal, check that using 7-level classification
+# If "Species" selected for taxon removal, check that using 7-level classification
 taxlength <- length(colnames(tax_table(ps)))
 if (type == "species" && 
 	taxlength == "6"){
 		stop("Data set lacks species-level assignments; please choose another level of organization.")
+}
+
+# Remove class Chloroplast
+if (remove.chloroplast == "yes") {
+	ps <- subset_taxa(ps, Class != "Chloroplast")
+}
+
+# Remove family Mitochondria
+if (remove.chloroplast == "yes") {
+	ps <- subset_taxa(ps, Family != "Mitochondria")
 }
 
 # Create list of taxa to filter out
