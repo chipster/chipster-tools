@@ -13,7 +13,7 @@ source(file.path(chipster.common.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 #### unzipIfGZipFile("reads.fastq")
 
-# binary
+# Binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
