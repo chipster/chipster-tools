@@ -33,7 +33,7 @@ if (remove.chloroplast == "yes") {
 }
 
 # Remove family Mitochondria
-if (remove.chloroplast == "yes") {
+if (remove.mitochondria == "yes") {
 	ps <- subset_taxa(ps, Family != "Mitochondria")
 }
 
@@ -55,7 +55,7 @@ if ( nchar(tax5) > 0 ){
 	filterTax <- c(filterTax, tax5)
 }
 
-# Filter out the specified taxa
+# Filter out specified taxa
 if (type == "phylum"){
 		ps <- subset_taxa(ps, !Phylum %in% filterTax)
 	} else if (type == "class"){
