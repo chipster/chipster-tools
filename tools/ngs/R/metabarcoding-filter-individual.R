@@ -33,7 +33,7 @@ if (remove.chloroplast == "yes") {
 }
 
 # Remove family Mitochondria
-if (remove.chloroplast == "yes") {
+if (remove.mitochondria == "yes") {
 	ps <- subset_taxa(ps, Family != "Mitochondria")
 }
 
