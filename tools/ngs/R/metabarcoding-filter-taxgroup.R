@@ -1,4 +1,4 @@
-# TOOL metabarcoding-filter-taxgroup.R: "Filter by taxonomic group" (Tidies a phyloseq object so that OTUs only from the desired taxonomic group \(bacteria, archaea, eukaryotes or fungi\) are retained. If bacteria are selected as the group, filters out OTUs not classified as Bacteria \(domain level\), classified as NA at the phylum level, and\/or classified as chloroplast sequences at the class level. With the exception of chloroplast sequence removal, similar filtering steps are applied to other groups. For fungi, filtering is performed at the kingdom level \(Fungi\) rather than the domain level. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file. Requires a phyloseq object in Rda format as the input.)
+# TOOL metabarcoding-filter-taxgroup.R: "Filter by taxonomic group" (Tidies a phyloseq object so that OTUs only from the desired taxonomic group \(bacteria, archaea, eukaryotes or fungi\) are retained. For bacteria, archaea and eukaryotes, filtering is performed at the domain level \(Bacteria, Archaea, Eukaryota\). For fungi, filtering is performed at the kingdom level \(Fungi\). Features with ambiguous phylum-level annotation \(e.g. NA, unknown, uncharacterized\) are removed. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file. Requires a phyloseq object in Rda format as the input.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT OPTIONAL ps_bacteria.Rda
 # OUTPUT OPTIONAL ps_bacteria_taxon.txt
@@ -25,8 +25,7 @@ load("ps.Rda")
 
 if (group == "bacteria"){
 # Filter out anything not classified as Bacteria at the domain level
-# (while also removing chloroplast sequences at the Class level) 
-ps <- subset_taxa(ps, Domain_Kingdom == "Bacteria" & Class != "Chloroplast")
+ps <- subset_taxa(ps, Domain_Kingdom == "Bacteria")
 }
 
 if (group == "archaea"){
@@ -48,7 +47,7 @@ ps <- subset_taxa(ps, Domain_Kingdom == "Fungi")
 
 # Remove any remaining features with the phylum annotated as NA
 # (or with otherwise ambiguous phylum-level annotation)
-ps <- subset_taxa(ps, !is.na(Phylum) & !Phylum %in% c("", "uncharacterized"))
+ps <- subset_taxa(ps, !is.na(Phylum) & !Phylum %in% c("", "uncharacterized", "unknown", "Unknown"))
 
 # Phylum-level taxonomy table
 taxonsummary <- table(tax_table(ps)[, "Phylum"], exclude = NULL)
