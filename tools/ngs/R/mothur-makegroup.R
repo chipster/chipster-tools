@@ -11,7 +11,7 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-#### unzipIfGZipFile("reads.fastq")
+unzipIfGZipFile("reads.fasta")
 
 # Binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
