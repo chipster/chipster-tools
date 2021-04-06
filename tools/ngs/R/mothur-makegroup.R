@@ -11,7 +11,10 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-unzipIfGZipFile("reads.fasta")
+input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+for (i in 1:nrow(input.names)) {
+	unzipIfGZipFile(input.names[i,1])	
+}
 
 # Binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
