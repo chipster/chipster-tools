@@ -1,10 +1,10 @@
-# TOOL mothur-makegroup.R: "Combine FASTA files and make a groups file" (Combines FASTA files of each sample to one file and creates a groups file. FASTA files can be gzipped. This tool is based on the Mothur tools make.group and merge.files.)
+# TOOL mothur-makegroup.R: "Combine FASTA files and make a group file" (Combines FASTA files of each sample to one file and creates a Mothur group file. FASTA files can be gzipped. This tool is based on the Mothur tools make.group and merge.files.)
 # INPUT reads{...}.fasta: "FASTA files" TYPE FASTA
 # OUTPUT sequences.fasta.gz
 # OUTPUT sequences.groups
 # OUTPUT log1.txt
 
-# EK 1.4.2021
+# EK 6.4.2021
 
 
 source(file.path(chipster.common.path, "tool-utils.R"))
