@@ -23,12 +23,12 @@ input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 # Set names for first input
 fasta_names <- input.names[1,1]
-group_names <- strip_name(c(input.names[1,2]))
+group_names <- strip_name(paste(input.names[1,2]))
 
 # Loop through the rest of the inputs
 for (i in 2:nrow(input.names)) {
   fasta_names <- paste(fasta_names, input.names[i,1], sep="-") 
-  group <- strip_name(c(input.names[i,2]))
+  group <- strip_name(paste(input.names[i,2]))
   group_names <- paste(group_names, group, sep="-")
 }
 
