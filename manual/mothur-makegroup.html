@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-Combines FASTA files of each sample to one file and creates a groups file. FASTA files can be gzipped.
+Combines FASTA files of each sample to one file and creates a Mothur group file. FASTA files can be gzipped.
 
 </p>
 
@@ -19,7 +19,7 @@ None
 <h3>Details</h3>
 <p>
 For the Mothur-based tools in Chipster your samples need to be in one FASTA file. 
-In order to assign sequences to a specific sample, and you need a <a href="http://www.mothur.org/wiki/group_file/">Mothur group file</a>.
+In order to assign sequences to a specific sample, you need also a <a href="http://www.mothur.org/wiki/group_file/">Mothur group file</a>.
 If you have single end data (e.g. IonTorrent) and your samples are in separate FASTQ files, you can convert them FASTA, and then combine them with this tool,
 which also generates the group file.   
 </p>
@@ -29,9 +29,9 @@ This tool is based on the <a href="http://www.mothur.org/wiki/make.group">make.g
 
 <h3>Output</h3>
 
-<p>The output consists of the  files:</p>
+<p>The output consists of the following files:</p>
 <ul>
-<li>sequences.fasta.gz: Compressed FASTA file containing all the sequences </li> 
+<li>sequences.fasta.gz: Compressed FASTA file containing sequences from all the samples</li> 
 <li>sequences.groups: Mothur group file indicating what sequence belongs to what sample </li> 
 </ul>
 
