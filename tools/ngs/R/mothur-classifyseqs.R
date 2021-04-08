@@ -18,6 +18,7 @@
 # EK 25.3.2021  removed parameters for removing lineages as this is now handled with Phyloseq tools "Remove selected taxa" and "Filter by taxonomic group"
 # EK 25.3.2021  add option to use own reference
 
+# to be removed later:
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "bacterial subset of Silva db", full: "whole Silva db"] DEFAULT bacterial (Silva reference set to use.)
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
@@ -43,7 +44,7 @@ documentVersion("Mothur",version)
 
 if (reference == "own") {
   if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")){
-    stop('CHIPSTER-NOTE: Provide your own reference and taxonomy files or select one of the provided ones.')
+    stop('CHIPSTER-NOTE: Provide your own reference and taxonomy files or select the Silva reference.')
   }
   reference.path <- "own_reference.fasta"
   taxonomy.path <- "own_reference.tax"
