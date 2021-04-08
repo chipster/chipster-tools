@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL fasta.log
 # PARAMETER OPTIONAL remove.unknowns: "Remove sequences with unknown nucleotides" TYPE [yes, no] DEFAULT no (Remove sequences with unknown nucleotides)
 # PARAMETER OPTIONAL rename.identifiers: "Rename sequence identifiers as numbers" TYPE [yes, no] DEFAULT no (Rename sequence identifiers as numbers)
-# PARAMETER quality.format: "Quality value format used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
+# PARAMETER quality.format: "Base quality encoding used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
 # PARAMETER OPTIONAL log.file: "Write a log file" TYPE [ no: "no", yes: "yes"] DEFAULT no (Produce a log file indicating how many sequences contained unknown nucleotides and were therefore discarded)
 
 # EK 17.6.2011
