@@ -5,21 +5,22 @@
 # INPUT OPTIONAL own_reference.tax: "Reference taxonomy file" TYPE GENERIC
 # OUTPUT OPTIONAL sequences-taxonomy-assignment.txt
 # OUTPUT OPTIONAL classification-summary.tsv
-# OUTPUT OPTIONAL picked.fasta.gz 
-# OUTPUT OPTIONAL picked.count_table
-# OUTPUT OPTIONAL picked-summary.tsv
 # PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (The reference options marked with _s are from the UNITE download2 set, so they comprise of all quality filtered unclustered UNITE and INSD sequences for Fungi \(887 399 for UNITE v8.2\). The options without _s are from the UNITE download1 set, which contains sequences included in the UNITE species hypotheses \(565 915 for UNITE v8.2\). The dynamic options are based on varying clustering thresholds for different species hypothesis. These choices were made manually by experts of those particular lineages of fungi.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
-# PARAMETER OPTIONAL remove.unknown: "Remove taxon unknown" TYPE [yes, no] DEFAULT yes (Remove taxon unknown.)
-# PARAMETER OPTIONAL remove.other: "Remove lineages" TYPE STRING DEFAULT empty (List of other lineages to remove. You must use dots \(\".\"\) instead of semicolons \(\";\"\). Use dash \(\"-\"\) to separate taxons. For example: Bacteria.Firmicutes.-Bacteria.Bacteroidetes.)
 
 # AMS 18.12.2020
 # EK 10.2.2021 removed unnecessary remove.lineages parameters
+# EK 8.4.2021 removed parameters for removing unknown and user-specified lineages
 
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
 # PARAMETER OPTIONAL remove.archaea: "Remove taxon Archaea" TYPE [yes, no] DEFAULT yes (Remove taxon Archaea.)
 # PARAMETER OPTIONAL remove.bacteria: "Remove taxon Bacteria" TYPE [yes, no] DEFAULT yes (Remove taxon Bacteria.)
+# PARAMETER OPTIONAL remove.unknown: "Remove taxon unknown" TYPE [yes, no] DEFAULT yes (Remove taxon unknown.)
+# PARAMETER OPTIONAL remove.other: "Remove lineages" TYPE STRING DEFAULT empty (List of other lineages to remove. You must use dots \(\".\"\) instead of semicolons \(\";\"\). Use dash \(\"-\"\) to separate taxons. For example: Bacteria.Firmicutes.-Bacteria.Bacteroidetes.)
+# OUTPUT OPTIONAL picked.fasta.gz 
+# OUTPUT OPTIONAL picked.count_table
+# OUTPUT OPTIONAL picked-summary.tsv
 
 
 source(file.path(chipster.common.path,"tool-utils.R"))
@@ -72,7 +73,7 @@ system("find . -type f -name a.*.taxonomy -exec mv {} sequences-taxonomy-assignm
 system("find . -type f -name a.*.summary -exec mv {} classification-summary.tsv \\;")
 
 # batch file 2: remove lineage, if the taxons to remove were listed
-toremove <- ""
+# toremove <- ""
 
 # if (remove.chloroplast == "yes") {
 #  toremove <- paste(toremove,"Chloroplast",sep = "-")
@@ -86,76 +87,76 @@ toremove <- ""
 #if (remove.bacteria == "yes") {
 #  toremove <- paste(toremove,"Bacteria",sep = "-")
 #}
-if (remove.unknown == "yes") {
-  toremove <- paste(toremove,"unknown",sep = "-")
-}
-if (remove.other != "empty") {
+# if (remove.unknown == "yes") {
+#   toremove <- paste(toremove,"unknown",sep = "-")
+# }
+# if (remove.other != "empty") {
   # Change periods to semicolons. Semicolons are not accepted in STRING input.
-  remove.other <- gsub(".",";",remove.other,fixed = TRUE)
-  toremove <- paste(toremove,remove.other,sep = "-")
-}
+#   remove.other <- gsub(".",";",remove.other,fixed = TRUE)
+#   toremove <- paste(toremove,remove.other,sep = "-")
+# }
 
-if (toremove != "") {
+# if (toremove != "") {
   # Remove leading dash
-  toremove <- substring(toremove,2)
-  removelineage.options <- paste("remove.lineage(fasta=a.fasta")
-  if (file.exists("a.count_table")) {
-    removelineage.options <- paste(removelineage.options,", count=a.count_table")
-  }
-  removelineage.options <- paste(removelineage.options,", taxonomy=sequences-taxonomy-assignment.txt, taxon=",toremove,")",sep = "")
-  documentCommand(removelineage.options)
-  write(removelineage.options,"batch.mth",append = FALSE)
+#   toremove <- substring(toremove,2)
+#   removelineage.options <- paste("remove.lineage(fasta=a.fasta")
+#   if (file.exists("a.count_table")) {
+#     removelineage.options <- paste(removelineage.options,", count=a.count_table")
+#   }
+#   removelineage.options <- paste(removelineage.options,", taxonomy=sequences-taxonomy-assignment.txt, taxon=",toremove,")",sep = "")
+#   documentCommand(removelineage.options)
+#   write(removelineage.options,"batch.mth",append = FALSE)
 
   # command
-  command <- paste(binary,"batch.mth",">> log.txt 2>&1")
+#   command <- paste(binary,"batch.mth",">> log.txt 2>&1")
 
   # run
-  system(command)
+#   system(command)
 
   # Rename output files
-  system("mv a.pick.fasta picked.fasta")
-  if (file.exists("a.pick.count_table")) {
-    system("mv a.pick.count_table picked.count_table")
-  }
+#   system("mv a.pick.fasta picked.fasta")
+#   if (file.exists("a.pick.count_table")) {
+#     system("mv a.pick.count_table picked.count_table")
+#   }
 
   # batch file 3: classify.seqs again
 
-  classifyseqs.options <- paste("classify.seqs(fasta=picked.fasta")
-  if (file.exists("picked.count_table")) {
-    classifyseqs.options <- paste(classifyseqs.options,", count=picked.count_table")
-  }
-  classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters,", reference=",reference.path,", taxonomy=",taxonomy.path,")",sep = "")
-  documentCommand(classifyseqs.options)
-  write(classifyseqs.options,"batch.mth",append = FALSE)
+#   classifyseqs.options <- paste("classify.seqs(fasta=picked.fasta")
+#   if (file.exists("picked.count_table")) {
+#     classifyseqs.options <- paste(classifyseqs.options,", count=picked.count_table")
+#   }
+#   classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters,", reference=",reference.path,", taxonomy=",taxonomy.path,")",sep = "")
+#   documentCommand(classifyseqs.options)
+#   write(classifyseqs.options,"batch.mth",append = FALSE)
   # command
-  command <- paste(binary,"batch.mth",">> log.txt 2>&1")
+#   command <- paste(binary,"batch.mth",">> log.txt 2>&1")
   # run
-  system(command)
+#   system(command)
 
   ## test
-  write("get.current()","batch2.mth",append = FALSE)
-  system(paste(binary,"batch2.mth",">> log.txt 2>&1"))
+#   write("get.current()","batch2.mth",append = FALSE)
+#   system(paste(binary,"batch2.mth",">> log.txt 2>&1"))
 
   # Postprocess output
-  system("find . -type f -name picked.*.taxonomy -exec mv {} sequences-taxonomy-assignment.txt \\;")
-  system("find . -type f -name pecked.*.summary -exec mv {} classification-summary.tsv \\;")
+#   system("find . -type f -name picked.*.taxonomy -exec mv {} sequences-taxonomy-assignment.txt \\;")
+#   system("find . -type f -name pecked.*.summary -exec mv {} classification-summary.tsv \\;")
 
   # batch file 3: summary
-  summaryseqs.options <- paste("summary.seqs(fasta=picked.fasta, count=picked.count_table)")
-  documentCommand(summaryseqs.options)
-  write(summaryseqs.options,"summary.mth",append = FALSE)
+#   summaryseqs.options <- paste("summary.seqs(fasta=picked.fasta, count=picked.count_table)")
+#   documentCommand(summaryseqs.options)
+#   write(summaryseqs.options,"summary.mth",append = FALSE)
 
   # command 3
-  command3 <- paste(binary,"summary.mth","> log_raw.txt")
+#   command3 <- paste(binary,"summary.mth","> log_raw.txt")
 
   # run
-  system(command3)
+#   system(command3)
 
   # zip output fasta
-  system("gzip picked.fasta")
+#   system("gzip picked.fasta")
 
   # Post process output
-  system("grep -A 10 Start log_raw.txt > picked-summary2.tsv")
+#   system("grep -A 10 Start log_raw.txt > picked-summary2.tsv")
   # Remove one tab to get the column naming look nice:
-  system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
-}
+#   system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
+# }
