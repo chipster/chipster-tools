@@ -3,11 +3,11 @@
 <head><title></title></head>
 <body>
 
-<h2>Utilities / Convert FASTQ to FASTA</h2>
+<h2>Convert FASTQ to FASTA</h2>
 
 <h3>Description</h3>
 
-<p>Given a FASTQ file, this tool will convert it to FASTA format. 
+<p>Given a FASTQ file, this tool converts it to FASTA format. 
 Reads can be also filtered for unknown nucleotides (Ns), and sequence identifiers can be renamed as numbers.</p>
 
 <h3>Parameters</h3>
@@ -15,16 +15,20 @@ Reads can be also filtered for unknown nucleotides (Ns), and sequence identifier
 <ul>
 <li>Remove sequences with unknown nucleotides (yes, no) [yes]</li>
 <li>Rename sequence identifiers as numbers (yes, no) [no]</li>
+<li>Write a log file (yes, no) [no]</li>
+<li>Base quality encoding used (Sanger, Illumina GA v1.3-1.5) [Sanger]</li>
+
 </ul>
 
 <h3>Details</h3>
 
-<p>Converts read files to FASTA format, which is a suitable input format for many traditional sequence analysis tools such as BLAST and EMBOSS. 
-Note that the base quality information available in FASTQ format is not available in FASTA.</p>
+<p>Converts FASTQ files to FASTA format. Note that the base quality information available in FASTQ format is not available in FASTA. 
+If you decide to remove sequences which contain unknown nucleotides, you might like to get a log file indicating how many sequences were discarded.
+</p>
 
 <h3>Output</h3>
 
-<p>A FASTA file containing the reads. </p>
+<p>FASTA file containing the reads. </p>
 
 <h3>Reference</h3>
 
