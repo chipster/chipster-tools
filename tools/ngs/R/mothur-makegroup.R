@@ -2,9 +2,9 @@
 # INPUT reads{...}.fasta: "FASTA files" TYPE FASTA
 # OUTPUT sequences.fasta.gz
 # OUTPUT sequences.groups
-# OUTPUT log1.txt
 
 # EK 6.4.2021
+# OUTPUT log1.txt
 
 
 source(file.path(chipster.common.path, "tool-utils.R"))
