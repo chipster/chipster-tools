@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL trimmed.fq.gz
 # OUTPUT OPTIONAL trimmed.tar
 # PARAMETER first: "First base to keep" TYPE INTEGER FROM 1 TO 100 DEFAULT 1 (First base to keep.)
-# PARAMETER last: "Last base to keep" TYPE INTEGER FROM 1 TO 300 DEFAULT 75 (Last base to keep.)
+# PARAMETER last: "Last base to keep" TYPE INTEGER FROM 1 TO 400 DEFAULT 200 (Last base to keep.)
 # PARAMETER quality.format: "Quality value format used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
 
 
