@@ -3,28 +3,28 @@
 <head><title></title></head>
 <body>
 
-<h2>Combine FASTA files and make a group file</h2>
+<h2>Combine FASTQ or FASTA files and make a group file</h2>
 
 <h3>Description</h3>
 
 <p>
-Combines FASTA files of each sample to one file and creates a Mothur group file. FASTA files can be gzipped.
+Combines FASTQ or FASTA files of each sample to one file and creates a Mothur group file. Input files can be gzipped.
 
 </p>
 
 <h3>Parameters</h3>
 
-None
+Input type (FASTQ, FASTA)[FASTQ]
 
 <h3>Details</h3>
 <p>
 For the Mothur-based tools in Chipster your samples need to be in one FASTA file. 
 In order to assign sequences to a specific sample, you need also a <a href="http://www.mothur.org/wiki/group_file/">Mothur group file</a>.
-If you have single end data (e.g. IonTorrent) and your samples are in separate FASTQ files, you can convert them FASTA, and then combine them with this tool,
+If you have single end data (e.g. Ion Torrent) and your samples are in separate FASTQ files, you can convert them FASTA and combine them with this tool,
 which also generates the group file.   
 </p>
 <p>
-This tool is based on the <a href="http://www.mothur.org/wiki/make.group">make.group</a> and <a href="http://www.mothur.org/wiki/merge.files">merge.files</a> commands of the Mothur package.
+This tool is based on the Mothur tools <a href="http://www.mothur.org/wiki/make.group/">make.group</a>, <a href="http://www.mothur.org/wiki/merge.files/">merge.files</a> and <a href="http://www.mothur.org/wiki/summary.seqs/">summary.seqs</a>.
 </p>
 
 <h3>Output</h3>
@@ -32,7 +32,8 @@ This tool is based on the <a href="http://www.mothur.org/wiki/make.group">make.g
 <p>The output consists of the following files:</p>
 <ul>
 <li>sequences.fasta.gz: Compressed FASTA file containing sequences from all the samples</li> 
-<li>sequences.groups: Mothur group file indicating what sequence belongs to what sample </li> 
+<li>sequences.groups: Mothur group file indicating what sequence belongs to what sample </li>
+<li>sequences-summary.tsv: Summary statistics for the sequences </li> 
 </ul>
 
 
