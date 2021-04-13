@@ -14,8 +14,8 @@ This tool generates input files for the R package <a href="http://bioconductor.o
 
 <h3>Parameters</h3>
 <ul>
-<li>Choice between 16S, 18S or archaeal vs ITS data (default 16S, 18S or archaeal).</li>
-<li>Dissimilarity threshold for OTU clustering (e.g. a cut-off value of 0.03 corresponds to 97% sequence similarity). Values of 0.01 - 0.05 are accepted (default 0.03).</li>
+<li>Type of data (16S, 18S or archaeal; ITS or Ion Torrent data) [16S, 18S or archaeal].</li>
+<li>Dissimilarity threshold for OTU clustering (0.01 - 0.05)[0.03, corresponds to 97% sequence similarity].</li>
 </ul>
 
 
@@ -23,8 +23,8 @@ This tool generates input files for the R package <a href="http://bioconductor.o
 <p>
 This tool requires three input files:
 <ul>
-<li>fasta file (picked.fasta)</li>
-<li>Mothur count file (picked.count_table)</li>
+<li>FASTA file (chimeras.removed.fasta)</li>
+<li>Mothur count file (chimeras.removed.count_table)</li>
 <li>Sequence taxonomy assignment file (sequences-taxonomy-assignment.txt)</li>
 </ul>
 </p>

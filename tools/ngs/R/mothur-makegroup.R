@@ -1,10 +1,13 @@
 # TOOL mothur-makegroup.R: "Combine FASTA files and make a group file" (Combines FASTA files of each sample to one file and creates a Mothur group file. FASTA files can be gzipped. This tool is based on the Mothur tools make.group and merge.files.)
-# INPUT reads{...}.fasta: "FASTA files" TYPE FASTA
+# INPUT reads{...}: "read files" TYPE GENERIC
 # OUTPUT sequences.fasta.gz
 # OUTPUT sequences.groups
+# PARAMETER input.type: "Input type" TYPE [FASTQ, FASTA] DEFAULT FASTQ (Input file type.)
+
 
 # EK 6.4.2021
 # OUTPUT log1.txt
+
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -15,6 +18,19 @@ for (i in 1:nrow(input.names)) {
 	unzipIfGZipFile(input.names[i,1])	
 }
 
+# Convert to FASTA if necessary
+# Binary
+binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastq_to_fasta"))
+# Go through the list and conver or rename depending on input type
+for (i in 1:nrow(input.names)) {
+  newname <- paste(input.names[i,1], ".fasta", sep = "")
+  if (input.type == "FASTQ"){
+    command <- paste(binary, "-n -i", input.names[i,1],"-o", newname)
+    system(command)
+  }else{
+    file.rename(paste(input.names[i,1]), newname)
+  }
+}
 # Binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
@@ -24,12 +40,13 @@ documentVersion("Mothur",version)
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 # Set names for first input
-fasta_names <- input.names[1,1]
+fasta_names <- paste(strip_name(paste(input.names[1,1])), ".fasta", sep="")
 group_names <- strip_name(paste(input.names[1,2]))
 
 # Loop through the rest of the inputs
 for (i in 2:nrow(input.names)) {
-  fasta_names <- paste(fasta_names, input.names[i,1], sep="-") 
+  fasta <- paste(strip_name(paste(input.names[i,1])), ".fasta", sep="")
+  fasta_names <- paste(fasta_names, fasta, sep="-") 
   group <- strip_name(paste(input.names[i,2]))
   group_names <- paste(group_names, group, sep="-")
 }
@@ -41,7 +58,7 @@ command1 <- paste(binary,"makegroup.mth","> log1.txt")
 system(command1)
 
 # Rename groups file
-filename <- list.files(path =".", pattern="*.groups")
+filename <- list.files(path =".", pattern="*groups")
 system(paste("mv", filename[1], "sequences.groups"))
 
 # Merge fasta files
