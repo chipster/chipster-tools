@@ -1,4 +1,4 @@
-# TOOL mothur-makegroup.R: "Combine FASTA files and make a group file" (Combines FASTA files of each sample to one file and creates a Mothur group file. FASTA files can be gzipped. This tool is based on the Mothur tools make.group and merge.files.)
+# TOOL mothur-makegroup.R: "Combine FASTQ or FASTA files and make a group file" (Combines FASTQ or FASTA files of all samples to one file and creates a Mothur group file for it. Input files can be gzipped. This tool is based on the Mothur tools make.group and merge.files.)
 # INPUT reads{...}: "read files" TYPE GENERIC
 # OUTPUT sequences.fasta.gz
 # OUTPUT sequences.groups
