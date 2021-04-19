@@ -8,19 +8,21 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta file and a group/count file, this tool screens out sequences that do not fulfill user defined criteria.
+Given a fasta file and a group/count file, this tool screens out sequences that do not fulfill user-defined criteria. 
+Note that this tool is used in twice during preprosessing (before and after aligning sequences to the reference) and different parameters apply: 
+You should use the length parameters before alignment, and the alignment start and end parameters after the alignment.
 </p>
 
 <h3>Parameters</h3>
 <ul>
 <li>Minimum length </li>
 <li>Maximum length </li>
-<li>Alignment start position </li>
-<li>Alignment end position</li>
-<li>Optimize by (empty, minlength, start, end) [empty]</li>
-<li>Optimization criteria (0-100) </li>
 <li>Maximum number of ambiguous bases </li>
 <li>Maximum homopolymer length </li>
+<li>Alignment start position (remove sequences which start after this position)</li>
+<li>Alignment end position (remove sequences which end before this position)</li>
+<li>Optimize by (empty, minlength, start, end) [empty]</li>
+<li>Optimization criteria (0-100) </li>
 </ul>
 
 <h3>Details</h3>

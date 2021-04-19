@@ -1,6 +1,6 @@
 # TOOL metabarcoding-import.R: "Convert Mothur files into phyloseq object" (Imports data into the phyloseq format using the import_mothur function in R, and saves the output as an Rda file. Requires a Mothur shared file, constaxonomy file and a phenodata file. Specifying a phenodata variable with unique IDs for each community profile is required to correctly import the phenodata table. Data are assumed to be grouped into up to seven taxonomic levels \(Domain or Kingdom, Phylum, Class, Order, Family, Genus and, where applicable, Species\).)
 # INPUT mothur_shared.shared: "Mothur shared file" TYPE GENERIC
-# INPUT mothur_consensus.taxonomy: "mothur constaxonomy file" TYPE GENERIC
+# INPUT mothur_consensus.taxonomy: "Mothur constaxonomy file" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_imported.txt
 # OUTPUT ps.Rda

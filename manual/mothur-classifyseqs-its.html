@@ -17,12 +17,13 @@ this tool assigns sequences to taxonomic units (~ species).
 <ul>
 <li>Reference (own) [own, UNITE files]</li>
 <li>Number of iterations (10-1000) [100]</li>
-<li>Remove taxon Chloroplast (yes/no) [yes]</li>
+<!--<li>Remove taxon Chloroplast (yes/no) [yes]</li>
 <li>Remove taxon Mitochondria (yes/no) [yes]</li>
 <li>Remove taxon Archae (yes/no) [yes]</li>
 <li>Remove taxon Bacteria (yes/no) [yes]</li>
 <li>Remove taxon unknown (yes/no) [yes]</li>
 <li>Remove other lineages (string) [empty]</li>
+-->
 </ul>
 
 <h3>Details</h3>
@@ -42,25 +43,35 @@ The bootstrap confidence score is calculated with 100 iterations by default.
 This low number of iterations is used as a default to make the tool faster, please consider using higher number (1000 for example).
 </p>
 <p>
-With the <b>Remove</b> parameters you can remove unwanted organisms/sequences from the data. 
-Some common options are provided as yes/no parameters. You can list others in the "Remove other lineages" 
-text field. Use dots (.) instead of semicolons (;) in names. Use dash (-) to separate taxons. For example: 
-Bacteria.Firmicutes.-Bacteria.Bacteroidetes. 
+    If you would like to remove certain taxa or filter by a taxonomic group, you can use the following Phyloseq tools in Chipster 
+    (note that prior to this you need to run the tools <a href="mothur-phyloseq-inputs.html">Generate input files for phyloseq</a> 
+    and <a href="metabarcoding-import.html">Convert mothur files into phyloseq object</a>):
+    <ul>
+    <li><a href="metabarcoding-filter-taxgroup.html">Filter by taxonomic group</a> tidies a phyloseq object so that OTUs only from the desired taxonomic group 
+        (bacteria, archaea, eukaryotes or fungi) are retained. Features with ambiguous phylum-level annotation (e.g. NA, unknown, uncharacterized) are removed. </li>
+    <li><a href="metabarcoding-filter-individual.html">Remove selected taxa</a> removes chloroplast and mitochondrial sequences from a phyloseq object, 
+        and up to five user-specified taxa at the desired level of biological organization.</li>
+    </ul> 
+    <!--With the <b>Remove</b> parameters you can remove unwanted organisms/sequences from the data. 
+    Some common options are provided as yes/no parameters. You can list others in the "Remove other lineages" 
+    text field. Use dots (.) instead of semicolons (;) in names. Use dash (-) to separate taxons. For example: 
+    Bacteria.Firmicutes.-Bacteria.Bacteroidetes.
+    --> 
 </p>
 <p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Classify.seqs">classify.seqs</a> 
-and <a href="https://mothur.org/wiki/Remove.lineage">remove.lineage</a> commands of the Mothur package.
+This tool is based on the Mothur command <a href="http://www.mothur.org/wiki/Classify.seqs">classify.seqs</a>. 
+<!--and <a href="https://mothur.org/wiki/Remove.lineage">remove.lineage</a> commands of the Mothur package.-->
 </p>  
 
 <h3>Output</h3>
 
-<p>The analysis output consists of the following:</p>
+<p>The analysis output consists of the following files:</p>
 <ul>
 <li>sequences-taxonomy-assignment.txt: Taxonomy assignment for each sequence </li> 
 <li>classification-summary.tsv: Taxonomic outline indicating the number of sequences that were found at each level </li>
-<li>picked.fasta: Fasta file without the sequences from removed lineages
-<li>picked.count_table: Counts without the sequences from removed lineages 
-
+<!--<li>picked.fasta: Fasta file without the sequences from removed lineages
+<li>picked.count_table: Counts without the sequences from removed lineages
+--> 
 </ul>
 </p>
 
