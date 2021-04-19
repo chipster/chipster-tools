@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT OPTIONAL custom.reference.summary.tsv
-# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v132", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
 
@@ -16,6 +16,7 @@
 # ML 14.3.2017 reference option (bacterial vs whole)
 # ML 15.3.2017 add pcr.seqs options
 # EK 22.8.2018 updated Silva to v132, added processors parameter to pcr.seqs and align.seqs
+# EK 19.4.2021 updated to Silva v138.1
 
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
 # OUTPUT log.txt
@@ -38,10 +39,12 @@ documentVersion("Mothur",version)
 #	template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 #}
 #if (reference=="full"){
+
 # new whole references:
 # data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
 data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference","silva"))
-template.path <- c(file.path(data.path,"silva.nr_v132.align"))
+# template.path <- c(file.path(data.path,"silva.nr_v132.align"))
+template.path <- c(file.path(data.path,"silva.nr_v138_1.align"))
 #}
 
 # create a symlink, because otherwise the modified reference will go to the reference folder
