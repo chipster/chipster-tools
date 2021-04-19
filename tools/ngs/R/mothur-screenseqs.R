@@ -110,7 +110,7 @@ if (file.exists("a.good.groups")) {
 # write("summary.seqs(fasta=screened.fasta)", "summary.mth", append=F)
 summaryseqs.options <- paste("summary.seqs(fasta=screened.fasta")
 if (file.exists("screened.count_table")) {
-  summaryseqs.options <- paste(summaryseqs.options,"count=screened.count_table")
+  summaryseqs.options <- paste(summaryseqs.options,", count=screened.count_table")
 }
 summaryseqs.options <- paste(summaryseqs.options,", processors=",chipster.threads.max,")",sep = "")
 documentCommand(summaryseqs.options)
