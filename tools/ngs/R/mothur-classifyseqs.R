@@ -5,7 +5,7 @@
 # INPUT OPTIONAL own_reference.tax: "Reference taxonomy file" TYPE GENERIC
 # OUTPUT OPTIONAL sequences-taxonomy-assignment.txt
 # OUTPUT OPTIONAL classification-summary.tsv
-# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v132", own:"own reference"] DEFAULT silva (Reference to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own:"own reference"] DEFAULT silva (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 
 # EK 18.06.2013
@@ -17,6 +17,7 @@
 # EK 11.5.2020  zip output fasta
 # EK 25.3.2021  removed parameters for removing lineages as this is now handled with Phyloseq tools "Remove selected taxa" and "Filter by taxonomic group"
 # EK 25.3.2021  add option to use own reference
+# EK 19.4.2021  updated to Silva v138.1
 
 # to be removed later:
 # OUTPUT OPTIONAL log.txt
@@ -51,13 +52,19 @@ if (reference == "own") {
 } else if (reference == "silva") {
   # Silva v132. Check data path when new tools-bin ready
   data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference","silva"))
-  template.path <- c(file.path(data.path,"silva.nr_v132.align"))
-  taxonomy.path <- c(file.path(data.path,"silva.nr_v132.tax"))
+  # template.path <- c(file.path(data.path,"silva.nr_v132.align"))
+  # taxonomy.path <- c(file.path(data.path,"silva.nr_v132.tax"))
+  template.path <- c(file.path(data.path,"silva.nr_v138_1.align"))
+  taxonomy.path <- c(file.path(data.path,"silva.nr_v138_1.tax"))
   # copy to working dir because mothur generates more files to the same directory
-  system(paste("ln -s ",template.path," silva.nr_v132.align"))
-  system(paste("ln -s ",taxonomy.path," silva.nr_v132.tax"))
-  template.path <- "silva.nr_v132.align"
-  taxonomy.path <- "silva.nr_v132.tax"
+  # system(paste("ln -s ",template.path," silva.nr_v132.align"))
+  # system(paste("ln -s ",taxonomy.path," silva.nr_v132.tax"))
+  system(paste("ln -s ",template.path," silva.nr_v138_1.align"))
+  system(paste("ln -s ",taxonomy.path," silva.nr_v138_1.tax"))
+  # template.path <- "silva.nr_v132.align"
+  # taxonomy.path <- "silva.nr_v132.tax"
+  template.path <- "silva.nr_v138_1.align"
+  taxonomy.path <- "silva.nr_v138_1.tax"
 }
 
 # batch file
