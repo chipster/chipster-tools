@@ -43,7 +43,7 @@ system("mv a.unique.fasta unique.fasta")
 
 
 # batch file 2 count.seqs -creates a new count_table
-countseqs.options <- paste("count.seqs(name=a.names, group=a.groups)",sep = "")
+countseqs.options <- paste("count.seqs(name=a.names, group=a.groups, compress=f)",sep = "")
 documentCommand(countseqs.options)
 write(countseqs.options,"batch.mth",append = FALSE)
 
