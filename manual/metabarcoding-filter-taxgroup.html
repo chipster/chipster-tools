@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-Tidies a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that OTUs only from the desired taxonomic group are retained. If bacteria are selected as the group, filters out OTUs not classified as Bacteria (domain level), classified as NA at the phylum level, and/or classified as chloroplast sequences at the class level. With the exception of chloroplast sequence removal, similar filtering steps are applied to other groups. For fungi, filtering is performed at the kingdom level (Fungi) rather than the domain level. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file.
+Tidies a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that OTUs only from the desired taxonomic group (bacteria, archaea, eukaryotes or fungi) are retained. For bacteria, archaea and eukaryotes, filtering is performed at the domain level (Bacteria, Archaea, Eukaryota). For fungi, filtering is performed at the kingdom level (Fungi). Features with ambiguous phylum-level annotation (e.g. NA, unknown, uncharacterized) are removed. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file.
 </p>
 
 

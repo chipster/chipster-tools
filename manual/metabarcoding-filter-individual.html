@@ -8,17 +8,18 @@
 <h3>Description</h3>
 
 <p>
-Removes up to five user-specified taxa from a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object, at the desired level of biological organization. Produces a taxonomy summary of the resulting phyloseq object and saves it as an Rda file.
+This tool can be used to remove chloroplast and mitochondrial sequences from a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object, and up to five user-specified taxa at the desired level of biological organization. Produces a taxonomy summary of the resulting phyloseq object and saves it as an Rda file.
 </p>
 
 
 <h3>Parameters</h3>
-<ul>
-<li>Level of biological organization for taxon removal (Phylum, Class, Order, Family, Genus or Species; the default is Phylum)</li>
-<li>Taxa to be removed (one is required; up to five can be removed)</li>
+<ul>Remove class Chloroplast (yes, no; default is yes)</li>
+<ul>Remove family Mitochondria (yes, no; default is yes)</li> 
+<li>Level of biological organization for manual taxon removal (Phylum, Class, Order, Family, Genus or Species; default is Phylum)</li>
+<li>Taxa to be removed (up to five can be specified)</li>
 </ul>
 <p>
-Names of taxa to be removed are manually typed using the text field provided.
+For manual taxon removal (removal of taxa other than Chloroplast and Mitochondria), the names of the taxa are typed into the text field provided.
 </p>
 
 <h3>Details</h3>
