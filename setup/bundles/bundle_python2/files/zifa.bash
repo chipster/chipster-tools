@@ -1,4 +1,6 @@
-##depends:none
+#!/bin/bash
+
+set -e
 
 # ZIFA
 cd ${TMPDIR_PATH}/
