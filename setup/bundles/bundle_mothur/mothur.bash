@@ -23,10 +23,10 @@ ln -s mothur-1.44.3 mothur
 
 mkdir -p ${TOOLS_PATH}/mothur-silva-reference/
 curl -s http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/mothur/silva/v102.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-silva-reference/
-curl -s http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/mothur/silva/v132.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-silva-reference/
 curl -s http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/mothur/silva/silva-gold.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-silva-reference/
+curl -s https://a3s.fi/bundle-builds/mothur-silva-v138.1_2021-04-26.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-silva-reference/
 
-ln -s v132 ${TOOLS_PATH}/mothur-silva-reference/silva
+ln -s v138.1 ${TOOLS_PATH}/mothur-silva-reference/silva
 
 mkdir -p ${TOOLS_PATH}/mothur-unite-reference/
 curl -s https://a3s.fi/bundle-builds/mothur-UNITEv8_2020-12-15.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-unite-reference/
