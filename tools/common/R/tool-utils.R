@@ -179,7 +179,7 @@ isFasta <- function(filename){
   if (str.filetype == "fasta"){
     return(TRUE)
   } else{
-    return(FASLSE)
+    return(FALSE)
   }
 }
 
