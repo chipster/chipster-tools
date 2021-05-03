@@ -8,10 +8,18 @@
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
-s3.conf.file<- file.path(chipster.common.path, "../../admin/shell/s3.conf")
+s3.conf.base<- file.path(chipster.common.path, "../../admin/shell/s3.conf")
+copy_command <- paste("cp ",  s3.conf.base, " s3.conf")
+system(copy_command)
+access_key <- system('cat /opt/chipster/comp/conf/chipster.yaml | grep tools-s3-access-key | cut -d " " -f 2', intern = TRUE )
+secret_key <- system('cat /opt/chipster/comp/conf/chipster.yaml | grep tools-s3-secret-key | cut -d " " -f 2', intern = TRUE )
+cat("access_key = ", file="s3.conf", append=TRUE, sep="")
+cat(access_key, file="s3.conf", append=TRUE, sep="\n")
+cat("secret_key = ", file="s3.conf", append=TRUE, sep="")
+cat(secret_key, file="s3.conf", append=TRUE, sep="\n")
 
 s3cmd.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "s3cmd")
-s3cmd.binary <- paste(s3cmd.binary, "-c", s3.conf.file)
+s3cmd.binary <- paste(s3cmd.binary, "-c s3.conf")
 
 
 #Check s3cmd and configuration
