@@ -25,7 +25,8 @@ This tool performs a variety of trimming tasks for Illumina paired end and singl
 <li>Adaptive quality trimming parameters (String) []</li>
 <li>Minimum average quality of reads to keep (Integer) []</li>
 <li>Minimum length of reads to keep (Integer) []</li>
-<li>Write a log file (yes, no) [yes]</li>
+<li>Write unpaired reads in a separate file (yes, no) [no]</li>
+<li>Write a log file (yes, no) [no]</li>
 </ul>
 
 <h3>Details</h3>
@@ -68,11 +69,11 @@ For single end reads:
 <ul>
 <li>trimmed.fq.gz:	Trimmed reads</li>
 </ul>
-For paired end reads:
+When using Trimmomatic for paired reads, some reads might lose their mate. These unpaired reads are not included in the result file, but you can request to get them in a separate file if needed:
 <ul>
 <li>trimmed_reads1_paired.fq.gz:	Trimmed reads from the first input file with a mate pair in the second input file.</li>
-<li>trimmed_reads1_unpaired.fq.gz:	Trimmed reads from the first input file without a mate pair in the second input file.</li>
 <li>trimmed_reads2_paired.fq.gz:	Trimmed reads from the second input file with a mate pair in the first input file.</li>
+<li>trimmed_reads1_unpaired.fq.gz:	Trimmed reads from the first input file without a mate pair in the second input file.</li>
 <li>trimmed_reads2_unpaired.fq.gz:	Trimmed reads from the second input file without a mate pair in the first input</li>
 </ul>
 Optionally:
