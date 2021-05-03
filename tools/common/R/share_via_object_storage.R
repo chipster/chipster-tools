@@ -11,8 +11,9 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 s3.conf.base<- file.path(chipster.common.path, "../../admin/shell/s3.conf")
 copy_command <- paste("cp ",  s3.conf.base, " s3.conf")
 system(copy_command)
-access_key <- system('cat /opt/chipster/comp/conf/chipster.yaml | grep tools-s3-access-key | cut -d " " -f 2', intern = TRUE )
-secret_key <- system('cat /opt/chipster/comp/conf/chipster.yaml | grep tools-s3-secret-key | cut -d " " -f 2', intern = TRUE )
+access_key <- system('cat /opt/chipster/comp/conf/chipster.yaml | grep tools-s3-access-key | awk \'{print $NF}\'', intern = TRUE )
+secret_key <- system('cat /opt/chipster/comp/conf/chipster.yaml | grep tools-s3-secret-key | awk \'{print $NF}\'', intern = TRUE )
+
 cat("access_key = ", file="s3.conf", append=TRUE, sep="")
 cat(access_key, file="s3.conf", append=TRUE, sep="\n")
 cat("secret_key = ", file="s3.conf", append=TRUE, sep="")
@@ -21,11 +22,10 @@ cat(secret_key, file="s3.conf", append=TRUE, sep="\n")
 s3cmd.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "s3cmd")
 s3cmd.binary <- paste(s3cmd.binary, " -c s3.conf ")
 
-
 #Check s3cmd and configuration
 s3check.command <- paste(s3cmd.binary, "--dump-config 2> /dev/null | wc -l")
 s3cmd_conf <- as.integer(system(s3check.command, intern = TRUE))
-if ( s3cmd_conf < 1 ){
+if ( s3cmd_conf < 1 ){	
 	stop(paste("CHIPSTER-NOTE: Share a file tool has not been configured for this Chipster server.", s3check.command ))
 }
 
