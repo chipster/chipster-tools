@@ -19,7 +19,8 @@
 # PARAMETER OPTIONAL maxinfo: "Adaptive quality trimming parameters" TYPE STRING (An adaptive quality trimmer which balances the benefits of retaining longer reads against the costs of retaining bases with errors. Two parameters need to be provided: <target length>:<strictness>. Strictness is a decimal value between 0 and 1. Values are separated by colons, e.g. 36:0.8) 
 # PARAMETER OPTIONAL avgqual: "Minimum average quality of reads to keep" TYPE INTEGER (Drop the read if the average quality is below the specified level.)
 # PARAMETER OPTIONAL minlen: "Minimum length of reads to keep" TYPE INTEGER (Drop the read if it is below a specified length.)
-# PARAMETER OPTIONAL logfile: "Write a log file" TYPE [yes, no] DEFAULT yes (Write a log file.)
+# PARAMETER OPTIONAL unpaired: "Write unpaired reads in a separate file" TYPE [yes, no] DEFAULT no (When using Trimmomatic for paired reads, some reads might lose their mate. These unpaired reads are not included in the result file, but they can be in a separate file if needed.)
+# PARAMETER OPTIONAL logfile: "Write a log file" TYPE [yes, no] DEFAULT no (Write a log file.)
 
 # AMS 2014.04.08
 # MK, 2014.12.05, corrected typo: avqual => avgqual. Corrected bug in initialisation of adapter.file parameter
@@ -137,6 +138,11 @@ outputnames[3,] <- c("trimmed_reads1_unpaired.fq.gz", paste(base1, "_unpaired_tr
 outputnames[4,] <- c("trimmed_reads2_paired.fq.gz", paste(base2, "_trimmed.fq.gz", sep =""))
 outputnames[5,] <- c("trimmed_reads2_unpaired.fq.gz", paste(base2, "_unpaired_trimmed.fq.gz", sep =""))
 outputnames[6,] <- c("trimlog.txt", paste(base1, "_trimlog.txt", sep =""))
+
+# Delete files containing unpaired reads if they are not needed
+if(unpaired == "no"){
+	system("rm *unpaired.fq.gz")
+}
 
 # Write output definitions file
 write_output_definitions(outputnames)
