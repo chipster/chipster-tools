@@ -19,7 +19,7 @@ cat("secret_key = ", file="s3.conf", append=TRUE, sep="")
 cat(secret_key, file="s3.conf", append=TRUE, sep="\n")
 
 s3cmd.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "s3cmd")
-s3cmd.binary <- paste(s3cmd.binary, "-c s3.conf")
+s3cmd.binary <- paste(s3cmd.binary, " -c s3.conf ")
 
 
 #Check s3cmd and configuration
