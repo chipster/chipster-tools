@@ -19,7 +19,7 @@
 # PARAMETER OPTIONAL maxinfo: "Adaptive quality trimming parameters" TYPE STRING (An adaptive quality trimmer which balances the benefits of retaining longer reads against the costs of retaining bases with errors. Two parameters need to be provided: <target length>:<strictness>. Strictness is a decimal value between 0 and 1. Values are separated by colons, e.g. 36:0.8) 
 # PARAMETER OPTIONAL avgqual: "Minimum average quality of reads to keep" TYPE INTEGER (Drop the read if the average quality is below the specified level.)
 # PARAMETER OPTIONAL minlen: "Minimum length of reads to keep" TYPE INTEGER (Drop the read if it is below a specified length.)
-# PARAMETER OPTIONAL unpaired: "Write unpaired reads in a separate file" TYPE [yes, no] DEFAULT no (When using Trimmomatic for paired reads, some reads might lose their mate. These unpaired reads are not included in the result file, but they can be in a separate file if needed.)
+# PARAMETER OPTIONAL unpaired: "Write unpaired reads in a separate file" TYPE [yes, no] DEFAULT no (When using Trimmomatic for paired reads, some reads might lose their mate. These unpaired reads are not included in the result file, but you can request to get them in a separate file if needed.)
 # PARAMETER OPTIONAL logfile: "Write a log file" TYPE [yes, no] DEFAULT no (Write a log file.)
 
 # AMS 2014.04.08
