@@ -170,6 +170,32 @@ fileCheck <- function(filename,minsize,minlines) {
   }
 }
 
+# Returns TRUE if file is in FASTA format. File needs to be uncompressed.
+isFasta <- function(filename){
+  emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+  sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, filename)
+  str.filetype <- system(sfcheck.command, intern = TRUE )
+  if (str.filetype == "fasta"){
+    return(TRUE)
+  } else{
+    return(FASLSE)
+  }
+}
+
+# Returns TRUE if file is in FASTQ format. File needs to be uncompressed.
+isFastq <- function(filename){
+  emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+  sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, filename)
+  str.filetype <- system(sfcheck.command, intern = TRUE )
+  if (grepl("fastq", str.filetype)){
+    return(TRUE)
+  }else{
+    return(FALSE)
+  }
+}
+
 # Wrapper for system2() command. 
 # Optionally captures stderr.
 # Checks for exit status and gives an error message if status != 0
@@ -261,3 +287,4 @@ documentVersion <- function(application,version.string) {
   cat("##","VERSION:",application,"\n")
   cat("##",version.string,"\n")
 }
+
