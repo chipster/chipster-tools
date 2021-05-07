@@ -6,14 +6,14 @@
 # OUTPUT OPTIONAL screened.groups
 # OUTPUT OPTIONAL summary.screened.tsv
 # OUTPUT OPTIONAL screened.count_table
+# PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in a sequence)
+# PARAMETER OPTIONAL maxhomop: "Maximum homopolymer length" TYPE INTEGER (Maximum length of homopolymers allowed)
 # PARAMETER OPTIONAL minlength: "Minimum length" TYPE INTEGER (What is the minimum length of the sequences to be kept?)
 # PARAMETER OPTIONAL maxlength: "Maximum length" TYPE INTEGER (What is the maximum length of the sequences to be kept?)
 # PARAMETER OPTIONAL start: "Alignment start position" TYPE INTEGER (Remove sequences which start after this position)
 # PARAMETER OPTIONAL end: "Alignment end position" TYPE INTEGER (Remove sequences which end before this position)
 # PARAMETER OPTIONAL optimize: "Optimize by"  TYPE [empty, minlength, start, end] DEFAULT empty  (Optimize according to minlength, start or end position. Please note that if you use this option, you can't determine the same criteria above! Fill in the optimization criteria below as well.)
 # PARAMETER OPTIONAL criteria: "Optimization criteria"  TYPE INTEGER FROM 0 TO 100  (Optimization criteria. For example 85 means that Mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.)
-# PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in a sequence?)
-# PARAMETER OPTIONAL maxhomop: "Maximum homopolymer length" TYPE INTEGER (Maximum length of homopolymers allowed)
 
 
 # ML 03.03.2016
