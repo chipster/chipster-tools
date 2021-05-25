@@ -2,10 +2,10 @@
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # INPUT reads.oligos: "Oligos" TYPE MOTHUR_OLIGOS
 # INPUT OPTIONAL reads.qual: "QUAL file" TYPE GENERIC
-# OUTPUT OPTIONAL trim.unique.fasta
-# OUTPUT OPTIONAL trim.groups
-# OUTPUT OPTIONAL trim.unique.count_table
-# OUTPUT OPTIONAL summary.trim.unique.tsv
+# OUTPUT trim.unique.fasta
+# OUTPUT trim.groups
+# OUTPUT trim.unique.count_table
+# OUTPUT summary.trim.unique.tsv
 # PARAMETER OPTIONAL flip: "Use reverse complement" TYPE [yes, no] DEFAULT no (Use reverse complement of the sequences.)
 # PARAMETER OPTIONAL qaverage: "Minimum average quality of sequence" TYPE INTEGER FROM 0 TO 40 (Minimum average quality of the sequence. Sequences that have a lower average quality are dropped.)
 # PARAMETER OPTIONAL qwindowaverage: "Minimum average quality of window" TYPE INTEGER (Minimum average quality score allowed over a window)

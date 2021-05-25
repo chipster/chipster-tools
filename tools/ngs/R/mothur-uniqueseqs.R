@@ -2,8 +2,8 @@
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # OUTPUT unique.fasta.gz
-# OUTPUT OPTIONAL unique.summary.tsv
-# OUTPUT OPTIONAL unique.count_table
+# OUTPUT unique.summary.tsv
+# OUTPUT unique.count_table
 
 
 # OUTPUT OPTIONAL log.txt

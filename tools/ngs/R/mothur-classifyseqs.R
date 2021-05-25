@@ -3,8 +3,8 @@
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
 # INPUT OPTIONAL own_reference.fasta: "Reference FASTA" TYPE FASTA
 # INPUT OPTIONAL own_reference.tax: "Reference taxonomy file" TYPE GENERIC
-# OUTPUT OPTIONAL sequences-taxonomy-assignment.txt
-# OUTPUT OPTIONAL classification-summary.tsv
+# OUTPUT sequences-taxonomy-assignment.txt
+# OUTPUT classification-summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own:"own reference"] DEFAULT silva (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 

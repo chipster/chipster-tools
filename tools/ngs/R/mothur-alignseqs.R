@@ -2,9 +2,9 @@
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL reference.fasta: "Custom reference FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL aligned.fasta.gz
+# OUTPUT aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
-# OUTPUT OPTIONAL custom.reference.summary.tsv
+# OUTPUT custom.reference.summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)

@@ -3,8 +3,8 @@
 # INPUT a.count_table: "Count table" TYPE MOTHUR_COUNT
 # INPUT OPTIONAL own_reference.fasta: "Reference FASTA" TYPE FASTA
 # INPUT OPTIONAL own_reference.tax: "Reference taxonomy file" TYPE GENERIC
-# OUTPUT OPTIONAL sequences-taxonomy-assignment.txt
-# OUTPUT OPTIONAL classification-summary.tsv
+# OUTPUT sequences-taxonomy-assignment.txt
+# OUTPUT classification-summary.tsv
 # PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (The reference options marked with _s are from the UNITE download2 set, so they comprise of all quality filtered unclustered UNITE and INSD sequences for Fungi \(887 399 for UNITE v8.2\). The options without _s are from the UNITE download1 set, which contains sequences included in the UNITE species hypotheses \(565 915 for UNITE v8.2\). The dynamic options are based on varying clustering thresholds for different species hypothesis. These choices were made manually by experts of those particular lineages of fungi.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
 

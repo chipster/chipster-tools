@@ -2,9 +2,9 @@
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL preclustered.fasta.gz
+# OUTPUT preclustered.fasta.gz
 # OUTPUT OPTIONAL preclustered.names
-# OUTPUT OPTIONAL preclustered-summary.tsv
+# OUTPUT preclustered-summary.tsv
 # OUTPUT OPTIONAL preclustered.count_table 
 # PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed for every 100 bases. 1 for every 100 bp sequence is recommended.)
 # SLOTS 4

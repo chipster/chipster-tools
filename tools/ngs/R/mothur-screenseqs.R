@@ -2,9 +2,9 @@
 # INPUT a.fasta: "FASTA file" TYPE GENERIC
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # INPUT OPTIONAL a.count: "Count file" TYPE MOTHUR_COUNT
-# OUTPUT OPTIONAL screened.fasta.gz
+# OUTPUT screened.fasta.gz
 # OUTPUT OPTIONAL screened.groups
-# OUTPUT OPTIONAL summary.screened.tsv
+# OUTPUT summary.screened.tsv
 # OUTPUT OPTIONAL screened.count_table
 # PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in a sequence)
 # PARAMETER OPTIONAL maxhomop: "Maximum homopolymer length" TYPE INTEGER (Maximum length of homopolymers allowed)
