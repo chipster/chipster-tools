@@ -22,12 +22,12 @@
                 <li> <a href="#alignment">Alignment</a></li>
                 <li> <a href="#variants">Variants</a></li>
                 <li> <a href="#RNA">RNA-seq</a></li>
-                <li> <a href="#miRNA">miRNA-seq</a></li>
+                <li> <a href="#miRNA">Small RNA-seq</a></li>
+                <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
                 <li> <a href="#ChIP">ChIP- and DNase-seq</a></li>
-                <li> <a href="#CNA">CNA-seq</a></li>
                 <li> <a href="#micropreproc">Microbial amplicon data preprocessing</a></li>
                 <li> <a href="#microanalysis">Microbial amplicon data analyses</a></li>
-                <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
+                <li> <a href="#CNA">CNA-seq</a></li>
         </ol>
         <hr>
         <ul>
@@ -229,6 +229,37 @@
                 <li> <a href="virusdetect-with-index-building.html">VirusDetect with own host genome</a></li>
                 <br>
                 <br>
+                <b><a name="singlecell">Single-cell RNA-seq</a></b>
+                <li><a href="single-cell-seurat-setup-v3.html">Seurat -Setup and QC</a></li>
+                <li><a href="single-cell-scater-QC.html">Scater - QC</a></li> 
+                <li><a href="single-cell-seurat-filter-regress-v3.html">Seurat -Filter, normalize, regress and detect variable genes</a></li>
+                <li><a href="single-cell-seurat-sctransform.html">Seurat v3 -SCTransform: Filter, normalize, regress and detect variable genes</a></li>
+                <li><a href="single-cell-seurat-pca-v3.html">Seurat -PCA</a></li>
+                <li><a href="single-cell-seurat-clustering-v3.html">Seurat -Clustering and detection of cluster marker genes</a></li>
+                <li><a href="single-cell-seurat-find-markers-v3.html">Seurat -Find differentially expressed genes between clusters</a></li>
+                <li><a href="single-cell-seurat-gene-plots-v3.html">Seurat -Visualize biomarker(s)</a></li>
+                <li><a href="single-cell-seurat-featureplot-v3.html">Seurat -Visualise features in UMAP plot </a></li>
+                <li><a href="single-cell-seurat-CCA-v3.html">Seurat -Combine two samples</a></li>
+                <li><a href="single-cell-seurat-integrated-analysis-v3.html">Seurat -Integrated analysis of two samples</a></li>
+                <li><a href="single-cell-seurat-diffexp-samples-v3.html">Seurat -Find conserved cluster markers and DE genes in two samples</a></li>
+                <li><a href="single-cell-seurat-split-dot-plot-v3.html">Seurat -Visualize genes with cell type specific responses in two samples</a></li>
+                <li><a href="single-cell-seurat-extract-cluster.html">Seurat -Extract cells in a cluster</a></li>
+                <li><a href="single-cell-seurat-subset.html">Seurat -Subset Seurat objects based on gene expression</a> </li>
+                <!-- DropSeq tools:-->
+                <li><a href="single-cell-preprocessing.html">Preprocessing of DropSeq FASTQ files</a></li>
+                <!-- <li><a href="picard-fastqtosam.html">FASTQ to BAM</a></li> -->
+                <!-- <li><a href="single-cell-TagBam.html">Tag BAM</a></li> -->
+                <!-- <li><a href="single-cell-FilterBam.html">Filter and trim BAM</a></li> -->
+                <!-- <li><a href="picard-samtofastq.html">BAM to FASTQ</a></li> -->
+                <!-- <li><a href="picard-sortsam.html">Sort BAM</a></li> -->
+                <li><a href="picard-merge-bam-alignment.html">Merge aligned and unaligned BAM</a></li>
+                <!--<li><a href="single-cell-tag-read-with-gene-exon.html">Tag reads with gene names</a></li> -->
+                <li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>
+                <!-- <li><a href="single-cell-detect-bead-synthesis-erros.html">Detect bead synthesis errors</a></li> -->
+                <li><a href="single-cell-digital-expression.html">Create digital gene expression matrix</a></li>
+                <!--<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>-->
+                <br>
+                <br>
                 <b><a name="ChIP">ChIP- and DNase-seq</a></b>
                 <li> <a href="macs2.html">Find peaks using MACS2</a></li>
                 <li> <a href="ngs-find-peaks-macs-one.html">Find peaks using MACS, treatment only</a></li>
@@ -242,35 +273,6 @@
                 <li> <a href="dimont-extract-data-custom.html">Dimont sequence extractor using own genome</a></li>
                 <li> <a href="dimont.html">Find motifs with Dimont</a></li>
                 <li> <a href="dimont-predictor.html">DimontPredictor</a></li>
-                <br>
-                <br>
-                <b><a name="CNA">CNA-seq</a></b>
-                <li><a href="cna-define-experiment.html ">Define CNA-seq experiment</a></li>
-                <li><a href="cna-filter-bins.html ">Filter copy number bins</a></li>
-                <li><a href="cna-correct.html">Correct for GC content</a></li>
-                <li><a href="acgh-normalize.html">Normalize copy number data</a></li>
-                <li><a href="cna-plot-profile.html">Plot copy number profiles</a></li>
-                <li><a href="acgh-segment.html">Segment copy number data</a></li>
-                <li><a href="acgh-call-aberrations.html">Call aberrations from segmented copy number data</a></li>
-                <li><a href="acgh-identify-regions.html">Identify common regions from called copy number data</a></li>
-                <li><a href="acgh-add-cytobands.html">Add cytogenetic bands</a></li>
-                <li><a href="acgh-count-overlapping-cnvs.html">Count overlapping CNVs</a></li>
-                <li><a href="acgh-plot-frequencies.html">Plot copy number aberration frequencies</a></li>
-                <li><a href="cna-count-aberrations.html">Count the number of aberrations per sample</a></li>
-                <li><a href="acgh-cluster.html">Cluster called copy number data</a></li>
-                <li><a href="cna-correlate.html">Plot correlations of called copy number data</a></li>
-                <li><a href="acgh-group-test.html">Group tests for called copy number data</a></li>
-                <li><a href="acgh-survival-test.html">Survival test for called copy number data</a></li>
-                <li><a href="acgh-plot-survival.html">Plot survival curves for called copy number data</a></li>
-                <li><a href="cna-fuse-regions-by-column.html">Fuse regions by column value</a></li>
-                <li><a href="cna-fuse-regions-manually.html">Fuse regions manually</a></li>
-                <li><a href="acgh-convert-from-probes-to-genes.html">Detect genes from called copy number data</a></li>
-                <li><a href="acgh-pathways-go.html">GO enrichment for called gene copy numbers</a></li>
-                <li><a href="acgh-match-probes.html">Match copy number and expression features</a></li>
-                <li><a href="acgh-plot-combined-profile.html">Plot profiles of matched copy number and expression</a>
-                </li>
-                <li><a href="acgh-expression-test.html">Test for copy number induced expression changes</a></li>
-                <li><a href="acgh-plot-combined-expression.html">Plot copy number induced gene expression</a></li>
                 <br>
                 <br>
                 <b><a name="micropreproc">Microbial amplicon data preprocessing</a></b>
@@ -315,53 +317,34 @@
                 <li><a href="metabarcoding-deseq2.html">Differential OTU abundance analysis using DESeq2</a></li>
                 <br>
                 <br>
-                <b><a name="singlecell">Single-cell RNA-seq</a></b>
-
-                <li><a href="single-cell-seurat-setup.html">Seurat -Setup and QC</a></li>
-                <li><a href="single-cell-seurat-filter-regress.html">Seurat -Filtering, regression and detection of
-                                variable genes</a></li>
-                <li><a href="single-cell-seurat-sctransform.html">Seurat -SCTransform: Filtering, regression and
-                                detection of variable genes</a></li>
-                <li><a href="single-cell-seurat-pca.html">Seurat -PCA</a></li>
-                <li><a href="single-cell-seurat-clustering.html">Seurat -Clustering and detection of cluster marker
-                                genes</a></li>
-                <li><a href="single-cell-seurat-find-markers-v3.html">Seurat -Find differentially expressed genes
-                                between clusters</a></li>
-                <li><a href="single-cell-seurat-gene-plots.html">Seurat -Visualize genes</a></li>
-                <li><a href="single-cell-seurat-featureplot-v3">Seurat -Visualise features in UMAP plot </a></li>
-                <li><a href="single-cell-seurat-CCA.html">Seurat -Combine two samples</a></li>
-                <li><a href="single-cell-seurat-integrated-analysis.html">Seurat -Integrated analysis of two samples</a>
+                <b><a name="CNA">CNA-seq</a></b>
+                <li><a href="cna-define-experiment.html ">Define CNA-seq experiment</a></li>
+                <li><a href="cna-filter-bins.html ">Filter copy number bins</a></li>
+                <li><a href="cna-correct.html">Correct for GC content</a></li>
+                <li><a href="acgh-normalize.html">Normalize copy number data</a></li>
+                <li><a href="cna-plot-profile.html">Plot copy number profiles</a></li>
+                <li><a href="acgh-segment.html">Segment copy number data</a></li>
+                <li><a href="acgh-call-aberrations.html">Call aberrations from segmented copy number data</a></li>
+                <li><a href="acgh-identify-regions.html">Identify common regions from called copy number data</a></li>
+                <li><a href="acgh-add-cytobands.html">Add cytogenetic bands</a></li>
+                <li><a href="acgh-count-overlapping-cnvs.html">Count overlapping CNVs</a></li>
+                <li><a href="acgh-plot-frequencies.html">Plot copy number aberration frequencies</a></li>
+                <li><a href="cna-count-aberrations.html">Count the number of aberrations per sample</a></li>
+                <li><a href="acgh-cluster.html">Cluster called copy number data</a></li>
+                <li><a href="cna-correlate.html">Plot correlations of called copy number data</a></li>
+                <li><a href="acgh-group-test.html">Group tests for called copy number data</a></li>
+                <li><a href="acgh-survival-test.html">Survival test for called copy number data</a></li>
+                <li><a href="acgh-plot-survival.html">Plot survival curves for called copy number data</a></li>
+                <li><a href="cna-fuse-regions-by-column.html">Fuse regions by column value</a></li>
+                <li><a href="cna-fuse-regions-manually.html">Fuse regions manually</a></li>
+                <li><a href="acgh-convert-from-probes-to-genes.html">Detect genes from called copy number data</a></li>
+                <li><a href="acgh-pathways-go.html">GO enrichment for called gene copy numbers</a></li>
+                <li><a href="acgh-match-probes.html">Match copy number and expression features</a></li>
+                <li><a href="acgh-plot-combined-profile.html">Plot profiles of matched copy number and expression</a>
                 </li>
-                <li><a href="single-cell-seurat-diffexp-samples.html">Seurat -Find conserved cluster markers and DE
-                                genes in two samples</a></li>
-                <li><a href="single-cell-seurat-split-dot-plot.html">Seurat -Visualize genes with cell type specific
-                                responses in two samples</a></li>
-                <li><a href="single-cell-seurat-extract-cluster.html">Seurat BETA -Extract cells in a cluster</a></li>
-                <li><a href="single-cell-seurat-subset.html">Seurat BETA -Subset Seurat objects based on gene
-                                expression</a> </li>
-
-                <!-- DropSeq tools:-->
-                <li><a href="single-cell-preprocessing.html">Preprocessing of DropSeq FASTQ files</a></li>
-                <!-- <li><a href="picard-fastqtosam.html">FASTQ to BAM</a></li> -->
-                <!-- <li><a href="single-cell-TagBam.html">Tag BAM</a></li> -->
-                <!-- <li><a href="single-cell-FilterBam.html">Filter and trim BAM</a></li> -->
-                <!-- <li><a href="picard-samtofastq.html">BAM to FASTQ</a></li> -->
-                <!-- <li><a href="picard-sortsam.html">Sort BAM</a></li> -->
-                <li><a href="picard-merge-bam-alignment.html">Merge aligned and unaligned BAM</a></li>
-                <!--<li><a href="single-cell-tag-read-with-gene-exon.html">Tag reads with gene names</a></li> -->
-                <li><a href="single-cell-bam-tag-histogram.html">Estimate number of usable cells</a></li>
-                <!-- <li><a href="single-cell-detect-bead-synthesis-erros.html">Detect bead synthesis errors</a></li> -->
-                <li><a href="single-cell-digital-expression.html">Create digital gene expression matrix</a></li>
-                <!--<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>-->
-
-
-
-
-
-
-
-
-                <!--        <li> <a href=" "> </a> </li>        -->
+                <li><a href="acgh-expression-test.html">Test for copy number induced expression changes</a></li>
+                <li><a href="acgh-plot-combined-expression.html">Plot copy number induced gene expression</a></li>
+                
         </ul>
 
 </body>
