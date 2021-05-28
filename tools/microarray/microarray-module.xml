@@ -64,7 +64,7 @@
 		<tool>stat-timeseries.R</tool>
 		<tool>stat-chisq-snp.R</tool>
 		<tool>stat-adjust-pvalues.R</tool>
-		<!-- <tool>ordination-pca.R</tool> -->
+		<tool>ordination-pca.R</tool>
 		<tool>ordination-ca.R</tool>
 		<tool>ordination-nmds.R</tool>
 		<tool>estimate-samplesize.R</tool>
