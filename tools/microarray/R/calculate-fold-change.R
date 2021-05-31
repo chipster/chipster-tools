@@ -1,12 +1,10 @@
-# TOOL calculate-fold-change.R: "Calculate fold change!" (Calculates a geometric average of gene expression for replicate chips and then
+# TOOL calculate-fold-change.R: "Calculate fold change" (Calculates a geometric average of gene expression for replicate chips and then
 # calculates a difference or ratio between the averages. The output fold change will be represented in log2 scale. 
 # Note that the tool is applicable only if you have defined two groups of samples, and the reference group is determined by the smaller group number.)
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC 
 # OUTPUT fold-change.tsv: fold-change.tsv 
 # PARAMETER column: Column TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups. Samples of which group attribute is NA are excluded from the analysis.)
-# PARAMETER OPTIONAL geometric: "Which mean to use" TYPE [yes:geometric] DEFAULT yes 
-# PARAMETER OPTIONAL scale: Scale TYPE [log2] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values.)
 
 # JTT 30.7.2007, Calculate fold changes between groups of samples
 # MG, 3.5.2011, added parameters for choosing aritmetic or geometric mean and for choosing linear or log scale
@@ -19,8 +17,8 @@
 	# up-regulation is represented by values greater than 1 and down-regulation values being between 0 and 1.)
 
 	
-#geometric<- "yes"
-#scale<- "log2"
+geometric<- "yes"
+scale<- "log2"
 # Loads the normalized data and phenodata
 file<-c("normalized.tsv")
 dat<-read.table(file, header=T, sep="\t", row.names=1)
