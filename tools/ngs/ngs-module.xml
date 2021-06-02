@@ -10,7 +10,7 @@
 		<tool>picard-collectmultiplemetrics.R</tool>
 		<tool>deseq2-pca-heatmap.R</tool>
 		<tool>check-fastq.R</tool>
-		<tool>multiqc.R</tool>
+		<!-- <tool>multiqc.R</tool> broken-->
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
