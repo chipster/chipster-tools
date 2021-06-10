@@ -1,0 +1,127 @@
+<html>
+
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 5px;
+        }
+
+        th {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Statistical terms explained </h1>
+
+    <p>
+        Fold change, p-value, FDR... There are many terms related to statistical testing that
+        you run into when doing statistical testing, for example when looking for differentially expressed
+        genes between samples in RNAseq or between clusters in scRNA-seq.
+        As we tend to get lots of questions regarding some of the terms, we try to clarify them here.
+    </p>
+    <p>
+        In the "Differential expression analysis" video below we explain some basic principles of statistical
+        testing in RNAseq, and some details about edgeR and DESeq2 tools:
+    </p>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/5tGCBW3_0IA" title="YouTube video player"
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+
+    <p>
+        We describe the Chipster tools' result tables and their columns in the tools manuals.
+        Check out for example:
+        <a href="https://chipster.rahtiapp.fi/manual/deseq2.html">DeSeq2 manual</a>,
+        <a href="https://chipster.rahtiapp.fi/manual/ngs-dea-edger-RNA.html">edgeR manual</a> and
+        <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-find-markers-v3.html"> Seurat -Find
+            differentially expressed genes between clusters tool manual</a>
+        pages.
+    </p>
+
+    <p>
+        The results table from EdgeR tool for more complex experimental designs
+        (<a href="https://chipster.rahtiapp.fi/manual/edgeR-multivariate.html">"Differential expression using edgeR for
+            multivariate experiments"</a>
+        can be especially confusing at the first glimpse, as there will be several columns corresponding to the
+        different comparisons.
+        Besides the manual page linked above, we also try to explain this in the video:
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/gJnu3xUQ7ww" title="YouTube video player"
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+
+
+    <h2>Fold change (FC)</h2>
+
+    <p>
+        Fold change (FC) describes the ratio of two values i.e. (expression in condition 1)/(expression in condition 2).
+        Fold changes are often reported in (2-based) logarithmic scale, because that way they are nicely centered
+        around 0, so that increase in expression shows positive FC and descrease negative.
+        This is easier to understand and nicer to plot!
+    </p>
+    <p>
+        log2FC is simply computed just log2(condition1/condition2).
+        You can however see in some of our codes and elsewhere also the format log2(condition1) - log2(condition2),
+        which leans on the logarithm rule: log(A/B) = log (A) - log(B). So same thing and result, just computed in two
+        different ways.
+    </p>
+    <p>
+        To switch back to FC from log2FC, the formula is log2(x)=y <=> 2^y=x.
+            So for example:
+            <ul>
+                <li> log2FC = 3 equals to FC=2^3=8, which means that the expression in condition 1 is 8 times higher
+                    than in condition 2. </li>
+                <li> log2FC = 1 means that FC = 2, which means that expression in condition 1 is twice as much as in
+                    condition 2, or 200%. </li>
+                <li> log2FC = -1 means that FC = 0.5, which means that expression in condition 1 is half as much as in
+                    condition 2, or 50%. </li>
+            </ul>
+    </p>
+
+
+    <h2>p-value</h2>
+    <p>
+
+        p-value is the probability of obtaining test results at least as extreme
+        as the results actually observed (=the measured expression values).
+        So the larger the p-value, the higher the likelihood that the gene is in the list of differentially
+        expressed genes just bey chance.
+        So the small p-values (< 0.05 for example) are the ones you are after: smaller p-value means more likely
+            actually differentially expressed genes. </p>
+
+            <h2>Adjusted p-value or FDR</h2>
+            <p>
+                When we are testing each gene for differential expression ("is gene A differentially expressed between
+                the sample groups? How about gene B? C? D...?")
+                we are actually doing (tens of) thousands of tests, and thus increase the possibility that there are in
+                fact genes
+                in the list of differentially expressed genes just by chance. That is why we need to do
+                "multiple testing correction". There are many ways to do this, one of which is explained in this video
+                at timepoint 21:30:
+            </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/5tGCBW3_0IA"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+
+            <p>
+                So, when reporting p-values, you actually want to report the adjusted p-values (sometimes called as the
+                FDR values).
+            </p>
+
+
+
+</body>
+
+</html>
