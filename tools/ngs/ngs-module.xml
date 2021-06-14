@@ -4,7 +4,7 @@
 		<tool>fastqc.R</tool>
 		<tool>fastqc_multiqc.R</tool>
 		<tool>fastx-statistics.R</tool>
-		<tool>prinseq-statistics.R</tool>
+		<!-- <tool>prinseq-statistics.R</tool> -->
 		<tool>rseqc.R</tool>
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
@@ -17,7 +17,7 @@
 		<tool>prinseq-filter.R</tool>
 		<tool>fastx-clipper.R</tool>
 		<tool>fastx-quality-filter.R</tool>
-		<tool>prinseq-trimmer.R</tool>	
+		<!-- <tool>prinseq-trimmer.R</tool>	-->
 		<tool>trimmomatic.R</tool>
 		<tool>fastx-trimmer.R</tool>
 		<tool>tagcleaner-trim.R</tool>	
