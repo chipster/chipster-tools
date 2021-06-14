@@ -27,6 +27,8 @@
 # AMS 2014.11.27, corrected bug: trimmomatic was always run in SE mode
 # ML, 2015.12.17, added option to use own adapter files
 
+source(file.path(chipster.common.path,"tool-utils.R"))
+
 # Check out if the files are compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fastaq")
@@ -105,12 +107,17 @@ if (!is.na(minlen)) {
 	step.params <- paste(c(step.params, " MINLEN:",  minlen), collapse="")
 }
 
+# Check that at leaat one 
+if (!nchar(step.params) > 0 ){
+	stop("CHIPSTER-NOTE: No trimming or clipping steps selected. Select at least one.")
+}
 trimmomatic.command <- paste("java -jar", trimmomatic.binary, trim.params, step.params)
 if(logfile == "yes"){
 	trimmomatic.command <- paste(trimmomatic.command, "1>trimlog.txt 2>> trimlog.txt")
 }
 #stop(paste('CHIPSTER-NOTE: ', trimmomatic.command))
 
+documentCommand(trimmomatic.command)
 system(trimmomatic.command)
 
 system("gzip *.fq")
