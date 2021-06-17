@@ -31,14 +31,14 @@
 
 	<p>We run currently the following Chipster courses (follow the links for more info). CSC runs also <a
 			href="https://research.csc.fi/bioscience-learning-materials">other bioinformatics courses</a>,
-		you can find the upcoming courses in our <a href="https://www.csc.fi/en/web/training/events">course
+		you can find the upcoming courses in our <a href="https://www.csc.fi/en/training">course
 			calendar</a>.</p>
 
 	<ol>
 		<li> <a href="#rna">RNA-seq data analysis</a> </li>
 		<li> <a href="#single-cell">Single cell RNA-seq data analysis</a> </li>
 		<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
-		<li> <a href="#16S">Microbial community analysis of amplicon sequencing data (16S)</a> </li>
+		<li> <a href="#16S">Microbial community analysis </a> </li>
 		<li> <a href="#variant">Detection and annotation of genomic variants</a> </li>
 		<li> <a href="#chip">ChIP-seq data analysis</a> </li>
 		<li> <a href="#microarray">Microarray data analysis</a> </li>
@@ -194,33 +194,46 @@
 	</ul>
 	<hr>
 
-	<h3><a name="16S">Microbial community analysis of 16S amplicon sequencing data</a></h3>
+	<h3><a name="16S">Microbial community analysis with Chipster</a></h3>
 
-	This course introduces microbial community analysis of (16S rRNA) amplicon sequencing data. It covers preprocessing,
-	alignment to reference, taxonomic classification, and statistical analysis.
-	The course takes one day. You will learn how to
+	This course introduces microbial community analysis.
+	MiSeq 16S data is used in the exercises, but also how to analyze IonTorrent and ITS data is discussed.
+
+	The course has been split to two parts. The first one covers preprocessing so quality chechinkg, trimming,
+	alignment to reference and taxonomic classification.
+	The second part covers statistical analysis, so data tidying, vizualization and statistics.
+	The course takes one-two days. 
+	In the first part you will learn how to:
 	<ul>
-		<li>check the quality of reads with FastQC and MultiQC</li>
-		<li>remove bad quality data with Trimmomatic and Mothur</li>
-		<li>remove redudancy, perform alignment and preclustering with Mothur</li>
+		<li>check the quality of reads with MultiQC</li>
+		<li>remove bad quality reads with Trimmomatic</li>
+		<li>handle paired end data with Mothur </li>
+		<li>filter and remove sequences for several criteria</li>
+		<li>align sequences to reference</li>
+		<li>precluster aligned sequences</li>
 		<li>do taxonomic classification with Mothur</li>
-		<li>perform statistical analysis (based on R packages vegan, rich, biodiversityR, pegas, labdsv and DESeq2)</li>
+	</ul>
+	In the second part you will learn how to:
+	<ul>
+		<li>create Phyloseq input files and how to fill the Phenodata table</li>
+		<li>produce phyloseq object</li>
+		<li>tidy the data</li>
+		<li>vizualise the data with different tools</li>
+		<li>calculaute different statistical tests (PERMANOVA, PERMDISP, DESeq2)</li>
+
 	</ul>
 
-	Course material (2020):
+	Course material (2021):
 	<ul>
-		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elA5SthFXdP7s2FuIgpx9kWF">lecture videos</a></li>
-		<li>slides</li>
+		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBjPaknlze6BkxebpEuj9KL">lecture videos</a></li>
+		<li><a href="https://drive.google.com/file/d/1NKlzqSqTTJZEYwVVJ12USLXzc8VbWhrA/view">part 1 slides</a></li>
+		<li><a href="https://github.com/csc-training/chipster-microbial/blob/master/docs/slides/d2.pdf">part 2 slides</a></li>
+		<li>exercises (The data is available on Chipster server in the example session listed in the exercise sheet)</li>
 		<ul>
-			<li><a href="https://chipster.csc.fi/material/16S/microbialCommunityAnalysis_slides_20200420.pdf">Community
-					analysis with Chipster</a></li>
-			<li><a href="https://chipster.csc.fi/material/16S/IntroductionToCommunityAnalysis_AnuMikkonen.pdf">Introduction
-					to community analysis (2017)</a> by Anu Mikkonen</li>
-			<!--  <li><a href="https://chipster.csc.fi/material/16S/StatisticalAnalysisOfMarkerGeneData_JarnoTuimala2017.pdf">Statistical analysis of marker gene data (2017)</a> by Jarno Tuimala</li>-->
+			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d1.html">part 1 exercises</a></li>
+			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d2.html">part 2 exercises</a></li>
 		</ul>
-		<li><a
-				href="https://chipster.csc.fi/material/16S/microbialCommunityAnalysis_exercises_20200420.pdf">exercises</a>.
-			The data is available on Chipster server in the example session listed in the exercise sheet.</li>
+		
 	</ul>
 	<hr>
 
