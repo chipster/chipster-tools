@@ -202,25 +202,51 @@
 
 	The course has been split to two parts. The first one covers preprocessing so quality chechinkg, filtering,
 	alignment to reference and taxonomic classification.
-	The second part covers statistical analysis, so data tidying, vizualization and statistics.
-	The course takes one or two days. 
-	In the first part you will learn how to:
-	<ul>
-		<li>check the quality of the reads with MultiQC</li>
-		<li>handle paired end data with Mothur </li>
-		<li>filter and remove sequences for several criteria</li>
-		<li>align sequences to reference</li>
-		<li>precluster aligned sequences</li>
-		<li>do taxonomic classification with Mothur</li>
-	</ul>
-	In the second part you will learn how to:
-	<ul>
-		<li>create Phyloseq input files and how to fill the Phenodata table</li>
-		<li>produce phyloseq object</li>
-		<li>tidy the data</li>
-		<li>vizualise the data with different tools</li>
-		<li>calculaute different statistical tests (PERMANOVA, PERMDISP, DESeq2)</li>
+	The second part covers statistical analysis so data tidying, vizualization and statistics.
+	The course takes one or two days.
+	<br>
+	<br>
+	Agenda of the first part:
 
+	<ul>
+		<li>Checking the quality of the reads with MultiQC</li>
+		<li>Preprocessing </li>
+		<ul>
+			<li>Combining paired reads to contigs</li>
+			<li>Screening sequences for length and ambiguous bases</li>
+			<li>Removing identical sequences</li>
+		</ul>
+		<li>Alignment</li>
+		<ul>
+			<li>Aligning sequences to the Silva reference alignment</li>
+			<li>Screening aligned sequences for alignment position and homopolymers</li>
+			<li>Filtering alignment for empty columns and overhangs</li>
+			<li>Removing new identical sequences</li>
+		</ul>
+		<li>Preclustering, removing chimeric sequences</li>
+		<li>Taxonomic classification</li>
+	</ul>
+	Agenda of the second part:
+	<ul>
+		<li>Data tidying and analysis</li>
+		<li>Creating and importing phyloseq input files</li>
+		<ul>
+			<li>Including taxonomic assignments and OTU clustering</li>
+		</ul>
+		<li>Data inspection and tidying using phyloseq</li>
+		<ul>
+			<li>Removing unwanted taxa</li>	
+			<li>Filtering singletons and doubletons</li>
+			<li>Prevalence filtering</li>
+		</ul>
+		<li>Data transformation, ordination and conversion</li>
+		<ul>
+			<li>CLR, Hellinger and % relative abundance</li>
+			<li>nMDS and db-RDA</li>
+			<li>DESeq2 format conversion and variance-stabilising transformation</li>
+		</ul>
+		<li>Relative abundance plots</li>
+		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
 	</ul>
 
 	Course material (2021):
@@ -228,7 +254,7 @@
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBjPaknlze6BkxebpEuj9KL">lecture videos</a></li>
 		<li><a href="https://drive.google.com/file/d/1NKlzqSqTTJZEYwVVJ12USLXzc8VbWhrA/view">part 1 slides</a></li>
 		<li><a href="https://github.com/csc-training/chipster-microbial/blob/master/docs/slides/d2.pdf">part 2 slides</a></li>
-		<li>exercises (The data is available on Chipster server in the example session listed in the exercise sheet)</li>
+		<li>Exercises (The data is available on Chipster server in the example session listed in the part 1 exercise sheet)</li>
 		<ul>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d1.html">part 1 exercises</a></li>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d2.html">part 2 exercises</a></li>
