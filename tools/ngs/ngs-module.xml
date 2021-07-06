@@ -260,7 +260,7 @@
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-makegroup.R</tool>
 		<tool>mothur-makecontigs.R</tool>
-		<tool>fastq-mergepairs.R</tool>
+		<!-- <tool>fastq-mergepairs.R</tool> -->
 		<tool>mothur-screenseqs.R</tool>
 		<tool>mothur-uniqueseqs.R</tool>
 		<tool>mothur-alignseqs.R</tool>
