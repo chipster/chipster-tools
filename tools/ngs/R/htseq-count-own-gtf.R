@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL mode: "Mode to handle reads overlapping more than one gene" TYPE [union, intersection-strict, intersection-nonempty] DEFAULT union (How to deal with reads that overlap more than one gene or exon?)
 # PARAMETER OPTIONAL minaqual: "Minimum alignment quality" TYPE INTEGER FROM 0 TO 100 DEFAULT 10 (Skip all reads with alignment quality lower than the given minimum value.)
 # PARAMETER OPTIONAL feature.type: "Feature type to count" TYPE [exon, CDS, gene] DEFAULT exon (Which feature type to use, all features of other type are ignored.)
-# PARAMETER OPTIONAL id.attribute: "Feature ID to use" TYPE [gene_id, ID, GeneID, transcript_id, gene_name, transcript_name, protein_name] DEFAULT gene_id (GFF attribute to be used as feature ID. Several GFF lines with the same feature ID will be considered as parts of the same feature. The feature ID is used to identity the counts in the output table.)
+# PARAMETER OPTIONAL id.attribute: "Feature ID to use" TYPE [gene_id, ID, GeneID, transcript_id, gene_name, transcript_name, protein_name, proteinId] DEFAULT gene_id (GFF attribute to be used as feature ID. Several GFF lines with the same feature ID will be considered as parts of the same feature. The feature ID is used to identity the counts in the output table.)
 # PARAMETER OPTIONAL print.coord: "Add chromosomal coordinates to the count table" TYPE [yes, no] DEFAULT yes (If you select yes, chromosomal coordinates are added to the output file. Given are the minimum and maximum coordinates of features, e.g. exons, associated with a given identifier)
 
 
