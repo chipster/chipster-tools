@@ -17,7 +17,8 @@
 # 21.5.2014	EK updated to use HTSeq 0.6.1
 # 9.4.2015	ML added the geneID options
 # 22.9.2016	EK clarified strandedness options
-# 24.3.2021	EK added feature option gene for own GTFs
+# 24.3.2021	EK added feature type gene
+# 24.3.2021	EK added id.attribute proteinId
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
