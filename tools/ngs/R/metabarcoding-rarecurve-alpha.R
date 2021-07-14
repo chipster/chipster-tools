@@ -3,11 +3,12 @@
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_rarecurve.pdf
 # OUTPUT ps_alphadiv.txt
-# PARAMETER OPTIONAL group_column: "Phenodata variable tabulated with alpha diversity estimates" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable added to alpha diversity table for improved readability.)
-# PARAMETER OPTIONAL type: "Are the data raw (untrimmed) or rarefied to even depth?" TYPE [raw, rarefied] DEFAULT raw (Type of data to be analyzed \(raw vs rarefied; by default, assumes raw data.\))
+# PARAMETER group_column: "Phenodata variable tabulated with alpha diversity estimates" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable added to alpha diversity table for improved readability.)
 # RUNTIME R-3.6.1-phyloseq
 
 # JH 2020
+# ES 9.7.2021 alpha diversity estimates for rarefied data
+# PARAMETER OPTIONAL type: "Are the data raw (untrimmed) or rarefied to even depth?" TYPE [raw, rarefied] DEFAULT raw (Type of data to be analyzed \(raw vs rarefied; by default, assumes raw data.\))
 
 # Load libraries
 library(microbiome)
@@ -50,7 +51,7 @@ rarecurve(t(otu_table(ps)), step = 100,
 dev.off()
 
 # Print out sequence numbers and alpha diversity table
-if (type == "raw"){
+#if (type == "raw"){
 sink("ps_alphadiv.txt")
 	cat("\n\n\n")
 	cat("### Per-sample sequence no.s ###\n")
@@ -62,17 +63,18 @@ sink("ps_alphadiv.txt")
 	print(richness)
 	cat("\n\n\n")
 sink()
-}
-if (type == "rarefied"){
-sink("ps_alphadiv.txt")
-	cat("\n\n\n")
-	cat("### Per-sample sequence no.s ###\n")
-	cat("\n\n\n")
-	print(seqno)
-	cat("\n\n\n")
-	cat("### Alpha diversity estimates (observed OTUs, Chao1, Shannon's index, Pielou's evenness) ###\n")
-	cat("\n\n\n")
-	cat("N/A (unavailable due to use of rarefied data)\n")
-	cat("\n\n\n")
-sink()
-}
+#}
+# commented out by ES
+#if (type == "rarefied"){
+#sink("ps_alphadiv.txt")
+#	cat("\n\n\n")
+#	cat("### Per-sample sequence no.s ###\n")
+#	cat("\n\n\n")
+#	print(seqno)
+#	cat("\n\n\n")
+#	cat("### Alpha diversity estimates (observed OTUs, Chao1, Shannon's index, Pielou's evenness) ###\n")
+#	cat("\n\n\n")
+#	cat("N/A (unavailable due to use of rarefied data)\n")
+#	cat("\n\n\n")
+#sink()
+#}
