@@ -83,7 +83,7 @@ write.table(as.matrix(markers), file = "markers.tsv", sep = "\t", row.names = T,
 top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
 
 # Heatmap
-DoHeatmap(object = seurat_obj, features = top10$gene) + NoLegend()
+DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) + NoLegend()
 dev.off() # close the pdf
 
 # Average expression table
