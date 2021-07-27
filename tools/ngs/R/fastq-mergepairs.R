@@ -1,13 +1,13 @@
-# TOOL fastq-mergepairs.R: "Combine paired reads to contigs with Vsearch" (Combines paired reads to sequence contigs within each sample, and puts all the resulting FASTQ files in one tar-package. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can make a Tar package of your FASTQ files using the Utilities tool Make a tar package. The tool tries to assign the FASTQ files into samples based on the file names, but you can also provide a file containing this information, please see the manual. This tool is based on the Vsearch fastq_mergepairs command.)
+# TOOL fastq-mergepairs.R: "Combine paired reads to contigs with VSEARCH" (Combines paired reads to sequence contigs within each sample, and puts all the resulting FASTQ files in one Tar package. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can make a Tar package of your FASTQ files using the Utilities tool Make a tar package. The tool tries to assign the FASTQ files into samples based on the file names, but you can also provide a file containing this information, please see the manual. This tool is based on the VSEARCH fastq_mergepairs command.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC
 # OUTPUT contigs.tar
 # OUTPUT summary.txt
 # OUTPUT summary_stats.tsv
 # OUTPUT samples.fastqs.txt
-# PARAMETER maxdiff: "Maximun difference" TYPE INTEGER FROM 0 TO 100 DEFAULT 10 (The Maximum number of non-matching nucleotides allowed in the overlap region 0 - 100, default 10)
+# PARAMETER maxdiff: "Maximun number of non-matching nucleotides" TYPE INTEGER FROM 0 TO 100 DEFAULT 10 (The maximum number of non-matching nucleotides allowed in the overlap region 0 - 100, the default value is 10)
 # PARAMETER maxdiffpct: "Maximum percentage of non-matching nucleotides" TYPE INTEGER FROM 0 TO 100 DEFAULT 100 (The maximum percentage of non-matching nucleotides allowed in the overlap region. The default value is 100.0%)
-# PARAMETER OPTIONAL maxns: "Discard sequences with more than the specified number of N." TYPE INTEGER FROM 0 (Discard sequences with more than the specified number of ambigious bases) 
+# PARAMETER OPTIONAL maxns: "Discard input sequences with more than this number of Ns." TYPE INTEGER FROM 0 (Discard input sequences which contain with more than the specified number of ambigious bases) 
 
 # ES 05.07.2021
 
