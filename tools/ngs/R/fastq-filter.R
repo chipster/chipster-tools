@@ -1,5 +1,5 @@
 # TOOL fastq-filter.R: "Filter sequences based on the number of expected errors" (Discards sequences which have more than the user specified number of expected errors. This tool can be used for example to filter out bad quality contigs, if paired reads were merged with VSEARCH which preserves the base quality information. )
-# INPUT contigs.tar: "Tar package containing the contig FASTQ files" TYPE GENERIC
+# INPUT contigs.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT filtered_contigs.tar
 # OUTPUT summary.tsv
 # PARAMETER maxee: "Discard sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 DEFAULT 1 (Decimal number to discard bad quality sequences. Decimal from 0 -, Default 1.)
