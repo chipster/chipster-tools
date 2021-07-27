@@ -21,13 +21,15 @@
 This tool takes a tar-package of FastQ files which have been created with tool "Combine paired reads to contigs with Vsearch"
 <br> It filters the samples and discards those reads which have more than the user specified number of expected errors. It calculates the number of expected errors.
 <br>
-This tools helps to filter bad quality reads.
+This tool helps to filter bad quality reads.
 For more information about expected error, you can check this USEARCH manual page <a href="https://drive5.com/usearch/manual/exp_errs.html">Expected errors predicted by Phred (Q) scores</a>.
 <br> This page suggests to use 1 as the treshold, but it can be made sticter. But be aware not to discard too many sequences.
 <br>
-For more information about the calculations and formulas to calculate the number of expected errors, you can check this 
+For more information, about the calculations and formulas to calculate the number of expected errors, you can check this 
 article by Robert C. Edgar and Henrik Flyvbjerg <a href="https://academic.oup.com/bioinformatics/article/31/21/3476/194979#btv401-M8">Error filtering, pair assembly and error correction for next-generation sequencing reads</a>.
 <br>
+<br>
+This tools is based on the fastq_filter command of VSEARCH package.
 </p>
 <h3>Output</h3>
 <p>

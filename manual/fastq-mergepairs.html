@@ -10,7 +10,7 @@
 <p>
 Combines paired reads to contigs for each sample
 and collects the sequences in one fastq file for each sample/pair. Then it makes one tar-package from all
-the fastq files.
+the FastQ files.
 </p>
 <h3>Parameters</h3>
 <ul>
@@ -72,7 +72,7 @@ The analysis output consists of the following:
 <ul>
     <li>contigs.tar: A Tar-package consisting all the merged FastQ files. One FastQ file from one sample/pair. </li>
     <li>summary.txt: Summary statistics for the merged FastQ files. Every sample has a summary in this file.</li>
-    <li>summary_stats.tsv: Info about "Not_merged" column from summary.txt to help find samples with high not_merged column. </li>
+    <li>summary_stats.tsv: A Tsv-table based on numbers from summary.txt to help to find merge info. </li>
     <li>samples.fastqs.txt: Shows how fastq files were assigned to samples.</li>
 </ul>
 </p>
