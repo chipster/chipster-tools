@@ -9,7 +9,7 @@
 
 <p>
 This tool combines paired reads to contigs and produces one FASTQ file for each sample. 
-It then puts the contig FASTQ files in one Tar package.
+Then it puts the (contigs) FASTQ files in one Tar package.
 </p>
 <h3>Parameters</h3>
 <ul>
@@ -32,8 +32,13 @@ If the sequencing construct is shorter than the read length, the alignment is st
 segments at the end of the read. The fastq_mergepairs command discards any "overhangs"
 at the ends which do not align to the other read.
 <br>
-<br>
+
 You can find more information on the merging process in the USEARCH manual <a href="https://drive5.com/usearch/manual/merge_pair.html">Merging of paired reads</a>.
+<br>
+<br>
+VSEARCH calculates posterior quality scores (Qs) for the overlap region. If the base calls match, the posterior Qs will increase.
+If there is a mismatch, the posterior Qs will usually decrease. If one of the reads has a low enough Qs (under 2), the base call can be treated as wrong.
+<br> So the posterior Qs is not just the sum/difference from the base calls. <br>
 For more information about equations for calculating posterior quality score information by VSEARCH, you can check this article by Robert C. Edgar and Henrik Flyvbjerg <a href="https://academic.oup.com/bioinformatics/article/31/21/3476/194979#btv401-M8">Error filtering, pair assembly and error correction for next-generation sequencing reads</a>. 
 <br>
 <br>
@@ -43,11 +48,14 @@ will be named by splitting the filename with '_'.
 <br>
 You can check the assignment of files to samples in the result file samples.fastqs.txt. If the assignment to samples is not correct, you can make a samples-files.txt yourself and give it as input.
 This file has 3 columns: sample name, forward fastq file name (R1), and reverse fastq file name (R2) which have been separated with tabulator ('\t'), 
-so it should look something like this: <br>
-sample1     sample1_L001_R1_001.fastq   sample1_L001_R2_001.fastq<br>
-sample2     sample2_L001_R1_001.fastq   sample2_L001_R2_001.fastq<br>
-sample3     sample3_L001_R1_001.fastq   sample3_L001_R2_001.fastq<br>
+So it should look something like this: <br>
+<pre>   
+sample1     sample1_L001_R1_001.fastq    sample1_L001_R2_001.fastq
+sample2     sample2_L001_R1_001.fastq    sample2_L001_R2_001.fastq
+sample3     sample3_L001_R1_001.fastq    sample3_L001_R2_001.fastq
 etc.
+</pre> 
+
 <br>
 <br>
 After merging paired reads to contigs with VSEARCH, you can visualize the base quality using the tool "Read quality with MultiQC for many FASTQ files".
@@ -55,7 +63,7 @@ You can also run tool "Filter contigs based on the number of expected errors" to
 <br> 
 <br>
 Before further steps in your workflow, you should run the tool "Microbial amplicon data preprocessing /Combine FASTQ or FASTA files and make a group file".
-This tool combines all the FASTQ files from the Tar package to one single FASTA file and to makes a group file required by Mothur analysis tools.
+This tool combines all the FASTQ files from the Tar package to one single FASTA file and makes a group file required by Mothur analysis tools.
 <br>
 <br>
 This tools is based on the fastq_mergepairs command of VSEARCH package.
