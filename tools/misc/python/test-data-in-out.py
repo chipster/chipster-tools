@@ -2,7 +2,6 @@
 # INPUT input TYPE GENERIC
 # OUTPUT output
 # OUTPUT OPTIONAL missing_output.txt
-# IMAGE chipster-tools-python
 
 import shutil
 

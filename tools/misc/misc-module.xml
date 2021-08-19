@@ -106,9 +106,11 @@
 		<tool>test-data-in.R</tool>	
         <tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
+		<tool>test-data-in-out-image.py</tool>
 		<tool>test-multiple-inputs.py</tool>
 		<tool>test-data-in-out3.py</tool>		
-		<tool>test-screen-output.py</tool>		
+		<tool>test-screen-output.py</tool>
+		<tool>test-screen-output-image.py</tool>
 		<tool>test-phenodata-input.py</tool>
 		<tool>test-phenodata2-input.py</tool>
 		<tool>test-phenodata-output.py</tool>
