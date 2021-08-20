@@ -270,6 +270,7 @@
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
 		<tool>mothur-classifyseqs-its.R</tool>
+		<tool>mothur-seq-error.R</tool>
 		<!--
 		<tool>mothur-classify-counttable.R</tool>
 	    <tool>mothur-analyses.R</tool>
