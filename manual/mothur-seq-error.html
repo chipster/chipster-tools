@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Assess error rates</h2>
+
+<h3>Description</h3>
+
+<p>
+If you have co-sequenced a mock community, this tool assess the error rates. You need to give a fasta file,
+a count_table, a sequence-taxonomy-assignment file, and a Mock reference file.
+This tool pulls out the sequences that were from the “Mock” sample, specified with the "Mock group name" parameter.
+Then it assess the error rates and removes the Mock samples from the fasta file, count_table and sequence-taxonomy-assignment file.
+
+</p>
+
+<h3>Parameters</h3>
+<ul>
+<li>The Mock group name, Default "Mock"</li>
+<li>Are the reference sequences aligned.(yes,no) [no]</li>
+</ul>
+
+<h3>Details</h3>
+<p>
+Calculates the error rates and removes the Mock sequences from the input files. 
+<br>
+You need to give the Mock group name as parameter and the Mock reference file as input. 
+<br>
+If your reference sequences are aligned, you should check that the aligned parameter is set to yes, otherwise to no.
+<br>
+This tool is based on the Mothur tools <a href="https://mothur.org/wiki/get.groups/">get.goups</a>, <a href="https://mothur.org/wiki/seq.error/">seq.error</a> and <a href="https://mothur.org/wiki/remove.groups/">remove.groups</a>.
+</p>
+
+<h3>Output</h3>
+
+<p>The analysis output consists of the following:</p>
+<ul>
+<li>mock-removed.fasta.gz: Alignment with the Mock sequences removed.</li>
+<li>mock-removed.count_table: Count table with the Mock groups removed.</li>
+<li>filtered-taxonomy-assignment.txt: Taxonomy-assignment with the Mock groups removed. </li>
+<li>error-summary.tsv: Summary statistics from remaining sequences. </li>
+<li>error-rate-summary.txt: Summary statictics of error rates and how many sequences was selected. </li>
+</ul>
+
+<h3>References</h3>
+<p>Schloss PD, Westcott SL, Ryabin T, Hall JR, Hartmann M, Hollister EB, Lesniewski RA, Oakley BB, Parks DH, Robinson CJ, Sahl JW, Stres B, Thallinger GG, Van Horn DJ, Weber CF.
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2786419/">Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.</a> 
+<br>
+Mothur MiseqSop:
+<a href="https://mothur.org/wiki/miseq_sop/#assessing-error-rates">Assesing error rates</a>
+</p>
+
+
+</body>
+
