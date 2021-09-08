@@ -12,7 +12,11 @@ source(file.path(chipster.common.path, "library-Chipster.R"))
 source(file.path(chipster.common.path, "library-CGHregions.R"))
 
 input <- readData("regions.tsv")
+
 phenodata <- readData("phenodata.tsv")
+phenoheaders <- strsplit(readLines("phenodata.tsv",n=1),split="\t")[[1]]
+colindices <- grep(column,phenoheaders,fixed=TRUE)
+
 regions <- toRegioning(input)
 
 margins <- c(10, 1)
@@ -26,10 +30,10 @@ if (type.of.calls == "hard") {
 }
 
 pdf(file="wecca.pdf", paper="a4", width=0, height=0)
-if (column == "EMPTY") {
+if (column == "EMPTY" || length(colindices) == 0) {
   WECCA.heatmap(regions, dendrogram, margins=margins)
 } else {
-  WECCA.heatmap(regions, dendrogram, margins=margins, ColSideColors=palette()[as.factor(phenodata[,column])])
+  WECCA.heatmap(regions, dendrogram, margins=margins, ColSideColors=palette()[as.factor(phenodata[,indices])])
 }
 dev.off()
 
