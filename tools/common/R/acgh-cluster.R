@@ -33,7 +33,7 @@ pdf(file="wecca.pdf", paper="a4", width=0, height=0)
 if (column == "EMPTY" || length(colindices) == 0) {
   WECCA.heatmap(regions, dendrogram, margins=margins)
 } else {
-  WECCA.heatmap(regions, dendrogram, margins=margins, ColSideColors=palette()[as.factor(phenodata[,indices])])
+  WECCA.heatmap(regions, dendrogram, margins=margins, ColSideColors=palette()[as.factor(phenodata[,colindices])])
 }
 dev.off()
 
