@@ -5,8 +5,8 @@
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC 
 # OUTPUT fold-change.tsv: fold-change.tsv 
 # PARAMETER column: Column TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups. Samples of which group attribute is NA are excluded from the analysis.)
-# PARAMETER OPTIONAL geometric: "Which mean to use" TYPE [yes:geometric, no:arithmetic] DEFAULT yes (Should the geometric or arithmetic mean be used in the calculation of average expression for the sample groups?)
-# PARAMETER OPTIONAL scale: Scale TYPE [log2, linear] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values. Conversely, in linear scale 
+# PARAMETER geometric: "Which mean to use" TYPE [yes:geometric, no:arithmetic] DEFAULT yes (Should the geometric or arithmetic mean be used in the calculation of average expression for the sample groups?)
+# PARAMETER scale: Scale TYPE [log2, linear] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values. Conversely, in linear scale 
 # up-regulation is represented by values greater than 1 and down-regulation values being between 0 and 1.)
 
 # JTT 30.7.2007, Calculate fold changes between groups of samples
