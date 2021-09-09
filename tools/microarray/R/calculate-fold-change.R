@@ -5,9 +5,8 @@
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC 
 # OUTPUT fold-change.tsv: fold-change.tsv 
 # PARAMETER column: Column TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups. Samples of which group attribute is NA are excluded from the analysis.)
-# PARAMETER geometric: "Which mean to use" TYPE [yes:geometric, no:arithmetic] DEFAULT yes (Should the geometric or arithmetic mean be used in the calculation of average expression for the sample groups?)
-# PARAMETER scale: Scale TYPE [log2, linear] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values. Conversely, in linear scale 
-# up-regulation is represented by values greater than 1 and down-regulation values being between 0 and 1.)
+# PARAMETER geometric: "Which mean to use" TYPE [geometric: geometric, arithmetic: arithmetic] DEFAULT geometric (Should the geometric or arithmetic mean be used in the calculation of average expression for the sample groups?)
+# PARAMETER outscale: Scale TYPE [log2: log2, linear: linear] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values. Conversely, in linear scale up-regulation is represented by values greater than 1 and down-regulation values being between 0 and 1.)
 
 # JTT 30.7.2007, Calculate fold changes between groups of samples
 # MG, 3.5.2011, added parameters for choosing aritmetic or geometric mean and for choosing linear or log scale
@@ -17,7 +16,12 @@
 # OH, 09.09.2021, additional parameters for phenodata read.table
 # OH, 09.09.2021, option geometric or arithmetic mean and option output log2 or linear
 
-
+if( ! exists("geometric", mode="character") ) {
+	geometric <- "geometric"
+}
+if( ! exists("outscale", mode="character") ) {
+	outscale <- "log2"
+}
 
 # Loads the normalized data and phenodata
 file<-c("normalized.tsv")
@@ -47,7 +51,7 @@ if(length(unique(groups))>2) {
 }
 
 # If arithmetic mean, then transform values to linear scale
-if (geometric == "no") {
+if (geometric == "arithmetic") {
 	dat2 <- as.data.frame (2^dat2)
 }
 
@@ -70,19 +74,19 @@ rownames(dat3)<-rownames(dat2)
 
 # Calculating the fold change
 # Treatment divided by the control
-if (geometric == "yes") {
+if (geometric == "geometric") {
 	FC <- dat3[,2]-dat3[,1]
 } else {
 	FC <- dat3[,2] / dat3 [,1]
 }
 
 # If arithmetic mean and log2 scale, then transform values back to log2 scale
-if (geometric == "no" && scale == "log2") {
+if (geometric == "arithmetic" && outscale == "log2") {
 	FC <- log2(FC)
 }
 
 # If geometric mean and linear scale, then transform values to linear scale
-if (geometric == "yes" && scale == "linear") {
+if (geometric == "geometric" && outscale == "linear") {
 	FC <- 2^FC
 }
 
