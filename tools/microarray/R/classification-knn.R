@@ -10,6 +10,8 @@
 
 # JTT 26.6.2006: KNN classification created
 # MK 02.07.2013: Bugs fixed, added group and traning column selection to the header section
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
+
 
 # Parameter settings (default) for testing purposes
 #number.of.nearest.neighbors<-2
@@ -29,7 +31,7 @@ file<-c("normalized.tsv")
 dat<-read.table(file, sep="\t", header=T, row.names=1)
 
 # Reads the phenodata table
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Checks whether the training variable is present if phenodata
 # If training part of phenodata has not been filled, but the column (header) is present, 

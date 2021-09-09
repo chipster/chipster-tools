@@ -16,6 +16,7 @@
 # JTT 22.01.2009
 # MK 18.06.2013 Chip-prediction table added to the output
 # Prediction has not yet been implemented!
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Parameter settings (default) for testing purposes
 #method<-"knn"
@@ -43,7 +44,7 @@ if(nrow(dat) > max.genes) {
 }
 
 # Reads the phenodata table
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Separates expression values and flags
 calls<-dat[,grep("flag", names(dat))]

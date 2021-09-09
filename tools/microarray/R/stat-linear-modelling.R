@@ -23,6 +23,7 @@
 # OH, 12.02.2015, getting columns from phenodata using which rather than grep in order to get exact matches
 # ML, 07.11.2016, simplify the outputs
 # EK, 03.12.2020, specify optional parameters as required by Web App.
+# OH, 09.09.2021, additional parameters for phenodata read.table
 
 #main.effect1<-"group"
 #main.effect2<-"gender"
@@ -49,7 +50,7 @@ dat<-read.table(file, header=T, sep="\t", row.names=1)
 dat2<-dat[,grep("chip", names(dat))]
 
 # Loads phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Sanity checks
 if(main.effect1=="EMPTY" & main.effect2=="EMPTY" & main.effect3=="EMPTY") {

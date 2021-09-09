@@ -13,11 +13,12 @@
 # rewritten by IS, 6.9.2010
 # modified by IS, 16.2.2011
 # modified by IS,12.10.2012
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # load inputs
 file <- 'normalized.tsv'
 dat <- read.table(file, header=TRUE, sep='\t', quote='', row.names=1, check.names=FALSE)
-phenodata <- read.table('phenodata.tsv', header=TRUE, sep='\t', as.is=TRUE)
+phenodata <- read.table('phenodata.tsv', header=TRUE, sep='\t', quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # identify replicates
 replicates <- unique(phenodata[duplicated(phenodata[,column]), column])

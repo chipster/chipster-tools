@@ -15,6 +15,7 @@
 
 # MK 17.10.2013 Annotated Heatmap
 # ML 29.07.2019 Add option to use gene symbols as row names
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 library("Heatplus")
 
@@ -40,7 +41,7 @@ if (ncol(dat2) > 20000) {
 }
 
 # Read phenodata and generate annotation features
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 colnames(dat2)<-gsub(" ", "", phenodata$description)
 if(column != "EMPTY") {
 	groups<-phenodata[,pmatch(column,colnames(phenodata))]

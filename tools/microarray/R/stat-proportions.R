@@ -7,6 +7,7 @@
 # PARAMETER p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off for significant results)
 
 # MG, 29.9.2011
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Optional parameter
 # PARAMETER test [Fisher, Chisquare, hypergeometric] DEFAULT Chisquare (Test type)
@@ -24,7 +25,7 @@ calls <- dat[,grep("flag", names(dat))]
 dat_2 <- dat[,grep("chip", names(dat))]
 
 # Test needs a parameter "groups" that specifies the grouping of the samples
-phenodata <- read.table("phenodata.tsv", header=T, sep="\t")
+phenodata <- read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 groups <- phenodata[,pmatch(column,colnames(phenodata))]
 group_levels <- (unique(groups))
 

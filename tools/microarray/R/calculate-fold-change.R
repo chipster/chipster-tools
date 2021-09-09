@@ -15,6 +15,7 @@
 	# PARAMETER OPTIONAL geometric: "Which mean to use" TYPE [yes:geometric, no:arithmetic] DEFAULT yes (Should the geometric or arithmetic mean be used in the calculation of average expression for the sample groups?)
 	# PARAMETER OPTIONAL scale: Scale TYPE [log2, linear] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values. Conversely, in linear scale 
 	# up-regulation is represented by values greater than 1 and down-regulation values being between 0 and 1.)
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 	
 geometric<- "yes"
@@ -22,7 +23,7 @@ scale<- "log2"
 # Loads the normalized data and phenodata
 file<-c("normalized.tsv")
 dat<-read.table(file, header=T, sep="\t", row.names=1)
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 #remove rows that are NAs
 na_samples <- phenodata[which(is.na(phenodata[,pmatch(column,colnames(phenodata))])), 1]

@@ -22,6 +22,7 @@
 # OH 17.01.2013: added maSigPro as alternative time series analysis, parameter added: degree.for.maSigPro
 # OH 17.01.2013: added maSigPro as alternative time series analysis, parameter added: rsq.for.maSigPro
 # MK 15.11.2013: bugs fixed in ICA and periodicity and maSigPro interface polished up. Manual upadated for maSigPro
+# OH 09.09.2021: additional parameters for phenodata read.table
 
 # Renaming variables
 analysis<-analysis.type
@@ -44,7 +45,7 @@ if( length(grep("description",colnames(dat)))>0 ) {
 }
 
 # Reads phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 times<-phenodata[column][[1]]
 
 # Separates expression values and flags

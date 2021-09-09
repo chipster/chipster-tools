@@ -19,9 +19,11 @@
 # Ilari Scheinin <firstname.lastname@gmail.com>
 # 2012-10-12
 
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
+
 file <- 'normalized.tsv'
 dat <- read.table(file, header=TRUE, sep='\t', quote='', row.names=1, check.names=FALSE)
-phenodata <- read.table("phenodata.tsv", header=TRUE, sep="\t")
+phenodata <- read.table("phenodata.tsv", header=TRUE, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 groups <- phenodata[,column]
 
 if(length(unique(groups[!is.na(groups)]))!=2)

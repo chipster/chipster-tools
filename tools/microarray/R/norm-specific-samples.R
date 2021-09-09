@@ -7,6 +7,7 @@
 
 # Normalize the data to specific samples
 # JTT 5.12.2008
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Loads the data file
 file<-c("normalized.tsv")
@@ -16,7 +17,7 @@ dat<-read.table(file, header=T, sep="\t", row.names=1)
 dat2<-dat[,grep("chip", names(dat))]
 
 # Loads phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Extract the data from the phenodata column
 extract<-phenodata[,which(column.to.normalize.by==colnames(phenodata))]
