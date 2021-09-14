@@ -5,7 +5,7 @@
 # PARAMETER normalization.method: "Normalization method" TYPE [mas5: MAS5, plier: Plier, rma: RMA, gcrma: GCRMA, li-wong: Li-Wong] DEFAULT rma (Preprocessing method)
 # PARAMETER stabilize.variance: "Stabilize variance" TYPE [yes: yes, no: no] DEFAULT no (Variance stabilazing normalization)
 # PARAMETER custom.chiptype: "Custom CDF annotation to be used" TYPE [empty: "Use original Affymetrix annotations", hgu133ahsentrezg(hgu133a): "hgu133a", hgu133a2hsentrezg(hgu133av2): "hgu133av2", hgu133phsentrezg(hgu133plus): "hgu133plus", hgu133plus2hsentrezg(hgu133plus2): "hgu133plus2", hgu133bhsentrezg(hgu133b): "hgu133b", hthgu133pluspmhsentrezg(hgu133pluspm): "hgu133pluspm", hgfocushsentrezg(hgfocus): "hgfocus", hgu95av2hsentrezg(hgu95av2): "hgu95av2", hgu219hsentrezg(hgu219): "hgu219", moe430ammentrezg(moe430a): "moe430a", moe430bmmentrezg(moe430b): "moe430b", mouse430a2mmentrezg(mouse430a2): "mouse430a2", mouse4302mmentrezg(mouse4302): "mouse4302", mm74av1mmentrezg(mgu74a): "mgu74a", mgu74av2mmentrezg(mgu74av2): "mgu74av2", mgu74bv2mmentrezg(mgu74bv2): "mgu74bv2", mgu74cv2mmentrezg(mgu74cv2): "mgu74cv2", rae230arnentrezg(rae230a): "rae230a", rae230brnentrezg(rae230b): "rae230b", rat2302rnentrezg(rat2302): "rat2302", rgu34arnentrezg(rgu34a): "rgu34a", rgu34brnentrezg(rgu34b): "rgu34b", rgu34crnentrezg(rgu34c): "rgu34c"] DEFAULT empty (The custom CDF annotation to be used. If you choose to use the original Affymetrix annotations, the tool will use the information in the .CEL-files to determine the chiptype. NOTE: If your files are from Gene or Exon array, please use the corresponding normalization tools!)
-
+# PARAMETER OPTIONAL mas5.scale: "MAS5 Scale" TYPE INTEGER FROM 0 TO 5000 DEFAULT 500 (Only MAS5: Value at which all arrays will be scaled to)
 
 # JTT 08.06.2006, Created
 # JTT 29.06.2006, Changes to column naming on 
@@ -15,10 +15,12 @@
 # MG 12.11.2009, Changes to cope with dropped custom package support for certain array types
 # MK 25.10.2014, PMA calls created with try-catch. Script polished up.
 # EK 12.09.2014, Added HGFocus to altcdfs
+# OH 14.09.2021, Added mas5.scale
 
 # Renaming variables
 norm<-normalization.method
 stabvar<-stabilize.variance
+m5sc<-mas5.scale
 
 # Initializes analyses
 library(affy)
@@ -58,7 +60,8 @@ if(norm=="mas5" || norm=="gcrma") {
 
 # MAS5 normalization
 if(norm=="mas5") {
-   dat2<-exprs(mas5(dat))
+   #dat2<-exprs(mas5(dat))
+   dat2<-exprs(mas5(dat,sc=m5sc))
 }
 
 # PLIER normalization
