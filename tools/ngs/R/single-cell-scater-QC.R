@@ -2,6 +2,10 @@
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT QCplots.pdf
+# IMAGE comp-20.04-r-base
+# RUNTIME R-4.1.1-single-cell
+
+
 # RUNTIME R-3.6.1-single-cell
 
 # 2020-06-23 ML
@@ -32,11 +36,13 @@ available.variables <- colnames(colData(sce))
 pdf(file = "QCplots.pdf",, width = 13, height = 7)
 
 # Calculate all qc-metrics
-sce <- calculateQCMetrics(sce, feature_controls = list(mito = mt.genes))
+# old: sce <- calculateQCMetrics(sce, feature_controls = list(mito = mt.genes))
+sce <- addPerCellQC(sce, subsets = list(mito = mt.genes))
 
 # Plot highest expression:
 # Top 50 expressed genes. This can be valuable for detecting genes that are overabundant that may be driving a lot of the variation.
-plotHighestExprs(sce, exprs_values = "counts", controls=NULL)
+# old: plotHighestExprs(sce, exprs_values = "counts", controls=NULL)
+plotHighestExprs(sce, exprs_values = "counts")
 
 # Cumulative expression:
 # Plot the relative proportion of the library size that is accounted for by the most highly expressed features for each cell (default 500 genes). 
@@ -44,11 +50,16 @@ plotHighestExprs(sce, exprs_values = "counts", controls=NULL)
 plotScater(sce, nfeatures = 1000) # block1 = "ident"
 
 # Plot cell stats:
-p1 <- plotColData(sce, x = "total_counts", y = "total_features_by_counts") # colour_by = "ident"
-p2 <- plotColData(sce, x = "pct_counts_feature_control", y = "total_features_by_counts")
-p3 <- plotColData(sce, x = "pct_counts_feature_control",  y = "pct_counts_in_top_50_features")
-p4 <- plotRowData(sce, x = "n_cells_by_counts", y = "mean_counts")
-multiplot(p1, p2, p3, p4, cols = 2)
+# old, the names have changed. 
+# p1 <- plotColData(sce, x = "total_counts", y = "total_features_by_counts") # colour_by = "ident"
+# p2 <- plotColData(sce, x = "pct_counts_feature_control", y = "total_features_by_counts")
+# p3 <- plotColData(sce, x = "pct_counts_feature_control",  y = "pct_counts_in_top_50_features")
+# p4 <- plotRowData(sce, x = "n_cells_by_counts", y = "mean_counts")
+# multiplot(p1, p2, p3, p4, cols = 2)
+
+p1 <- plotColData(sce, x = "sum", y="detected") 
+p2 <- plotColData(sce, x = "sum", y="subsets_mito_percent")
+gridExtra::grid.arrange(p1,p2)
 
 # Not recognizing library(mvoutlier) for some reason atm, so commented out:
 # Identify outliers (=low quality cells): 
@@ -77,26 +88,26 @@ plotPCA(sce,ncomponents=4,colour_by="nFeature_RNA")
 # By default top 10 factors are plotted, but we also select some specific factors.
 # Top 10 factors:
 plotExplanatoryVariables(sce) 
-# If there are no cell-cycle scores available in the Seurat object:
-if (is.na(pmatch("Phase",available.variables))) {
-    plotExplanatoryVariables(sce, variables =  c("pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
-    # plotExplanatoryVariables(sce, variables =  c("ident","Chemistry","pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts", "S.Score","G2M.Score"))
-}else {
-   # If there are cell-cycle scores available, let's also plot them:
-    plotExplanatoryVariables(sce, variables =  c("G2M.Score", "S.Score","Phase", "pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
-}
+## If there are no cell-cycle scores available in the Seurat object:
+#if (is.na(pmatch("Phase",available.variables))) {
+#    # plotExplanatoryVariables(sce, variables =  c("pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
+#    plotExplanatoryVariables(sce, variables =  c("ident","Chemistry","pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts", "S.Score","G2M.Score")) 
+#}else {
+#   # If there are cell-cycle scores available, let's also plot them:
+#    plotExplanatoryVariables(sce, variables =  c("G2M.Score", "S.Score","Phase", "pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
+#}
 
 # Explanatory PCs:
 # Top 10 factors:
 plotExplanatoryPCs(sce)
-# If there are no cell-cycle scores available in the Seurat object:
-if (is.na(pmatch("Phase",available.variables))) {
-    # plotExplanatoryPCs(sce, variables = c("ident", "Chemistry","pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "total_counts","S.Score","G2M.Score"), npcs_to_plot = 20)
-    plotExplanatoryPCs(sce, variables =  c("pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
-}else {
-   # If there are cell-cycle scores available, let's also plot them:
-    plotExplanatoryPCs(sce, variables =  c("G2M.Score", "S.Score","Phase", "pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
-}
+## If there are no cell-cycle scores available in the Seurat object:
+#if (is.na(pmatch("Phase",available.variables))) {
+#    # plotExplanatoryPCs(sce, variables = c("ident", "Chemistry","pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "total_counts","S.Score","G2M.Score"), npcs_to_plot = 20)
+#    plotExplanatoryPCs(sce, variables =  c("pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
+#}else {
+#   # If there are cell-cycle scores available, let's also plot them:
+#    plotExplanatoryPCs(sce, variables =  c("G2M.Score", "S.Score","Phase", "pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts"))
+#}
 
 dev.off() # close the pdf
 
