@@ -3,6 +3,10 @@
 # OUTPUT OPTIONAL UMAPplot.pdf
 # PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mt, nCount_RNA, nFeature_RNA] DEFAULT percent.mt (Denotes which feature to use for coloring the cells.)
 # PARAMETER OPTIONAL point.size: "Point size in UMAP plot" TYPE DECIMAL DEFAULT 1 (Point size for UMAP plot. )
+# IMAGE comp-20.04-r-base
+# RUNTIME R-4.1.0-single-cell
+
+
 # RUNTIME R-3.6.1-single-cell
 
 

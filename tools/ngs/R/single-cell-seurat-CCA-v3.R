@@ -5,9 +5,12 @@
 # OUTPUT seurat_obj_combined.Robj
 # PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 20 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 20 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
-# RUNTIME R-3.6.1-single-cell
+# IMAGE comp-20.04-r-base
+# RUNTIME R-4.1.0-single-cell
 # SLOTS 3
 
+
+# RUNTIME R-3.6.1-single-cell
 
 # SLOTS = 3: when testing at VM this tool required 18.8G)
 # Not used atm: PARAMETER OPTIONAL CCstovisualise: "How many CCs to visualise as heatmaps" TYPE INTEGER DEFAULT 9 (How many canonical components you want to visualise as heatmaps.)
