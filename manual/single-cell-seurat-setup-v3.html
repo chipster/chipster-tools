@@ -12,10 +12,12 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool creates a Seurat object from one of the following input files (see more info below):
+		This tool creates a Seurat object from one of the following input files (<b>see more info below</b>):
 	<ol>
 		<li>tar package of a folder which contains the 10X Genomics output files</li>
-		<li>DGE (digital expression matrix) table (.tsv, tab separated table)</li>
+		<li>A matrix/table (DGE = digital expression matrix) containing the counts per each gene in each cell (.tsv, tab
+			separated
+			table)</li>
 	</ol>
 	After setting up the R-object (.Robj), some quality control plots are drawn.
 	</p>
@@ -42,16 +44,24 @@
 			<a
 				href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices">here</a>.
 			Make sure that you use the filtered data which contains only the cell barcodes present in your data,
-			as opposed to the unfiltered data containing millions of barcodes.
+			as opposed to the unfiltered data containing millions of barcodes (this will very likely jam the tools).
 			<br>You need to tar the folder into a package. There are graphical programs for this, such as 7-zip, or
 			you can use
 			command prompt (Windows) / Terminal (Mac) with command: tar -czvf name-for-your-package.tar.gz
 			/path/to/folder-you-want-to-tar. You can also use the Chipster tool <i>Utilities - Make a tar
 				package</i>.
 		</li>
-		<li>DGE matrix which you can generate from e.g. DropSeq data using the tool <i>Single cell RNA-seq - Create
-				digital gene expression matrix</i> in Chipster. The input file needs to be .tsv (= tab separated table)
-			format!
+		<li>A table / DGE matrix which you have for example received from colleague, downloaded from some database like
+			GEO,
+			or generated with the DropSeq data using the tool <i>Single cell RNA-seq - Create
+				digital gene expression matrix</i> in Chipster.<b> Note, that the input file needs to be .tsv (= tab
+				separated table)
+				format!</b> You can modify the file from .csv (=comma separated format) into .tsv for example in Excel
+			(open file, choose "Save as" an "Text (Tab delimited) (*.txt)" and rename the file ending as .tsv.)
+			Please note, that more often than not, this first step of getting the "raw" data into a format that you can
+			analyse
+			requires some tailoring (such as switching the comma separators etc) -you can often do this in Excel or
+			similar tool.
 		</li>
 	</ol>
 
