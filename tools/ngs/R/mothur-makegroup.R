@@ -47,7 +47,7 @@ for (i in 1:nrow(input.names)) {
       group_names <- paste(group_names, basename, sep="-")
     }
   }
-  # Input file is a sequense file
+  # Input file is a sequence file
   else{
     basename <- paste(strip_name(paste(input.names[i,1])))
     fastaname <- paste(basename, ".fasta", sep = "")
