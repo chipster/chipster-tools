@@ -15,3 +15,7 @@ BiocManager::install("MAST")
 BiocManager::install("GEOquery")
 BiocManager::install("scater")
 BiocManager::install("mvoutlier")
+BiocManager::install('multtest')
+
+# requires multtest
+install.packages('metap')
