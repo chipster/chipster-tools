@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in ln scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. Note that the base of log is e, so if you are interested in two-fold expression changes in linear scale, you need to enter 0.693 here.)
 # PARAMETER OPTIONAL pval.cutoff.conserved: "Adjusted p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the conserved cluster marker genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
-# IMAGE comp-20.04-r-base
+# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
 
