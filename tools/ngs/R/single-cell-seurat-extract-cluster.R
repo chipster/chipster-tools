@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-extract-cluster.R: "Seurat v3 BETA -Extract cells in a cluster" (Extract cells in a particular cluster into a new R-object for closer inspection. As input, use R-object after clustering the data. Read the tool manual to see how you can continue the analysis.)
+# TOOL single-cell-seurat-extract-cluster.R: "Seurat v4 BETA -Extract cells in a cluster" (Extract cells in a particular cluster into a new R-object for closer inspection. As input, use R-object after clustering the data. Read the tool manual to see how you can continue the analysis.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT seurat_obj_subset.Robj
@@ -7,10 +7,9 @@
 # IMAGE comp-20.04-r-base
 # RUNTIME R-4.1.0-single-cell
 
-# RUNTIME R-3.6.1-single-cell
-
 
 # 03.10.2019 ML
+# 2021-10-04 ML Update to Seurat v4
 
 library(Seurat)
 library(dplyr)

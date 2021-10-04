@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-subset.R: "Seurat v3 BETA -Subset Seurat objects based on gene expression" (Subset cells in a Seurat object based on the expression level of a gene or feature. Gene name and expression threshold are given as parameters.)
+# TOOL single-cell-seurat-subset.R: "Seurat v4 -Subset Seurat objects based on gene expression" (Subset cells in a Seurat object based on the expression level of a gene or feature. Gene name and expression threshold are given as parameters.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL subset_plot.pdf
@@ -8,10 +8,8 @@
 # IMAGE comp-20.04-r-base
 # RUNTIME R-4.1.0-single-cell
 
-
-# RUNTIME R-3.6.1-single-cell
-
 # 25.03.2020 ML
+# 2021-10-04 ML Update to Seurat v4
 
 library(Seurat)
 library(gplots)

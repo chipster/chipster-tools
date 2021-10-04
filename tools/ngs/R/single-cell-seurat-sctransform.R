@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-sctransform.R: "Seurat v3 -SCTransform: Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)  
+# TOOL single-cell-seurat-sctransform.R: "Seurat v4 -SCTransform: Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)  
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_sctransform.Robj
@@ -12,12 +12,11 @@
 # RUNTIME R-4.1.0-single-cell
 
 
-# RUNTIME R-3.6.1-single-cell
-
 
 # 2020-06-17 ML
 # 2020-10-11 EK Unified parameter descriptions with the corresponding normalization tool 
 # 2020-12-18 ML Always compute the cell-cycle scoring and plot the PCA + Remove the plot titles, as they started giving errors.
+# 2021-10-04 ML Update to Seurat v4
 
 # Source: https://github.com/satijalab/seurat/issues/1679
 
