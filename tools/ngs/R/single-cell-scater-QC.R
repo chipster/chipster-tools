@@ -2,7 +2,7 @@
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT QCplots.pdf
-# IMAGE comp-20.04-r-base
+# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
 

@@ -4,7 +4,7 @@
 # OUTPUT seurat_obj_subset.Robj
 # OUTPUT OPTIONAL QCplots.pdf 
 # PARAMETER cluster.identifier: "Name of the cluster to extract" TYPE STRING DEFAULT "3" (Name of the cluster you wish to extract.)
-# IMAGE comp-20.04-r-base
+# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
 
