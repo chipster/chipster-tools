@@ -10,6 +10,7 @@
 # PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
+# SLOTS 2
 
 
 # 2017-06-06 ML
