@@ -196,8 +196,7 @@
 	</category>
 	
 	<category name="Single cell RNA-seq" color="#37dddd">	   	
-		<tool>single-cell-seurat-setup-v3.R</tool>	   
-		<!-- commented out, waiting for new tools: --> 
+		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool> 	
 		<tool>single-cell-seurat-filter-regress.R</tool>	
 		<tool>single-cell-seurat-sctransform.R</tool>	
