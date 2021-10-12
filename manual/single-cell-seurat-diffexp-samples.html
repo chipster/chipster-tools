@@ -13,19 +13,19 @@
 
 	<p>
 		For a given cluster this tool gives you
-		<ul>
-			<li> the cell type markers that are conserved across conditions (conserved_markers.tsv)</li>
-			<li> differentially expressed genes between the conditions (de-list.tsv) </li>
-		</ul>
-		Conditions are determined in the Setup tool with the Sample or Group name parameter.
+	<ul>
+		<li> the cell type markers that are conserved across conditions (conserved_markers.tsv)</li>
+		<li> differentially expressed genes between the conditions (de-list.tsv) </li>
+	</ul>
+	Conditions are determined in the Setup tool with the Sample or Group name parameter.
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
 		<li>Name of the cluster [3]</li>
 		<li>Return only positive marker genes [TRUE]</li>
-		<li>Fold change threshold for conserved markers in ln scale [0.25]</li>
-		<li>Fold change threshold for differentially expressed genes in ln scale [0.25]</li>
+		<li>Fold change threshold for conserved markers in log scale [0.25]</li>
+		<li>Fold change threshold for differentially expressed genes in log scale [0.25]</li>
 		<li>Adjusted p-value cutoff for conserved markers [0.05]</li>
 		<li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
 	</ul>
@@ -43,14 +43,18 @@
 	</p>
 
 	<p>
-		You can filter both the conserved marker genes and the differentially expressed genes using the parameters. By default, only genes with
-		adjusted p-value < 0.05 are listed in the result table and only positive markers are kept. Note that Seurat adjusts p-values using the rather conserved Bonferroni method for multiple testing correction.
-		</p> 
-		<p>You can choose to include in the analysis only genes whose average fold change is higher than a selected value. This prefiltering speeds up the analysis
-		and narrows down the result list. Note that Seurat calculates fold change in ln scale (log base e), so if you are interested in two-fold expression changes in linear scale, 
-		you need to enter 0.693 in the parameter.
-		</p> 
-		<p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the two conditions in the selected cluster. The columns include 
+		You can filter both the conserved marker genes and the differentially expressed genes using the parameters. By
+		default, only genes with
+		adjusted p-value < 0.05 are listed in the result table and only positive markers are kept. Note that Seurat
+			adjusts p-values using the rather conserved Bonferroni method for multiple testing correction. </p>
+			<p>You can choose to include in the analysis only genes whose average fold change is higher than a selected
+				value. This prefiltering speeds up the analysis
+				and narrows down the result list. Note that Seurat calculates fold change in ln scale (log base e), so
+				if you are interested in two-fold expression changes in linear scale,
+				you need to enter 0.693 in the parameter.
+			</p>
+			<p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the two
+				conditions in the selected cluster. The columns include
 			<ul>
 				<li><b>p_val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
 					likelihood that the gene is in the list just be chance) </li>
@@ -59,21 +63,23 @@
 					differentially expressed genes just by chance. There are different methods to correct for this,
 					Seurat uses the Bonferroni method. When filtering the table and reporting your results,
 					use this value.</li>
-				<li><b>avg_logFC</b> = average ln fold change (how much higher or lower the expression of this gene is
+				<li><b>avg_logFC</b> = average log2 fold change (how much higher or lower the expression of this gene is
 					in the chosen cluster between the conditions </li>
-				<li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene</li>
-				<li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene</li>
+				<li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene
+				</li>
+				<li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene
+				</li>
 			</ul>
 	</p>
 
 	<p>
 		<b>conserved_markers.tsv</b> contains a ranked list of conserved marker genes for the chosen cluster
-		(= genes that show specific expression in this particular cell type/cluster, regardless of the treatment). 
+		(= genes that show specific expression in this particular cell type/cluster, regardless of the treatment).
 		In addition to the columns listed above, this table contains also the following columns:
-		<ul>
-			<li> max_pval = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
-			<li> min_pval = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
-		</ul>
+	<ul>
+		<li> max_pval = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+		<li> min_pval = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+	</ul>
 	</p>
 
 	<p>
