@@ -55,21 +55,15 @@
 	</p>
 
 	<p>
-		In order to visualize the clusters, non-linear dimensional reduction is performed using tSNE on the same PCs as
-		used for the graph-based clustering, and the tSNE plot is then colored by the clustering results.
+		In order to visualize the clusters, non-linear dimensional reduction is performed using tSNE and UMAP on the same PCs as
+		used for the graph-based clustering, and the plots in <b>clusterPlots.pdf</b> are then colored by the clustering results.
 		Cells belonging to the same cluster should co-localize on the tSNE plot, because tSNE aims to place cells, which
 		have a similar
 		local neighborhood in high-dimensional space, together in low-dimensional space. The perplexity parameter is a
 		guess
 		about the number of close neighbors each cell has, so it allows you to balance attention between local and
 		global aspects of the data (<a href="https://distill.pub/2016/misread-tsne/">read more</a>).
-		If you have low number of cells, try lowering the perplexity value.
-		The tSNE result is visualized in the <b>tSNEplot.pdf</b>.
-	</p>
-
-	<p>
-		For visualisation, the tool also computed UMAP dimension reduction. UMAP is another non-linear, graph-based
-		dimension reduction method, similar to tSNE. Unlike tSNE, UMAP also considers the global aspects of the data.
+		If you have low number of cells, try lowering the perplexity value. Unlike tSNE, UMAP also considers the global aspects of the data.
 		Later on, you can choose whether you want to plot tSNE or UMAP plots.
 	</p>
 	<p>
@@ -81,7 +75,7 @@
 		You can also filter out genes whose log2 fold change between the two groups is less than a given value (logfc.threshold=0.25).
 		Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large
 		number of genes that are unlikely to be highly discriminatory.
-		The marker genes for each cluster are written in the <b>markers.tsv</b> file.
+
 		<br>
 		<br>Seurat currently implements the following tests:
 	<ul>
@@ -161,7 +155,7 @@
 			Chipster. </li>
 		<li>clusterPlot.pdf: Cluster visualization in tSNE and UMAP plots, heatmap showing the expression of top ten marker genes (in
 			terms of fold change) for each cluster. </li>
-		<li>markers.tsv: Top marker genes</li>
+		<li>markers.tsv: Marker genes</li>
 		<li>aver_expr_in_clusters.tsv: A table for "average expression" for each gene in each cluster</li>
 	</ul>
 
