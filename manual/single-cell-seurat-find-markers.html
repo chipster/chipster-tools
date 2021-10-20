@@ -19,9 +19,11 @@
 	<ul>
 		<li>Number of the cluster of interest [1]</li>
 		<li>Cluster to compare to [all others]</li>
-		<li>Min.pct [0.25]</li>
-		<li>Differential expression threshold for a cluster marker gene [0.25]</li>
 		<li>Which test to use for finding marker genes [wilcox]</li>
+		<li>Limit testing to genes which are expressed in at least this fraction of cells [0.10]</li>
+		<li>Limit testing to genes which show at least this log 2 fold difference [0.25]</li>
+		<li>Report only positive marker genes [TRUE]</li>
+
 	</ul>
 
 
@@ -37,18 +39,14 @@
 		When comparing to group of clusters, separate the clusters with a comma (,).
 	</p>
 	<p>
-		You can filter out genes prior to statistical testing by requiring that a gene has to be expressed in at
-		least a certain fraction of cells in either of the two groups
-		(min.pct=0.25).
-		You can also require that the change in expression has to be at least certain percentage between the groups
-		(thresh.test=0.25).
+		You can filter out genes prior to statistical testing by requiring that a gene has to be expressed in at least a certain fraction of cells in either of the two groups
+		(min.pct=0.10).
+		You can also filter out genes whose log2 fold change between the two groups is less than a given value (logfc.threshold=0.25).
 		Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large
-		number of genes that are unlikely to be highly discriminatory.
+		number of genes that are unlikely to be highly discriminatory. 
 	</p>
 	<p>
-		The marker genes for each cluster are written in the <b>markers.tsv</b> file.
-		<br>
-		<br>Seurat currently implements the following tests:
+	Seurat currently implements the following tests:
 	<ul>
 		<li>"wilcox": Wilcoxon rank sum test (default)</li>
 		<li>"bimod": Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)
@@ -62,20 +60,18 @@
 			UMI-based datasets</li>
 		<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology,
 			2015)</li>
-		<!--  <li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>-->
+		<li>"DESeq2": DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014). Please note that when using the DESeq2 method you should not filter genes prior to testing.</li>
 	</ul>
-	<b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying
+	<b>The Poisson, negbiom and DESeq2 options should ONLY be used on UMI datasets</b>, as they assume an underlying
 	poisson and negative-binomial distribution, respectively.
-	Please note that the DESeq2 method has not been included, because it was not designed for situations where there
-	are thousands of samples (cells) and it is therefore very slow.
 	</p>
 
 	<p>
-		The <b>markers.tsv</b> result file contains marker genes and associated statistics <b>for all the clusters</b>:
+		The <b>markers.tsv</b> result file contains marker genes and associated statistics. Note that by default only genes with positive log2 fold change are listed in the result file:
 	<ul>
 		<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
 			likelihood that the gene is in the list just be chance) </li>
-		<li><b>avg_logFC</b> = average log2 fold change (how much higher (lower) the expression of this gene is in
+		<li><b>avg_log2FC</b> = average log2 fold change (how much higher (lower) the expression of this gene is in
 			the particular
 			cluster, compared to all the other cells </li>
 		<li><b>pct.1</b> = what percentage of the cells in the particular cluster show some expression for this gene
