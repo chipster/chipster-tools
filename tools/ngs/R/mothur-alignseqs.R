@@ -9,7 +9,7 @@
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
-# SLOTS 5
+# SLOTS 2
 
 
 # EK 05.06.2013
