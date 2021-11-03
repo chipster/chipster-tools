@@ -43,7 +43,8 @@ seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA
 
 # SCTransform:
 # Note that this single command replaces NormalizeData, ScaleData, and FindVariableFeatures.
-seurat_obj <- SCTransform(seurat_obj, assay = 'RNA', new.assay.name = 'SCT', vars.to.regress = c('percent.mt', 'nFeature_RNA', 'nCount_RNA'), variable.features.n = num.features, verbose = FALSE)
+# seurat_obj <- SCTransform(seurat_obj, assay = 'RNA', new.assay.name = 'SCT', vars.to.regress = c('percent.mt', 'nFeature_RNA', 'nCount_RNA'), variable.features.n = num.features, verbose = FALSE)
+seurat_obj <- SCTransform(seurat_obj, assay = 'RNA', new.assay.name = 'SCT', vars.to.regress = c('percent.mt'), variable.features.n = num.features, verbose = FALSE)
 
 
 # Dispersion plot:
