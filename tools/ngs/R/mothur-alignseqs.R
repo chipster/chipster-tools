@@ -5,7 +5,6 @@
 # OUTPUT aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT custom.reference.summary.tsv
-# OUTPUT log.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
@@ -21,6 +20,7 @@
 # EK 19.4.2021 updated to Silva v138.1
 
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
+# OUTPUT log.txt
 
 
 source(file.path(chipster.common.path,"tool-utils.R"))
