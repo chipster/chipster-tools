@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: install-r
-        image: docker-registry.rahti.csc.fi/chipster-images-beta/comp-20.04-r-base
+        image: docker-registry.rahti.csc.fi/chipster-images-beta/comp-20.04-r-deps
         volumeMounts:
         - name: tools-bin
           mountPath: /mnt/tools
