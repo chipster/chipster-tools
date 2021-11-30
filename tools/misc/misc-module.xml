@@ -127,6 +127,7 @@
 		<tool>data-throughput.R</tool>
 		<tool>input-sleep-output.R</tool>
 		<tool>sort_gtf.R</tool>
+		<tool>umi-tools.R</tool>
 
 	</category>
 
