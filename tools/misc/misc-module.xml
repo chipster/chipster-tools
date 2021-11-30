@@ -126,6 +126,7 @@
 		<tool>simple-input-output.R</tool>
 		<tool>data-throughput.R</tool>
 		<tool>input-sleep-output.R</tool>
+		<tool>sort_gtf.R</tool>
 
 	</category>
 
