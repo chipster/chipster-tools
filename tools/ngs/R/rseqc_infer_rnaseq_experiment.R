@@ -1,4 +1,4 @@
-# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference and inner distance estimation using RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files. For paired-end reads the inner distance distribution is also calculated.)
+# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference with RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files.)
 # INPUT reads1.fq: "Read 1 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL user_genome: "Genome to align against" TYPE GENERIC
@@ -6,6 +6,7 @@
 # OUTPUT experiment_data.txt
 # OUTPUT OPTIONAL inner_distance.pdf
 # PARAMETER organism: "Organism" TYPE [other: "Own reference files", "FILES genomes/bed .bed"] DEFAULT other (Choose one of the reference organisms or provide your own reference genome and BED file. It is also possible to use own BED file with one of the provided reference genomes.)
+# PARAMETER innerdistance: "Calculate inner distance" TYPE [yes, no] DEFAULT no (Calculate inner distance for paired reads.)
 
 # Functions 
 source(file.path(chipster.common.path,"tool-utils.R"))
@@ -151,7 +152,8 @@ if (pe) {
 write(message,file = "experiment_data.txt",append = TRUE)
 
 # Inner distance. Only for paired end reads
-if (pe) {
+# if (pe) {
+  if (innerdistance == "yes") {
   # tools-bin RSeQC
   ie.binary <- c(file.path(chipster.tools.path,"rseqc","inner_distance.py"))
   id.command <- paste(ie.binary,"-i alignment.sam -r",bed," -o id")
