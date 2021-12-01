@@ -6,8 +6,11 @@
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
-runExternal("echo $0")
+# active Python virtual environment "venv"
+venv_root <- "/opt/chipster/tools/umi-tools/venv"
+venv_path <- paste(Sys.getenv("PATH"), paste(venv_root, "bin", sep="/"), sep = ":")
+Sys.setenv(PATH = venv_path, VIRTUAL_ENV = venv_root)
 
-runExternal("bash -c 'source /opt/chipster/tools/umi-tools/venv/bin/activate; umi_tools --help'")
+runExternal("umi_tools --help")
 
 runExternal(paste("mv", "input.tsv", "output.tsv"))
