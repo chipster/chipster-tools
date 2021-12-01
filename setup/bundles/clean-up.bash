@@ -1,6 +1,6 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 source ~/jenkins-env.bash
 
@@ -13,13 +13,17 @@ fi
 JOB_NAME="$1"
 BUILD_NUMBER="$2"
 
-adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' )"
+adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' | tr '.' '-')"
 name="tool-install-$adjusted_job_name-$BUILD_NUMBER"
 
 kubectl delete deployment $name
 
-echo "umount tools-bin"
-sudo umount /mnt/data/$name/tools-bin
+if grep -qs "/mnt/data/$name/tools-bin " /proc/mouns; then
+  echo "umount tools-bin"
+  sudo umount /mnt/data/$name/tools-bin
+else
+  echo "/mnt/data/$name/tools-bin is not a mount"
+fi
 
 echo "delete /mnt/data/$name"
 sudo rm -rf /mnt/data/$name

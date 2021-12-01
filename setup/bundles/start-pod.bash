@@ -1,6 +1,6 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 source ~/jenkins-env.bash
 
@@ -15,7 +15,7 @@ BUILD_NUMBER="$2"
 image="$3"
 BUNDLE_COLLECTION_VERSION="$4"
 
-adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' )"
+adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' | tr '.' '-')"
 name="tool-install-$adjusted_job_name-$BUILD_NUMBER"
 
 # umount old tools-bin if exists
@@ -28,19 +28,26 @@ fi
 sudo mkdir -p /mnt/data/$name/tools-bin-upper
 sudo chown ubuntu:ubuntu /mnt/data/$name/tools-bin-upper
 
-echo "mount tools-bin: $BUNDLE_COLLECTION_VERSION"
+# host mount tools-bin
 sudo mkdir -p /mnt/data/$name/tools-bin
+sudo chown 1000:1000 /mnt/data/$name/tools-bin
 
-# using unionfs-fuse, because overlayfs refused to make modifications to subdirectories when used on top of NFS 
-unionfs_cmd="unionfs-fuse -o cow -o allow_other /mnt/data/$name/tools-bin-upper=RW"
+if [ -z "$BUNDLE_COLLECTION_VERSION" ]; then
+  echo "empty tools-bin requested"
+else
+  echo "mount tools-bin: $BUNDLE_COLLECTION_VERSION"
 
-for f in /mnt/artefacts/collect_bundles/$BUNDLE_COLLECTION_VERSION/*; do
-  unionfs_cmd="$unionfs_cmd:$f=RO"
-done
+  # using unionfs-fuse, because overlayfs refused to make modifications to subdirectories when used on top of NFS 
+  unionfs_cmd="unionfs-fuse -o cow -o allow_other /mnt/data/$name/tools-bin-upper=RW"
 
-unionfs_cmd="$unionfs_cmd /mnt/data/$name/tools-bin"
-#echo $unionfs_cmd
-sudo bash -c "$unionfs_cmd"
+  for f in /mnt/artefacts/collect_bundles/$BUNDLE_COLLECTION_VERSION/*; do
+    unionfs_cmd="$unionfs_cmd:$f=RO"
+  done
+
+  unionfs_cmd="$unionfs_cmd /mnt/data/$name/tools-bin"
+  #echo $unionfs_cmd
+  sudo bash -c "$unionfs_cmd"
+fi
 
 # delete old deployment if exists
 if kubectl get deployment $name > /dev/null 2>&1; then
