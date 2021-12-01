@@ -1,5 +1,5 @@
 # TOOL umi-tools.R: "Umi Tools example" (Umi Tools example)
-# INPUT input.tsv: "GTF file" TYPE GENERIC
+# INPUT input.tsv: "TSV file" TYPE GENERIC
 # OUTPUT output.tsv
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
