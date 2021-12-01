@@ -1,6 +1,6 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 source ~/jenkins-env.bash
 

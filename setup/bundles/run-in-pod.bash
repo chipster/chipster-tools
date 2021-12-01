@@ -1,6 +1,6 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 source ~/jenkins-env.bash
 
@@ -16,7 +16,7 @@ user="$3"
 command="$4"
 kubectl_exec_opts="-it"
 
-adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' )"
+adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' | tr '.' '-')"
 name="tool-install-$adjusted_job_name-$BUILD_NUMBER"
 
 pod_name=$(kubectl get pod | grep $name | grep Running | cut -d " " -f 1)
@@ -35,5 +35,12 @@ if [ "$command" == "-" ]; then
   kubectl_exec_opts=""
 fi
 
-echo "** running in $image container as $user"
-kubectl exec $kubectl_exec_opts $pod_name -- su - -c "set -e; $command"
+# create temp dir for tool installations
+TEMP_DIR="/opt/chipster/tools/tmp"
+kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "echo create $TEMP_DIR; mkdir -p $TEMP_DIR; chown $user:$user $TEMP_DIR"
+
+echo "** run as $user"
+# run strict mode to catch errors early
+kubectl exec $kubectl_exec_opts $pod_name -- su - $user -c "set -euo pipefail; IFS=$'\n\t'; cd $TEMP_DIR; $command"
+
+kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "echo delete $TEMP_DIR; rm -rf $TEMP_DIR"
