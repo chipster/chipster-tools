@@ -115,6 +115,7 @@
 		<tool>test-phenodata2-output.py</tool>
 		<tool>test-parameters.py</tool>
 		<tool>test-parameters.R</tool>
+		<tool>test-output-missing.R</tool>
 		<tool>sleep.py</tool>
 		<tool>sleep.R</tool>
 		<tool>test.R</tool>
