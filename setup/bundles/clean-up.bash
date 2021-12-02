@@ -3,6 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 source ~/jenkins-env.bash
+source $(dirname "$0")/bundle-utils.bash
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -ne 2 ]; then
   echo "Clean-up tool installation pod"
@@ -13,12 +14,11 @@ fi
 JOB_NAME="$1"
 BUILD_NUMBER="$2"
 
-adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' | tr '.' '-')"
-name="tool-install-$adjusted_job_name-$BUILD_NUMBER"
+name=$(get_name $JOB_NAME $BUILD_NUMBER)
 
 kubectl delete deployment $name
 
-if grep -qs "/mnt/data/$name/tools-bin " /proc/mouns; then
+if grep -qs "/mnt/data/$name/tools-bin " /proc/mounts; then
   echo "umount tools-bin"
   sudo umount /mnt/data/$name/tools-bin
 else

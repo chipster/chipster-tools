@@ -3,6 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 source ~/jenkins-env.bash
+source $(dirname "$0")/bundle-utils.bash
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -ne 3 ]; then
   echo "Move directory to artefacts"

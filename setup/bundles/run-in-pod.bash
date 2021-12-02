@@ -3,6 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 source ~/jenkins-env.bash
+source $(dirname "$0")/bundle-utils.bash
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -ne 4 ]; then
   echo "Run command in the tool installation pod"
@@ -16,8 +17,7 @@ user="$3"
 command="$4"
 kubectl_exec_opts="-it"
 
-adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' | tr '.' '-')"
-name="tool-install-$adjusted_job_name-$BUILD_NUMBER"
+name=$(get_name $JOB_NAME $BUILD_NUMBER)
 
 pod_name=$(kubectl get pod | grep $name | grep Running | cut -d " " -f 1)
 

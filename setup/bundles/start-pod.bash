@@ -3,6 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 source ~/jenkins-env.bash
+source $(dirname "$0")/bundle-utils.bash
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -ne 4 ]; then
   echo "Start pod for tool installations"
@@ -15,8 +16,7 @@ BUILD_NUMBER="$2"
 image="$3"
 BUNDLE_COLLECTION_VERSION="$4"
 
-adjusted_job_name="$(echo "$JOB_NAME" | tr '_' '-' | tr '.' '-')"
-name="tool-install-$adjusted_job_name-$BUILD_NUMBER"
+name=$(get_name $JOB_NAME $BUILD_NUMBER)
 
 # umount old tools-bin if exists
 if grep -qs "/mnt/data/$name/tools-bin " /proc/mouns; then
