@@ -1,6 +1,6 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 source $OPENRC_PATH
 
@@ -9,6 +9,11 @@ image="comp-20.04-r-deps"
 
 # this needs python from tools-bin
 BUNDLE_COLLECTION_VERSION="58"
+
+function finish {
+  ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/clean-up.bash $JOB_NAME $BUILD_NUMBER"
+}
+trap finish EXIT
 
 ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/start-pod.bash $JOB_NAME $BUILD_NUMBER $image $BUNDLE_COLLECTION_VERSION"
 
@@ -33,5 +38,3 @@ ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBE
 EOF
 
 ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/move-to-artefacts.bash /opt/chipster/tools/umi-tools $JOB_NAME $BUILD_NUMBER"
-
-ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/clean-up.bash $JOB_NAME $BUILD_NUMBER"

@@ -1,11 +1,16 @@
 #!/bin/bash
-
-set -e
+set -euo pipefail
+IFS=$'\n\t'
 
 source $OPENRC_PATH
 
 image="comp-20.04-r-deps"
 BUNDLE_COLLECTION_VERSION=""
+
+function finish {
+  ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/clean-up.bash $JOB_NAME $BUILD_NUMBER"
+}
+trap finish EXIT
 
 ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/start-pod.bash $JOB_NAME $BUILD_NUMBER $image \"$BUNDLE_COLLECTION_VERSION\""
   
@@ -25,5 +30,3 @@ EOF
 
 ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/move-to-artefacts.bash /opt/chipster/tools/BBMap_38.94 $JOB_NAME $BUILD_NUMBER"
 ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/move-to-artefacts.bash /opt/chipster/tools/bbmap $JOB_NAME $BUILD_NUMBER"
-
-ssh $K3S_BUILD_HOST "bash $K3S_BUNDLE_DIR/clean-up.bash $JOB_NAME $BUILD_NUMBER"
