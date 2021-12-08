@@ -4,6 +4,8 @@
 # OUTPUT chimeras.removed.fasta.gz
 # OUTPUT chimeras.removed.summary.tsv
 # OUTPUT chimeras.removed.count_table
+# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL log2.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "16S rRNA Silva gold bacteria", none: "none, de novo"] DEFAULT bacterial (You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. Note that if you choose none, you have to give a count table as input.)
 # PARAMETER OPTIONAL method: "Method" TYPE [vsearch, uchime] DEFAULT vsearch (Chimera detection method to use. Note that VSEARCH is much faster than the UCHIME method.)
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (De novo chimera detection uses the more abundant sequences from the same sample to check the query sequence. When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false.)
