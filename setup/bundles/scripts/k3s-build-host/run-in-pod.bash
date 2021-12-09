@@ -43,6 +43,10 @@ kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "echo create $TEMP_DIR
 echo "** run as $user"
 
 # run strict mode to catch errors early
-kubectl exec $kubectl_exec_opts $pod_name -- su - $user -c "set -euo pipefail; IFS=$'\n\t'; cd $TEMP_DIR; $command"
+kubectl exec $kubectl_exec_opts $pod_name -- su - $user -c "
+  set -euo pipefail
+  IFS=$'\n\t'
+  cd $TEMP_DIR
+  $command"
 
 kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "echo delete $TEMP_DIR; rm -rf $TEMP_DIR"

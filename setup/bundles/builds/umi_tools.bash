@@ -2,6 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+source $(dirname "$0")/build-env.bash
+
 # wrapper script is going to be written in R
 image="comp-20.04-r-deps"
 
@@ -26,8 +28,8 @@ EOF
   
 bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
-  /opt/chipster/tools/python-3.8.11/bin/python3 -m venv /opt/chipster/tools/umi-tools/venv
-  source /opt/chipster/tools/umi-tools/venv/bin/activate
+  $TOOLS_PATH/python-3.8.11/bin/python3 -m venv $TOOLS_PATH/umi-tools/venv
+  source $TOOLS_PATH/umi-tools/venv/bin/activate
   
   pip3 install wheel
   pip3 install umi_tools
@@ -35,4 +37,4 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   umi_tools --help
 EOF
 
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash /opt/chipster/tools/umi-tools $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/umi-tools $JOB_NAME $BUILD_NUMBER
