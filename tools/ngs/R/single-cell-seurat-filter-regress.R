@@ -91,7 +91,7 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
 	# Visualize in PCA:
 	# PCA plot 1: without/before filtering cell cycle effect
 	seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
-	plot1 <- DimPlot(seurat_obj) #, plot.title = "PCA on cell cycle genes")   reduction = pca
+	plot1 <- DimPlot(seurat_obj) + ggtitle('PCA on cell cycle genes (no cell cycle regression)')   # reduction = pca
 
 	# Cell cycle stage filtering:
 	if( filter.cell.cycle != "no" ) {	
@@ -105,16 +105,15 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
 			# PCA plot 2A: after filtering, all:	
 			seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
 			ggtitle("After cell cycle correction (method: remove all)")
-			plot2 <- DimPlot(seurat_obj)#, plot.title = "After cell cycle correction (method: remove all)")
+			plot2 <- DimPlot(seurat_obj) + ggtitle('After cell cycle correction (method: remove all)') 
 			CombinePlots(plots = list(plot1, plot2))
 		# Option 2: regressing out the difference between the G2M and S phase scores:	
 		}else if (filter.cell.cycle == "diff.phases"){
 			seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
 			seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), verbose = FALSE)			
 			# PCA plot 2B: after filtering, difference:	
-			seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE)
-			ggtitle("After cell cycle correction (method: difference between G2M and S phases)")
-			plot2 <- DimPlot(seurat_obj) #, plot.title = "After cell cycle correction (method: difference between G2M and S phases)")	
+			seurat_obj <- RunPCA(object = seurat_obj, features  = c(s.genes, g2m.genes), do.print = FALSE) 
+			plot2 <- DimPlot(seurat_obj) + ggtitle("After cell cycle correction (method: G2M / S difference)") 
 			CombinePlots(plots = list(plot1, plot2))
 		}
 	# just plot the 1 PCA plot, if no filtering:
