@@ -9,6 +9,7 @@
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
+# PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST] DEFAULT wilcox (Tests for comparing a cluster to all the other cells include Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, MAST \(GLM-framework that treats cellular detection rate as a covariate\), poisson, and negbinom. The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
 # PARAMETER OPTIONAL minpct: "Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # PARAMETER OPTIONAL threshuse: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this log2 fold change between the two groups of cells. Increasing the threshold speeds up testing, but can miss weaker signals.)
@@ -62,8 +63,8 @@ seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
 
 # Plot tSNE and UMAP
 pdf(file = "clusterPlot.pdf")
-DimPlot(seurat_obj, reduction = "umap", pt.size = point.size)
-DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size)
+DimPlot(seurat_obj, reduction = "umap", pt.size = point.size, label=add.labels)
+DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size, label=add.labels)
 #TSNEPlot(object = seurat_obj, do.return = T, pt.size = point.size, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
 
 # Number of cells in each cluster:

@@ -3,6 +3,7 @@
 # OUTPUT OPTIONAL UMAPplot.pdf
 # PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mt, nCount_RNA, nFeature_RNA] DEFAULT percent.mt (Denotes which feature to use for coloring the cells.)
 # PARAMETER OPTIONAL point.size: "Point size in UMAP plot" TYPE DECIMAL DEFAULT 1 (Point size for UMAP plot. )
+# PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
@@ -24,7 +25,7 @@ if (exists("data.combined") ){
 
 # Plot tSNE 
 pdf(file="UMAPplot.pdf") 
-FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size)
+FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label=add.labels)
 dev.off() # close the pdf
 
 # EOF

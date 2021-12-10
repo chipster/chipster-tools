@@ -8,6 +8,7 @@
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation of clusters with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 0.5 (Point size for the dimensionality reduction plot.)
+# PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
@@ -54,10 +55,10 @@ data.combined <- FindClusters(data.combined, resolution = res)
 # Visualization
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
 p1 <- DimPlot(data.combined, reduction = reduction.method, group.by = "stim", pt.size = point.size)
-p2 <- DimPlot(data.combined, reduction = reduction.method, label = TRUE, pt.size = point.size)
+p2 <- DimPlot(data.combined, reduction = reduction.method, pt.size = point.size, label=add.labels)
 plot_grid(p1, p2)
 # Show both conditions in separate plots:
-DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size)
+DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label=add.labels)
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
 
