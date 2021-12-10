@@ -24,7 +24,8 @@ name=$(get_name $JOB_NAME $BUILD_NUMBER)
 pod_name=$(kubectl get pod | grep $name | grep Running | cut -d " " -f 1)
 
 if kubectl exec $pod_name -- id -u $user >> /dev/null 2>&1; then
-  echo "user $user exists already"
+  #echo "user $user exists already"
+  :
 else
   echo "create user $user"
   kubectl exec $pod_name -- groupadd -g 1000 ubuntu
@@ -32,15 +33,15 @@ else
 fi
 
 if [ "$command" == "-" ]; then
-  echo "read command from stdin"
+  #echo "read command from stdin"
   command="$(</dev/stdin)"
 fi
 
-# create temp dir for tool installations
-TEMP_DIR="/opt/chipster/tools/tmp"
-kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "echo create $TEMP_DIR; mkdir -p $TEMP_DIR; chown $user:$user $TEMP_DIR"
+# create temp dir for tool installations (start with "." to omit it for example when copying artefacts in binaries.bash with wildcard "*")
+TEMP_DIR="/opt/chipster/tools/.tmp"
+kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "mkdir -p $TEMP_DIR; chown $user:$user $TEMP_DIR"
 
-echo "** run as $user"
+echo "** run as $user in $pod_name"
 
 # run strict mode to catch errors early
 kubectl exec $kubectl_exec_opts $pod_name -- su - $user -c "
@@ -49,4 +50,5 @@ kubectl exec $kubectl_exec_opts $pod_name -- su - $user -c "
   cd $TEMP_DIR
   $command"
 
-kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "echo delete $TEMP_DIR; rm -rf $TEMP_DIR"
+# delete TEMP_DIR after each run, otherwise we should think about its file owners more carefully
+kubectl exec $kubectl_exec_opts $pod_name -- su - root -c "rm -rf $TEMP_DIR"
