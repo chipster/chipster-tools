@@ -33,4 +33,4 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   
 EOF
 
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/python2 $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/'*' $JOB_NAME $BUILD_NUMBER

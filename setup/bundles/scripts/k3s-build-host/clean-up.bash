@@ -22,8 +22,9 @@ if grep -qs "/mnt/data/$name/tools-bin " /proc/mounts; then
   echo "umount tools-bin"
   sudo umount /mnt/data/$name/tools-bin
 else
-  echo "/mnt/data/$name/tools-bin is not a mount"
+  #echo "/mnt/data/$name/tools-bin is not a mount"
+  :
 fi
 
-echo "delete /mnt/data/$name"
+#echo "delete /mnt/data/$name"
 sudo rm -rf /mnt/data/$name

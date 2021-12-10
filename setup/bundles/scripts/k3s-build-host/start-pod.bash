@@ -33,7 +33,8 @@ sudo mkdir -p /mnt/data/$name/tools-bin
 sudo chown 1000:1000 /mnt/data/$name/tools-bin
 
 if [ -z "$BUNDLE_COLLECTION_VERSION" ]; then
-  echo "empty tools-bin requested"
+  #echo "empty tools-bin requested"
+  :
 else
   echo "mount tools-bin: $BUNDLE_COLLECTION_VERSION"
 
