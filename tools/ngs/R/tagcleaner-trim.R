@@ -2,7 +2,7 @@
 # INPUT reads: "FASTQ/FASTA file" TYPE GENERIC
 # INPUT OPTIONAL qual: "QUAL file" TYPE GENERIC
 # OUTPUT trim.log.txt
-# OUTPUT OPTIONAL trimmed.fastq.gz
+# OUTPUT OPTIONAL trimmed.fq.gz
 # OUTPUT OPTIONAL trimmed.fasta.gz
 # OUTPUT OPTIONAL trimmed.qual.gz
 # PARAMETER input.type: "Input type" TYPE [FASTQ, FASTA] DEFAULT FASTQ (Input type. If using a FASTA file you can provide an optional QUAL file to trim sequences and their quality scores.)
@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL mm5: "Maximum  mismatches at the 5'-end" TYPE INTEGER DEFAULT 0 (Maximum number of allowed mismatches at the 5'-end.)
 # PARAMETER OPTIONAL mm3: "Maximum  mismatches at the 3'-end" TYPE INTEGER DEFAULT 0 (Maximum number of allowed mismatches at the 3'-end.)
 # PARAMETER OPTIONAL trimwithin: "Trim within" TYPE INTEGER DEFAULT 0 (The sequence of the tag could occur not only at the sequence end, but also at any other position of the sequence. To assure that only tags are trimmed, the tag sequences can be defined to occur only at the ends allowing a certain number of variable bases. If specified, the value has to be at least the number of bases in the tag sequence. 0 value means option is ignored.)
-# PARAMETER OPTIONAL split: "Split fragment-to-fragment concatenations" TYPE [yes, no] DEFAULT yes (This option removes tag contaminations inside the sequences and splist fragment-to-fragment concatenations into separate sequences. This feature should be used with caution for inputs with only a 5' or 3' tag sequence (likely splits too many false positive that naturally occur for single tags compared to much longer concatenated 5' and 3' tags\).)
+# PARAMETER OPTIONAL split: "Split fragment-to-fragment concatenations" TYPE [yes, no] DEFAULT no (This option removes tag contaminations inside the sequences and splits fragment-to-fragment concatenations into separate sequences. This feature should be used with caution for inputs with only a 5' or 3' tag sequence (likely splits too many false positive that naturally occur for single tags compared to much longer concatenated 5' and 3' tags\).)
 # PARAMETER OPTIONAL split.mismatch: "Allowed mismatches" TYPE INTEGER DEFAULT 0 (Maximum number of allowed mismatches for the internal (concatenated\) tag sequence(s\).)
 
 # AMS 2013.02.18
@@ -86,7 +86,7 @@ outputnames <- matrix(NA, nrow=3, ncol=2)
 
 base1 <- strip_name(inputnames$reads)
 
-outputnames[1,] <- c("trimmed.fastq.gz", paste(base1, ".fastq.gz", sep =""))
+outputnames[1,] <- c("trimmed.fastq.gz", paste(base1, "trimmed.fq.gz", sep =""))
 outputnames[2,] <- c("trimmed.fasta.gz", paste(base1, ".fasta.gz", sep =""))
 outputnames[3,] <- c("trimmed.qual.gz", paste(base1, ".qual.gz", sep =""))
 

@@ -1,12 +1,17 @@
-# TOOL single-cell-seurat-featureplot.R: "Seurat v2 -Visualise features in tSNE plot" (Color single cells on a tSNE dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.)
+# TOOL single-cell-seurat-featureplot.R: "Seurat v4 -Visualise features in UMAP plot" (Color single cells on a UMAP dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL tSNEplot.pdf
-# PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mito, nUMI, nGene, orig.ident, PC1, PC2] DEFAULT percent.mito (Denotes which feature to use for coloring the cells.)
-# PARAMETER OPTIONAL point.size: "Point size in tSNE plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE plot. )
-# RUNTIME R-3.4.3
+# OUTPUT OPTIONAL UMAPplot.pdf
+# PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mt, nCount_RNA, nFeature_RNA] DEFAULT percent.mt (Denotes which feature to use for coloring the cells.)
+# PARAMETER OPTIONAL point.size: "Point size in UMAP plot" TYPE DECIMAL DEFAULT 1 (Point size for UMAP plot. )
+# PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
+# IMAGE comp-20.04-r-deps
+# RUNTIME R-4.1.0-single-cell
 
 
 # 09.04.2019 ML
+# 09.07.2019 ML Seurat v3
+# 09.09.2019 ML remove optins for orig.ident, PC1, PC2
+# 2021-10-04 ML Update to Seurat v4
 
 library(Seurat)
 library(gplots)
@@ -14,9 +19,13 @@ library(gplots)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
+if (exists("data.combined") ){
+	seurat_obj <- data.combined
+}
+
 # Plot tSNE 
-pdf(file="tSNEplot.pdf") 
-FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size)
+pdf(file="UMAPplot.pdf") 
+FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label=add.labels)
 dev.off() # close the pdf
 
 # EOF

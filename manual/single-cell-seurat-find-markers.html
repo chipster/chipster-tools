@@ -1,43 +1,104 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
-<head><title></title></head>
+
+<head>
+	<title></title>
+</head>
+
 <body>
 
-<h2>Seurat -Find group specific markers</h2>
+	<h2>Seurat -Find differentially expressed genes between clusters</h2>
 
-<h3>Description</h3>
+	<h3>Description</h3>
 
-<p>This tool palplaplaa
- </p>
- 
-
+	<p>Find the markers for a specific cluster compared to another cluster(s).
+	</p>
 
 
-<h3>Parameters</h3>
-<ul>
-		<li>Base range for cell barcode [1-12]</li>
-		<li>Base range for molecule barcode [13-20]</li>
-		<li>Base quality [10]</li>
-		<li>Adapter sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
-		<li>Mismatches in adapter [0]</li>
-		<li>Number of bases to check in adapter [5]</li>
-		<li>Mismatches in polyA [0]</li>
-		<li>Number of bases to check in polyA [6]</li>
-		<li>Minimum length of reads to keep [50]</li>	
+	<h3>Parameters</h3>
+	<ul>
+		<li>Number of the cluster of interest [1]</li>
+		<li>Cluster to compare to [all others]</li>
+		<li>Which test to use for finding marker genes [wilcox]</li>
+		<li>Limit testing to genes which are expressed in at least this fraction of cells [0.10]</li>
+		<li>Limit testing to genes which show at least this log 2 fold difference [0.25]</li>
+		<li>Report only positive marker genes [TRUE]</li>
+
 	</ul>
 
 
-<h3>Output</h3>
+	<h3>Details</h3>
 
-<ul>
+	<p>
+		Seurat function FindMarkers is used to identify positive and negative marker genes for the clusters of interest,
+		determined by the user.
+		By default, differentially expressed genes are tested between the cluster of interest and all the other cells by
+		default.
+		User can also define to compare the cluster of interest to another cluster or clusters by typing
+		the numbers of the clusters to compare to in the parameter field.
+		When comparing to group of clusters, separate the clusters with a comma (,).
+	</p>
+	<p>
+		You can filter out genes prior to statistical testing by requiring that a gene has to be expressed in at least a certain fraction of cells in either of the two groups
+		(min.pct=0.10).
+		You can also filter out genes whose log2 fold change between the two groups is less than a given value (logfc.threshold=0.25).
+		Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large
+		number of genes that are unlikely to be highly discriminatory. 
+	</p>
+	<p>
+	Seurat currently implements the following tests:
+	<ul>
+		<li>"wilcox": Wilcoxon rank sum test (default)</li>
+		<li>"bimod": Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)
+		</li>
+		<li>"roc": Standard AUC classifier</li>
+		<li>"t": Student's t-test</li>
+		<li>"tobit": Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
+		<li>"poisson": Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based
+			datasets</li>
+		<li>"negbinom": Likelihood ratio test assuming an underlying negative binomial distribution. Use only for
+			UMI-based datasets</li>
+		<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology,
+			2015)</li>
+		<li>"DESeq2": DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014). Please note that when using the DESeq2 method you should not filter genes prior to testing.</li>
+	</ul>
+	<b>The Poisson, negbiom and DESeq2 options should ONLY be used on UMI datasets</b>, as they assume an underlying
+	poisson and negative-binomial distribution, respectively.
+	</p>
 
-<li>[input_name].bam : Tagged, trimmed & filtered unaligned BAM </li>
-<li>[input_name].fq.gz: Trimmed and filtered FASTQ file </li>
-<li>tagging_and_trimming_summary.txt: Summary of the tagging and trimming steps</li>
-<li>tagging_and_trimming_histograms.pdf: Graphics presenting the failed bases in tagging steps, and adapters and polyAs trimmed </li>
-</ul>
+	<p>
+		The <b>markers.tsv</b> result file contains marker genes and associated statistics. Note that by default only genes with positive log2 fold change are listed in the result file:
+	<ul>
+		<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
+			likelihood that the gene is in the list just be chance) </li>
+		<li><b>avg_log2FC</b> = average log2 fold change (how much higher (lower) the expression of this gene is in
+			the particular
+			cluster, compared to all the other cells </li>
+		<li><b>pct.1</b> = what percentage of the cells in the particular cluster show some expression for this gene
+		</li>
+		<li><b>pct.2</b> = what percentage of the cells <b>not</b> in the particular cluster (=all the other cells)
+			show some expression for this gene</li>
+		<li><b>p-val_adj</b> = adjusted/corrected p-value. This value is multiple testing corrected:
+			when we test over thousands of genes, we would statistically start getting some significantly
+			differentially
+			expressed genes just by chance. There are different methods to correct for this,
+			here a <i>Bonferroni</i> correction is used. When filtering the table and reporting your results,
+			use this value.</li>
 
+	</ul>
+
+	<p>
+		For more details, please check:<br>
+		The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
+		<br><br>
+	</p>
+
+
+	<h3>Output</h3>
+
+	<ul>
+		<li>markers.tsv: Marker genes for the cluster of interest </li>
+	</ul>
 
 
 </body>
-

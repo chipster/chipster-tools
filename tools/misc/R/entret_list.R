@@ -28,8 +28,8 @@ num.queryseq <- as.integer(str.queryseq)
 
 #round(num.queryseq)
 
-if (num.queryseq > 100000){
-	stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 100000 but your file contains ", num.queryseq ))
+if (num.queryseq > 600000){
+	stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 600000 but your file contains ", num.queryseq ))
 }
 
 
