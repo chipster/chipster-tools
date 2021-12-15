@@ -196,40 +196,26 @@
 	</category>
 	
 	<category name="Single cell RNA-seq" color="#37dddd">	   	
-		<tool>single-cell-seurat-setup-v3.R</tool>	   
-		<!-- commented out, waiting for new tools: --> 
+		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool> 	
-		<tool>single-cell-seurat-filter-regress-v3.R</tool>	
+		<tool>single-cell-seurat-filter-regress.R</tool>	
 		<tool>single-cell-seurat-sctransform.R</tool>	
-		<tool>single-cell-seurat-pca-v3.R</tool>	   	
-		<tool>single-cell-seurat-clustering-v3.R</tool>	
-		<tool>single-cell-seurat-find-markers-v3.R</tool>
-		<tool>single-cell-seurat-gene-plots-v3.R</tool>
-		<tool>single-cell-seurat-featureplot-v3.R</tool>	
-		<tool>single-cell-seurat-CCA-v3.R</tool>	
-		<tool>single-cell-seurat-integrated-analysis-v3.R</tool>	
-		<tool>single-cell-seurat-diffexp-samples-v3.R</tool>	
-		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>	
+		<tool>single-cell-seurat-pca.R</tool>	   	
+		<tool>single-cell-seurat-clustering.R</tool>	
+		<tool>single-cell-seurat-find-markers.R</tool>
+		<tool>single-cell-seurat-gene-plots.R</tool>
+		<tool>single-cell-seurat-featureplot.R</tool>	
+		<tool>single-cell-seurat-CCA.R</tool>	
+		<tool>single-cell-seurat-integrated-analysis.R</tool>	
+		<tool>single-cell-seurat-diffexp-samples.R</tool>	
+		<tool>single-cell-seurat-split-dot-plot.R</tool>	
 		<tool>single-cell-seurat-extract-cluster.R</tool>
 		<tool>single-cell-seurat-subset.R</tool>
-		<!--<tool>single-cell-seurat-update-object-v3.R</tool>--> 
 		<!-- Dropseq tools: --> 
 		<tool>single-cell-preprocessing.R</tool>
 		<tool>picard-merge-bam-alignment.R</tool>	
 		<tool>single-cell-bam-tag-histogram.R</tool>	  	
 		<tool>single-cell-digital-expression.R</tool>
-		<!-- Seurat v2 tools, commented out, to be removed later  
-		<tool>single-cell-seurat-setup.R</tool>	   	
-		<tool>single-cell-seurat-filter-regress.R</tool>	   	
-		<tool>single-cell-seurat-pca.R</tool>	   	
-		<tool>single-cell-seurat-clustering.R</tool>	
-		<tool>single-cell-seurat-gene-plots.R</tool>	
-		<tool>single-cell-seurat-CCA.R</tool>	
-		<tool>single-cell-seurat-integrated-analysis.R</tool>	
-		<tool>single-cell-seurat-diffexp-samples.R</tool>	
-		<tool>single-cell-seurat-split-dot-plot.R</tool>
-		<tool>single-cell-seurat-featureplot.R</tool>-->	
-		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
 		<!--<tool>picard-fastqtosam.R</tool> --> 
 		<!--<tool>single-cell-TagBam.R</tool> --> 
 		<!--<tool>single-cell-FilterBam.R</tool> --> 

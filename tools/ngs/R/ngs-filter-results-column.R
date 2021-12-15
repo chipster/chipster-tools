@@ -2,7 +2,7 @@
 # INPUT results.tsv: "Table to be filtered" TYPE GENERIC 
 # OUTPUT filtered-NGS-results.tsv: filtered-NGS-results.tsv 
 # PARAMETER column: "Column to filter by" TYPE COLUMN_SEL (Data column to filter by)
-# PARAMETER has.rownames: "Does the first column have a title" TYPE [yes: no, no: yes] DEFAULT no (Specifies whether the first column has a title or not.)
+# PARAMETER has.rownames: "Does the first column lack a title" TYPE [yes: yes, no: no] DEFAULT no (Specifies whether the first column has a title or not.)
 # PARAMETER cutoff: "Cut-off value" TYPE DECIMAL FROM -10000000 TO 10000000 DEFAULT 0.05 (Cut-off for filtering)
 # PARAMETER smaller.or.larger: "Filtering criteria" TYPE [equal-to: equal-to, smaller-than: smaller-than, larger-than: larger-than, within: within, outside: outside] DEFAULT smaller-than (Smaller or larger than the cutoff is filtered.
 # Use the "within" or "outside" options to filter symmmetrically around two cut-offs, useful for example when searching for up- and down-regulated genes.)
@@ -12,6 +12,7 @@
 # 08.05.2013, EK clarified wording
 # 08.05.2014, MK read.table command fixed and change the script to support duplicate row names (e.g. BED files)
 # 01.06.2014, EK reverted the has.rownames parameter definition, moved BED support to a separate script
+# 07.12.2021, EK changed rownames parameter, replaced -which structure
 
 # Loads the data
 file <- c("results.tsv")
@@ -44,7 +45,8 @@ if(smaller.or.larger=="outside") {
 }
 if(smaller.or.larger=="within") {
 	cutoff_2 <- -cutoff
-	dat2<-dat[-which(f>=cutoff | f <=cutoff_2),]
+#	dat2<-dat[-which(f>=cutoff | f <=cutoff_2),]
+	dat2<-dat[!(f>=cutoff | f <=cutoff_2),]
 }
 
 # Writing the data to disk

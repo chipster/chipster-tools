@@ -35,7 +35,7 @@ base <- strip_name(inputnames$reads.fastq)
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("subset.fastq.gz", paste(base, "_subset.fq.gz", sep =""))
+outputnames[1,] <- c("subset.fastq.gz", paste(base, "subset.fq.gz", sep =""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
