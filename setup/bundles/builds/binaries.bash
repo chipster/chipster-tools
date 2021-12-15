@@ -25,8 +25,6 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   
   ls -lah $TOOLS_PATH/
 
-  exit $?
-
   # used to be:
   # checkout https://github.com/chipster/chipster-tools.git
   # cd build && sudo bash run_install_chipster.bash
