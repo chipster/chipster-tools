@@ -212,6 +212,7 @@
 		<tool>single-cell-seurat-extract-cluster.R</tool>
 		<tool>single-cell-seurat-subset.R</tool>
 		<tool>single-cell-seurat-rename-clusters.R</tool>
+		<tool>single-cell-seurat-modify-clusters.R</tool>
 		<!-- Dropseq tools: --> 
 		<tool>single-cell-preprocessing.R</tool>
 		<tool>picard-merge-bam-alignment.R</tool>	
