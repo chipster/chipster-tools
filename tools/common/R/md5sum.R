@@ -2,10 +2,12 @@
 # INPUT file: "File" TYPE GENERIC
 # INPUT OPTIONAL md5file: "MD5 file" TYPE GENERIC
 # OUTPUT OPTIONAL file.md5
+# IMAGE comp-20.04-r-deps
+# RUNTIME R-4.1.1
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
-# 
+#
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
 
 
@@ -24,15 +26,15 @@ if(file.exists("md5file")){
 		in1 <- input.names[1,2]
 		in2 <- input.names[2,2]
 		stop(paste ("CHIPSTER-NOTE: ERROR: The file", in1, "  does not match the MD5 sum in file",in2 ) )
-	}	
+	}
 }else{
 	# Gzip
 	system(paste("mv", input.names[1,1], input.names[1,2]))
     system(paste("md5sum", input.names[1,2], "> file.md5"))
 
-    # 
+    #
     filename <- paste(input.names[1,2], ".md5", sep = "")
-   
+
 
     # And finally change Chipster display name to match original file name
     outputnames <- matrix(NA, nrow=1, ncol=2)
