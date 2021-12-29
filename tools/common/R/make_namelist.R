@@ -1,8 +1,10 @@
 # TOOL make_namelist.R: "Make a list of file names" (Makes a list of file names of the selected files.)
 # INPUT table{...}.file: "Input files" TYPE GENERIC
-# OUTPUT files.txt 
+# OUTPUT files.txt
 # PARAMETER name: "File name for list" TYPE STRING DEFAULT "files.txt" (File name for the list.)
 # PARAMETER sort: "Sort file" TYPE [yes, no] DEFAULT yes (Sort the list alphabetically.)
+# IMAGE comp-20.04-r-deps
+# RUNTIME R-4.1.1
 
 # Read input names
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
