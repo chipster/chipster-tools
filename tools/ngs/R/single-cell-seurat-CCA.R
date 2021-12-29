@@ -3,6 +3,7 @@
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT seurat_obj_combined.Robj
+# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [normal:NormalizeData, sctransform:SCTransform] DEFAULT normal (Which normalisation method was used in preprocessing, NormalizeData \(default\) or SCTransform.)
 # PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 20 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 20 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
 # IMAGE comp-20.04-r-deps
@@ -28,17 +29,46 @@ seurat_obj1 <- seurat_obj
 load("seurat_obj2.Robj")
 seurat_obj2 <- seurat_obj
 
+# Select features that are repeatedly variable across datasets for integration
+features <- SelectIntegrationFeatures(object.list = list(seurat_obj1, seurat_obj2))
+
+# If SCTransform was used to normalise the data, do a prep step:
+if (normalisation.method == "sctransform"){
+    seurat_obj_list <- PrepSCTIntegration(object.list = list(seurat_obj1, seurat_obj2), anchor.features = features)
+    # seurat_obj1 <- PrepSCTIntegration(object.list = seurat_obj1, anchor.features = features)
+   #  seurat_obj2 <- PrepSCTIntegration(object.list = seurat_obj2, anchor.features = features)
+
+}
+
+
 # Perform integration: 
-# 1. identify anchors using the FindIntegrationAnchors function
-data.anchors <- FindIntegrationAnchors(object.list = list(seurat_obj1, seurat_obj2), dims = 1:CCstocompute) # dims = Which dimensions to use from the CCA to specify the neighbor search space
-# 2. use these anchors to integrate the two datasets together with IntegrateData.
-data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute) # dims = Number of PCs to use in the weighting procedure
 
-DefaultAssay(data.combined) <- "integrated"
+# When data is normalised with NormalizeData:
+if (normalisation.method == "normal"){
+    # 1. identify anchors using the FindIntegrationAnchors function
+    data.anchors <- FindIntegrationAnchors(object.list = list(seurat_obj1, seurat_obj2), dims = 1:CCstocompute, anchor.features = features) # dims = Which dimensions to use from the CCA to specify the neighbor search space
+    # 2. use these anchors to integrate the two datasets together with IntegrateData.
+    data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute) # dims = Number of PCs to use in the weighting procedure
 
-# Note: these steps are now done twice?
-data.combined <- ScaleData(data.combined, verbose = FALSE)  
-data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
+    DefaultAssay(data.combined) <- "integrated"
+
+    # Note: these steps are now done twice?
+    data.combined <- ScaleData(data.combined, verbose = FALSE)  
+    data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
+
+# When data is normalised with SCTransform:
+} else{
+    # 1. identify anchors using the FindIntegrationAnchors function
+    data.anchors <- FindIntegrationAnchors(object.list = seurat_obj_list, dims = 1:CCstocompute, anchor.features = features, normalization.method = "SCT") # dims = Which dimensions to use from the CCA to specify the neighbor search space
+    # 2. use these anchors to integrate the two datasets together with IntegrateData.
+    data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute, normalization.method = "SCT") # dims = Number of PCs to use in the weighting procedure
+
+    DefaultAssay(data.combined) <- "integrated"
+
+    # Note: Skip ScaleData when using SCTransform
+    data.combined <- ScaleData(data.combined, verbose = FALSE)  
+    data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
+}
 
 # No plots, makes it confusing (no CCA option, only PCA, tSNE and UMAP)
 # Plots:
