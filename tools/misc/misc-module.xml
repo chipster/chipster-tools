@@ -1,125 +1,126 @@
 <module name="misc">
 
 	<category name="Data retrieval" color="#e7df70">
-	   <tool>edirect_fetch.py</tool>
-	   <tool module="common">enafetch.R</tool>
- 	   <!-- <tool module="common">srafetch.R</tool>
+		<tool>edirect_fetch.py</tool>
+		<tool module="common">enafetch.R</tool>
+		<!-- <tool module="common">srafetch.R</tool>
  	   <tool module="common">srabamfetch.R</tool> -->
-       <tool module="common">ensemblfetch.R</tool>
-	   <tool>dbfetch.R</tool>
-	   <tool>dbfetch_list.R</tool> 
-	   <tool>entret_list.R</tool>
-	   <tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
-	   <tool module="common">share_via_object_storage.R</tool>
-	   <tool module="common">basespace.R</tool>	   
+		<tool module="common">ensemblfetch.R</tool>
+		<tool>dbfetch.R</tool>
+		<tool>dbfetch_list.R</tool>
+		<tool>entret_list.R</tool>
+		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
+		<tool module="common">share_via_object_storage.R</tool>
+		<tool module="common">basespace.R</tool>
 	</category>
-	
+
 	<category name="BLAST" color="#d59f45">
-       <tool>ncbi_blastn.R</tool>
-       <tool>my_blastn.R</tool>
-       <tool>ncbi_blastp.R</tool>
-       <tool>my_blastp.R</tool>
-	   <tool>ncbi_blastx.R</tool>
-	   <tool>my_blastx.R</tool>	   	    
-	   <tool>ncbi_tblastn.R</tool>
-       <tool>my_tblastn.R</tool>
-       <tool>diamond.R</tool>
+		<tool>ncbi_blastn.R</tool>
+		<tool>my_blastn.R</tool>
+		<tool>ncbi_blastp.R</tool>
+		<tool>my_blastp.R</tool>
+		<tool>ncbi_blastx.R</tool>
+		<tool>my_blastx.R</tool>
+		<tool>ncbi_tblastn.R</tool>
+		<tool>my_tblastn.R</tool>
+		<tool>diamond.R</tool>
 	</category>
-	
+
 	<category name="Sequence alignment" color="#d59f45">
-	   <tool>stretcher.R</tool>	
-  	   <tool>matcher.R</tool>
-  	   <tool>mafft.R</tool>	
-  	   <tool>muscle.R</tool>
-  	   <tool>muscle_profile.R</tool>
-  	   <tool>diffseq.R</tool>
-  	   <tool>dotmatcher.R</tool>
-  	   <tool>polydot.R</tool>
-  	   <tool>cons.R</tool>
-  	   <tool>plotcon.R</tool>
-  	   <tool>infoalign.R</tool>
-  	   <tool>showalign.R</tool>
-  	   <tool>mview.R</tool>
+		<tool>stretcher.R</tool>
+		<tool>matcher.R</tool>
+		<tool>mafft.R</tool>
+		<tool>muscle.R</tool>
+		<tool>muscle_profile.R</tool>
+		<tool>diffseq.R</tool>
+		<tool>dotmatcher.R</tool>
+		<tool>polydot.R</tool>
+		<tool>cons.R</tool>
+		<tool>plotcon.R</tool>
+		<tool>infoalign.R</tool>
+		<tool>showalign.R</tool>
+		<tool>mview.R</tool>
 	</category>
-    
-    <category name="Nucleic sequence analysis" color="#e7881c">     
-        <tool>eprimer.R</tool>
-        <tool>fuzznuc.R</tool>
-        <tool>getorf.R</tool>
-    	<tool>plotorf.R</tool>
-     	<tool>restrict.R</tool>
-     	<tool>remap.R</tool>	
-        <tool>revseq.R</tool>
-	    <tool>transeq.R</tool>	   	
+
+	<category name="Nucleic sequence analysis" color="#e7881c">
+		<tool>eprimer.R</tool>
+		<tool>fuzznuc.R</tool>
+		<tool>getorf.R</tool>
+		<tool>plotorf.R</tool>
+		<tool>restrict.R</tool>
+		<tool>remap.R</tool>
+		<tool>revseq.R</tool>
+		<tool>transeq.R</tool>
 	</category>
-    
-    <category name="Protein sequence analysis" color="#d53833">    
-       <tool>protfilter.R</tool>
-       <tool>fuzzpro.R</tool>
-   	</category>
-   	
-   	<category name="Sequence utilities" color="#80a3b7">
-	   <tool>infoseq_summary.R</tool>
-	   <tool>infoseq.R</tool>
-	   <tool>textsearch_fasta.R</tool>
-       <tool>seqor.R</tool>
-	   <tool>seqret.R</tool>
-	   <tool>cdhit.R</tool>
-	   <tool>skipredundant.R</tool>
-	   <tool>extractseq.R</tool>
-	   <tool>descseq.R</tool>
-	   <tool>biosed.R</tool>
-	   <tool>emboss.R</tool>
-	</category>  
-   	
-   	<category name="Phylogeny" color="#0177b7">
-     	<tool>fdnadist.R</tool>
-   	    <tool>fdnapars.R</tool>
-   	    <tool>fprotdist.R</tool>
-   	    <tool>fprotpars.R</tool>
-   	    <tool>fneighbor.R</tool>
-   	    <tool>fdrawtree.R</tool>
-   	    <tool>fdrawgram.R</tool>
-   	    <tool>fdnaml.R</tool>
+
+	<category name="Protein sequence analysis" color="#d53833">
+		<tool>protfilter.R</tool>
+		<tool>fuzzpro.R</tool>
 	</category>
-	
+
+	<category name="Sequence utilities" color="#80a3b7">
+		<tool>infoseq_summary.R</tool>
+		<tool>infoseq.R</tool>
+		<tool>textsearch_fasta.R</tool>
+		<tool>seqor.R</tool>
+		<tool>seqret.R</tool>
+		<tool>cdhit.R</tool>
+		<tool>skipredundant.R</tool>
+		<tool>extractseq.R</tool>
+		<tool>descseq.R</tool>
+		<tool>biosed.R</tool>
+		<tool>emboss.R</tool>
+	</category>
+
+	<category name="Phylogeny" color="#0177b7">
+		<tool>fdnadist.R</tool>
+		<tool>fdnapars.R</tool>
+		<tool>fprotdist.R</tool>
+		<tool>fprotpars.R</tool>
+		<tool>fneighbor.R</tool>
+		<tool>fdrawtree.R</tool>
+		<tool>fdrawgram.R</tool>
+		<tool>fdnaml.R</tool>
+	</category>
+
 	<category name="Utilities" color="#629a9b">
 		<tool>fixed_text_conversions.R</tool>
-	    <tool>taxonomy_tool.R</tool>
-    	<tool>emboss_files.R</tool>
-	    <tool module="common">select_columns.R</tool> 
-	    <tool module="common">sort_and_select_columns.R</tool>
-	    <tool module="common">general_file_processing.R</tool>
-        <tool module="common">concatenate.R</tool>
-        <tool module="common">join_tsv_files.R</tool>
-  		<tool module="common">transpose-matrix.R</tool>      
-        <tool module="common">extract_gzip_tar.py</tool>
+		<tool>taxonomy_tool.R</tool>
+		<tool>emboss_files.R</tool>
+		<tool module="common">select_columns.R</tool>
+		<tool module="common">sort_and_select_columns.R</tool>
+		<tool module="common">general_file_processing.R</tool>
+		<tool module="common">concatenate.R</tool>
+		<tool module="common">join_tsv_files.R</tool>
+		<tool module="common">transpose-matrix.R</tool>
+		<tool module="common">extract_gzip_tar.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_namelist.R</tool>
 		<tool module="common">make_tar.R</tool>
 		<tool module="common">gzip.R</tool>
 		<tool module="common">md5sum.R</tool>
-	    <tool module="common">encrypt.R</tool>
+		<tool module="common">encrypt.R</tool>
 	</category>
-	
+
 	<category name="Tests" color="#d59f45">
-		<tool>test-data-in.R</tool>	
-        <tool>test-data-in-out.R</tool>
+		<tool>test-data-in.R</tool>
+		<tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
 		<tool>test-data-in-out-image.py</tool>
 		<tool>test-multiple-inputs.py</tool>
-		<tool>test-data-in-out3.py</tool>		
+		<tool>test-data-in-out3.py</tool>
 		<tool>test-screen-output.py</tool>
-		<tool>test-screen-output-image.py</tool>
 		<tool>test-phenodata-input.py</tool>
 		<tool>test-phenodata2-input.py</tool>
 		<tool>test-phenodata-output.py</tool>
 		<tool>test-phenodata2-output.py</tool>
 		<tool>test-parameters.py</tool>
 		<tool>test-parameters.R</tool>
+		<tool>test-output-missing.R</tool>
 		<tool>sleep.py</tool>
 		<tool>sleep.R</tool>
 		<tool>test.R</tool>
+		<tool>test-note.R</tool>
 		<tool>no-operation.R</tool>
 		<tool>echo.R</tool>
 		<tool>fail.R</tool>
@@ -127,7 +128,11 @@
 		<tool>simple-input-output.R</tool>
 		<tool>data-throughput.R</tool>
 		<tool>input-sleep-output.R</tool>
-		
-	</category>	
-	
+		<tool>sort_gtf.R</tool>
+		<tool>umi-tools.R</tool>
+		<tool>bbduk.R</tool>
+		<tool>factoextra.R</tool>
+
+	</category>
+
 </module>

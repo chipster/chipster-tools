@@ -82,7 +82,7 @@ if(length(gene_id) < 1) {
 }
 
 ensembl <- useMart("ensembl", dataset=dataset)
-annotated_genes <- getBM(mart=ensembl, attributes=c("entrezgene","hgnc_symbol","description"), filters="entrezgene", values=gene_id)
+annotated_genes <- getBM(mart=ensembl, attributes=c("entrezgene_id","hgnc_symbol","description"), filters="entrezgene_id", values=gene_id)
 
 # Match the list of transcripts with the annotations
 gene_entrezid <- character(length(gene_id))

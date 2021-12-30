@@ -8,10 +8,11 @@
 # OUTPUT OPTIONAL transcripts.gtf
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference annotation. Check your BAM and choose accordingly.)
 # PARAMETER OPTIONAL organism: "Reference organism" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (You can use own GTF file or one of those provided on the server.)
-# PARAMETER OPTIONAL ug: "Estimate expression of known isoforms, don't assemble novel ones" TYPE [yes, no] DEFAULT no (Reference annotation (a GFF/GTF file\) is used to estimate isoform expression. Program will not assemble novel transcripts, and the it will ignore alignments not structurally compatible with any reference transcript. You can supply your own GTF file or use one of the provided annotations.)
-# PARAMETER OPTIONAL lg: "Do reference annotation based transcript assembly" TYPE [yes, no] DEFAULT no (Cufflinks will use the supplied reference annotation (a GFF/GTF file\) to guide RABT assembly. Reference transcripts will be tiled with faux-reads to provide additional information in assembly. Output will include all reference transcripts as well as any novel genes and isoforms that are assembled. You can supply your own GTF file or use one of the provided annotations.)
+# PARAMETER OPTIONAL ug: "Estimate expression of known isoforms, don't assemble novel ones" TYPE [yes: "Only known isoforms", no: "Assemble also novel ones"] DEFAULT no (Reference annotation (a GFF/GTF file\) is used to estimate isoform expression. Program will not assemble novel transcripts, and the it will ignore alignments not structurally compatible with any reference transcript. You can supply your own GTF file or use one of the provided annotations.)
+# PARAMETER OPTIONAL lg: "If assembling novel transcripts, should the RABT approach be used?" TYPE [yes, no] DEFAULT no (If you select yes, Cufflinks will do reference annotation based transcript assembly. In RABT a GFF/GTF file is used to guide the assembly, you can supply your own or use one of the provided ones. Reference transcripts will be tiled with faux-reads to provide additional information in assembly. Note that RABT is very slow and it is not recommended for organisms with deep annotations as it can produce false positives. Output will include all reference transcripts as well as any novel genes and isoforms that are assembled.)
 # PARAMETER OPTIONAL mmread: "Enable multi-mapped read correction" TYPE [yes, no] DEFAULT no (By default, Cufflinks will uniformly divide each multi-mapped read to all of the positions it maps to. If multi-mapped read correction is enabled, Cufflinks will re-estimate the transcript abundances dividing each multi-mapped read probabilistically based on the initial abundance estimation, the inferred fragment length and fragment bias, if bias correction is enabled.)
 # PARAMETER OPTIONAL bias: "Correct for sequence-specific bias" TYPE [yes, no] DEFAULT no (Cufflinks can detect sequence-specific bias and correct for it in abundance estimation. You will need to supply a reference genome as a FASTA file if you are not using one of the provided reference organisms.)
+
 
 # AMS 21.11.2012
 # AMS 2.07.2013 Added chr1/1 option
@@ -115,10 +116,10 @@ if (file.exists("tmp/genes.fpkm_tracking") && file.info("tmp/genes.fpkm_tracking
 if (file.exists("tmp/isoforms.fpkm_tracking") && file.info("tmp/isoforms.fpkm_tracking")$size > 0) {
 	system("mv tmp/isoforms.fpkm_tracking isoforms.fpkm_tracking.tsv")
 }
-if (file.exists("tmp/skipped.gtf") && file.info("tmp/skipped.gtf")$size > 0) {
-	sort.gtf("tmp/skipped.gtf", "skipped.gtf")
-}
+#if (file.exists("tmp/skipped.gtf") && file.info("tmp/skipped.gtf")$size > 0) {
+#	sort.gtf("tmp/skipped.gtf", "skipped.gtf")
+#}
 if (file.exists("tmp/transcripts.gtf") && file.info("tmp/transcripts.gtf")$size > 0) {
-	sort.gtf("tmp/transcripts.gtf", "transcripts.gtf")
+	system("mv tmp/transcripts.gtf transcripts.gtf")
 }
 
