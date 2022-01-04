@@ -11,3 +11,5 @@ library("factoextra")
 library("ggrepel")
 
 runExternal(paste("mv", "input.tsv", "output.tsv"))
+
+library("ggplot2")
