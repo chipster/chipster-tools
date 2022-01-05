@@ -91,7 +91,8 @@ title(paste("Total number of cells: ", length(colnames(x = seurat_obj)), "\n Num
 #
 ## Heatmap
 #DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) + NoLegend()
-#dev.off() # close the pdf
+
+dev.off() # close the pdf
 
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
