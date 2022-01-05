@@ -1,22 +1,23 @@
-# TOOL single-cell-seurat-clustering.R: "Seurat v4 -Clustering and detection of cluster marker genes" (Clusters cells, performs tSNE and UMAP for visualization purposes, and finds positive marker genes for the clusters.)
+# TOOL single-cell-seurat-clustering.R: "Seurat v4 -Clustering" (Clusters cells and performs tSNE and UMAP for visualization purposes.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL clusterPlot.pdf
 # OUTPUT seurat_obj_clustering.Robj
-# OUTPUT OPTIONAL markers.tsv
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
 # PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
-# PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST] DEFAULT wilcox (Tests for comparing a cluster to all the other cells include Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, MAST \(GLM-framework that treats cellular detection rate as a covariate\), poisson, and negbinom. The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
-# PARAMETER OPTIONAL minpct: "Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# PARAMETER OPTIONAL threshuse: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this log2 fold change between the two groups of cells. Increasing the threshold speeds up testing, but can miss weaker signals.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
+
+# PARAMETER OPTIONAL test.type: "Which test to use for finding marker genes" TYPE [wilcox, bimod, roc, t, tobit, poisson, negbinom, MAST] DEFAULT wilcox (Tests for comparing a cluster to all the other cells include Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, MAST \(GLM-framework that treats cellular detection rate as a covariate\), poisson, and negbinom. The latter two options should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution.)
+# PARAMETER OPTIONAL minpct: "Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
+# PARAMETER OPTIONAL threshuse: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this log2 fold change between the two groups of cells. Increasing the threshold speeds up testing, but can miss weaker signals.)
+# OUTPUT OPTIONAL markers.tsv
 
 # 09.06.2017 ML
 # 2018-01-11 ML update Seurat version to 2.2.0
@@ -33,6 +34,7 @@
 # 2020-01-31 ML Add option to output average expression table
 # 2020-10-11 EK update minpct to v3 default, update parameter descriptions
 # 2021-10-04 ML Update to Seurat v4
+# 2021-12-31 ML Marker gene detection to separate tool
 
 # for UMAP:
 library(reticulate)
@@ -72,25 +74,24 @@ cell_counts <- table(Idents(seurat_obj), seurat_obj$orig.ident)
 textplot(cell_counts, halign = "center", valign = "center", cex = 1)
 title(paste("Total number of cells: ", length(colnames(x = seurat_obj)), "\n Number of cells in each cluster:"))
 
-# Find all markers
-markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = TRUE)
 
-if (length(warnings()) > 0) {
-  # or !is.null(warnings())
-  stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
-}
-
-write.table(as.matrix(markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-
-# somecomment here
-# packageDescription("Seurat")
-
-# Plot top10 genes of each cluster as a heatmap
-top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
-
-# Heatmap
-DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) + NoLegend()
-dev.off() # close the pdf
+# Moved to a separate tool:
+# # Find all markers
+#markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = TRUE)
+#markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
+#
+#if (length(warnings()) > 0) {
+#  # or !is.null(warnings())
+#  stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
+#}
+#
+#write.table(as.matrix(markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+## Plot top10 genes of each cluster as a heatmap
+#top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+#
+## Heatmap
+#DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) + NoLegend()
+#dev.off() # close the pdf
 
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
