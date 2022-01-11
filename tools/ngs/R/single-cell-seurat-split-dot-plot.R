@@ -46,9 +46,12 @@ pdf(file="split_dot_plot.pdf", width=12, height=12)  # open pdf
 
 
 # Dot plot:
-DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, 
-	split.by = "stim") + RotatedAxis()
-	
+#DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, split.by = "stim") + RotatedAxis()
+# Check how many samples there are and choose as many colors:
+number.of.samples <- length(levels(as.factor((data.combined$stim))))
+colors.for.samples <- rainbow(number.of.samples)
+DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim") + RotatedAxis()
+
 
 # Feature plot:
 # Show in which cluster the genes are active
