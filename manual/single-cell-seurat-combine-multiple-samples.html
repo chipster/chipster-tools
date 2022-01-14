@@ -18,7 +18,7 @@
 
     <h3>Parameters</h3>
     <ul>
-        <li>Normalisation method used previously [NormalizeData]</li>
+        <li>Normalisation method used previously [Global scaling normalization]</li>
         <li>Number of CCs to use in the neighbor search [20]</li>
         <li>Number of PCs to use in the anchor weighting [20]</li>
     </ul>
@@ -40,7 +40,8 @@
     <p>
         The first parameter asks about the normalisation step performed either
         in the tool: <b>Seurat -Filter, normalize, regress and detect variable genes</b>, in which case the
-        <b>NormalizeData</b> method was used, or in tool: <b>Seurat -SCTransform: Filter, normalize, regress and detect
+        <b>Global scaling normalization</b> (NormalizeData) method was used, or in tool: <b>Seurat -SCTransform: Filter,
+            normalize, regress and detect
             variable genes</b>,
         in which case the user should change the parameter to <b>SCTransform</b>.
         In case SCTransform option is selected,
@@ -51,7 +52,7 @@
     </p>
 
     <p>
-        This tool performs data integration to two samples (in .Robj).
+        This tool performs data integration of multiple samples (in .Robj).
         First, Canonical correlation analysis (CCA) is performed to identify common sources of variation between
         the datasets.
         The tool then identifies anchors, gives scores (=weights) to these anchors
