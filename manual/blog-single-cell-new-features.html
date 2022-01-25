@@ -1,0 +1,79 @@
+<html>
+
+<body>
+
+    <h1>New features for single cell RNA-seq tools </h1>
+
+    <p>
+        First of all, we would like to kindly thank our active users and course participants for the
+        valuable feedback we got from them! These new features are based on those ideas and wishes.
+
+        Many improvements to our manuals, plots and user instructions were made based on the feedback
+        -we won’t go through all those here, but again would like to thank our active user base.
+    </p>
+
+    <p>
+        Smaller improvements include:
+    <ul>
+
+        <a href="https://chipster.csc.fi/manual/library-type-summary.html"> More information about directional
+            protocols</a>
+
+        <li> <b>The possibility to export PCA loadings from the
+                <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-pca.html">PCA tool</a> </b>.
+            If this parameter is turned on, an .txt file listing the top N genes associatied with the loadings is
+            given as an output. Default for the N is 5, but user can tune this. </li>
+
+        <li> <b>Separation of the
+                <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-find-markers.html">expression
+                    analysis</a> from the
+                <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-clustering.html">clustering tool</a>.
+            </b>
+            Parameters remain the same, but separating the two tools allows faster and easier re-runs of
+            expression analysis with different parameters. </li>
+
+        <li> <b><a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-modify-clusters.html">Tool for removing
+                    clusters</a> from the data.</b>
+            User can define either the clusters to remove, or list the clusters to keep. </li>
+
+        <li> <b> <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-rename-clusters.html">Renaming of the
+                    clusters</a>. </b>
+            By default, the cluster names are just numbers,
+            but by importing a table with cluster new cluster names it is now possible to rename them. </li>
+    </ul>
+    </p>
+
+    <p>
+        Bigger improvements include:
+    <ul>
+        <li> <b> <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-singler.html">SingleR cluster
+                    annotation tool</a>. </b>
+            With SingleR tool and CellDex annotation datasets, users can label their cell types based on the
+            similarity to the reference datasets.
+            As output, users get both higher level annotations as well as more detailed labels.
+            Some plots for estimating the quality of these annotations are also provided.</li>
+
+        <li> It is now also possible to use <b>data normalised with the SCTransform tool in the multiple sample
+                analysis</b>.
+            Note that you need to let the tool know that this normalisation method was used!
+            When using this option, the tool acknowledges the used parameters in scaling and integration steps.</li>
+
+        <li> Last but not least, it is now possible to <b>
+                <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-combine-multiple-samples.html">integrate
+                    multiple samples</a> in the analysis</b>,
+            instead of just the previous two.
+            As before, it is important that the samples are named in the Setup tool. </li>
+
+    </ul>
+    </p>
+
+    <p>
+        We further encourage our users to communicate their ideas, wishes and notes on the function of
+        these and other tools in Chipster -help us to help you!
+    </p>
+
+
+
+</body>
+
+</html>
