@@ -32,6 +32,7 @@ inputnames <- read_input_definitions()
 # binaries
 gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+java.path <- paste("PATH=", c(file.path(chipster.tools.path,"rtg","jre","bin")),":$PATH",sep="",collapse="")
 
 # If user provided fasta we use it, else use internal fasta
 if (organism == "other"){
@@ -105,7 +106,11 @@ command <- paste(gatk.binary, "Mutect2", "-O mutect2.vcf", options)
 command <- paste(command, "2>> error.txt")
 
 # Run command
-system(command)
+system(paste(gatk.binary,"Mutect2", "2> version.tmp"))
+version <- system("grep Version version.tmp",intern = TRUE)
+documentVersion("GATK Mutect2",version)
+documentCommand(command)
+runExternal(command, java.path)
 
 # Return error message if no result
 if (fileNotOk("mutect2.vcf")){
