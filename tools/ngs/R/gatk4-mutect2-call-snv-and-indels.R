@@ -15,7 +15,7 @@
 # PARAMETER OPTIONAL gatk.interval: "Genomic intervals" TYPE STRING (One or more genomic intervals over which to operate. Format chromosome:begin-end, e.g. 20:10,000,000-10,200,000)
 # PARAMETER OPTIONAL gatk.padding: "Interval padding" TYPE INTEGER DEFAULT 0 (Amount of padding in bp to add to each interval.)
 # PARAMETER OPTIONAL gatk.bamout: "Output assembled haplotypes as BAM" TYPE [yes, no] DEFAULT no (Output assembled haplotypes as BAM.)
-
+# SLOTS 2
 
 ## PARAMETER gatk.afofalleles: "Allele fraction of alleles not in germline resource" TYPE DECIMAL DEFAULT -1 (Population allele fraction assigned to alleles not found in germline resource. Only applicable if germline resource file is provided. -1 = use default value. Default for case-only calling is 5e-8 and for matched-control calling 1e-5.)
 
