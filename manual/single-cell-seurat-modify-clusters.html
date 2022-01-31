@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Remove clusters </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        With this tool you can remove clusters from your data.
+        You can either list the clusters you want to remove, or the clusters you wish to include.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Do you wish to remove or include these clusters [remove]</li>
+        <li>Names of the clusters to remove or include [3]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As input, give the Seurat R-object (Robj) after clustering step.
+    </p>
+
+    <p>
+        If you give names of clusters not present in the data, the tool will give you an error.
+    </p>
+
+    <p>
+        For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+            Chipster. </li>
+        <li>ClusterPlots.pdf: Cluster plots where you can confirm that correct clusters were removed/included. </li>
+    </ul>
+
+
+
+</body>

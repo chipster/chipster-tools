@@ -46,15 +46,18 @@ pdf(file="split_dot_plot.pdf", width=12, height=12)  # open pdf
 
 
 # Dot plot:
-DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, 
-	split.by = "stim") + RotatedAxis()
-	
+#DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, split.by = "stim") + RotatedAxis()
+# Check how many samples there are and choose as many colors:
+number.of.samples <- length(levels(as.factor((data.combined$stim))))
+colors.for.samples <- rainbow(number.of.samples)
+DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim") + RotatedAxis()
+
 
 # Feature plot:
 # Show in which cluster the genes are active
 FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method) 
 # Compare between the treatments:
-FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "red"), reduction=reduction.method)
+FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction=reduction.method)
 
 # FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
 #		max.exp = 3)

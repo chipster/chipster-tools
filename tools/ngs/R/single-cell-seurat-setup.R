@@ -65,9 +65,15 @@ if (file.exists("dropseq.tsv")) {
 }
 
 # Initialize the Seurat object
-seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
+
+# In case of multiomics data, "dat" object has a list of matrices. 
+# We need to select the Gene Expression one from there.
+if (class(dat) == "list") {
+  seurat_obj <- CreateSeuratObject(counts = dat$`Gene Expression`, min.cells = mincells, project = project.name)
+}else{
+  seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
 # min.features = 200 => this is done in the next tool.
-# v3: raw.data -> counts
+}
 
 # For sample detection later on
 if (groupident != "empty") {

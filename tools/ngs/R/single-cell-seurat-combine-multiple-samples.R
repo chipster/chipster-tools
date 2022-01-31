@@ -1,6 +1,5 @@
-# TOOL single-cell-seurat-CCA.R: "Seurat v4 -Combine two samples" (This tool can be used to integrate data and combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
-# INPUT OPTIONAL seurat_obj1.Robj: "Seurat object 1" TYPE GENERIC
-# INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
+# TOOL single-cell-seurat-combine-multiple-samples.R: "Seurat v4 -Combine multiple samples" (This tool can be used to integrate data and combine multiple Seurat objects for later joined analysis. The samples \/R-objects need to be named when created in the Seurat Setup tool.) 
+# INPUT samples{...}.Robj: "Samples to combine and align" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT seurat_obj_combined.Robj
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [normal:"Global scaling normalization", sctransform:SCTransform] DEFAULT normal (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
@@ -11,34 +10,24 @@
 # SLOTS 3
 
 
-# SLOTS = 3: when testing at VM this tool required 18.8G)
-# Not used atm: PARAMETER OPTIONAL CCstovisualise: "How many CCs to visualise as heatmaps" TYPE INTEGER DEFAULT 9 (How many canonical components you want to visualise as heatmaps.)
-# Not used atm: PARAMETER OPTIONAL num.features: "Number of variable features to return" TYPE INTEGER DEFAULT 2000 (How many features returned per dataset.)
-
-
-# 2018-08-05 ML
-# 2018-10-03 ML Add sample identifiers to cell barcodes (fix problem with same cell barcodes in two samples)
-# 09.07.2019 ML Seurat v3
-# 2021-10-04 ML Update to Seurat v4
+# 2021-12-30 ML 
 
 library(Seurat)
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
-load("seurat_obj1.Robj")
-seurat_obj1 <- seurat_obj
-load("seurat_obj2.Robj")
-seurat_obj2 <- seurat_obj
+input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+for (i in 1:nrow(input.names)) {
+    # unzipIfGZipFile(input.names[i,1])
+    load(input.names[i,1])
+    name.of.obj <- paste("seurat_obj", i, sep = "")
+    assign(name.of.obj, seurat_obj)
+}
+
+# seurat.objects.list <- objects(pattern="seurat_obj")
+seurat.objects.list <- as.list(mget(objects(pattern="seurat_obj"))) 
 
 # Select features that are repeatedly variable across datasets for integration
-features <- SelectIntegrationFeatures(object.list = list(seurat_obj1, seurat_obj2))
-
-# If SCTransform was used to normalise the data, do a prep step:
-if (normalisation.method == "sctransform"){
-    seurat_obj_list <- PrepSCTIntegration(object.list = list(seurat_obj1, seurat_obj2), anchor.features = features)
-    # seurat_obj1 <- PrepSCTIntegration(object.list = seurat_obj1, anchor.features = features)
-   #  seurat_obj2 <- PrepSCTIntegration(object.list = seurat_obj2, anchor.features = features)
-
-}
+features <- SelectIntegrationFeatures(object.list = seurat.objects.list)
 
 
 # Perform integration: 
@@ -46,7 +35,7 @@ if (normalisation.method == "sctransform"){
 # When data is normalised with NormalizeData:
 if (normalisation.method == "normal"){
     # 1. identify anchors using the FindIntegrationAnchors function
-    data.anchors <- FindIntegrationAnchors(object.list = list(seurat_obj1, seurat_obj2), dims = 1:CCstocompute, anchor.features = features) # dims = Which dimensions to use from the CCA to specify the neighbor search space
+    data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features) # dims = Which dimensions to use from the CCA to specify the neighbor search space
     # 2. use these anchors to integrate the two datasets together with IntegrateData.
     data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute) # dims = Number of PCs to use in the weighting procedure
 
@@ -58,8 +47,10 @@ if (normalisation.method == "normal"){
 
 # When data is normalised with SCTransform:
 } else{
+    # When SCTransform was used to normalise the data, do a prep step:
+    seurat.objects.list <- PrepSCTIntegration(object.list = seurat.objects.list, anchor.features = features)
     # 1. identify anchors using the FindIntegrationAnchors function
-    data.anchors <- FindIntegrationAnchors(object.list = seurat_obj_list, dims = 1:CCstocompute, anchor.features = features, normalization.method = "SCT") # dims = Which dimensions to use from the CCA to specify the neighbor search space
+    data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, normalization.method = "SCT") # dims = Which dimensions to use from the CCA to specify the neighbor search space
     # 2. use these anchors to integrate the two datasets together with IntegrateData.
     data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute, normalization.method = "SCT") # dims = Number of PCs to use in the weighting procedure
 
@@ -70,15 +61,6 @@ if (normalisation.method == "normal"){
     data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
 }
 
-# No plots, makes it confusing (no CCA option, only PCA, tSNE and UMAP)
-# Plots:
-# pdf(file="CCAplot.pdf", , width=13, height=7)  # open pdf
-# DimPlot(data.combined, reduction = "pca")
-
-# How to decide number of PCAs/CCAs??
-# ElbowPlot(data.combined)
-
-# dev.off() # close the pdf
 
 # Save the Robj for the next tool
 save(data.combined, file="seurat_obj_combined.Robj")

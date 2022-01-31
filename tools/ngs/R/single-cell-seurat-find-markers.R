@@ -3,6 +3,9 @@
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_markers.Robj
 # OUTPUT OPTIONAL markers.tsv
+# OUTPUT OPTIONAL all_markers.tsv
+# OUTPUT OPTIONAL Top10Heatmap.pdf
+# PARAMETER OPTIONAL find.all.markers: "Find all markers" TYPE [FALSE, TRUE] DEFAULT FALSE (Give as an output a large table with markers for all the clusters. Each cluster is compared to all the other clusters. This parameter overwrites the two cluster number parameters below. You will want to filter this table with the tool in Utilities category.)
 # PARAMETER OPTIONAL cluster: "Cluster of interest" TYPE INTEGER DEFAULT 1 (The number of the cluster of interest.)
 # PARAMETER OPTIONAL cluster2: "Cluster to compare with" TYPE STRING DEFAULT "all others" (Number\(s\) of the cluster\(s\) to compare to. By default the cluster of interest is compared to cells in all other clusters. You can also compare to another cluster or a group of clusters, just separate the cluster numbers with a comma.)
 # PARAMETER OPTIONAL minpct: "Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of the two populations. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
@@ -24,22 +27,43 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+library(ggplot2) 
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
-
-# Comparing to all other cells (default): 
-if (cluster2 == "all others") { 
-  cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive)
-}else { 
-# comparing to another user determined cluster(s):
-  cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
-  cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive)
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
 }
 
-write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+# If FindAllMarkers:
+if (find.all.markers == TRUE){
+   markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = TRUE)
+   # markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
 
+    if (length(warnings()) > 0) {
+      # or !is.null(warnings())
+      stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
+    }
+  write.table(as.matrix(markers), file = "all_markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+
+  # Plot top10 genes of each cluster as a heatmap
+  top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+
+  plot_heatmap <- DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) #+ NoLegend()
+  ggplot2::ggsave(filename = "Top10Heatmap.pdf", plot = plot_heatmap)
+
+}else { # Comparing only one cluster to all others or 
+    # Comparing to all other cells (default): 
+    if (cluster2 == "all others") { 
+        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive)
+    }else { 
+      # comparing to another user determined cluster(s):
+        cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
+        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive)
+    }
+  write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+ }
 # Save the Robj for the next tool -not necessary here
 # save(seurat_obj, file = "seurat_obj_markers.Robj")
 
