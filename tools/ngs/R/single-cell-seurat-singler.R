@@ -1,0 +1,77 @@
+# TOOL single-cell-seurat-singler.R: "SingleR cluster annotation" (Setup the Seurat object, make quality control plots and filter out genes. There are two options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix as input. If you are planning to combine samples later on, make sure you name them in this tool.)
+# INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# OUTPUT OPTIONAL log.txt
+# OUTPUT singleR_annotation_plots.pdf
+# OUTPUT seurat_obj_singler_annotations.Robj
+# OUTPUT OPTIONAL annotations_main.tsv
+# OUTPUT OPTIONAL annotations_fine.tsv
+# PARAMETER celldex.index "CellDex reference to use" TYPE [HumanPrimaryCellAtlasData: "Human primary cell atlas", BlueprintEncodeData: "Blueprint/ENCODE", MouseRNAseqData: "Mouse RNA-seq", ImmGenData: "Immunological Genome Project", DatabaseImmuneCellExpressionData: "Database of Immune Cell Expression", NovershternHematopoieticData: "Novershtern hematopoietic data", MonacoImmuneData: "Monaco Immune data"] DEFAULT MonacoImmuneData (Which CellDex reference to use for annotations.)
+# IMAGE comp-20.04-r-deps
+# RUNTIME R-4.1.0-single-cell
+
+
+# 2022-01-11 ML
+
+# scRNAseq annotations with singleR
+
+# Sources:
+# 1. https://www.bioconductor.org/packages/release/bioc/vignettes/SingleR/inst/doc/SingleR.html
+# 2. https://www.singlecellcourse.org/single-cell-rna-seq-analysis-using-seurat.html#cell-type-annotation-using-singler
+
+
+library(Seurat)
+library(dplyr)
+library(Matrix)
+library(gplots)
+library(pheatmap)
+library(celldex)
+library(SingleR)
+
+# Load the R-Seurat-object (called seurat_obj)
+load("seurat_obj.Robj")
+
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
+}
+
+# Let’s convert our Seurat object to single cell experiment (SCE) for convenience
+sce <- as.SingleCellExperiment(DietSeurat(seurat_obj))
+
+
+# HumanPrimaryCellAtlasData, BlueprintEncodeData, MouseRNAseqData, ImmGenData, DatabaseImmuneCellExpressionData, NovershternHematopoieticData, MonacoImmuneData
+# HumanPrimaryCellAtlasData: "Human primary cell atlas", BlueprintEncodeData: "Blueprint/ENCODE", MouseRNAseqData: "Mouse RNA-seq", ImmGenData: "Immunological Genome Project", DatabaseImmuneCellExpressionData: "Database of Immune Cell Expression", NovershternHematopoieticData: "Novershtern hematopoietic data", MonacoImmuneData: "Monaco Immune data"
+
+# annotation.data <- celldex.index
+#ref <- eval(parse(paste(annotation.data, "()", sep="")))
+command <- paste("celldex::", celldex.index, sep="")
+ref <- eval(parse(text=command))
+
+
+# These steps can take some time, < 1min
+annotation.main <- SingleR(test = sce,assay.type.test = 1, ref = ref, labels = ref$label.main)
+annotation.fine <- SingleR(test = sce,assay.type.test = 1, ref = ref, labels = ref$label.fine)
+
+write.table(annotations.main, file = "annotations_main.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(annotations.fine, file = "annotations_fine.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+
+# Back to Seurat obj
+seurat_obj@meta.data$annotation.main <- annotation.main$pruned.labels
+seurat_obj@meta.data$annotation.fine <- annotation.fine$pruned.labels
+
+
+# Visualise, in pdf plots:
+pdf(file = "singleR_annotation_plots.pdf",, width = 13, height = 7)
+# Visualise:
+seurat_obj <- SetIdent(seurat_obj, value = "annotation.fine")
+DimPlot(seurat_obj, label = T , repel = T, label.size = 3) + NoLegend()
+
+plotScoreHeatmap(annotation.main)
+
+plotDeltaDistribution(annotation.main, ncol = 3)
+dev.off() # close the pdf
+
+# Save the Robj for the next tool
+save(seurat_obj, file = "seurat_obj_singler_annotations.Robj")
+
+## EOF
