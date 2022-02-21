@@ -24,9 +24,13 @@ use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 
-# Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
+# Load the R-Seurat-object:
 load("combined_seurat_obj.Robj")
-#combined_seurat_obj <- data.combined
+
+if (exists("seurat_obj")) {
+  data.combined <- seurat_obj
+}
+
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
