@@ -7,10 +7,11 @@
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 20 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
-# SLOTS 3
+# SLOTS 4
 
 
-# 2021-12-30 ML 
+# 2021-12-30 ML
+# 2022-02-17 EK increased slots to 4
 
 library(Seurat)
 
