@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
-
+# SLOTS 4
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
 # PARAMETER OPTIONAL output_norm_table: "Give a table of log-normalized values with cluster and sample information" TYPE [T: yes, F: no] DEFAULT F (Returns a table with the log-normalised UMI counts for all cells and all genes, along with the information on which sample and which cluster the cell belongs to.)
