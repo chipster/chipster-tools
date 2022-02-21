@@ -26,6 +26,7 @@
 # 2020-01-31 ML Add option to output average expression table
 # 2020-02-25 ML Add option to output log-normalised values table (still commented)
 # 2021-10-04 ML Update to Seurat v4
+# 2922-02-21 EK Increase slots to 2 so that the average expression table is produced also with larger datasets
 
 # for UMAP:
 library(reticulate)
