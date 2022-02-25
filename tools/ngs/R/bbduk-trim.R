@@ -4,7 +4,7 @@
 # PARAMETER OPTIONAL k: "Kmer length" TYPE INTEGER FROM 1 DEFAULT 13 (Kmer length used for finding contaminants. Contaminants shorter than k will not be found. k must be at least 1.)
 # PARAMETER OPTIONAL ktrim: "Trim reads" TYPE [f: "Don't trim", r: "Trim to the right", l: "Trim to the left"] DEFAULT r (Trim reads to remove bases matching reference kmers.)
 # PARAMETER OPTIONAL mink: "Look for shorter kmers at read tips down to this length" TYPE INTEGER DEFAULT 5 (Look for shorter kmers at read tips down to this length, when k-trimming or masking. 0 means disabled.)
-# PARAMETER OPTIONAL qtrim: "Trim read ends" TYPE [rl: (Trim both ends), f: (Neither end), r: (Right end only), l: (Left end only), w: (Sliding window)] DEFAULT rl (After looking for kmers, trim read ends to remove bases with quality below the quality threshold.)
+# PARAMETER OPTIONAL qtrim: "Trim read ends based on quality" TYPE [rl: (Trim both ends), f: (Neither end), r: (Right end only), l: (Left end only), w: (Sliding window)] DEFAULT rl (After looking for kmers, trim read ends to remove bases with quality below the quality threshold.)
 # PARAMETER OPTIONAL trimq: "Trimming quality threshold" TYPE DECIMAL DEFAULT 10 (Regions with average quality below this will be trimmed, if quality trimming is selected. Can be a floating-point number like 7.3.)
 # PARAMETER OPTIONAL minlength: "Minimum length" TYPE INTEGER DEFAULT 20 (Reads shorter than this after trimming will be discarded.)
 
