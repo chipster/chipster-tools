@@ -23,6 +23,10 @@
 		<tool>tagcleaner-trim.R</tool>	
 		<tool>tagcleaner-predict.R</tool>	
 		<tool>tagcleaner-statistics.R</tool>
+		<tool>umi_tools-extract.R</tool>
+		<tool>bbduk-trim.R</tool>
+		<tool>umi_tools-dedup.R</tool>		
+		
 	</category>
 
 	<category name="Utilities" color="#d59f45">
