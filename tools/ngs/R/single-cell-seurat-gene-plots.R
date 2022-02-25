@@ -7,6 +7,7 @@
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE and UMAP plots.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
+# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
@@ -58,7 +59,7 @@ pdf(file="biomarker_plot.pdf", width=12, height=12)
 VlnPlot(seurat_obj, features = biomarker)
 
 # Feature plot:
-FeaturePlot(seurat_obj, features = biomarker, pt.size=point.size, reduction=reduction.method, , label=add.labels) 	
+FeaturePlot(seurat_obj, features = biomarker, pt.size=point.size, reduction=reduction.method, label=add.labels, order=as.logical(plotting.order.used)) 	
 
 # Ridge plot:
 RidgePlot(seurat_obj, features = biomarker, ncol = 2)

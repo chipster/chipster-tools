@@ -60,7 +60,7 @@ DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.sample
 
 # Feature plot:
 # Show in which cluster the genes are active
-FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method, order=TRUE) #plotting.order
+FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method, order=as.logical(plotting.order.used)) 
 # Compare between the treatments:
 # NOTE: These plots get squeezed when there are many samples, and are at some point very difficult to read.
 
