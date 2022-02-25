@@ -18,9 +18,6 @@ source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"bam-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
 
-version <- system(paste(star.binary,"--version"),intern = TRUE)
-documentVersion("STAR",version)
-
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
 for (i in 1:nrow(input.names)) {
@@ -31,6 +28,9 @@ for (i in 1:nrow(input.names)) {
 star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
 path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
 samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+
+version <- system(paste(star.binary,"--version"),intern = TRUE)
+documentVersion("STAR",version)
 
 # Input fastq names
 reads1 <- paste(grep("reads",input.names[,1],value = TRUE),sep = "",collapse = ",")
