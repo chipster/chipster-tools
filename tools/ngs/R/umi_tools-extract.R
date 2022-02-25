@@ -1,4 +1,4 @@
-# TOOL umi_tools-extract.R: "UMI-tools extract" (UMI-tools extract)
+# TOOL umi_tools-extract.R: "Extract UMIs from QuantSeq reads" (Given a Lexogen QuantSeq FASTQ file, this tool removes the TATA spacer and extracts the 6-base UMI and adds it to the read name. This tool is based on the UMI-tools extract.)
 # INPUT reads.fq.gz: "Reads" TYPE GENERIC
 # OUTPUT output.fq.gz
 # OUTPUT log.txt
