@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
-
+# SLOTS 2
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
 # PARAMETER OPTIONAL output_norm_table: "Give a table of log-normalized values with cluster and sample information" TYPE [T: yes, F: no] DEFAULT F (Returns a table with the log-normalised UMI counts for all cells and all genes, along with the information on which sample and which cluster the cell belongs to.)
@@ -26,6 +26,7 @@
 # 2020-01-31 ML Add option to output average expression table
 # 2020-02-25 ML Add option to output log-normalised values table (still commented)
 # 2021-10-04 ML Update to Seurat v4
+# 2922-02-21 EK Increase slots to 2 so that the average expression table is produced also with larger datasets
 
 # for UMAP:
 library(reticulate)
