@@ -19,3 +19,6 @@ BiocManager::install('multtest')
 
 # requires multtest
 install.packages('metap')
+
+BiocManager::install("celldex")
+BiocManager::install("SingleR")

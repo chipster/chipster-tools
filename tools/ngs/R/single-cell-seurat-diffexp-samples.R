@@ -24,6 +24,13 @@ library(Seurat)
 # Load the R-Seurat-objects
 load("combined_seurat_obj.Robj")
 
+if (exists("seurat_obj")) {
+  data.combined <- seurat_obj
+}
+
+
+# Check that this cluster is available in data:
+
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.

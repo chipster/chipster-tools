@@ -3,6 +3,7 @@
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
+# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
@@ -24,9 +25,13 @@ use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 
-# Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
+# Load the R-Seurat-object:
 load("combined_seurat_obj.Robj")
-#combined_seurat_obj <- data.combined
+
+if (exists("seurat_obj")) {
+  data.combined <- seurat_obj
+}
+
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
@@ -38,7 +43,7 @@ match(markers.to.plot, all.genes)
 # if one of the genes is not in the list, print error message:
 if (!all(!is.na(match(markers.to.plot, all.genes)))) { 
   not.found <- markers.to.plot[is.na(match(markers.to.plot, all.genes))==TRUE]
-  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found))
+  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found, " "))
   }
 
 # pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
@@ -55,9 +60,11 @@ DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.sample
 
 # Feature plot:
 # Show in which cluster the genes are active
-FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method) 
+FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method, order=as.logical(plotting.order.used)) 
 # Compare between the treatments:
-FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction=reduction.method)
+# NOTE: These plots get squeezed when there are many samples, and are at some point very difficult to read.
+
+FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction=reduction.method, order=as.logical(plotting.order.used))
 
 # FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
 #		max.exp = 3)

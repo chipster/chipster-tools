@@ -204,7 +204,8 @@
 		<tool>single-cell-seurat-clustering.R</tool>	
 		<tool>single-cell-seurat-find-markers.R</tool>
 		<tool>single-cell-seurat-gene-plots.R</tool>
-		<tool>single-cell-seurat-featureplot.R</tool>	
+		<tool>single-cell-seurat-featureplot.R</tool>
+		<tool>single-cell-seurat-singler.R</tool>
 		<tool>single-cell-seurat-CCA.R</tool>
 		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
 		<tool>single-cell-seurat-integrated-analysis.R</tool>	

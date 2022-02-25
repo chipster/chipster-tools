@@ -4,6 +4,7 @@
 # PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mt, nCount_RNA, nFeature_RNA] DEFAULT percent.mt (Denotes which feature to use for coloring the cells.)
 # PARAMETER OPTIONAL point.size: "Point size in UMAP plot" TYPE DECIMAL DEFAULT 1 (Point size for UMAP plot. )
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
+# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
@@ -25,7 +26,7 @@ if (exists("data.combined") ){
 
 # Plot tSNE 
 pdf(file="UMAPplot.pdf") 
-FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label=add.labels)
+FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label=add.labels, order=as.logical(plotting.order.used))
 dev.off() # close the pdf
 
 # EOF
