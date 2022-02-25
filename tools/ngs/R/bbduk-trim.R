@@ -1,12 +1,12 @@
-# TOOL bbduk-trim.R: "Trim QuantSeq reads using BBDuk" (Remove the adapter contamination, polyA read through, and low quality tails.)
+# TOOL bbduk-trim.R: "Trim QuantSeq reads using BBDuk" (Given a FASTQ file containing Lexogen QuantSeq reads, removes adapters, polyA read-through, and low quality tails. This tool is based on BBDuk.)
 # INPUT reads.fq: "FASTQ file" TYPE GENERIC 
 # OUTPUT trimmed.fq.gz
 # PARAMETER OPTIONAL k: "Kmer length" TYPE INTEGER FROM 1 DEFAULT 13 (Kmer length used for finding contaminants. Contaminants shorter than k will not be found. k must be at least 1.)
 # PARAMETER OPTIONAL ktrim: "Trim reads" TYPE [f: "Don't trim", r: "Trim to the right", l: "Trim to the left"] DEFAULT r (Trim reads to remove bases matching reference kmers.)
-# PARAMETER OPTIONAL mink: "Mink" TYPE INTEGER DEFAULT 5 (Look for shorter kmers at read tips down to this length, when k-trimming or masking. 0 means disabled.)
-# PARAMETER OPTIONAL qtrim: "Trim read ends" TYPE [rl: (trim both ends), f: (neither end), r: (right end only), l: (left end only), w: (sliding window)] DEFAULT rl (Trim read ends to remove bases with quality below trimq.Performed AFTER looking for kmers.)
-# PARAMETER OPTIONAL trimq: "" TYPE DECIMAL DEFAULT 10 (Regions with average quality BELOW this will be trimmed, if qtrim is set to something other than f.  Can be a floating-point number like 7.3.)
-# PARAMETER OPTIONAL minlength: "Minimum length" TYPE INTEGER DEFAULT 20 (Reads shorter than this after trimming will be discarded. Pairs will be discarded if both are shorter.)
+# PARAMETER OPTIONAL mink: "Look for shorter kmers at read tips down to this length" TYPE INTEGER DEFAULT 5 (Look for shorter kmers at read tips down to this length, when k-trimming or masking. 0 means disabled.)
+# PARAMETER OPTIONAL qtrim: "Trim read ends" TYPE [rl: (Trim both ends), f: (Neither end), r: (Right end only), l: (Left end only), w: (Sliding window)] DEFAULT rl (After looking for kmers, trim read ends to remove bases with quality below the quality threshold.)
+# PARAMETER OPTIONAL trimq: "Trimming quality threshold" TYPE DECIMAL DEFAULT 10 (Regions with average quality below this will be trimmed, if quality trimming is selected. Can be a floating-point number like 7.3.)
+# PARAMETER OPTIONAL minlength: "Minimum length" TYPE INTEGER DEFAULT 20 (Reads shorter than this after trimming will be discarded.)
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
