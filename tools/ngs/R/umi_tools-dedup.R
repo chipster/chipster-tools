@@ -1,10 +1,10 @@
-# TOOL umi_tools-dedup.R: "UMI-tools deduplicate" (UMI-tools dedup)
+# TOOL umi_tools-dedup.R: "Deduplicate aligned QuantSeq reads" (Given a BAM file of aligned Lexogen QuantSeq reads, this tool deduplicates them using UMI and mapping coordinates. For every group of duplicate reads, a single representative read is retained. This tool is based on the UMI-tools dedup.)
 # INPUT input.bam: "BAM file" TYPE GENERIC
 # OUTPUT deduplicated.bam
 # OUTPUT stats_edit_distance.tsv
 # OUTPUT stats_per_umi.tsv
 # OUTPUT stats_per_umi_per_position.tsv
-# PARAMETER grouping.method: "Grouping method" TYPE [unique, directional] DEFAULT unique (What method to use to identify group of reads with the same or similar UMIs. Please see the manual page for details.)
+# PARAMETER grouping.method: "Grouping method" TYPE [unique, directional] DEFAULT unique (What method to use to identify group of reads with the same or similar UMIs. Unique means that the grouped reads share the exact same UMI. Differential allows for sequencing errors by building networks of related UMIs. Please see the manual page for details.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
