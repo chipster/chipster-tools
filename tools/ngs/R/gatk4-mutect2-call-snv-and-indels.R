@@ -15,6 +15,10 @@
 # PARAMETER OPTIONAL gatk.interval: "Genomic intervals" TYPE STRING (One or more genomic intervals over which to operate. Format chromosome:begin-end, e.g. 20:10,000,000-10,200,000)
 # PARAMETER OPTIONAL gatk.padding: "Interval padding" TYPE INTEGER DEFAULT 0 (Amount of padding in bp to add to each interval.)
 # PARAMETER OPTIONAL gatk.bamout: "Output assembled haplotypes as BAM" TYPE [yes, no] DEFAULT no (Output assembled haplotypes as BAM.)
+
+
+
+
 # SLOTS 2
 
 ## PARAMETER gatk.afofalleles: "Allele fraction of alleles not in germline resource" TYPE DECIMAL DEFAULT -1 (Population allele fraction assigned to alleles not found in germline resource. Only applicable if germline resource file is provided. -1 = use default value. Default for case-only calling is 5e-8 and for matched-control calling 1e-5.)
@@ -23,6 +27,7 @@
 source(file.path(chipster.common.path, "gatk-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path, "vcf-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
@@ -74,11 +79,11 @@ if (fileOk("normal.bam")){
 }
 # VCF files. These need to bgzip compressed and tabix indexed
 if (fileOk("germline_resource.vcf")){
-	formatGatkVcf("germline_resource.vcf")
+	formatGatkVcf("germline_resource.vcf",chr)
 	options <- paste(options, "--germline-resource germline_resource.vcf.gz")
 }
 if (fileOk("normal_panel.vcf")){
-	formatGatkVcf("normal_panel.vcf")
+	formatGatkVcf("normal_panel.vcf",chr)
 	options <- paste(options, "--panel-of-normals normal_panel.vcf.gz")
 }
 if (fileOk("gatk_interval.list")){
@@ -103,7 +108,7 @@ if (gatk.bamout == "yes"){
 command <- paste(gatk.binary, "Mutect2", "-O mutect2.vcf", options)
 
 # Capture stderr
-command <- paste(command, "2>> error.txt")
+#command <- paste(command, "2>> error.txt")
 
 # Run command
 system(paste(gatk.binary,"Mutect2", "2> version.tmp"))
