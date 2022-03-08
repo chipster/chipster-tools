@@ -25,11 +25,11 @@ Given a FASTQ file containing Lexogen QuantSeq reads, removes polyA read-through
 
 This tool performs three steps. It starts by looking for kmer matches to two references: Illumina Truseq adapters and a 18-nt polyA sequence. You can set the kmer length and also define how short kmer matches are considered. 
 Note that shorter matches are considered only if they occur in read ends.
-Once a polyA or Truseq adapter kmer match is found in a read, that kmer and all the bases to the right of it are removed (you can define the direction with a parameter).
+Once a polyA or Truseq adapter kmer match is found, that kmer and all the bases to the right of it are removed (you can define the direction with a parameter).
 <br><br>
-Next the ends of the reads are scanned for low base quality and trimmed if the quality is below the Phred score given as the threshold. You can decide which end to trim.
+Next the ends of the reads are scanned for low base quality and trimmed if the quality is below the Phred score threshold. You can decide the threshold and which end to trim.
 <br><br>
-After trimming the reads are filtered based on length.
+After trimming reads are filtered based on their length.
 
 <h3>Output</h3>
 
