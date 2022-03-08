@@ -7,7 +7,7 @@ getVCFNames <- function(input){
     }else{
         vcf.names <- paste("1")
     }
-    return vcf.names
+    return(vcf.names)
 }
 
 # Adds "chr" to the beginning of each line of a VCF file that starts with a number or with X, Y, Z, W or M
