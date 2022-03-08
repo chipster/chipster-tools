@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Find DE genes between chosen samples </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        For a given cluster, this tool gives you the differentially expressed genes between the samples/conditions
+        listed by the user.
+        Conditions/samples are determined in the Setup tool with the Sample or Group name parameter.
+        If you are listing multiple samples, separate them with comma (,).
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Name of the samples to compare to</li>
+        <li>Name of the samples to compare with</li>
+        <li>Name of the cluster [3]</li>
+        <li>Return only positive marker genes [TRUE]</li>
+        <li>Fold change threshold for differentially expressed genes in log scale [0.25]</li>
+        <li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As inputs, give the combined Seurat object. <br>
+    </p>
+
+    <p>
+        Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter
+        is set to cluster "3".
+    </p>
+
+    <p>
+        Select the samples or list of samples which you want to compare to each other by typing the sample names
+        to the parameter fields. If you are listing multiple samples, use comma as separator: for example,
+        type: "CTRL, CTRL_2" (withouth the hyphens "") in first field and "STIM, STIM_2" in the second.
+    </p>
+
+    <p>
+        You can filter the differentially expressed genes using the parameters. By
+        default, only genes with
+        adjusted p-value < 0.05 are listed in the result table and only positive markers are kept. Note that Seurat
+            adjusts p-values using the rather conserved Bonferroni method for multiple testing correction. </p>
+            <p>You can choose to include in the analysis only genes whose average fold change is higher than a selected
+                value. This prefiltering speeds up the analysis
+                and narrows down the result list.
+            </p>
+            <p>The result table contains the genes which are differentially expressed between the
+                conditions in the selected cluster. The columns include
+            <ul>
+                <li><b>p_val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
+                    likelihood that the gene is in the list just be chance) </li>
+                <li><b>p_val_adj</b> = adjusted p-value. This value is corrected for multiple testing:
+                    when we test thousands of genes, we can get some statistically significantly
+                    differentially expressed genes just by chance. There are different methods to correct for this,
+                    Seurat uses the Bonferroni method. When filtering the table and reporting your results,
+                    use this value.</li>
+                <li><b>avg_logFC</b> = average log2 fold change (how much higher or lower the expression of this gene is
+                    in the chosen cluster between the conditions </li>
+                <li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene.
+                    Note, that numbering is based on alphabets: earlier in the alphabets -> 1, the other one -> 2.
+                    So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in alphabets.
+                </li>
+                <li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene
+                </li>
+            </ul>
+    </p>
+
+
+
+    <p>
+        For more details, please check the <a
+            href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
+            for multiple sample analysis</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>de-list_samplenames_vs_Samplesnames_in_clusterclustername.tsv files: Differentially expressed genes between
+            the user defined samples
+    </ul>
+
+
+
+</body>
