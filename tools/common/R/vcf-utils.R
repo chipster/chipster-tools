@@ -1,13 +1,13 @@
 # Check VCF chromosome naming scheme
-checkVCFNameMatch <- function(input,chr){
+getVCFNames <- function(input){
     # Check if VCF has chr chromosome names
     vcf.chr <- system(paste("grep -i -c ^chr", input),intern = TRUE)
     if (vcf.chr > 0){
-        vcf.names <-paste("chr1")
+        vcf.names <- paste("chr1")
     }else{
         vcf.names <- paste("1")
     }
-    return (vcf.names == chr)
+    return vcf.names
 }
 
 # Adds "chr" to the beginning of each line of a VCF file that starts with a number or with X, Y, Z, W or M
@@ -22,3 +22,4 @@ removeChrFromVCF <- function(input, output){
     #system(paste("awk '{gsub(/^chr/,""); print}'", input, ">", output
     system(paste("cat", input, "|sed s/ID=chr/ID=/I | sed s/^chr//I >", output))
 }
+ 
