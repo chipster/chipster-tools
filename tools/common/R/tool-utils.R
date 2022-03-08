@@ -250,6 +250,8 @@ runExternal <- function(command,env = NULL,capture = TRUE,checkexit = TRUE) {
         msg <- paste(msg,command,"\n\n")
         msg <- paste(msg,"Error:\n")
         msg <- paste(msg,paste(error,collapse = "\n"))
+        system("cat stderr.tmp")
+        system("ls -l")
         stop(paste('CHIPSTER-NOTE: ',msg))
       }
     }

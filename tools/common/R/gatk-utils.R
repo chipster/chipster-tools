@@ -4,18 +4,28 @@
 # Note that e.g. for input file "example.vcf" you end up with files "example.vcf.gz" and "example.vcf.gz.tbi".
 # Remember to use correct filenames in GATK commands.
 #
-formatGatkVcf <- function(input.vcf){
+formatGatkVcf <- function(input.vcf,chr="1"){
 	source(file.path(chipster.common.path, "zip-utils.R"))
 	tabix.binary <- c(file.path(chipster.tools.path, "tabix", "tabix"))
 	bgzip.binary <- c(file.path(chipster.tools.path, "tabix", "bgzip"))
 	# Uncompress
 	unzipIfGZipFile(input.vcf)
+    
+	# Check if VCF chromosome names match BAM names
+	if (!(checkVCFNameMatch(input.vcf, chr))){
+	  if (chr == "1"){
+	    removeChrFromVCF(input.vcf, "output.vcf")
+	  }else{
+		addChrToVCF(input.vcf, "output.vcf")
+	  }
+	  system(paste("mv output.vcf", input.vcf))
+	}
+	
 	# Bgzip
 	system(paste(bgzip.binary, input.vcf))
 	# Index
 	gz.name <- paste(input.vcf, ".gz", sep="")
-	system(paste(tabix.binary, "-p vcf", gz.name))
-	
+	system(paste(tabix.binary, "-p vcf", gz.name))	
 }
 
 # Formast a FASTA format reference sequence to be compatible with GATK
