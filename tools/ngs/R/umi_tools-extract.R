@@ -14,9 +14,12 @@ Sys.setenv(PATH = venv_path, VIRTUAL_ENV = venv_root)
  
 version <- system("umi_tools --version | cut -d : -f 2-",intern = TRUE)
 documentVersion("UMI-tools",version)
-umi.command <- paste("umi_tools extract --extract-method=regex --bc-pattern \"(?P<umi_1>.{6})(?P<discard_1>TATA).*\" -L log.txt -I reads.fq.gz -S output.fq.gz")
+umi.command <- paste("umi_tools extract --extract-method=regex --bc-pattern \"(?P<umi_1>.{6})(?P<discard_1>TATA).*\" -L log.t.txt -I reads.fq.gz -S output.fq.gz")
 documentCommand(umi.command)
 runExternal(umi.command)
+
+# Clean log file
+system("grep INFO log.t.txt |grep -v Parsed > log.txt")
 
 # Output names
 inputnames <- read_input_definitions()
