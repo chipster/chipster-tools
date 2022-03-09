@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Deduplicate aligned QuantSeq reads</h2>
+
+<h3>Description</h3>
+Given a BAM file of aligned Lexogen QuantSeq reads, this tool deduplicates them based on the mapping coordinate and the UMI attached to the read. For every group of duplicate reads, a single representative read is retained.
+
+<br>
+<br>
+<h3>Parameters</h3>
+
+<ul>
+<li>Grouping method (unique, directional) [unique]</li>
+</ul>
+
+<h3>Details</h3>
+
+The tool first identifies which reads have the same mapping position and thereby come from a transcript of a same gene. 
+It then groups those reads which have the same UMI, meaning that they are PCR duplicates of the same transcript molecule and should hence be counted only once.
+<br>
+<br>
+You can define what is considered the same UMI using the method parameter:
+<ul>
+<li><b>Unique</b> means that reads must have exactly the same UMI sequence in order to be grouped together. This is the fastest method, but it doesn't allow for sequencing errors.</li>
+<li><b>Directional</b> allows for sequencing errors but it can be slow and memory-consuming. It builds networks where nodes are UMIs and edges connect UMIs with an edit distance smaller or equal to 1. 
+It then identifies clusters of connected UMIs based on hamming distance threshold, and requires that counts for UMI A are larger or equal to twice the counts of UMI B minus 1.
+Therefore, if UMI A has for example ten reads and UMI B has five reads, they would be considered separate UMIs and not merged in one group.</li>
+</ul>
+
+For every group of duplicate reads, a single representative read is retained. The following criteria are applied to select the representative read:
+<ol>
+<li>lowest number of mapping coordinates (multimapping reads are not reliable).</li>
+<li>highest mapping quality. Note that this is not the read base quality, and if two reads have the same mapping quality then one will be picked at random regardless of the base quality.</li>
+</ol>
+
+<h3>Output</h3>
+
+The output consists of four files: 
+<ul>
+<li>BAM file containing the deduplicated reads.</li>
+<li>stats_edit_distance.tsv (optional).</li>
+<li>stats_per_umi_per_position.tsv (optional).</li>
+<li>stats_per_umi_per.tsv (optional).</li>
+</ul>
+
+
+https://umi-tools.readthedocs.io/en/latest/reference/dedup.html#dedup-specific-options
+
+
+<h3><br>References</h3>
+
+<p>This tool is based on the <a href="https://umi-tools.readthedocs.io/en/latest/reference/dedup.html">dedup tool of the UMI-Tools package</a>. 
+Please cite </p>
+<p> T Smith, A Heger and I Sudbery: <a href="https://genome.cshlp.org/content/27/3/491">UMI-tools: Modelling sequencing errors in Unique Molecular 
+Identifiers to improve quantification accuracy.</a> Genome Res. 2017 27:491</p>  
+
+</body>
+
