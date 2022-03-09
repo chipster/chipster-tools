@@ -4,8 +4,8 @@
 # OUTPUT OPTIONAL stats_edit_distance.tsv
 # OUTPUT OPTIONAL stats_per_umi.tsv
 # OUTPUT OPTIONAL stats_per_umi_per_position.tsv
-# PARAMETER grouping.method: "Grouping method" TYPE [unique, directional] DEFAULT unique (What method to use to identify group of reads with the same or similar UMIs. Unique means that the grouped reads share the exact same UMI. Directional allows for sequencing errors by building networks of related UMIs. Please see the manual page for details.)
-# PARAMETER stats: "Produce statistics tables" TYPE [no, yes] DEFAULT no (Calculate statics for average edit distance between the UMIs at each position, counts for unique combinations of UMI and position, and UMI-level summaries.) 
+# PARAMETER grouping.method: "Grouping method" TYPE [unique, directional] DEFAULT unique (What method should be used to group reads based on UMIs. Unique means that reads must have exactly the same UMI sequence. Directional allows for sequencing errors by building networks of related UMIs and clustering them. Please see the manual page for details.)
+# PARAMETER stats: "Produce statistics tables" TYPE [no, yes] DEFAULT no (Calculate average edit distance between the UMIs at each position, counts for unique combinations of UMI and position, and UMI-level summaries.) 
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
