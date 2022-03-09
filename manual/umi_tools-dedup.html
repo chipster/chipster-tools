@@ -32,14 +32,14 @@ Therefore, if UMI A has for example ten reads and UMI B has five reads, they wou
 </ul>
 
 For every group of duplicate reads, a single representative read is retained. The following criteria are applied to select the representative read:
-<ol>
+<ul>
 <li>lowest number of mapping coordinates (multimapping reads are not reliable).</li>
 <li>highest mapping quality. Note that this is not the read base quality, and if two reads have the same mapping quality then one will be picked at random regardless of the base quality.</li>
-</ol>
+</ul>
 
 Finally, you can decide if statistics for the following should be reported: average edit distance between the UMIs at each position, counts for unique combinations of UMI and position, and UMI-level summary statistics.
 Please find a <a href="https://umi-tools.readthedocs.io/en/latest/reference/dedup.html#dedup-specific-options">detailed description of the statistics tables</a> in the dedup manual.
-
+<br>
 <h3>Output</h3>
 
 The output consists of four files: 
@@ -51,15 +51,12 @@ The output consists of four files:
 </ul>
 
 
-https://umi-tools.readthedocs.io/en/latest/reference/dedup.html#dedup-specific-options
-
-
-<h3><br>References</h3>
+<h3>References</h3>
 
 <p>This tool is based on the <a href="https://umi-tools.readthedocs.io/en/latest/reference/dedup.html">dedup tool of the UMI-Tools package</a>. 
 Please cite </p>
-<p> T Smith, A Heger and I Sudbery: <a href="https://genome.cshlp.org/content/27/3/491">UMI-tools: Modelling sequencing errors in Unique Molecular 
-Identifiers to improve quantification accuracy.</a> Genome Res. 2017 27:491</p>  
+T Smith, A Heger and I Sudbery: <a href="https://genome.cshlp.org/content/27/3/491">UMI-tools: Modelling sequencing errors in Unique Molecular 
+Identifiers to improve quantification accuracy.</a> Genome Res. 2017 27:491.  
 
 </body>
 
