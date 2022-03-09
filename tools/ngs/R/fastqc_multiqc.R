@@ -10,9 +10,14 @@ source(file.path(chipster.common.path,"tool-utils.R"))
 
 # Rename input files to get the original banes in the report
 input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+
+system("cat chipster-inputs.tsv")
+system("ls -l")
+
 for (i in 1:nrow(input.names)) {
   system(paste("mv --backup=numbered",input.names[i,1],input.names[i,2]))
 }
+system("ls -l")
 
 # Try opening the input files as tar packages.
 system("ls *.tar *.tar.* *.tgz |xargs -i tar xf {} --xform='s#^.+/##x' 2>/dev/null")
@@ -37,6 +42,8 @@ documentCommand(multiqc.command)
 # run
 runExternal(fastqc.command)
 runExternal(multiqc.command)
+
+
 
 if (fileNotOk("multiqc_report.html")) {
   system("mv stderr.log error_log.txt")

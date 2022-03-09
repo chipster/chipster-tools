@@ -1,8 +1,8 @@
 # Check VCF chromosome naming scheme
 getVCFNames <- function(input){
     # Check if VCF has chr chromosome names
-    vcf.chr <- system(paste("grep -i -c ^chr", input),intern = TRUE)
-    if (vcf.chr > 0){
+    vcf.chr <- system(paste("grep -q -i ^chr", input))
+    if (vcf.chr == 0){
         vcf.names <- paste("chr1")
     }else{
         vcf.names <- paste("1")
