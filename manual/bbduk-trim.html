@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Trim QuantSeq reads using BBDuk</h2>
+
+<h3>Description</h3>
+Given a FASTQ file containing Lexogen QuantSeq reads, removes polyA read-through, Illumina Truseq adapters, and low quality ends.
+
+<br>
+<br>
+<h3>Parameters</h3>
+
+<ul>
+<li>Kmer length for detecting adapters and polyA [13]</li>
+<li>Minimum length of kmers to report at read tips [5]</li>
+<li>Trimming direction from a kmer match [Trim to the right]</li>
+<li>Should read ends be trimmed based on quality [Trim both ends]</li>
+<li>Threshold for quality trimming [10]</li>
+<li>Minimum length for reads to be kept after trimming [20]</li>
+</ul>
+
+<h3>Details</h3>
+
+This tool performs three steps. It starts by looking for kmer matches to two references: Illumina Truseq adapters and a 18-nt polyA sequence. You can set the kmer length and also define how short kmer matches are considered. 
+Note that shorter matches are considered only if they occur in read ends.
+Once a polyA or Truseq adapter kmer match is found, that kmer and all the bases to the right of it are removed (you can define the direction with a parameter).
+<br><br>
+Next the ends of the reads are scanned for low base quality and trimmed if the quality is below the Phred score threshold. You can decide the threshold and which end to trim.
+<br><br>
+After trimming reads are filtered based on their length.
+
+<h3>Output</h3>
+
+<p>The output is a FASTQ file containing the trimmed reads.</p>
+
+
+<h3><br>References</h3>
+
+<p>This tool is based on the <a href="https://jgi.doe.gov/data-and-tools/software-tools/bbtools/bb-tools-user-guide/bbduk-guide/">BBDuk tool of the BBTools package</a>. 
+Please cite <a href="https://sourceforge.net/projects/bbmap/">the primary website: BBMap – Bushnell B.</a></p>  
+
+</body>
+

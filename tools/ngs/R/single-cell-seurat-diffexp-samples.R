@@ -1,6 +1,7 @@
-# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in two samples" (This tool lists the cell type markers that are conserved across the two conditions, and the differentially expressed genes between the two conditions for a user defined cluster. This tool can be used for two sample combined Seurat objects.) 
+# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in two samples" (This tool lists the cell type markers that are conserved across the two conditions, and the differentially expressed genes between the two conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
+# OUTPUT OPTIONAL de-list_{...}.tsv
 # OUTPUT OPTIONAL conserved_markers.tsv
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
@@ -37,12 +38,6 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
     verbose = FALSE, logfc.threshold = logFC.conserved)
 
-# Filter based on logFC:
-# PARAMETER logFC.cutoff.conserved: "Threshold for logFC of conserved markers" TYPE INTEGER DEFAULT 1 (Threshold for the logFC of the conserved cluster markers: by default, fold changes smaller than 1 are filtered out.)
-# In case of negative fold changes;
-# logFC.cutoff.conserved_2 <- -logFC.cutoff.conserved
-# Note: hardcoded column names need to be changed to the stim levels in the next line
-# dat2 <- subset(cluster.markers, (CTRL_avg_logFC >= logFC.cutoff.conserved | CTRL_avg_logFC <= logFC.cutoff.conserved_2) & (STIM_avg_logFC >= logFC.cutoff.conserved | STIM_avg_logFC <= logFC.cutoff.conserved_2)) 
 
 # Filter conserved marker genes based on adj p-val:
 # Note: hardcoded column names need to be changed to the stim levels
@@ -59,22 +54,42 @@ data.combined$celltype <- Idents(data.combined)
 Idents(data.combined) <- "celltype.stim"
 
 lvls <- levels(as.factor(data.combined$stim))
-ident1 <- paste(cluster, "_", lvls[1], sep = "")
-ident2 <- paste(cluster, "_", lvls[2], sep = "")
-cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
 
-# Filter based on logFC:
-# PARAMETER logFC.cutoff.de: "Threshold for logFC of DE genes" TYPE INTEGER DEFAULT 1 (Threshold for the logFC of the DE genes: by default, fold changes smaller than 1 are filtered out.)
-# In case of negative fold changes;
-# logFC.cutoff.de_2 <- -logFC.cutoff.de
-# de2 <- subset(cluster_response, (avg_logFC >= logFC.cutoff.de | avg_logFC <= logFC.cutoff.de_2))
+if (length(lvls) < 2) { 
+  	stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
 
-# Filter DE genes based on adj p-val:
-de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de))
+# If there are only two samples:
+} else if (length(lvls) == 2) { 
+  ident1 <- paste(cluster, "_", lvls[1], sep = "")
+  ident2 <- paste(cluster, "_", lvls[2], sep = "")
+  cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
 
-# Write to table
-write.table(de2, file = "de-list.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+  # Filter DE genes based on adj p-val:
+  de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de))
 
+  # Write to table
+  write.table(de2, file = "de-list.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+# If there are more than 2 samples in the data:
+} else { 
+
+  for (i in 1:length(lvls) ) { 
+    # i:th sample vs all the others (= -i)
+    ident1 <- paste(cluster, "_", lvls[i], sep = "")
+    ident2 <- paste(cluster, "_", lvls[-i], sep = "")
+    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+
+    # Filter DE genes based on adj p-val:
+    de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de) )
+
+    # Comparison name for the output file:
+    comparison.name <- paste(lvls[i], "vsAllOthers", sep="")
+    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+
+    # Write to table
+    write.table(de2, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+  } 
+} 
 # Save the Robj for the next tool
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")
 

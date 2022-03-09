@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Extract UMIs from QuantSeq reads</h2>
+
+<h3>Description</h3>
+Given a Lexogen QuantSeq FASTQ file, this tool removes the TATA spacer and extracts the 6-base unique molecular identifier (UMI) and stores it in read's name.
+
+<br>
+<br>
+<h3>Parameters</h3>
+
+<ul>
+<li> None</li>
+</ul>
+
+<h3>Details</h3>
+
+
+<br>QuantSeq FWD-UMI libraries contain a 6 nt UMI at the start of the read, followed by a 4 nt spacer that separates the UMI from the random priming sequence that initiates second strand synthesis. 
+The spacer has the same sequence (TATA) in all reads, which generates low diversity signals for cycles 7-10 of Read 1. 
+This low diversity signature is visible in FastQC analysis results. 
+<br><br>
+This tool removes the TATA spacer and extracts the 6-base UMI and stores it in read's name.
+
+<h3>Output</h3>
+
+<p>The output consists of the following files:</p>
+
+<ul>
+<li>FASTQ file containing the trimmed reads</li>
+<li>log.txt file showing how many reads contained the TATA motif in position 7-10 and were thus kept and processed</li>
+</ul>
+
+<h3><br>References</h3>
+
+<p>This tool is based on the <a href="https://umi-tools.readthedocs.io/en/latest/reference/extract.html">extract tool of the UMI-Tools package</a>. Please cite</p>
+
+<p> T Smith, A Heger and I Sudbery: <a href="https://genome.cshlp.org/content/27/3/491">UMI-tools: Modelling sequencing errors in Unique Molecular 
+Identifiers to improve quantification accuracy.</a> Genome Res. 2017 27:491</p>  
+
+</body>

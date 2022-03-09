@@ -16,8 +16,10 @@
 	<ul>
 		<li> the cell type markers that are conserved across conditions (conserved_markers.tsv)</li>
 		<li> differentially expressed genes between the conditions (de-list.tsv) </li>
+		<li> OR, in case of more than 2 samples, differentially expressed genes of each sample compared to all the other
+			samples (de-list_samplenameVsAllOthers.tsv) </li>
 	</ul>
-	Conditions are determined in the Setup tool with the Sample or Group name parameter.
+	Conditions/samples are determined in the Setup tool with the Sample or Group name parameter.
 	</p>
 
 	<h3>Parameters</h3>
@@ -93,6 +95,8 @@
 	<ul>
 		<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
 		<li>de-list.tsv: Differentially expressed genes between the conditions </li>
+		<li>OR several de-list_samplenameVsAllOthers.tsv files: Differentially expressed genes between each sample and
+			all other samples</li>
 	</ul>
 
 

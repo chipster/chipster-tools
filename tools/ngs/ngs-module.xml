@@ -213,7 +213,8 @@
 		<tool>single-cell-seurat-CCA.R</tool>
 		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
 		<tool>single-cell-seurat-integrated-analysis.R</tool>	
-		<tool>single-cell-seurat-diffexp-samples.R</tool>	
+		<tool>single-cell-seurat-diffexp-samples.R</tool>
+		<tool>single-cell-seurat-diffexp-chosen-samples.R</tool>
 		<tool>single-cell-seurat-split-dot-plot.R</tool>	
 		<tool>single-cell-seurat-extract-cluster.R</tool>
 		<tool>single-cell-seurat-subset.R</tool>
