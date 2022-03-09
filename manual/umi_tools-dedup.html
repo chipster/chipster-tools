@@ -14,6 +14,7 @@ Given a BAM file of aligned Lexogen QuantSeq reads, this tool deduplicates them 
 
 <ul>
 <li>Grouping method (unique, directional) [unique]</li>
+<li>Produce statistics tables (yes, no) [no]</li>
 </ul>
 
 <h3>Details</h3>
@@ -35,6 +36,9 @@ For every group of duplicate reads, a single representative read is retained. Th
 <li>lowest number of mapping coordinates (multimapping reads are not reliable).</li>
 <li>highest mapping quality. Note that this is not the read base quality, and if two reads have the same mapping quality then one will be picked at random regardless of the base quality.</li>
 </ol>
+
+Finally, you can decide if statistics for the following should be reported: average edit distance between the UMIs at each position, counts for unique combinations of UMI and position, and UMI-level summary statistics.
+Please find a <a href="https://umi-tools.readthedocs.io/en/latest/reference/dedup.html#dedup-specific-options">detailed description of the statistics tables</a> in the dedup manual.
 
 <h3>Output</h3>
 
