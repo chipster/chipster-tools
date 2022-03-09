@@ -22,7 +22,10 @@ Sys.setenv(PATH = venv_path, VIRTUAL_ENV = venv_root)
  
 version <- system("umi_tools --version | cut -d : -f 2-",intern = TRUE)
 documentVersion("UMI-tools",version)
-umi.command <- paste("umi_tools dedup -I input.bam --output-stats=stats -S deduplicated.bam --method",grouping.method)
+umi.command <- paste("umi_tools dedup -I input.bam -S deduplicated.bam --method",grouping.method)
+if (stats == "yes"){
+  umi.command <- paste(umi.command, "--output-stats=stats")
+}
 documentCommand(umi.command)
 runExternal(umi.command)
 
