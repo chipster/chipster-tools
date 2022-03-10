@@ -74,7 +74,7 @@ if (fileOk("normal.bam")){
 	options <- paste(options, "-I normal.bam", "--normal", normal)
 }
 # VCF files. These need to bgzip compressed and tabix indexed
-if (fileOk("germline_resource.vcf")){
+if (fileOk("germline_resource.vcf")){	
 	formatGatkVcf("germline_resource.vcf",paste(chr))
 	options <- paste(options, "--germline-resource germline_resource.vcf.gz")
 }

@@ -26,7 +26,7 @@ formatGatkVcf <- function(input.vcf,bam.names){
 		# Rename tmp file
 		system(paste("mv output.vcf", input.vcf))
 	}  
-
+    # GATK requires files to compressed with bgzip and indexed
 	# Bgzip
 	system(paste(bgzip.binary, input.vcf))
 	# Index
