@@ -14,18 +14,17 @@ formatGatkVcf <- function(input.vcf,bam.names){
     
 	# Check if VCF chromosome names match BAM names
 	vcf.names <- getVCFNames(input.vcf)
-	if (vcf.names != bam.names){
-		# Naming schemes don't match
-		if (bam.names == "1"){
-			# BAM names have "1"- Remove "chr" from VCF names.
-            removeChrFromVCF(input.vcf, "output.vcf")
-		}else{
-			# BAM names have "chr". Add "chr" to VCF names.
-			addChrToVCF(input.vcf, "output.vcf")
-		}
-		# Rename tmp file
+    if ((bam.names == "1") && (vcf.names == "chr1")){
+		# BAM names have "1"- Remove "chr" from VCF names.
+        removeChrFromVCF(input.vcf, "output.vcf")
 		system(paste("mv output.vcf", input.vcf))
-	}  
+	}
+    if ((bam.names == "chr1") && (vcf.names == "1")){
+		# BAM names have "chr". Add "chr" to VCF names.
+		addChrToVCF(input.vcf, "output.vcf")
+		system(paste("mv output.vcf", input.vcf))
+	}
+		  
     # GATK requires files to compressed with bgzip and indexed
 	# Bgzip
 	system(paste(bgzip.binary, input.vcf))
