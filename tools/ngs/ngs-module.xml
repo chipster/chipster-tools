@@ -58,6 +58,7 @@
 		<tool>samtools-count.R</tool>
 		<tool>samtools-rmdup.R</tool>
 		<tool>picard-markduplicates.R</tool>
+		<tool>picard-addreadgroup.R</tool>
 		<tool>samtools-consensus.R</tool>
 		<tool>unique-alignments-from-bam.R</tool>
 		<tool>bedtools-bamtobed.R</tool>
@@ -84,7 +85,8 @@
 		<tool module="common">extract_zip.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_tar.R</tool>
-		<tool module="common">list_tar_contents.R</tool>
+		<tool module="common">combine-tar.R</tool>
+		<tool module="common">list_tar_contents.R</tool>	
 		<tool module="common">list_zip.py</tool>
 		<tool module="common">gzip.R</tool>	
 		<tool>a5-miseq.R</tool>
