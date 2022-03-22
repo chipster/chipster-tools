@@ -11,6 +11,7 @@
 # PARAMETER organism: "Reference sequence" TYPE [other, "FILES genomes/fasta .fa"] DEFAULT other (Reference sequence.)
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the reference sequence. Check your BAM and choose accordingly. This only applies to provided reference genomes.)
 # PARAMETER tumor: "Tumor sample name" TYPE STRING (BAM sample name of tumor.)
+# PARAMETER star: "STAR compatibilty mode" TYPE [yes,no] DEFAULT no (Some aligners such as STAR set MAPQ=255 for uniquely mapping reads. In GATK MAPQ=255 means mapping quality is not available. This option disables MappingQualityAvailableReadFilter.)
 # PARAMETER OPTIONAL normal: "Normal sample name" TYPE STRING (BAM sample name of normal.)
 # PARAMETER OPTIONAL gatk.interval: "Genomic intervals" TYPE STRING (One or more genomic intervals over which to operate. Format chromosome:begin-end, e.g. 20:10,000,000-10,200,000)
 # PARAMETER OPTIONAL gatk.padding: "Interval padding" TYPE INTEGER DEFAULT 0 (Amount of padding in bp to add to each interval.)
@@ -99,6 +100,10 @@ if (nchar(gatk.interval) > 0 ){
 if (gatk.bamout == "yes"){
 	options <- paste(options, "-bamout mutect2.bam")
 }
+if (star == "yes"){
+	options <- paste(options, "--disable-read-filter MappingQualityAvailableReadFilter")
+}
+
 
 # Command
 command <- paste(gatk.binary, "Mutect2", "-O mutect2.vcf", options)
@@ -113,20 +118,19 @@ documentVersion("GATK Mutect2",version)
 documentCommand(command)
 runExternal(command, java.path)
 
-# Return error message if no result
-if (fileNotOk("mutect2.vcf")){
-	system("ls -l >> error.txt")
-	system("mv error.txt gatk_log.txt")
-}
-
+# Log
+#system("mv stdout.tmp gatk_log.txt")
+system("cat stdout.tmp")
+system("cat stderr.tmp")
 
 # Output names
 basename <- strip_name(inputnames$tumor.bam)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
+outputnames <- matrix(NA, nrow=3, ncol=2)
 outputnames[1,] <- c("mutect2.bam", paste(basename, "_mutect2.bam", sep=""))
 outputnames[2,] <- c("mutect2.vcf", paste(basename, "_mutect2.vcf", sep=""))
+outputnames[3,] <- c("gatk_log.txt", paste(basename, "_mutect2.log", sep=""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
