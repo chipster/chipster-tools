@@ -12,7 +12,6 @@
 # PARAMETER OPTIONAL threshuse: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this log2 fold difference, between the two groups of cells. Increasing the threshold speeds up testing, but can miss weaker signals.)
 # PARAMETER OPTIONAL test.type: "Which test to use for detecting marker genes" TYPE [wilcox, DESeq2, MAST, bimod, roc, t, tobit, poisson, negbinom] DEFAULT wilcox (Seurat currently implements Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, MAST \(GLM-framework that treates cellular detection rate as a covariate\), poisson, negbinom and DESeq2. The latter three should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution. Note that DESeq2 is very slow and should be used only for comparisons between two clusters.)
 # PARAMETER OPTIONAL only.positive: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (When this parameter is set to true, only genes with positive log2 fold change are listed in the result file.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
 

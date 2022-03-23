@@ -5,7 +5,6 @@
 # OUTPUT stats_per_umi.tsv
 # OUTPUT stats_per_umi_per_position.tsv
 # PARAMETER grouping.method: "Grouping method" TYPE [unique, directional] DEFAULT unique (What method to use to identify group of reads with the same or similar UMIs. Unique means that the grouped reads share the exact same UMI. Differential allows for sequencing errors by building networks of related UMIs. Please see the manual page for details.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
 source(file.path(chipster.common.path, "tool-utils.R"))
