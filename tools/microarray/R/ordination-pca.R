@@ -10,6 +10,8 @@
 # PARAMETER OPTIONAL scaling: Scaling TYPE [yes: yes, no: no] DEFAULT no (Scale the data to have a unit variance)
 # PARAMETER OPTIONAL centering: Centering TYPE [yes: yes, no: no] DEFAULT yes (Scale the data to have the same mean)
 # PARAMETER OPTIONAL vectors: "No. of top genes to plot as vectors" TYPE INTEGER FROM 0 TO 5 DEFAULT 0 (Number of top genes to plot as vectors in PCA \(max 5\))
+# IMAGE comp-20.04-r-deps
+# RUNTIME R-4.1.1-statistics
 
 # JTT, 27.6.2006
 # MG, 29.3.2010 to enable coloring by cluster feature 
