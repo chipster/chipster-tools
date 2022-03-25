@@ -19,7 +19,7 @@
 # IS, 12.10.2012 to cope with tables with gene descriptions (that typically contain 's)
 # MK, 16.09.2013 modified to produce variance explanation table
 # EK, 02.07.2014 modified to produce loadings table
-# JH, 2022 modified for PCA biplot functionality, construction of normalized + phenodata joint table
+# JH, 25.03.2022 modified for PCA biplot functionality, construction of normalized + phenodata joint table
 
 # Load factoextra git
 library(factoextra)
