@@ -1,11 +1,11 @@
-# TOOL ordination-pca.R: PCA (Principal component analysis. The number of principal component to save is controlled through the explained variablity. All principal components are saved until the explained variability is exceeded, but at least 3 components are always saved.)
+# TOOL ordination-pca.R: PCA (Principal component analysis. The number of principal component to save is controlled through the explained variablity. All principal components are saved until the explained variability is exceeded, but at least 3 components are always saved. Up to 5 of the top genes contributing to between-group differences can be plotted as vectors on the PCA plot. The PCA plot is created using default plotting settings in the factoextra R package, with concentration ellipses enclosing 95\% of data within a group.)
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # INPUT META phenodata-normalized.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT pca.tsv: pca.tsv 
 # OUTPUT variance.tsv: variance.tsv 
 # OUTPUT loadings.tsv: loadings.tsv
 # OUTPUT pca_biplot.pdf: pca_biplot.pdf
-# PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique ID for each sample)
+# PARAMETER samplevar: "Phenodata column with sample names" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique ID for each sample)
 # PARAMETER OPTIONAL group_column: "Phenodata variable for PCA grouping" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable describing grouping added to PCA biplot)
 # PARAMETER OPTIONAL expvar: "Amount of variation to explain" TYPE INTEGER FROM 0 TO 100 DEFAULT 80 (Percentage of experimental variation to explain, as a percentage 0-100)
 # PARAMETER OPTIONAL scaling: Scaling TYPE [yes: yes, no: no] DEFAULT no (Scale the data to have a unit variance)
