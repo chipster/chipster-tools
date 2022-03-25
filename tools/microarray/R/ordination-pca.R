@@ -4,6 +4,7 @@
 # OUTPUT pca.tsv: pca.tsv 
 # OUTPUT variance.tsv: variance.tsv 
 # OUTPUT loadings.tsv: loadings.tsv
+# OUTPUT pca_biplot.pdf: pca_biplot.pdf
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique ID for each sample)
 # PARAMETER OPTIONAL group_column: "Phenodata variable for PCA grouping" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable describing grouping added to PCA biplot)
 # PARAMETER OPTIONAL expvar: "Amount of variation to explain" TYPE INTEGER FROM 0 TO 100 DEFAULT 80 (Percentage of experimental variation to explain, as a percentage 0-100)
@@ -70,7 +71,10 @@ if(no<3) {
 pcs<-as.data.frame(pc$x[,1:no])
 
 # Give the PC headers new names
-names(pcs)<-paste("chip.", names(pcs), sep="")
+# MAR 22: REMOVED
+# names(pcs)<-paste("chip.", names(pcs), sep="")
+
+# Round PCs to two digits
 pcs<-round(pcs,digits=2)
 
 # Save the PCs with data
