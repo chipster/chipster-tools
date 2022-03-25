@@ -21,9 +21,7 @@
 # EK, 02.07.2014 modified to produce loadings table
 # JH, 2022 modified for PCA biplot functionality, construction of normalized + phenodata joint table
 
-# setwd("/projappl/dac/harrison/chipster")
-
-# Load factoextra 
+# Load factoextra git
 library(factoextra)
 
 # Load normalized data
