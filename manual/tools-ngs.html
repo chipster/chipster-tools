@@ -22,19 +22,20 @@
                 <li> <a href="#alignment">Alignment</a></li>
                 <li> <a href="#variants">Variants</a></li>
                 <li> <a href="#RNA">RNA-seq</a></li>
-                <li> <a href="#miRNA">miRNA-seq</a></li>
+                <li> <a href="#miRNA">Small RNA-seq</a></li>
+                <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
                 <li> <a href="#ChIP">ChIP- and DNase-seq</a></li>
-                <li> <a href="#CNA">CNA-seq</a></li>
                 <li> <a href="#micropreproc">Microbial amplicon data preprocessing</a></li>
                 <li> <a href="#microanalysis">Microbial amplicon data analyses</a></li>
-                <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
+                <li> <a href="#CNA">CNA-seq</a></li>
         </ol>
         <hr>
         <ul>
                 <b><a name="quality">Quality control</a></b>
                 <li> <a href="fastqc.html">Read quality with FastQC</a></li>
+                <li> <a href="fastqc_multiqc.html">Read quality with MultiQC for many FASTQ files</a></li>
                 <li> <a href="fastx-statistics.html">Quality statistics with FASTX</a></li>
-                <li> <a href="prinseq-statistics.html">Read quality statistics with PRINSEQ</a></li>
+                <!-- <li> <a href="prinseq-statistics.html">Read quality statistics with PRINSEQ</a></li> -->
                 <li> <a href="rseqc.html">RNA-seq quality metrics with RseQC</a></li>
                 <li> <a href="rseqc_infer_rnaseq_experiment.html">RNA-seq strandedness inference and inner distance
                                 estimation
@@ -43,7 +44,7 @@
                 <!-- <li> <a href="deseq2-pca-heatmap.html">PCA and heatmap of samples with DESeq2</a></li> -->
                 <li> <a href="heatmap-for-rnaseq.html">Heatmap for RNA-seq results</a></li>
                 <li> <a href="check-fastq.html">Check FASTQC file for errors</a></li>
-                <li> <a href="multiqc.html">Combine reports using MultiQC</a></li>
+                <!-- <li> <a href="multiqc.html">Combine reports using MultiQC</a></li> broken--> 
                 <br>
                 <br>
                 <b><a name="preprocessing">Preprocessing</a></b>
@@ -53,7 +54,7 @@
                 <li> <a href="tagcleaner-trim.html">Trim primers/adaptors with TagCleaner</a></li>
                 <li> <a href="tagcleaner-predict.html">Predict primers/adaptors with TagCleaner</a></li>
                 <li> <a href="tagcleaner-statistics.html">Statistics for primers/adaptors with TagCleaner</a></li>
-                <li> <a href="prinseq-filter.html">Filter reads for several criteria with PRINSEQ</a></li>
+                <!-- <li> <a href="prinseq-filter.html">Filter reads for several criteria with PRINSEQ</a></li> -->
                 <li> <a href="fastx-quality-filter.html">Filter reads for quality with FASTX</a></li>
                 <li> <a href="fastx-clipper.html">Filter reads for adapters, length and Ns with FASTX</a></li>
                 <br>
@@ -228,6 +229,37 @@
                 <li> <a href="virusdetect-with-index-building.html">VirusDetect with own host genome</a></li>
                 <br>
                 <br>
+                <b><a name="singlecell">Single-cell RNA-seq</a></b>
+                <li><a href="single-cell-seurat-setup-v3.html">Seurat -Setup and QC</a></li>
+                <li><a href="single-cell-scater-QC.html">Scater - QC</a></li> 
+                <li><a href="single-cell-seurat-filter-regress-v3.html">Seurat -Filter, normalize, regress and detect variable genes</a></li>
+                <li><a href="single-cell-seurat-sctransform.html">Seurat v3 -SCTransform: Filter, normalize, regress and detect variable genes</a></li>
+                <li><a href="single-cell-seurat-pca-v3.html">Seurat -PCA</a></li>
+                <li><a href="single-cell-seurat-clustering-v3.html">Seurat -Clustering and detection of cluster marker genes</a></li>
+                <li><a href="single-cell-seurat-find-markers-v3.html">Seurat -Find differentially expressed genes between clusters</a></li>
+                <li><a href="single-cell-seurat-gene-plots-v3.html">Seurat -Visualize biomarker(s)</a></li>
+                <li><a href="single-cell-seurat-featureplot-v3.html">Seurat -Visualise features in UMAP plot </a></li>
+                <li><a href="single-cell-seurat-CCA-v3.html">Seurat -Combine two samples</a></li>
+                <li><a href="single-cell-seurat-integrated-analysis-v3.html">Seurat -Integrated analysis of two samples</a></li>
+                <li><a href="single-cell-seurat-diffexp-samples-v3.html">Seurat -Find conserved cluster markers and DE genes in two samples</a></li>
+                <li><a href="single-cell-seurat-split-dot-plot-v3.html">Seurat -Visualize genes with cell type specific responses in two samples</a></li>
+                <li><a href="single-cell-seurat-extract-cluster.html">Seurat -Extract cells in a cluster</a></li>
+                <li><a href="single-cell-seurat-subset.html">Seurat -Subset Seurat objects based on gene expression</a> </li>
+                <!-- DropSeq tools:-->
+                <li><a href="single-cell-preprocessing.html">Preprocessing of DropSeq FASTQ files</a></li>
+                <!-- <li><a href="picard-fastqtosam.html">FASTQ to BAM</a></li> -->
+                <!-- <li><a href="single-cell-TagBam.html">Tag BAM</a></li> -->
+                <!-- <li><a href="single-cell-FilterBam.html">Filter and trim BAM</a></li> -->
+                <!-- <li><a href="picard-samtofastq.html">BAM to FASTQ</a></li> -->
+                <!-- <li><a href="picard-sortsam.html">Sort BAM</a></li> -->
+                <li><a href="picard-merge-bam-alignment.html">Merge aligned and unaligned BAM</a></li>
+                <!--<li><a href="single-cell-tag-read-with-gene-exon.html">Tag reads with gene names</a></li> -->
+                <li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>
+                <!-- <li><a href="single-cell-detect-bead-synthesis-erros.html">Detect bead synthesis errors</a></li> -->
+                <li><a href="single-cell-digital-expression.html">Create digital gene expression matrix</a></li>
+                <!--<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>-->
+                <br>
+                <br>
                 <b><a name="ChIP">ChIP- and DNase-seq</a></b>
                 <li> <a href="macs2.html">Find peaks using MACS2</a></li>
                 <li> <a href="ngs-find-peaks-macs-one.html">Find peaks using MACS, treatment only</a></li>
@@ -241,6 +273,51 @@
                 <li> <a href="dimont-extract-data-custom.html">Dimont sequence extractor using own genome</a></li>
                 <li> <a href="dimont.html">Find motifs with Dimont</a></li>
                 <li> <a href="dimont-predictor.html">DimontPredictor</a></li>
+                <br>
+                <br>
+                <b><a name="micropreproc">Microbial amplicon data preprocessing</a></b>
+                <li><a href="mothur-trimseqs-uniqueseqs.html">Trim primers and barcodes and filter reads</a></li>
+                <li><a href="mothur-makegroup.html">Combine FASTQ or FASTA files and make a group file</a></li>
+                <li><a href="mothur-makecontigs.html">Combine paired reads to contigs</a></li>
+                <li><a href="fastq-mergepairs.html">Combine paired reads to contigs with vsearch</a></li>
+                <li><a href="fastq-filter.html">Filter contigs based on the number of expected errors</a></li>
+                <li><a href="mothur-screenseqs.html">Screen sequences for several criteria</a></li>
+                <li><a href="mothur-uniqueseqs.html">Extract unique sequences</a></li>
+                <li><a href="mothur-alignseqs.html">Align sequences to reference</a></li>
+                <li><a href="mothur-filterseqs.html">Filter sequence alignment</a></li>
+                <li><a href="mothur-precluster.html">Precluster aligned sequences</a></li>
+                <li><a href="mothur-chimera-uchime.html">Remove chimeric sequences</a></li>
+                <li><a href="mothur-classifyseqs.html">Classify 16S or 18S sequences to taxonomic units using Silva</a></li>
+                <li><a href="mothur-classifyseqs-its.html">Classify ITS sequences to taxonomic units using UNITE</a></li>
+                <!--<li><a href="mothur-classify-counttable.html">Produce count table and phenodata</li> -->
+                <!-- <li><a href="mothur-analyses.html">Statistical analysis for marker gene studies</a></li> -->
+                <li><a href="mothur-seq-error.html">Asses error rates</a></li>
+                <li><a href="mothur-summaryseqs.html">Summarize sequences</a></li>
+                <li><a href="mothur-sffinfo.html">Extract sequences from SFF file</a></li>
+                <li><a href="mothur-fastqinfo.html">Split FASTQ file to FASTA and QUAL files</a></li>
+                <li><a href="merge-fasta-qual.html">Merge FASTA or QUAL files</a></li>
+                <li><a href="fixed_text_conversions.html">Convert contig names to Mothur format</a></li>
+                <br>
+                <br>
+                <b><a name="microanalysis">Microbial amplicon data analyses</a></b>
+                <li><a href="mothur-phyloseq-inputs.html">Generate input files for phyloseq</a></li>
+                <li><a href="metabarcoding-import.html">Convert mothur files into phyloseq object</a></li>
+                <li><a href="metabarcoding-rarecurve-alpha.html">Sequence numbers, rarefaction curve and alpha diversity estimates</a></li>
+                <li><a href="metabarcoding-rarefy-even.html">Rarefy to even depth</a></li>
+                <li><a href="metabarcoding-taxon-overview.html">Overview of taxon composition</a></li>
+                <li><a href="metabarcoding-filter-taxgroup.html">Filter by taxonomic group</a></li>
+                <li><a href="metabarcoding-filter-individual.html">Remove selected taxa</a></li>
+                <li><a href="metabarcoding-additional-prevalence.html">Additional prevalence summaries</a></li>
+                <li><a href="metabarcoding-single-double.html">Remove OTUs with 0-2 occurrences</a></li>
+                <li><a href="metabarcoding-prevalence-filter.html">Proportional prevalence filtering</a></li>
+                <li><a href="metabarcoding-transform-otu.html">Transform OTU counts</a></li>
+                <li><a href="metabarcoding-stacked-barplot.html">OTU relative abundance bar plots</a></li>
+                <li><a href="metabarcoding-distance-ordination.html">Distance matrices and ordinations</a></li>
+                <li><a href="metabarcoding-global-permanova.html">Global PERMANOVA for OTU abundance data</a></li>
+                <li><a href="metabarcoding-permdisp.html">PERMDISP for OTU abundance data</a></li>
+                <li><a href="metabarcoding-pairwise-permanova.html">Post-hoc pairwise PERMANOVA for OTU abundance data</a></li>
+                <li><a href="metabarcoding-pairwise-tukey.html">Post-hoc pairwise Tukey's HSD for OTU abundance data</a></li>
+                <li><a href="metabarcoding-deseq2.html">Differential OTU abundance analysis using DESeq2</a></li>
                 <br>
                 <br>
                 <b><a name="CNA">CNA-seq</a></b>
@@ -270,97 +347,7 @@
                 </li>
                 <li><a href="acgh-expression-test.html">Test for copy number induced expression changes</a></li>
                 <li><a href="acgh-plot-combined-expression.html">Plot copy number induced gene expression</a></li>
-                <br>
-                <br>
-                <b><a name="micropreproc">Microbial amplicon data preprocessing</a></b>
-                <li><a href="mothur-trimseqs-uniqueseqs.html">Trim primers and barcodes and filter reads</a></li>
-                <li><a href="mothur-makecontigs.html">Combine paired reads to contigs</a></li>
-                <li><a href="mothur-screenseqs.html">Screen sequences for several criteria</a></li>
-                <li><a href="mothur-uniqueseqs.html">Extract unique sequences</a></li>
-                <li><a href="mothur-alignseqs.html">Align sequences to reference</a></li>
-                <li><a href="mothur-filterseqs.html">Filter sequence alignment</a></li>
-                <li><a href="mothur-precluster.html">Precluster aligned sequences</a></li>
-                <li><a href="mothur-chimera-uchime.html">Remove chimeric sequences</a></li>
-                <li><a href="mothur-classifyseqs.html">Classify sequences to taxonomic units</li>
-                <!--<li><a href="mothur-classify-counttable.html">Produce count table and phenodata</li> -->
-                <!-- <li><a href="mothur-analyses.html">Statistical analysis for marker gene studies</a></li> -->
-                <li><a href="mothur-summaryseqs.html">Summarize sequences</a></li>
-                <li><a href="mothur-sffinfo.html">Extract sequences from SFF file</a></li>
-                <li><a href="mothur-fastqinfo.html">Split FASTQ file to FASTA and QUAL files</a></li>
-                <li><a href="merge-fasta-qual.html">Merge FASTA or QUAL files</a></li>
-                <br>
-                <br>
-                <b><a name="microanalysis">Microbial amplicon data analyses</a></b>
-                <li><a href="mothur-phyloseq-inputs.html">Generate input files for phyloseq</a></li>
-                <li><a href="metabarcoding-import.html">Convert mothur files into phyloseq object</a></li>
-                <li><a href="metabarcoding-rarecurve-alpha.html">Sequence numbers, rarefaction curve and alpha diversity
-                                estimates</a></li>
-                <li><a href="metabarcoding-taxon-overview.html">Overview of taxon composition</a></li>
-                <li><a href="metabarcoding-rarefy-even.html">Rarefy to even depth</a></li>
-                <li><a href="metabarcoding-filter-taxgroup.html">Filter by taxonomic group</a></li>
-                <li><a href="metabarcoding-filter-individual.html">Filter out individual phyla</a></li>
-                <li><a href="metabarcoding-single-double.html">Remove OTUs with 0-2 occurrences</a></li>
-                <li><a href="metabarcoding-additional-prevalence.html">Additional prevalence summaries</a></li>
-                <li><a href="metabarcoding-prevalence-filter.html">Proportional prevalence filtering</a></li>
-                <li><a href="metabarcoding-transform-otu.html">Transform OTU counts</a></li>
-                <li><a href="metabarcoding-stacked-barplot.html">OTU relative abundance bar plots</a></li>
-                <li><a href="metabarcoding-distance-ordination.html">Distance matrices and ordinations</a></li>
-                <li><a href="metabarcoding-global-permanova.html">Global PERMANOVA for OTU abundance data</a></li>
-                <li><a href="metabarcoding-pairwise-permanova.html">Post-hoc pairwise PERMANOVA for OTU abundance
-                                data</a></li>
-                <li><a href="metabarcoding-permdisp.html">PERMDISP for OTU abundance data</a></li>
-                <li><a href="metabarcoding-pairwise-tukey.html">Post-hoc pairwise Tukey's HSD for OTU abundance data</a>
-                </li>
-                <li><a href="metabarcoding-deseq2.html">Differential OTU abundance analysis using DESeq2</a></li>
-                <br>
-                <br>
-                <b><a name="singlecell">Single-cell RNA-seq</a></b>
-
-                <li><a href="single-cell-seurat-setup.html">Seurat -Setup and QC</a></li>
-                <li><a href="single-cell-seurat-filter-regress.html">Seurat -Filtering, regression and detection of
-                                variable genes</a></li>
-                <li><a href="single-cell-seurat-sctransform.html">Seurat -SCTransform: Filtering, regression and
-                                detection of variable genes</a></li>
-                <li><a href="single-cell-seurat-pca.html">Seurat -PCA</a></li>
-                <li><a href="single-cell-seurat-clustering.html">Seurat -Clustering and detection of cluster marker
-                                genes</a></li>
-                <li><a href="single-cell-seurat-find-markers-v3.html">Seurat -Find differentially expressed genes
-                                between clusters</a></li>
-                <li><a href="single-cell-seurat-gene-plots.html">Seurat -Visualize genes</a></li>
-                <li><a href="single-cell-seurat-featureplot-v3">Seurat -Visualise features in UMAP plot </a></li>
-                <li><a href="single-cell-seurat-CCA.html">Seurat -Combine two samples</a></li>
-                <li><a href="single-cell-seurat-integrated-analysis.html">Seurat -Integrated analysis of two samples</a>
-                </li>
-                <li><a href="single-cell-seurat-diffexp-samples.html">Seurat -Find conserved cluster markers and DE
-                                genes in two samples</a></li>
-                <li><a href="single-cell-seurat-split-dot-plot.html">Seurat -Visualize genes with cell type specific
-                                responses in two samples</a></li>
-                <li><a href="single-cell-seurat-extract-cluster.html">Seurat BETA -Extract cells in a cluster</a></li>
-                <li><a href="single-cell-seurat-subset.html">Seurat BETA -Subset Seurat objects based on gene
-                                expression</a> </li>
-
-                <!-- DropSeq tools:-->
-                <li><a href="single-cell-preprocessing.html">Preprocessing of DropSeq FASTQ files</a></li>
-                <!-- <li><a href="picard-fastqtosam.html">FASTQ to BAM</a></li> -->
-                <!-- <li><a href="single-cell-TagBam.html">Tag BAM</a></li> -->
-                <!-- <li><a href="single-cell-FilterBam.html">Filter and trim BAM</a></li> -->
-                <!-- <li><a href="picard-samtofastq.html">BAM to FASTQ</a></li> -->
-                <!-- <li><a href="picard-sortsam.html">Sort BAM</a></li> -->
-                <li><a href="picard-merge-bam-alignment.html">Merge aligned and unaligned BAM</a></li>
-                <!--<li><a href="single-cell-tag-read-with-gene-exon.html">Tag reads with gene names</a></li> -->
-                <li><a href="single-cell-bam-tag-histogram.html">Estimate number of usable cells</a></li>
-                <!-- <li><a href="single-cell-detect-bead-synthesis-erros.html">Detect bead synthesis errors</a></li> -->
-                <li><a href="single-cell-digital-expression.html">Create digital gene expression matrix</a></li>
-                <!--<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>-->
-
-
-
-
-
-
-
-
-                <!--        <li> <a href=" "> </a> </li>        -->
+                
         </ul>
 
 </body>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Combine FASTQ or FASTA files and make a group file</h2>
+
+<h3>Description</h3>
+
+<p>
+Combines FASTQ or FASTA files of each sample to one file and creates a Mothur group file. Input can be one or more FASTQ or FASTA files or a tar file. Input files can be gzipped.
+
+</p>
+
+<h3>Parameters</h3>
+None
+
+<h3>Details</h3>
+<p>
+For the Mothur-based tools in Chipster your samples need to be in one FASTA file. 
+In order to assign sequences to a specific sample, you need also a <a href="http://www.mothur.org/wiki/group_file/">Mothur group file</a>.
+If you have single end data (e.g. Ion Torrent) and your samples are in separate FASTQ files, you can convert them FASTA and combine them with this tool,
+which also generates the group file.   
+</p>
+<p>
+Input can be one or more FASTQ or FASTA files or a tar file containing FASTQ or FASTA files.    
+</p>
+<p>
+This tool is based on the Mothur tools <a href="http://www.mothur.org/wiki/make.group/">make.group</a>, <a href="http://www.mothur.org/wiki/merge.files/">merge.files</a> and <a href="http://www.mothur.org/wiki/summary.seqs/">summary.seqs</a>.
+</p>
+
+<h3>Output</h3>
+
+<p>The output consists of the following files:</p>
+<ul>
+<li>sequences.fasta.gz: Compressed FASTA file containing sequences from all the samples</li> 
+<li>sequences.groups: Mothur group file indicating what sequence belongs to what sample </li>
+<li>sequences-summary.tsv: Summary statistics for the sequences </li> 
+</ul>
+
+
+<h3>References</h3>
+<p>Schloss PD, Westcott SL, Ryabin T, Hall JR, Hartmann M, Hollister EB, Lesniewski RA, Oakley BB, Parks DH, Robinson CJ, Sahl JW, Stres B, Thallinger GG, Van Horn DJ, Weber CF.
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2786419/">Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.</a> 
+</p>
+
+</body>

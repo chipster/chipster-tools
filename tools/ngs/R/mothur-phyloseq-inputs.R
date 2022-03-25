@@ -15,7 +15,7 @@
 # OUTPUT OPTIONAL file.agc.0.01.cons.taxonomy
 # OUTPUT OPTIONAL file.opti_mcc.shared
 # OUTPUT OPTIONAL file.agc.shared
-# PARAMETER datatype: "Type of data" TYPE [other: "16S, 18S or archaeal", its: "ITS"] DEFAULT other (Choice between ITS vs other data)
+# PARAMETER datatype: "Type of data" TYPE [other: "16S, 18S or archaeal", its: "ITS or Ion Torrent data"] DEFAULT other (Choice between ITS vs other data. Note that Ion Torrent data needs to be specified)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
 
 # AMS JH EK 2020-2021
@@ -54,7 +54,7 @@ if (datatype == "other"){
 
 if (datatype == "other"){ 
     cluster.options <- paste("cluster(column=file.dist, count=picked.count_table")
-    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
+    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "", "seed" = 1)
     documentCommand(cluster.options)
     write(cluster.options,"cluster.mth",append = FALSE)
     command <- paste(binary,"cluster.mth","> log_cluster.txt")
@@ -64,7 +64,7 @@ if (datatype == "other"){
 
 if (datatype == "its"){
     cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc")
-    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "")
+    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "", "seed" = 1)
     documentCommand(cluster.options)
     write(cluster.options,"cluster.mth",append = FALSE)
     command <- paste(binary,"cluster.mth","> log_cluster.txt")

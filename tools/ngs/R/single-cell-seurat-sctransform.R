@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-sctransform.R: "Seurat v3 -SCTransform: Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)  
+# TOOL single-cell-seurat-sctransform.R: "Seurat v4 -SCTransform: Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)  
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Dispersion_plot.pdf 
 # OUTPUT OPTIONAL seurat_obj_sctransform.Robj
@@ -8,12 +8,15 @@
 # PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out dead cells. The cells to be kept must have lower percentage of mitochondrial transcripts than this.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-3.6.1-single-cell
+# IMAGE comp-20.04-r-deps
+# RUNTIME R-4.1.0-single-cell
+
 
 
 # 2020-06-17 ML
 # 2020-10-11 EK Unified parameter descriptions with the corresponding normalization tool 
 # 2020-12-18 ML Always compute the cell-cycle scoring and plot the PCA + Remove the plot titles, as they started giving errors.
+# 2021-10-04 ML Update to Seurat v4
 
 # Source: https://github.com/satijalab/seurat/issues/1679
 
@@ -40,7 +43,8 @@ seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA
 
 # SCTransform:
 # Note that this single command replaces NormalizeData, ScaleData, and FindVariableFeatures.
-seurat_obj <- SCTransform(seurat_obj, assay = 'RNA', new.assay.name = 'SCT', vars.to.regress = c('percent.mt', 'nFeature_RNA', 'nCount_RNA'), variable.features.n = num.features, verbose = FALSE)
+# seurat_obj <- SCTransform(seurat_obj, assay = 'RNA', new.assay.name = 'SCT', vars.to.regress = c('percent.mt', 'nFeature_RNA', 'nCount_RNA'), variable.features.n = num.features, verbose = FALSE)
+seurat_obj <- SCTransform(seurat_obj, assay = 'RNA', new.assay.name = 'SCT', vars.to.regress = c('percent.mt'), variable.features.n = num.features, verbose = FALSE)
 
 
 # Dispersion plot:

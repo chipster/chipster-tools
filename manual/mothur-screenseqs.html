@@ -8,19 +8,21 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta file and a group/count file, this tool screens out sequences that do not fulfill user defined criteria.
+Given a fasta file and a group/count file, this tool screens out sequences that do not fulfill user-defined criteria. 
+Note that this tool is used in twice during preprosessing (before and after aligning sequences to the reference) and different parameters apply: 
+You should use the length parameters before alignment, and the alignment start and end parameters after the alignment.
 </p>
 
 <h3>Parameters</h3>
 <ul>
-<li>Minimum length </li>
-<li>Maximum length </li>
-<li>Alignment start position </li>
-<li>Alignment end position</li>
-<li>Optimize by (empty, minlength, start, end) [empty]</li>
-<li>Optimization criteria (0-100) </li>
 <li>Maximum number of ambiguous bases </li>
 <li>Maximum homopolymer length </li>
+<li>Minimum length </li>
+<li>Maximum length </li>
+<li>Alignment start position (remove sequences which start after this position)</li>
+<li>Alignment end position (remove sequences which end before this position)</li>
+<li>Optimize by (empty, minlength, start, end) [empty]</li>
+<li>Optimization criteria (0-100) </li>
 </ul>
 
 <h3>Details</h3>
@@ -29,6 +31,10 @@ Screen out sequences based on their length or alignment position.
 You can either choose the cut-off yourself (first four parameters), or use the optimization based on these.
 If you use the optimization, remember to determine the criteria: 
 for example 85 means that Mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.
+<br>
+<br>
+After you have combined paired reads to contigs with VSEARCH, you need to run tool "Combine FASTQ or FASTA files and make a group file"
+to get a group and fasta file. 
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Screen.seqs">screen.seqs</a> command of the Mothur package.
 </p>

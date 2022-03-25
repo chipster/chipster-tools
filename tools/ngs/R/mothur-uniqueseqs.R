@@ -2,8 +2,8 @@
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT a.groups: "Groups file" TYPE MOTHUR_GROUPS
 # OUTPUT unique.fasta.gz
-# OUTPUT OPTIONAL unique.summary.tsv
-# OUTPUT OPTIONAL unique.count_table
+# OUTPUT unique.summary.tsv
+# OUTPUT unique.count_table
 
 
 # OUTPUT OPTIONAL log.txt
@@ -43,7 +43,7 @@ system("mv a.unique.fasta unique.fasta")
 
 
 # batch file 2 count.seqs -creates a new count_table
-countseqs.options <- paste("count.seqs(name=a.names, group=a.groups)",sep = "")
+countseqs.options <- paste("count.seqs(name=a.names, group=a.groups, compress=f)",sep = "")
 documentCommand(countseqs.options)
 write(countseqs.options,"batch.mth",append = FALSE)
 

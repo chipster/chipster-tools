@@ -3,12 +3,12 @@
 <head><title></title></head>
 <body>
 
-<h2>Seurat - Visualise features in tSNE plot </h2>
+<h2>Seurat - Visualise features in UMAP plot </h2>
 
 <h3>Description</h3>
 
 <p>
-Color single cells on a tSNE dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc. 
+Color single cells on a UMAP dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc. 
 As input the user gives the Seurat R-object (.Robj) after the clustering step, 
 and selects the feature of interest.
 </p>
@@ -16,13 +16,13 @@ and selects the feature of interest.
  <h3>Parameters</h3>
 <ul>
 		<li>Feature</li>
-		<li>Point size in tSNE plot</li>
+		<li>Point size in UMAP plot</li>
 </ul>
 
  <h3>Details</h3>
  
 <p>
-The resulting tSNE dimension reduction plot colors the single cells according the selected features 
+The resulting UMAP dimension reduction plot colors the single cells according the selected features 
 available in Seurat objects, such as
  percentage of mitochondrial genes (percent.mito), number of unique molecular identifiers (nUMI),
  number of genes expressed (nGene) or effect on the first principal components (PCA1 and PCA2).
@@ -38,7 +38,7 @@ For more details, please check the <a href="https://www.rdocumentation.org/packa
 <h3>Output</h3>
 
 <ul>
-<li>tSNEplot.pdf: tSNE plot colored based on the selected feature </li>
+<li>UMAPplot.pdf: UMAP plot colored based on the selected feature </li>
 </ul>
 
 

@@ -7,14 +7,12 @@
 
 <h3>Description</h3>
 
-<p>Calculates a geometric or arithmetic average of gene expression for replicate chips and then calculates a difference or ratio between the averages. This tool is applicable only if the data has two groups.</p>
+<p>Calculates a geometric average of gene expression for replicate chips and then calculates a difference or ratio between the averages. This tool is applicable only if the data has two groups.</p>
 
 <h3>Parameters</h3>
 
 <ul>
 <li>Column [group]</li>
-<li>Which mean to use (geometric, arithmetic) [geometric] </li>
-<li>Scale (log2, linear) [log2] </li>
 </ul>
 
 <h3>Details</h3>
@@ -25,15 +23,13 @@ Then Chipster knows to compare treatment to control (control is coded with a sma
 Since this makes a difference when interpreting the results such as fold change, it is worth paying attention to.</p>
 
 <p>
-First the samples in both groups are averaged - either using the geometric or arithmetic mean - and then a fold change of these averages
-is calculated. In most cases the geometric mean is considered the most appropriate way to calculate the average expression, especially for data from 2-color array
-experiments.  Fold change is reported in either linear or base 2 logarithmic scale. By default, the output is given in base 2 logarithmic scale, due to the statistical benefits and the ease of use and graphical interpretation
-this brings. However, sometimes users may wish to report the fold changes as linear ratios, which can be achieved by setting the "scale" parameter accordingly. </p>
+First the samples in both groups are averaged using geometric mean - and then a fold change of these averages
+is calculated. Fold change is reported in base 2 logarithmic scale.</p>
 
 
 <h3>Output</h3>
 
-<p>A table with the fold change values.</p>
+<p>A table with the fold change values in fold-change.tsv</p>
 
 </body>
 

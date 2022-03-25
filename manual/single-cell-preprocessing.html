@@ -1,22 +1,27 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
-<head><title></title></head>
+
+<head>
+	<title></title>
+</head>
+
 <body>
 
-<h2>Preprocessing DropSeq FASTQ files</h2>
+	<h2>Preprocessing DropSeq FASTQ files</h2>
 
-<h3>Description</h3>
+	<h3>Description</h3>
 
-<p>This tool converts FASTQ files to unaligned BAM file, 
-tags the sequence reads with the cell and molecular barcodes,
-removes the reads which contain low quality bases in barcodes, trims adapters and polyA tails,
-converts the preprocessed BAM file back into a FASTQ format for alignment,
-and filters out too short reads from the FASTQ file. 
-As an output it produces an unaligned, tagged and trimmed BAM file, a trimmed FASTQ file, a summary file, and plots of the process.
- </p>
- 
- <h3>Parameters</h3>
-<ul>
+	<p>This tool converts FASTQ files to unaligned BAM file,
+		tags the sequence reads with the cell and molecular barcodes,
+		removes the reads which contain low quality bases in barcodes, trims adapters and polyA tails,
+		converts the preprocessed BAM file back into a FASTQ format for alignment,
+		and filters out too short reads from the FASTQ file.
+		As an output it produces an unaligned, tagged and trimmed BAM file, a trimmed FASTQ file, a summary file, and
+		plots of the process.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
 		<li>Base range for cell barcode [1-12]</li>
 		<li>Base range for molecule barcode [13-20]</li>
 		<li>Base quality [10]</li>
@@ -25,93 +30,101 @@ As an output it produces an unaligned, tagged and trimmed BAM file, a trimmed FA
 		<li>Number of bases to check in adapter [5]</li>
 		<li>Mismatches in polyA [0]</li>
 		<li>Number of bases to check in polyA [6]</li>
-		<li>Minimum length of reads to keep [50]</li>	
+		<li>Minimum length of reads to keep [50]</li>
 	</ul>
- 
- <h3>Details</h3>
- 
-This tool combines several tools: 
-<ul>
-<li>DropSeq (TagBamWithReadSequenceExtended, FilterBam)</li> 
-<li>Picard (FASTQ to BAM, BAM to FASTQ)</li>
-<li>Trimmomatic (MINLEN)</li>
-</ul>
-Overview of the steps:
-<ol>
+
+	<h3>Details</h3>
+
+	This tool combines several tools:
+	<ul>
+		<li>DropSeq (TagBamWithReadSequenceExtended, FilterBam)</li>
+		<li>Picard (FASTQ to BAM, BAM to FASTQ)</li>
+		<li>Trimmomatic (MINLEN)</li>
+	</ul>
+	Overview of the steps:
+	<ol>
 		<li>Convert the FASTQ files into an unaligned BAM file</li>
 		<li>Tag the sequence reads in the BAM file with cell and molecular barcodes </li>
 		<li>Filter and trim the reads in the BAM file</li>
 		<li>Convert the tagged and trimmed BAM file back to FASTQ format for aligning the reads to genome</li>
 		<li>Filter out too short reads from the FASTQ file</li>
-</ol>
+	</ol>
 
-<p>
-Since the FASTQ format cannot hold the information about the cell and molecular barcodes of the sequence reads, 
-we need to transform the FASTQ files into a BAM file. The BAM format has a tag field which can store the barcode information.
-We also trim and filter the sequence reads in the BAM format.
-However, aligners take as input only FASTQ format, so we need to transform the trimmed & filtered
-BAM back to FASTQ format. 
-After this preprocessing step, we will have one unaligned, tagged and trimmed BAM file 
-that holds the information of the cell and molecular barcodes in the tags, and a FASTQ file ready for alignment.
-After the alignment, these two files are merged using the tool Merge aligned and unaligned BAM.
-</p>
+	<p>
+		Since the FASTQ format cannot hold the information about the cell and molecular barcodes of the sequence reads,
+		we need to transform the FASTQ files into a BAM file. The BAM format has a tag field which can store the barcode
+		information.
+		We also trim and filter the sequence reads in the BAM format.
+		However, aligners take as input only FASTQ format, so we need to transform the trimmed & filtered
+		BAM back to FASTQ format.
+		After this preprocessing step, we will have one unaligned, tagged and trimmed BAM file
+		that holds the information of the cell and molecular barcodes in the tags, and a FASTQ file ready for alignment.
+		After the alignment, these two files are merged using the tool Merge aligned and unaligned BAM.
+	</p>
 
-Detailed description of the steps:
-<ol>
-<li><b>Convert the FASTQ files into an unaligned BAM file</b></li>
+	Detailed description of the steps:
+	<ol>
+		<li><b>Convert the FASTQ files into an unaligned BAM file</b></li>
 
-<li><b>Tag the sequence reads with cell and molecular barcodes</b> extracts cell and molecular barcodes from the barcode read,
- and puts the barcode bases in BAM tags XC and XM, respectively.<br>
-This program is run once per barcode extraction to add a tag. 
-On the first iteration, the cell barcode is extracted from bases determined in the first parameter (default: 1­12).
-On the second iteration, the molecular barcode is extracted from bases determined by the base range for molecular barcode
-parameter (default 13­20) of the barcode read.<br>
-The tool also tags reads where the base quality in the barcode drops below a threshold.
-The number of bases that fall below the threshold is marked in the XQ tag. 
-This information is used in the subsequent filtering step.</li>
+		<li><b>Tag the sequence reads with cell and molecular barcodes</b> extracts cell and molecular barcodes from the
+			barcode read,
+			and puts the barcode bases in BAM tags XC and XM, respectively.<br>
+			This program is run once per barcode extraction to add a tag.
+			On the first iteration, the cell barcode is extracted from bases determined in the first parameter (default:
+			1ï¿½12).
+			On the second iteration, the molecular barcode is extracted from bases determined by the base range for
+			molecular barcode
+			parameter (default 13ï¿½20) of the barcode read.<br>
+			The tool also tags reads where the base quality in the barcode drops below a threshold.
+			The number of bases that fall below the threshold is marked in the XQ tag.
+			This information is used in the subsequent filtering step.</li>
 
-<li><b>Filter and trim the reads in the BAM file</b> performs several things:
-<ul>
-	<li>XQ tags are used to filter out reads where more than one
-	base in the barcode have quality below the threshold (default: 10). </li>
-	<li>Any user determined sequences are trimmed away. The SMART Adapter sequence is offered as a default.
-	You can determine how many mismatches are allowed (default: 0), 
-	and how long stretch of the sequence there has to be at least (default: 5 bases).</li>
-	<li>Trailing polyA tails are hard-clipped from the reads. 
-	The tool searches for contiguous A's from the end of the read. You can
-	determine the number of mismatches allowed (default: 0) and how many A's there at least need to be 
-	for the clipping to happen (default: 6).</li>
-</ul>
-</li>
+		<li><b>Filter and trim the reads in the BAM file</b> performs several things:
+			<ul>
+				<li>XQ tags are used to filter out reads where more than one
+					base in the barcode have quality below the threshold (default: 10). </li>
+				<li>Any user determined sequences are trimmed away from the <b>beginning</b> of the read. The SMART
+					Adapter sequence is offered as a default.
+					You can determine how many mismatches are allowed (default: 0),
+					and how long stretch of the sequence there has to be at least (default: 5 bases).</li>
+				<li>Trailing polyA tails are hard-clipped from the reads.
+					The tool searches for contiguous A's from the <b>end</b> of the read. You can
+					determine the number of mismatches allowed (default: 0) and how many A's there at least need to be
+					for the clipping to happen (default: 6).</li>
+			</ul>
+		</li>
 
-<li><b>Convert the tagged and trimmed BAM file back to FASTQ format for aligning the reads to genome</b></li>
+		<li><b>Convert the tagged and trimmed BAM file back to FASTQ format for aligning the reads to genome</b></li>
 
-<li><b>Filter out too short reads of the FASTQ file</b>.
-After trimming and filtering, you might end up having some rather short reads in your BAM file.
-It is advisable to remove those, as this makes the alignment step faster. 
-The Trimmomatic tool and MINLEN option is used in the last step: the default value
-for the Minimum length of reads to keep -parameter is set to 50.</li>
-</ol>
+		<li><b>Filter out too short reads of the FASTQ file</b>.
+			After trimming and filtering, you might end up having some rather short reads in your BAM file.
+			It is advisable to remove those, as this makes the alignment step faster.
+			The Trimmomatic tool and MINLEN option is used in the last step: the default value
+			for the Minimum length of reads to keep -parameter is set to 50.</li>
+	</ol>
 
-<p>
-For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual</a>
-and the <a href="https://broadinstitute.github.io/picard/command-line-overview.html/">home page of Picard tools</a>.
+	<p>
+		For more details, please check the <a
+			href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq
+			manual</a>
+		and the <a href="https://broadinstitute.github.io/picard/command-line-overview.html/">home page of Picard
+			tools</a>.
 
-</p>
+	</p>
 
 
 
-<h3>Output</h3>
+	<h3>Output</h3>
 
-<ul>
+	<ul>
 
-<li>[input_name].bam: Tagged, trimmed & filtered unaligned BAM </li>
-<li>[input_name].fq.gz: Trimmed and filtered FASTQ file </li>
-<li>tagging_and_trimming_summary.txt: Summary of the tagging and trimming steps</li>
-<li>tagging_and_trimming_histograms.pdf: Graphics presenting the failed bases in tagging steps, and adapters and polyAs trimmed </li>
-</ul>
+		<li>[input_name].bam: Tagged, trimmed & filtered unaligned BAM </li>
+		<li>[input_name].fq.gz: Trimmed and filtered FASTQ file </li>
+		<li>tagging_and_trimming_summary.txt: Summary of the tagging and trimming steps</li>
+		<li>tagging_and_trimming_histograms.pdf: Graphics presenting the failed bases in tagging steps, and adapters and
+			polyAs trimmed </li>
+	</ul>
 
 
 
 </body>
-

@@ -8,14 +8,16 @@
 <h3>Description</h3>
 
 <p>
-Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates (observed no. of OTUs, Chao1 and Shannon indices, Pielou's evenness) for OTU abundance data stored as a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object.
+Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates (observed no. of OTUs, Chao1 and Shannon indices, Pielou's evenness) for OTU abundance data stored as a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object and calculates means of alpha diversity estimates as well as Wilcoxon rank sum test if the phenodata variable is selected.
 </p>
 
 
 <h3>Parameters</h3>
 <ul>
-<li>Phenodata variable tabulated with alpha diversity estimates (for improved readability)</li>
-<li>Type of data to be analyzed (raw vs rarefied to even depth; by default, assumes raw data)</li>
+<li>Phenodata variable tabulated with alpha diversity estimates and to calculate means of alpha diversity estimates as well as Wilcoxon rank sum test</li>
+<li>Name of the fist sample group from the Phenodata variable for Wilcoxon rank sum test</li>
+<li>Name of the second sample group from the Phenodata variable for Wilcoxon rank sum test</li>
+<!--<li>Type of data to be analyzed (raw vs rarefied to even depth; by default, assumes raw data)</li> -->
 </ul>
 
 <h3>Details</h3>
@@ -29,8 +31,16 @@ The tool employs the following R functions and packages:
 <ul>
 <li>Rarefaction curve: rarecurve() (<a href="https://cran.r-project.org/web/packages/vegan/index.html">vegan</a>)</li>
 <li>Alpha diversity indices: estimate_richness() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>) and evenness() (<a href="https://bioconductor.org/packages/release/bioc/html/microbiome.html">microbiome</a>)
+<li>Wilcoxon rank sum test</li>
 </ul>
 Note that the alpha diversity estimates are only reliable when using raw OTU data, as many diversity metrics depend on the presence of singletons and doubletons in the data set under analysis.
+<br>
+<br>
+If the phenodata variable is selected, this tool calculates also the means, standard error and standard deviation of alpha diversity estimates.
+<br>
+If there is two groups, this tool calculates also Mann-Whitney U-test. If there is more than two groups, please 
+select which two groups, you would like to compare.  
+
 </p>
 
 <h3>Output</h3>

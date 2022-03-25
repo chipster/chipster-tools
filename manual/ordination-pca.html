@@ -21,9 +21,17 @@
 
 <p>Performs principal component analysis for samples. Principal components
 are retained until the explained variability exceeds the specified value.
-The output of the analysis can be visualized using the 3D scatterplot in the
-visualization panel. To do this, select the pca.tsv spreadsheet and change 
-the visualization method to "3D scatterplot for PCA".</p>
+In order to inspect the results, please see the file variance.tsv
+which contains the principal components for the samples. 
+You need to check the row "Proportion of Variance". 
+Here you can see how big percentage of the the variance is explained
+by the first principal component (PC1), the second principal component (PC2), etc. 
+The most important one is PC1. 
+If the percentage is high, it means this PC explains a big proportion
+of the difference between the samples (ideally your sample groups separate along this axis).
+If PC2 is large too, there is another factor affecting the gene expression in your samples.
+This might be intentional depending on your experimental set up, but it can also be a batch effect.
+In the latter case you should take it into account as a second factor in the statistical analysis.  </p>
 </p>
 
 <h3>Output</h3>

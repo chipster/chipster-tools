@@ -4,25 +4,29 @@
 		<tool>fastqc.R</tool>
 		<tool>fastqc_multiqc.R</tool>
 		<tool>fastx-statistics.R</tool>
-		<tool>prinseq-statistics.R</tool>
+		<!-- <tool>prinseq-statistics.R</tool> -->
 		<tool>rseqc.R</tool>
 		<tool>rseqc_infer_rnaseq_experiment.R</tool>
 		<tool>picard-collectmultiplemetrics.R</tool>
 		<tool>deseq2-pca-heatmap.R</tool>
 		<tool>check-fastq.R</tool>
-		<tool>multiqc.R</tool>
+		<!-- <tool>multiqc.R</tool> broken-->
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
 		<tool>prinseq-filter.R</tool>
 		<tool>fastx-clipper.R</tool>
 		<tool>fastx-quality-filter.R</tool>
-		<tool>prinseq-trimmer.R</tool>	
+		<!-- <tool>prinseq-trimmer.R</tool>	-->
 		<tool>trimmomatic.R</tool>
 		<tool>fastx-trimmer.R</tool>
 		<tool>tagcleaner-trim.R</tool>	
 		<tool>tagcleaner-predict.R</tool>	
 		<tool>tagcleaner-statistics.R</tool>
+		<tool>umi_tools-extract.R</tool>
+		<tool>bbduk-trim.R</tool>
+		<tool>umi_tools-dedup.R</tool>		
+		
 	</category>
 
 	<category name="Utilities" color="#d59f45">
@@ -54,6 +58,7 @@
 		<tool>samtools-count.R</tool>
 		<tool>samtools-rmdup.R</tool>
 		<tool>picard-markduplicates.R</tool>
+		<tool>picard-addreadgroup.R</tool>
 		<tool>samtools-consensus.R</tool>
 		<tool>unique-alignments-from-bam.R</tool>
 		<tool>bedtools-bamtobed.R</tool>
@@ -80,7 +85,8 @@
 		<tool module="common">extract_zip.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_tar.R</tool>
-		<tool module="common">list_tar_contents.R</tool>
+		<tool module="common">combine-tar.R</tool>
+		<tool module="common">list_tar_contents.R</tool>	
 		<tool module="common">list_zip.py</tool>
 		<tool module="common">gzip.R</tool>	
 		<tool>a5-miseq.R</tool>
@@ -196,40 +202,31 @@
 	</category>
 	
 	<category name="Single cell RNA-seq" color="#37dddd">	   	
-		<tool>single-cell-seurat-setup-v3.R</tool>	   
-		<!-- commented out, waiting for new tools: --> 
+		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool> 	
-		<tool>single-cell-seurat-filter-regress-v3.R</tool>	
+		<tool>single-cell-seurat-filter-regress.R</tool>	
 		<tool>single-cell-seurat-sctransform.R</tool>	
-		<tool>single-cell-seurat-pca-v3.R</tool>	   	
-		<tool>single-cell-seurat-clustering-v3.R</tool>	
-		<tool>single-cell-seurat-find-markers-v3.R</tool>
-		<tool>single-cell-seurat-gene-plots-v3.R</tool>
-		<tool>single-cell-seurat-featureplot-v3.R</tool>	
-		<tool>single-cell-seurat-CCA-v3.R</tool>	
-		<tool>single-cell-seurat-integrated-analysis-v3.R</tool>	
-		<tool>single-cell-seurat-diffexp-samples-v3.R</tool>	
-		<tool>single-cell-seurat-split-dot-plot-v3.R</tool>	
+		<tool>single-cell-seurat-pca.R</tool>	   	
+		<tool>single-cell-seurat-clustering.R</tool>	
+		<tool>single-cell-seurat-find-markers.R</tool>
+		<tool>single-cell-seurat-gene-plots.R</tool>
+		<tool>single-cell-seurat-featureplot.R</tool>
+		<tool>single-cell-seurat-singler.R</tool>
+		<tool>single-cell-seurat-CCA.R</tool>
+		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
+		<tool>single-cell-seurat-integrated-analysis.R</tool>	
+		<tool>single-cell-seurat-diffexp-samples.R</tool>
+		<tool>single-cell-seurat-diffexp-chosen-samples.R</tool>
+		<tool>single-cell-seurat-split-dot-plot.R</tool>	
 		<tool>single-cell-seurat-extract-cluster.R</tool>
 		<tool>single-cell-seurat-subset.R</tool>
-		<!--<tool>single-cell-seurat-update-object-v3.R</tool>--> 
+		<tool>single-cell-seurat-rename-clusters.R</tool>
+		<tool>single-cell-seurat-modify-clusters.R</tool>
 		<!-- Dropseq tools: --> 
 		<tool>single-cell-preprocessing.R</tool>
 		<tool>picard-merge-bam-alignment.R</tool>	
 		<tool>single-cell-bam-tag-histogram.R</tool>	  	
 		<tool>single-cell-digital-expression.R</tool>
-		<!-- Seurat v2 tools, commented out, to be removed later  
-		<tool>single-cell-seurat-setup.R</tool>	   	
-		<tool>single-cell-seurat-filter-regress.R</tool>	   	
-		<tool>single-cell-seurat-pca.R</tool>	   	
-		<tool>single-cell-seurat-clustering.R</tool>	
-		<tool>single-cell-seurat-gene-plots.R</tool>	
-		<tool>single-cell-seurat-CCA.R</tool>	
-		<tool>single-cell-seurat-integrated-analysis.R</tool>	
-		<tool>single-cell-seurat-diffexp-samples.R</tool>	
-		<tool>single-cell-seurat-split-dot-plot.R</tool>
-		<tool>single-cell-seurat-featureplot.R</tool>-->	
-		<!--<tool>single-cell-seurat-find-markers.R</tool>-->  
 		<!--<tool>picard-fastqtosam.R</tool> --> 
 		<!--<tool>single-cell-TagBam.R</tool> --> 
 		<!--<tool>single-cell-FilterBam.R</tool> --> 
@@ -258,7 +255,10 @@
 
 	<category name="Microbial amplicon data preprocessing" color="#a49900">
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
+		<tool>mothur-makegroup.R</tool>
 		<tool>mothur-makecontigs.R</tool>
+		<tool>fastq-mergepairs.R</tool>
+		<tool>fastq-filter.R</tool> 
 		<tool>mothur-screenseqs.R</tool>
 		<tool>mothur-uniqueseqs.R</tool>
 		<tool>mothur-alignseqs.R</tool>
@@ -267,6 +267,7 @@
 		<tool>mothur-chimera-uchime.R</tool>		
 		<tool>mothur-classifyseqs.R</tool>
 		<tool>mothur-classifyseqs-its.R</tool>
+		<tool>mothur-seq-error.R</tool>
 		<!--
 		<tool>mothur-classify-counttable.R</tool>
 	    <tool>mothur-analyses.R</tool>

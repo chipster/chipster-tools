@@ -108,7 +108,7 @@
 
 	<category name="Copy number aberrations" color="#c0d2de">
 		<tool>import-soft2.R</tool>
-		<tool>acgh-import-from-cangem.R</tool>
+		<!-- <tool>acgh-import-from-cangem.R</tool> -->
 		<tool>acgh-normalize.R</tool>
 		<tool>acgh-plot-profile.R</tool>
 		<tool>acgh-smooth.R</tool>
@@ -133,7 +133,7 @@
 		<tool module="common">acgh-expression-test.R</tool>	
 		<tool module="common">acgh-plot-combined-expression.R</tool>
 		<tool>acgh-fetch-probe-positions-from-geo.R</tool>
-		<tool>acgh-fetch-probe-positions-from-cangem.R</tool>
+		<!-- <tool>acgh-fetch-probe-positions-from-cangem.R</tool> -->
 	</category>
 
 	<category name="Visualisation" color="#a49900">
