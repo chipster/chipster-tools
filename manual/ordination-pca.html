@@ -12,9 +12,12 @@
 <h3>Parameters</h3>
 
 <ul>
+<li>Phenodata column with unique sample names</li>
+<li>Phenodata variable for sample grouping</li>
 <li>Variability to explain (0...100) [80]</li>
 <li>Should data be scaled (yes,no) [no]</li>
 <li>Should data be centered (yes, no) [yes]</li>
+<li>No. of top contributing genes to plot as vectors (max 5)</li>
 </ul>
 
 <h3>Details</h3>
@@ -41,6 +44,7 @@ In the latter case you should take it into account as a second factor in the sta
 <li>pca.tsv containing the principal components for the samples (these are not expression values).</li>
 <li>variance.tsv where the row "proportion of variance" indicates how much of the variance is explained by each component.</li>
 <li>loadings.tsv containing the component loadings. The higher the absolute value, the more that gene contributes to the difference in the samples along that principal component. </li>
+<li>pca_biplot.pdf including the PCA plot with or without top contributing genes shown as vectors, and with 95% concentration ellipses included for each group. </li>
 </ul>
 
 </body>
