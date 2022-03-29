@@ -10,7 +10,7 @@ image=${1:-comp-20.04-r-deps}
 name="comp-shell"
 
 if ! kubectl get pod | grep $name | grep Running > /dev/null 2>&1; then
-  cat <<EOF | kubectl apply -f -
+  deployment=$(cat << EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,16 +27,37 @@ spec:
     spec:
       containers:
       - name: $name
-        image: docker-registry.rahti.csc.fi/chipster-images-beta/$image
-        volumeMounts:
-        - name: tools-bin
-          mountPath: /mnt/tools
-      volumes:
-      - name: tools-bin
-        hostPath:
-          path: /mnt/tools-bin
-          type: Directory
+        volumeMounts: []
+      volumes: []
 EOF
+  )
+
+  patch=".spec.template.spec.containers[0].image = \"docker-registry.rahti.csc.fi/chipster-images/$image\""
+
+  TOOLS_BIN_NAME=$(cat ~/values.yaml | yq e - -o json | jq .toolsBin.version -r)
+  TOOLS_BIN_HOST_MOUNT_PATH=$(cat ~/values.yaml | yq e - -o json | jq .toolsBin.hostPath -r)
+  TOOLS_BIN_PATH="/opt/chipster/tools"
+
+  if [[ $TOOLS_BIN_NAME != "null" ]]; then  
+    patch="$patch |
+      .spec.template.spec.containers[0].volumeMounts += [{\"name\": \"tools-bin\", \"readOnly\": false, \"mountPath\": \"$TOOLS_BIN_PATH\"}]"
+      
+    if [[ $TOOLS_BIN_HOST_MOUNT_PATH != "null" ]]; then
+      echo "mount tools-bin from hostPath $TOOLS_BIN_HOST_MOUNT_PATH/$TOOLS_BIN_NAME to $TOOLS_BIN_PATH"
+      patch="$patch |
+        .spec.template.spec.volumes += [{\"name\": \"tools-bin\", \"hostPath\": { \"path\": \"$TOOLS_BIN_HOST_MOUNT_PATH/$TOOLS_BIN_NAME\", \"type\": \"Directory\"}}]"
+    else
+      echo "mount tools-bin from PVC $TOOLS_BIN_NAME to $TOOLS_BIN_PATH"
+      patch="$patch |
+        .spec.template.spec.volumes += [{\"name\": \"tools-bin\", \"persistentVolumeClaim\": { \"claimName\": \"tools-bin-$TOOLS_BIN_NAME\"}}]"
+    fi
+  else
+    echo "do not mount tools-bin"
+  fi
+
+  json=$(echo "$deployment"    | yq e - -o=json | jq "$patch")
+
+  echo "$json" | kubectl apply -f -
 
   echo "waiting pod to start"
   for i in $(seq 30); do

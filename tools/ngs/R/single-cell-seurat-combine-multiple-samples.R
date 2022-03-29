@@ -5,7 +5,6 @@
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [normal:"Global scaling normalization", sctransform:SCTransform] DEFAULT normal (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 20 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 20 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 # SLOTS 4
 
