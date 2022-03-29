@@ -1,8 +1,14 @@
 # Check VCF chromosome naming scheme
 getVCFNames <- function(input){
+    # Uncompress
+	unzipIfGZipFile(input)
+
+    # Subset file to make searching faster
+    system(paste("grep -v \"#\"", input, "|head -50 > name.tmp"))
+    
     # Check if VCF has chr chromosome names
-    vcf.chr <- system(paste("grep -i -c ^chr", input),intern = TRUE)
-    if (vcf.chr > 0){
+    vcf.chr <- grep("^chr", readLines("name.tmp"), ignore.case = TRUE)
+    if (length(vcf.chr) > 0){
         vcf.names <- paste("chr1")
     }else{
         vcf.names <- paste("1")

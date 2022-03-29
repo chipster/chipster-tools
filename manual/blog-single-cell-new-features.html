@@ -36,7 +36,18 @@
                 <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-clustering.html">clustering tool</a>.
             </b>
             Parameters remain the same, but separating the two tools allows faster and easier re-runs of
-            expression analysis with different parameters. </li>
+            expression analysis with different parameters.
+        </li>
+
+        <li><b>Plot cells in the the order of expression.</b> Some of the Seurat tools give as output FeaturePlots,
+            where
+            dots representing the cells
+            are colored according to some feature of the data, like for example particular genes expression.
+            In Seurat tools, by default, the cells are NOT ordered according to the expression levels,
+            but there is a parameter that does that. We now included this parameter in the tools including this
+            kind of plots, but it is "off" by default, according the original tool.
+            It can be useful to turn this "on" if cells expressing given feature are getting buried.
+        </li>
 
         <li> <b><a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-modify-clusters.html">Tool for removing
                     clusters</a> from the data.</b>
@@ -48,7 +59,7 @@
             but by importing a table with cluster new cluster names it is now possible to rename them. </li>
     </ul>
 
-    <img src="blog-text-images/scRNAseq_named_clusters.png" width="400" height="400" />
+    <img src="-text-images/scRNAseq_named_clusters.png" width="400" height="400" />
 
     </p>
 
@@ -72,11 +83,18 @@
                 <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-combine-multiple-samples.html">integrate
                     multiple samples</a> in the analysis</b>,
             instead of just the previous two.
-            As before, it is important that the samples are named in the Setup tool. </li>
+            As before, it is important that the samples are named in the Setup tool. The tool
+            "Seurat -Find conserved cluster markers and DE genes" recognises if there are
+            more than two samples in the object, in which case it will compare each sample to all other samples, and
+            print out separate DEG list file for each sample. There's also a new tool, <b>
+                <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-diffexp-chosen-samples.html">Find
+                    DE genes between chosen samples</a></b>, which allows comparing any samples or group of samples
+            to other sample/samples.
+        </li>
 
     </ul>
 
-    <img src="blog-text-images/scRNAseq_3_samples.png" width="400" height="400" />
+    <img src="-text-images/scRNAseq_3_samples.png" width="400" height="400" />
 
     </p>
 
