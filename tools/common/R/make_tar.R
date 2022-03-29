@@ -2,7 +2,6 @@
 # INPUT file{...}.tsv: "Files to include" TYPE GENERIC
 # OUTPUT OPTIONAL chipster.tar
 # PARAMETER name: "File name for tar package" TYPE STRING DEFAULT "chipster" (File name for the tar package. Ending .tar will be added to the name.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
 # Read input names

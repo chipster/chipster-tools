@@ -2,7 +2,6 @@
 # INPUT reads.fq.gz: "Reads" TYPE GENERIC
 # OUTPUT output.fq.gz
 # OUTPUT log.txt
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
 source(file.path(chipster.common.path, "tool-utils.R"))
