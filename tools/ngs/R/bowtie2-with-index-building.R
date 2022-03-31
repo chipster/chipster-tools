@@ -1,5 +1,5 @@
 # TOOL bowtie2-with-index-building.R: "Bowtie2 for single end reads and own genome" (Bowtie2 aligns reads to genomes or transcriptomes. Results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser.)
-# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads to align" TYPE FASTQ
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
 # OUTPUT OPTIONAL bowtie2.bam
 # OUTPUT OPTIONAL bowtie2.bam.bai
