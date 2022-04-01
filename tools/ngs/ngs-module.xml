@@ -1,8 +1,8 @@
 <module name="ngs">
 	
 	<category name="Quality control" color="#d5c796">
-		<tool>fastqc.R</tool>
 		<tool>fastqc_multiqc.R</tool>
+		<tool>fastqc.R</tool>
 		<tool>fastx-statistics.R</tool>
 		<!-- <tool>prinseq-statistics.R</tool> -->
 		<tool>rseqc.R</tool>
