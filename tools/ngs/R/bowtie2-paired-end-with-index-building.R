@@ -65,7 +65,7 @@ system(echo.command)
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  system("echo Extarting tar formatted gemome index file >> bowtie2.log")
+  system("echo Extracting tar formatted gemome index file >> bowtie2.log")
   system("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
@@ -73,7 +73,7 @@ if (genome.filetype == "tar") {
   # case 2. Fasta file
 } else {
   # Do indexing
-  #check sequece file type
+  #check sequence file type
   emboss.path <- file.path(chipster.tools.path,"emboss","bin")
   options(scipen = 999)
   inputfile.to.check <- ("genome.txt")
@@ -143,13 +143,13 @@ if (discordant.file == "yes") {
 }
 
 # Check if reads are in FASTA format
-emboss.path <- file.path(chipster.tools.path,"emboss","bin")
-sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
-str.filetype <- system(sfcheck.command,intern = TRUE)
-if (str.filetype == "fasta") {
-  parameters <- paste(parameters,"-f")
-}
+# emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+# sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
+# sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
+# str.filetype <- system(sfcheck.command,intern = TRUE)
+# if (str.filetype == "fasta") {
+#   parameters <- paste(parameters,"-f")
+# }
 
 # Input files
 if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
