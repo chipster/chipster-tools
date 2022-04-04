@@ -80,8 +80,14 @@ print("open the results file")
 with open("annotated.tsv", "w") as annotated:
 
 	print("write column titles")
-	annotated.write("symbol\tdescription\t" + "\t".join(column_titles) + "\n")
-	
+
+	if len(column_titles) + 1 == len(rows[0]):
+		# the first column title is missing i.e. R rowname
+		annotated.write("symbol\tdescription\t" + "\t".join(column_titles) + "\n")
+	else:
+		# keep the colum title of first column
+		annotated.write(column_titles[0] + "\tsymbol\tdescription\t" + "\t".join(column_titles[1:]) + "\n")
+
 	for row_chunk in row_chunks:
 		print("annotate " + str(len(row_chunk)) + " gene(s)")
 
