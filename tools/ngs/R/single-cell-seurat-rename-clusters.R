@@ -4,7 +4,6 @@
 # OUTPUT OPTIONAL clusterPlotRenamed.pdf
 # OUTPUT OPTIONAL seurat_obj_renamed.Robj
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
 
 

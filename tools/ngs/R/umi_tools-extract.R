@@ -1,7 +1,8 @@
 # TOOL umi_tools-extract.R: "Extract UMIs from QuantSeq reads" (Given a Lexogen QuantSeq FASTQ file, this tool removes the TATA spacer and extracts the 6-base UMI and adds it to the read name. This tool is based on the UMI-tools extract.)
 # INPUT reads.fq.gz: "Reads" TYPE GENERIC
 # OUTPUT output.fq.gz
-# OUTPUT log.txt
+# OUTPUT OPTIONAL log.txt
+# PARAMETER OPTIONAL log: "Produce log file" TYPE [yes,no] DEFAULT no (Produce log file.)
 # IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
@@ -19,7 +20,9 @@ documentCommand(umi.command)
 runExternal(umi.command)
 
 # Clean log file
-system("grep INFO log.t.txt |grep -v Parsed > log.txt")
+if (log=="yes"){
+    system("grep INFO log.t.txt |grep -v Parsed > log.txt")
+}
 
 # Output names
 inputnames <- read_input_definitions()
@@ -28,6 +31,6 @@ print(basename)
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)
 outputnames[1,] <- c("output.fq.gz", paste(basename, "_extracted.fq.gz", sep=""))
-outputnames[2,] <- c("log.txt", paste(basename, "_log.txt", sep=""))
+outputnames[2,] <- c("log.txt", paste(basename, "_extracted.log", sep=""))
 # Write output definitions file
 write_output_definitions(outputnames)
