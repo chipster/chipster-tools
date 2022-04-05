@@ -15,19 +15,14 @@
 
     <h3>Parameters</h3>
 
-    <ul>
-        <li>Organism (human, mouse, yeast) [human] </li>
-    </ul>
-
+    <p>None</p>
+    
     <h3>Details</h3>
 
-    <p> Bioconductor biomaRt -package is used to fetch the annotations. Ensembl IDs need to be in the first column or as
+    <p> Ensembl REST API is used to fetch the annotations. Ensembl IDs need to be in the first column or as
         row names in the input file. </p>
 
-    <p> Unfortunately, fetching the annotations from ensembl is somewhat unreliable, and the original
-        error message in these situations is a bit misleading. This is why we added
-        our own error message, encouraging users to try again. There seems to also be some
-        restriction to the file size, so that files with hundreds of rows tend to fail. </p>
+    <p> Maximum of 100 000 Ensembl IDs can be annotated in one job. </p>
 
 
     <h3>Output</h3>
@@ -36,13 +31,7 @@
 
     <h3>References</h3>
 
-    <p>More information about the biomaRt -package can be found at the <a
-            href="http://www.bioconductor.org/packages/release/bioc/html/biomaRt.html">Bioconductor website</a> and in
-        the following articles:</p>
-    Durinck S, Spellman P, Birney E and Huber W (2009). â€œMapping identifiers for the integration of genomic datasets
-    with the R/Bioconductor package biomaRt.â€� Nature Protocols, 4, pp. 1184â€“1191.</p>
-    Durinck S, Moreau Y, Kasprzyk A, Davis S, De Moor B, Brazma A and Huber W (2005). â€œBioMart and Bioconductor: a
-    powerful link between biological databases and microarray data analysis.â€� Bioinformatics, 21, pp. 3439â€“3440.
-    </p>
+    <p>This tools uses Ensembl REST API to provide Ensembl data, please cite Yates et. al. (<a href="http://europepmc.org/search/?query=DOI:10.1093/bioinformatics/btu613">doi:10.1093/bioinformatics/btu613</a>) and
+    Zerbino et. al. (<a href="https://doi.org/10.1093/nar/gkx1098">doi.org/10.1093/nar/gkx1098</a>).</p>
 
 </body>

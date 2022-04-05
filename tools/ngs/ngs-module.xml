@@ -44,7 +44,7 @@
 		<tool>process-preprocessed-counts.R</tool>
 		<tool>normalise-counts.R</tool>
 		<tool>deseq2-normalized-counts-for-gene.R</tool>
-		<tool>annotate-ensembl-ids.R</tool>		
+		<tool>annotate-ensembl-ids.py</tool>		
 		<tool>samtools-index.R</tool>
 		<tool>samtools-sort-index-BAM.R</tool>
 		<tool>samtools-convert-SAMtoBAM-sort-index.R</tool>
