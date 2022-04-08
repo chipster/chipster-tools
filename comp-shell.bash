@@ -1,9 +1,18 @@
 #!/bin/bash
 
-if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -gt 1 ]; then
+if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -gt 2 ]; then
   echo "Open shell in container image"
-  echo "Usage: $0 [IMAGE]"
+  echo "Usage: $0 [--local-image] [IMAGE]"
   exit 0
+fi
+
+image_repo="docker-registry.rahti.csc.fi/chipster-images/"
+image_pull_policy="Always"
+
+if [[ $1 == "--local-image" ]]; then
+  image_repo=""
+  image_pull_policy="Never"
+  shift
 fi
 
 image=${1:-comp-20.04-r-deps}
@@ -32,7 +41,10 @@ spec:
 EOF
   )
 
-  patch=".spec.template.spec.containers[0].image = \"docker-registry.rahti.csc.fi/chipster-images/$image\""
+  echo "image: ${image_repo}${image}"
+
+  patch=".spec.template.spec.containers[0].image = \"${image_repo}${image}\" |
+    .spec.template.spec.containers[0].imagePullPolicy = \"${image_pull_policy}\""
 
   TOOLS_BIN_NAME=$(cat ~/values.yaml | yq e - -o json | jq .toolsBin.version -r)
   TOOLS_BIN_HOST_MOUNT_PATH=$(cat ~/values.yaml | yq e - -o json | jq .toolsBin.hostPath -r)
