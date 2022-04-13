@@ -21,13 +21,10 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   # variable f needs to be escaped to be evaluated only later on the k3s host
   # recent packages are downloaded directly from Allas
   f="R-3.6.1-phyloseq_2020-11-04.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
-  f="R-3.6.1-single-cell_2020-10-14.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
 
   # old packages had their primary copy in nic
   lz4 -d /mnt/artefacts/downloads/R-3.4.3_ubuntu-16.04_2018-08-29.tar.lz4 | tar x -C $TOOLS_PATH
-  lz4 -d /mnt/artefacts/downloads/R-3.6.1_ubuntu-16.04_2019-07-31.tar.lz4 | tar x -C $TOOLS_PATH
-  lz4 -d /mnt/artefacts/downloads/R-3.6.1-plain_ubuntu-16.04_2019-07-31.tar.lz4 | tar x -C $TOOLS_PATH
-
+  
   ls -lah $TOOLS_PATH/
 EOF
 
