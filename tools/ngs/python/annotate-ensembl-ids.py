@@ -100,8 +100,16 @@ with open("annotated.tsv", "w") as annotated:
 			ensemblid = row[0]
 			other_columns = row[1:]
 
-			# empty strings if not found
-			id_response = response.get(ensemblid, { "display_name": "", "description": ""})
+			id_response = response.get(ensemblid)
+
+			if not id_response:
+				# deprecated ID
+				print("ensemblid not found: " + ensemblid)
+				# write the existing row anyway
+				id_response = {
+					"symbol": "",
+					"description": ""
+				}
 			
 			# empty string when there is a response, but it doesn't have display_name or description 
 			# (e.g. novel_transcripts)
