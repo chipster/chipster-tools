@@ -25,7 +25,7 @@ for (i in 1:nrow(input.names)) {
 }
 
 # seurat.objects.list <- objects(pattern="seurat_obj")
-seurat.objects.list <- as.list(mget(objects(pattern="seurat_obj"))) 
+seurat.objects.list <- as.list(mget(objects(pattern="seurat_obj_"))) 
 
 # Select features that are repeatedly variable across datasets for integration
 features <- SelectIntegrationFeatures(object.list = seurat.objects.list)
