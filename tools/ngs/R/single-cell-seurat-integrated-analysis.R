@@ -61,6 +61,8 @@ plot_grid(p1, p2)
 DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label=add.labels)
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
+sums <- colSums(cell_counts)
+cell_counts <- rbind(cell_counts, sums)
 
 textplot(cell_counts, halign = "center", valign = "center", cex = 1)
 title(paste("Total number of cells: ", length(colnames(x = data.combined)), "\n Number of cells in each cluster:"))
