@@ -20,7 +20,7 @@ input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
 for (i in 1:nrow(input.names)) {
     # unzipIfGZipFile(input.names[i,1])
     load(input.names[i,1])
-    name.of.obj <- paste("seurat_obj", i, sep = "")
+    name.of.obj <- paste("seurat_obj_", i, sep = "")
     assign(name.of.obj, seurat_obj)
 }
 
