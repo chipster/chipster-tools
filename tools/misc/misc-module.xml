@@ -108,6 +108,7 @@
 		<tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
 		<tool>test-data-in-out-storage.py</tool>
+		<tool>test-data-in-out-storage-1tb.py</tool>
 		<tool>test-data-in-out-without-tools-bin.py</tool>
 		<tool>test-multiple-inputs.py</tool>
 		<tool>test-data-in-out3.py</tool>
