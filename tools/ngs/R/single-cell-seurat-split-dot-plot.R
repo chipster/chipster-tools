@@ -83,7 +83,9 @@ if (number.of.samples > 4) {
   for (j in 1:ceiling(number.of.samples/4) ) { 
     # If i is less than # of samples we have, keep subsetting and printing.
     if (i < number.of.samples) { 
-      subset.of.samples <- subset(data.combined, idents = as.vector(sample.names[i:(i+3)] ) )
+      samples.of.this.round <- as.vector(sample.names[i:(i+3)] ) 
+      samples.of.this.round <- samples.of.this.round[!is.na(samples.of.this.round)]
+      subset.of.samples <- subset(data.combined, idents = samples.of.this.round)      
       Idents(subset.of.samples) <- "stim"
       # Need to save and print the plots for them to actually go to pdf:
       feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction=reduction.method, order=as.logical(plotting.order.used))
