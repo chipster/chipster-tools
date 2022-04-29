@@ -58,9 +58,6 @@ with open("genelist.tsv") as fd:
 
 print("found " + str(len(rows)) + " rows")
 
-if not rows[0][0].startswith("ENS"):
-	raise RuntimeError("CHIPSTER-NOTE: You can only annotate Ensembl IDs with this tool. The IDs need to be in the first column of the table.")
-
 # there is a limit how many IDs can be queried in one request
 max_ids_per_query = 1000
 
@@ -88,6 +85,8 @@ with open("annotated.tsv", "w") as annotated:
 		# keep the colum title of first column
 		annotated.write(column_titles[0] + "\tsymbol\tdescription\t" + "\t".join(column_titles[1:]) + "\n")
 
+	not_found_ids = []
+
 	for row_chunk in row_chunks:
 		print("annotate " + str(len(row_chunk)) + " gene(s)")
 
@@ -103,6 +102,7 @@ with open("annotated.tsv", "w") as annotated:
 			id_response = response.get(ensemblid)
 
 			if not id_response:
+				not_found_ids.append(ensemblid)
 				# deprecated ID
 				print("ensemblid not found: " + ensemblid)
 				# write the existing row anyway
@@ -118,3 +118,6 @@ with open("annotated.tsv", "w") as annotated:
 
 			# print(ensemblid, symbol, description)
 			annotated.write(ensemblid + "\t" + symbol + "\t" + description + "\t" + "\t".join(other_columns) + "\n")
+		
+		if len(not_found_ids) > 0.9 * len(row_chunk):
+			raise RuntimeError("CHIPSTER-NOTE: " + str(len(not_found_ids)) + "/" + str(len(row_chunk)) + " IDs not found. You can only annotate Ensembl IDs with this tool. The IDs need to be in the first column of the table.")
