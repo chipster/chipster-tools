@@ -36,6 +36,9 @@ if (exists("data.combined") ){
 	seurat_obj <- data.combined
 }
 
+# in case some other type of array is set
+DefaultAssay(seurat_obj) <- "RNA"
+
 # If multiple genes are listed: (separate words from "," and remove whitespace)
 if(length(grep(",", biomarker)) != 0) {
    biomarker <- trimws(unlist(strsplit(biomarker, ",")))
