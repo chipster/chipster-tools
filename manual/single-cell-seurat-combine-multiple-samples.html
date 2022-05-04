@@ -19,8 +19,10 @@
     <h3>Parameters</h3>
     <ul>
         <li>Normalisation method used previously [Global scaling normalization]</li>
+        <li>Anchor identification method TYPE [CCA, RPCA]</li>
         <li>Number of CCs to use in the neighbor search [20]</li>
         <li>Number of PCs to use in the anchor weighting [20]</li>
+
     </ul>
 
 
@@ -52,6 +54,32 @@
     </p>
 
     <p>
+        The "anchor identification method" parameter determines which anchor identification method to use.
+        By default, canonical correlation analysis CCA is used, but user can also decide to use the
+        faster and more conservative reciprocal PCA approach.
+        When determining anchors between any two datasets using RPCA, each dataset is projected into the
+        others PCA space and the anchors are constrained by the same mutual neighborhood requirement.
+
+        By identifying shared sources of variation between datasets, CCA is well-suited for identifying anchors
+        when cell types are conserved, but there are very substantial differences in gene expression
+        across experiments, i.e. when experimental
+        conditions or disease states introduce very strong expression shifts,
+        or when integrating datasets across modalities and species.
+        However, CCA-based integration may also lead to overcorrection,
+        especially when a large proportion of cells are non-overlapping across datasets.
+
+        RPCA-based integration runs significantly faster, and also represents a more conservative
+        approach where cells in different biological states are less likely to "align" after integration.
+        RPCA is thus recommended during integrative analysis where:
+    <ul>
+        <li>A substantial fraction of cells in one dataset have no matching type in the other </li>
+        <li>Datasets originate from the same platform (i.e. multiple lanes of 10x Genomics) </li>
+        <li>There are a large number of datasets or cells to integrate </li>
+    </ul>
+    See the link to Seurat RPCA vignette below for more information!
+    </p>
+
+    <p>
         This tool performs data integration of multiple samples (in .Robj).
         First, Canonical correlation analysis (CCA) is performed to identify common sources of variation between
         the datasets.
@@ -65,7 +93,7 @@
     </p>
 
     <p>
-        The second parameter is the number of PCs to use in the anchor weighting procedure.
+        The third parameter is the number of PCs to use in the anchor weighting procedure.
         The anchors and their weights are used to compute the correction vectors,
         which are used for correction, thus allowing the datasets to be integrated.
     </p>
@@ -74,6 +102,12 @@
     <p>
         For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
             for multiple sample analysis</a>.
+    </p>
+
+    <p>
+        For more details on use of reciprocal PCA, please check the <a
+            href="https://satijalab.org/seurat/articles/integration_rpca.html">Seurat vignette
+            for "Fast integration using reciprocal PCA (RPCA)"</a>.
     </p>
     <p>
         For more detailed description of the integration process, read "Comprehensive integration
