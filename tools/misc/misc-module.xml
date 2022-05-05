@@ -103,7 +103,6 @@
 	</category>
 
 	<category name="Tests" color="#d59f45">
-		<tool>fastqc_multiqc_storage.R</tool>
 		<tool>test-data-in.R</tool>
 		<tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
