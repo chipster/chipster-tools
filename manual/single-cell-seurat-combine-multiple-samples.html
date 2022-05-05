@@ -19,7 +19,7 @@
     <h3>Parameters</h3>
     <ul>
         <li>Normalisation method used previously [Global scaling normalization]</li>
-        <li>Anchor identification method TYPE [CCA, RPCA]</li>
+        <li>Anchor identification method [CCA, RPCA]</li>
         <li>Number of CCs to use in the neighbor search [20]</li>
         <li>Number of PCs to use in the anchor weighting [20]</li>
 
@@ -54,7 +54,7 @@
     </p>
 
     <p>
-        The "anchor identification method" parameter determines which anchor identification method to use.
+        The <b>"anchor identification method"</b> parameter determines which anchor identification method to use.
         By default, canonical correlation analysis CCA is used, but user can also decide to use the
         faster and more conservative reciprocal PCA approach.
         When determining anchors between any two datasets using RPCA, each dataset is projected into the
@@ -88,17 +88,17 @@
     </p>
 
     <p>
-        The first parameter tells which dimensions from the CCA to use for specifying the neighbor seach space.
+        The third parameter tells which dimensions from the CCA/PCA to use for specifying the neighbor seach space.
         The neighbors are used to determine the anchors for the alignment.
     </p>
 
     <p>
-        The third parameter is the number of PCs to use in the anchor weighting procedure.
+        The fourth parameter is the number of PCs to use in the anchor weighting procedure.
         The anchors and their weights are used to compute the correction vectors,
         which are used for correction, thus allowing the datasets to be integrated.
     </p>
 
-
+    <h3>Further information</h3>
     <p>
         For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
             for multiple sample analysis</a>.
