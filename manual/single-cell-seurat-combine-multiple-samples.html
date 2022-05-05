@@ -22,6 +22,7 @@
         <li>Anchor identification method [CCA, RPCA]</li>
         <li>Number of CCs to use in the neighbor search [20]</li>
         <li>Number of PCs to use in the anchor weighting [20]</li>
+        <li>Samples to use as references [No references selected]</li>
 
     </ul>
 
@@ -39,6 +40,7 @@
         This name will be used later on to separate the samples.
     </p>
 
+    <h4>Normalization method: Global scaling normalization vs SCTransform</h4>
     <p>
         The first parameter asks about the normalisation step performed either
         in the tool: <b>Seurat -Filter, normalize, regress and detect variable genes</b>, in which case the
@@ -53,13 +55,16 @@
 
     </p>
 
+    <h4>CCA vs R-PCA in anchor identification</h4>
+
     <p>
         The <b>"anchor identification method"</b> parameter determines which anchor identification method to use.
         By default, canonical correlation analysis CCA is used, but user can also decide to use the
         faster and more conservative reciprocal PCA approach.
         When determining anchors between any two datasets using RPCA, each dataset is projected into the
         others PCA space and the anchors are constrained by the same mutual neighborhood requirement.
-
+    </p>
+    <p>
         By identifying shared sources of variation between datasets, CCA is well-suited for identifying anchors
         when cell types are conserved, but there are very substantial differences in gene expression
         across experiments, i.e. when experimental
@@ -67,7 +72,8 @@
         or when integrating datasets across modalities and species.
         However, CCA-based integration may also lead to overcorrection,
         especially when a large proportion of cells are non-overlapping across datasets.
-
+    </p>
+    <p>
         RPCA-based integration runs significantly faster, and also represents a more conservative
         approach where cells in different biological states are less likely to "align" after integration.
         RPCA is thus recommended during integrative analysis where:
@@ -78,6 +84,26 @@
     </ul>
     See the link to Seurat RPCA vignette below for more information!
     </p>
+
+
+    <h4>Large datasets integration and using part of samples as references</h4>
+    <p>
+        The <b>"Samples to use as references"</b> parameter allows users to list sample names to be used as integration
+        references.
+        This is especially handy when integrating <b>large datasets</b>, as the tool migt run out of memory if the
+        refence samples are not determined,
+        By default (if the parameter is kept as it is), all samples are compared to each other (i.e. for 10 samples
+        there are 45 comparisons).
+        Users can list the sample names (separated with comma) they want to use as references by typing the sample names
+        in the parameter field.
+        Make sure you type the sample name correctly, exactly like you typed it in the Setup tool.
+        Make sure you select good representation of your samples as references (e.g. if you have samples from male and
+        female patients, pick one reference from both).
+        See the link to Seurat vignette below for more information!
+
+    </p>
+
+    <h4>Integration steps and parameters</h4>
 
     <p>
         This tool performs data integration of multiple samples (in .Robj).
@@ -109,6 +135,14 @@
             href="https://satijalab.org/seurat/articles/integration_rpca.html">Seurat vignette
             for "Fast integration using reciprocal PCA (RPCA)"</a>.
     </p>
+
+    <p>
+        For more details on using reference samples for integration, please check the <a
+            href=" https://satijalab.org/seurat/articles/integration_large_datasets.html">Seurat vignette
+            "Tips for integrating large datasets"</a>.
+    </p>
+
+
     <p>
         For more detailed description of the integration process, read "Comprehensive integration
         of single cell data <a href="https://www.biorxiv.org/content/10.1101/460147v1">the paper</a>

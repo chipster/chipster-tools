@@ -41,6 +41,9 @@ require(cowplot)
 load("combined_seurat_obj.Robj")
 # combined_seurat_obj <- data.combined
 
+# PCA (moved here from the combination tool)
+data.combined <- RunPCA(data.combined, npcs = num.dims, verbose = FALSE)
+
 # t-SNE and UMAP
 # NOTE: let's do both tSNE AND UMAP so that both can be later visualized.
 data.combined <- RunUMAP(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
