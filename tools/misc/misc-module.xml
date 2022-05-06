@@ -139,4 +139,8 @@
 
 	</category>
 
+	<category name="Genomes" color="#83010b">
+		<tool>genome-download.py</tool>
+	</category>
+
 </module>
