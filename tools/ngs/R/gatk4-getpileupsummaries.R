@@ -14,6 +14,7 @@
 source(file.path(chipster.common.path, "gatk-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path, "vcf-utils.R"))
 
 unzipIfGZipFile("reference")
 
@@ -53,11 +54,11 @@ system(paste(samtools.binary, "index reads.bam > reads.bam.bai"))
 options <- paste(options, "-I reads.bam")
 # VCF
 if (fileOk("variants.vcf")){
-	formatGatkVcf("variants.vcf")
+	formatGatkVcf("variants.vcf",chr)
 	options <-paste(options, "-V variants.vcf.gz")
 }
 if (fileOk("intervals.vcf")){
-	formatGatkVcf("intervals.vcf")
+	formatGatkVcf("intervals.vcf",chr)
 	options <-paste(options, "-L intervals.vcf.gz")	
 }else if (usevariants == "yes"){
 	options <-paste(options, "-L variants.vcf.gz")

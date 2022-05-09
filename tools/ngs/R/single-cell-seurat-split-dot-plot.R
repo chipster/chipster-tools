@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
-# IMAGE comp-20.04-r-deps
+# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # RUNTIME R-4.1.0-single-cell
 
 
@@ -24,11 +24,17 @@ use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 
-# Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
+# Load the R-Seurat-object:
 load("combined_seurat_obj.Robj")
-#combined_seurat_obj <- data.combined
+
+if (exists("seurat_obj")) {
+  data.combined <- seurat_obj
+}
+
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+# Store idents:
+stored_idents <- Idents(data.combined)
 
 markers.to.plot <- unlist(strsplit(markers, ", "))
 
@@ -38,7 +44,7 @@ match(markers.to.plot, all.genes)
 # if one of the genes is not in the list, print error message:
 if (!all(!is.na(match(markers.to.plot, all.genes)))) { 
   not.found <- markers.to.plot[is.na(match(markers.to.plot, all.genes))==TRUE]
-  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found))
+  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found, " "))
   }
 
 # pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
@@ -46,19 +52,54 @@ pdf(file="split_dot_plot.pdf", width=12, height=12)  # open pdf
 
 
 # Dot plot:
-DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, 
-	split.by = "stim") + RotatedAxis()
-	
+# DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, split.by = "stim") + RotatedAxis()
+# Check how many samples there are and choose as many colors:
+number.of.samples <- length(levels(as.factor((data.combined$stim))))
+colors.for.samples <- rainbow(number.of.samples)
+DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim") + RotatedAxis()
+
 
 # Feature plot:
 # Show in which cluster the genes are active
-FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method) 
+FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction=reduction.method, order=as.logical(plotting.order.used)) 
+
 # Compare between the treatments:
-FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "red"), reduction=reduction.method)
+# These plots get squeezed when there are many samples, and are at some point very difficult to read.
+# That is why we subset the object so that only 4 samples are shown on each page.
+
+
+number.of.samples <- length(levels(as.factor((data.combined$stim))))
+sample.names <- levels(as.factor((data.combined$stim)))
+Idents(data.combined) <- "stim"
+
+if (number.of.samples <= 4){
+FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction=reduction.method, order=as.logical(plotting.order.used))
+  }
+# If there are more than 4 samples, lets split them in multiple pages, using subsetting.
+if (number.of.samples > 4) {
+  # Using i as a bookmark, which sample we are now working with.
+  i <- 1
+  # Looping and printing pages until all samples are printed (rounding always up, last page can have only 1 sample.)
+  for (j in 1:ceiling(number.of.samples/4) ) { 
+    # If i is less than # of samples we have, keep subsetting and printing.
+    if (i < number.of.samples) { 
+      samples.of.this.round <- as.vector(sample.names[i:(i+3)] ) 
+      samples.of.this.round <- samples.of.this.round[!is.na(samples.of.this.round)]
+      subset.of.samples <- subset(data.combined, idents = samples.of.this.round)      
+      Idents(subset.of.samples) <- "stim"
+      # Need to save and print the plots for them to actually go to pdf:
+      feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction=reduction.method, order=as.logical(plotting.order.used))
+      print(feat.plot)
+      i <- i+4
+    }
+  }
+}
 
 # FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top", 
 #		max.exp = 3)
 
+DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+Idents(data.combined) <- stored_idents # Return the original idents
 
 ## Comparison violin plot:
 data.combined$celltype <- Idents(data.combined)

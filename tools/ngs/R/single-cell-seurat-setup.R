@@ -1,6 +1,7 @@
 # TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are two options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix as input. If you are planning to combine samples later on, make sure you name them in this tool.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
+# INPUT OPTIONAL hdf5.h5: "HDF5 input file" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
@@ -8,9 +9,8 @@
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
-# SLOTS 2
+# SLOTS 5
 
 
 # 2017-06-06 ML
@@ -21,6 +21,7 @@
 # 2019-09-24 ML correct for cases where there are NaNs in percent.mt
 # 2019-09-30 EK add spport for lower case mitochondrial gene names
 # 2021-10-04 ML Update to Seurat v4
+# 2022-04-01 ML Add HDF5 input file option
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
@@ -60,14 +61,25 @@ if (file.exists("dropseq.tsv")) {
   # Load the data
   dat <- Read10X("datadir/")
 
+# If using HDF5 data:
+} else if (file.exists("hdf5.h5")) {
+  library(hdf5r)
+  dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
+
 } else {
   stop(paste("CHIPSTER-NOTE: ", "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
 }
 
 # Initialize the Seurat object
-seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
+
+# In case of multiomics data, "dat" object has a list of matrices. 
+# We need to select the Gene Expression one from there.
+if (class(dat) == "list") {
+  seurat_obj <- CreateSeuratObject(counts = dat$`Gene Expression`, min.cells = mincells, project = project.name)
+}else{
+  seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
 # min.features = 200 => this is done in the next tool.
-# v3: raw.data -> counts
+}
 
 # For sample detection later on
 if (groupident != "empty") {
@@ -105,4 +117,5 @@ dev.off() # close the pdf
 save(seurat_obj, file = "setup_seurat_obj.Robj")
 
 ## EOF
+
 

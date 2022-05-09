@@ -25,6 +25,9 @@ Returns a subsample of N reads from a FASTQ file.
 Returns a subsample of N reads from a FASTQ file. 
 </p>
 <p>
+The input can be a single FASTQ file or a tar package containing multiple FASTQ files.    
+</p>
+<p>
 When using paired-end data, use same random seed for both files to keep pairing.
 </p>
 
@@ -32,7 +35,7 @@ When using paired-end data, use same random seed for both files to keep pairing.
 <h3>Output</h3>
 
 <p>
-The output is a gzipped FASTQ file.
+The output is a gzipped FASTQ file or a tar file containing gzipped FASTQ files.
 </p>
 
 

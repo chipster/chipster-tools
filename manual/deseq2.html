@@ -18,6 +18,7 @@ account for a second experimental factor.
 <li> Column describing groups [group]</li>
 <li> Column describing additional experimental factor [EMPTY]</li>
 <li> Cutoff for the adjusted P-value (0-1) [0.05]</li>
+<li> Create BED file (yes,no) [no]</li>
 </ul>
 
 <h3>Details</h3>
@@ -62,7 +63,7 @@ from a likelihood ratio test of a model including the groups and the additional 
 		<li>pvalue = Wald test p-value</li>
 		<li>padj = Benjamini-Hochberg adjusted p-value</li>
 	</ul></li>
-<li>de-list-deseq2.bed: The BED version of the results table contains genomic coordinates and log2 fold change values.<br></li>
+<li>de-list-deseq2.bed (optional): The BED version of the results table contains genomic coordinates and log2 fold change values.<br></li>
 <li>summary.txt: Textual summary of the differential expression results, including information on filtering and outliers. <br></li>
 <li>deseq2_report.pdf: A PDF file containing:
 	<ul>

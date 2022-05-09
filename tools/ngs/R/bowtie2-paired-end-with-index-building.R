@@ -1,5 +1,5 @@
 # TOOL bowtie2-paired-end-with-index-building.R: "Bowtie2 for paired end reads and own genome" (Bowtie2 aligns reads to genomes or transcriptomes. Results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction \(e.g. 1files.txt and 2files.txt\). You can generate the lists with the tool \"Utilities \\\ Make a list of filenames\".)
-# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads" TYPE FASTQ
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
@@ -65,7 +65,7 @@ system(echo.command)
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  system("echo Extarting tar formatted gemome index file >> bowtie2.log")
+  system("echo Extracting tar formatted gemome index file >> bowtie2.log")
   system("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
@@ -73,7 +73,7 @@ if (genome.filetype == "tar") {
   # case 2. Fasta file
 } else {
   # Do indexing
-  #check sequece file type
+  #check sequence file type
   emboss.path <- file.path(chipster.tools.path,"emboss","bin")
   options(scipen = 999)
   inputfile.to.check <- ("genome.txt")
@@ -143,13 +143,13 @@ if (discordant.file == "yes") {
 }
 
 # Check if reads are in FASTA format
-emboss.path <- file.path(chipster.tools.path,"emboss","bin")
-sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
-str.filetype <- system(sfcheck.command,intern = TRUE)
-if (str.filetype == "fasta") {
-  parameters <- paste(parameters,"-f")
-}
+# emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+# sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
+# sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
+# str.filetype <- system(sfcheck.command,intern = TRUE)
+# if (str.filetype == "fasta") {
+#   parameters <- paste(parameters,"-f")
+# }
 
 # Input files
 if (file.exists("reads1.txt") && file.exists("reads2.txt")) {

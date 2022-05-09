@@ -106,6 +106,9 @@
 		<tool>test-data-in.R</tool>
 		<tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
+		<tool>test-data-in-out-storage.py</tool>
+		<tool>test-data-in-out-storage-1tb.py</tool>
+		<tool>test-data-in-out-without-tools-bin.py</tool>
 		<tool>test-multiple-inputs.py</tool>
 		<tool>test-data-in-out3.py</tool>
 		<tool>test-screen-output.py</tool>
@@ -116,6 +119,7 @@
 		<tool>test-parameters.py</tool>
 		<tool>test-parameters.R</tool>
 		<tool>test-output-missing.R</tool>
+		<tool>test-chipster-note.py</tool>
 		<tool>sleep.py</tool>
 		<tool>sleep.R</tool>
 		<tool>test.R</tool>
@@ -130,6 +134,7 @@
 		<tool>sort_gtf.R</tool>
 		<tool>umi-tools.R</tool>
 		<tool>bbduk.R</tool>
+		<tool>factoextra.R</tool>
 
 	</category>
 

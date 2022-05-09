@@ -8,7 +8,7 @@
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
 # PARAMETER OPTIONAL ad_factor: "Column describing additional experimental factor" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing an additional experimental factor. If given, p-values in the output table are from a likelihood ratio test of a model including the experimental groups and experimental factor, vs a model which only includes the experimental factor.)
 # PARAMETER OPTIONAL p.value.cutoff: "Cutoff for the adjusted P-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for Benjamini-Hochberg adjusted p-value. Note that the developers of DESeq2 use 0.1 as a default cut-off.)
-
+# PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
 
 # MK 15.04.2014, added the possibility to use DESeq2 in dea-deseq.R 
 # AMS 17.06.2014, split the DESeq2 part to a separate tool
@@ -141,23 +141,24 @@ for(i in grep("baseMean$", colnames(res))) {
 rownames(output_table) <- make.names(rep(rownames(res), length(grep("baseMean$", colnames(res)))), unique=T)
 
 # If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
-if("chr" %in% colnames(dat)) {
-	if (dim(sig)[1] > 0) {
-		bed <- output_table[,c("chr","start","end")]
-		bed <- as.data.frame(bed)
-		if(is.null(results_name)) {
-			gene_names <- rownames(res)
-		} else {
-			gene_names <- paste(rep(results_name, each=nrow(res)), rownames(res), sep="")	
+if (bed == "yes"){
+	if("chr" %in% colnames(dat)) {
+		if (dim(sig)[1] > 0) {
+			bed <- output_table[,c("chr","start","end")]
+			bed <- as.data.frame(bed)
+			if(is.null(results_name)) {
+				gene_names <- rownames(res)
+			} else {
+				gene_names <- paste(rep(results_name, each=nrow(res)), rownames(res), sep="")	
+			}
+			bed <- cbind(bed, name=gene_names)							#name
+			bed <- cbind(bed, score=output_table[, "log2FoldChange"])		#score
+			bed <- bed[(output_table$padj <= p.value.cutoff & (! (is.na(output_table$padj)))), ]
+			bed <- sort.bed(bed)
+			write.table(bed, file="de-list-deseq2.bed", sep="\t", row.names=F, col.names=F, quote=F)	
 		}
-		bed <- cbind(bed, name=gene_names)							#name
-		bed <- cbind(bed, score=output_table[, "log2FoldChange"])		#score
-		bed <- bed[(output_table$padj <= p.value.cutoff & (! (is.na(output_table$padj)))), ]
-		bed <- sort.bed(bed)
-		write.table(bed, file="de-list-deseq2.bed", sep="\t", row.names=F, col.names=F, quote=F)
-		
 	}
-}
+}	
 
 # Make dispersion plot
 plotDispEsts(dds, main="Dispersion plot", cex=0.2)

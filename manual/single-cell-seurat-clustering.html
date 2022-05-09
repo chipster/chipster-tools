@@ -12,7 +12,7 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool clusters cells, visualizes the result in tSNE and UMAp plots, and finds marker genes for the clusters.
+		This tool clusters cells and visualizes the result in tSNE and UMAp plots.
 
 	</p>
 
@@ -22,9 +22,6 @@
 		<li>Resolution for granularity [0.5]</li>
 		<li>Perplexity, expected number of neighbors for tSNE plot [30]</li>
 		<li>Point size in tSNE and UMAP plots [30]</li>
-		<li>Which test to use for finding marker genes [wilcox]</li>
-		<li>Limit testing to genes which are expressed in at least this fraction of cells [0.10]</li>
-		<li>Limit testing to genes which show at least this log 2 fold difference [0.25]</li>
 		<li>Give a list of average expression in each cluster [no]</li>
 	</ul>
 
@@ -55,79 +52,19 @@
 	</p>
 
 	<p>
-		In order to visualize the clusters, non-linear dimensional reduction is performed using tSNE and UMAP on the same PCs as
-		used for the graph-based clustering, and the plots in <b>clusterPlots.pdf</b> are then colored by the clustering results.
+		In order to visualize the clusters, non-linear dimensional reduction is performed using tSNE and UMAP on the
+		same PCs as
+		used for the graph-based clustering, and the plots in <b>clusterPlots.pdf</b> are then colored by the clustering
+		results.
 		Cells belonging to the same cluster should co-localize on the tSNE plot, because tSNE aims to place cells, which
 		have a similar
 		local neighborhood in high-dimensional space, together in low-dimensional space. The perplexity parameter is a
 		guess
 		about the number of close neighbors each cell has, so it allows you to balance attention between local and
 		global aspects of the data (<a href="https://distill.pub/2016/misread-tsne/">read more</a>).
-		If you have low number of cells, try lowering the perplexity value. Unlike tSNE, UMAP also considers the global aspects of the data.
+		If you have low number of cells, try lowering the perplexity value. Unlike tSNE, UMAP also considers the global
+		aspects of the data.
 		Later on, you can choose whether you want to plot tSNE or UMAP plots.
-	</p>
-	<p>
-		Next, Seurat function FindAllMarkers is used to identify (positive) marker genes for the clusters.
-		These genes are differentially expressed between a cluster and all the other cells. You can filter out genes
-		prior to statistical testing
-		by requiring that a gene has to be expressed in at least a certain fraction of cells in either of the two groups
-		(min.pct=0.10).
-		You can also filter out genes whose log2 fold change between the two groups is less than a given value (logfc.threshold=0.25).
-		Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large
-		number of genes that are unlikely to be highly discriminatory.
-
-		<br>
-		<br>Seurat currently implements the following tests:
-	<ul>
-		<li>"wilcox": Wilcoxon rank sum test (default)</li>
-		<li>"bimod": Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)
-		</li>
-		<li>"roc": Standard AUC classifier</li>
-		<li>"t": Student's t-test</li>
-		<li>"tobit": Tobit-test for differential gene expression (Trapnell et al., Nature Biotech, 2014)</li>
-		<li>"poisson": Likelihood ratio test assuming an underlying poisson distribution. Use only for UMI-based
-			datasets</li>
-		<li>"negbinom": Likelihood ratio test assuming an underlying negative binomial distribution. Use only for
-			UMI-based datasets</li>
-		<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology,
-			2015)</li>
-		<!--  <li>"DESeq2" : DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014)</li>-->
-	</ul>
-	<b>The "Poisson" and "negbiom" options should ONLY be used on UMI datasets</b>, as they assume an underlying
-	poisson and negative-binomial distribution, respectively.
-	Please note that the DESeq2 method is not included in this tool, because it is very slow for large comparisons. However, 
-	it is available in the tool <a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-find-markers.html">Seurat -Find differentially expressed genes between clusters</a> where you can use it for comparing two clusters.
-	</p>
-
-	<p>
-		The <b>markers.tsv</b> result file contains marker genes and associated statistics <b>for all the clusters</b>:
-	<ul>
-		<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
-			likelihood that the gene is in the list just be chance) </li>
-		<li><b>avg_log2FC</b> = average log2 fold change (how much higher (lower) the expression of this gene is in
-			the particular
-			cluster, compared to all the other cells </li>
-		<li><b>pct.1</b> = what percentage of the cells in the particular cluster show some expression for this gene
-		</li>
-		<li><b>pct.2</b> = what percentage of the cells <b>not</b> in the particular cluster (=all the other cells)
-			show some expression for this gene</li>
-		<li><b>p-val_adj</b> = adjusted/corrected p-value. This value is multiple testing corrected:
-			when we test over thousands of genes, we would statistically start getting some significantly
-			differentially
-			expressed genes just by chance. There are different methods to correct for this,
-			here a <i>Bonferroni</i> correction is used. When filtering the table and reporting your results,
-			use this value.</li>
-		<li><b>cluster</b> = the cluster for which this gene is a marker. Use this column to filter
-			the table to get the markers for a cluster of interest (see below). </li>
-	</ul>
-
-	You can retrieve markers for a specific cluster using the tool <a
-		href="/manual/ngs-filter-results-column.html">Utilities / Filter table by column value</a> .
-	For example, to get the markers for cluster 2, fill in the parameters accordingly: <br>
-	Column to filter by = cluster <br>
-	Does the first column have a title = no <br>
-	Cutoff = 2 <br>
-	Filtering criteria = equal-to <br>
 	</p>
 
 	<p>
@@ -151,11 +88,10 @@
 	<h3>Output</h3>
 
 	<ul>
-		<li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+		<li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not
+			viewable in
 			Chipster. </li>
-		<li>clusterPlot.pdf: Cluster visualization in tSNE and UMAP plots, heatmap showing the expression of top ten marker genes (in
-			terms of fold change) for each cluster. </li>
-		<li>markers.tsv: Marker genes</li>
+		<li>clusterPlot.pdf: Cluster visualization in tSNE and UMAP plots</li>
 		<li>aver_expr_in_clusters.tsv: A table for "average expression" for each gene in each cluster</li>
 	</ul>
 
