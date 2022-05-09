@@ -1,4 +1,4 @@
-# TOOL fastqc_multiqc.R: "Read quality with MultiQC for many FASTQ files" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input can be FASTQ files or tar files containing FASTQ files. Files can be gzipped. Please make sure you don't have duplicate FASTQ file names. This tool is based on the FastQC and MultiQC packages.)
+# TOOL fastqc_multiqc.R: "Read quality with MultiQC for many FASTQ files" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input can be FASTQ files or tar files containing FASTQ files. Files can be gzipped. Please make sure you don't have duplicate FASTQ file names. Run the tool once for all samples, not separately for each file. This tool is based on the FastQC and MultiQC packages.)
 # INPUT reads{...}.fq: "FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL multiqc_report.html
 # OUTPUT OPTIONAL error_log.txt
@@ -10,9 +10,14 @@ source(file.path(chipster.common.path,"tool-utils.R"))
 
 # Rename input files to get the original banes in the report
 input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+
+system("cat chipster-inputs.tsv")
+system("ls -l")
+
 for (i in 1:nrow(input.names)) {
   system(paste("mv --backup=numbered",input.names[i,1],input.names[i,2]))
 }
+system("ls -l")
 
 # Try opening the input files as tar packages.
 system("ls *.tar *.tar.* *.tgz |xargs -i tar xf {} --xform='s#^.+/##x' 2>/dev/null")
@@ -37,6 +42,8 @@ documentCommand(multiqc.command)
 # run
 runExternal(fastqc.command)
 runExternal(multiqc.command)
+
+
 
 if (fileNotOk("multiqc_report.html")) {
   system("mv stderr.log error_log.txt")

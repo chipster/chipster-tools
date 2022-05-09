@@ -8,7 +8,7 @@ source $(dirname "$0")/build-env.bash
 image="comp-20.04-r-deps"
 
 # this needs python from tools-bin
-BUNDLE_COLLECTION_VERSION="58"
+BUNDLE_COLLECTION_VERSION="chipster-4.5.1-rc2-bbduk-umi-statistics"
 
 function finish {
   bash $BUNDLE_SCRIPTS_DIR/clean-up.bash $JOB_NAME $BUILD_NUMBER

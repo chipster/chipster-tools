@@ -26,6 +26,8 @@ echo "package $source"
 start_time=$(get_time)
     
 # packaging and extracting takes less than 10 seconds
+TOOLS_PATH="$TOOLS_PATH" \
+TMPDIR_PATH="$TMPDIR_PATH" \
 bash $(dirname "$0")/run-in-pod.bash $JOB_NAME $BUILD_NUMBER root - <<EOF
 
   mkdir -p $nfs_client_bundle

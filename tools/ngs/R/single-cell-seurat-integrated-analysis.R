@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-integrated-analysis.R: "Seurat v4 -Integrated analysis of two samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for two sample combined Seurat objects.)
+# TOOL single-cell-seurat-integrated-analysis.R: "Seurat v4 -Integrated analysis of multiple samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for combined Seurat objects that have multiple samples in them.)
 # INPUT combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT seurat_obj_combined_integrated.Robj
@@ -10,9 +10,8 @@
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 0.5 (Point size for the dimensionality reduction plot.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.0-single-cell
-
+# SLOTS 2
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
 # PARAMETER OPTIONAL output_norm_table: "Give a table of log-normalized values with cluster and sample information" TYPE [T: yes, F: no] DEFAULT F (Returns a table with the log-normalised UMI counts for all cells and all genes, along with the information on which sample and which cluster the cell belongs to.)
@@ -26,6 +25,7 @@
 # 2020-01-31 ML Add option to output average expression table
 # 2020-02-25 ML Add option to output log-normalised values table (still commented)
 # 2021-10-04 ML Update to Seurat v4
+# 2922-02-21 EK Increase slots to 2 so that the average expression table is produced also with larger datasets
 
 # for UMAP:
 library(reticulate)
@@ -40,6 +40,9 @@ require(cowplot)
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
 load("combined_seurat_obj.Robj")
 # combined_seurat_obj <- data.combined
+
+# PCA (moved here from the combination tool)
+data.combined <- RunPCA(data.combined, npcs = num.dims, verbose = FALSE)
 
 # t-SNE and UMAP
 # NOTE: let's do both tSNE AND UMAP so that both can be later visualized.
@@ -61,6 +64,8 @@ plot_grid(p1, p2)
 DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label=add.labels)
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
+sums <- colSums(cell_counts)
+cell_counts <- rbind(cell_counts, sums)
 
 textplot(cell_counts, halign = "center", valign = "center", cex = 1)
 title(paste("Total number of cells: ", length(colnames(x = data.combined)), "\n Number of cells in each cluster:"))

@@ -1,7 +1,8 @@
 # TOOL make_tar.R: "Make a tar package" (Makes a tar package with selected files. Note that file names must be unique.)
 # INPUT file{...}.tsv: "Files to include" TYPE GENERIC
-# OUTPUT OPTIONAL chipster.tar 
+# OUTPUT OPTIONAL chipster.tar
 # PARAMETER name: "File name for tar package" TYPE STRING DEFAULT "chipster" (File name for the tar package. Ending .tar will be added to the name.)
+# RUNTIME R-4.1.1
 
 # Read input names
 input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
