@@ -11,12 +11,13 @@
 
 	<h3>Description</h3>
 
-	<p>Find the markers for a specific cluster compared to another cluster(s).
+	<p>Find the markers for a specific cluster compared to another cluster(s), all for all clusters.
 	</p>
 
 
 	<h3>Parameters</h3>
 	<ul>
+		<li>Find all markers [FALSE]</li>
 		<li>Number of the cluster of interest [1]</li>
 		<li>Cluster to compare to [all others]</li>
 		<li>Which test to use for finding marker genes [wilcox]</li>
@@ -30,7 +31,13 @@
 	<h3>Details</h3>
 
 	<p>
-		Seurat function FindMarkers is used to identify positive and negative marker genes for the clusters of interest,
+		If <b>Find all markers</b> parameter is set to TRUE, Seurat function FindAllMarkers is used to list
+		the markers for all the clusters. In this case, each cluster is compared to all the other clusters.
+		This parameter overwrites the selection of cluster numbers in the two parameters below.
+		This option gives as an output a large table with all the markers in it.
+
+		If <b>Find all markers</b> parameter is FALSE (default), Seurat function FindMarkers is used to identify
+		positive and negative marker genes for the clusters of interest,
 		determined by the user.
 		By default, differentially expressed genes are tested between the cluster of interest and all the other cells by
 		default.
@@ -39,14 +46,16 @@
 		When comparing to group of clusters, separate the clusters with a comma (,).
 	</p>
 	<p>
-		You can filter out genes prior to statistical testing by requiring that a gene has to be expressed in at least a certain fraction of cells in either of the two groups
+		You can filter out genes prior to statistical testing by requiring that a gene has to be expressed in at least a
+		certain fraction of cells in either of the two groups
 		(min.pct=0.10).
-		You can also filter out genes whose log2 fold change between the two groups is less than a given value (logfc.threshold=0.25).
+		You can also filter out genes whose log2 fold change between the two groups is less than a given value
+		(logfc.threshold=0.25).
 		Both of these parameters can be set to 0, but with a dramatic increase in time since this will test a large
-		number of genes that are unlikely to be highly discriminatory. 
+		number of genes that are unlikely to be highly discriminatory.
 	</p>
 	<p>
-	Seurat currently implements the following tests:
+		Seurat currently implements the following tests:
 	<ul>
 		<li>"wilcox": Wilcoxon rank sum test (default)</li>
 		<li>"bimod": Likelihood-ratio test for single cell gene expression, (McDavid et al., Bioinformatics, 2013)
@@ -60,14 +69,16 @@
 			UMI-based datasets</li>
 		<li>"MAST": GLM-framework that treates cellular detection rate as a covariate (Finak et al, Genome Biology,
 			2015)</li>
-		<li>"DESeq2": DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014). Please note that when using the DESeq2 method you should not filter genes prior to testing.</li>
+		<li>"DESeq2": DE based on a model using the negative binomial distribution (Love et al, Genome Biology, 2014).
+			Please note that when using the DESeq2 method you should not filter genes prior to testing.</li>
 	</ul>
 	<b>The Poisson, negbiom and DESeq2 options should ONLY be used on UMI datasets</b>, as they assume an underlying
 	poisson and negative-binomial distribution, respectively.
 	</p>
 
 	<p>
-		The <b>markers.tsv</b> result file contains marker genes and associated statistics. Note that by default only genes with positive log2 fold change are listed in the result file:
+		The <b>markers.tsv</b> result file contains marker genes and associated statistics. Note that by default only
+		genes with positive log2 fold change are listed in the result file:
 	<ul>
 		<li><b>p-val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
 			likelihood that the gene is in the list just be chance) </li>
@@ -87,6 +98,17 @@
 
 	</ul>
 
+	In case all markers are listed, the tool will give a larger table, <b>all_markers.tsv</b>.
+	This table contains the same values for all the cluster markers, and an extra column
+	<b>cluster</b> = the cluster for which this gene is a marker. Use this column to filter
+	the table to get the markers for a cluster of interest using the tool <a
+		href="/manual/ngs-filter-results-column.html">Utilities / Filter table by column value</a> .
+	For example, to get the markers for cluster 2, fill in the parameters accordingly: <br>
+	Column to filter by = cluster <br>
+	Does the first column have a title = no <br>
+	Cutoff = 2 <br>
+	Filtering criteria = equal-to <br>
+	</p>
 	<p>
 		For more details, please check:<br>
 		The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
@@ -98,6 +120,10 @@
 
 	<ul>
 		<li>markers.tsv: Marker genes for the cluster of interest </li>
+		<li>all_markers.tsv: Marker genes for all the clusters vs all other cells</li>
+		<li>top10Heatmap.pdf: Heatmap showing the expression of top ten marker genes (in
+			terms of fold change) for each cluster. </li>
+		</li>
 	</ul>
 
 

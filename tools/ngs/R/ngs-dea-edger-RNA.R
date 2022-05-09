@@ -14,6 +14,7 @@
 # PARAMETER OPTIONAL normalization: "Apply TMM normalization" TYPE [yes, no] DEFAULT yes (Should normalization based on the trimmed mean of M-values \(TMM\) be performed to reduce the RNA composition effect.)
 # PARAMETER OPTIONAL w: "Plot width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted image)
 # PARAMETER OPTIONAL h: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted image)
+# PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
 
 
 # MG 11.6.2011                                            
@@ -138,14 +139,16 @@ if (dim(significant_results)[1] > 0) {
 	significant_indices <- rownames (significant_results)
 	output_table <- data.frame (dat[significant_indices,], significant_results)
 	write.table(output_table, file="de-list-edger.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-	if("chr" %in% colnames(dat)) {
-		bed_output <- output_table [,c("chr","start","end")]
-		gene_names <- rownames(output_table)
-		bed_output <- cbind(bed_output,name=gene_names)
-		bed_output <- cbind(bed_output, score=output_table[,"logFC"])
-		source(file.path(chipster.common.path, "bed-utils.R"))
-		bed_output <- sort.bed(bed_output)
-		write.table(bed_output, file="de-list-edger.bed", sep="\t", row.names=F, col.names=F, quote=F)
+	if (bed == "yes"){
+		if("chr" %in% colnames(dat)) {
+			bed_output <- output_table [,c("chr","start","end")]
+			gene_names <- rownames(output_table)
+			bed_output <- cbind(bed_output,name=gene_names)
+			bed_output <- cbind(bed_output, score=output_table[,"logFC"])
+			source(file.path(chipster.common.path, "bed-utils.R"))
+			bed_output <- sort.bed(bed_output)
+			write.table(bed_output, file="de-list-edger.bed", sep="\t", row.names=F, col.names=F, quote=F)
+		}
 	}	
 
 # Make an MA-plot displaying the significant tags (genes)

@@ -2,6 +2,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Clean up after the tool installation
+# 
+# This is the stable interface that all build scripts should call. 
+#
+# See start-pod.bash for longer explanation.
+
 source $(dirname "$0")/vm-utils.bash
 
 JOB_NAME="$1"

@@ -6,11 +6,11 @@
 	<title></title>
 </head>
 <body>
-	<h2>Preprocessing / Filter by column value</h2>
+	<h2>Filter by column value</h2>
 	
 <h3>Description</h3>
 
-<p>Filters rows in a table containing NGS based on the values in the selected data column.</p></p>
+<p>Filters rows in a table based on the numeric values in the selected data column.</p></p>
 
 <h3>Parameters</h3>
 
@@ -22,8 +22,9 @@
 
 <h3>Details</h3>
 
-<p>Filters rows in a table based on continuous values in the selected data column, for example genomic regions detected by the tool "Find peaks using MACS, treatment vs. control""). 
-The options "within" and "outside" can be used to filter based on a symmetrical range of values. </p>
+<p>Filters rows in a table based on continuous values in the selected data column. 
+The options "within" and "outside" can be used to filter based on a symmetrical range of values. For example, 
+setting the cutoff to 2 and the criteria to outside will give rows where the value is larger than 2 or smaller than -2. </p>
 
 <h3>Output</h3>
 
