@@ -37,12 +37,19 @@ You can find more information on the merging process in the USEARCH manual <a hr
 <br>
 <br>
 VSEARCH calculates posterior quality scores (Qs) for the overlap region. If the base calls match, the posterior Qs will increase.
-If there is a mismatch, the posterior Qs will usually decrease. If one of the reads has a low enough Qs (under 2), the base call can be treated as wrong.
-<br> So the posterior Qs is not just the sum/difference from the base calls. <br>
+If there is a mismatch, the posterior Qs will usually decrease. If one of the reads has a low enough Qs (under 2), the base call can be treated as wrong. So the posterior Qs is not just the sum/difference from the base calls. <br>
 For more information about equations for calculating posterior quality score information by VSEARCH, you can check this article by Robert C. Edgar and Henrik Flyvbjerg <a href="https://academic.oup.com/bioinformatics/article/31/21/3476/194979#btv401-M8">Error filtering, pair assembly and error correction for next-generation sequencing reads</a>. 
 <br>
 <br>
-The FASTQ files for a pair/sample are recognized by their name. Therefore they should be named so that the forward and reverse read files have the same name
+After merging paired reads to contigs with VSEARCH, you can visualize the base quality using the tool "Read quality with MultiQC for many FASTQ files".
+You can also run tool "Filter contigs based on the number of expected errors" to discard contigs which have more than the specified number of expected errors. 
+<br> 
+<br>
+Before further steps in your workflow, you should run the tool "Microbial amplicon data preprocessing /Combine FASTQ or FASTA files and make a group file".
+This tool combines all the FASTQ files from the Tar package to one single FASTA file and makes a group file required by Mothur analysis tools.
+<br>
+<br>
+Note: The FASTQ files for a pair/sample are recognized by their name. Therefore they should be named so that the forward and reverse read files have the same name
 but a different tag, for example R1 for forward read and R2 for reverse read. The resulting contig FASTQ file 
 will be named by splitting the filename with '_'. 
 <br>
@@ -55,15 +62,6 @@ sample2     sample2_L001_R1_001.fastq    sample2_L001_R2_001.fastq
 sample3     sample3_L001_R1_001.fastq    sample3_L001_R2_001.fastq
 etc.
 </pre> 
-
-<br>
-<br>
-After merging paired reads to contigs with VSEARCH, you can visualize the base quality using the tool "Read quality with MultiQC for many FASTQ files".
-You can also run tool "Filter contigs based on the number of expected errors" to discard contigs which have more than the specified number of expected errors. 
-<br> 
-<br>
-Before further steps in your workflow, you should run the tool "Microbial amplicon data preprocessing /Combine FASTQ or FASTA files and make a group file".
-This tool combines all the FASTQ files from the Tar package to one single FASTA file and makes a group file required by Mothur analysis tools.
 <br>
 <br>
 This tools is based on the fastq_mergepairs command of VSEARCH package.
@@ -80,7 +78,7 @@ The analysis output consists of the following:
 </p>
 <h3>References</h3>
 <p>
-    by Torbjørn Rognes​, Tomáš Flouri, Ben Nichols, Christopher Quince, Frédéric Mahé <br>
+    by Torbjørn Rognes, Tomáš Flouri, Ben Nichols, Christopher Quince, Frédéric Mahé <br>
 <a href="https://peerj.com/articles/2584/"> VSEARCH: a versatile open source tool for metagenomics </a> 
 <br>
 See --fastq_mergepairs <br>
