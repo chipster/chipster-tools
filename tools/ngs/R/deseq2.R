@@ -5,10 +5,15 @@
 # OUTPUT OPTIONAL summary.txt
 # OUTPUT OPTIONAL deseq2_report.pdf
 # OUTPUT OPTIONAL de-list-deseq2.bed
+# OUTPUT OPTIONAL dds.Robj
+# OUTPUT OPTIONAL output_table.tsv 
+# OUTPUT OPTIONAL res.Robj
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
 # PARAMETER OPTIONAL ad_factor: "Column describing additional experimental factor" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing an additional experimental factor. If given, p-values in the output table are from a likelihood ratio test of a model including the experimental groups and experimental factor, vs a model which only includes the experimental factor.)
 # PARAMETER OPTIONAL p.value.cutoff: "Cutoff for the adjusted P-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for Benjamini-Hochberg adjusted p-value. Note that the developers of DESeq2 use 0.1 as a default cut-off.)
 # PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
+# PARAMETER OPTIONAL size.factor.estimation.type: "Method for estimating size factors" TYPE [ratio:"ratio", poscounts:"poscounts"] DEFAULT ratio (Which size estimation method to use. Default option "ratio" uses the standard median ratio method introduced in DESeq. "poscounts" offers alternative estimator, which can be used even when all genes contain a sample with a zero.)
+# RUNTIME R-3.6.1-phyloseq
 
 # MK 15.04.2014, added the possibility to use DESeq2 in dea-deseq.R 
 # AMS 17.06.2014, split the DESeq2 part to a separate tool
@@ -20,6 +25,7 @@
 # ML 4.5.2016, Changed the direction of the comparison when more than 2 groups
 # ML+SS 18.10.2016, Fixed plotting & rounding and formatting when more than 2 groups
 # ML+SS 08.05.2018, comparison possible also when >9 groups
+# ML 10.5.2022, Move to R-3.6.1 and DESeq 1.26.0, add the size factor estimation type parameter to cope with cases when all genes contain a sample with a zero.
 
 #column <-"group"
 #ad_factor<-"EMPTY"
@@ -56,7 +62,8 @@ if (ad_factor == "EMPTY") {
 # Vector / variable that holds comparison names
 results_name <- NULL 
 
-dds <- DESeq(dds)
+
+dds <- DESeq(dds, sfType=size.factor.estimation.type)
 
 # Calculate statistic for differential expression, merge with original data table, keep significant DEGs, remove NAs and sort by FDR. If there are more than 2 groups, get pairwise results for each comparison.
 if (length(unique(groups)) == 2) {
@@ -139,6 +146,8 @@ for(i in grep("baseMean$", colnames(res))) {
 	output_table <- rbind(output_table, cbind(dat, res[, (i:(i+col_size))]))
 }
 rownames(output_table) <- make.names(rep(rownames(res), length(grep("baseMean$", colnames(res)))), unique=T)
+output_table <- as.data.frame(output_table)
+
 
 # If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
 if (bed == "yes"){
@@ -164,7 +173,8 @@ if (bed == "yes"){
 plotDispEsts(dds, main="Dispersion plot", cex=0.2)
 legend(x="topright", legend="fitted dispersion", col="red", cex=1, pch="-")
 
-# Make histogram of p-values with overlaid significance cutoff. When more than two groups, min.pvalue is taken over all comparisons for genes
+
+## Make histogram of p-values with overlaid significance cutoff. When more than two groups, min.pvalue is taken over all comparisons for genes
 hist(output_table$pval, breaks=100, col="blue", border="slateblue", freq=FALSE, main="P-value distribution", xlab="p-value", ylab="proportion (%)")
 hist(output_table$padj, breaks=100, col="red", border="slateblue", add=TRUE, freq=FALSE)
 abline(v=p.value.cutoff, lwd=2, lty=2, col="black")
@@ -183,5 +193,6 @@ dev.off()
 # legend (x="topleft", legend=c("significant","not significant"), col=c("red","black"), cex=1, pch=19)
 # abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2)
 # dev.off()
+
 
 # EOF
