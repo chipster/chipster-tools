@@ -1,6 +1,6 @@
 # TOOL genome-download.py: "Download genome from Ensembl" (Download genome fasta and gtf files from Ensembl.) 
-# OUTPUT output.fa.gz
-# OUTPUT output.gtf.gz
+# OUTPUT output.fa.lz4
+# OUTPUT output.gtf.lz4
 # PARAMETER species: Species TYPE STRING DEFAULT drosophila_melanogaster ()
 # PARAMETER version: Version TYPE STRING DEFAULT BDGP6.32 (Genome assembly version)
 # PARAMETER release: "Ensembl release" TYPE STRING DEFAULT current (Ensembl release number or "current")
@@ -13,6 +13,13 @@ import os.path
 from urllib.parse import urlparse
 from pathlib import Path
 import re
+import subprocess
+import sys
+
+# add the tools dir to path, because __main__ script cannot use relative imports
+sys.path.append(os.getcwd() + "/../toolbox/tools")
+from common.python import tool_utils
+
 
 # Calls find_files and filters away some files that are typical for gtf
 def find_gtf_file(dir, file):
@@ -124,11 +131,24 @@ def download(host, species, release, ftp_release):
 
     fasta_dir = get_dir(host, species, release, "fasta")
     fasta_url = find_file(fasta_dir, ".dna.toplevel.fa.gz", [])
-    download_url(fasta_url, "output.fa.gz")
+    download_url(fasta_url, "output.fa.lz4")
 
     gtf_dir = get_dir(host, species, release, "gtf")
     gtf_url = find_gtf_file(gtf_dir, ".gtf.gz")
-    download_url(gtf_url, "output.gtf.gz")
+    download_url(gtf_url, "output.gtf.lz4")
+
+    ftp_fasta_filename = os.path.basename(fasta_url)
+    ftp_gtf_filename = os.path.basename(gtf_url)
+
+    fasta_filename = tool_utils.remove_postfix(ftp_fasta_filename, '.gz') + ".lz4"
+    gtf_filename = tool_utils.remove_postfix(ftp_gtf_filename, '.gz') + ".lz4"
+
+    output_names = {
+        'output.fa.lz4': fasta_filename,
+        'output.gtf.lz4': gtf_filename,
+    }
+
+    tool_utils.write_output_definitions(output_names)
 
     print("done " + species + " version " + ftp_release)
 
@@ -138,50 +158,48 @@ def to_hr(byte_size: int):
 
 def download_url(url: str, file_name: str):
 
-    # url = url.replace("ftp://", "http://")
-
     print("download url " + url  + " to " + file_name)
 
-    parsed_url = urlparse(url)
-    ftp_server = parsed_url.netloc
-    ftp_dir = os.path.dirname(parsed_url.path)
-    ftp_file = os.path.basename(parsed_url.path)
+    bash_cmd = "curl -s " + url + " | gunzip | lz4 > " + file_name
+    bash_process = subprocess.run(["bash", "-c", bash_cmd])
 
-    try:
+    if bash_process.returncode != 0:
+        raise RuntimeError("download failed with exit code: " + bash_process.returncode + ", command: " + bash_cmd)
 
-        print("connect to FTP server " + str(ftp_server))
-        with FTP(ftp_server) as ftp:
-            print("login")
-            ftp.login()
+    #print("download url " + url  + " to " + file_name)
+    # parsed_url = urlparse(url)
+    # ftp_server = parsed_url.netloc
+    # ftp_dir = os.path.dirname(parsed_url.path)
+    # ftp_file = os.path.basename(parsed_url.path)
+    # try:
+    #     print("connect to FTP server " + str(ftp_server))
+    #     with FTP(ftp_server) as ftp:
+    #         print("login")
+    #         ftp.login()
+    #         ftp.cwd(ftp_dir)
+    #         total_size = ftp.size(ftp_file)
+    #         print("download")
+    #         size = 0
+    #         chunk_count = 0
+    #         with open(file_name, "wb") as f:
+    #             def write_chunk(data):
+    #                 f.write(data)
+    #                 nonlocal size 
+    #                 nonlocal chunk_count
+    #                 size += len(data)
+    #                 chunk_count = chunk_count + 1
+    #                 if chunk_count % 10000 == 0:
+    #                     print("downloaded", to_hr(size) + " / " + to_hr(total_size))
+    #             ftp.retrbinary('RETR ' + ftp_file, write_chunk)        
+    # except BaseException as exc:
+    #     raise RuntimeError("ftp download failed", ftp_server, ftp_dir, ftp_file) from exc
 
-            ftp.cwd(ftp_dir)
-
-            total_size = ftp.size(ftp_file)
-
-            print("download")
-            size = 0
-            chunk_count = 0
-            with open(file_name, "wb") as f:
-                def write_chunk(data):
-                    f.write(data)
-                    nonlocal size 
-                    nonlocal chunk_count
-                    size += len(data)
-                    chunk_count = chunk_count + 1
-                    if chunk_count % 10000 == 0:
-                        print("downloaded", to_hr(size) + " / " + to_hr(total_size))
-
-                ftp.retrbinary('RETR ' + ftp_file, write_chunk)        
-
-    except BaseException as exc:
-        raise RuntimeError("ftp download failed", ftp_server, ftp_dir, ftp_file) from exc
-
+    # url = url.replace("ftp://", "http://")
+    # print("download url " + url  + " to " + file_name)
     # resp = requests.get(url, stream=True)
     # total = int(resp.headers.get('content-length', 0))
-
     # chunk_count = 0
     # downloaded_size = 0
-    
     # with open(file_name, 'wb') as file:
     #     for data in resp.iter_content(chunk_size=1024 * 1024 * 100):
     #         size = file.write(data)
