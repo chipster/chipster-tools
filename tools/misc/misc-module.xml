@@ -141,6 +141,7 @@
 
 	<category name="Genomes" color="#83010b">
 		<tool>genome-download.py</tool>
+		<tool>filter-fasta.py</tool>
 	</category>
 
 </module>

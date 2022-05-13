@@ -9,6 +9,7 @@
 # PARAMETER release: "Ensembl release" TYPE STRING DEFAULT current (Ensembl release number or "current")
 # PARAMETER ftp_site: "Ensembl ftp site" TYPE ["ensembl.org", "fungi", "plants", "bacteria"] DEFAULT "ensembl.org" ()
 # RUNTIME python3
+# TOOLS_BIN ""
 
 import requests
 from ftplib import FTP
