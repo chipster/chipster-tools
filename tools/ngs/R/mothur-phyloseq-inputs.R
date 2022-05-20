@@ -17,7 +17,7 @@
 # OUTPUT OPTIONAL file.agc.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "16S, 18S or archaeal", its: "ITS or Ion Torrent data"] DEFAULT other (Choice between ITS vs other data. Note that Ion Torrent data needs to be specified)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
-# STORAGE 1000
+# STORAGE 2000
 
 # AMS JH EK 2020-2021
 
