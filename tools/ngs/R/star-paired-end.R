@@ -80,9 +80,13 @@ command <- paste(command,"--outFilterMismatchNoverLmax",out.filter.mismatch.nove
 documentCommand(command)
 runExternal(command)
 
-# rename result files
-system("mv Log.progress.out Log_progress.txt")
-system("mv Log.final.out Log_final.txt")
+# rename result files according to the parameter
+if (log.files == "final_log") {
+  system("mv Log.final.out Log_final.txt")
+} else if (log.files == "final_and_progress") {
+  system("mv Log.progress.out Log_progress.txt")
+  system("mv Log.final.out Log_final.txt")
+}
 system("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
