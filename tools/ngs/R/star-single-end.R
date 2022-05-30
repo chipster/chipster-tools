@@ -12,6 +12,7 @@
 # PARAMETER OPTIONAL align.intron.min: "Minimum intron size" TYPE INTEGER DEFAULT 21 (Minimum intron size.)
 # PARAMETER OPTIONAL align.intron.max: "Maximum intron size" TYPE INTEGER DEFAULT 0 (If 0, max intron size will be determined automatically, please see the manual page.)
 # PARAMETER OPTIONAL align.mates.gap.max: "Maximum gap between two mates" TYPE INTEGER DEFAULT 0 (If 0, max intron gap will be determined automatically, please see the manual page.)
+# PARAMETER OPTIONAL log.files: "Create log files" TYPE [final_log: "Final log only", final_and_progress: "Final and progress logs", no_logs: "No logs"] DEFAULT final_log (Which log files are created. By default only the final log is created.)
 # SLOTS 5
 
 source(file.path(chipster.common.path,"tool-utils.R"))
@@ -58,9 +59,13 @@ command <- paste(command,"--outFilterMismatchNoverLmax",out.filter.mismatch.nove
 documentCommand(command)
 runExternal(command)
 
-# rename result files
-system("mv Log.progress.out Log_progress.txt")
-system("mv Log.final.out Log_final.txt")
+# rename result files according to the number of log files being created
+if (log.files == "final_log") {
+  system("mv Log.final.out Log_final.txt")
+} else if (log.files == "final_and_progress") {
+  system("mv Log.progress.out Log_progress.txt")
+  system("mv Log.final.out Log_final.txt")
+}
 system("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
