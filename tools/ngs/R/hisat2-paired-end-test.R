@@ -140,16 +140,17 @@ debugPrint(toString(hisat.parameters))
 # setting up HISAT binaries (and paths)
 hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
 samtools.binary <- file.path(chipster.tools.path,"samtools","samtools")
+hisat.index <- file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism)
 
 ## Run HISAT
 # Note a single ' at the beginning, it allows us to use special characters like >
-command <- paste("bash -c '",hisat.binary)
+command <- paste(hisat.binary, "-x", hisat.index)
 
 # Add the parameters
 command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "view -bS - > hisat.tmp.bam")
 
 # Close the command with a ', because there is a opening ' also
-command <- paste(command,"'")
+#command <- paste(command,"'")
 documentCommand(command)
 # Print the command to the hisat.log file
 debugPrint(command)
@@ -217,6 +218,6 @@ outputnames[2,] <- c("hisat.bam.bai",paste(basename,".bam.bai",sep = ""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
-system("ls -l >> hisat.log")
+system("ls | sort -r >> hisat.log")
 #EOF
 
