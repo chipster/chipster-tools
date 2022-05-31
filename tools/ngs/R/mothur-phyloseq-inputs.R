@@ -17,6 +17,7 @@
 # OUTPUT OPTIONAL file.agc.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "16S, 18S or archaeal", its: "ITS or Ion Torrent data"] DEFAULT other (Choice between ITS vs other data. Note that Ion Torrent data needs to be specified)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
+# SLOTS 4
 # STORAGE 2000
 
 # AMS JH EK 2020-2021
@@ -38,8 +39,9 @@ documentVersion("Mothur",version)
 # used for 16S, 18S and archaeal data only
 
 if (datatype == "other"){ 
-    distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
-    distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
+    distseqs.options <- paste("dist.seqs(fasta=file.fasta, processors=8") # dist.seqs produces file.dist. REMOVE processor argument from here after the chipster.threads.max fix.
+ #   distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
+ #   distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
     distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
     documentCommand(distseqs.options)
     write(distseqs.options,"distseqs.mth",append = FALSE)
