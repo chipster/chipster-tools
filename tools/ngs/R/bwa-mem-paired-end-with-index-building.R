@@ -3,9 +3,10 @@
 # INPUT reads1.txt: "Reads to align" TYPE GENERIC 
 # INPUT reads2.txt: "Reads to align" TYPE GENERIC 
 # INPUT genome.txt: "Reference genome" TYPE GENERIC
-# OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
-# OUTPUT bwa.log 
+# OUTPUT bwa.bam  
+# OUTPUT bwa.log
+# OUTPUT OPTIONAL bwa.bam.bai
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.) 
 # PARAMETER mode: "Data source" TYPE [ normal: " Illumina, 454, IonTorrent reads longer than 70 base pairs", pacbio: "PacBio subreads"] DEFAULT normal (Defining the type of reads will instruct the tool to use a predefined set of parameters optimized for that read type.)
 
 # KM 11.11.2014
@@ -57,7 +58,9 @@ system(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
 system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+if (index.file == "index_file") {
+  system("mv alignment.sorted.bam.bai bwa.bam.bai")
+}
 
 # Handle output names
 #
