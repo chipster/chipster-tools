@@ -122,9 +122,9 @@ if (dta.cufflinks == "yes") {
 # Threads that hisat uses
 hisat.parameters <- paste(hisat.parameters,"-p",chipster.threads.max)
 # Name of the output file
-hisat.parameters <- paste(hisat.parameters,"-S","hisat.sam")
+#hisat.parameters <- paste(hisat.parameters,"-S","hisat.sam")
 # Forward errors to hisat.log
-hisat.parameters <- paste(hisat.parameters,"2>> hisat.log")
+#hisat.parameters <- paste(hisat.parameters,"2>> hisat.log")
 # Suppress SAM records for reads that failed to align
 hisat.parameters <- paste(hisat.parameters,"--no-unal")
 
@@ -146,10 +146,11 @@ samtools.binary <- file.path(chipster.tools.path,"samtools","samtools")
 command <- paste("bash -c '",hisat.binary)
 
 # Add the parameters
-command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "view -b - > hisat.tmp.bam")
+command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "view -bS - > hisat.tmp.bam")
 
 # Close the command with a ', because there is a opening ' also
 command <- paste(command,"'")
+documentCommand(command)
 # Print the command to the hisat.log file
 debugPrint(command)
 
