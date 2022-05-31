@@ -136,6 +136,7 @@
 		<tool>bbduk.R</tool>
 		<tool>factoextra.R</tool>
 		<tool module="ngs">hisat2-paired-end-storage.R</tool>
+		<tool module="ngs">hisat2-paired-end-test.R</tool>
 
 	</category>
 
