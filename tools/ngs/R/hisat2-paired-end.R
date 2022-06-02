@@ -216,5 +216,6 @@ outputnames[2,] <- c("hisat.bam.bai",paste(basename,".bam.bai",sep = ""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
+system("ls -l >> hisat.log")
 #EOF
 
