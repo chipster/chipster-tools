@@ -1,5 +1,6 @@
 # TOOL single-cell-seurat-gene-plots.R: "Seurat v4 -Visualize genes" (Visualize for example selected cluster marker genes with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# INPUT OPTIONAL genes.txt: "Optional text file of the gene name(s)" TYPE GENERIC (The gene names\(s\) you wish to plot can also be given in the form of a text file, separated by comma. In case the text file is provided, the gene parameter is ignored.)
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL biomarker_plot.pdf
@@ -28,6 +29,10 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+library(readr)  
+
+# for the fileOk function
+source(file.path(chipster.common.path,"tool-utils.R"))
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -39,20 +44,31 @@ if (exists("data.combined") ){
 # in case some other type of array is set
 DefaultAssay(seurat_obj) <- "RNA"
 
-# If multiple genes are listed: (separate words from "," and remove whitespace)
-if(length(grep(",", biomarker)) != 0) {
-   biomarker <- trimws(unlist(strsplit(biomarker, ",")))
+# Use genes text file if provided, else the gene parameter is used
+if (fileOk("genes.txt",0)) {
+  genes = read_file("genes.txt")
+  print(genes)
+  biomarker <- trimws(unlist(strsplit(genes,",")))
+} else {
+  biomarker <- trimws(unlist(strsplit(biomarker, ",")))
 }
 
-# Sanity check: are the requested genes available in the data:
+# Sanity check: are all of the requested genes available in the data (one missing allowed)
 all.genes <- rownames(x = seurat_obj)
 match(biomarker, all.genes)
-# if one of the genes is not in the list, print error message:
+# if more than one of the genes is not in the list, print error message:
+if (sum(is.na((match(biomarker, all.genes)))) > 1) {  
+  not.found <- (biomarker[is.na(match(biomarker, all.genes))==TRUE])
+  not.found <- paste(not.found,collapse=",")
+  stop(paste('CHIPSTER-NOTE: ', "The genes you requested were not found in this dataset:", not.found))
+  }
+
+#continue even if one gene is missing
 if (!all(!is.na(match(biomarker, all.genes)))) { 
   not.found <- biomarker[is.na(match(biomarker, all.genes))==TRUE]
- #  print(paste("The gene you requested was not found in this dataset:", not.found))
-  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found))
-  }
+  print(paste("Continuing the visualization without the one gene not found: ", not.found))
+  biomarker <- biomarker[!is.na(match(biomarker, all.genes))]
+}
 
 # open pdf
 pdf(file="biomarker_plot.pdf", width=12, height=12) 
