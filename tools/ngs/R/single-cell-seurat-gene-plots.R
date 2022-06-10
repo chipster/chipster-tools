@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL biomarker_plot.pdf
-# PARAMETER biomarker: "Gene name\(s\)" TYPE STRING DEFAULT "MS4A1, LYZ" (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
+# PARAMETER OPTIONAL biomarker: "Gene name\(s\)" TYPE STRING DEFAULT "MS4A1, LYZ" (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE and UMAP plots.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
@@ -47,7 +47,6 @@ DefaultAssay(seurat_obj) <- "RNA"
 # Use genes text file if provided, else the gene parameter is used
 if (fileOk("genes.txt",0)) {
   genes = read_file("genes.txt")
-  print(genes)
   biomarker <- trimws(unlist(strsplit(genes,",")))
 } else {
   biomarker <- trimws(unlist(strsplit(biomarker, ",")))
