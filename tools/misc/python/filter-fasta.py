@@ -4,6 +4,7 @@
 # INPUT OPTIONAL seq_region.txt TYPE GENERIC
 # INPUT OPTIONAL karyotype.txt TYPE GENERIC
 # OUTPUT output.fa
+# OUTPUT output.fa.fai
 # PARAMETER ftp_site: "Ensembl ftp site" TYPE ["ensembl.org", "fungi", "plants", "bacteria"] DEFAULT "ensembl.org" ()
 # RUNTIME python3
 
@@ -32,14 +33,19 @@ def main():
         print("no karyotype chromosomes, keeping all")
 
         run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
+        run_process(["mv", input_fa + ".fai",  output_fa + ".fai"])
 
     else:
-        print("index genome")
+        print("index original genome")
         run_process([samtools, "faidx", input_fa])
 
         for chromosome in karyotype_chr:
             print("copy chromosome", chromosome)
             run_bash(samtools + " faidx " + input_fa + " " + chromosome + " >> " + output_fa)
+
+        print("index filtered genome")
+        run_process([samtools, "faidx", output_fa])
+        
 
 def run_bash(cmd: str):
     run_process(["bash", "-c", cmd])
