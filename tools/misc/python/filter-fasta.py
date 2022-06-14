@@ -1,5 +1,5 @@
 # TOOL filter-fasta.py: "Filter fasta" (Keep only primary chromosomes in fasta. Chromosomes that have karyotype data in Ensembl are considered as the primary chromosomes.)
-# INPUT input.fa.gz TYPE GENERIC
+# INPUT input.fa TYPE GENERIC
 # INPUT OPTIONAL coord_system.txt TYPE GENERIC
 # INPUT OPTIONAL seq_region.txt TYPE GENERIC
 # INPUT OPTIONAL karyotype.txt TYPE GENERIC
@@ -10,16 +10,44 @@
 # add the tools dir to path, because __main__ script cannot use relative imports
 sys.path.append(os.getcwd() + "/../toolbox/tools")
 from common.python import tool_utils
+import subprocess
+from typing import Iterable
+
 
 def main():
 
+    input_fa = "input.fa"
     coord_input = "coord_system.txt"
     seq_input = "seq_region.txt"
     karyotype_input = "karyotype.txt"
+    output_fa = "output.fa"
+
+    samtools = chipster_tools_path + "/samtools-1.2/samtools"
 
     karyotype_chr = get_karyotype_chromosomes(coord_input, seq_input, karyotype_input)
 
     print("karyotype chromosomes", karyotype_chr)
+
+    if len(karyotype_chr) == 0:
+        print("no karyotype chromosomes, keeping all")
+
+        run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
+
+    else:
+        print("index genome")
+        run_process([samtools, "faidx", input_fa])
+
+        for chromosome in karyotype_chr:
+            print("copy chromosome", chromosome)
+            run_bash(samtools + " faidx " + input_fa + " " + chromosome + " >> " + output_fa)
+
+def run_bash(cmd: str):
+    run_process(["bash", "-c", cmd])
+
+def run_process(cmd: Iterable[str]):
+    process = subprocess.run(cmd)
+    if process.returncode != 0:
+        raise RuntimeError("process failed with return code: " + process.returncode + ", command: " + str(cmd))
 
 def get_karyotype_chromosomes(coord_input: str, seq_input: str, karyotype_input: str):
 

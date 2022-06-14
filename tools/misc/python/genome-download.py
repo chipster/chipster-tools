@@ -1,5 +1,5 @@
 # TOOL genome-download.py: "Download genome from Ensembl" (Download genome fasta and gtf files from Ensembl.) 
-# OUTPUT output.fa.gz
+# OUTPUT output.fa
 # OUTPUT output.gtf
 # OUTPUT OPTIONAL coord_system.txt
 # OUTPUT OPTIONAL seq_region.txt
@@ -140,7 +140,7 @@ def download(host: str, species: str, release: str, ftp_release: str) -> str:
     print("downloading " + species + " version " + version + " from release " + ftp_release)
 
     # these must be the same than the output names in SADL
-    fasta_package = ".gz"
+    fasta_package = ""
     gtf_package = ""
     mysql_package = ""
 
@@ -321,3 +321,7 @@ check_version(species, release, version, ftp_version)
 print("download()", host, species_name, ftp_release)
 download(host, species, release, ftp_release)
 
+cmd = ["ls", "-lah"]
+process = subprocess.run(cmd)
+if process.returncode != 0:
+    raise RuntimeError("failed to list files: " + process.returncode + ", command: " + cmd)
