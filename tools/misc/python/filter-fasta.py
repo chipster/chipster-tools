@@ -61,7 +61,7 @@ def run_bash(cmd: str):
 def run_process(cmd: Iterable[str]):
     process = subprocess.run(cmd)
     if process.returncode != 0:
-        raise RuntimeError("process failed with return code: " + process.returncode + ", command: " + str(cmd))
+        raise RuntimeError("process failed with return code: " + str(process.returncode) + ", command: " + str(cmd))
 
 def get_karyotype_chromosomes(coord_input: str, seq_input: str, karyotype_input: str):
 

@@ -324,4 +324,4 @@ download(host, species, release, ftp_release)
 cmd = ["ls", "-lah"]
 process = subprocess.run(cmd)
 if process.returncode != 0:
-    raise RuntimeError("failed to list files: " + process.returncode + ", command: " + cmd)
+    raise RuntimeError("failed to list files: " + str(process.returncode) + ", command: " + cmd)
