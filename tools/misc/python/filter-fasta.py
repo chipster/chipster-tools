@@ -5,7 +5,6 @@
 # INPUT OPTIONAL karyotype.txt TYPE GENERIC
 # OUTPUT output.fa
 # OUTPUT output.fa.fai
-# PARAMETER ftp_site: "Ensembl ftp site" TYPE ["ensembl.org", "fungi", "plants", "bacteria"] DEFAULT "ensembl.org" ()
 # RUNTIME python3
 
 # add the tools dir to path, because __main__ script cannot use relative imports
@@ -45,7 +44,16 @@ def main():
 
         print("index filtered genome")
         run_process([samtools, "faidx", output_fa])
-        
+
+    # write better file names for client
+    session_input_fa = tool_utils.read_input_definitions()[input_fa]
+
+    output_names = {
+        output_fa: session_input_fa,
+        output_fa + ".fai": session_input_fa + ".fai",
+    }
+
+    tool_utils.write_output_definitions(output_names)
 
 def run_bash(cmd: str):
     run_process(["bash", "-c", cmd])
