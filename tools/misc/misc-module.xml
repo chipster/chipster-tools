@@ -147,6 +147,7 @@
 		<tool>index-bwa.py</tool>
 		<tool>index-gtf.py</tool>
 		<tool>index-hisat2.py</tool>
+		<tool>index-star.py</tool>
 	</category>
 
 </module>
