@@ -1,13 +1,14 @@
 # TOOL genome-download.py: "Download genome from Ensembl" (Download genome fasta and gtf files from Ensembl.) 
-# OUTPUT output.fa
-# OUTPUT output.gtf
+# OUTPUT OPTIONAL output.fa
+# OUTPUT OPTIONAL output.gtf
 # OUTPUT OPTIONAL coord_system.txt
 # OUTPUT OPTIONAL seq_region.txt
 # OUTPUT OPTIONAL karyotype.txt
 # PARAMETER species: Species TYPE STRING DEFAULT drosophila_melanogaster ()
 # PARAMETER version: Version TYPE STRING DEFAULT BDGP6.32 (Genome assembly version)
 # PARAMETER release: "Ensembl release" TYPE STRING DEFAULT current (Ensembl release number or "current")
-# PARAMETER ftp_site: "Ensembl ftp site" TYPE ["ensembl.org", "fungi", "plants", "bacteria"] DEFAULT "ensembl.org" ()
+# PARAMETER site: "Ensembl site" TYPE ["verteberates", "fungi", "plants", "bacteria"] DEFAULT "verteberates" ()
+# PARAMETER action: "Action" TYPE [check_version_only: "Check version", download: "Download"] DEFAULT "download" ()
 # RUNTIME python3
 # TOOLS_BIN ""
 
@@ -36,12 +37,12 @@ def find_file(dir: str, file: str, ignore_names: [str]) -> str:
 
     try:
         url = urlparse(dir)
-        print("connect to FTP server " + url.netloc)
+        # print("connect to FTP server " + url.netloc)
         ftp = FTP(url.netloc)
-        print("login")
+        # print("login")
         ftp.login()
 
-        print("list files in " + url.path)
+        # print("list files in " + url.path)
         ftp.cwd(url.path)
         files = ftp.nlst()
         ftp.quit()
@@ -73,12 +74,12 @@ def find_file(dir: str, file: str, ignore_names: [str]) -> str:
 # Returns a path to a directory where a genome is found. First argument is TYPE.
 def get_dir(host: str, species: str, release: str, file_type: str) -> str:
 
-    print("get_dir()", host, species, release, file_type)
+    # print("get_dir()", host, species, release, file_type)
 
     dir = ""
 
     if host.startswith("ftp://ftp.ensembl.org/"):
-        if release is "current":
+        if release == "current":
             # ftp://ftp.ensembl.org/pub/current_fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP6.dna.toplevel.fa.gz
             dir = host + "current_" + file_type + "/"
         else:
@@ -88,16 +89,16 @@ def get_dir(host: str, species: str, release: str, file_type: str) -> str:
         # ftp://ftp.ensemblgenomes.org/pub/plants/current/fasta/populus_trichocarpa/dna/Populus_trichocarpa.JGI2.0.26.dna.toplevel.fa.gz
         dir = host + release + "/" + file_type + "/"		
 
-    if host is "ftp://ftp.ensemblgenomes.org/pub/bacteria/":
+    if host == "ftp://ftp.ensemblgenomes.org/pub/bacteria/":
         # iterate over collections to find the right one
         i = 0
         while True:
-            collection = dir + "bacteria_" + i + "_collection/"
-            response = requests.get(collection)
+            collection = dir + "bacteria_" + str(i) + "_collection/"
+            response = requests.get(collection.replace("ftp://", "http://"))
 
             if response.status_code == 200:
-                species_url = dir + "bacteria_" + i + "_collection/" + species + "/"
-                response = requests.get(species_url)
+                species_url = dir + "bacteria_" + str(i) + "_collection/" + species + "/"
+                response = requests.get(species_url.replace("ftp://", "http://"))
 
                 if response.status_code == 200:
                     dir = species_url
@@ -115,14 +116,12 @@ def get_dir(host: str, species: str, release: str, file_type: str) -> str:
     else:
         dir = dir + species + "/"
 
-    if file_type is "fasta":
+    if file_type == "fasta":
         dir = dir + "dna/"
 
     return dir
 
 def check_version(species: str, release: str, version: str, ftp_version: str) -> str:
-
-    print("checking " + species + " version " + version + " from release " + release)
 
     if version == ftp_version:
         print("current release is " + ftp_release)
@@ -137,7 +136,6 @@ def check_version(species: str, release: str, version: str, ftp_version: str) ->
             """)
 
 def download(host: str, species: str, release: str, ftp_release: str) -> str:
-    print("downloading " + species + " version " + version + " from release " + ftp_release)
 
     # these must be the same than the output names in SADL
     fasta_package = ""
@@ -161,14 +159,15 @@ def download(host: str, species: str, release: str, ftp_release: str) -> str:
     download_url(gtf_url, gtf_output)
 
     # download mysql data to find out primary chromosomes to filter fasta files
-    mysql_dir = get_dir(host, species, release, "mysql")
+    if site == "verteberates":
+        mysql_dir = get_dir(host, species, release, "mysql")
 
-    try:
-        download_url(mysql_dir + "coord_system.txt.gz", coord_output)
-        download_url(mysql_dir + "seq_region.txt.gz", seq_output)
-        download_url(mysql_dir + "karyotype.txt.gz", karyotype_output)
-    except DownloadError as e:
-        print("optional mysql data is not available (" + str(e) + ")")
+        try:
+            download_url(mysql_dir + "coord_system.txt.gz", coord_output)
+            download_url(mysql_dir + "seq_region.txt.gz", seq_output)
+            download_url(mysql_dir + "karyotype.txt.gz", karyotype_output)
+        except DownloadError as e:
+            print("optional mysql data is not available (" + str(e) + ")")
 
     # write proper filenames for the client
     ftp_fasta_filename = os.path.basename(fasta_url)
@@ -197,7 +196,7 @@ def download_url(url: str, file_name: str):
 
     print("download url " + url  + " to " + file_name)
 
-    bash_cmd = "set -euxo pipefail; curl -s " + url
+    bash_cmd = "set -euo pipefail; curl -s " + url
 
     if file_name.endswith(".lz4"):
         bash_cmd += " | gunzip | lz4"
@@ -263,17 +262,17 @@ def download_url(url: str, file_name: str):
     #     print("download completed")
 
 
-def get_host(ftp_site: str) -> str:
-    if ftp_site == "ensembl.org":
+def get_host(site: str) -> str:
+    if site == "verteberates":
         return "ftp://ftp.ensembl.org/pub/"
-    elif ftp_site == "fungi":
+    elif site == "fungi":
         return "ftp://ftp.ensemblgenomes.org/pub/fungi/"
-    elif ftp_site == "plants":
+    elif site == "plants":
         return "ftp://ftp.ensemblgenomes.org/pub/plants/"
-    elif ftp_site == "bacteria":
+    elif site == "bacteria":
         return "ftp://ftp.ensemblgenomes.org/pub/bacteria/"
     else:
-        raise RuntimeError("unknown ftp_site " + ftp_site)
+        raise RuntimeError("unknown site " + site)
 
 def parse_gtf_url(gtf_url: str) -> (str, str, str):
     # name 
@@ -302,26 +301,26 @@ def parse_gtf_url(gtf_url: str) -> (str, str, str):
 
 
 # convert parameter options to real addresses
-print("get_host()", ftp_site)
+# print("get host", site)
 
-host = get_host(ftp_site)
+host = get_host(site)
 
-print("get_dir", host, species, release)
+# print("get dir", host, species, release)
 gtf_dir = get_dir(host, species, release, "gtf")
 
-print("find_gtf_file()", gtf_dir)
+# print("find gtf file", gtf_dir)
 gtf_url = find_gtf_file(gtf_dir, ".gtf.gz")
 
 
 species_name, ftp_version, ftp_release = parse_gtf_url(gtf_url)
 
-print("check_version()", species, release, version, ftp_version)
+print("check version", species, release, version, ftp_version)
 check_version(species, release, version, ftp_version)
 
-print("download()", host, species_name, ftp_release)
-download(host, species, release, ftp_release)
+if action == "download":
+    download(host, species, release, ftp_release)
 
-cmd = ["ls", "-lah"]
-process = subprocess.run(cmd)
-if process.returncode != 0:
-    raise RuntimeError("failed to list files: " + str(process.returncode) + ", command: " + cmd)
+# cmd = ["ls", "-lah"]
+# process = subprocess.run(cmd)
+# if process.returncode != 0:
+#     raise RuntimeError("failed to list files: " + str(process.returncode) + ", command: " + cmd)
