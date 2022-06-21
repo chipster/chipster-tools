@@ -4,7 +4,6 @@
 # INPUT OPTIONAL seq_region.txt TYPE GENERIC
 # INPUT OPTIONAL karyotype.txt TYPE GENERIC
 # OUTPUT output.fa
-# OUTPUT output.fa.fai
 # RUNTIME python3
 
 # add the tools dir to path, because __main__ script cannot use relative imports
@@ -12,7 +11,7 @@ sys.path.append(os.getcwd() + "/../toolbox/tools")
 from common.python import tool_utils
 import subprocess
 from typing import Iterable
-
+import os
 
 def main():
 
@@ -28,29 +27,26 @@ def main():
 
     print("karyotype chromosomes", karyotype_chr)
 
-    if len(karyotype_chr) == 0:
+    print("index original genome")
+    run_process([samtools, "faidx", input_fa])
+
+    if karyotype_chr == None or len(karyotype_chr) == 0:
         print("no karyotype chromosomes, keeping all")
 
-        run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
-        run_process(["mv", input_fa + ".fai",  output_fa + ".fai"])
-
+        #run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
+        os.rename(input_fa, output_fa)
+    
     else:
-        print("index original genome")
-        run_process([samtools, "faidx", input_fa])
 
         for chromosome in karyotype_chr:
             print("copy chromosome", chromosome)
             run_bash(samtools + " faidx " + input_fa + " " + chromosome + " >> " + output_fa)
 
-        print("index filtered genome")
-        run_process([samtools, "faidx", output_fa])
-
     # write better file names for client
-    session_input_fa = tool_utils.read_input_definitions()[input_fa]
+    session_input_fa = tool_utils.read_input_definitions()[input_fa].replace(".dna.toplevel", "")
 
     output_names = {
         output_fa: session_input_fa,
-        output_fa + ".fai": session_input_fa + ".fai",
     }
 
     tool_utils.write_output_definitions(output_names)
@@ -67,7 +63,7 @@ def get_karyotype_chromosomes(coord_input: str, seq_input: str, karyotype_input:
 
     for file in [ coord_input, seq_input, karyotype_input]:
         if not os.path.exists(file):
-            raise RuntimeError("cannot filter fasta without mysql file", file)
+            return None
 
     coord_chromosomes = []
 

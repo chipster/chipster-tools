@@ -31,8 +31,8 @@ def main():
     run_bash(gtf2bed + " " + input_gtf + ".gtf > " + output_bed)
         
     output_names = {
-        output_gtf: gtf_basename + ".DEXSeq.gtf",
-        output_bed: gtf_basename + ".bed",
+        output_gtf: "dexseq/" + gtf_basename + ".DEXSeq.gtf",
+        output_bed: "bed/" + gtf_basename + ".bed",
     }
 
     tool_utils.write_output_definitions(output_names)

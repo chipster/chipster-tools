@@ -79,13 +79,13 @@ def main():
         if file.endswith(".bt2"):
             output_name = file.replace(gtf_basename, "output") + str(len(output_names))
             os.rename(file, output_name)
-            output_names[output_name] = file
+            output_names[output_name] = "bowtie2/" + file
 
     # tophat index files
     for file in os.listdir(gtf_basename):
         output_name = file.replace(gtf_basename, "output") + str(len(output_names))
         os.rename(gtf_basename + "/" + file, output_name)
-        output_names[output_name] = "tophat/" + file
+        output_names[output_name] = "tophat2/" + file
 
     tool_utils.write_output_definitions(output_names)
     
