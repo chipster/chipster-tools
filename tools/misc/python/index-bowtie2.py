@@ -59,16 +59,16 @@ def main():
     
     run_process(["ls", "-lah"])
 
-    # symlink the fasta for the tophat, otherwise it will rebuild it
-    run_process(["ln", "-s", input_fa, gtf_basename + ".fa"])
-    # tophat seems to take the output name from the gtf file
-    run_process(["ln", "-s", input_gtf, gtf_basename + ".gtf"])    
-    run_bash("export PATH=\"$PATH:" + bowtie2_path + "\"; " + tophat + " --GTF " + gtf_basename + ".gtf --transcriptome-index " + gtf_basename + " " + gtf_basename)
+    # # symlink the fasta for the tophat, otherwise it will rebuild it
+    # run_process(["ln", "-s", input_fa, gtf_basename + ".fa"])
+    # # tophat seems to take the output name from the gtf file
+    # run_process(["ln", "-s", input_gtf, gtf_basename + ".gtf"])    
+    # run_bash("export PATH=\"$PATH:" + bowtie2_path + "\"; " + tophat + " --GTF " + gtf_basename + ".gtf --transcriptome-index " + gtf_basename + " " + gtf_basename)
 
-    run_process(["ls", "-lah"])
+    # run_process(["ls", "-lah"])
 
-    # Why does tophat create a dir named $gtf_basename?
-    run_process(["ls", "-lah", gtf_basename])
+    # # Why does tophat create a dir named $gtf_basename?
+    # run_process(["ls", "-lah", gtf_basename])
 
     # rename index files to fixed output names and define real names for the client
 
@@ -79,13 +79,14 @@ def main():
         if file.endswith(".bt2"):
             output_name = file.replace(gtf_basename, "output") + str(len(output_names))
             os.rename(file, output_name)
-            output_names[output_name] = "bowtie2/" + file
+            # output_names[output_name] = "bowtie2/" + file
+            output_names[output_name] = file
 
-    # tophat index files
-    for file in os.listdir(gtf_basename):
-        output_name = file.replace(gtf_basename, "output") + str(len(output_names))
-        os.rename(gtf_basename + "/" + file, output_name)
-        output_names[output_name] = "tophat2/" + file
+    # # tophat index files
+    # for file in os.listdir(gtf_basename):
+    #     output_name = file.replace(gtf_basename, "output") + str(len(output_names))
+    #     os.rename(gtf_basename + "/" + file, output_name)
+    #     output_names[output_name] = "tophat2/" + file
 
     tool_utils.write_output_definitions(output_names)
     
