@@ -74,7 +74,7 @@ def get_karyotype_chromosomes(coord_input: str, seq_input: str, karyotype_input:
             if tabs[2] == "chromosome" or tabs[2] == "primary_assembly":
                 # there are multiple rows for different assembly versions (human)
                 # but that shouldn't matter as long as only one of them is used in karyotype data
-                coord_chromosomes.append(tabs[1])
+                coord_chromosomes.append(tabs[0])
 
     if len(coord_chromosomes) == 0:
         raise RuntimeError("no chromosomes were found from " + coord_input)
