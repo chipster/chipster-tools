@@ -1,8 +1,5 @@
 # TOOL filter-fasta.py: "Filter fasta" (Keep only primary chromosomes in fasta. Chromosomes that have karyotype data in Ensembl are considered as the primary chromosomes.)
 # INPUT input.fa TYPE GENERIC
-# INPUT OPTIONAL coord_system.txt TYPE GENERIC
-# INPUT OPTIONAL seq_region.txt TYPE GENERIC
-# INPUT OPTIONAL karyotype.txt TYPE GENERIC
 # OUTPUT output.fa
 # RUNTIME python3
 
@@ -12,23 +9,34 @@ from common.python import tool_utils
 import subprocess
 from typing import Iterable
 import os
+import requests
 
 def main():
 
     input_fa = "input.fa"
-    coord_input = "coord_system.txt"
-    seq_input = "seq_region.txt"
-    karyotype_input = "karyotype.txt"
     output_fa = "output.fa"
 
     samtools = chipster_tools_path + "/samtools-1.2/samtools"
 
-    karyotype_chr = get_karyotype_chromosomes(coord_input, seq_input, karyotype_input)
+    session_input_fa = tool_utils.read_input_definitions()[input_fa].replace(".dna.toplevel", "")
+
+    karyotype_chr = get_karyotype_chromosomes(session_input_fa)
 
     print("karyotype chromosomes", karyotype_chr)
 
     print("index original genome")
     run_process([samtools, "faidx", input_fa])
+
+    fasta_chr = []
+
+    with open(input_fa + ".fai") as file:
+        for line in file:
+            cols = line.split("\t")
+            fasta_chr.append(cols[0])
+
+    fasta_chr_set = set(fasta_chr)
+
+    print("fasta chromosomes", fasta_chr_set)
 
     if karyotype_chr == None or len(karyotype_chr) == 0:
         print("no karyotype chromosomes, keeping all")
@@ -39,11 +47,17 @@ def main():
     else:
 
         for chromosome in karyotype_chr:
-            print("copy chromosome", chromosome)
-            run_bash(samtools + " faidx " + input_fa + " " + chromosome + " >> " + output_fa)
+            if chromosome in fasta_chr_set:
+                print("copy chromosome", chromosome)
+                run_bash(samtools + " faidx " + input_fa + " " + chromosome + " >> " + output_fa)
+            else:
+                # if the chromosome isn't found, samtools returns an emtpy sequence
+		        # we don't want to add new chromosomes to old fastas, so check that the 
+		        # chromosome exists before running samtools 
+                print("no chromosome " + chromosome + " in fasta, skipping")
 
     # write better file names for client
-    session_input_fa = tool_utils.read_input_definitions()[input_fa].replace(".dna.toplevel", "")
+    
 
     output_names = {
         output_fa: session_input_fa,
@@ -59,47 +73,24 @@ def run_process(cmd: Iterable[str]):
     if process.returncode != 0:
         raise RuntimeError("process failed with return code: " + str(process.returncode) + ", command: " + str(cmd))
 
-def get_karyotype_chromosomes(coord_input: str, seq_input: str, karyotype_input: str):
+def get_karyotype_chromosomes(name: str):
 
-    for file in [ coord_input, seq_input, karyotype_input]:
-        if not os.path.exists(file):
-            return None
+    # a string before the first period 
+    # (drosophila_melanogaster)
+    species_name = name.split(".", 1)[0].lower()
 
-    coord_chromosomes = []
+    server = "https://rest.ensembl.org"
+    ext = "/info/assembly/" + species_name + "?"
+ 
+    r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
+ 
+    if not r.ok:
+        r.raise_for_status()
 
-    with open(coord_input) as lines:
-        for line in lines:
-            tabs = line.split("\t")
-            # "primary_assembly" in drosophila_melanogaster
-            if tabs[2] == "chromosome" or tabs[2] == "primary_assembly":
-                # there are multiple rows for different assembly versions (human)
-                # but that shouldn't matter as long as only one of them is used in karyotype data
-                coord_chromosomes.append(tabs[0])
+    decoded = r.json()
 
-    if len(coord_chromosomes) == 0:
-        raise RuntimeError("no chromosomes were found from " + coord_input)
+    karyotype = decoded["karyotype"]
 
-    coord_chr_set = set(coord_chromosomes)
-
-    chr_map = {}
-
-    with open(seq_input) as lines:
-        for line in lines:
-            tabs = line.split("\t")
-            if tabs[2] in coord_chr_set:
-                if tabs[0] in chr_map:
-                    raise RuntimeError("duplicate id", tabs[0])
-                chr_map[tabs[0]] = tabs[1]
-
-    karyotype_chr = set()
-
-    with open(karyotype_input) as lines:
-        for line in lines:
-            tabs = line.split("\t")
-            if tabs[1] in chr_map:
-                chr_name = chr_map[tabs[1]]
-                karyotype_chr.add(chr_name)
-
-    return karyotype_chr
+    return set(karyotype)
 
 main()
