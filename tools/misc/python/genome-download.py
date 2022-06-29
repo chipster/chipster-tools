@@ -1,14 +1,12 @@
 # TOOL genome-download.py: "Download genome from Ensembl" (Download genome fasta and gtf files from Ensembl.) 
 # OUTPUT OPTIONAL output.fa
 # OUTPUT OPTIONAL output.gtf
-# OUTPUT OPTIONAL coord_system.txt
-# OUTPUT OPTIONAL seq_region.txt
-# OUTPUT OPTIONAL karyotype.txt
 # PARAMETER species: Species TYPE STRING DEFAULT drosophila_melanogaster ()
 # PARAMETER version: Version TYPE STRING DEFAULT BDGP6.32 (Genome assembly version)
 # PARAMETER release: "Ensembl release" TYPE STRING DEFAULT current (Ensembl release number or "current")
 # PARAMETER site: "Ensembl site" TYPE ["verteberates", "fungi", "plants", "bacteria"] DEFAULT "verteberates" ()
 # PARAMETER action: "Action" TYPE [check_version_only: "Check version", download: "Download"] DEFAULT "download" ()
+# PARAMETER assembly: "Preferred assembly" TYPE [toplevel: "Toplevel", primary_assembly: "Primary assembly"] DEFAULT "primary_assembly" (Toplevel file includes chromsomes, regions not assembled into chromosomes and N padded haplotype/patch regions. Primary assembly contains all toplevel sequence regions excluding haplotypes and patches.)
 # RUNTIME python3
 # TOOLS_BIN ""
 
@@ -20,6 +18,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+from typing import Iterable
 
 # add the tools dir to path, because __main__ script cannot use relative imports
 sys.path.append(os.getcwd() + "/../toolbox/tools")
@@ -32,8 +31,25 @@ class DownloadError(Exception):
 def find_gtf_file(dir: str, file: str) -> str:
     return find_file(dir, file, ["abinitio", ".chr.gtf.gz", ".chr_patch"])
 
-# Finds files that are specified by its arguments first is directory and second is file (or part of a file name), rest of the arguments are expressions for grep to exclude e.g. '[\.]', ".gz", or "name". If a file is found from a directory its path is returned, otherwise raises an error
+def file_exists(dir: str, file: str, ignore_names: [str]) -> bool:
+    filtered_files = find_files(dir, file, ignore_names)
+
+    return len(filtered_files) > 0
+
+# Finds a file that is specified by its arguments first is directory and second is file (or part of a file name), rest of the arguments are expressions for grep to exclude e.g. '[\.]', ".gz", or "name". If a file is found from a directory its path is returned, otherwise raises an error
 def find_file(dir: str, file: str, ignore_names: [str]) -> str:
+    filtered_files = find_files(dir, file, ignore_names)
+
+    if len(filtered_files) == 0:
+            raise RuntimeError("Can't find file " + file + " from " + dir)
+
+    if len(filtered_files) != 1:
+            raise RuntimeError("Searching for one file, but found many: " + str(filtered_files))
+
+    return filtered_files[0]
+
+# Finds files that are specified by its arguments first is directory and second is file (or part of a file name), rest of the arguments are expressions for grep to exclude e.g. '[\.]', ".gz", or "name".
+def find_files(dir: str, file: str, ignore_names: [str]) -> Iterable[str]:
 
     try:
         url = urlparse(dir)
@@ -62,14 +78,8 @@ def find_file(dir: str, file: str, ignore_names: [str]) -> str:
             if file in ftp_file:
                 filtered_files.append(ftp_file)
 
-    # check empty string first, because wc will count the empty line
-    if len(filtered_files) == 0:
-            raise RuntimeError("Can't find file " + file + " from " + dir)
+    return list(map(lambda file: dir + file, filtered_files))
 
-    if len(filtered_files) != 1:
-            raise RuntimeError("Searching for one file, but found many: " + str(filtered_files))
-
-    return dir + filtered_files[0]
 
 # Returns a path to a directory where a genome is found. First argument is TYPE.
 def get_dir(host: str, species: str, release: str, file_type: str) -> str:
@@ -109,10 +119,6 @@ def get_dir(host: str, species: str, release: str, file_type: str) -> str:
             
             i = i + 1
 
-    elif file_type == "mysql":
-        # ftp://ftp.ensembl.org/pub/current_mysql/drosophila_melanogaster_core_80_602/
-        dir = find_file(dir, species + "_core_", []) + "/"
-
     else:
         dir = dir + species + "/"
 
@@ -140,34 +146,29 @@ def download(host: str, species: str, release: str, ftp_release: str) -> str:
     # these must be the same than the output names in SADL
     fasta_package = ""
     gtf_package = ""
-    mysql_package = ""
 
     fasta_output = "output.fa" + fasta_package
     gtf_output = "output.gtf" + gtf_package
-    coord_output = "coord_system.txt" + mysql_package
-    seq_output = "seq_region.txt" + mysql_package
-    karyotype_output = "karyotype.txt" + mysql_package
 
     # download fasta
     fasta_dir = get_dir(host, species, release, "fasta")
-    fasta_url = find_file(fasta_dir, ".dna.toplevel.fa.gz", [])
+
+    toplevel_extension = ".dna.toplevel.fa.gz"
+    preferred_extension = ".dna." + assembly + ".fa.gz"
+    fasta_url = None
+    if file_exists(fasta_dir, preferred_extension, []):
+        # find the smaller primary_assembly version by default if available, or the toplevel file if user has selected so
+        fasta_url = find_file(fasta_dir, preferred_extension, [])
+    else:
+        # Ensembl README: "If the primary assembly file is not present, that indicates that there are no haplotype/patch regions, and the 'toplevel' file is equivalent."
+        fasta_url = find_file(fasta_dir, toplevel_extension, []) 
+    
     download_url(fasta_url, fasta_output)
 
     # download gtf
     gtf_dir = get_dir(host, species, release, "gtf")
     gtf_url = find_gtf_file(gtf_dir, ".gtf.gz")
     download_url(gtf_url, gtf_output)
-
-    # download mysql data to find out primary chromosomes to filter fasta files
-    if site == "verteberates":
-        mysql_dir = get_dir(host, species, release, "mysql")
-
-        try:
-            download_url(mysql_dir + "coord_system.txt.gz", coord_output)
-            download_url(mysql_dir + "seq_region.txt.gz", seq_output)
-            download_url(mysql_dir + "karyotype.txt.gz", karyotype_output)
-        except DownloadError as e:
-            print("optional mysql data is not available (" + str(e) + ")")
 
     # write proper filenames for the client
     ftp_fasta_filename = os.path.basename(fasta_url)
@@ -179,9 +180,6 @@ def download(host: str, species: str, release: str, ftp_release: str) -> str:
     output_names = {
         fasta_output: fasta_basename + fasta_package,
         gtf_output: gtf_basename + gtf_package,
-        coord_output: gtf_basename + ".coord_system.txt" + mysql_package,
-        seq_output: gtf_basename + ".seq_region.txt" + mysql_package,
-        karyotype_output: gtf_basename + ".karyotype.txt" + mysql_package,
     }
 
     tool_utils.write_output_definitions(output_names)
@@ -213,7 +211,7 @@ def download_url(url: str, file_name: str):
     bash_process = subprocess.run(["bash", "-c", bash_cmd])
 
     if bash_process.returncode != 0:
-        # delete empty fail if the download failed (e.g. trying if there is mysql data for this species)
+        # delete empty file if the download failed (e.g. trying if there is mysql data for this species)
         if os.path.exists(file_name):
             os.remove(file_name)
         raise DownloadError("download failed with exit code: " + str(bash_process.returncode) + ", command: " + bash_cmd)
