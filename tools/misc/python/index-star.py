@@ -9,6 +9,7 @@
 # OUTPUT chrStart.txt
 # OUTPUT genomeParameters.txt
 # RUNTIME python3
+# SLOTS 5
 
 # add the tools dir to path, because __main__ script cannot use relative imports
 sys.path.append(os.getcwd() + "/../toolbox/tools")

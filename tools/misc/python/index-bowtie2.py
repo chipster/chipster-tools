@@ -3,6 +3,7 @@
 # INPUT input.gtf TYPE GENERIC
 # OUTPUT output{...}
 # RUNTIME python3
+# SLOTS 2
 
 # add the tools dir to path, because __main__ script cannot use relative imports
 sys.path.append(os.getcwd() + "/../toolbox/tools")
@@ -34,7 +35,7 @@ def main():
     # named after the fasta. However, the  Tophat index is based also on gtf and the
     # Tophat script has to find both indexes, so let's use gtf_basename also for the 
     # Bowtie index.
-    run_process([bowtie2_build, input_fa, gtf_basename])
+    run_process([bowtie2_build, "--threads", chipster_threads_max, input_fa, gtf_basename])
 
     print("inspect index")
     inspect_output = "inspect_output.txt"

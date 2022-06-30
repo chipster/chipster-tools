@@ -20,6 +20,8 @@ def main():
     session_input_fa = tool_utils.read_input_definitions()[input_fa]
     fasta_basename = tool_utils.remove_postfix(session_input_fa, '.fa')
 
+    # our bowtie is too old for --threads
+    # run_process([bowtie_build, "--threads", chipster_threads_max, input_fa, fasta_basename])
     run_process([bowtie_build, input_fa, fasta_basename])
 
     print("inspect index")
