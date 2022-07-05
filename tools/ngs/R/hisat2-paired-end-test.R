@@ -28,7 +28,7 @@ source(file.path(chipster.common.path,"bam-utils.R"))
 # setting up binaries and paths
 hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
 samtools.binary <- file.path(chipster.tools.path,"samtools-1.2","samtools")
-hisat.index <- file.path(chipster.tools.path, "genomes", "indexes", "hisat2", organism)
+hisat2.index.path <- file.path(chipster.tools.path, "genomes", "indexes", "hisat2")
 
 # Document version numbers
 hisat2.version.command <- paste(hisat.binary, "--help |grep HISAT2 | awk '{print $3}'")
@@ -84,8 +84,6 @@ if (rna.strandness == "FR") {
 # Organism
 # -x declares the basename of the index for reference genome
 hisat.parameters <- paste(hisat.parameters,"-x",organism)
-# Set environment variable that defines where indexes locate, HISAT2 requires this
-#Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2")
 # Known splice sites
 if (file.exists("splicesites.txt")) {
   hisat.parameters <- paste(hisat.parameters,"--known-splicesite-infile","splicesites.txt")
@@ -114,16 +112,17 @@ hisat.parameters <- paste(hisat.parameters,"--no-unal")
 
 ## Run HISAT
 # Note a single ' at the beginning, it allows us to use special characters like >
-command <- paste(hisat.binary, "-x", hisat.index)
+command <- paste(hisat.binary, "-x", organism)
 
 # Add the parameters
 #command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "view -bS - > hisat.tmp.bam")
-command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "sort -o hisat.sorted.bam -O bam -")
+command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
 
 documentCommand(command)
 
+hisat2.index <- paste("HISAT2_INDEXES=",hisat2.index.path, sep="")
 # Run command
-runExternal(command)
+runExternal(command, hisat2.index)
 
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam",minsize = 100)) {
