@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v4 -SCTransform: Filter cells, normalize, regress and detect high-variance features in spatial data </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool uses the SCTransform method for normalization, scaling and finding variable genes.
+        Before normalization, the tool filters out potential empties, multiplets and broken cells.
+    </p>
+
+    <h3>Parameters</h3>
+    <p>
+    <ul>
+        <li>Filter out cells which have less than this many genes expressed [200]</li>
+        <li>Filter out cells which have more than this many genes expressed [2500]</li>
+        <li>Filter out cells which have higher mitochondrial transcript percentage [5]</li>
+        <li>Number of variable genes to return [3000] </li>
+    </ul>
+    </p>
+
+
+    <h3>Details</h3>
+
+    <p>
+        The tool filters out bad quality cells, and then it performs the three steps included in the SCTransform tool: normalization, scaling and finding variable
+        genes.
+    </p>
+    <p>
+        As an input, give 10X Visium data. The R-object output can be used as an input for the Seurat -PCA tool.
+    </p>
+    <p>
+        Compared to the basic Seurat normalization + scaling + variable gene finding,
+        the SCTransform workflow performs more effective normalization,
+        strongly removing technical effects from the data.
+        This allows more PCs to be selected in the PCA step, as the higher PCs are more likely to represent
+        subtle, but biologically relevant, sources of heterogeneity instead of variation in sequencing depth.
+    </p>
+
+
+    <ol>
+        <li><b>Filtering</b> is performed in order to remove empties, multiplets and broken cells.
+            You can use the QC-plots.pdf to estimate the parameters for this step.</li>
+        <br>
+        <li><b>Expression values are normalized</b> using the SCTransform normalisation method, which uses
+            Pearson residuals from regularized negative binomial regression,
+            where cellular sequencing depth is utilized as a covariate in a generalized linear model (GLM).
+            The parameters for the model are estimated by pooling information across genes that are expressed at
+            similar levels.
+            This should remove the technical variation but preserve the biological heterogeneity,
+            and avoid over-fitting the model to the data.
+        </li>
+        <br>
+        <li><b>Genes which are highly variable across the cells are detected</b> using the Pearson residuals
+            computed in the normalization step. The highly variable genes will be used in downstream analysis, like PCA.
+        </li>
+        <br>
+        <li><b>Uninteresting sources of variation in the expression values are regressed out</b> during normalization in order to improve
+            dimensionality reduction and clustering later on.
+            This tool regresses on <!--<i>the number of detected molecules per cell</i> as well as--> the <i>percentage
+                mitochondrial transcript content</i>.
+        </li>
+    </ol>
+
+
+    <p>
+        The SCTransform function is described in <a
+            href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1874-1">Hafemeister, C., Satija,
+            R. Normalization and variance stabilization of single-cell RNA-seq data using regularized negative binomial
+            regression. Genome Biol 20, 296 (2019)</a>, DOI: https://doi.org/10.1186/s13059-019-1874-1
+        <br>
+        The use of the SCTransform function is demonstrated in the <a
+            href="https://satijalab.org/seurat/articles/sctransform_vignette.html">Seurat SCTransform vignette page</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj_sctransform.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+            Chipster. </li>
+        <li>plot? </li>
+    </ul>
+
+
+
+</body>

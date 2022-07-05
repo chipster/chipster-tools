@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat -Visualize gene expression </h2>
+
+<h3>Description</h3>
+
+<p>
+With this tool user can visualize selected genes with FeaturePlot. As input the user gives the Seurat R-object
+(.Robj) and the name of the gene of interest (for example Hpca, Ttr...).
+<br>Note: If you list multiple gene names, use comma (,) as separator.
+</p>
+ 
+ <h3>Parameters</h3>
+<ul>
+		<li>Gene name</li>
+        <li>Point size</li>
+        <li>Minimum and maximum</li>
+</ul>
+
+ <h3>Details</h3>
+ 
+<p>
+<b>Violin plot</b> and <b>ridge plot</b> show the probability density at different expression levels of the gene for each cluster. 
+The color coding of the clusters helps to see in which clusters the marker gene is expressed.
+Good marker genes will show strongly in a single cluster.  
+</p>
+<p>
+<b>The UMAP plot</b> is useful for viewing the expression of the selected marker gene in the context of all the cells and helps validate the specificity of the marker or 
+the quality of the clustering. 
+</p>
+
+
+<p>
+For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>feature_plot.pdf</li>
+</ul>
+
+
+
+</body>
+
