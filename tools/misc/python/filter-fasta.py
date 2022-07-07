@@ -20,7 +20,16 @@ def main():
 
     session_input_fa = tool_utils.read_input_definitions()[input_fa].replace(".dna.toplevel", "")
 
-    karyotype_chr = get_karyotype_chromosomes(session_input_fa)
+    karyotype_chr = None
+
+    try:
+        karyotype_chr = get_karyotype_chromosomes(session_input_fa)
+    except requests.exceptions.HTTPError as err:
+        if err.response.status_code == 400:
+            print("failed to get chromosomes. Most likely the species is not available in the Ensembl Rest API. Keeping all chromosomes.", err)
+        else:
+            # raise the same exception again
+            raise
 
     print("karyotype chromosomes", karyotype_chr)
 
