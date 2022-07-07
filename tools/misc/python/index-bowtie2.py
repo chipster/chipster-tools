@@ -19,7 +19,6 @@ def main():
     bowtie2_path = chipster_tools_path + "/bowtie2"
     bowtie2_build = chipster_tools_path + "/bowtie2/bowtie2-build"
     bowtie2_inspect = chipster_tools_path + "/bowtie2/bowtie2-inspect"
-    tophat = chipster_tools_path + "/tophat2/tophat"
 
     session_input_fa = tool_utils.read_input_definitions()[input_fa]
     fasta_basename = tool_utils.remove_postfix(session_input_fa, '.fa')
@@ -29,12 +28,8 @@ def main():
 
     # gtf_basename contains the genome version and the Ensembl version 
     # (...GRCh38.81), but in the latest releases, the fasta_basename contains
-    # only the genome version (...GRCh38). This makes sense, because fasta files 
-    # different Ensembl releases should be identical after the patches are removed. 
-    # The Bowtie index is based only on fasta, so it in theory it should be 
-    # named after the fasta. However, the  Tophat index is based also on gtf and the
-    # Tophat script has to find both indexes, so let's use gtf_basename also for the 
-    # Bowtie index.
+    # only the genome version (...GRCh38). Name the index after the gtf_basename,
+    # because it is used here to build the index.
     run_process([bowtie2_build, "--threads", chipster_threads_max, input_fa, gtf_basename])
 
     print("inspect index")
@@ -60,17 +55,6 @@ def main():
     
     run_process(["ls", "-lah"])
 
-    # # symlink the fasta for the tophat, otherwise it will rebuild it
-    # run_process(["ln", "-s", input_fa, gtf_basename + ".fa"])
-    # # tophat seems to take the output name from the gtf file
-    # run_process(["ln", "-s", input_gtf, gtf_basename + ".gtf"])    
-    # run_bash("export PATH=\"$PATH:" + bowtie2_path + "\"; " + tophat + " --GTF " + gtf_basename + ".gtf --transcriptome-index " + gtf_basename + " " + gtf_basename)
-
-    # run_process(["ls", "-lah"])
-
-    # # Why does tophat create a dir named $gtf_basename?
-    # run_process(["ls", "-lah", gtf_basename])
-
     # rename index files to fixed output names and define real names for the client
 
     output_names = {}
@@ -82,12 +66,6 @@ def main():
             os.rename(file, output_name)
             # output_names[output_name] = "bowtie2/" + file
             output_names[output_name] = file
-
-    # # tophat index files
-    # for file in os.listdir(gtf_basename):
-    #     output_name = file.replace(gtf_basename, "output") + str(len(output_names))
-    #     os.rename(gtf_basename + "/" + file, output_name)
-    #     output_names[output_name] = "tophat2/" + file
 
     tool_utils.write_output_definitions(output_names)
     
