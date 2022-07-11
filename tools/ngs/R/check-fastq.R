@@ -66,7 +66,7 @@ system("echo >> check.log")
 
 system("echo 'Test summary:' >> check.log")
 system(paste("echo 'file name:", inputnames$reads, "' >>check.log"))
-system(paste("echo 'reads:", floor(linenumber / 4), "' >>check.log"))
+system(paste("echo 'reads:",format(floor(linenumber / 4),scientific=FALSE), "' >>check.log"))
 if (alltests){
 	system("echo 'Overall result: PASS' >> check.log")
 	system("mv check.log pass.log")
