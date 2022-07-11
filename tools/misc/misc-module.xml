@@ -100,6 +100,8 @@
 		<tool module="common">gzip.R</tool>
 		<tool module="common">md5sum.R</tool>
 		<tool module="common">encrypt.R</tool>
+		<tool>copy-fasta.py</tool>
+		<tool>copy-gtf.py</tool>
 	</category>
 
 	<category name="Tests" color="#d59f45">

@@ -39,9 +39,8 @@ documentVersion("Mothur",version)
 # used for 16S, 18S and archaeal data only
 
 if (datatype == "other"){ 
-    distseqs.options <- paste("dist.seqs(fasta=file.fasta, processors=8") # dist.seqs produces file.dist. REMOVE processor argument from here after the chipster.threads.max fix.
- #   distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
- #   distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
+    distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
+    distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
     distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
     documentCommand(distseqs.options)
     write(distseqs.options,"distseqs.mth",append = FALSE)
