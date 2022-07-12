@@ -14,12 +14,11 @@
 	<p>
 		This tool performs principal component analysis (PCA) on the highly variable genes across the single cells,
 		selected using
-		the tool <b>Filtering, regression and detection of variable genes</b>.
+		the tool <b>SCTransform: Filter cells, normalize, regress and detect high-variance features in spatial data</b>.
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
-		<li>Number of principal components to plot as heatmaps [12]</li>
 		<li>Number of PCs to compute [20]</li>
 		<li>Print loadings in a file [no]</li>
 		<li>Number of genes to list in the loadings file [5]</li>
@@ -29,8 +28,7 @@
 	<h3>Details</h3>
 
 	<p>
-		As input, give the Seurat R-object (Robj) from the tool Seurat -Filtering, regression and detection of variable
-		genes.
+		As input, give the Seurat R-object (Robj) from the tool Seurat -SCTransform: Filter cells, normalize, regress and detect high-variance features in spatial data.
 	</p>
 
 	<p>
@@ -49,27 +47,12 @@
 	</p>
 
 	<p>
-		In the first plot, the top genes associated with the first two principal components are shown.
-		Second plot shows the PCA plot: principal components 1 and 2 for the cells in the dataset, and the third plot
-		is a heatmap focusing on principal component 1.
-		In heatmap, both cells and genes are sorted by their principal component scores: both extremes are shown.
-		Rows represent the extreme genes, and columns are the extreme cells.
-		Purple: positive correlation, yellow: negative correlation.
-	</p>
-
-	<p>
-		Next plots can be used to decide which principal components to use. By default, 12 heatmaps are plotted,
-		focusing on the 12 first principal components, in which both cells and genes are sorted by their principal
-		component scores.
-		You can change the number of heatmaps to plot. Explore especially the PCs which you choose for downstream
-		analysis:
-		heatmaps can display the 'extremes' across both genes and cells,
-		and can be useful to exclude PCs that may be driven primarily by ribosomal/mitochondrial or cell cycle genes.
-	</p>
-
-	<p>
-		The last plot shows the standard deviations of the principal components.
-		Here, the <b>cutoff</b> is where there is an elbow in the graph.
+		This tool produces the following cluster plots.
+		<ul>
+			<li>Dimplot showing the results of the dimensional reduction on a 2D scatter plot where each point is a cell and it's positioned based on the cell embeddings determined by the reduction technique.
+			</li>
+			<li>SpatialDimPlot showing the resulting clusters overlaid on the spatial image.</li>
+		</ul>
 	</p>
 
 	<p>

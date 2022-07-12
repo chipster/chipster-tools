@@ -1,10 +1,10 @@
-# TOOL spatial-transcriptomics-seurat-featureplot.R: "Seurat v4 -Visualize gene expression" (Visualize molecular data on top of the tissue histology.)
+# TOOL spatial-transcriptomics-seurat-featureplot.R: "Seurat v4 -Visualise gene expression" (Visualise molecular data on top of the tissue histology.)
 # INPUT seurat_obj_sctransform.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Feature_plot.pdf 
 # PARAMETER OPTIONAL genes: "Gene name\(s\)" TYPE STRING DEFAULT "Hpca, Ttr" (Name\(s\) of the gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in spatial feature plot" TYPE DECIMAL DEFAULT 1.6 (Point size for the plot. Default is 1.6)
-# PARAMETER OPTIONAL min_transparency: "Minimum transparency" TYPE DECIMAL DEFAULT 1 (Transparency of the points. Default is 1)
-# PARAMETER OPTIONAL max_transparency: "Maximum transparency" TYPE DECIMAL DEFAULT 1 (Transparency of the points. Default is 1)
+# PARAMETER OPTIONAL min_transparency: "Minimum transparency" TYPE DECIMAL DEFAULT 1 (Transparency of the points. Default is 1. Transparency of points with lower expression can be downweighted with lower minimum.)
+# PARAMETER OPTIONAL max_transparency: "Maximum transparency" TYPE DECIMAL DEFAULT 1 (Transparency of the points. Default is 1.)
 # RUNTIME R-4.1.0-single-cell
 
 

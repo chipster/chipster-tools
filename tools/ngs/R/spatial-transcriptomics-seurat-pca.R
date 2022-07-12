@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-pca.R: "Seurat v4 - PCA, clustering, and visualization" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
+# TOOL spatial-transcriptomics-seurat-pca.R: "Seurat v4 - PCA, clustering, and visualisation" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
 # INPUT OPTIONAL seurat_obj_sctransform.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL seurat_spatial_obj_pca.Robj
@@ -14,7 +14,6 @@ library(Matrix)
 library(gplots)
 library(ggplot2)
 library(patchwork)
-
 
 
 # Load the R-Seurat-object (called seurat_obj)
@@ -35,9 +34,10 @@ seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
 seurat_obj <- FindClusters(seurat_obj, verbose = FALSE)
 seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
 
+# Open the pdf file for plotting
 pdf(file="PCAplots.pdf", , width=9, height=12) 
 
-#visualize the results of the clustering 
+#visualise the results of the clustering 
 DimPlot(seurat_obj, reduction = "umap", label = TRUE)
 
 SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3)

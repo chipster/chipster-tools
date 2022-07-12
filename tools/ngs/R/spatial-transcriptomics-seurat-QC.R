@@ -1,7 +1,6 @@
 # TOOL spatial-transcriptomics-seurat-QC.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
-# OUTPUT OPTIONAL QC_plot.pdf 
-# OUTPUT OPTIONAL seurat_spatial_setup.Robj
+# OUTPUT OPTIONAL QC_plots.pdf 
 # RUNTIME R-4.1.0-single-cell
 
 library(Seurat)
@@ -23,13 +22,13 @@ image.file <- Read10X_Image("datadir", image.name = "tissue_lowres_image.png")
 seurat_obj <- Load10X_Spatial(data.dir = "datadir", filename = "Visium_Adult_Mouse_Brain_filtered_feature_bc_matrix.h5", assay = "Spatial", image = image.file)
 
 # Open the pdf file for plotting
-pdf(file="QC_plot.pdf", width=13, height=7) 
+pdf(file="QC_plots.pdf", width=13, height=7) 
 
  plot1 <- VlnPlot(seurat_obj, features = "nCount_Spatial", pt.size = 0.1) + NoLegend()
  plot2 <- SpatialFeaturePlot(seurat_obj, features = "nCount_Spatial") + theme(legend.position = "right")
  CombinePlots(plots = list(plot1, plot2))
 
-# # close the pdf
+# close the pdf
  dev.off() 
 
 # Save the Robj for the next tool
