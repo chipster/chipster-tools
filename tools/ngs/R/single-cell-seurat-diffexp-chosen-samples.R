@@ -2,6 +2,7 @@
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
+# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER samples1: "Name of the samples to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample or samples of which you want to identify the differentially expressed of.)
 # PARAMETER samples2: "Name of the samples to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample or samples which you want to identify the differentially expressed of.)
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
@@ -11,12 +12,16 @@
 # RUNTIME R-4.1.0-single-cell
 
 
+# TESTAA!
+
 # 2018-16-05 ML 
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
 # 30.10.2019 ML Add filtering parameters
 # 02.12.2019 EK Change FC filter to use logfc.threshold prefiltering, add adjusted p-value filtering for DE genes
 # 2021-10-04 ML Update to Seurat v4
+# 2022-07-21 ML Tune for SCTransform data
+
 
 library(Seurat)
 
@@ -39,7 +44,14 @@ samples2.ok <- unlist(strsplit(samples2, ", "))
 samples1.cluster <- paste(cluster, "_", samples1.ok, sep="")
 samples2.cluster <- paste(cluster, "_", samples2.ok, sep="")
 
-cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de)
+# When SCTransform was used to normalise the data, do a prep step:
+if (normalisation.method == "SCT"){
+  data.combined <- PrepSCTFindMarkers(data.combined)
+  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de)
+} else { 
+  cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de)
+}
+
 # Filter DE genes based on adj p-val:
 de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de))
 
