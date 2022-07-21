@@ -41,8 +41,9 @@ if (exists("data.combined") ){
 	seurat_obj <- data.combined
 }
 
-# in case some other type of array is set
-DefaultAssay(seurat_obj) <- "RNA"
+# Commented out, as in case of SCTransformed data, for plots to work, this needs to be "SCT"
+## In case some other type of array is set:
+## DefaultAssay(seurat_obj) <- "RNA"
 
 # Use genes text file if provided, else the gene parameter is used
 if (fileOk("genes.txt",0)) {
