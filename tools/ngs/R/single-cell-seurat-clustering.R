@@ -4,6 +4,7 @@
 # OUTPUT OPTIONAL clusterPlot.pdf
 # OUTPUT seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
+# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
@@ -96,7 +97,12 @@ dev.off() # close the pdf
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
 if (output_aver_expr == "T") {
-  aver_expr <- AverageExpression(object = seurat_obj)
+  if (normalisation.method == "SCT"){
+    aver_expr <- AverageExpression(object = seurat_obj, slot ="data", assay="SCT")
+  } else { 
+    aver_expr <- AverageExpression(object = seurat_obj)
+  }
+
   aver_expr_in_clusters <- aver_expr[[1]]
   # Write to table
   write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
