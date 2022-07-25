@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-subset-clusters.R: "Seurat v4 -Subset out anatomical regions" ()
+# TOOL spatial-transcriptomics-seurat-subset-clusters.R: "Seurat v4 -Subset out clusters" (Subset out anatomical regions first by taking a subset of clusters.)
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_subset1.Robj
 # OUTPUT OPTIONAL subset.pdf

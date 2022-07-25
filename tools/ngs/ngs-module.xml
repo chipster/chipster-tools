@@ -250,6 +250,7 @@
 		<tool>spatial-transcriptomics-seurat-subset-clusters.R</tool>
 		<tool>spatial-transcriptomics-seurat-subset-cells.R</tool>
 		<tool>spatial-transcriptomics-seurat-integration-with-sc.R</tool>
+		<tool>spatial-transcriptomics-seurat-visualise-integration.R</tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">

@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-subset-cells.R: "Seurat v4 -Subset out anatomical regions" ()
+# TOOL spatial-transcriptomics-seurat-subset-cells.R: "Seurat v4 -Subset out cells" (Subset out anatomical regions based on exact positions.)
 # INPUT seurat_obj_subset1.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_subset2.Robj
 # OUTPUT OPTIONAL subset2.pdf
@@ -30,3 +30,5 @@ dev.off()
 
 # Save the Robj for the next tool
 save(seurat_obj, file="seurat_obj_subset2.Robj")
+
+#EOF
