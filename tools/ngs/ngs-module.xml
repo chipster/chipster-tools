@@ -239,12 +239,17 @@
 
 	<category name="Spatial Transcriptomics" color="#37dddd">	   	
 		<tool>spatial-transcriptomics-seurat-setup.R</tool>
-		<tool>spatial-transcriptomics-seurat-QC.R</tool>
+		<tool>spatial-transcriptomics-seurat-top-expressed-genes.R</tool>
 		<tool>spatial-transcriptomics-seurat-sctransform.R</tool>	
+		<tool>spatial-transcriptomics-seurat-multiple-samples.R</tool>	
 		<tool>spatial-transcriptomics-seurat-featureplot.R</tool>	
 		<tool>spatial-transcriptomics-seurat-pca.R</tool>	
 		<tool>spatial-transcriptomics-seurat-spatialdimplot.R</tool>	
 		<tool>spatial-transcriptomics-seurat-diffexp-chosen-clusters.R</tool>	
+		<tool>spatial-transcriptomics-seurat-FindSpatiallyVariableFeatures.R</tool>
+		<tool>spatial-transcriptomics-seurat-subset-clusters.R</tool>
+		<tool>spatial-transcriptomics-seurat-subset-cells.R</tool>
+		<tool>spatial-transcriptomics-seurat-integration-with-sc.R</tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">

@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL seurat_spatial_obj_pca.Robj
 # OUTPUT OPTIONAL PCAloadings.txt
-# PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 20 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
+# PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 30 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
 # RUNTIME R-4.1.0-single-cell
@@ -42,7 +42,8 @@ DimPlot(seurat_obj, reduction = "umap", label = TRUE)
 
 SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3)
 
-dev.off()# close the pdf
+# close the pdf
+dev.off()
 
 # Save the Robj for the next tool
 save(seurat_obj, file="seurat_spatial_obj_pca.Robj")

@@ -12,14 +12,14 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool performs principal component analysis (PCA) on the highly variable genes across the single cells,
+		This tool performs principal component analysis (PCA) on the highly variable genes,
 		selected using
 		the tool <b>SCTransform: Filter cells, normalize, regress and detect high-variance features in spatial data</b>.
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
-		<li>Number of PCs to compute [20]</li>
+		<li>Number of PCs to compute [30]</li>
 		<li>Print loadings in a file [no]</li>
 		<li>Number of genes to list in the loadings file [5]</li>
 	</ul>
@@ -37,16 +37,6 @@
 	</p>
 
 	<p>
-		To overcome the extensive technical noise in any single gene for scRNA-seq data,
-		Seurat clusters cells based on their PCA scores,
-		with each PC essentially representing a 'metagene' that combines information across a correlated gene set.
-		Determining how many PCs to include downstream is therefore an important step, but it can be challenging.
-		The result file <b>PCAplots.pdf</b> contains several plots which can help to explore the primary sources of
-		heterogeneity in the dataset and to decide
-		which principal components to include in the downstream analysis.
-	</p>
-
-	<p>
 		This tool produces the following cluster plots.
 		<ul>
 			<li>Dimplot showing the results of the dimensional reduction on a 2D scatter plot where each point is a cell and it's positioned based on the cell embeddings determined by the reduction technique.
@@ -61,7 +51,7 @@
 	</p>
 
 	<p>
-		For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
+		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorials</a>.
 	</p>
 
 	<h3>Output</h3>
