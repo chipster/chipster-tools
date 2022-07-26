@@ -1,8 +1,15 @@
-# TOOL dada2-dada.R: "Learn error rates and run dada()" 
+# TOOL dada2-dada.R: "Sample Inference" (Giving a tar package containing fastq files this tool runs the learnErrors and dada commands from the dada2 library. If the plot error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function, the ambigious bases Ns should be removed before from the fastq files )
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
-# OUTPUT OPTIONAL summary.txt
-# OUTPUT filtered.tar
+# OUTPUT summary.txt
+# OUTPUT dada_forward.Rda
+# OUTPUT dada_reverse.Rda
+# OUTPUT OPTIONAL plotErrors.pdf
+# PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
 # RUNTIME R-4.1.1
+
+# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL log2.txt
+# OUTPUT OPTIONAL summary_stats.tsv
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -10,7 +17,7 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 # load library dada2
 library(dada2)
 #packageVersion("dada2")
-
+library(ggplot2)  # just for renaming plot title
 # Read the contents of the tar file into a list
 system("tar tf reads.tar > tar.contents")
 file.list <- scan("tar.contents",what = "",sep = "\n")
@@ -24,14 +31,12 @@ if (grepl("/",file.list[1])) {
   stop(paste('CHIPSTER-NOTE: ',"It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
 
-
-# Make input and output folders 
+# Make input folder 
 system("mkdir input_folder")
-system("mkdir output_folder")
 
 # untar the tar package to input_folder and list the filenames
 untar("reads.tar", exdir = "input_folder")
-filenames <- list.files("input_folder")
+filenames <- list.files("input_folder", full.names=TRUE)
 
  # Sort the filenames _R1 _R2, samples have different names
 filenames <- sort(filenames)
@@ -41,14 +46,64 @@ number <- length(filenames)%%2
 if (number != 0 && length(filenames)<2){
     stop(paste('CHIPSTER-NOTE: ',"It seems that some of your fastq files doesn`t have a pair"))
     }
-# put the reverse and forward reads to own folders
-fnFs <- sort(list.files("input_folder", pattern="_R1_001.fastq", full.names = TRUE))
-fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
+# put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
+# forward reads should be before reverse reads after sort() function
+forward <- seq(1,length(filenames),by=2)
+fnFs <- filenames[forward]
 
+reverse <- seq(2,length(filenames), by=2)
+fnRs <- filenames[reverse]
+
+# put the reverse and forward reads to own folders  problem with pattern
+#fnFs <- sort(list.files("input_folder", pattern="_R1_001.fastq", full.names = TRUE))
+#fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
+
+# take out the sample names
 sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
-#print(sample.names)
 
-errF <- learnErrors(fnFs, multithread=TRUE)
-errR <- learnErrors(fnRs, multithread=TRUE)
+sink(file="log.txt")
+# Run learnErrors (slow)
+  cat("\nLearn error rates for forward reads:\n")
+  errF <- learnErrors(fnFs, multithread=TRUE)
+  cat("\nLearn error rates for reverse reads:\n")
+  errR <- learnErrors(fnRs, multithread=TRUE)
+sink()
 
-print(errF)
+# make a pdf file for visualizing error rates if ploterrors parameter is yes
+if (ploterr == "yes"){
+  pdf("plotErrors.pdf", , width=13, height=7) 
+  print(plotErrors(errF, nominalQ=TRUE)+ labs(title="Error rates for forward reads"))
+  print(plotErrors(errR, nominalQ=TRUE)+ labs(title="Error rates for reverse reads"))
+  dev.off()}
+# run dereplicate, no need dada() can handle fastq files, same result
+#derepF1 <- derepFastq(fnFs)
+#derepR1 <- derepFastq(fnRs)
+
+#run dada()
+sink(file="log2.txt")
+  cat("\nDada for forward reads:\n")
+  dadaFs <- dada(fnFs, err=errF, multithread=TRUE)
+  cat("\nDada for reverse reads:\n")
+  dadaRs <- dada(fnRs, err=errR, multithread=TRUE)
+  cat("\n")
+  cat("\nDada results for forward reads:\n")
+  print(dadaFs)
+  cat("\nDada results for reverse reads:\n")
+  print(dadaRs)
+sink()
+
+# save the dada-class objects to .Rda file
+save(dadaFs, file = "dada_forward.Rda")
+save(dadaRs, file = "dada_reverse.Rda")
+
+#merge the log files to one file
+file.create("summary.txt")
+rows <- readLines("log.txt")
+for (row in rows){
+    write(row,file="summary.txt",append=TRUE)
+}
+rows <- readLines("log2.txt")
+for (row in rows){
+    write(row,file="summary.txt",append=TRUE)
+}
+

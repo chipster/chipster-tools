@@ -7,7 +7,7 @@
 # OUTPUT samples.fastqs.txt
 # PARAMETER maxdiff: "Maximun number of non-matching nucleotides" TYPE INTEGER FROM 0 TO 100 DEFAULT 10 (The maximum number of non-matching nucleotides allowed in the overlap region 0 - 100, the default value is 10)
 # PARAMETER maxdiffpct: "Maximum percentage of non-matching nucleotides" TYPE INTEGER FROM 0 TO 100 DEFAULT 100 (The maximum percentage of non-matching nucleotides allowed in the overlap region. The default value is 100.0%)
-# PARAMETER OPTIONAL maxns: "Discard input sequences with more than this number of Ns." TYPE INTEGER FROM 0 (Discard input sequences which contain with more than the specified number of ambigious bases) 
+# PARAMETER OPTIONAL maxns: "Discard input sequences with more than this number of Ns." TYPE INTEGER FROM 0 (Discard input sequences which contain more than the specified number of ambigious bases) 
 
 # ES 05.07.2021
 
