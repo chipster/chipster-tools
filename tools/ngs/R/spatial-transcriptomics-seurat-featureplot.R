@@ -1,5 +1,6 @@
 # TOOL spatial-transcriptomics-seurat-featureplot.R: "Seurat v4 -Visualise gene expression" (Visualise molecular data on top of the tissue histology.)
-# INPUT seurat_obj_sctransform.Robj: "Seurat object" TYPE GENERIC
+# INPUT OPTIONAL seurat_obj_sctransform.Robj: "Seurat object" TYPE GENERIC ()
+# INPUT OPTIONAL seurat_obj_multiple.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Feature_plot.pdf 
 # PARAMETER OPTIONAL genes: "Gene name\(s\)" TYPE STRING DEFAULT "Hpca, Ttr" (Name\(s\) of the gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in spatial feature plot" TYPE DECIMAL DEFAULT 1.6 (Point size for the plot. Default is 1.6)
@@ -14,8 +15,13 @@ library(ggplot2)
 library(patchwork)
 library(dplyr)
 
-# Load the R-Seurat-object (called seurat_obj)
-load("seurat_obj_sctransform.Robj", verbose = TRUE)
+if (file.exists("seurat_obj_sctransform.Robj")) {
+  # Load the R-Seurat-object (called seurat_obj)
+  load("seurat_obj_sctransform.Robj", verbose = TRUE)
+} else {
+    # Load the R-Seurat-object (called seurat_obj)
+    load("seurat_obj_multiple.Robj", verbose = TRUE)
+}
 
 # Open the pdf file for plotting
 pdf(file="Feature_plot.pdf", width=13, height=7) 
