@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Assign taxonomy</h2>
+
+<h3>Description</h3>
+
+<p>
+Given a sequence_table saved as a .Rda object, this tool assigns taxonomy to the sequence variants (ASVs) and outputs a taxonomy table.
+This tool uses SILVA v.138.1 reference fastas for assignment if own reference files are not provided. If the species parameter is selected "yes",
+this tool will use the addSpecies() function for species level assignments.
+</p>
+
+<h3>Parameters</h3>
+<ul>
+  <li>Do you want to assign the sequences to the species level? (yes, no) [yes]</li>  
+</ul>
+
+<h3>Details</h3>
+<p>
+This tool uses the assignTaxonomy() and assignSpecies() functions to assign taxonomy to the sequence variants.
+AssignTaxonomy() uses naive Bayesian classifier method of <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1950982/"> Wang et.al 2007</a> 
+to assign taxonomy across multiple ranks (Kingdom to Genus). 
+<br>
+If you want to use your own reference file, please provide the reference fasta as input.
+<br>
+<br>
+Otherwise the Silva reference file v.138.1 (silva_nr99_v138.1_train_set.fa) will be used <a href="https://zenodo.org/record/4587955#.YuJ1TuxBwUE">Silva reference set</a> 
+In that case, you should be aware of Silva's <a href="https://www.arb-silva.de/silva-license-information">dual-use license</a>: 
+Silva is free for academic users, but commercial users need to purchase a license.
+<br>
+<br>
+If the assign species parameter is set to "yes", the addSpecies command is used for the species level assignment. 
+<br>
+Again, if you want to use your own reference file for the species level assignment, please provide it as input. 
+<br> 
+Otherwise the Silva v.138.1 reference file (silva_species_assignment_v138.1.fa) will be used. 
+<br> 
+<br> 
+For more information about taxonomy assignment check: <a href="https://benjjneb.github.io/dada2/assign.html">Taxonomic Assignment</a>
+<br> 
+For formatting custom databases/reference fastas check the end of this page: <a href="https://benjjneb.github.io/dada2/training.html">Taxonomic reference data</a>
+<br> 
+<br> 
+To make the visualisation easier, the names of the ASV sequences are changed in the .tsv
+tables to asv0, asv1 ... <br>.Rda objects have still the original row and columnames
+
+</p>
+<h3>Output</h3>
+<p>
+The analysis output consists of the following:
+<ul>
+    <li>taxonomy-assignment-matrix.Rda: Taxonomy sequence table saved as a .RDA object. </li>
+    <li>taxonomy_assignment.tsv: Taxonomy table where rownames are changed to asv0, asv1... and columnames are the taxonomies</li>
+    <li>taxa_seqtab_combined.tsv: Taxonomy and sequence (ASV) table combined in a .tsv table where rownames are changed to asv0, asv1... and columnames are the taxonomies and the sample names.</li>
+</ul>
+</p>
+
+<h3>References</h3>
+<p>
+    check assignTaxonomy() and addSpecies() commands from the dada2 manual: <br>
+<a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+<br>
+<br>
+<a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
+<br>
+<a href="https://benjjneb.github.io/dada2/assign.html">Taxonomic Assignment</a>
+<br>
+<a href="https://zenodo.org/record/4587955#.YuJ1TuxBwUE">Silva reference set</a> 
+<br>
+<br>
+by Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJ, Holmes SP (2016). 13(7), 581-3. <br>
+<a href="https://www.researchgate.net/publication/345890170_DADA2_High_resolution_sample_inference_from_amplicon_data"> DADA2: High resolution sample inference from Illumina amplicon data. Nature Methods </a> 
+</p>
+</body>

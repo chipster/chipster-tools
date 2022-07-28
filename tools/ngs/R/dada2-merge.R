@@ -1,4 +1,4 @@
-# TOOL dada2-merge.R: "Make contigs and remove chimeras" (Giving the filtered fastq files in a tar package and two dada-class objects produced with dada function, this tool combines the files to contigs, makes an asv-table and removes chimeras. For more information check the manual)
+# TOOL dada2-merge.R: "Make contigs and remove chimeras" (Given the filtered fastq files in a tar package and two dada-class objects produced with dada function, this tool combines the files to contigs, makes an asv-table and removes chimeras. For more information check the manual)
 # INPUT forward.Rda: "DADA-class object created from forward reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
 # INPUT reverse.Rda: "DADA-class object created from reverse reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC

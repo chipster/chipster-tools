@@ -1,10 +1,11 @@
-# TOOL dada2-dada.R: "Sample Inference" (Giving a tar package containing fastq files this tool runs the learnErrors and dada commands from the dada2 library. If the plot error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function, the ambigious bases Ns should be removed before from the fastq files )
+# TOOL dada2-dada.R: "Sample inference" (Giving a tar package containing fastq files this tool runs the learnErrors and dada commands from the dada2 library. If the plot error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function, the ambigious bases Ns should be removed before from the fastq files )
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT summary.txt
 # OUTPUT dada_forward.Rda
 # OUTPUT dada_reverse.Rda
 # OUTPUT OPTIONAL plotErrors.pdf
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
+# PARAMETER OPTIONAL pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check manual)
 # RUNTIME R-4.1.1
 
 # OUTPUT OPTIONAL log.txt
@@ -79,8 +80,9 @@ if (ploterr == "yes"){
 #derepF1 <- derepFastq(fnFs)
 #derepR1 <- derepFastq(fnRs)
 
-#run dada()
-sink(file="log2.txt")
+#run dada() and make a summary. If pool=pseudo then run with parameter pseudo
+if (pool=="independent"){
+  sink(file="log2.txt")
   cat("\nDada for forward reads:\n")
   dadaFs <- dada(fnFs, err=errF, multithread=TRUE)
   cat("\nDada for reverse reads:\n")
@@ -91,7 +93,19 @@ sink(file="log2.txt")
   cat("\nDada results for reverse reads:\n")
   print(dadaRs)
 sink()
-
+}else{
+  sink(file="log2.txt")
+  cat("\nDada for forward reads:\n")
+  dadaFs <- dada(fnFs, err=errF, pool="pseudo", multithread=TRUE)
+  cat("\nDada for reverse reads:\n")
+  dadaRs <- dada(fnRs, err=errR, pool="pseudo", multithread=TRUE)
+  cat("\n")
+  cat("\nDada results for forward reads:\n")
+  print(dadaFs)
+  cat("\nDada results for reverse reads:\n")
+  print(dadaRs)
+sink()
+}
 # save the dada-class objects to .Rda file
 save(dadaFs, file = "dada_forward.Rda")
 save(dadaRs, file = "dada_reverse.Rda")

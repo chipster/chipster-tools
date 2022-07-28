@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Sample inference</h2>
+
+<h3>Description</h3>
+
+<p>
+Given a tar package of fastg files, this tool runs the learnErrors() and dada() functions from the DADA2 library.
+This tool tries to remove all sequencing errors to reveal the members of the sequenced community ASVs.
+Note that the dada() function doesn't allow any Ns bases in the FASTQ files.  
+</p>
+
+<h3>Parameters</h3>
+<ul>
+    <li>Do you want to visualize the error rates to an output pdf file (no,yes) [yes]</li>
+    <li>Linear scaling of independent sample inference or use pseudo-pooling.
+        (independent,pseudo) [independent]</li>
+</ul>
+
+<h3>Details</h3>
+<p>
+This tool takes a Tar package of FASTQ files. The fastq files in the tar package can be compressed.
+<br> Note that the dada() function doesn't allow any Ns bases in the FASTQ files. Therefore it's recommend to remove the Ns and filter
+the reads with the tool "Filter sequences with DADA2" before and use the output tar package as the input for this tool
+<br>
+This way also the names for the fastq files will be handled correctly, if the sample name/identifier is separated from the tags with
+'_'.
+<br>
+Otherwise  the FASTQ files should be named like:
+<br>
+<pre> 
+sample_xx_R1.fastq      sample_xx_R2.fastq  
+</pre>      
+<br>
+First the learnErrors() function is run for the both forward and reverse files independently. Error rates are learned by alternating
+between Sample inferences and error rate estimation until convergence.<br>
+Error rate estimation is performed with errorestimationFunction lossErrfun which use a loess fit to estimate error rates from
+transition counts.
+<br>If the parameter visualize error rates is selected "yes", the error rates are visualized with plotErrors() function
+for the forward and reverse files.<br>
+All the observed frequencies of each transition (eg. A->C, A->G..) in a log(10) scale as a function of the associated quality score 
+are being plotted. 
+<br> The observed error rates for each consensus quality score are plotted as points, the estimated output error rates
+as a black solid line and the expected error rates if quality scores exactly matched their nominal definition  Q = -10 log10(p_err)
+as a red line. <br>
+For more information check the DADA2 manual and learnErrors() and lossErrfun() functions.
+<br> 
+Note that the learnErrors() function can take quite long. 
+<br>
+The output of this function is a 16xN matrix and it's used as the err parameter for the dada() function. 
+<br>
+<br>
+Dada() function is the core sample inference/ denoising algorithm in the dada2 pipeline. It uses the error rates matrix 
+produced by the learnErrors() function and the filtered fastq files provided as the input for this tool.
+<br> It produces 2 lists of dada-class objects: one from forward files 
+and one from reverse files. Dada-class objects are multi-item lists 
+with many values. Those are saved as .Rda files for the next tools. 
+<br>
+ In other words, dada() function is used to provide the most accurate possible reconstruction of amplicon sequence
+ variants (ASV) truly present in a sample from the noisy amplicon reads.
+<br>
+<br>
+Dada() implements a statistical test for the notion that a specific sequence was seen too many times to have been caused by 
+amplicon errors.
+<br> Overly-abundant sequences are used as seeds of new partitions of sequencing reads and the final set
+of partitions is taken to represent the denoised composition of the sample. 
+<br> High accuracy for DADA2 pipeline requires both high sensitivity and spesificity. For that it uses OMEGA_A parameter 1e-40 
+by default.
+<br> That sets the level of the statistical evidence (like p-value) required for inferences of a new ASV.  
+<br> The accuracy of the estimated error rates affects the quality of the sample inference. 
+<br> For more information on the statistical parameters check setDadaopt from the <a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+<br> or <a href="https://benjjneb.github.io/dada2/pseudo.html#pseudo-pooling">pseudo-pooling</a>
+<br>
+If the parameter pooling is set to pseudo, dada() uses a 2 step process in which the independent processing is run twice. 
+<br> First on the raw data alone, and then on the raw data again, but this time informed by priors generated from the first run.
+<br> Pseudo-pooling takes longer (approximately 2 times longer than independent processing) but with that more ASVs are observed per 
+sample and more chimeras are being identified. 
+<br>
+Pseudo-pooling can provide a more accurate description of ASVs especially at very low frequencies for example in longitudinal 
+experiments. But independent sample inference is still very accurate and less prone to report certain false-positives. 
+<br> For more information check: <a href="https://benjjneb.github.io/dada2/pseudo.html#pseudo-pooling">pseudo-pooling</a>
+<br>
+<br>
+This tool is based on the learnErrors() and dada() functions in the DADA2 R-package.
+</p>
+
+<h3>Output</h3>
+<p>
+The analysis output consists of the following:
+<ul>
+    <li>dada_forward.Rda: list of dada-class objects produced with dada() function from forwards fastq files </li>
+    <li>dada_reverse.Rda: list of dada-class objects produced with dada() function from reverse fastq files</li>
+    <li>summary.txt: summary file based on the data produced by learnErrors() and dada()</li>
+    <li>plotErrors.pdf: Optional, if the parameter is set to yes, plots the error rates from forward and reverse reads to a .pdf file</li>
+</ul>
+</p>
+
+<h3>References</h3>
+<p>
+by Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJ, Holmes SP (2016). 13(7), 581-3. <br>
+<a href="https://www.researchgate.net/publication/345890170_DADA2_High_resolution_sample_inference_from_amplicon_data"> DADA2: High resolution sample inference from Illumina amplicon data. Nature Methods </a> 
+<br> 
+Check learnErros(), loessErrors(), plotErrors(), dada(), dada-class()
+<br>
+<a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+<br>
+<a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
+<br>
+<a href="https://benjjneb.github.io/dada2/pseudo.html#pseudo-pooling">pseudo-pooling</a>
+<br>
+<a href="https://www.nature.com/articles/ismej2017119">Exact sequence variants should replace operational taxonomic units in marker-gene data analysis</a>
+</p>
+</body>

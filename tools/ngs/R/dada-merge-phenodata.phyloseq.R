@@ -46,5 +46,5 @@ sink()
 
 save(ps, file="ps.Rda")
 
-print(sample_data(ps))
+#print(sample_data(ps))
 #EOF

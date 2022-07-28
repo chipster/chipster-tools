@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Make contigs and remove chimeras</h2>
+
+<h3>Description</h3>
+
+<p>
+This tool combines the paired FASTQ files to sequence contigs, makes an ASV-table, removes chimeras and poduces an output file
+to track the number of reads which made it through each step. The tool "Sample inference" should be run beforehand. 
+</p>
+
+<h3>Parameters</h3>
+<ul>
+  <li>None</li>  
+</ul>
+
+<h3>Details</h3>
+<p>
+Given a tar package of filtered FASTQ files and 2 lists of dada-class objects saved as .Rda objects (The output of the tool 
+"Sample inderence"), this tool combines the paired FASTQ files to contigs, then makes an amplicon sequence variants (ASV)
+table, removes chimeras and produced a output file/table to track how many reads made it through each step.
+<br>
+The input tar package containing the FASTQ files should be the same as the input tar package
+for the "Sample inference" tool.
+<br>
+At first, this tool merges the FASTQ files to contigs with the function mergePairs(). This function attemps to merge each denoised 
+pair of forward and reverse reads, and rejects any pairs which don't sufficiently overlap or which contain too many
+(>0 by default) mismatches in the overlap region 
+<br>
+By default, mergePairs() uses alignment parameters that hevaily penalizes mismatches and gaps when
+aligning the forward and reverse sequences.
+<br>
+The output of this function is a data.frame or a list of data.frames(), and it's used as the input for the makeSequenceTable() 
+function.
+<br>
+<br>
+makeSequenceTable() function constructs an ASV table, a higher-resolution version of the OTU table produced by traditional methods.
+<br>
+<br>
+The ASV table is used as the input for the removeBimeraDenovo() function which is a convenience interface for chimera removal.
+To the summary.txt file is printed how many ASVs was found before and after the chimera removal.
+<br>
+Chimeras are sequences formed from two or more biological sequences joined together.
+Amplicons with chimeric sequences can form during PCR when closely related sequences are amplified. 
+The majority of chimeras are believed to arise from incomplete extension: During subsequent cycles of PCR, a partially extended strand can bind to a template derived from a different but similar sequence. This then acts as a primer that is extended to form a chimeric sequence.
+<br>
+<br>
+With removeBimeraDenovo() Chimeric sequences are identified if they 
+can be exactly reconstructed by combining a left-segment and a right-segment from two more abundant “parent” sequences.
+<br>
+This function runs the isBimeraDenovo() function when the method is selected as "consensus" which means that the samples in a sequence table are independently 
+checked for bimeras, and a consensus decision on each sequence variant is made. 
+<br>
+<br>
+At last, the number of reads which made it through the merging and chimera removal are printed to a output table. You can use
+that table for a last sanity check to check how many reads were removed in each step. 
+<br>
+If you can see something suspicious or many reads are lost in one step, you might consider to run the filtering tools with different
+parameters again. There shouldn't be no step in which majority of reads are lost. 
+<br>
+For some hints and solutions you can check the <a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a> or the 
+<a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a>. 
+<br>
+If a majority of reads failed to merge, you may need to revisit the truncLen parameter used in the filtering step
+and make sure that the truncated reads span your amplicon.
+<br>
+</p>
+
+<h3>Output</h3>
+<p>
+The analysis output consists of the following:
+<ul>
+    <li>seqtab.nochim: An object of matching sequence table saved as .Rda file. It's the output of the removeBimeraDenovo() function </li>
+    <li>preprocessing_summary.tsv: Summary table to track how many made it through each step.</li>
+    <li>sequence_table.tsv: The sequence (ASV) table produced after the removeBimeraDenovo() function printed out in a .tsv file. The columnames/names of each ASV sequence are being edited to asv0, asv1... to make it easier to investigate the table.</li>
+</ul>
+</p>
+
+<h3>References</h3>
+<p>
+    check mergePairs(), makeSequenceTable() and removeBimeraDenovo() comamnds from the dada2 manual: <br>
+<a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+<br>
+<a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
+<br>
+by Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJ, Holmes SP (2016). 13(7), 581-3. <br>
+<a href="https://www.researchgate.net/publication/345890170_DADA2_High_resolution_sample_inference_from_amplicon_data"> DADA2: High resolution sample inference from Illumina amplicon data. Nature Methods </a> 
+</p>
+</body>

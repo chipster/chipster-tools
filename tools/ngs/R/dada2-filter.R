@@ -1,4 +1,4 @@
-# TOOL dada2-filter.R: "Filter input sequences with dada2" (Given a tar package of fastg files, this tool filters the input sequences which don't fullfill the user defined criteria. For more information see the manual)
+# TOOL dada2-filter.R: "Filter sequences with DADA2" (Given a tar package of fastg files, this tool filters the input sequences which don't fullfill the user defined criteria. This tool is based on the filterAndTrim tool in the DADA2 package. For more information check the manual)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL summary.tsv
 # OUTPUT OPTIONAL summary.txt
@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL maxns: "Discard input sequences with more than specified number of Ns" TYPE INTEGER FROM 0 DEFAULT 0 (Sequences with more than specified number of Ns will be discarded. Note that dada does not allow any Ns.)
 # PARAMETER OPTIONAL maxeef: "Discard forward sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with higher than maxEE "expected errors" will be discarded. If this parameter is not set, no expected error filtering is done.)
 # PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with higher than maxEE "expected errors" will be discarded. If this parameter is not set, no expected error filtering is done.)
-# PARAMETER OPTIONAL truncq: "Truncuate sequence after this base quality" TYPE INTEGER FROM 0 (Truncate reads at the first instance of a quality score less than or equal to the specified number.)
+# PARAMETER OPTIONAL truncq: "Truncuate reads after this base quality" TYPE INTEGER FROM 0 (Truncate reads at the first instance of a quality score less than or equal to the specified number.)
 # RUNTIME R-4.1.1
 
 # ES 15.07.2022
