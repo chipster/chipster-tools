@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL maxns: "Discard input sequences with more than specified number of Ns" TYPE INTEGER FROM 0 DEFAULT 0 (Sequences with more than specified number of Ns will be discarded. Note that dada does not allow any Ns.)
 # PARAMETER OPTIONAL maxeef: "Discard forward sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with higher than maxEE "expected errors" will be discarded. If this parameter is not set, no expected error filtering is done.)
 # PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with higher than maxEE "expected errors" will be discarded. If this parameter is not set, no expected error filtering is done.)
-# PARAMETER OPTIONAL truncq: "Truncuate reads after this base quality" TYPE INTEGER FROM 0 (Truncate reads at the first instance of a quality score less than or equal to the specified number.)
+# PARAMETER OPTIONAL truncq: "Truncuate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off. )
 # RUNTIME R-4.1.1
 
 # ES 15.07.2022
@@ -43,14 +43,16 @@ system("mkdir output_folder")
 untar("reads.tar", exdir = "input_folder")
 filenames <- list.files("input_folder", full.names=TRUE)
 
-# Sort the filenames, samples have different names
-filenames <- sort(filenames)
+
 
 # check if the lenght of files in the input_folder is even, else error
 number <- length(filenames)%%2
 if (number != 0 && length(filenames)<2){
     stop(paste('CHIPSTER-NOTE: ',"It seems that some of your fastq files doesn`t have a pair"))
     }
+
+# Sort the filenames, samples have different names
+filenames <- sort(filenames)
 
 # put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
 # forward reads should be before reverse reads after sort() function
@@ -81,18 +83,21 @@ if (is.na(maxeef)){
 if (is.na(maxeer)){
   maxeer='inf'
 }
+#out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs,
+         #     compress=TRUE, multithread=TRUE, verbose=TRUE)
 # run command filterAndTrim
 # if truncq not selected
-if (is.na(truncq)){
-  out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(truncf,truncr),
-              maxN=maxns, maxEE=c(maxeef,maxeer), rm.phix=TRUE,
-              compress=TRUE, multithread=TRUE, verbose=TRUE)
-             
-  }else{
-  out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(truncf,truncr),
+#if (is.na(truncq)){
+#  out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(truncf,truncr),
+#              maxN=maxns, maxEE=c(maxeef,maxeer), rm.phix=TRUE,
+#              compress=TRUE, multithread=TRUE, verbose=TRUE)
+#             
+#  }else{
+out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(truncf,truncr),
               maxN=maxns, maxEE=c(maxeef,maxeer), truncQ=truncq, rm.phix=TRUE,
-              compress=TRUE, multithread=TRUE, verbose=TRUE)}
+              compress=TRUE, multithread=TRUE, verbose=TRUE)
 
+# make a summary file
 sink("summary.txt")
 	cat("\n\n\n")
   print(out)

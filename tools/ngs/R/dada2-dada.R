@@ -73,8 +73,8 @@ sink()
 # make a pdf file for visualizing error rates if ploterrors parameter is yes
 if (ploterr == "yes"){
   pdf("plotErrors.pdf", , width=13, height=7) 
-  print(plotErrors(errF, nominalQ=TRUE)+ labs(title="Error rates for forward reads"))
-  print(plotErrors(errR, nominalQ=TRUE)+ labs(title="Error rates for reverse reads"))
+  print(plotErrors(errF, nominalQ=TRUE)+ labs(title="Estimated error rates of forward reads"))
+  print(plotErrors(errR, nominalQ=TRUE)+ labs(title="Estimated error rates of reverse reads"))
   dev.off()}
 # run dereplicate, no need dada() can handle fastq files, same result
 #derepF1 <- derepFastq(fnFs)
@@ -83,14 +83,14 @@ if (ploterr == "yes"){
 #run dada() and make a summary. If pool=pseudo then run with parameter pseudo
 if (pool=="independent"){
   sink(file="log2.txt")
-  cat("\nDada for forward reads:\n")
+  cat("\nDada function of forward reads:\n")
   dadaFs <- dada(fnFs, err=errF, multithread=TRUE)
-  cat("\nDada for reverse reads:\n")
+  cat("\nDada function of reverse reads:\n")
   dadaRs <- dada(fnRs, err=errR, multithread=TRUE)
   cat("\n")
-  cat("\nDada results for forward reads:\n")
+  cat("\nDada results of forward reads:\n")
   print(dadaFs)
-  cat("\nDada results for reverse reads:\n")
+  cat("\nDada results of reverse reads:\n")
   print(dadaRs)
 sink()
 }else{

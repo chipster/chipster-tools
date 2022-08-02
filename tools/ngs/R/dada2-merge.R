@@ -1,12 +1,14 @@
 # TOOL dada2-merge.R: "Make contigs and remove chimeras" (Given the filtered fastq files in a tar package and two dada-class objects produced with dada function, this tool combines the files to contigs, makes an asv-table and removes chimeras. For more information check the manual)
 # INPUT forward.Rda: "DADA-class object created from forward reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
 # INPUT reverse.Rda: "DADA-class object created from reverse reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
-# INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
+# INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC (Tar package containing those FASTQ files which were used to create dada-class objects.)
 # OUTPUT OPTIONAL seqtab_nochim.Rda
 # OUTPUT OPTIONAL log4.txt
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL preprocessing_summary.tsv
 # OUTPUT OPTIONAL sequence_table.tsv
+# PARAMETER minoverlap: "The minimum length of the overlap required for merging the forward and reverse reads" TYPE INTEGER FROM 0 DEFAULT 12 (By default the overlap area should be at least 12 base pairs long.)
+# PARAMETER maxmismatch: "The maximum number of mismatches allowed in the overlap region" TYPE INTEGER FROM 0 DEFAULT 0 (By default no mismatches are allowed in the overlap region.)
 # RUNTIME R-4.1.1
 
 source(file.path(chipster.common.path,"tool-utils.R"))
@@ -62,12 +64,12 @@ fnRs <- filenames[reverse]
 #fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
 
 
-# not working!!
+# sink not working!!
 sink(file="log4.txt")
   sink.number(type = "output")
     #cat("\nmergePairs:\n")
       #errF <- learnErrors(fnFs, multithread=TRUE)
-    mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, verbose=TRUE)
+    mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, verbose=TRUE)
     print(head(mergers[[1]]))
 sink()
 
@@ -126,3 +128,5 @@ write.table(seqtab.nochim2, file="sequence_table.tsv", sep="\t", row.names=TRUE,
 
 # save the object as .Rda 
 save(seqtab.nochim, file = "seqtab_nochim.Rda")
+print(nchar(seqtab.nochim))
+print(min(nchar(seqtab.nochim)))

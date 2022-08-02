@@ -8,10 +8,10 @@
 <h3>Description</h3>
 
 <p>
-Given a sequence_table saved as a .Rda object and a taxonomy_table saved as a .Rda object this tool creates an new
- <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object and saves it as an .Rda file.
+Given a sequence_table and a taxonomy_table saved as a .Rda object, this tool creates an new
+ <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object and saves it as a .Rda file.
 It will create also an Phenodata file, which can be used to save sample information and then merge it to the Phyloseq 
-object with the tool "Merge phenodata to the phyloseq object".
+object with the tool "/Merge phenodata to the phyloseq object".
 </p>
 
 <h3>Parameters</h3>
@@ -26,7 +26,7 @@ This tool creates a new Phyloseq object. To make a new phyloseq object,
 it needs an otu_table (ASV table created with "make contigs and remove chimeras") and a taxonomy_table (created with 
 "assign taxonomy") saved as a .Rda file. 
 <br><br>
-s part of the import process, initial taxonomic rankings are renamed for clarity 
+As part of the import process, initial taxonomic rankings are renamed for clarity 
 (Domain_Kingdom, Phylum, Class, Order, Family, Genus, Species).
 The input data may include taxonomic assignments at six levels (Domain_Kingdom to Genus) 
 or seven levels (Domain_Kingdom to Species), depending on if addSpecies command was used or not. 
@@ -35,14 +35,15 @@ depending on the reference employed.
 <br><br>
 This tool creates also a metadata file called Phenodata which user can use to specify sample information for the
 data analyses process with the phyloseq object. To combine the sample information from the phenodata file,
-you should run the tool "Merge phenodata to the phyloseq object"
+you should run the tool "Merge phenodata to the phyloseq object" before advancing to the analyse steps.
 <p>
 
 <h3>Output</h3>
 </p>
 The analysis output consists of the following:
 <ul>
-    <li>ps_nophe.Rda: A Phyloseq object without phenodata. </li>
+    <li>ps_nophe.Rda: A Phyloseq object without phenodata merged to the object. </li>
+    <li>Phenodata file (used to assign samples for statistical analysis)</li>
     <li>ps_imported.txt: Text summary of the phyloseq object.</li>
 </ul>
 </p>
