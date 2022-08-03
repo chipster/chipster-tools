@@ -51,7 +51,7 @@
 	This course introduces RNA-seq data analysis methods, tools and file formats. It covers all the steps from quality
 	control and alignment to quantification and differential expression analysis, and also experimental design is
 	discussed.
-	The course takes two days (or one long day if you omit exercise sheets 3 and 4). You will learn how to
+	The course takes two days. You will learn how to
 	<ul>
 		<li>check the quality of reads with FastQC and MultiQC</li>
 		<li>remove bad quality data with Trimmomatic</li>
@@ -62,24 +62,33 @@
 		<li>check the experiment level quality with PCA plots and heatmaps</li>
 		<li>analyze differential expression with DESeq2 and edgeR</li>
 		<li>take multiple factors (including batch effects) into account in differential expression analysis</li>
+		<li>plot heatmaps</li>
+		<li>annotate Ensembl identifiers</li>
+		<li>perform pathway analysis with ConsensusPathDB</li>
 	</ul>
 
 	Course material (2022):
 	<ul>
-		<li><a href="https://chipster.csc.fi/material/rna/RNAseqDataAnalysis2020.pdf">slides</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/IntroductionToChipsterAndCourse.pdf">introductory slides about Chipster and the course</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/RNAseqDataAnalysis2022.pdf">slides on RNA-seq data analysis</a></li>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBj3KYi7ACscgOxlNkNOxPc">lecture videos</a> (2019-2022)
 		</li>
 		<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
 		<ol>
-			<li><a href="https://chipster.csc.fi/material/rna/exercises1_RNAseq_withChipster_ENCODE.pdf">ENCODE data
-					with two samples</a>. These exercises cover the whole workflow.</li>
-			<li><a href="https://chipster.csc.fi/material/rna/exercises2_RNAseq_withChipster_drosophila.pdf">drosophila
-					pasilla dataset</a>. These exercises focus on differential expression analysis and how to take
-				confounding factors into account.</li>
-			<li><a href="https://chipster.csc.fi/material/rna/exercises3_parathyroid.pdf">parathyroid dataset</a>. As
-				before, but even harder.</li>
-			<li><a href="https://chipster.csc.fi/material/rna/exercises4_lung_lymphnode_comparison.pdf">lung and
-					lymphnode comparison</a>. Test your new skills with minimal instructions!</li>
+			<li><a href="exercises1_RNAseq_lung-lymphnode_comparison_2samples.pdf">Analysis starting from FASTQ files: QC, alignment, counting, combining, DE analysis
+			Human lung and lymph node sample (2 samples)</a>. These exercises cover the whole workflow.</li>
+			
+			<li><a href="exercises2_RNAseq_lung-lymphnode_comparison_10samples.pdf">Differential expression (DE) analysis starting from a count table
+			</a>. Human lung and lymph node samples (10 samples)</li>
+			
+			<li><a href="https://chipster.csc.fi/material/rna/exercises3_RNAseq_withChipster_drosophila.pdf">DE analysis when there is a a batch effect</a>. These exercises focus on differential expression analysis and how to take
+			Drosophila pasilla gene knock-down experiment (7 samples).</li>
+			
+			<li><a href="https://chipster.csc.fi/material/rna/exercises4_RNAseq_parathyroid.pdf">DE analysis when there are big differences between individuals</a>.
+ 			Human adenocarcinoma samples before and after treatment (12 samples).</li>
+			
+			<li><a href="https://chipster.csc.fi/material/rna/exercises7_Convert_counttable_to_ChipsterFormat.pdf">How to bring in a read count table and convert it to Chipster format.</li>
+			
 		</ol>
 		<li>additional material: We have collected <a
 				href="https://chipster.csc.fi/manual/rna-seq-summary.html">instructions for RNA-seq</a> and written a <a
@@ -109,8 +118,11 @@
 	
 	Course material (2022):
 	<ul>
-		<li><a href="https://chipster.csc.fi/material/rna/quantseq2022slides.pdf">slides</a></li>
-		<li><a href="https://chipster.csc.fi/material/rna/quantseq2022exercises.pdf">exercises</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/QuantSeqDataAnalysis2022.pdf">slides</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/exercises5_QuantSeq_KawasakiDiseaseMouseModel_AnakinraTreatment_2samples.pdf">
+		From raw QuantSeq reads to counts per genes</a>. Mouse model of Kawasaki Disease, treatment with IL-1 receptor antagonist, Anakinra (2 samples).</li>
+		<li><a href="https://chipster.csc.fi/material/rna/exercises5_QuantSeq_KawasakiDiseaseMouseModel_AnakinraTreatment_6samples.pdf">
+		From count table to differentially expressed genes</a>. Mouse model of Kawasaki Disease, treatment with IL-1 receptor antagonist, Anakinra (6 samples).</li>
 		<li><a href="https://www.youtube.com/watch?v=NT96sQ_3X_0">lecture video</a>
 		</li>
 	
