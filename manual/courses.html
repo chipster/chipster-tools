@@ -36,6 +36,7 @@
 
 	<ol>
 		<li> <a href="#rna">RNA-seq data analysis</a> </li>
+		<li> <a href="#quantseq">3' RNA-seq data analysis (QuantSeq)</a> </li>
 		<li> <a href="#single-cell">Single cell RNA-seq data analysis</a> </li>
 		<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
 		<li> <a href="#16S">Microbial community analysis </a> </li>
@@ -87,6 +88,32 @@
 	</ul>
 	<hr>
 
+	<h3><a name="quantseq">3' RNA-seq data analysis (QuantSeq)</a></h3>
+
+	This course module covers the preprocessing steps specific for QuantSeq FWD UMI 3’ mRNA-seq data. For the rest of the analysis, 
+	the typical RNA-seq data analysis steps described above in the RNA-seq course material can be used.
+	
+	QuantSeq reads contain 6 nt unique molecular identifiers (UMIs), which help to reduce amplification bias. This is particularly useful for low-input 
+	and FFPE samples. In data analysis the UMIs need to be removed and stored in the read name before alignment to genome. Reads which map to the same 
+	genomic location and have the same UMI are grouped together, and only one representative read is kept. In addition to dealing with UMIs, 
+	polyA read-through to adapters needs to be trimmed.
+	
+	The course takes half a day. You will learn how to
+	<ul>
+		<li>extract UMIs from reads using the extract tool of the UMI-Tools package</li>
+		<li>trim reads using the BBDuk tool of the BBTools package</li>
+		<li>check the quality of reads after preprocessing with MultiQC</li>
+		<li>align reads to the reference genome with HISAT2 and STAR</li>
+		<li>deduplicate the aligned QuantSeq reads using the dedup tool of the UMI-Tools package</li>
+	</ul>
+	
+	Course material (2022):
+	<ul>
+		<li><a href="https://chipster.csc.fi/material/rna/quantseq2022slides.pdf">slides</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/quantseq2022exercises.pdf">exercises</a></li>
+		<li><a href="https://www.youtube.com/watch?v=NT96sQ_3X_0">lecture video</a>
+		</li>
+	
 	<h3><a name="single-cell">Single cell RNA-seq data analysis</a></h3>
 
 	<br>
