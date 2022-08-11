@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL maxns: "Discard input sequences with more than this number of Ns." TYPE INTEGER FROM 0 (Discard input sequences which contain more than the specified number of ambigious bases) 
 
 # ES 05.07.2021
-
+# ES 08.07.2022 # made it look much nicer
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -46,93 +46,93 @@ file.create("samples.fastqs.txt")
 untar("reads.tar", exdir = "input_folder")
 
 #make 6 empty vectors for summary.tsv
-vector_names <- c()
+sample.names <- c()
 vector_info <- c()
 vector_mergeinfo <- c()
 vector_pairs <- c()
 vector_merged <- c()
 vector_notmerged <- c()
 
-#if input list selected use it, and make list of filenames
+#list the files full names with input_folder/
+filenames <- list.files("input_folder", full.names=TRUE)
+#if input list selected use it, and make a new list of filenames
 if (fileOk("input_list.txt")){
-    filenames <- c()
+    txt_filenames <- c()
     input <- readLines("input_list.txt")
     for (row in input){
         sample <- strsplit(row,'\t',fixed=TRUE)
-        sample_name <- trimws(sample[[1]][1])
-        vector_names <- c(vector_names, sample_name)
+        sample.names <- c(sample.names, trimws(sample[[1]][1])) 
         first = trimws(sample[[1]][2])
         second = trimws(sample[[1]][3])
-        filenames <- c(filenames,first)
-        filenames <- c(filenames,second)
+        txt_filenames <- c(txt_filenames,first)
+        txt_filenames <- c(txt_filenames,second)
         }
+    # if the input list has a different amount of files than the tar package
+    if (length(txt_filenames) != length(filenames)){
+        stop(paste('CHIPSTER-NOTE: ',"It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package. Please check manual."))
+    }else{ #add the full name
+        filenames <- paste0("input_folder/",txt_filenames)
+    }
 }else{
-    filenames <- list.files("input_folder")
     # Sort the filenames _R1 _R2, samples have different names
     filenames <- sort(filenames)
+    txt_filenames <- list.files("input_folder") #names without the folder name
 }
 
 # check if the lenght of files in the input_folder is even (all the fastq files have a pair), else error
 number <- length(filenames)%%2
-if (number != 0 && length(filenames)<2){
+if (number != 0){
     stop(paste('CHIPSTER-NOTE: ',"It seems that some of your fastq files doesn`t have a pair"))
     }
+
+# put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
+# forward reads should be before reverse reads after sort() function
+forward <- seq(1,length(filenames),by=2)
+fnFs <- filenames[forward]
+
+reverse <- seq(2,length(filenames), by=2)
+fnRs <- filenames[reverse]
+
+# take out the sample names splitting with _, if input
+if (!fileOk("input_list.txt")){
+  sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+
+}
 
 x<-1
 y<-1
 # run fastq_mergepair for each sample, take _R1 and _R2 files 
-while (x < length(filenames)){
-    name <- filenames[x]
-    len <- length(filenames) / 2
-    if (len!= length(vector_names)){
-        # take the sequence names out
-        names <- strsplit(name, "_")
-        names <- names[[1]][1]
-        #take the sample name to vector
-        vector_names <- c(vector_names, names)
-    
-    }else{
-        names <- vector_names[y]
-    }
-
+for (name in sample.names){
     # make a output- and input fastq file
-    output_fastq <- paste("output_folder/", names, ".fq", sep="")
-    input_fastq1 <- paste("input_folder/",name, sep="")
-    x = x+1
-    # read the reverse read from the fastq pair
-    name2 = filenames[x]
-    input_fastq2 <- paste("input_folder/",name2, sep="")
-    line2 <- paste(names,'\t',name,'\t',name2)
-
+    output_fastq <- paste0("output_folder/", name, ".fq")
+    # for  samples.fastqs.txt
+    line2 <- paste(name,'\t',txt_filenames[y],'\t',txt_filenames[y+1])
     #if maxns is selected
-    if (!is.na(maxns)){
-    # command with maxns parameter
-    command <- paste(binary,"--fastq_mergepairs",input_fastq1,"--reverse",input_fastq2,"--eeout",
-        "--fastq_maxdiffs",maxdiff,"--fastq_maxdiffpct",maxdiffpct, "--fastq_maxns",maxns,
-        "--fastqout", output_fastq ,"--label_suffix",names,">>summary.txt 2>&1") 
-    }
-    # else without --fastq_maxns
-    else{
+    if (!is.na(maxns)){ # command with maxns parameter
+        command <- paste(binary,"--fastq_mergepairs",fnFs[x],"--reverse",fnRs[x],"--eeout",
+            "--fastq_maxdiffs",maxdiff,"--fastq_maxdiffpct",maxdiffpct, "--fastq_maxns",maxns,
+            "--fastqout", output_fastq ,"--label_suffix",name,">>summary.txt 2>&1") 
+    }else{# else without --fastq_maxns
     # command without maxns parameter
-    command <- paste(binary,"--fastq_mergepairs",input_fastq1,"--reverse",input_fastq2,"--eeout",
+    command <- paste(binary,"--fastq_mergepairs",fnFs[x],"--reverse",fnRs[x],"--eeout",
         "--fastq_maxdiffs",maxdiff,"--fastq_maxdiffpct",maxdiffpct,
-        "--fastqout", output_fastq ,"--label_suffix",names,">>summary.txt 2>&1")
+        "--fastqout", output_fastq ,"--label_suffix",name,">>summary.txt 2>&1")
     }
+    x<-x+1
+    y<-y+2
+
     #add filename to summary.txt file 
     write("\n",file="summary.txt",append=TRUE)
-    line = paste("#",names)
+    line = paste("#",name)
     write(line,file="summary.txt",append=TRUE)
     # write samples.fastqs.txt file, to check if right samples have been merged
     write(line2,file="samples.fastqs.txt",append=TRUE)
     write("\n",file="summary.txt",append=TRUE)
-    
-    
+
     # run command
     runExternal(command)
     documentCommand(command)
     system(command)
-    x = x+1
-    y = y +1
     write("--------------------------------------------------------------",file="summary.txt",append=TRUE)
 }
 
@@ -177,7 +177,7 @@ for (row in summary_data){
 }
 
 # make a data.frame and summary.tsv file, where are the sample IDs and not_merged info
-summ.data <- data.frame("Sample"= vector_names,"Pairs"=vector_pairs, "Merged"=vector_merged, "Not_merged"=vector_notmerged, "Percentage_not_merged"= vector_info, "Mean_expected_error" = vector_mergeinfo)
+summ.data <- data.frame("Sample"= sample.names,"Pairs"=vector_pairs, "Merged"=vector_merged, "Not_merged"=vector_notmerged, "Percentage_not_merged"= vector_info, "Mean_expected_error" = vector_mergeinfo)
 write.table(summ.data, file ="summary_stats.tsv", row.names = FALSE)
 
 #make a output tar package named contigs.tar and qzip

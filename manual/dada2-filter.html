@@ -48,10 +48,13 @@ DADA2 tutorial suggest that max expected errors should be set to 2. If you want 
 <br>
 Running the tool "Read quality with MultiQC for many FASTQ files" can help to determine the values for the parameters.
 <br>
-If too few reads are passing the filter, you should try to change the parameters. Especially the maxee parameter on the reverse reads.
+If too few reads are passing the filter, you should try to change the parameters.
+<br>
+If too few reads are passing the filter, increase maxEE and/or reduce truncQ. If quality drops sharply at the end of your reads, reduce truncLen. 
+If your reads are high quality and you want to reduce computation time in the sample inference step, reduce maxEE."
 <br>
 Remember when choosing the truncLen parameter you must maintain the overlap region for paired reads after truncation to merge them to contigs later.
-
+<br>
 <br>
 Note that this tool is used for paired FASTQ files which are not merged to contigs yet. 
 The FASTQ files/pair from one sample is recognized by the name of the files. Therefore they should be named so that the files from 

@@ -255,14 +255,14 @@
 
 
 	<category name="Microbial amplicon data preprocessing" color="#a49900">
-		<tool>dada2-testi.R</tool>
 		<tool>dada2-filter.R</tool>
 		<tool>dada2-dada.R</tool>
 		<tool>dada2-merge.R</tool>
+		<tool>dada2-sqtab-chimera.R</tool>
 		<tool>dada2-assign-taxonomy.R</tool>
 		<tool>dada-make-phyloseq-object.R</tool>
 		<tool>dada-merge-phenodata.phyloseq.R</tool>
-		<tool>test-mothur.R</tool>
+		<!-- <tool>test-mothur.R</tool> -->
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-makegroup.R</tool>
 		<tool>mothur-makecontigs.R</tool>

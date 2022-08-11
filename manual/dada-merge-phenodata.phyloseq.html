@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Merge phenodata to the Phyloseq object</h2>
+
+<h3>Description</h3>
+
+<p>
+Given a Phyloseq object saved a .Rda file and a phenodata table, this tool merges the sample information from the phenodata table
+to the Phyloseq object.
+</p>
+
+<h3>Parameters</h3>
+<ul>
+    <li>Phenodata variable with unique IDs for each community profile</li>
+
+</ul>
+
+<h3>Details</h3>
+<p>
+This tool merges the sample information from the phenodata table to the phyloseq object with the 
+merge_phyloseq() command. 
+<br>
+After the DADA2/asv pipeline, the sample information needs to be merged to the phyloseq object before the next analyse 
+tools in chipster.
+<br> After the Mothur/otu pipeline, the phenodata.tsv is already merged to the Phyloseq object,
+but this tool can be used to update the sample information. 
+ 
+<h3>Output</h3>
+</p>
+The analysis output consists of the following:
+<ul>
+    <li>ps.Rda: A Phyloseq object saved as a .Rda object. </li>
+    <li>ps_sample_summary.txt: Text summary of the phyloseq object.</li>
+</ul>
+</p>
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/"> Phyloseq resources and Github repository </a> 
+</p>
+</body>

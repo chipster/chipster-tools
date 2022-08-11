@@ -76,6 +76,7 @@ by default.
 <br>
 If the parameter pooling is set to pseudo, dada() uses a 2 step process in which the independent processing is run twice. 
 <br> First on the raw data alone, and then on the raw data again, but this time informed by priors generated from the first run.
+<br> All ASVs detected in at least two samples in the first sample processing step are input as priors to the second step
 <br> Pseudo-pooling takes longer (approximately 2 times longer than independent processing) but with that more ASVs are observed per 
 sample and more chimeras are being identified. 
 <br>
