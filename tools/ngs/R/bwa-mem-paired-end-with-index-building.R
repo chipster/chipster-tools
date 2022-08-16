@@ -7,6 +7,7 @@
 # OUTPUT bwa.bam.bai 
 # OUTPUT bwa.log 
 # PARAMETER mode: "Data source" TYPE [ normal: " Illumina, 454, IonTorrent reads longer than 70 base pairs", pacbio: "PacBio subreads"] DEFAULT normal (Defining the type of reads will instruct the tool to use a predefined set of parameters optimized for that read type.)
+# RUNTIME R-4.1.1
 
 # KM 11.11.2014
 

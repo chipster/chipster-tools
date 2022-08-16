@@ -14,6 +14,7 @@
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (Sets maximum intron length. Default: 500000)
 # PARAMETER OPTIONAL no.softclip: "Disallow soft clipping" TYPE [nosoft: "No soft-clipping", yessoft: "Use soft-clipping"] DEFAULT yessoft (Is soft-clipping used. By default HISAT2 may soft-clip reads near their 5' and 3' ends.)
 # PARAMETER OPTIONAL dta: "Require long anchor lengths for subsequent assembly" TYPE [nodta: "Don't require", yesdta: "Require"] DEFAULT nodta (With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.)
+# RUNTIME R-4.1.1
 
 # AO 30.5.2017 First version
 # EK 18.10.2017 Polishing

@@ -28,6 +28,7 @@
 # PARAMETER OPTIONAL no.dovetail: "Not concordant when mates extend past each other" TYPE [yes, no] DEFAULT no (If the mates "dovetail", that is if one mate alignment extends past the beginning of the other such that the wrong mate begins upstream, consider that to be concordant. Default: mates cannot dovetail in a concordant alignment. ) 
 # PARAMETER OPTIONAL no.contain: "Not concordant when one mate alignment contains other" TYPE [yes, no] DEFAULT no (If one mate alignment contains the other, consider that to be non-concordant. Default: a mate can contain the other in a concordant alignment.)
 # PARAMETER OPTIONAL no.overlap: "Not concordant when mates overlap at all"  TYPE [yes, no] DEFAULT no (If one mate alignment overlaps the other at all, consider that to be non-concordant. Default: mates can overlap in a concordant alignment.)
+# RUNTIME R-4.1.1
 
 # KM 10-01.2012
 # EK 8.5.2013 replaced samtools -q 1 with Bowtie --no-unal to remove unaligned reads from BAM

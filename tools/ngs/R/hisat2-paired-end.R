@@ -14,6 +14,7 @@
 # PARAMETER OPTIONAL no.softclip: "Disallow soft-clipping" TYPE [nosoft: "No soft-clipping", yessoft: "Use soft-clipping"] DEFAULT yessoft (Is soft-cliping used. By default HISAT2 may soft-clip reads near their 5' and 3' ends.)
 # PARAMETER OPTIONAL dta: "Require long anchor lengths for subsequent assembly" TYPE [nodta: "Don't require", yesdta: "Require"] DEFAULT nodta (With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.)
 # PARAMETER OPTIONAL dta.cufflinks: "Tailor alignments for Cufflinks" TYPE [yes, no] DEFAULT no (Report alignments tailored specifically for Cufflinks transcript assembly. With this option, HISAT2 looks for novel splice sites with three signals, GT-AG, GC-AG, AT-AC, but all user-provided splice sites are used irrespective of their signals. HISAT2 produces an optional XS field for every spliced alignment.)
+# RUNTIME R-4.1.1
 
 # AO 30.05.2017 First version
 # EK 18.10.2017 Polishing

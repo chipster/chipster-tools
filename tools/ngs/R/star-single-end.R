@@ -25,7 +25,10 @@ for (i in 1:nrow(input.names)) {
 }
 
 # setting up STAR
-star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
+# latest STAR is not compatible with old indexes
+# use the latest version and set runtime R-4.1.1 after indexes are updated
+# star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
+star.binary <- c(file.path(chipster.tools.path,"STAR-2.5.3a","STAR"))
 path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
 samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
 

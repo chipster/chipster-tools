@@ -20,6 +20,7 @@
 # PARAMETER OPTIONAL trim.threshold: "Quality trimming threshold" TYPE INTEGER DEFAULT 0 (Quality threshold for read trimming down to 35bp. Corresponds to the command line parameter -q.)
 # PARAMETER OPTIONAL barcode.length: "Barcode length"  TYPE INTEGER DEFAULT 0 (Length of barcode starting from the 5 prime end. The barcode of each read will be trimmed before mapping. Corresponds to the command line parameter -B.)
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments are reported per read" TYPE  INTEGER DEFAULT 3 (Maximum number of alignments to report. Corresponds to the samse command line parameter -n.)
+# RUNTIME R-4.1.1
 
 # KM 24.8.2011
 # AMS 19.6.2012 Added unzipping
