@@ -24,12 +24,12 @@ command.start <- paste("bash -c '", bwa.binary)
 
 # Do indexing
 print("Indexing the genome...")
-system("echo Indexing the genome... > bwa.log")
+runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 
 #genome.dir <- system(check.command, intern = TRUE)
 #bwa.genome <- file.path( genome.dir , "genome.txt")
-bwa.genome <- system(check.command, intern = TRUE)
+bwa.genome <- runExternal(check.command, intern = TRUE)
 
 mode.parameters <- ifelse(mode == "pacbio", "-x pacbio", "")
 
@@ -41,24 +41,24 @@ bwa.command <- paste(command.start, mode.parameters, command.end)
 
 echo.command <- paste("echo '", bwa.binary , mode.parameters, bwa.genome, "reads.txt ' > bwa.log" )
 #stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(echo.command)
-system(bwa.command)
+runExternal(echo.command)
+runExternal(bwa.command)
 		
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Handle output names
 #

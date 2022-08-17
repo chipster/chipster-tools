@@ -44,18 +44,18 @@ bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
 bowtie2.index.binary <- file.path(chipster.module.path,"shell","check_bowtie2_index.sh")
 
 
-genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
+genome.filetype <- runExternal("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type",genome.filetype," > bowtie2.log")
-system(echo.command)
+runExternal(echo.command)
 
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  system("echo Extarting tar formatted gemome index file >> bowtie2.log")
-  system("tar -tf genome.txt >> bowtie2.log")
+  runExternal("echo Extarting tar formatted gemome index file >> bowtie2.log")
+  runExternal("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
-  bowtie2.genome <- system(check.command,intern = TRUE)
+  bowtie2.genome <- runExternal(check.command,intern = TRUE)
   #system("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {
@@ -65,20 +65,20 @@ if (genome.filetype == "tar") {
   inputfile.to.check <- ("genome.txt")
   sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
   sfcheck.command <- paste(sfcheck.binary,emboss.path,inputfile.to.check)
-  str.filetype <- system(sfcheck.command,intern = TRUE)
+  str.filetype <- runExternal(sfcheck.command,intern = TRUE)
   if (str.filetype == "Not an EMBOSS compatible sequence file") {
     stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
   }
 
   # Do indexing
   print("Indexing the genome...")
-  system("echo Indexing the genome... >> bowtie2.log")
+  runExternal("echo Indexing the genome... >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
-  bowtie2.genome <- system(check.command,intern = TRUE)
+  bowtie2.genome <- runExternal(check.command,intern = TRUE)
   #genome.dir <- system(check.command, intern = TRUE)
   #bowtie2.genome <- file.path( genome.dir , "genome.txt")
   cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")
-  system(cp.command)
+  runExternal(cp.command)
   new_index_created <- ("yes")
 }
 #echo.command <- paste("echo Internal genome name:", bowtie2.genome, " >> bowtie2.log")
@@ -133,36 +133,36 @@ command.end <- paste("-x",bowtie2.genome,"-U",reads1,"1> alignment.sam 2>> bowti
 # run bowtie
 bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
-system("echo Launching Bowtie2 alignment >> bowtie2.log")
+runExternal("echo Launching Bowtie2 alignment >> bowtie2.log")
 echo.command <- paste("echo '",bowtie.command,"' >> bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 if (file.size("alignment.sam") < 1) {
-  system("cat bowtie2.log")
+  runExternal("cat bowtie2.log")
   stop("Bowtie2 failed! Check the tail of the ouput below for more information.")
 }
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # Substitute display names to BAM header for clarity
 displayNamesToBAM("alignment.sorted.bam")
 
 # rename result files
-system("mv alignment.sorted.bam bowtie2.bam")
-system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+runExternal("mv alignment.sorted.bam bowtie2.bam")
+runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 
 if (unaligned.file == "yes") {
-  system("mv unaligned unaligned_1.fq")
+  runExternal("mv unaligned unaligned_1.fq")
 }
 
 # Substitute display names to log for clarity

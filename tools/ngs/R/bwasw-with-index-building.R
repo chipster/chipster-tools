@@ -34,11 +34,11 @@ command.start <- paste("bash -c '", bwa.binary)
 
 # Do indexing
 print("Indexing the genome...")
-system("echo Indexing the genome... > bwa.log")
+runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 #genome.dir <- system(check.command, intern = TRUE)
 #bwa.genome <- file.path( genome.dir , "genome.txt")
-bwa.genome <- system(check.command, intern = TRUE)
+bwa.genome <- runExternal(check.command, intern = TRUE)
 
 # algorithm parameters
 mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty , "-q" , gap.opening , "-r" , gap.extension , "-a" , match.score , "-w" , band.width , "-T" , min.score , "-c" , threshold.coeff , "-z" , z.best , "-s" , sa.interval , "-N" , min.support)
@@ -47,38 +47,38 @@ mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.pen
 command.end <- paste( bwa.genome , "reads.txt 1> alignment.sai 2>> bwa.log'")
 
 # run bwa alignment
-system("echo Running the alignment with command: >> bwa.log")
+runExternal("echo Running the alignment with command: >> bwa.log")
 bwa.command <- paste(command.start, mode.parameters, command.end)
 echo.command <- paste("echo '",bwa.command ,"'  >> bwa.log")
-system(echo.command)
+runExternal(echo.command)
 #stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(bwa.command)
+runExternal(bwa.command)
 
 # sai to sam conversion
-system("echo Running sai to sam conversion with command: >> bwa.log")
+runExternal("echo Running sai to sam conversion with command: >> bwa.log")
 samse.parameters <- paste("samse -n", alignment.no )
 samse.end <- paste(bwa.genome, "-f alignment.sam alignment.sai reads.txt >> bwa.log'" )
 samse.command <- paste( command.start, samse.parameters , samse.end )
 echo.command <- paste("echo '",samse.command )
-system(echo.command)
+runExternal(echo.command)
 echo.command <- paste("echo '",samse.end," >> bwa.log" )
-system(echo.command)
-system(samse.command)
+runExternal(echo.command)
+runExternal(samse.command)
 
 		
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system("echo Converting sam to bam format. >> bwa.log")
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+runExternal("echo Converting sam to bam format. >> bwa.log")
+runExternal(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")

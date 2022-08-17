@@ -58,16 +58,16 @@ input.display.names <- read_input_definitions()
 unzipInputs(input.names)
 
 if (fileOk("genome.txt")) {
-  genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
+  genome.filetype <- runExternal("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
   hg_ifn <- ("")
   echo.command <- paste("echo Host genome file type",genome.filetype," > hisat.log")
-  system(echo.command)
+  runExternal(echo.command)
   new_index_created <- ("no")
   # case 1. Ready calculated indexes in tar format
   if (genome.filetype == "tar") {
-    system("echo Extracting tar formatted gemome index file >> hisat.log")
+    runExternal("echo Extracting tar formatted gemome index file >> hisat.log")
     # Untar. Folders are flattened
-    system("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
+    runExternal("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
     # Check index base name
     if (file.exists(Sys.glob("*.1.ht2"))) {
       f <- list.files(getwd(),pattern = "\\.1.ht2$")
@@ -81,17 +81,17 @@ if (fileOk("genome.txt")) {
     # case 2. Fasta file
   } else {
     # Do indexing
-    system("echo Indexing the genome... >> hisat.log")
-    system("echo >> hisat.log")
+    runExternal("echo Indexing the genome... >> hisat.log")
+    runExternal("echo >> hisat.log")
     hisat2.genome <- strip_name(input.display.names$genome.txt)
     index.command <- paste("bash -c '",hisat.index.binary,"-p",chipster.threads.max,"genome.txt",hisat2.genome,"2>>hisat.log","'")
-    system(paste("echo ",index.command," >> hisat.log"))
-    system(index.command)
+    runExternal(paste("echo ",index.command," >> hisat.log"))
+    runExternal(index.command)
     echo.command <- paste("echo Internal genome name:",hisat2.genome," >> hisat.log")
-    system(echo.command)
+    runExternal(echo.command)
     # Make tar package from the index
     if (file.exists(Sys.glob("*.1.ht*"))) {
-      system("tar cf hisat2_index.tar *.ht*")
+      runExternal("tar cf hisat2_index.tar *.ht*")
     }
   }
 } else {
@@ -172,7 +172,7 @@ command <- paste(command,"'")
 debugPrint(command)
 
 # Run command
-system(command)
+runExternal(command)
 
 ## Run samtools
 # Convert SAM file into BAM file and index bam file
@@ -185,27 +185,27 @@ debugPrint("")
 debugPrint("SAMTOOLS")
 samtools.view.command <- paste(samtools.binary,"view -bS hisat.sam > hisat.tmp.bam")
 debugPrint(samtools.view.command)
-system(samtools.view.command)
+runExternal(samtools.view.command)
 # Index bam, this produces a "hisat.sorted.bam" file
 samtools.sort.command <- paste(samtools.binary,"sort hisat.tmp.bam -o hisat.sorted.bam")
 debugPrint(samtools.sort.command)
-system(samtools.sort.command)
+runExternal(samtools.sort.command)
 
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam",minsize = 100)) {
   # Rename result files
-  system("mv hisat.sorted.bam hisat.bam")
+  runExternal("mv hisat.sorted.bam hisat.bam")
   # Change file names in BAM header to display names
   displayNamesToBAM("hisat.bam")
   # Index BAM
-  system(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
+  runExternal(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
 }
 
 
 Sys.unsetenv("HISAT2_INDEX")
 
 # Append the debug.log into hisat.log
-system("cat debug.log >> hisat.log")
+runExternal("cat debug.log >> hisat.log")
 
 # Substitute display names to log for clarity
 displayNamesToFile("hisat.log")

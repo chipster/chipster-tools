@@ -32,7 +32,7 @@ unzipInputs <- function(names) {
 # Echoes command in log file if debug == TRUE
 debugPrint <- function(command) {
   if (debug) {
-    system(paste("echo ",command,">> debug.log"))
+    runExternal(paste("echo ",command,">> debug.log"))
   }
 }
 
@@ -129,7 +129,7 @@ command <- paste(command,"'")
 debugPrint(command)
 
 # Run command
-system(command)
+runExternal(command)
 
 ## Run samtools
 # Convert SAM file into BAM file and index bam file
@@ -142,27 +142,27 @@ debugPrint("")
 debugPrint("SAMTOOLS")
 samtools.view.command <- paste(samtools.binary,"view -bS hisat.sam > hisat.tmp.bam")
 debugPrint(samtools.view.command)
-system(samtools.view.command)
+runExternal(samtools.view.command)
 # Index bam, this produces a "hisat.sorted.bam" file
 samtools.sort.command <- paste(samtools.binary,"sort hisat.tmp.bam -o hisat.sorted.bam")
 debugPrint(samtools.sort.command)
-system(samtools.sort.command)
+runExternal(samtools.sort.command)
 
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam",minsize = 100)) {
   # Rename result files
-  system("mv hisat.sorted.bam hisat.bam")
+  runExternal("mv hisat.sorted.bam hisat.bam")
   # Change file names in BAM header to display names
   displayNamesToBAM("hisat.bam")
   # Index BAM
-  system(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
+  runExternal(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
 }
 
 # Unset environmet variable
 Sys.unsetenv("HISAT2_INDEX")
 
 # Append the debug.log into hisat.log
-system("cat debug.log >> hisat.log")
+runExternal("cat debug.log >> hisat.log")
 
 # Substitute display names to log for clarity
 displayNamesToFile("hisat.log")

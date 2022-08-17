@@ -63,23 +63,23 @@ command.end <- paste(bowtie.index, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2
 # run bowtie
 bowtie.command <- paste(command.start, common.parameters, quality.parameter, orientation.parameter, mode.parameters, output.parameters, command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
-system(bowtie.command)
+runExternal(bowtie.command)
 
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 # convert sam to bam
-system(paste(samtools.binary, "view -bS -q 1 alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary, "view -bS -q 1 alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bowtie.bam")
-system("mv alignment.sorted.bam.bai bowtie.bam.bai")
+runExternal("mv alignment.sorted.bam bowtie.bam")
+runExternal("mv alignment.sorted.bam.bai bowtie.bam.bai")
 
 # Handle output names
 #

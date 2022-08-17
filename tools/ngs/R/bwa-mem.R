@@ -121,34 +121,34 @@ for (i in 1:length(reads1.list)) {
 	bwa.command <- paste(command.start, bwa.parameters, command.end)
 	
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
-	system(bwa.command)
+	runExternal(bwa.command)
 	
 	# convert sam to bam
-	system(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
 }		
 
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")

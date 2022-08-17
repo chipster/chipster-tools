@@ -60,17 +60,17 @@ bowtie2.index.binary <- file.path(chipster.module.path,"shell","check_bowtie2_in
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type",genome.filetype," > bowtie2.log")
-system(echo.command)
+runExternal(echo.command)
 
 
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  system("echo Extracting tar formatted gemome index file >> bowtie2.log")
-  system("tar -tf genome.txt >> bowtie2.log")
+  runExternal("echo Extracting tar formatted gemome index file >> bowtie2.log")
+  runExternal("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
-  system("ls -l >> bowtie2.log")
+  runExternal("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {
   # Do indexing
@@ -88,16 +88,16 @@ if (genome.filetype == "tar") {
 
 
   print("Indexing the genome...")
-  system("echo Indexing the genome... >> bowtie2.log")
+  runExternal("echo Indexing the genome... >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
   cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")
-  system(cp.command)
-  system("ls -l >> bowtie2.log")
+  runExternal(cp.command)
+  runExternal("ls -l >> bowtie2.log")
   new_index_created <- ("yes")
 }
 echo.command <- paste("echo Internal genome name:",bowtie2.genome," >> bowtie2.log")
-system(echo.command)
+runExternal(echo.command)
 
 command.start <- paste("bash -c '",bowtie.binary)
 rdg.value <- paste(rdg.open,rdg.ext,sep = ",")
@@ -185,11 +185,11 @@ bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
 echo.command <- paste("echo '",bowtie.command,"' >> bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 if (file.size("alignment.sam") < 1) {
-  system("cat bowtie2.log")
+  runExternal("cat bowtie2.log")
   stop("Bowtie2 failed! Check the tail of the ouput below for more information.")
 }
 
@@ -198,20 +198,20 @@ if (file.size("alignment.sam") < 1) {
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bowtie2.bam")
-system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+runExternal("mv alignment.sorted.bam bowtie2.bam")
+runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 
 #if (unaligned.file== "yes"){
 #  system("mv unaligned.1 unaligned_1.fq")
@@ -219,8 +219,8 @@ system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 #}
 
 if (discordant.file == "yes") {
-  system("mv failed.1 failed_1.fq")
-  system("mv failed.2 failed_2.fq")
+  runExternal("mv failed.1 failed_1.fq")
+  runExternal("mv failed.2 failed_2.fq")
 }
 
 # Substitute display names to log for clarity

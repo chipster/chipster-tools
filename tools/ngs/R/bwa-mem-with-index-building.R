@@ -46,19 +46,19 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type", genome.filetype, " > bwa.log")
-system(echo.command)
+runExternal(echo.command)
 
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar"){
-	system("echo Extarting tar formatted gemome index file >> bwa.log")
-	system("tar -tf genome.txt >> bwa.log")
+	runExternal("echo Extarting tar formatted gemome index file >> bwa.log")
+	runExternal("tar -tf genome.txt >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt | tail -1 ")	
-	bwa.genome <- system(check.command, intern = TRUE)
+	bwa.genome <- runExternal(check.command, intern = TRUE)
 	if ( bwa.genome == "wrong_tar_content"){
 		stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")	
 	}
-	system("ls -l >> bwa.log")	
+	runExternal("ls -l >> bwa.log")	
 # case 2. Fasta file
 }else{
 	#check sequece file type
@@ -73,15 +73,15 @@ if (genome.filetype == "tar"){
 		stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
 	}
 	#Do indexing
-	system("echo Calculating gemome indexes >> bwa.log")
+	runExternal("echo Calculating gemome indexes >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt -tar| tail -1 ")
 	bwa.genome <- system(check.command, intern = TRUE)
 	cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./bwa_index.tar ", sep ="")
-	system(cp.command)
+	runExternal(cp.command)
 	new_index_created <- ("yes")
 }
 echo.command <- paste("echo Internal genome name:", bwa.genome, " >> bwa.log")
-system(echo.command)
+runExternal(echo.command)
 
 
 # bwa
@@ -165,36 +165,36 @@ for (i in 1:length(reads1.list)) {
 	bwa.command <- paste(command.start, bwa.parameters, command.end)
 	
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
-	system(bwa.command)
+	runExternal(bwa.command)
 	
 	# convert sam to bam
-	system(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
 }		
 
-system("echo BWA ready >> bwa.log")
+runExternal("echo BWA ready >> bwa.log")
 #system("ls -l >> bwa.log")
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")

@@ -37,7 +37,7 @@ samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools")
 #samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 
-version <- system(paste(star.binary,"--version"),intern = TRUE)
+version <- runExternal(paste(star.binary,"--version"),intern = TRUE)
 documentVersion("STAR",version)
 
 # Input files
@@ -85,15 +85,15 @@ documentCommand(command)
 runExternal(command)
 
 # rename result files
-system("mv Log.progress.out Log_progress.txt")
-system("mv Log.final.out Log_final.txt")
-system("mv Aligned.sortedByCoord.out.bam alignment.bam")
+runExternal("mv Log.progress.out Log_progress.txt")
+runExternal("mv Log.final.out Log_final.txt")
+runExternal("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # index bam
-system(paste(samtools.binary,"index alignment.bam"))
+runExternal(paste(samtools.binary,"index alignment.bam"))
 
 # Determine base name
 inputnames <- read_input_definitions()

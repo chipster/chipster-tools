@@ -101,7 +101,7 @@ if (discordant.file == "yes") {
 emboss.path <- file.path(chipster.tools.path,"emboss","bin")
 sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
 sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
-str.filetype <- system(sfcheck.command,intern = TRUE)
+str.filetype <- runExternal(sfcheck.command,intern = TRUE)
 if (str.filetype == "fasta") {
   parameters <- paste(parameters,"-f")
 }
@@ -140,31 +140,31 @@ bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
 echo.command <- paste("echo '",bowtie.command,"' > bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bowtie2.bam")
-system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+runExternal("mv alignment.sorted.bam bowtie2.bam")
+runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 
 if (discordant.file == "yes") {
-  system("mv failed.1 failed_1.fq")
-  system("mv failed.2 failed_2.fq")
+  runExternal("mv failed.1 failed_1.fq")
+  runExternal("mv failed.2 failed_2.fq")
 }
 
 # Substitute display names to log for clarity

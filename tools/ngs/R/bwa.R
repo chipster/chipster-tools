@@ -61,40 +61,40 @@ for (i in 1:nrow(input.names)) {
 	# run bwa alignment
 	bwa.command <- paste(command.start, mode.parameters, command.end)
 	
-	system(bwa.command)
+	runExternal(bwa.command)
 	
 	# sai to sam conversion
 	samse.parameters <- paste("samse -n", alignment.no )
 	samse.end <- paste(bwa.genome, sai.file, input.names[i,1], ">", sam.file, "2>>bwa.log'" )
 	samse.command <- paste( command.start, samse.parameters , samse.end )
-	system(samse.command)
+	runExternal(samse.command)
 	
 	# convert sam to bam
-	system(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
 }
 
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")
