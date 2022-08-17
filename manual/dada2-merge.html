@@ -13,7 +13,8 @@ This tool combines the paired FASTQ files to sequence contigs. The tool "Sample 
 
 <h3>Parameters</h3>
 <ul>
-  <li>None</li>  
+  <li>The minimum length of the overlap required for merging the forward and reverse reads (0 - ) [12]</li>
+  <li>The maximum number of mismatches allowed in the overlap region (0 - ) [0]</li>
 </ul>
 
 <h3>Details</h3>
@@ -26,20 +27,19 @@ for the "Sample inference" tool.
 <br>
 At first, this tool merges the FASTQ files to contigs with the function mergePairs(). This function attemps to merge each denoised 
 pair of forward and reverse reads, and rejects any pairs which don't sufficiently overlap or which contain too many
-(0 by default) mismatches in the overlap region. You can change those parameters and make it less strict if many reads are being discarded.
+ mismatches in the overlap region (0 by default). You can change those parameters and make the merging less strict if many reads are being discarded.
 <br>
 By default, mergePairs() uses alignment parameters that hevaily penalizes mismatches and gaps when
 aligning the forward and reverse sequences.
 <br>
-The output of this function is a data.frame or a list of data.frames(), and it can be used as the input for the 
+The output of this function is a data.frame or a list of data.frames(), and it can be used as the input for the tool
 "Make a sequence table and remove chimeras".
 <br>
 <br>
-If a majority of reads failed to merge, you may need to revisit the truncLen parameter used in the filtering step
+If a majority of the reads failed to merge, you may need to revisit the truncLen parameter used in the filtering step
 and make sure that the truncated reads span your amplicon.
 <br>
 </p>
-
 <h3>Output</h3>
 <p>
 The analysis output consists of the following:

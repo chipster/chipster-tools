@@ -104,7 +104,7 @@ y<-1
 # run fastq_mergepair for each sample, take _R1 and _R2 files 
 for (name in sample.names){
     # make a output- and input fastq file
-    output_fastq <- paste0("output_folder/", name, ".fq")
+    output_fastq <- paste0("output_folder/", name, "_merged.fq")
     # for  samples.fastqs.txt
     line2 <- paste(name,'\t',txt_filenames[y],'\t',txt_filenames[y+1])
     #if maxns is selected

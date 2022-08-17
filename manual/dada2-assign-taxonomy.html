@@ -15,7 +15,9 @@ this tool will use the addSpecies() function for species level assignments.
 
 <h3>Parameters</h3>
 <ul>
-  <li>Do you want to assign the sequences to the species level? (yes, no) [yes]</li>  
+  <li>The minimum bootstrap confidence for assigning a taxonomic level. (0 - ) [50]</li>
+  <li>Do you want to assign the sequences to the species level? (yes, no) [yes]</li>
+  <li>Combine the taxonomy and the sequence table. (yes, no) [yes]</li>
 </ul>
 
 <h3>Details</h3>
@@ -24,18 +26,29 @@ This tool uses the assignTaxonomy() and assignSpecies() functions to assign taxo
 AssignTaxonomy() uses naive Bayesian classifier method of <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1950982/"> Wang et.al 2007</a> 
 to assign taxonomy across multiple ranks (Kingdom to Genus). 
 <br>
+You can specify the minimum bootstrap confidence for assigning a taxonomic level during the assignTaxonomy() function. 
+<br>
 If you want to use your own reference file, please provide the reference fasta as input.
 <br>
 <br>
 Otherwise the Silva reference file v.138.1 (silva_nr99_v138.1_train_set.fa) will be used <a href="https://zenodo.org/record/4587955#.YuJ1TuxBwUE">Silva reference set</a> 
-In that case, you should be aware of Silva's <a href="https://www.arb-silva.de/silva-license-information">license</a>: 
-<br>As of release 138 the SILVA databases, its taxonomy, and all files provided for
-download are licensed unter Creative Commons Attribution 4.0 (CC-BY 4.0).
-<br>For more information on the v.138.1 release, check this: <a href="https://www.arb-silva.de/documentation/release-138.1/">Silva 138.1 release information</a>
-All data is freely available for academic and commercial use as long as SILVA
-is credited as original author and a link to the full license is provided.
 <br>
-If the assign species parameter is set to "yes", the addSpecies command is used for the species level assignment. 
+As of release 138 the SILVA databases, its taxonomy, and all files provided for
+download are freely available for academic and commercial use as long as SILVA
+is credited as original author and a link to the full license is provided.
+<a href="https://www.arb-silva.de/silva-license-information">Silva license</a>: 
+<br>For more information on the v.138.1 release, check this: <a href="https://www.arb-silva.de/documentation/release-138.1/">Silva 138.1 release information</a>
+<br>
+<br>
+If the assign species parameter is set to "yes", the addSpecies() command is used for the species level assignment. 
+AddSpecies() function uses exact string matching against a reference database to assign genus species binomials. 
+<br> So the query sequence is compared against all the reference sequences that had binomial genus-species nomenclature assigned, 
+and the genus-species of all exact matches are recorded and returned if it is unambiguous
+<br>
+The 100% identity/exact matching seems to be the best way for species level assignment to 16S amplicon data.
+<a href="https://academic.oup.com/bioinformatics/article/34/14/2371/4913809">Species level assignment</a>
+<br>
+The assignTaxonomy function can also be used for species level assignment, if the reference file contains also that information.
 <br>
 Again, if you want to use your own reference file for the species level assignment, please provide it as input. 
 <br> 
@@ -70,6 +83,9 @@ The analysis output consists of the following:
 <a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
 <br>
 <a href="https://benjjneb.github.io/dada2/assign.html">Taxonomic Assignment</a>
+<br>
+By Robert c Edgar, 2018:
+<a href="https://academic.oup.com/bioinformatics/article/34/14/2371/4913809">Updating the 97% identity threshold for 16S ribosomal RNA OTUs</a>
 <br>
 <a href="https://zenodo.org/record/4587955#.YuJ1TuxBwUE">Silva reference set</a> 
 <br>

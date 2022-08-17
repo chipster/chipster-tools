@@ -2,22 +2,29 @@
 <html lang="en">
 <head><title></title></head>
 <body>
-    This tool makes an ASV-table, removes chimeras and poduces an output file
+
+<h2>Make a sequence table and remove chimeras</h2>
+
+  <h3>Description</h3>
+  
+  <p>
+    This tool makes an ASV/sequence-table, removes chimeras and produces an output file
     to check how many reads were removed as chimeric sequences. 
     </p>
     
     <h3>Parameters</h3>
     <ul>
-      <li>None</li>  
+      <li>Method to identify chimeras (consensus, pooled) [consensus]</li>  
     </ul>
     
     <h3>Details</h3>
     <p>
     As an input you can give:
     <ul>
-        <li>If single end reads: The dada-class object as a .Rda file which is the output from the "Sample 
-            inference" tool</li> 
-        <li>If paired end reads: The .Rda object, which is the output from the "Combine paired reads to contigs with Dada2" tool </li> 
+        <li>If single end reads: The dada-class object as a .Rda file which is the output from the tool "Sample 
+            inference". Name: dada_forward.Rda</li> 
+        <li>If paired end reads: The .Rda object, which is the output from the tool "Combine paired reads to contigs with Dada2".
+           Name: contigs.Rda</li> 
       </ul>
     <br>
     At first, this tool uses the makeSequenceTable() function to construct an ASV table, a higher-resolution version of the OTU table produced by traditional methods.
@@ -28,37 +35,36 @@
     <br>
     Chimeras are sequences formed from two or more biological sequences joined together.
     Amplicons with chimeric sequences can form during PCR when closely related sequences are amplified. 
-    The majority of chimeras are believed to arise from incomplete extension: During subsequent cycles of PCR, a partially extended strand can bind to a template derived from a different but similar sequence. This then acts as a primer that is extended to form a chimeric sequence.
+    The majority of chimeras are believed to arise from incomplete extension: During subsequent cycles of PCR, a partially extended strand can bind to a template derived from a different but similar sequence.
+    This then acts as a primer that is extended to form a chimeric sequence.
     <br>
     <br>
     With removeBimeraDenovo() Chimeric sequences are identified if they 
     can be exactly reconstructed by combining a left-segment and a right-segment from two more abundant “parent” sequences.
     <br>
-    This function runs the isBimeraDenovo() function when the method is selected as "consensus" which means that the samples in a sequence table are independently 
-    checked for bimeras, and a consensus decision on each sequence variant is made. 
+    <br>
+    If the method is consensus, the samples in a sequence table are independently checked for
+    bimeras, and a consensus decision on each sequence variant is made. It runs the isBimeraDenovoTable() function.
+    <br>
+    If the method is pooled, The samples in the sequence table are all pooled together for bimera
+    identification. It runs the isBimeraDenovo() function.
     <br>
     <br>
-    At last, the number of reads which made it through the merging and chimera removal are printed to a output table. You can use
-    that table for a last sanity check to check how many reads were removed in each step. 
+    At last, the number of reads which made it through the chimera removal are printed to a reads_summary table.
     <br>
-    If you can see something suspicious or many reads are lost in one step, you might consider to run the filtering tools with different
-    parameters again. There shouldn't be no step in which majority of reads are lost. 
-    <br>
-    For some hints and solutions you can check the <a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a> or the 
-    <a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a>. 
-    <br>
-    If a majority of reads failed to merge, you may need to revisit the truncLen parameter used in the filtering step
-    and make sure that the truncated reads span your amplicon.
-    <br>
+    If most of your reads are removed as chimeric, upstream processing may need to be revisited. 
+    In many cases this is caused by primer sequences with ambiguous nucleotides that were not
+    removed prior to beginning the DADA2 pipeline.
     </p>
-    
+  
     <h3>Output</h3>
     <p>
     The analysis output consists of the following:
     <ul>
         <li>seqtab.nochim: An object of matching sequence table saved as .Rda file. It's the output of the removeBimeraDenovo() function </li>
-        <li>preprocessing_summary.tsv: Summary table to track how many made it through each step.</li>
-        <li>sequence_table.tsv: The sequence (ASV) table produced after the removeBimeraDenovo() function printed out in a .tsv file. The columnames/names of each ASV sequence are being edited to asv0, asv1... to make it easier to investigate the table.</li>
+        <li>reads_summary.tsv: Summary table to see how many reads were removed as chimeric</li>
+        <li>summary.txt: Text file to see how many ASVs were found and how many were removed as chimeric</li>
+        <li>sequence_table_nochim.tsv: The sequence (ASV) table produced after the removeBimeraDenovo() function printed out in a .tsv file. The columnames/names of each ASV sequence are being edited to asv0, asv1... to make it easier to investigate the table.</li>
     </ul>
     </p>
     

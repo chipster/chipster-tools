@@ -9,11 +9,14 @@
 
 <p>
 Given a tar package of FASTQ files, this tool filters the input sequences which don't fullfill the user defined criteria.
-Note that this tool is used for paired reads which are not merged to contigs yet. The filtered FASTQ files are put in one tar package
+This tool can be used either for single or paired end reads, but the type of the data needs to be specified. If the reads are single end, 
+use the p forward read parameters.
+<br>The filtered FASTQ files are put in one tar package
 </p>
 
 <h3>Parameters</h3>
 <ul>
+    <li>Is the data paired end or single end reads (paired, single) [paired]</li>
     <li>Truncate forward reads after this amount of bases ( 0- ) [0] </li>
     <li>Truncate reverse reads after this amount of bases (0 - ) [0]</li>
     <li>Discard input sequences with more than specified number of Ns (0 - ) [0]</li>
@@ -25,52 +28,68 @@ Note that this tool is used for paired reads which are not merged to contigs yet
 <h3>Details</h3>
 <p>
 This tool takes a Tar package of FASTQ files (you can create one using the tool Utilities / Make a Tar package) and filters
-them based on user specified parameters. The fastq files in the tar package can be compressed.
+them based on user specified parameters. The FASTQ files in the tar package can be compressed.
 <br>
-For one sample, one reverse and one forward fastq file should be provided in which case filtering is performed on the forward and 
-reverse reads independently, and both reads must pass for the read pair no to be filtered.
+The data can be either paired end or single end reads, but you need to specify the right type with the first parameter.
+<br>
+If the reads are single end, then the parameters "Truncate reverse reads after this amount of bases" and 
+"Discard reverse sequences with more than the specified number of expected errors" are not used. 
+<br>
+If the reads are paired end, then for one sample one reverse and one forward FASTQ file should be provided in which case
+filtering is performed on the forward and reverse reads independently, and both reads must pass for the read pair no to be filtered.
 <br>
 <br>
 Truncate reads after specified amount of bases is set to 0 by default which means that no truncation will happen.
 <br>
-Setting parameter "Truncuate reads at the first instance of a quality score less than or equal" to 0, will turn off this behaviour.
+Setting the parameter "Truncuate reads at the first instance of a quality score less than or equal" to 0, will turn off this behaviour.
 <br>
 For example, if parameter TRUNCQ=2 is set, it means that it will truncate the read at the first nucleotide with a quality score of 2 (if there is one). 
 The read is only then discarded if it is now shorter than truncLen.
 <br>
-Max Ns should be kept 0 if you want to continue with the asv/dada2 pipeline, because dada() doesn't allow any Ns.
+Max Ns should be kept 0 if you want to continue with the ASV/DADA2 pipeline, because the dada() function doesn't allow any Ns.
 <br>
-By default max expected error is not used which will mean that the parameter is set to 'Inf'. After truncation, reads with more 
-than the specified number of errors will be discarded. 
-<br>Expected errors are calculated from the nominal definition of the quality score: sum(10^(-Q/10).
+By default the maximum expected error parameter is not used which will mean that the parameter is set to 'Inf'. After truncation, reads with more 
+than the specified number of expected errors will be discarded. 
+<br>Expected errors are calculated from the nominal definition of the quality score: sum(10^(-Q/10)).
 <br>
-DADA2 tutorial suggest that max expected errors should be set to 2. If you want to speed up downstream computation try to tighten this parameter.
+DADA2 tutorial suggest that the maximum expected errors threshold should be set to 2. 
+<br> If your reads are high quality and you want to speed up downstream computation, you can try to tighten this parameter.
+<br>
+<br>
+Note that thhis tool discards reads that match against PhiX genome.
+<br>
 <br>
 Running the tool "Read quality with MultiQC for many FASTQ files" can help to determine the values for the parameters.
+<br> If quality drops sharply at the end of your reads, reduce truncLen. 
 <br>
-If too few reads are passing the filter, you should try to change the parameters.
-<br>
-If too few reads are passing the filter, increase maxEE and/or reduce truncQ. If quality drops sharply at the end of your reads, reduce truncLen. 
-If your reads are high quality and you want to reduce computation time in the sample inference step, reduce maxEE."
+If too few reads are passing the filter, try to change the parameter values for example by increasing
+the maximun expected error and/or reducing truncQ. 
 <br>
 Remember when choosing the truncLen parameter you must maintain the overlap region for paired reads after truncation to merge them to contigs later.
 <br>
 <br>
-Note that this tool is used for paired FASTQ files which are not merged to contigs yet. 
-The FASTQ files/pair from one sample is recognized by the name of the files. Therefore they should be named so that the files from 
-one sample/pair should have the same name but a different tag. And the forward files should be before the reverse files 
-after the sort() function.<br>
+If the data is paired end:
+<br>
+The FASTQ files/pair from one sample is recognized by the name of the files. Therefore those should be named so that the files from 
+one sample/pair should have the same name but a different tag and the forward files should be before the reverse files 
+after the sort() function.
+<br>
 The filtered FASTQ files will be named by splitting the filename with '_' and adding a 'F' or 'R' tag to the name.
 <br>
-For example the FASTQ files should be named like:
+You can check how the FASTQ files were assigned to samples from the result file samples.fastqs.txt. If the assignment
+to samples is not correct, you can make a samples.fastqs.txt file yourself and give it as input. 
 <br>
+This file has 3 columns: sample name, name of the forward FASTQ file (R1), and name of the reverse FASTQ file name (R2) 
+which have been separated with tabulator ('\t'), So the file and the names should be named like this:
 <br>
 <pre> 
-sample_xx_R1.fastq      sample_xx_R2.fastq  
+sample1  sample1_xx_R1.fastq  sample1_xx_R2.fastq  
 </pre>      
 <br>
+If the data is single end reads, then the filtered FASTQ files will be named by splitting the filename with '_'
 <br>
-This tool is based on the filterAndTrim() tool in the DADA2 package.
+<br>
+This tool is based on the filterAndTrim() tool from the DADA2 package.
 <p>
 
 <h3>Output</h3>
@@ -79,6 +98,7 @@ The analysis output consists of the following:
 <ul>
     <li>filtered.tar: A Tar package containing all the filtered FASTQ files. </li>
     <li>summary.txt: Summary statistics on how many reads where filtered from each sample.</li>
+    <li>samples.fastqs.txt: Shows how the FASTQ files were assigned to samples</li>
 </ul>
 </p>
 

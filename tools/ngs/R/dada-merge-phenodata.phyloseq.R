@@ -14,7 +14,7 @@ library(phyloseq)
 #packageVersion("phyloseq")
 
 # load input files
-load("ps_phe.Rda", verbose=TRUE)
+load("ps_phe.Rda")
 
 # read the phenodata.tsv meta file
 phenodata <- read.delim("phenodata.tsv")

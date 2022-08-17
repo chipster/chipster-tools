@@ -262,6 +262,7 @@
 		<tool>dada2-assign-taxonomy.R</tool>
 		<tool>dada-make-phyloseq-object.R</tool>
 		<tool>dada-merge-phenodata.phyloseq.R</tool>
+		<tool>phyloseq-info.R</tool>
 		<!-- <tool>test-mothur.R</tool> -->
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-makegroup.R</tool>

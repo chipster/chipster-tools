@@ -1,9 +1,10 @@
-# TOOL dada2-sqtab-chimera.R: "Make a sequence table and remove chimeras" (This tool makes a sequence table / ASV-table and removes chimeras. As the input you can give either if you have single reads the output .Rda object from the Sample inference tool or if you have paired end data the output .Rda object from the Combine paired reads to contigs with Dada2. )
-# INPUT object.Rda: "Either a contigs or dada class object saved as .Rda files"  TYPE GENERIC (Dada-class object named dada-forward.Rda if single reads and a mergers object named contigs.Rda if paired reads.)
+# TOOL dada2-sqtab-chimera.R: "Make a sequence table and remove chimeras" (This tool makes a sequence table / ASV-table and removes chimeras. As the input you can give either if you have single end reads the output .Rda object from the tool Sample inference or if you have paired end data the output .Rda object from the tool Combine paired reads to contigs with Dada2. )
+# INPUT object.Rda: "Either mergers object named contigs.Rda or dada-class object named dada-forward.Rda"  TYPE GENERIC (Dada-class object named dada-forward.Rda if single end reads and a mergers object named contigs.Rda if paired end reads.)
 # OUTPUT seqtab_nochim.Rda
 # OUTPUT reads_summary.tsv
 # OUTPUT summary.txt
 # OUTPUT sequence_table_nochim.tsv
+# PARAMETER method1: "Method to identify chimeras" TYPE [consensus, pooled] DEFAULT consensus (Identification by consensus across samples or identification from pooled sequences)
 # RUNTIME R-4.1.1
 
 
@@ -44,7 +45,7 @@ sink(file="summary.txt")
     cat("\n###Removing Chimeras:###\n")
 
 # run isbimeradenovo / remove chimeras
-    seqtab.nochim <- removeBimeraDenovo(seqtab, method="consensus", multithread=TRUE, verbose=TRUE)
+    seqtab.nochim <- removeBimeraDenovo(seqtab, method=method1, multithread=TRUE, verbose=TRUE)
     num <- length(colnames(seqtab))-length(colnames(seqtab.nochim))
     cat("Identified ",num," bimeras out of ",length(colnames(seqtab))," input sequences\n")
     cat("Total amount of ASVs is: ")
@@ -56,7 +57,7 @@ sink(file="summary.txt")
     #  cat("DADA2 inferred", length(unqs.mock), "sample sequences present in the Mock community.\n")}
 sink()
 
-# track reads through the pipeline and make a tsv table
+# track readsthat were removed asand make a tsv table
 getN <- function(x) sum(getUniques(x))
 track <- cbind(sapply(object, getN), rowSums(seqtab.nochim))
 colnames(track) <- c( name, "Removed chimeras")
@@ -72,3 +73,6 @@ write.table(seqtab.nochim2, file="sequence_table_nochim.tsv", sep="\t", row.name
 
 # save the object as .Rda 
 save(seqtab.nochim, file = "seqtab_nochim.Rda")
+
+
+print(seqtab.nochim[rownames(seqtab.nochim) != "Mock"],)

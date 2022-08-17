@@ -1,16 +1,16 @@
-# TOOL dada2-filter.R: "Filter sequences with DADA2" (Given a tar package of fastg files, this tool filters the input sequences which don't fullfill the user defined criteria. This tool is based on the filterAndTrim tool in the DADA2 package. For more information check the manual)
+# TOOL dada2-filter.R: "Filter sequences with DADA2" (Given a tar package of FASTQ files, this tool filters the input sequences which don't fullfill the user defined criteria. This tool can be used either for single or paired end reads. If the reads are single end, then use only the parameters for forward reads. For more information please check the manual.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
-# INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC (If the FASTQ files are not assigned into samples correctly, you can give a file containing this information. Check instruction from manual)
+# INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC (If the FASTQ files are not assigned into samples correctly, you can give a file containing this information. Check instructions from manual)
 # OUTPUT filtered.tar
 # OUTPUT summary.tsv
 # OUTPUT OPTIONAL samples.fastqs.txt
-# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end so one forward and one reverse FASTQ file for one sample.)
-# PARAMETER OPTIONAL truncf: "Truncate forward reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded.) 
+# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only the forward parameters.)
+# PARAMETER OPTIONAL truncf: "Truncate forward reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded. Use this for single and paired end reads.) 
 # PARAMETER OPTIONAL truncr: "Truncate reverse reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded.) 
-# PARAMETER OPTIONAL maxns: "Discard input sequences with more than specified number of Ns" TYPE INTEGER FROM 0 DEFAULT 0 (Sequences with more than specified number of Ns will be discarded. Note that dada does not allow any Ns.)
-# PARAMETER OPTIONAL maxeef: "Discard forward sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with higher than maxEE "expected errors" will be discarded. If this parameter is not set, no expected error filtering is done.)
-# PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with higher than maxEE "expected errors" will be discarded. If this parameter is not set, no expected error filtering is done.)
-# PARAMETER OPTIONAL truncq: "Truncuate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off. )
+# PARAMETER OPTIONAL maxns: "Discard input sequences with more than specified number of Ns" TYPE INTEGER FROM 0 DEFAULT 0 (Sequences with more than the specified number of Ns will be discarded. Note that the dada function does not allow any Ns.)
+# PARAMETER OPTIONAL maxeef: "Discard forward sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done. Use this for single end reads.)
+# PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done.)
+# PARAMETER OPTIONAL truncq: "Truncuate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off.)
 # RUNTIME R-4.1.1
 
 

@@ -1,4 +1,4 @@
-# TOOL dada2-dada.R: "Sample inference" (Giving a tar package containing fastq files this tool runs the learnErrors and dada commands from the dada2 library. If the plot error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function, the ambigious bases Ns should be removed before from the fastq files )
+# TOOL dada2-dada.R: "Sample inference" (Given a tar package containing FASTQ files, this tool runs the learnErrors and dada commands from the dada2 library. If the plot error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function, the ambigious bases Ns should be removed before from the fastq files. This tool can be used either for single or paired end reads.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT dada_forward.Rda
 # OUTPUT OPTIONAL dada_reverse.Rda
@@ -165,7 +165,7 @@ for (row in rows){
 rows <- readLines("log2.txt")
 for (row in rows){
   if (grepl("Key parameters:",row)){
-    write(paste0("\nParameters used for DADA() function:\n",row),file="summary.txt",append=TRUE)
+    write(paste0("\nParameters used for the DADA() function:\n",row),file="summary.txt",append=TRUE)
     break
   }
 }
@@ -174,5 +174,6 @@ for (row in rows){
     write(row,file="summary.txt",append=TRUE)
   }
 }
-
+print(dadaFs)
+print(getDadaOpt())
 #EOF

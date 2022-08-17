@@ -13,7 +13,6 @@ Given a sequence_table and a taxonomy_table saved as a .Rda object, this tool cr
 It will create also an Phenodata file, which can be used to save sample information and then merge it to the Phyloseq 
 object with the tool "/Merge phenodata to the phyloseq object".
 </p>
-
 <h3>Parameters</h3>
 <ul>
     <li>None</li>
@@ -25,6 +24,11 @@ object with the tool "/Merge phenodata to the phyloseq object".
 This tool creates a new Phyloseq object. To make a new phyloseq object, 
 it needs an otu_table (ASV table created with "make contigs and remove chimeras") and a taxonomy_table (created with 
 "assign taxonomy") saved as a .Rda file. 
+<br><br>
+For visualization, the names of the ASV sequences are changed from the full DNA sequences to ASV1, ASV2... 
+<br> The full DNA sequences of the ASVs are stored in the refseq() slot of the phyloseq object. That way, the short ASV names will
+appear in tables and plots but it's still possible to find the DNA sequences corresponding to each ASV with the tool "Get out Phyloseq information"
+<br> That way it's still possible for example merge the found ASVs with other datasets or index into reference databases. 
 <br><br>
 As part of the import process, initial taxonomic rankings are renamed for clarity 
 (Domain_Kingdom, Phylum, Class, Order, Family, Genus, Species).

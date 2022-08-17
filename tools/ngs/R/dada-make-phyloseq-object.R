@@ -32,7 +32,7 @@ ps <- phyloseq(otu_table(seqtab.nochim, taxa_are_rows=FALSE),
 #if (!is.na(mock)){
 #    ps <- prune_samples(sample_names(ps) != mock, ps)
 #}
-
+# Rename the names of the asv and save sequences to refseq
 dna <- Biostrings::DNAStringSet(taxa_names(ps))
 names(dna) <- taxa_names(ps)
 ps <- merge_phyloseq(ps, dna)

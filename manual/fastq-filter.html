@@ -8,34 +8,50 @@
 <h3>Description</h3>
 <p>
     Discards sequences which have more than the user specified number of expected errors. 
-    This tool helps to filter bad quality sequences, for example contigs made by merging paired reads with VSEARCH. 
+    This tool helps to filter bad quality sequences. This tool is recoommend to use
+    after the paired reads are merged to contigs with the tool "Combine paired reads to contigs with VSEARCH".
 </p>
 <h3>Parameters</h3>
 <ul>
-    <li>Discard sequences with more than the specified number of expected errors. Decimal (0 -) [1]</li>
+    <li>Discard sequences with more than the specified number of expected errors. Decimal number (0 -) [1]</li>
 </ul>
 
 <h3>Details</h3>
 <p>
-This tool takes a Tar package of FASTQ files, for example contigs created with tool "Combine paired reads to contigs with VSEARCH".
-<br> It filters out those sequences which have more than the user specified number of expected errors.
+Given a Tar package of FASTQ files, which is recommend to be the output of the tool "Combine paired reads to contigs with VSEARCH", 
+it filters out those sequences which have more than the user specified number of expected errors.
 <br>
-For more information about expected error, you can check this USEARCH manual page <a href="https://drive5.com/usearch/manual/exp_errs.html">Expected errors predicted by Phred (Q) scores</a>.
-<br> This page suggests to use 1 as the threshold, but it can be made stricter.
+Expected number of errors of a read is the sum of the error probabilities in the read. In other words, based on the quality scores it
+tells the average number of errors to be expected in a read. 
+<br>The most probable number of errors is the expected error rounded down to the nearest integer.
+<br> Therefore, it is recommend to use 1 as the expected error threshold,
+ because then the most probable number of errors of a filtered reads is 0. 
+<br>But you can make the parameter stricter or less.
 <br>
-For more information about the calculations and formulas to calculate the number of expected errors, you can check this 
-article by Robert C. Edgar and Henrik Flyvbjerg <a href="https://academic.oup.com/bioinformatics/article/31/21/3476/194979#btv401-M8">Error filtering, pair assembly and error correction for next-generation sequencing reads</a>.
 <br>
-After this tool, you need to run tool "Combine FASTQ or FASTA files and make a group file" to get a group and fasta file. 
+Quality filtering by maximum expected errors should be performed as a
+post-processing step after the reads have been merged to contigs in order to take advantage of the re-calculated Phred quality scores.
 <br>
-This tools is based on the fastq_filter command of VSEARCH package.
+<br>
+For more information on expected error you can check the VSEARCH tutorial:  <a href="https://drive5.com/usearch/manual/exp_errs.html">Expected errors predicted by Phred (Q) scores</a>.
+<br> and on the equations, check this article by  Robert C. Edgar and Henrik Flyvbjerg:
+<a href="https://academic.oup.com/bioinformatics/article/31/21/3476/194979#btv401-M8">Error filtering, pair assembly and error correction for next-generation sequencing reads</a>.
+<br>
+<br>
+To convert the files for the Mothur based preprocessing tools in Chipster, you need to run the tool
+"Combine FASTQ or FASTA files and make a group file" before continuing to the next steps.
+<br>
+For the Mothur tools, all the sequences from every sample/FASTQ file needs to be put to one single 
+Fasta file. The Mothur group file is then needed to keep track of which read came from which sample. 
+<br>
+This tools is based on the --fastq_filter command of VSEARCH package.
 </p>
 <h3>Output</h3>
 <p>
 The analysis output consists of the following:
 <ul>
-    <li>filtered_contigs.tar: A Tar package consisting of FASTQ files containing filtered sequences. One FASTQ file per sample. </li>
-    <li>summary.tsv: Summary statistics, which show how many sequences have been discarded from each sample.</li>
+    <li>filtered_contigs.tar: A Tar package consisting of filtered FASTQ files. One FASTQ file per sample. </li>
+    <li>summary.tsv: Summary statistics which shows, how many sequences have been discarded from each sample.</li>
 </ul>
 </p>
 <h3>References</h3>
@@ -43,7 +59,7 @@ The analysis output consists of the following:
 by Torbjørn Rognes​, Tomáš Flouri, Ben Nichols, Christopher Quince, Frédéric Mahé <br>
 <a href="https://peerj.com/articles/2584/"> VSEARCH: a versatile open source tool for metagenomics </a> 
 <br>
-See --fastq_filter and --fastx_filter <br>
+Check --fastq_filter and --fastx_filter <br>
 <a href="https://usermanual.wiki/Document/vsearchmanual.523130275/help">VSEARCH manual</a>
 </p>
 </body>
