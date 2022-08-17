@@ -42,7 +42,7 @@ inputnames <- read_input_definitions()
 # bwa settings
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 command.start <- paste("bash -c '", bwa.binary)
 
@@ -133,7 +133,7 @@ if (fileOk("2.bam")){
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
 system(paste(samtools.binary, "index alignment.sorted.bam"))

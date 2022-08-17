@@ -28,12 +28,14 @@ for (i in 1:nrow(input.names)) {
 
 # setting up STAR
 # latest STAR is not compatible with old indexes
-# use the latest version and set runtime R-4.1.1 after indexes are updated
+# use the latest version, set runtime R-4.1.1 and latest samtools after indexes are updated
 # star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
 star.binary <- c(file.path(chipster.tools.path,"STAR-2.5.3a","STAR"))
 path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
 path.gtf <- c(file.path(chipster.tools.path,"genomes","gtf",organism))
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
+#samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
+
 
 version <- system(paste(star.binary,"--version"),intern = TRUE)
 documentVersion("STAR",version)

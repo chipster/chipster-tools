@@ -42,7 +42,7 @@ for (i in 1:nrow(input.names)) {
 }
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # bwa settings
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
@@ -135,7 +135,7 @@ if (fileOk("2.bam")){
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
 system(paste(samtools.binary, "index alignment.sorted.bam"))

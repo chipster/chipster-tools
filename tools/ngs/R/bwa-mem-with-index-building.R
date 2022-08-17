@@ -41,7 +41,7 @@ inputnames <- read_input_definitions()
 # bwa
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
-samtools.binary <- file.path(chipster.tools.path, "samtools-1.2", "samtools")
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
 hg_ifn <- ("")
@@ -187,7 +187,7 @@ if (fileOk("2.bam")){
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+system(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
 system(paste(samtools.binary, "index alignment.sorted.bam"))

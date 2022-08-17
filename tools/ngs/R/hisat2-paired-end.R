@@ -140,7 +140,7 @@ debugPrint(toString(hisat.parameters))
 
 # setting up HISAT binaries (and paths)
 hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
-samtools.binary <- file.path(chipster.tools.path,"samtools","samtools")
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 ## Run HISAT
 # Note a single ' at the beginning, it allows us to use special characters like >
@@ -170,7 +170,7 @@ samtools.view.command <- paste(samtools.binary,"view -bS hisat.sam > hisat.tmp.b
 debugPrint(samtools.view.command)
 system(samtools.view.command)
 # Index bam, this produces a "hisat.sorted.bam" file
-samtools.sort.command <- paste(samtools.binary,"sort hisat.tmp.bam hisat.sorted")
+samtools.sort.command <- paste(samtools.binary,"sort hisat.tmp.bam -o hisat.sorted.bam")
 debugPrint(samtools.sort.command)
 system(samtools.sort.command)
 

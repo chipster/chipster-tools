@@ -83,30 +83,30 @@ bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
 echo.command <- paste("echo '",bowtie.command,"' > bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # Substitute display names to BAM header for clarity
 displayNamesToBAM("alignment.sorted.bam")
 
 # rename result files
-system("mv alignment.sorted.bam bowtie2.bam")
-system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+runExternal("mv alignment.sorted.bam bowtie2.bam")
+runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 
 if (unaligned.file == "yes") {
-  system("mv unaligned unaligned_1.fq")
+  runExternal("mv unaligned unaligned_1.fq")
 }
 
 # Substitute display names to log for clarity

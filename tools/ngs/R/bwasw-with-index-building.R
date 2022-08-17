@@ -67,14 +67,14 @@ system(samse.command)
 
 		
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
 system("echo Converting sam to bam format. >> bwa.log")
 system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+system(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
 system(paste(samtools.binary, "index alignment.sorted.bam"))
