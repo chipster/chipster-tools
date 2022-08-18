@@ -7,7 +7,7 @@
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end so one forward and one reverse FASTQ file for one sample.)
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
 # PARAMETER OPTIONAL pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check manual)
-# RUNTIME R-4.1.1
+# RUNTIME R-4.1.1-asv
 
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt

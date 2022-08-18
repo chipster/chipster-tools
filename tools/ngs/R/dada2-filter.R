@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL maxeef: "Discard forward sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done. Use this for single end reads.)
 # PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done.)
 # PARAMETER OPTIONAL truncq: "Truncuate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off.)
-# RUNTIME R-4.1.1
+# RUNTIME R-4.1.1-asv
 
 
 # ES 15.07.2022
