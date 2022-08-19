@@ -50,16 +50,16 @@ command.start <- paste("bash -c '", bwa.binary)
 # Do indexing
 if (file.exists("genome.txt")){
 	bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
-	genome.filetype <- runExternal("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
+	genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
 	
 	# case 1. Ready calculated indexes in tar format
 	if (genome.filetype == "tar"){
 		check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
-		bwa.genome <- runExternal(check.command, intern = TRUE)		
+		bwa.genome <- system(check.command, intern = TRUE)		
 		# case 2. Fasta file
 	}else{
 		check.command <- paste ( bwa.index.binary, "genome.txt -tar| tail -1 ")
-		bwa.genome <- runExternal(check.command, intern = TRUE)
+		bwa.genome <- system(check.command, intern = TRUE)
 		cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./genome_bwa_index.tar ", sep ="")
 		runExternal(cp.command)
 		hg_ifn <- strip_name(inputnames$genome.txt)
@@ -81,7 +81,7 @@ runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 #genome.dir <- system(check.command, intern = TRUE)
 #bwa.genome <- file.path( genome.dir , "genome.txt")
-bwa.genome <- runExternal(check.command, intern = TRUE)
+bwa.genome <- system(check.command, intern = TRUE)
 
 
 # mode specific parameters

@@ -44,7 +44,7 @@ bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
 bowtie2.index.binary <- file.path(chipster.module.path,"shell","check_bowtie2_index.sh")
 
 
-genome.filetype <- runExternal("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
+genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type",genome.filetype," > bowtie2.log")
 runExternal(echo.command)
@@ -55,7 +55,7 @@ if (genome.filetype == "tar") {
   runExternal("echo Extarting tar formatted gemome index file >> bowtie2.log")
   runExternal("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
-  bowtie2.genome <- runExternal(check.command,intern = TRUE)
+  bowtie2.genome <- system(check.command,intern = TRUE)
   #system("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {
@@ -65,7 +65,7 @@ if (genome.filetype == "tar") {
   inputfile.to.check <- ("genome.txt")
   sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
   sfcheck.command <- paste(sfcheck.binary,emboss.path,inputfile.to.check)
-  str.filetype <- runExternal(sfcheck.command,intern = TRUE)
+  str.filetype <- system(sfcheck.command,intern = TRUE)
   if (str.filetype == "Not an EMBOSS compatible sequence file") {
     stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
   }
@@ -74,7 +74,7 @@ if (genome.filetype == "tar") {
   print("Indexing the genome...")
   runExternal("echo Indexing the genome... >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
-  bowtie2.genome <- runExternal(check.command,intern = TRUE)
+  bowtie2.genome <- system(check.command,intern = TRUE)
   #genome.dir <- system(check.command, intern = TRUE)
   #bowtie2.genome <- file.path( genome.dir , "genome.txt")
   cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")

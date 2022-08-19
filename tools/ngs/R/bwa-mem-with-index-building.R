@@ -56,7 +56,7 @@ if (genome.filetype == "tar"){
 	runExternal("echo Extarting tar formatted gemome index file >> bwa.log")
 	runExternal("tar -tf genome.txt >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt | tail -1 ")	
-	bwa.genome <- runExternal(check.command, intern = TRUE)
+	bwa.genome <- system(check.command, intern = TRUE)
 	if ( bwa.genome == "wrong_tar_content"){
 		stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")	
 	}

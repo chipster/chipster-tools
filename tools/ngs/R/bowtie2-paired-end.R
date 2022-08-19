@@ -101,7 +101,7 @@ if (discordant.file == "yes") {
 emboss.path <- file.path(chipster.tools.path,"emboss","bin")
 sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
 sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
-str.filetype <- runExternal(sfcheck.command,intern = TRUE)
+str.filetype <- system(sfcheck.command,intern = TRUE)
 if (str.filetype == "fasta") {
   parameters <- paste(parameters,"-f")
 }

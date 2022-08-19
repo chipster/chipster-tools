@@ -55,7 +55,7 @@ runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 #genome.dir <- system(check.command, intern = TRUE)
 #bwa.genome <- file.path( genome.dir , "genome.txt")
-bwa.genome <- runExternal(check.command, intern = TRUE)
+bwa.genome <- system(check.command, intern = TRUE)
 
 
 ###
@@ -111,7 +111,7 @@ for (i in 1:length(reads1.list)) {
 	bwa.command <- paste(command.start, mode.parameters, command.end)
 
 	documentCommand(bwa.command)
-	
+
 	runExternal(bwa.command)
 	
 	# sai to sam conversion

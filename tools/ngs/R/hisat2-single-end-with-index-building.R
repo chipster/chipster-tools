@@ -58,7 +58,7 @@ input.display.names <- read_input_definitions()
 unzipInputs(input.names)
 
 if (fileOk("genome.txt")) {
-  genome.filetype <- runExternal("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
+  genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
   hg_ifn <- ("")
   echo.command <- paste("echo Host genome file type",genome.filetype," > hisat.log")
   runExternal(echo.command)
