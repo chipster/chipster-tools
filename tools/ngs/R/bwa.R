@@ -61,6 +61,8 @@ for (i in 1:nrow(input.names)) {
 	# run bwa alignment
 	bwa.command <- paste(command.start, mode.parameters, command.end)
 	
+	documentCommand(bwa.command)
+	
 	runExternal(bwa.command)
 	
 	# sai to sam conversion
@@ -118,3 +120,9 @@ outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

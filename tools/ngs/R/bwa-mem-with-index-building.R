@@ -38,8 +38,10 @@ for (i in 1:nrow(input.names)) {
 # read input names
 inputnames <- read_input_definitions()
 
-# bwa
-bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
+# bwa binary
+bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
+# bwa mem binary
+bwa.mem.binary <- paste(bwa.binary, "mem")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
@@ -83,9 +85,8 @@ if (genome.filetype == "tar"){
 echo.command <- paste("echo Internal genome name:", bwa.genome, " >> bwa.log")
 runExternal(echo.command)
 
-
 # bwa
-command.start <-(bwa.binary)
+command.start <-(bwa.mem.binary)
 
 bwa.parameters <- paste("-M", "-k", minseedlen, "-w", bandwith, "-A", matchscore, "-B", mismatchscore, "-O", gapopen, "-E", gapextension, "-L",  clippenalty )
 
@@ -164,6 +165,8 @@ for (i in 1:length(reads1.list)) {
 	# run bwa alignment
 	bwa.command <- paste(command.start, bwa.parameters, command.end)
 	
+	documentCommand(bwa.command)
+
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
 	runExternal(bwa.command)
 	
@@ -231,3 +234,10 @@ if ( new_index_created == "yes"){
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

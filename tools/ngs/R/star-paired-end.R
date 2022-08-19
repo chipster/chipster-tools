@@ -36,10 +36,6 @@ path.gtf <- c(file.path(chipster.tools.path,"genomes","gtf",organism))
 samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
 #samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
-
-version <- runExternal(paste(star.binary,"--version"),intern = TRUE)
-documentVersion("STAR",version)
-
 # Input files
 if (fileOk("reads1.txt",0) && fileOk("reads2.txt",0)) {
   # Case: list files exist
@@ -106,3 +102,10 @@ outputnames[2,] <- c("alignment.bam.bai",paste(basename,".bam.bai",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+star.version <- system(paste(star.binary,"--version"),intern = TRUE)
+documentVersion("STAR",star.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

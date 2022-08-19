@@ -33,9 +33,6 @@ path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",or
 samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
 #samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
-version <- runExternal(paste(star.binary,"--version"),intern = TRUE)
-documentVersion("STAR",version)
-
 # Input fastq names
 reads1 <- paste(grep("reads",input.names[,1],value = TRUE),sep = "",collapse = ",")
 
@@ -84,3 +81,10 @@ outputnames[2,] <- c("alignment.bam.bai",paste(basename,".bam.bai",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+star.version <- system(paste(star.binary,"--version"),intern = TRUE)
+documentVersion("STAR",star.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

@@ -193,3 +193,10 @@ outputnames[4,] <- c("failed_2.fq",paste(base2,"_failed.fq",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
+documentVersion("Bowtie 2",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

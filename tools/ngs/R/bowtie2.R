@@ -84,6 +84,8 @@ bowtie.command <- paste(command.start,parameters,command.end)
 
 echo.command <- paste("echo '",bowtie.command,"' > bowtie2.log")
 runExternal(echo.command)
+
+documentCommand(bowtie.command)
 runExternal(bowtie.command)
 
 # samtools binary
@@ -129,3 +131,10 @@ outputnames[3,] <- c("unaligned_1.fq",paste(basename,"_unaligned.fq",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
+documentVersion("Bowtie 2",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

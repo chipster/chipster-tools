@@ -128,6 +128,8 @@ command <- paste(command,"'")
 # Print the command to the hisat.log file
 debugPrint(command)
 
+documentCommand(command)
+
 # Run command
 runExternal(command)
 
@@ -161,8 +163,10 @@ if (fileOk("hisat.sorted.bam",minsize = 100)) {
 # Unset environmet variable
 Sys.unsetenv("HISAT2_INDEX")
 
-# Append the debug.log into hisat.log
-runExternal("cat debug.log >> hisat.log")
+if (debug) {
+  # Append the debug.log into hisat.log
+  runExternal("cat debug.log >> hisat.log")
+}
 
 # Substitute display names to log for clarity
 displayNamesToFile("hisat.log")
@@ -183,5 +187,11 @@ outputnames[2,] <- c("hisat.bam.bai",paste(basename,".bam.bai",sep = ""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+hisat.version <- system(paste(hisat.binary,"--version | grep hisat2"),intern = TRUE)
+documentVersion("HISAT2",hisat.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)
 
 #EOF

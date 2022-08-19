@@ -92,3 +92,10 @@ outputnames[4,] <- c("multireads.fastq", paste(basename, "_multireads.fq", sep="
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie"),intern = TRUE)
+documentVersion("Bowtie",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

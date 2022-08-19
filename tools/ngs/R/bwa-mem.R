@@ -33,14 +33,16 @@ for (i in 1:nrow(input.names)) {
 }
 
 # bwa binary
-bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
+bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
+# bwa mem binary
+bwa.mem.binary <- paste(bwa.binary, "mem")
 # bwa genome
 bwa.genome <- file.path(chipster.tools.path, "genomes", "indexes", "bwa", organism)
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
-#command.start <- paste("bash -c '", bwa.binary)
-command.start <-(bwa.binary)
+#command.start <- paste("bash -c '", bwa.mem.binary)
+command.start <-(bwa.mem.binary)
 
 bwa.parameters <- paste("-M", "-k", minseedlen, "-w", bandwith, "-A", matchscore, "-B", mismatchscore, "-O", gapopen, "-E", gapextension, "-L",  clippenalty )
 
@@ -119,6 +121,8 @@ for (i in 1:length(reads1.list)) {
 	}
 	# run bwa alignment
 	bwa.command <- paste(command.start, bwa.parameters, command.end)
+
+	documentCommand(bwa.command)
 	
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
 	runExternal(bwa.command)
@@ -181,3 +185,9 @@ outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)
