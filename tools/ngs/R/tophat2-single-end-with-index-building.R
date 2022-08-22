@@ -55,7 +55,7 @@ set.path <-paste(sep="", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 
 # Do indexing
 print("Indexing the genome...")
-system("echo Indexing the genome... > bowtie2.log")
+runExternal("echo Indexing the genome... > bowtie2.log")
 check.command <- paste ( bowtie2.index.binary, "genome.txt| tail -1 ")
 genome.dir <- system(check.command, intern = TRUE)
 bowtie2.genome <- file.path( genome.dir , "genome.txt")
@@ -95,10 +95,13 @@ command.end <- paste(bowtie2.genome, reads1, "2>> tophat.log'")
 command <- paste(command.start, command.parameters, command.end)
 
 echo.command <- paste("echo '",command ,"' 2>> tophat.log " )
-system(echo.command)
-system("echo >> tophat.log")
+runExternal(echo.command)
+runExternal("echo >> tophat.log")
 #stop(paste('CHIPSTER-NOTE: ', command))
-system(command)
+
+documentCommand(command)
+
+runExternal(command)
 
 
 # samtools binary
@@ -106,15 +109,15 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
 
 # sort bam (removed because TopHat itself does the sorting)
 # system(paste(samtools.binary, "sort tophat_out/accepted_hits.bam tophat"))
-system("mv tophat_out/accepted_hits.bam tophat.bam") 
+runExternal("mv tophat_out/accepted_hits.bam tophat.bam") 
 
 # index bam
-system(paste(samtools.binary, "index tophat.bam"))
+runExternal(paste(samtools.binary, "index tophat.bam"))
 
-system("mv tophat_out/junctions.bed junctions.u.bed")
-system("mv tophat_out/insertions.bed insertions.u.bed")
-system("mv tophat_out/deletions.bed deletions.u.bed")
-system("mv tophat_out/align_summary.txt tophat-summary.txt")
+runExternal("mv tophat_out/junctions.bed junctions.u.bed")
+runExternal("mv tophat_out/insertions.bed insertions.u.bed")
+runExternal("mv tophat_out/deletions.bed deletions.u.bed")
+runExternal("mv tophat_out/align_summary.txt tophat-summary.txt")
 
 # sorting BEDs
 source(file.path(chipster.common.path, "bed-utils.R"))
@@ -152,12 +155,12 @@ if (file.exists("deletions.u.bed")){
 
 # If no BAM file is produced, return the whole logs folder as a tar package
 if (fileNotOk("tophat.bam")){
-	system("tar cf logs.tar tophat_out/logs/*")	
+	runExternal("tar cf logs.tar tophat_out/logs/*")	
 }
 
 if (!(file.exists("tophat-summary.txt"))){
 	#system("mv tophat_out/logs/tophat.log tophat2.log")
-	system("mv tophat.log tophat2.log")
+	runExternal("mv tophat.log tophat2.log")
 }
 
 # Handle output names
@@ -176,5 +179,12 @@ outputnames[2,] <- c("tophat.bam.bai", paste(basename, ".bam.bai", sep =""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+tophat.version <- system(paste(tophat.binary,"--version"),intern = TRUE)
+documentVersion("TopHat 2",tophat.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)
 
 #EOF

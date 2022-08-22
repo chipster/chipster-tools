@@ -55,7 +55,7 @@ multiread.output <- ifelse(multiread.file == "yes", "--max multireads.fastq", ""
 output.parameters <- paste(unaligned.output, multiread.output)
 
 # command ending
-command.end <- paste(genome.base, "reads.txt 1> alignment.sam 2> bowtie.log'")
+command.end <- paste("-x", genome.base, "reads.txt 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
 bowtie.command <- paste(command.start, common.parameters, quality.parameter, mode.parameters, output.parameters, command.end)

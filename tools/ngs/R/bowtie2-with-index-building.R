@@ -60,7 +60,7 @@ if (genome.filetype == "tar") {
   # case 2. Fasta file
 } else {
   #check sequece file type
-  emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+  emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
   options(scipen = 999)
   inputfile.to.check <- ("genome.txt")
   sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")

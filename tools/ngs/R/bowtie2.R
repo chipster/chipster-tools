@@ -64,7 +64,7 @@ if (unaligned.file == "yes") {
 }
 
 # Check if reads are in FASTA forma
-emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
 sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
 sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
 str.filetype <- system(sfcheck.command,intern = TRUE)

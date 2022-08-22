@@ -58,7 +58,7 @@ multiread.output <- ifelse(multiread.file == "yes", "--max multireads.fq", "")
 output.parameters <- paste(unaligned.output, multiread.output)
 
 # command ending
-command.end <- paste(bowtie.index, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2> bowtie.log'")
+command.end <- paste("-x", bowtie.index, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
 bowtie.command <- paste(command.start, common.parameters, quality.parameter, orientation.parameter, mode.parameters, output.parameters, command.end)
