@@ -10,6 +10,9 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
 
+# Prefer fixed representation over exponential
+options(scipen = 10)
+
 unzipIfGZipFile("reads")
 
 inputnames <- read_input_definitions()
@@ -66,7 +69,7 @@ system("echo >> check.log")
 
 system("echo 'Test summary:' >> check.log")
 system(paste("echo 'file name:", inputnames$reads, "' >>check.log"))
-system(paste("echo 'reads:", floor(linenumber / 4), "' >>check.log"))
+system(paste("echo 'reads:",floor(linenumber / 4), "' >>check.log"))
 if (alltests){
 	system("echo 'Overall result: PASS' >> check.log")
 	system("mv check.log pass.log")

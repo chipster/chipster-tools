@@ -100,10 +100,11 @@
 		<tool module="common">gzip.R</tool>
 		<tool module="common">md5sum.R</tool>
 		<tool module="common">encrypt.R</tool>
+		<tool>copy-fasta.py</tool>
+		<tool>copy-gtf.py</tool>
 	</category>
 
 	<category name="Tests" color="#d59f45">
-		<tool>fastqc_multiqc_storage.R</tool>
 		<tool>test-data-in.R</tool>
 		<tool>test-data-in-out.R</tool>
 		<tool>test-data-in-out.py</tool>
@@ -136,6 +137,8 @@
 		<tool>umi-tools.R</tool>
 		<tool>bbduk.R</tool>
 		<tool>factoextra.R</tool>
+		<tool module="ngs">hisat2-paired-end-storage.R</tool>
+		<tool module="ngs">hisat2-paired-end-test.R</tool>
 
 	</category>
 

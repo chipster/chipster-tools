@@ -52,9 +52,19 @@
 		In the first plot, the top genes associated with the first two principal components are shown.
 		Second plot shows the PCA plot: principal components 1 and 2 for the cells in the dataset, and the third plot
 		is a heatmap focusing on principal component 1.
-		In heatmap, both cells and genes are sorted by their principal component scores: both extremes are shown.
-		Rows represent the extreme genes, and columns are the extreme cells.
-		Purple: positive correlation, yellow: negative correlation.
+	</p>
+	<p>
+		In <b>heatmap </b>, both cells and genes are sorted by their principal component scores: both extremes are
+		shown.
+		Rows (y-axis) represent the extreme genes, and columns (x-axis) are the extreme cells.
+		They are "extreme" in their PCA scores, so those genes that basically best determine that particular principal
+		component,
+		i.e. the separation between the cells. Similarly for the cells: these cells "furthest away"
+		(in the yellow or purple end) from each other on this spectrum of PC1. Purple: positive correlation, yellow:
+		negative correlation.
+		The heatmap might be handy for checking whether the genes reveal what that particular PC might be all about:
+		for example, if the genes seem to be related to cell-cycle phase, one might want to consider regressing out that
+		effect, or at least it's good to acknowledge this.
 	</p>
 
 	<p>

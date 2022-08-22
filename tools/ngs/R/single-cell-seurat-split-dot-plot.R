@@ -1,7 +1,8 @@
 # TOOL single-cell-seurat-split-dot-plot.R: "Seurat v4 -Visualize genes with cell type specific responses in two samples" (This tool gives you plots showing user defined markers/genes across the conditions. This tool can be used for two sample combined Seurat objects.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
+# INPUT OPTIONAL markers.txt: "Optional text file of the markers to plot" TYPE GENERIC (The names of the marker genes you wish to plot can also be given in the form of a text file, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d. In case the text file is provided, the markers to plot parameter is ignored.)
 # OUTPUT OPTIONAL split_dot_plot.pdf
-# PARAMETER markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
+# PARAMETER OPTIONAL markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # RUNTIME R-4.1.0-single-cell
@@ -23,6 +24,10 @@ library(reticulate)
 use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
+library(readr)  
+
+# for the fileOk function
+source(file.path(chipster.common.path,"tool-utils.R"))
 
 # Load the R-Seurat-object:
 load("combined_seurat_obj.Robj")
@@ -31,21 +36,34 @@ if (exists("seurat_obj")) {
   data.combined <- seurat_obj
 }
 
+# Use markers text file if provided, else the markers to plot parameter is used
+if (fileOk("markers.txt",0)) {
+  markers = read_file("markers.txt")
+  markers.to.plot <- trimws(unlist(strsplit(markers,",")))
+} else {
+  markers.to.plot <- trimws(unlist(strsplit(markers, ",")))
+}
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 # Store idents:
 stored_idents <- Idents(data.combined)
 
-markers.to.plot <- unlist(strsplit(markers, ", "))
-
 # Sanity check: are the requested genes available in the data:
 all.genes <- rownames(x = data.combined)
 match(markers.to.plot, all.genes)
-# if one of the genes is not in the list, print error message:
+# if more than one of the genes is not in the list, print error message:
+if (sum(is.na((match(markers.to.plot, all.genes)))) > 1) {  
+  not.found <- (markers.to.plot[is.na(match(markers.to.plot, all.genes))==TRUE])
+  not.found <- paste(not.found,collapse=",")
+  stop(paste('CHIPSTER-NOTE: ', "The genes you requested were not found in this dataset:", not.found))
+  }
+
+#continue even if one gene is missing
 if (!all(!is.na(match(markers.to.plot, all.genes)))) { 
   not.found <- markers.to.plot[is.na(match(markers.to.plot, all.genes))==TRUE]
-  stop(paste('CHIPSTER-NOTE: ', "The gene you requested was not found in this dataset:", not.found, " "))
-  }
+  print(paste("Continuing the visualization without the one gene not found: ", not.found))
+  markers.to.plot <- markers.to.plot[!is.na(match(markers.to.plot, all.genes))]
+}
 
 # pdf(file="split_dot_plot.pdf", , width=13, height=7)  # open pdf
 pdf(file="split_dot_plot.pdf", width=12, height=12)  # open pdf

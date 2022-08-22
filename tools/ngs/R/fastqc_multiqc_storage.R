@@ -1,4 +1,4 @@
-# TOOL fastqc_multiqc_storage.R: "Read quality with MultiQC for many FASTQ files (beta)" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input can be FASTQ files or tar files containing FASTQ files. Files can be gzipped. Please make sure you don't have duplicate FASTQ file names. Run the tool once for all samples, not separately for each file. This tool is based on the FastQC and MultiQC packages.)
+# TOOL fastqc_multiqc_storage.R: "Read quality with MultiQC for input data bigger than 200 GB" (The tool runs FastQC on multiple FASTQ files, and then combines the reports using MultiQC. Input can be gzipped FASTQ files or tar files containing FASTQ files. The total size of input files can be bigger than 200 GB. Please make sure you don't have duplicate FASTQ file names. Run the tool once for all samples, not separately for each file. This tool is based on the FastQC and MultiQC packages.)
 # INPUT reads{...}.fq: "FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL multiqc_report.html
 # OUTPUT OPTIONAL error_log.txt

@@ -2,10 +2,11 @@
 # INPUT samples{...}.Robj: "Samples to combine and align" TYPE GENERIC
 # OUTPUT OPTIONAL CCAplot.pdf
 # OUTPUT seurat_obj_combined.Robj
-# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [normal:"Global scaling normalization", sctransform:SCTransform] DEFAULT normal (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
-# PARAMETER OPTIONAL anchor.identification.method: "Anchor identification method" TYPE [normal:"CCA", rpcamethod:RPCA] DEFAULT normal (Which anchor identification method to use. By default, canonical correlation analysis CCA is used, but user can also decide to use the faster and more conservative reciprocal PCA approach. Check from the manual in which cases this option is recommended.)
+# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
+# PARAMETER OPTIONAL anchor.identification.method: "Anchor identification method" TYPE [cca:CCA, rpca:RPCA] DEFAULT cca (Which anchor identification method to use. By default, canonical correlation analysis CCA is used, but user can also decide to use the faster and more conservative reciprocal PCA approach. Check from the manual in which cases this option is recommended.)
 # PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 20 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 20 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
+# PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
 # RUNTIME R-4.1.0-single-cell
 # SLOTS 3
 
@@ -14,6 +15,7 @@
 # 2022-02-17 EK increased slots to 4
 # 2022-04-19 ML increased slots to 5
 # 2022-05-04 ML add RPCA option for anchor identification
+# 2022-05-05 ML Rewrite the code, add option to use only part of samples as references
 
 
 
@@ -41,60 +43,51 @@ features <- SelectIntegrationFeatures(object.list = seurat.objects.list)
 
 # Perform integration: 
 
-# When data is normalised with NormalizeData:
-if (normalisation.method == "normal"){
-    # 1. identify anchors using the FindIntegrationAnchors function
-    # CCA:
-    if (anchor.identification.method == "normal"){
-    data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features) # dims = Which dimensions to use from the CCA to specify the neighbor search space
-    # RPCA:
-    } else{
-        # When using RPCA, run PCA on each dataset using these features
-        seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
-            x <- ScaleData(x, features = features, verbose = FALSE)
-            x <- RunPCA(x, features = features, verbose = FALSE)
-        })
-        
-        data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, reduction = "rpca") # dims = Which dimensions to use from the CCA to specify the neighbor search space
-    }
-    # 2. use these anchors to integrate the two datasets together with IntegrateData.
-    data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute) # dims = Number of PCs to use in the weighting procedure
-
-    DefaultAssay(data.combined) <- "integrated"
-
-    # Note: these steps are now done twice?
-    data.combined <- ScaleData(data.combined, verbose = FALSE)  
-    data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
-
-# When data is normalised with SCTransform:
-} else{
-    # When SCTransform was used to normalise the data, do a prep step:
+# When SCTransform was used to normalise the data, do a prep step:
+if (normalisation.method == "SCT"){
     seurat.objects.list <- PrepSCTIntegration(object.list = seurat.objects.list, anchor.features = features)
-    # 1. identify anchors using the FindIntegrationAnchors function
-     # CCA:
-    if (anchor.identification.method == "normal"){
-    data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, normalization.method = "SCT") # dims = Which dimensions to use from the CCA to specify the neighbor search space
-    # RPCA:
-    } else{
-        # When using RPCA, run PCA on each dataset using these features
+}
+
+# When using RPCA, need to run PCA on each dataset using these features:
+if (anchor.identification.method == "rpca"){
         seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
             x <- ScaleData(x, features = features, verbose = FALSE)
             x <- RunPCA(x, features = features, verbose = FALSE)
         })
-        
-        data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, normalization.method = "SCT", reduction = "rpca") # dims = Which dimensions to use from the CCA to specify the neighbor search space
-    }
-    
-    
-    # 2. use these anchors to integrate the two datasets together with IntegrateData.
-    data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute, normalization.method = "SCT") # dims = Number of PCs to use in the weighting procedure
-
-    DefaultAssay(data.combined) <- "integrated"
-
-    # Note: Skip ScaleData when using SCTransform
-    data.combined <- ScaleData(data.combined, verbose = FALSE)  
-    data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
 }
+
+# When using only the user listed samples as references:
+if (ref.sample.names != "No references selected"){
+    ref.samples.name.list <- unlist(strsplit(ref.sample.names, ", "))
+    # Go through the samples = R-objects in the list to see which ones are the reference samples.
+    ref.sample.numbers <- vector()
+    for (i in 1:length(seurat.objects.list)) {
+     # Check, if the (first) sample name i:th sample is one of the names listed by user (=if there are any TRUEs)
+        if (any(seurat.objects.list[[i]]@meta.data$stim[1] == ref.samples.name.list) ){
+        # if TRUE, save the i
+        ref.sample.numbers <- append(ref.sample.numbers, i)
+        }
+    }
+}else{
+    ref.sample.numbers <- NULL # if no samples are listed, NULL = all pairwise anchors are found (no reference/s)
+}
+
+# 1. identify anchors using the FindIntegrationAnchors function
+data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, reduction = anchor.identification.method, normalization.method = normalisation.method, reference = ref.sample.numbers) # dims = Which dimensions to use from the CCA to specify the neighbor search space
+
+# 2. use these anchors to integrate the two datasets together with IntegrateData.
+data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute, normalization.method = normalisation.method) # dims = Number of PCs to use in the weighting procedure
+
+DefaultAssay(data.combined) <- "integrated"
+
+# Note: Skip ScaleData when using SCTransform
+if (normalisation.method != "SCT"){
+    data.combined <- ScaleData(data.combined, verbose = FALSE)  
+}  
+
+# Moved to next tool to clarify, there's npcs as a parameter:
+# data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
+
 
 
 # Save the Robj for the next tool

@@ -1,5 +1,5 @@
 # TOOL hisat2.R: "HISAT2 for single end reads" (Aligns single end RNA-seq reads to a reference genome.)
-# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
+# INPUT reads{...}.fq.gz: "Reads to align" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL hisat.log
@@ -11,6 +11,7 @@
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (Sets maximum intron length. Default: 500000)
 # PARAMETER OPTIONAL no.softclip: "Disallow soft-clipping" TYPE [nosoft: "No soft-clipping", yessoft: "Use soft-clipping"] DEFAULT yessoft (Is soft-cliping used. By default HISAT2 may soft-clip reads near their 5' and 3' ends.)
 # PARAMETER OPTIONAL dta: "Require long anchor lengths for subsequent assembly" TYPE [nodta: "Don't require", yesdta: "Require"] DEFAULT nodta (With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.)
+# PARAMETER OPTIONAL bai: "Index BAM" TYPE [yes, no] DEFAULT no (Index BAM file.)
 # RUNTIME R-4.1.1
 
 # AO 30.5.2017 First version
@@ -21,35 +22,24 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"bam-utils.R"))
 
-## Helper functions
-#Unzips a list of files
-unzipInputs <- function(names) {
-  for (i in 1:nrow(names)) {
-    unzipIfGZipFile(names[i,1])
-  }
-}
-
-# Echoes command in log file if debug == TRUE
-debugPrint <- function(command) {
-  if (debug) {
-    runExternal(paste("echo ",command,">> debug.log"))
-  }
-}
-
-## Options
 # Prefer fixed representation over exponential
 options(scipen = 10)
-# Debug mode, change debug to TRUE or FALSE, depending do you want debug prints or not
-debug <- FALSE
-debugPrint("")
-debugPrint("DEBUG MODE IS ON")
+
+# setting up binaries and paths
+hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
+samtools.binary <- file.path(chipster.tools.path,"samtools","bin","samtools")
+hisat2.index.path <- file.path(chipster.tools.path, "genomes", "indexes", "hisat2")
+
+# Document version numbers
+hisat2.version.command <- paste(hisat.binary, "--help |grep HISAT2 | awk '{print $3}'")
+version <- system(hisat2.version.command,intern = TRUE)
+documentVersion("HISAT2",version)
+samtools.version.command <- paste(samtools.binary, "--version | head -1 | awk '{print $2}'")
+version <- system(samtools.version.command,intern = TRUE)
+documentVersion("Samtools",version)
 
 # Get input name
 input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
-
-# check out if the file is compressed and if so unzip it
-unzipInputs(input.names)
-
 
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
@@ -57,6 +47,8 @@ hisat.parameters <- ""
 # Parse the read names from input files
 reads.parsed <- paste(grep("reads",input.names[,1],value = TRUE),sep = "",collapse = ",")
 hisat.parameters <- paste(hisat.parameters,"-U",reads.parsed)
+# Organism
+hisat.parameters <- paste(hisat.parameters,"-x",organism)
 # Quality score format
 if (quality.format == "phred64") {
   hisat.parameters <- paste(hisat.parameters,"--phred64")
@@ -72,11 +64,6 @@ if (rna.strandness == "F") {
 } else if (rna.strandness == "R") {
   hisat.parameters <- paste(hisat.parameters,"--rna-strandness R")
 }
-# Organism
-# -x declares the basename of the index for reference genome
-hisat.parameters <- paste(hisat.parameters,"-x",organism)
-# Set environment variable that defines where indexes locate, HISAT2 requires this
-Sys.setenv(HISAT2_INDEXES = "/opt/chipster/tools/genomes/indexes/hisat2")
 # Known splice sites
 if (file.exists("splicesites.txt")) {
   hisat.parameters <- paste(hisat.parameters,"--known-splicesite-infile","splicesites.txt")
@@ -95,60 +82,23 @@ if (dta == "yesdta") {
 ## Set parameters that are not mutable via Chipster
 # Threads that hisat uses
 hisat.parameters <- paste(hisat.parameters,"-p",chipster.threads.max)
-# Name of the output file
-hisat.parameters <- paste(hisat.parameters,"-S","hisat.sam")
-# Forward errors to hisat.log
-hisat.parameters <- paste(hisat.parameters,"2>> hisat.log")
 # Suppress SAM records for reads that failed to align
 hisat.parameters <- paste(hisat.parameters,"--no-unal")
 
-#Print the HISAT2_INDEXES into debug
-debugPrint("")
-debugPrint("HISAT2_INDEXES:")
-debugPrint("$HISAT2_INDEXES")
-
-# Print parameters into log
-debugPrint("HISAT PARAMETERS")
-debugPrint(toString(hisat.parameters))
-
-# setting up HISAT binaries (and paths)
-hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
-
 ## Run HISAT
 
-# Note a single ' at the beginning, it allows us to use special characters like >
-command <- paste("bash -c '",hisat.binary)
+# Base command 
+command <- paste(hisat.binary)
 
 # Add the parameters
-command <- paste(command,hisat.parameters)
-
-# Close the command with a ', because there is a opening ' also
-command <- paste(command,"'")
-# Print the command to the hisat.log file
-debugPrint(command)
+command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
 
 documentCommand(command)
 
 # Run command
-runExternal(command)
-
-## Run samtools
-# Convert SAM file into BAM file and index bam file
-# Parameters:
-#  -b Output in the BAM format.
-#  -S Ignored for compatibility with previous samtools versions. Previously this option was required if input was in SAM format, but now the correct
-#    format is automatically detected by examining the first few characters of input.
-# Convert SAM to BAM
-debugPrint("")
-debugPrint("SAMTOOLS")
-samtools.view.command <- paste(samtools.binary,"view -bS hisat.sam > hisat.tmp.bam")
-debugPrint(samtools.view.command)
-runExternal(samtools.view.command)
-# Index bam, this produces a "hisat.sorted.bam" file
-samtools.sort.command <- paste(samtools.binary,"sort hisat.tmp.bam -o hisat.sorted.bam")
-debugPrint(samtools.sort.command)
-runExternal(samtools.sort.command)
+documentCommand(command)
+hisat2.index <- paste("HISAT2_INDEXES=",hisat2.index.path, sep="")
+runExternal(command, hisat2.index)
 
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam",minsize = 100)) {
@@ -156,16 +106,10 @@ if (fileOk("hisat.sorted.bam",minsize = 100)) {
   runExternal("mv hisat.sorted.bam hisat.bam")
   # Change file names in BAM header to display names
   displayNamesToBAM("hisat.bam")
-  # Index BAM
-  runExternal(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
-}
-
-# Unset environmet variable
-Sys.unsetenv("HISAT2_INDEX")
-
-if (debug) {
-  # Append the debug.log into hisat.log
-  runExternal("cat debug.log >> hisat.log")
+  # Index BAM (optional)
+  if (bai == "yes"){
+    system(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
+  }
 }
 
 # Substitute display names to log for clarity
@@ -186,12 +130,5 @@ outputnames[2,] <- c("hisat.bam.bai",paste(basename,".bam.bai",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
-# save version information
-hisat.version <- system(paste(hisat.binary,"--version | grep hisat2"),intern = TRUE)
-documentVersion("HISAT2",hisat.version)
-
-samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
-documentVersion("Samtools",samtools.version)
 
 #EOF

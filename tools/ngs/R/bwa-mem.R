@@ -7,6 +7,7 @@
 # OUTPUT OPTIONAL bwa.bam.bai 
 # OUTPUT bwa.log
 # PARAMETER organism: "Organism" TYPE ["FILES genomes/indexes/bwa .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bwa/default .fa" (Genome that you would like to align your reads against.)
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.)
 # PARAMETER OPTIONAL minseedlen: "Minimum seed length" TYPE INTEGER DEFAULT 19 (Matches shorter than this will be missed when looking for maximal exact matches or MEMs in the first alignment phase.)
 # PARAMETER OPTIONAL bandwith: "Maximum gap length" TYPE INTEGER DEFAULT 100 (Gaps longer than this will not be found. Note also scoring matrix and hit length affect the maximum gap length, in addition to this band width parameter.)
 # PARAMETER OPTIONAL matchscore: "Match score" TYPE INTEGER DEFAULT 1 (Score for a matching base.)
@@ -152,7 +153,9 @@ runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
 runExternal("mv alignment.sorted.bam bwa.bam")
-runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
+if (index.file == "index_file") {
+  runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
+}
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")
