@@ -58,7 +58,7 @@ tophat.binary <- c(file.path(chipster.tools.path, "tophat2", "tophat2"))
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2-2.2.9", "bowtie2"))
 bowtie2.index.binary <- file.path(chipster.module.path, "shell", "check_bowtie2_index.sh")
 path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))
-path.samtools <- c(file.path(chipster.tools.path, "samtools"))
+path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
 set.path <-paste(sep="", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 
 # Do indexing
@@ -142,7 +142,7 @@ runExternal(command)
 
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # sort bam (removed because TopHat itself does the sorting)
 # system(paste(samtools.binary, "sort tophat_out/accepted_hits.bam tophat"))
