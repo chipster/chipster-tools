@@ -10,7 +10,7 @@
 <p>
 Given a tar package of FASTQ files, this tool filters the input sequences which don't fullfill the user defined criteria.
 This tool can be used either for single or paired end reads, but the type of the data needs to be specified. If the reads are single end, 
-use the p forward read parameters.
+use only those forward read parameters.
 <br>The filtered FASTQ files are put in one tar package
 </p>
 
@@ -22,7 +22,7 @@ use the p forward read parameters.
     <li>Discard input sequences with more than specified number of Ns (0 - ) [0]</li>
     <li>Discard forward sequences with more than the specified number of expected errors (0 - ) [empty]</li>
     <li>Discard forward sequences with more than the specified number of expected errors (0 - ) [empty]</li>
-    <li>Truncuate reads at the first instance of a quality score less than or equal to the specified number (0 - ) [2]</li>
+    <li>Truncate reads at the first instance of a quality score less than or equal to the specified number (0 - ) [2]</li>
 </ul>
 
 <h3>Details</h3>
@@ -41,14 +41,14 @@ filtering is performed on the forward and reverse reads independently, and both 
 <br>
 Truncate reads after specified amount of bases is set to 0 by default which means that no truncation will happen.
 <br>
-Setting the parameter "Truncuate reads at the first instance of a quality score less than or equal" to 0, will turn off this behaviour.
+Setting the parameter "Truncate reads at the first instance of a quality score less than or equal" to 0, will turn off this behaviour.
 <br>
 For example, if parameter TRUNCQ=2 is set, it means that it will truncate the read at the first nucleotide with a quality score of 2 (if there is one). 
 The read is only then discarded if it is now shorter than truncLen.
 <br>
 Max Ns should be kept 0 if you want to continue with the ASV/DADA2 pipeline, because the dada() function doesn't allow any Ns.
 <br>
-By default the maximum expected error parameter is not used which will mean that the parameter is set to 'Inf'. After truncation, reads with more 
+By default, the maximum expected error parameter is not used which will mean that the parameter is set to 'Inf'. After truncation, reads with more 
 than the specified number of expected errors will be discarded. 
 <br>Expected errors are calculated from the nominal definition of the quality score: sum(10^(-Q/10)).
 <br>
@@ -56,7 +56,7 @@ DADA2 tutorial suggest that the maximum expected errors threshold should be set 
 <br> If your reads are high quality and you want to speed up downstream computation, you can try to tighten this parameter.
 <br>
 <br>
-Note that thhis tool discards reads that match against PhiX genome.
+Note that this tool discards reads that match against PhiX genome.
 <br>
 <br>
 Running the tool "Read quality with MultiQC for many FASTQ files" can help to determine the values for the parameters.
@@ -86,7 +86,9 @@ which have been separated with tabulator ('\t'), So the file and the names shoul
 sample1  sample1_xx_R1.fastq  sample1_xx_R2.fastq  
 </pre>      
 <br>
-If the data is single end reads, then the filtered FASTQ files will be named by splitting the filename with '_'
+If the data is single end reads, you can use that input file to rename/specify the sample names. Otherwise,
+the filtered FASTQ files will be named by splitting the filename with '_'. If the reads are single end, the samples.fastqs.txt
+will have only 2 columns: sample name + '\t' + filename
 <br>
 <br>
 This tool is based on the filterAndTrim() tool from the DADA2 package.

@@ -5,7 +5,7 @@
 # OUTPUT taxonomy-assignment-matrix.Rda
 # OUTPUT OPTIONAL taxa_seqtab_combined.tsv
 # OUTPUT OPTIONAL taxonomy_assignment.tsv
-# PARAMETER boot: "The minimum bootstrap confidence for assigning a taxonomic level" TYPE INTEGER FROM 0 DEFAULT 50 (The minimum bootstrap confidence for assigning a taxonomic level)
+# PARAMETER boot: "The minimum bootstrap confidence for assigning a taxonomic level" TYPE INTEGER FROM 0 TO 100 DEFAULT 50 (The minimum bootstrap confidence for assigning a taxonomic level)
 # PARAMETER species: "Exact species level assignment?" TYPE [yes, no] DEFAULT yes (Do you want to assign the sequences to the species level if there is an exact match 100% identity between ASVs and sequenced reference strains?)
 # PARAMETER combine_tables: "Combine the taxonomy and the sequence table" TYPE [yes,no] DEFAULT yes (If set to yes, it combines the taxonomy and the sequence/ASV table into one .tsv file, otherwise the tsv file consist only of the taxonomy table.)
 # RUNTIME R-4.1.1-asv

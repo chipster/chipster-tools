@@ -1,14 +1,15 @@
 # TOOL dada-make-phyloseq-object.R: "Make a Phyloseq object" (This tool makes a phyloseq object and saves it as a .Rda file. Requires an otu/asv-table which can be produced with the tool Make contigs and remove chimeras and a taxonomy table as the input.)
-# INPUT chimera.Rda: "Saved class object produced with tool Make contigs and remove chimeras, named seqtab_nochim.Rda" TYPE GENERIC
-# INPUT assignment.Rda: "Saved class object produced by assign taxonomy, named taxonomy-assignment-matrix.Rda" TYPE GENERIC
+# INPUT chimera.Rda: "Sequence table saved as a .Rda object, named seqtab_nochim.Rda" TYPE GENERIC
+# INPUT assignment.Rda: "Taxonomy table saved as a .Rda object, named taxonomy-assignment-matrix.Rda " TYPE GENERIC
 # OUTPUT META phenodata.tsv: "Phenodata" 
 # OUTPUT ps_nophe.Rda
 # OUTPUT ps_summary.txt
-# PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely to be named as Mock)
 # RUNTIME R-3.6.1-phyloseq
 
-# RUNTIME R-4.1.1  no need for dada2 anymore
 
+# ES 18.8.2022
+# RUNTIME R-4.1.1-asv  no need for dada2 
+# PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely to be named as Mock)
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))

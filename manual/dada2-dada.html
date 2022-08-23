@@ -8,10 +8,10 @@
 <h3>Description</h3>
 
 <p>
-Given a tar package of fastg files, this tool runs the learnErrors() and dada() functions from the DADA2 library.
-This tool tries to remove all sequencing errors to reveal the members of the sequenced community ASVs.
+Given a tar package of FASTQ files, this tool runs the learnErrors() and dada() functions from the DADA2 library.
+This tool tries to remove all the sequencing errors to reveal the members of the sequenced community.
 Note that the dada() function doesn't allow any Ns bases in the FASTQ files.
- This tool can be used for either single and paired end reads.
+This tool can be used either for single or paired end reads.
 </p>
 
 <h3>Parameters</h3>
@@ -24,17 +24,17 @@ Note that the dada() function doesn't allow any Ns bases in the FASTQ files.
 
 <h3>Details</h3>
 <p>
-This tool takes a Tar package of FASTQ files. The FASTQ files in the tar package can be compressed.
-This tool can be used for single or paired end reads. <br>
-If the reads are paired end, you need to be carefull that the FASTQ files/pairs are assigned correctly to samples. 
-<br> Note that the dada() function doesn't allow any Ns bases in the FASTQ files. Therefore it's recommend to remove the Ns and filter
-the reads with the tool "Filter sequences with DADA2" before and use the output tar package as the input for this tool. 
+This tool takes a tar package of FASTQ files. The FASTQ files in the tar package can be compressed.
+<br>
+If the reads are paired end, you need to be carefull that the FASTQ files/pairs are assigned correctly to samples.
+<br> Note that the dada() function doesn't allow any Ns bases in the FASTQ files. Therefore it's recommend to remove the Ns
+and filter the reads with the tool "Filter sequences with DADA2" before and use the output tar package as the input for this tool. 
 <br> That way also the names of the FASTQ file/sample pairs are handled correctly.
 <br>
-Otherwise the samples will be recognized based on the name of the files by splitting the file name with the underscore mark '_' 
+Otherwise the samples will be recognized based on the names of the files by splitting the filename with the underscore mark '_' 
 and the reverse and forward files should have the same sample names but different tags like ('R1' and 'R2').
 <br>
-You should check the manual of the tool "Filter sequences with DADA2".
+For more information, please check the manual of the tool "Filter sequences with DADA2".
 <br>
 <br>
 First the learnErrors() function is run for the both forward and reverse files independently. 
@@ -43,11 +43,11 @@ between sample inferences and error rate estimation until convergence.<br>
 Error rate estimation is performed with the error estimation function lossErrfun() which use a loess fit to estimate error rates from
 transition counts.
 <br>
-<br> If the parameter visualize error rates is selected "yes", the error rates are visualized with plotErrors() function.<br>
+<br> If the parameter "visualize error rates" is selected to "yes", the error rates are visualized with plotErrors() function.<br>
 Then all the observed frequencies of each transition (eg. A->C, A->G..) in a log(10) scale as a function of the associated quality score 
 are being plotted. 
 <br> The observed error rates for each consensus quality score are plotted as points, the estimated output error rates
-as a black solid line and the expected error rates if quality scores exactly matched their nominal definition  Q = -10 log10(p_err)
+as a black solid line and the expected error rates if quality scores matched exactly their nominal definition  Q = -10 log10(p_err),
 as a red line. <br>
 For more information check the DADA2 manual and learnErrors() and lossErrfun() functions.
 <br> 
@@ -56,16 +56,17 @@ Note that the learnErrors() function can take quite long.
 The output of the learnErrors() function is a 16xN matrix and it's used as the err parameter for the dada() function. 
 <br>
 <br>
-Dada() function is the core sample inference/ denoising algorithm in the dada2 pipeline. It uses the error rates matrix 
+Dada() function is the core sample inference/ denoising algorithm in the DADA2 pipeline. It uses the error rate matrix 
 produced by the learnErrors() function and the filtered FASTQ files provided as the input for this tool.
-<br> It produces  lists of dada-class objects: one from forward files 
+<br> It produces lists of dada-class objects: one from forward files 
 and one from reverse files. 
-<br> If the reads are single end only one list of dada-class objects is produced.
+<br> If the reads are single end, only one list of dada-class objects is produced.
 <br> Dada-class objects are multi-item lists with many values. 
 Those are saved as .Rda files for the next tools. 
 <br>
+<br>
  In other words, dada() function is used to provide the most accurate possible reconstruction of amplicon sequence
- variants (ASV) truly present in a sample from the noisy amplicon reads.
+ variants (ASV) truly present in the samples from the noisy amplicon reads.
 <br>
 <br>
 Dada() implements a statistical test for the notion that a specific sequence was seen too many times to have been caused by 
@@ -81,12 +82,14 @@ by default.
 <br>
 If the parameter pooling is set to pseudo, dada() uses a 2 step process in which the independent processing is run twice. 
 <br> First on the raw data alone, and then on the raw data again, but this time informed by priors generated from the first run.
-<br> All ASVs detected in at least two samples in the first sample processing step are input as priors to the second step
+<br> All ASVs detected in at least two samples in the first sample processing step are input as priors to the second step.
 <br> Pseudo-pooling takes longer (approximately 2 times longer than independent processing) but with that more ASVs are observed per 
 sample and more chimeras are being identified. 
 <br>
+Pseudo-pooling approximates poolin in linear time. 
+<br>
 Pseudo-pooling can provide a more accurate description of ASVs especially at very low frequencies for example in longitudinal 
-experiments. But independent sample inference is still very accurate and less prone to report certain false-positives. 
+experiments. However, independent sample inference is still very accurate and less prone to report certain false-positives. 
 <br> For more information check: <a href="https://benjjneb.github.io/dada2/pseudo.html#pseudo-pooling">pseudo-pooling</a>
 <br>
 <br>
@@ -98,7 +101,7 @@ This tool is based on the learnErrors() and dada() functions in the DADA2 R-pack
 The analysis output consists of the following:
 <ul>
     <li>dada_forward.Rda: list of dada-class objects produced with dada() function from forwards FASTQ files </li>
-    <li>dada_reverse.Rda: list of dada-class objects produced with dada() function from reverse FASTQ files. Optional only if paired end data</li>
+    <li>dada_reverse.Rda: list of dada-class objects produced with dada() function from reverse FASTQ files. Optional, only if paired end data</li>
     <li>summary.txt: summary file based on the data produced by learnErrors() and dada()</li>
     <li>plotErrors.pdf: Optional, if the parameter is set to yes, plots the error rates from forward and reverse reads to a .pdf file</li>
 </ul>

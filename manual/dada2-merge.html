@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-This tool combines the paired FASTQ files to sequence contigs. The tool "Sample inference" should be run before. 
+This tool combines the paired FASTQ files to sequence contigs with DADA2. The tool named "Sample inference" should be run before. 
 </p>
 
 <h3>Parameters</h3>
@@ -22,15 +22,18 @@ This tool combines the paired FASTQ files to sequence contigs. The tool "Sample 
 Given a tar package of filtered FASTQ files and 2 lists of dada-class objects saved as .Rda objects (The output of the tool 
 "Sample inderence"), this tool combines the paired FASTQ files to contigs.
 <br>
-The input tar package containing the FASTQ files should be the same as the input tar package
+The input tar package, containing the FASTQ files, should be the same as the input tar package
 for the "Sample inference" tool.
 <br>
 At first, this tool merges the FASTQ files to contigs with the function mergePairs(). This function attemps to merge each denoised 
 pair of forward and reverse reads, and rejects any pairs which don't sufficiently overlap or which contain too many
  mismatches in the overlap region (0 by default). You can change those parameters and make the merging less strict if many reads are being discarded.
 <br>
-By default, mergePairs() uses alignment parameters that hevaily penalizes mismatches and gaps when
+By default, mergePairs() uses alignment parameters that heavily penalizes mismatches and gaps when
 aligning the forward and reverse sequences.
+<br>
+MergePairs() function is based on the Needleman-Wunsch alignment. For more information check the references.
+<br>
 <br>
 The output of this function is a data.frame or a list of data.frames(), and it can be used as the input for the tool
 "Make a sequence table and remove chimeras".

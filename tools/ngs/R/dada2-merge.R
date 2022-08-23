@@ -1,15 +1,16 @@
-# TOOL dada2-merge.R: "Combine paired reads to contigs with Dada2" (Given the filtered FASTQ files in a tar package and two dada-class objects produced with the tool Sample inference, this tool merges the files to contigs. The tar package needs to be the same as the tar package given to the Sample Inference tool.)
+# TOOL dada2-merge.R: "Combine paired reads to contigs with DADA2" (Given the filtered FASTQ files in a tar package and two dada-class objects produced with the tool Sample inference, this tool merges the files to contigs. The tar package needs to be the same as the tar package given to the Sample Inference tool.)
 # INPUT forward.Rda: "DADA-class object of forward reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
 # INPUT reverse.Rda: "DADA-class object of reverse reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC (Tar package containing those FASTQ files which were used to create the dada-class objects.)
 # OUTPUT contigs.Rda
 # OUTPUT OPTIONAL contigs_summary.tsv
-# OUTPUT OPTIONAL contigs.txt
 # PARAMETER minoverlap: "The minimum length of the overlap required for merging the forward and reverse reads" TYPE INTEGER FROM 0 DEFAULT 12 (By default the overlap area should be at least 12 base pairs long.)
 # PARAMETER maxmismatch: "The maximum number of mismatches allowed in the overlap region" TYPE INTEGER FROM 0 DEFAULT 0 (By default no mismatches are allowed in the overlap region.)
 # RUNTIME R-4.1.1-asv
 
 # ES 11.08.2022
+# OUTPUT OPTIONAL contigs.txt
+# OUTPUT OPTIONAL contigs2.txt
 # PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely the name is Mock)
 
 source(file.path(chipster.common.path,"tool-utils.R"))
@@ -64,15 +65,17 @@ fnRs <- filenames[reverse]
 #fnFs <- sort(list.files("input_folder", pattern="_R1_001.fastq", full.names = TRUE))
 #fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
 
-
+#capture.output(mergers<-mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, verbose=TRUE), file="contigs2.txt")
 # sink not working!!
-sink(file="contigs.txt")
-  sink.number(type = "output")
+#sink(file="contigs.txt", type=c("output","message"))
+ # sink.number(type = "message")
     #cat("\nmergePairs:\n")
-      #errF <- learnErrors(fnFs, multithread=TRUE)
-    mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, verbose=TRUE)
-    print(head(mergers[[1]]))
-sink()
+   # errF <- learnErrors(fnFs, multithread=TRUE, verbose=TRUE)
+
+mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, verbose=TRUE)
+#sink()
+
+print(mergers$abundance)
 
 
 save(mergers, file="contigs.Rda" )

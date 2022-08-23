@@ -81,6 +81,7 @@ if (ploterr == "yes"){
   print(plotErrors(errF, nominalQ=TRUE)+ labs(title="Estimated error rates of forward reads"))
   print(plotErrors(errR, nominalQ=TRUE)+ labs(title="Estimated error rates of reverse reads"))
   dev.off()}
+  
 # run dereplicate, no need dada() can handle fastq files, same result
 #derepF1 <- derepFastq(fnFs)
 #derepR1 <- derepFastq(fnRs)
@@ -174,6 +175,5 @@ for (row in rows){
     write(row,file="summary.txt",append=TRUE)
   }
 }
-print(dadaFs)
-print(getDadaOpt())
+
 #EOF
