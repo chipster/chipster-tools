@@ -11,7 +11,7 @@
 # MK, 10.04.2014, speeding up the script subtantially by removing for loops
 
 # Extract the BAM file into SAM
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 samtools.command <- paste(samtools.binary, "view bam_file.bam > sam_file")
 system(samtools.command)
 

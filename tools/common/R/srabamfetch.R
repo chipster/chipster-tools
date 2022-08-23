@@ -47,7 +47,7 @@ if ( sam.numrows == "0"){
 
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 	
 # convert sam to bam
 system(paste(samtools.binary, "view -bS sra_tmp.sam -o sra_tmp.bam"))

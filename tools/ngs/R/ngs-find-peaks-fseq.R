@@ -15,7 +15,7 @@
 #Export2sam.pl is a part of samtools and is used to convert ELAND outputs to SAM
 eland_to_sam.binary <- c(file.path(chipster.tools.path, "samtools-0.1.18", "misc", "export2sam.pl"))
 #samtools is used to convert SAM to BAM
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 #bedtools is used to convert BAM to BED
 bam_to_bed.binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "bamToBed"))
 #In-house perl script to extend reads from 5'

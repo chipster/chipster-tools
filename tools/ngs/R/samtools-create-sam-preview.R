@@ -3,7 +3,7 @@
 # OUTPUT preview.sam
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
 
 # Print header to preview
 system(paste(samtools.binary,"view -H alignment.bam > preview.sam"))

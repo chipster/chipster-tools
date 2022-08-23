@@ -2,12 +2,13 @@
 # It uses samtools reheader command
 #
 addChrToBAM <- function(input, output){
-	samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+	samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 		system(paste(samtools.binary, "view -H", input, "| sed -e 's/SN:\\([0-9XY]\\)/SN:chr\\1/' -e 's/SN:MT/SN:chrM/' |", samtools.binary, "reheader -", input, ">", output))
 }
 
 # Changes the file names in BAM header to display names according to chipster-inputs.tsv
 #
+# Using new samtools for Ubuntu 20.04 by default. Caller can provide path to older samtools if necessary.
 displayNamesToBAM <- function(input.bam, samtools.binary=c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))){
 		
 	# Read BAM header to file

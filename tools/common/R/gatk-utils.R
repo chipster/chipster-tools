@@ -41,7 +41,7 @@ formatGatkVcf <- function(input.vcf,bam.names){
 formatGatkFasta <- function(fasta){
 	source(file.path(chipster.common.path, "zip-utils.R"))
 	picard.binary <- c(file.path(chipster.tools.path, "picard-tools", "picard.jar"))
-	samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+	samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 	# Uncompress
 	unzipIfGZipFile(fasta)
 	# Index

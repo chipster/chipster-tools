@@ -25,7 +25,7 @@ source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("features.gtf")
 
 # sort bam if the data is paired-end
-samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
 if(paired == "yes"){
 	system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
 	bam<-"name-sorted.bam"

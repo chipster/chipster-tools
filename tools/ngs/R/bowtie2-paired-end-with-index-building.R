@@ -92,8 +92,6 @@ if (genome.filetype == "tar") {
   runExternal("echo Indexing the genome... >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
-  cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")
-  runExternal(cp.command)
   runExternal("ls -l >> bowtie2.log")
   new_index_created <- ("yes")
 }

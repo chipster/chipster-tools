@@ -20,7 +20,7 @@ unzipIfGZipFile("reference")
 
 # binaries
 gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # If user provided fasta we use it, else use internal fasta
 if (organism == "other"){

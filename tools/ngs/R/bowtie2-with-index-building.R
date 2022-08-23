@@ -78,8 +78,6 @@ if (genome.filetype == "tar") {
   bowtie2.genome <- system(check.command,intern = TRUE)
   #genome.dir <- system(check.command, intern = TRUE)
   #bowtie2.genome <- file.path( genome.dir , "genome.txt")
-  cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")
-  runExternal(cp.command)
   new_index_created <- ("yes")
 }
 #echo.command <- paste("echo Internal genome name:", bowtie2.genome, " >> bowtie2.log")
