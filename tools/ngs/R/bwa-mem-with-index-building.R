@@ -54,7 +54,7 @@ runExternal(echo.command)
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar"){
-	runExternal("echo Extarting tar formatted gemome index file >> bwa.log")
+	runExternal("echo Extracting tar formatted gemome index file >> bwa.log")
 	runExternal("tar -tf genome.txt >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt | tail -1 ")	
 	bwa.genome <- system(check.command, intern = TRUE)
@@ -169,7 +169,8 @@ for (i in 1:length(reads1.list)) {
 	documentCommand(bwa.command)
 
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
-	runExternal(bwa.command)
+	# why the log is empty if this is run with runExternal()?
+	system(bwa.command)
 	
 	# convert sam to bam
 	runExternal(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))

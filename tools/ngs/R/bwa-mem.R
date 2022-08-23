@@ -126,7 +126,8 @@ for (i in 1:length(reads1.list)) {
 	documentCommand(bwa.command)
 	
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
-	runExternal(bwa.command)
+	# why the log is empty if this is run with runExternal()?
+	system(bwa.command)
 	
 	# convert sam to bam
 	runExternal(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
