@@ -32,7 +32,7 @@ hisat.index.binary <- file.path(chipster.tools.path,"hisat2","hisat2-build")
 samtools.binary <- file.path(chipster.tools.path,"samtools","bin","samtools")
 
 # Document version numbers
-hisat2.version.command <- paste(hisat.binary, "--help |grep HISAT2 | awk '{print $3}'")
+hisat2.version.command <- paste(hisat.binary, "--version |grep hisat2 | awk '{print $3}'")
 version <- system(hisat2.version.command,intern = TRUE)
 documentVersion("HISAT2",version)
 samtools.version.command <- paste(samtools.binary, "--version | head -1 | awk '{print $2}'")

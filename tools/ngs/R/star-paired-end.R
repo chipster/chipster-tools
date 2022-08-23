@@ -92,7 +92,7 @@ if (log.files == "final_log") {
 runExternal("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
-displayNamesToBAM("alignment.bam")
+displayNamesToBAM("alignment.bam", samtools.binary)
 
 # index bam
 if (index.file == "index_file") {

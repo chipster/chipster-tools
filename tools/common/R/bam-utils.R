@@ -8,10 +8,9 @@ addChrToBAM <- function(input, output){
 
 # Changes the file names in BAM header to display names according to chipster-inputs.tsv
 #
-displayNamesToBAM <- function(input.bam){
+displayNamesToBAM <- function(input.bam, samtools.binary=c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))){
 		
 	# Read BAM header to file
-	samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 	runExternal(paste(samtools.binary, "view -H", input.bam, "> header.sam"))
 	
 	# Go through input names and change names

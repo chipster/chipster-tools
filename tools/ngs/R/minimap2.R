@@ -132,7 +132,8 @@ system(paste(samtools.binary, "view -b alignment.sam -o alignment.bam"))
 
 #system("ls -l >> minimap2.log")
 # Change file named in BAM header to display names
-displayNamesToBAM("alignment.bam")
+# use old samtools which works in Ubuntu 20.04
+displayNamesToBAM("alignment.bam", samtools.binary)
 
 # sort bam
 system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))

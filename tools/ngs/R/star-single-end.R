@@ -32,7 +32,7 @@ for (i in 1:nrow(input.names)) {
 # star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
 star.binary <- c(file.path(chipster.tools.path,"STAR-2.5.3a","STAR"))
 path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
-samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-1.2","samtools"))
 #samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # Input fastq names
@@ -71,7 +71,7 @@ if (log.files == "final_log") {
 runExternal("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
-displayNamesToBAM("alignment.bam")
+displayNamesToBAM("alignment.bam", samtools.binary)
 
 # index bam
 if (index.file == "index_file") {
