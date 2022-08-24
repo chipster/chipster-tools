@@ -28,10 +28,25 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   unzip download
   rm download
   cd hisat2-2.2.1
+  # replace 'python' with 'python3' for example in hisat-build
+  for f in \$(find . -type f); do sed -i 's_^#!/usr/bin/env python\$_#!/usr/bin/env python3_' \$f; done
   cd ..
   mv hisat2-2.2.1 $TOOLS_PATH/
   cd $TOOLS_PATH
   ln -s hisat2-2.2.1 hisat2
+
+  # samtools (used by the Hisat2 wrapper and many other tools)
+
+  cd $TMPDIR_PATH
+  wget https://github.com/samtools/samtools/releases/download/1.15.1/samtools-1.15.1.tar.bz2
+  tar -xvf samtools-1.15.1.tar.bz2 
+  rm samtools-1.15.1.tar.bz2 
+  cd samtools-1.15.1/
+  ./configure --prefix=/opt/chipster/tools/samtools-1.15.1
+  make
+  make install
+  cd $TOOLS_PATH
+  ln -s samtools-1.15.1 samtools
 
   # STAR
   
@@ -60,6 +75,17 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   cd $TOOLS_PATH
   ln -s bowtie2-2.4.5-linux-x86_64 bowtie2
 
+  # Tophat 2, The Artistic License
+
+  cd ${TMPDIR_PATH}  
+  wget -O tophat-2.1.1.Linux_x86_64.tar.gz http://ccb.jhu.edu/software/tophat/downloads/tophat-2.1.1.Linux_x86_64.tar.gz
+ 
+  tar -xf tophat-2.1.1.Linux_x86_64.tar.gz -C ${TOOLS_PATH}/
+  rm -f tophat-2.1.1.Linux_x86_64.tar.gz
+  ln -s tophat-2.1.1.Linux_x86_64 ${TOOLS_PATH}/tophat2
+
+  ls -lah $TOOLS_PATH
+
   # Bowtie
 
   cd $TMPDIR_PATH
@@ -69,6 +95,8 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   mv bowtie-1.3.1-linux-x86_64 $TOOLS_PATH
   cd $TOOLS_PATH
   ln -s bowtie-1.3.1-linux-x86_64 bowtie
+  # remove example index
+  rm ${TOOLS_PATH}/bowtie/indexes/e_coli.*
 
   # BWA
   
@@ -90,7 +118,11 @@ bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/STAR-2.7.10a $JOB_NA
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/STAR $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/bowtie2-2.4.5-linux-x86_64 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/bowtie2 $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/tophat-2.1.1.Linux_x86_64 $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/tophat2 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/bowtie-1.3.1-linux-x86_64 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/bowtie $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/bwa-0.7.17 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/bwa $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/samtools-1.15.1 $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/samtools $JOB_NAME $BUILD_NUMBER
