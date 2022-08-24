@@ -35,6 +35,8 @@
 # 2020-10-11 EK update minpct to v3 default, update parameter descriptions
 # 2021-10-04 ML Update to Seurat v4
 # 2021-12-31 ML Marker gene detection to separate tool
+# 2022-07-21 ML Tune for SCTransform data
+
 
 # for UMAP:
 library(reticulate)
