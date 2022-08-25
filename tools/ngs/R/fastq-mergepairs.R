@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL maxns: "Discard input sequences with more than this number of Ns." TYPE INTEGER FROM 0 (Discard input sequences which contain more than the specified number of ambigious bases) 
 
 # ES 05.07.2021
-# ES 08.07.2022 # made it look much nicer
+# ES 08.08.2022 # made it look much nicer
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -69,7 +69,8 @@ if (fileOk("input_list.txt")){
         }
     # if the input list has a different amount of files than the tar package
     if (length(txt_filenames) != length(filenames)){
-        stop(paste('CHIPSTER-NOTE: ',"It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package. Please check manual."))
+        line1 <- paste(c("Filenames from the given txt file:\n", txt_filenames), collapse="\n")
+        stop(paste0('CHIPSTER-NOTE: ',"It seems that the list of the FASTQ files (.txt file) has different amount of filenames than the .tar package. Please check the manual\n\n",line1))
     }else{ #add the full name
         filenames <- paste0("input_folder/",txt_filenames)
     }
