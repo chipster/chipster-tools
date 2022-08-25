@@ -8,10 +8,10 @@
 <h3>Description</h3>
 
 <p>
-Given a sequence_table and a taxonomy_table saved as a .Rda object, this tool creates an new
- <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">Phyloseq</a> object and saves it as a .Rda file.
-It will create also an Phenodata file, which can be used to save sample information and then merge it to the Phyloseq 
-object with the tool "/Merge phenodata to the phyloseq object".
+Given a sequence_table and a taxonomy_table saved as a .Rda object, this tool creates a new
+ <a href="https://joey711.github.io/phyloseq/">phyloseq</a> object and saves it as a .Rda file.
+It will create also a phenodata table, which can be used to specify sample information and sample groups.
+It can be merged to the phyloseq object with the tool "/Merge phenodata to the phyloseq object".
 </p>
 <h3>Parameters</h3>
 <ul>
@@ -21,24 +21,25 @@ object with the tool "/Merge phenodata to the phyloseq object".
 
 <h3>Details</h3>
 <p>
-This tool creates a new Phyloseq object. To make a new phyloseq object, 
+This tool creates a new phyloseq object. To make a new phyloseq object, 
 it needs an otu_table (ASV table created with "make contigs and remove chimeras") and a taxonomy_table (created with 
 "assign taxonomy") saved as a .Rda file. 
 <br><br>
-For visualization, the names of the ASV sequences are changed from the full DNA sequences to ASV1, ASV2... 
+For visualization purposes, the names of the ASV sequences are changed from the full DNA sequences to ASV1, ASV2... 
 <br> The full DNA sequences of the ASVs are stored in the refseq() slot of the phyloseq object. That way, the short ASV names will
-appear in tables and plots but it's still possible to find the DNA sequences corresponding to each ASV with the tool "Get out Phyloseq information"
-<br> That way it's still possible for example merge the found ASVs with other datasets or index into reference databases. 
+appear in tables and plots but it's still possible to find the DNA sequences corresponding to each ASV with the tool 
+"Extract information from the phyloseq object".
+<br> That way it's still possible for example to merge the found ASVs with other datasets or index into reference databases. 
 <br><br>
 As part of the import process, initial taxonomic rankings are renamed for clarity 
 (Domain_Kingdom, Phylum, Class, Order, Family, Genus, Species).
 The input data may include taxonomic assignments at six levels (Domain_Kingdom to Genus) 
-or seven levels (Domain_Kingdom to Species), depending on if addSpecies command was used or not. 
+or seven levels (Domain_Kingdom to Species).
 Assignments under the label Domain_Kingdom may consist of either domain- or kingdom-level classifications, 
-depending on the reference employed. 
+depending on the reference file employed. 
 <br><br>
-This tool creates also a metadata file called Phenodata which user can use to specify sample information for the
-data analyses process with the phyloseq object. To combine the sample information from the phenodata file,
+This tool creates also a metadata file called phenodata.tsv which the user can use to specify sample information for the
+data analysing steps. To combine the sample information from the phenodata table and the phyloseq object,
 you should run the tool "Merge phenodata to the phyloseq object" before advancing to the analyse steps.
 <p>
 

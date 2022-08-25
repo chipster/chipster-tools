@@ -1,4 +1,4 @@
-# TOOL dada-make-phyloseq-object.R: "Make a Phyloseq object" (This tool makes a phyloseq object and saves it as a .Rda file. Requires an otu/asv-table which can be produced with the tool Make contigs and remove chimeras and a taxonomy table as the input.)
+# TOOL dada-make-phyloseq-object.R: "Make a phyloseq object" (This tool makes a phyloseq object and saves it as a .Rda file. As the input, it requires an asv-table which can be produced with the tool /Make a sequence table and remove chimeras and a taxonomy table produced with the tool /Assign taxonomy)
 # INPUT chimera.Rda: "Sequence table saved as a .Rda object, named seqtab_nochim.Rda" TYPE GENERIC
 # INPUT assignment.Rda: "Taxonomy table saved as a .Rda object, named taxonomy-assignment-matrix.Rda " TYPE GENERIC
 # OUTPUT META phenodata.tsv: "Phenodata" 

@@ -1,4 +1,4 @@
-# TOOL phyloseq-info.R: "Extract Phyloseq information" (You can use this tool to extract the phyloseq information: OTU/ASV-table, sample information, ASV table, refseg stored DNA sequences)
+# TOOL phyloseq-info.R: "Extract information from the Phyloseq object" (You can use this tool to extract information from the Phyloseq object: OTU/ASV-table, taxonomy table, sample information, refseg stored DNA sequences)
 # INPUT ps.Rda: "Phyloseq object" TYPE GENERIC
 # OUTPUT OPTIONAL otu_table.tsv
 # OUTPUT OPTIONAL taxonomy_table.tsv
@@ -6,8 +6,8 @@
 # OUTPUT OPTIONAL sample_information.tsv
 # PARAMETER otu: "Do you want to extract the OTU table" TYPE [yes,no] DEFAULT no
 # PARAMETER taxa: "Do you want to extract the taxonomy table" TYPE [yes,no] DEFAULT no
-# PARAMETER ref: "Do you want to extract the DNA sequences stored to refseq" TYPE [yes,no] DEFAULT no
-# PARAMETER sample: "Do you want to extract the sample infomartion" TYPE [yes,no] DEFAULT no
+# PARAMETER ref: "Do you want to extract the full DNA sequences stored to refseq" TYPE [yes,no] DEFAULT no
+# PARAMETER sample: "Do you want to extract the sample information" TYPE [yes,no] DEFAULT no
 # RUNTIME R-3.6.1-phyloseq
 
 # ES 15.8.2022 

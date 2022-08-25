@@ -22,10 +22,11 @@ This tool combines the paired FASTQ files to sequence contigs with DADA2. The to
 Given a tar package of filtered FASTQ files and 2 lists of dada-class objects saved as .Rda objects (The output of the tool 
 "Sample inderence"), this tool combines the paired FASTQ files to contigs.
 <br>
-The input tar package, containing the FASTQ files, should be the same as the input tar package
+The input tar package containing the FASTQ files should be the same as the input tar package
 for the "Sample inference" tool.
 <br>
-At first, this tool merges the FASTQ files to contigs with the function mergePairs(). This function attemps to merge each denoised 
+<br>
+This tool merges the FASTQ files to contigs with the function mergePairs(). This function attemps to merge each denoised 
 pair of forward and reverse reads, and rejects any pairs which don't sufficiently overlap or which contain too many
  mismatches in the overlap region (0 by default). You can change those parameters and make the merging less strict if many reads are being discarded.
 <br>

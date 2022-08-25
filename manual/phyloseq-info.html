@@ -3,28 +3,46 @@
 <head><title></title></head>
 <body>
 
-<h2>EExtract Phyloseq information</h2>
+<h2>Extract information from the Phyloseq object</h2>
 
 <h3>Description</h3>
 
 <p>
-With this tool you can extract the DNA sequences stored to refseq, otu_table, taxonomy_table and sample_information 
-from the given Phyloseq object. 
+With this tool you can extract information from the Phyloseq object: 
+<ul>
+    <li>OTU or ASV table</li>
+    <li>taxonomy table</li>
+    <li>Dna sequences stored to refseq in the Phyloseq object</li>
+    <li>Sample information which is the Phenodata information</li>
+</ul>
+ 
 </p>
 
 <h3>Parameters</h3>
 <ul>
-    <li>Do you want to extract the OTU table</li>
-    <li>Do you want to extract the taxonomy table</li>
-    <li>Do you want to extract the DNA sequences stored to refseq</li>
-    <li>Do you want to extract the sample infomartion</li>
+    <li>Do you want to extract the OTU table? (yes, no) [no]</li>
+    <li>Do you want to extract the taxonomy table? (yes, no) [no]</li>
+    <li>Do you want to extract the DNA sequences stored to refseq? (yes, no) [no]</li>
+    <li>Do you want to extract the sample infomartion? (yes, no) [no]</li>
 
 </ul>
 
 <h3>Details</h3>
 <p>
-This tool can be used to access the data/information saved to the Phyloseq information.
-
+This tool can be used to access the data/information saved to the Phyloseq object.
+<br>
+You can extract the information if it's stored to the Phyloseq object. You can find out what information it has 
+from the summary .txt file produced when the object was created. 
+<br>
+With this tool, one option is to get the full DNA sequences which were stored into the refseq() slot when the Phyloseq object was 
+created from the ASV table. The full DNA sequences were changed to shorter strings in order to get the visualization looks nicer.
+In the refseq() slot is stored the information of which full DNA sequence correspond to ASV1, ASV2 and etc.
+<br> This information can be usefull if you want to for example 
+merge the found ASVs with other datasets or index into reference databases.
+<br>
+<br>
+This tool can be used also to investigate how the Phenodata table, in other words the sample information merged to the 
+Phyloseq object looks like or if you want to get the OTU/ASV table and the taxonomy table used to create the object.
 </p>
 
 <h3>Output</h3>

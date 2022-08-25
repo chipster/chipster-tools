@@ -1,4 +1,4 @@
-# TOOL dada2-dada.R: "Sample inference" (Given a tar package containing FASTQ files, this tool runs the learnErrors and dada commands from the dada2 library. If the plot error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function, the ambigious bases Ns should be removed before from the fastq files. This tool can be used either for single or paired end reads.)
+# TOOL dada2-dada.R: "Sample inference" (Given a tar package containing FASTQ files, this tool runs the learnErrors and dada commands from the DADA2 library. If the visualize error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function the ambigious bases Ns needs to be removed before from the fastq files. This tool can be used either for single or paired end reads. Please check the manual for more information.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT dada_forward.Rda
 # OUTPUT OPTIONAL dada_reverse.Rda
@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL plotErrors.pdf
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end so one forward and one reverse FASTQ file for one sample.)
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
-# PARAMETER OPTIONAL pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check manual)
+# PARAMETER OPTIONAL pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check the manual.)
 # RUNTIME R-4.1.1-asv
 
 # OUTPUT OPTIONAL log.txt

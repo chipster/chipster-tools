@@ -28,7 +28,7 @@ use only those forward read parameters.
 <h3>Details</h3>
 <p>
 This tool takes a Tar package of FASTQ files (you can create one using the tool Utilities / Make a Tar package) and filters
-them based on user specified parameters. The FASTQ files in the tar package can be compressed.
+them based on the user specified parameters. The FASTQ files in the tar package can be compressed.
 <br>
 The data can be either paired end or single end reads, but you need to specify the right type with the first parameter.
 <br>
@@ -65,7 +65,7 @@ Running the tool "Read quality with MultiQC for many FASTQ files" can help to de
 If too few reads are passing the filter, try to change the parameter values for example by increasing
 the maximun expected error and/or reducing truncQ. 
 <br>
-Remember when choosing the truncLen parameter you must maintain the overlap region for paired reads after truncation to merge them to contigs later.
+Remember when choosing the truncLen parameter you must maintain the overlap region for paired end reads after truncation to merge them to contigs later.
 <br>
 <br>
 If the data is paired end:
