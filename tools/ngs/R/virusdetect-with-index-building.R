@@ -47,7 +47,7 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 vd.binary <- c(file.path(chipster.tools.path, "virusdetect", "virus_detect.pl"))
 #vd.binary <- c(file.path("/opt/chipster/tools_local/virusdetect", "virus_detect.pl"))
 vd.parameters <- paste("--reference", reference, "--thread_num", chipster.threads.max, "--coverage_cutoff", coverage_cutoff, "--depth_cutoff", depth_cutoff, "--hsp_cover", hsp_cover )

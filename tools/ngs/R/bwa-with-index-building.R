@@ -20,6 +20,7 @@
 # PARAMETER OPTIONAL trim.threshold: "Quality trimming threshold" TYPE INTEGER DEFAULT 0 (Quality threshold for read trimming down to 35bp. Corresponds to the command line parameter -q.)
 # PARAMETER OPTIONAL barcode.length: "Barcode length"  TYPE INTEGER DEFAULT 0 (Length of barcode starting from the 5 prime end. The barcode of each read will be trimmed before mapping. Corresponds to the command line parameter -B.)
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments are reported per read" TYPE  INTEGER DEFAULT 3 (Maximum number of alignments to report. Corresponds to the samse command line parameter -n.)
+# RUNTIME R-4.1.1
 
 # KM 24.8.2011
 # AMS 19.6.2012 Added unzipping
@@ -41,7 +42,7 @@ inputnames <- read_input_definitions()
 # bwa settings
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 command.start <- paste("bash -c '", bwa.binary)
 
@@ -60,7 +61,7 @@ if (file.exists("genome.txt")){
 		check.command <- paste ( bwa.index.binary, "genome.txt -tar| tail -1 ")
 		bwa.genome <- system(check.command, intern = TRUE)
 		cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./genome_bwa_index.tar ", sep ="")
-		system(cp.command)
+		runExternal(cp.command)
 		hg_ifn <- strip_name(inputnames$genome.txt)
 		# Make a matrix of output names
 		outputnames <- matrix(NA, nrow=1, ncol=2)
@@ -76,7 +77,7 @@ if (file.exists("genome.txt")){
 
 
 print("Indexing the genome...")
-system("echo Indexing the genome... > bwa.log")
+runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 #genome.dir <- system(check.command, intern = TRUE)
 #bwa.genome <- file.path( genome.dir , "genome.txt")
@@ -93,7 +94,7 @@ mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e"
 
 # command ending
 command.end <- paste( bwa.genome , "reads.txt 1> alignment.sai 2>> bwa.log'")
-system("echo Running the alignment with command: >> bwa.log")
+runExternal("echo Running the alignment with command: >> bwa.log")
 
 # Run BWA for each input
 for (i in 1:nrow(input.names)) {
@@ -105,41 +106,43 @@ for (i in 1:nrow(input.names)) {
 	
 	# run bwa alignment
 	bwa.command <- paste(command.start, mode.parameters, command.end)
+
+	documentCommand(bwa.command)
 	
-	system(bwa.command)
+	runExternal(bwa.command)
 	
 	# sai to sam conversion
 	samse.parameters <- paste("samse -n", alignment.no )
 	samse.end <- paste(bwa.genome, sai.file, input.names[i,1], ">", sam.file, "2>>bwa.log'" )
 	samse.command <- paste( command.start, samse.parameters , samse.end )
-	system(samse.command)
+	runExternal(samse.command)
 	
 	# convert sam to bam
-	system(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
 }
 
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")
@@ -163,3 +166,9 @@ outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

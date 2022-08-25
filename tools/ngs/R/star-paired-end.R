@@ -29,13 +29,14 @@ for (i in 1:nrow(input.names)) {
 }
 
 # setting up STAR
-star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
+# latest STAR is not compatible with old indexes
+# use the latest version, set runtime R-4.1.1 and latest samtools after indexes are updated
+# star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
+star.binary <- c(file.path(chipster.tools.path,"STAR-2.5.3a","STAR"))
 path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
 path.gtf <- c(file.path(chipster.tools.path,"genomes","gtf",organism))
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
-
-version <- system(paste(star.binary,"--version"),intern = TRUE)
-documentVersion("STAR",version)
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
+#samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # Input files
 if (fileOk("reads1.txt",0) && fileOk("reads2.txt",0)) {
@@ -83,19 +84,19 @@ runExternal(command)
 
 # rename result files according to the parameter
 if (log.files == "final_log") {
-  system("mv Log.final.out Log_final.txt")
+  runExternal("mv Log.final.out Log_final.txt")
 } else if (log.files == "final_and_progress") {
-  system("mv Log.progress.out Log_progress.txt")
-  system("mv Log.final.out Log_final.txt")
+  runExternal("mv Log.progress.out Log_progress.txt")
+  runExternal("mv Log.final.out Log_final.txt")
 }
-system("mv Aligned.sortedByCoord.out.bam alignment.bam")
+runExternal("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
-displayNamesToBAM("alignment.bam")
+displayNamesToBAM("alignment.bam", samtools.binary)
 
 # index bam
 if (index.file == "index_file") {
-  system(paste(samtools.binary,"index alignment.bam"))
+  runExternal(paste(samtools.binary,"index alignment.bam"))
 }
 # Determine base name
 inputnames <- read_input_definitions()
@@ -108,4 +109,10 @@ outputnames[2,] <- c("alignment.bam.bai",paste(basename,".bam.bai",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
- 
+
+# save version information
+star.version <- system(paste(star.binary,"--version"),intern = TRUE)
+documentVersion("STAR",star.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

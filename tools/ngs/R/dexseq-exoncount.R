@@ -15,7 +15,7 @@
 # AMS 04.07.2014 New genome/gtf/index locations & names
 
 # if BAM contains paired-end data, sort it by read names
-samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
 if(paired == "yes"){
 	system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
 	bam<-"name-sorted.bam"

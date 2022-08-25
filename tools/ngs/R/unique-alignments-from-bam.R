@@ -7,7 +7,7 @@
 # 2014.06.02 AMS 
 
 # convert bam to sam, sort bam if the data is paired-end
-samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 
 if(paired == "yes") {

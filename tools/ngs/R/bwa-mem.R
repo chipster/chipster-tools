@@ -19,6 +19,7 @@
 # PARAMETER OPTIONAL rgsm: "Sample name for read group" TYPE STRING (The name of the sample sequenced in this read group. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rgpl: "Platform for read group" TYPE [ none: "Not defined", ILLUMINA, SOLID, LS454, HELICOS, PACBIO] DEFAULT none (Platform\/technology used to produce the read. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rglb: "Library identifier for read group" TYPE STRING (DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
+# RUNTIME R-4.1.1
 
 # KM 28.08.2015
 
@@ -33,14 +34,16 @@ for (i in 1:nrow(input.names)) {
 }
 
 # bwa binary
-bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
+bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
+# bwa mem binary
+bwa.mem.binary <- paste(bwa.binary, "mem")
 # bwa genome
 bwa.genome <- file.path(chipster.tools.path, "genomes", "indexes", "bwa", organism)
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
-#command.start <- paste("bash -c '", bwa.binary)
-command.start <-(bwa.binary)
+#command.start <- paste("bash -c '", bwa.mem.binary)
+command.start <-(bwa.mem.binary)
 
 bwa.parameters <- paste("-M", "-k", minseedlen, "-w", bandwith, "-A", matchscore, "-B", mismatchscore, "-O", gapopen, "-E", gapextension, "-L",  clippenalty )
 
@@ -119,37 +122,40 @@ for (i in 1:length(reads1.list)) {
 	}
 	# run bwa alignment
 	bwa.command <- paste(command.start, bwa.parameters, command.end)
+
+	documentCommand(bwa.command)
 	
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
+	# why the log is empty if this is run with runExternal()?
 	system(bwa.command)
 	
 	# convert sam to bam
-	system(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
 }		
 
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam bwa.bam")
 if (index.file == "index_file") {
-  system("mv alignment.sorted.bam.bai bwa.bam.bai")
+  runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 }
 
 # Substitute display names to log for clarity
@@ -183,3 +189,9 @@ outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

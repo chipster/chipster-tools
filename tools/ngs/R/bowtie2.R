@@ -18,6 +18,7 @@
 # PARAMETER OPTIONAL rdg.ext: "Gap extension penalty for the reads" TYPE INTEGER FROM 0 TO 20 DEFAULT 3 (Gap extension penalty for the reads. Default value: 3. )
 # PARAMETER OPTIONAL rfg.open: "Gap opening penalty for the reference" TYPE INTEGER FROM 0 TO 20 DEFAULT 5 (Gap opening penalty for the reference. Default value: 5. )
 # PARAMETER OPTIONAL rfg.ext: "Gap extension penalty for the reference" TYPE INTEGER FROM 0 TO 20 DEFAULT 3 (Gap extension penalty for the reference. Default value: 3. )
+# RUNTIME R-4.1.1
 
 # KM 23.10.2012
 # EK 8.5.2013 replaced samtools -q 1 with Bowtie --no-unal to remove unaligned reads from BAM
@@ -64,7 +65,7 @@ if (unaligned.file == "yes") {
 }
 
 # Check if reads are in FASTA forma
-emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
 sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
 sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
 str.filetype <- system(sfcheck.command,intern = TRUE)
@@ -83,32 +84,34 @@ bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
 echo.command <- paste("echo '",bowtie.command,"' > bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+
+documentCommand(bowtie.command)
+runExternal(bowtie.command)
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # Substitute display names to BAM header for clarity
 displayNamesToBAM("alignment.sorted.bam")
 
 # rename result files according to the index parameter
-system("mv alignment.sorted.bam bowtie2.bam")
+runExternal("mv alignment.sorted.bam bowtie2.bam")
 if (index.file == "index_file") {
-  system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+  runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 }
 
 if (unaligned.file == "yes") {
-  system("mv unaligned unaligned_1.fq")
+  runExternal("mv unaligned unaligned_1.fq")
 }
 
 # Substitute display names to log for clarity
@@ -131,3 +134,10 @@ outputnames[3,] <- c("unaligned_1.fq",paste(basename,"_unaligned.fq",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
+documentVersion("Bowtie 2",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

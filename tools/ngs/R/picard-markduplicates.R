@@ -7,7 +7,7 @@
 # 2015.09.09 AMS 
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # run
 picard.command <- paste("java -Xmx2g -jar", picard.binary, "MarkDuplicates INPUT=alignment.bam OUTPUT=marked.bam METRICS_FILE=duplicateMetrics.txt VALIDATION_STRINGENCY=LENIENT")
