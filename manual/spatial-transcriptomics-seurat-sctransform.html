@@ -7,7 +7,7 @@
 
 <body>
 
-    <h2>Seurat v4 -SCTransform: Filter cells, normalize, regress and detect high-variance features in spatial data </h2>
+    <h2>Seurat v4 -Filter spots, normalize with SCTransform and detect high-variance genes </h2>
 
     <h3>Description</h3>
 
@@ -19,8 +19,8 @@
     <h3>Parameters</h3>
     <p>
     <ul>
-        <li>Filter out cells which have higher mitochondrial transcript percentage [25]</li>
-        <li>Filter out cells which have higher hemoglobin transcript percentage [20]</li>
+        <li>Filter out spots which have higher mitochondrial transcript percentage [25]</li>
+        <li>Filter out spots which have higher hemoglobin transcript percentage [20]</li>
         <li>Number of variable genes to return [3000] </li>
     </ul>
     </p>
@@ -34,7 +34,7 @@
     </p>
     <p>
         As input, you can give the Seurat object from the tool "Seurat v4 -Setup and QC". 
-        In multiple sample analysis, the normalised Seurat objects can in the next step be combined using the tool "Combine multiple samples".
+        In multiple sample analysis, the normalised Seurat objects can in the next step be combined using the tool "Seurat v4 -Combine multiple samples".
     </p>
     <p>
         Compared to the basic Seurat normalization + scaling + variable gene finding,
