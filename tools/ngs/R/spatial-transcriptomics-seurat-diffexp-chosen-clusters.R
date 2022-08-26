@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters.R: "Seurat v4 -Identify differentially expressed features based on clusters" (This tool lists the differentially expressed genes between two user defined clusters.) 
+# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters.R: "Seurat v4 -Identify spatially variable genes based on clusters" (This tool lists the differentially expressed genes between two user defined clusters.) 
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot.pdf
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
