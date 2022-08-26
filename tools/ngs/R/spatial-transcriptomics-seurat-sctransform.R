@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-sctransform.R: "Seurat v4 -Filter spots, normalize with SCTransform and detect high-variance genes in spatial data" (This tool filters out spots with high mitochondrial transcript percentage, indicative of regions where the tissue is damaged. It then normalizes gene expression values using the SCTransform method and detects highly variable genes.)
+# TOOL spatial-transcriptomics-seurat-sctransform.R: "Seurat v4 -Filter spots, normalize with SCTransform and detect high-variance genes" (This tool filters out spots with high mitochondrial transcript percentage, indicative of tissue damage. It then normalizes gene expression values using the SCTransform method and detects highly variable genes.)
 # INPUT OPTIONAL seurat_spatial_setup.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_sctransform.Robj
 # PARAMETER OPTIONAL mitocutoff: "Filter out spots which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots from regions of damaged tissue. The spots to be kept must have lower percentage of mitochondrial transcripts than this.)
