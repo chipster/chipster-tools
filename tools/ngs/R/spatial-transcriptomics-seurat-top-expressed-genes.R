@@ -1,8 +1,10 @@
 # TOOL spatial-transcriptomics-seurat-top-expressed-genes.R: "Seurat v4 -Identify top expressed genes" (Identify top expressed genes in the spatial data. Code from https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html)
-# INPUT OPTIONAL seurat_spatial_setup.Robj: "Seurat object" TYPE GENERIC
+# INPUT OPTIONAL seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL top_genes.pdf 
 # RUNTIME R-4.1.0-single-cell
 
+# 2022-07-22 IH
+ 
 library(Seurat)
 library(ggplot2)
 library(patchwork)
@@ -10,7 +12,7 @@ library(dplyr)
 library(Matrix)
 
 # Load the R-Seurat-object (called seurat_obj)
-load("seurat_spatial_setup.Robj")
+load("seurat_object.Robj")
 
 # Open the pdf file for plotting
 pdf(file="top_genes.pdf", width=13, height=7)

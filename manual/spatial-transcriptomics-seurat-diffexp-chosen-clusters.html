@@ -7,18 +7,18 @@
 
 <body>
 
-    <h2>Seurat v4 -Identification of spatially variable features</h2>
+    <h2>Seurat v4 -Identify differentially expressed features based on clusters</h2>
 
     <h3>Description</h3>
 
     <p>
-        For a given cluster, this tool gives you the differentially expressed genes between the anatomical regions within the tissue.
+        Find differentially expressed genes between  pre-annotated anatomical regions within the tissue.
     </p>
 
     <h3>Parameters</h3>
     <ul>
-        <li>Number of the first cluster [1]ß</li>
-        <li>Number of the second cluster [2]</li>
+        <li>Cluster to identify markers for [1]</li>
+        <li>Cluster for comparison [2]</li>
         <li>Test used in the differential expression [wilcox]
     </ul>
 
@@ -30,11 +30,13 @@
     </p>
 
     <p>
-        Select the clusters you want to inspect by setting their numbers in the parameter field. As an example, the parameters
-        are set to cluster 1 and 2.
+        Select the clusters you want to find spatially variable genes. As an example, the differential expression is performed between cluster 1 and 2.
+        The first clusters is used as the identity class to define markers for and the other as the identity class for comparison.
     </p>
-
-
+    <p>
+        Select the test used for the differential expression. Options for this are the Wilcoxon Rank sum test and the hurdle model tailored to scRNA-seq analysis called MAST. By default wilcox is used.
+    </p>
+    
     <h3>Output</h3>
 
     <ul>

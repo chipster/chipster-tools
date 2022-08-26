@@ -1,9 +1,11 @@
 # TOOL spatial-transcriptomics-seurat-multiple-samples.R: "Combine multiple samples" (This tool can be used to combine multiple datasets either by merging or integrating the data across sections. Integration should be done if there are strong batch effects present in the data.)
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_multiple.Robj
-# PARAMETER OPTIONAL method: "Combine the data" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the data.)
+# PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the samples.)
 # RUNTIME R-4.1.0-single-cell
 # SLOTS 3
+
+# 2022-07-21 IH
 
 library(Seurat)
 library(ggplot2)
@@ -58,10 +60,18 @@ if (method == "integration") {
     objects_combined <- IntegrateData(anchorset = int.anchors, normalization.method = "SCT",
     verbose = FALSE)
 
+    #Set default assay and variable features for merged Seurat object
+    DefaultAssay(objects_combined) <- "SCT"
+    for (object in seurat_objects) {
+        variables_list <- VariableFeatures(object)
+    }
+    VariableFeatures(objects_combined) <- (c(variables_list))
+
     #remove objects and memory
     rm(int.anchors, seurat_objects)
     gc()
 }
+
 #rename combined Robj
 seurat_obj <- objects_combined
 # Save the combined Robj for the next tool

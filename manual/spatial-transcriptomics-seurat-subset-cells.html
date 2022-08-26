@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v4 -Subset out additional cells </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool subsets out anatomical regions by removing additional cells to help with the integration with scRNA-seq data. Then it visualises the results with SpatialDimPlot.
+
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Rows to subset [400]</li>
+        <li>Columns to subset [150]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As input, you can give the Seurat object from the tool "Seurat v4 -Subset out additional clusters."
+    </p>
+
+    <p>
+        Select the cells you want to subset, by giving rows and columns to be removed. 
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>seurat_obj_subset2.Robj: Can be passed to the next Seurat tool, or imported to R. Not viewable in Chipster. </li>
+        <li>subset_plot.pdf </li>
+    </ul>
+
+
+</body>

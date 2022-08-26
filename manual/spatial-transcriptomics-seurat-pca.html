@@ -7,7 +7,7 @@
 
 <body>
 
-	<h2>Seurat -PCA, clustering, and visualization </h2>
+	<h2>Seurat -PCA, clustering, and visualisation </h2>
 
 	<h3>Description</h3>
 
@@ -28,20 +28,20 @@
 	<h3>Details</h3>
 
 	<p>
-		As input, give the Seurat R-object (Robj) from the tool Seurat -SCTransform: Filter cells, normalize, regress and detect high-variance features in spatial data.
+		As input, give a Seurat R-object (Robj).
 	</p>
 
 	<p>
-		If you have low number of cells in your data, you might get an error message. Try lowering the number of
+		If you have low number of spots in your data, you might get an error message. Try lowering the number of
 		principal components to compute.
 	</p>
 
 	<p>
 		This tool produces the following cluster plots.
 		<ul>
-			<li>Dimplot showing the results of the dimensional reduction on a 2D scatter plot where each point is a cell and it's positioned based on the cell embeddings determined by the reduction technique.
+			<li>Dimplot showing the results of the dimensional reduction on a 2D scatter plot where each point is a spot and it's positioned based on the spot embeddings determined by the reduction technique.
 			</li>
-			<li>SpatialDimPlot showing the resulting clusters overlaid on the spatial image.</li>
+			<li>SpatialDimPlot showing the resulting clusters overlaid on the tissue image.</li>
 		</ul>
 	</p>
 
@@ -60,8 +60,7 @@
 
 		<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
 			Chipster. </li>
-		<!--  <li>PCAgenes.txt: Top genes associated with first principal components</li>-->
-		<li>PCAplots.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of
+		<li>UMAP_plot.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of
 			the PCs for the downstream analysis. </li>
 		<li>PCAloadings.txt: If requested, the loadings (=genes responsible) of principal components </li>
 	</ul>

@@ -13,15 +13,14 @@
 
     <p>
         This tool uses the SCTransform method for normalization, scaling and finding variable genes.
-        Before normalization, the tool filters out potential empties, multiplets and broken cells.
+        Before normalization, the tool filters out bad quality spots.
     </p>
 
     <h3>Parameters</h3>
     <p>
     <ul>
-        <li>Filter out cells which have less than this many genes expressed [200]</li>
-        <li>Filter out cells which have more than this many genes expressed [2500]</li>
-        <li>Filter out cells which have higher mitochondrial transcript percentage [5]</li>
+        <li>Filter out cells which have higher mitochondrial transcript percentage [25]</li>
+        <li>Filter out cells which have higher hemoglobin transcript percentage [20]</li>
         <li>Number of variable genes to return [3000] </li>
     </ul>
     </p>
@@ -30,11 +29,12 @@
     <h3>Details</h3>
 
     <p>
-        The tool filters out bad quality cells, and then it performs the three steps included in the SCTransform tool: normalization, scaling and finding variable
+        The tool filters out spots with broken cells, and then it performs the three steps included in the SCTransform tool: normalization, scaling and finding variable
         genes.
     </p>
     <p>
-        As an input, give 10X Visium data. The R-object output can be used as an input for the Seurat -PCA tool.
+        As input, you can give the Seurat object from the tool "Seurat v4 -Setup and QC". 
+        In multiple sample analysis, the normalised Seurat objects can in the next step be combined using the tool "Combine multiple samples".
     </p>
     <p>
         Compared to the basic Seurat normalization + scaling + variable gene finding,
@@ -46,7 +46,7 @@
 
 
     <ol>
-        <li><b>Filtering</b> is performed in order to remove empties, multiplets and broken cells.
+        <li><b>Filtering</b> is performed in order to remove broken spots.
             You can use the QC-plots.pdf to estimate the parameters for this step.</li>
         <br>
         <li><b>Expression values are normalized</b> using the SCTransform normalisation method, which uses
@@ -60,12 +60,6 @@
         <br>
         <li><b>Genes which are highly variable across the cells are detected</b> using the Pearson residuals
             computed in the normalization step. The highly variable genes will be used in downstream analysis, like PCA.
-        </li>
-        <br>
-        <li><b>Uninteresting sources of variation in the expression values are regressed out</b> during normalization in order to improve
-            dimensionality reduction and clustering later on.
-            This tool regresses on <!--<i>the number of detected molecules per cell</i> as well as--> the <i>percentage
-                mitochondrial transcript content</i>.
         </li>
     </ol>
 
@@ -86,7 +80,6 @@
 
         <li>seurat_obj_sctransform.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
             Chipster. </li>
-        <li>plot? </li>
     </ul>
 
 

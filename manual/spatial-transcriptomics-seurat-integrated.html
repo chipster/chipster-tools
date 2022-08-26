@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v4 -Integration with single-cell data</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		This tool integrates the spatial data with scRNA-seq data to predict the proportion of different celltypes in the Visium spots.
+	</p>
+
+	<h3>Details</h3>
+
+	<p>
+		This tool enables the prediction of the underlying composition of cell types present in each of the spatial voxels in the Visium spots. 
+		It applies the 'anchor'-based integration to enable the probabilistic transfer of annotations from the scRNA-seq reference to the query set.
+	</p>
+
+	<p>
+		As an input, give the Seurat object and the reference scRNA-seq dataset. 
+		The reference set should contain all the celltypes you expect to find in your spots, ideally from the exact same tissue.
+	</p>
+
+	<p>
+		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat tutorials
+			for integration with single-cell data</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+
+		<li>seurat_obj_integrated.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+			Chipster. </li>
+	</ul>
+
+
+
+</body>
