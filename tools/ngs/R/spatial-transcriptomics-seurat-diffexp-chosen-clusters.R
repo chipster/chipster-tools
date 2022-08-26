@@ -9,7 +9,6 @@
 # 2022-07-29 IH
 
 library(Seurat)
-library(SeuratData)
 library(ggplot2)
 library(patchwork)
 library(dplyr)

@@ -12,7 +12,6 @@
 # 2022-07-19 IH
 
 library(Seurat)
-library(SeuratData)
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_spatial_setup.Robj")
