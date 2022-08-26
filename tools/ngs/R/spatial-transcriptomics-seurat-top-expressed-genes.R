@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-top-expressed-genes.R: "Seurat v4 -Identify top expressed genes" (Identify top expressed genes in the spatial data. Code from https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html)
+# TOOL spatial-transcriptomics-seurat-top-expressed-genes.R: "Seurat v4 -Identify top expressed genes" (Identify top expressed genes in spatial data and visualize them in a box plot.)
 # INPUT OPTIONAL seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL top_genes.pdf 
 # RUNTIME R-4.1.0-single-cell
