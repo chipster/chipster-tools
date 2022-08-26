@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-multiple-samples.R: "Combine multiple samples" (This tool can be used to combine multiple datasets either by merging or integrating the data across sections. Integration should be done if there are strong batch effects present in the data.)
+# TOOL spatial-transcriptomics-seurat-multiple-samples.R: "Seurat v4 -Combine multiple samples" (This tool can be used to combine multiple datasets either by merging or integrating the data across sections. Integration should be done if there are strong batch effects present in the data.)
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_multiple.Robj
 # PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the samples.)
