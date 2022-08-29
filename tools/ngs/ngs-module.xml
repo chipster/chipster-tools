@@ -202,7 +202,7 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single cell RNA-seq" color="#37dddd">	   	
+	<category name="Single cell RNA-seq" color="#2196F3">	   	
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool> 	
 		<tool>single-cell-seurat-filter-regress.R</tool>	
@@ -237,6 +237,21 @@
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
 
+	<category name="Spatial Transcriptomics" color="#37dddd">	   	
+		<tool>spatial-transcriptomics-seurat-setup.R</tool>
+		<tool>spatial-transcriptomics-seurat-sctransform.R</tool>	
+		<tool>spatial-transcriptomics-seurat-multiple-samples.R</tool>	
+		<tool>spatial-transcriptomics-seurat-top-expressed-genes.R</tool>
+		<tool>spatial-transcriptomics-seurat-featureplot.R</tool>	
+		<tool>spatial-transcriptomics-seurat-pca.R</tool>	
+		<tool>spatial-transcriptomics-seurat-spatialdimplot.R</tool>	
+		<tool>spatial-transcriptomics-seurat-diffexp-chosen-clusters.R</tool>	
+		<tool>spatial-transcriptomics-seurat-spatially-variable-markvariogram.R</tool>
+		<tool>spatial-transcriptomics-seurat-subset-clusters.R</tool>
+		<tool>spatial-transcriptomics-seurat-integrated.R</tool>
+		<tool>spatial-transcriptomics-seurat-visualise-integration.R</tool>
+	</category>
+
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
 		<tool>macs2.R</tool>
 		<tool>ngs-find-peaks-macs-one.R</tool>
@@ -253,12 +268,22 @@
 		<!--<tool runtime="R-3.0.2">MEDIPS.R</tool>-->
 	</category>
 
+	<category name="Microbial amplicon data preprocessing for ASV" color="#a49900">
+		<tool>dada2-filter.R</tool>
+		<tool>dada2-dada.R</tool>
+		<tool>dada2-merge.R</tool>
+		<tool>dada2-sqtab-chimera.R</tool>
+		<tool>dada2-assign-taxonomy.R</tool>
+		<tool>dada-make-phyloseq-object.R</tool>
+		<tool>dada-merge-phenodata.phyloseq.R</tool>
+	</category>
 
-	<category name="Microbial amplicon data preprocessing" color="#a49900">
+	<category name="Microbial amplicon data preprocessing for OTU" color="#a49900">
+		<!-- <tool>test-mothur.R</tool> -->
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
 		<tool>mothur-makegroup.R</tool>
-		<tool>mothur-makecontigs.R</tool>
 		<tool>fastq-mergepairs.R</tool>
+		<tool>mothur-makecontigs.R</tool>
 		<tool>fastq-filter.R</tool> 
 		<tool>mothur-screenseqs.R</tool>
 		<tool>mothur-uniqueseqs.R</tool>
@@ -269,6 +294,8 @@
 		<tool>mothur-classifyseqs.R</tool>
 		<tool>mothur-classifyseqs-its.R</tool>
 		<tool>mothur-seq-error.R</tool>
+		<tool>mothur-phyloseq-inputs.R</tool>
+		<tool>metabarcoding-import.R</tool>
 		<!--
 		<tool>mothur-classify-counttable.R</tool>
 	    <tool>mothur-analyses.R</tool>
@@ -281,8 +308,7 @@
 	</category>
 
 	<category name="Microbial amplicon data analyses" color="#a49900">
-		<tool>mothur-phyloseq-inputs.R</tool>
-		<tool>metabarcoding-import.R</tool>
+		<tool>phyloseq-info.R</tool>
 		<tool>metabarcoding-rarecurve-alpha.R</tool>
 		<tool>metabarcoding-rarefy-even.R</tool>
 		<tool>metabarcoding-taxon-overview.R</tool>

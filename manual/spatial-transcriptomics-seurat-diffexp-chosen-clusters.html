@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v4 -Identify spatially variable genes based on clusters</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        Find differentially expressed genes between  pre-annotated anatomical regions within the tissue.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Cluster to identify markers for [1]</li>
+        <li>Cluster for comparison [2]</li>
+        <li>Test used in the differential expression [wilcox]
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As inputs, you can give the Seurat object from the Seurat v4- PCA, clustering and visualisation. <br>
+    </p>
+
+    <p>
+        Select the clusters you want to find spatially variable genes. As an example, the differential expression is performed between cluster 1 and 2.
+        The first cluster is used as the identity class to define markers for and the other as the identity class for comparison.
+    </p>
+    <p>
+        Select the test used for the differential expression. Options for this are the Wilcoxon Rank sum test and the hurdle model tailored to scRNA-seq analysis called MAST. By default wilcox is used.
+    </p>
+    
+    <h3>Output</h3>
+
+    <ul>
+        <li>Markerplot.pdf
+    </ul>
+
+
+
+</body>
