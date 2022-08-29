@@ -23,7 +23,9 @@ Then it puts the contig FASTQ files in one Tar package.
 This tool takes a Tar package of FASTQ files (you can create one using the tool Utilities / Make a Tar package).
 It extracts the sequences and quality data from the FASTQ files and joins paired reads to contigs.
 If there is a mismatch, the base with higher quality score is kept. 
-If the maximum number or percentage of non-matching nucleotides allowed in the overlap region is exceeded, the reads are not merged.
+If the maximum number of non-matching nucleotides or the maximum percentage of non-matching nucleotides allowed in the overlap region is exceeded, the reads are not merged.
+By default the maximun percentage of non-matching nucleotides is 100%, so it won't have any effect. If you want to use it, the parameter should usually be set to 5 or less.
+
 You can also remove input sequences which have too many Ns. 
 <!--This can be done in later steps which is with OTU clustering recommendable. -->
  <br>

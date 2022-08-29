@@ -19,7 +19,7 @@ BUNDLE_COLLECTION_VERSION="$4"
 name=$(get_name $JOB_NAME $BUILD_NUMBER)
 
 # umount old tools-bin if exists
-if grep -qs "/mnt/data/$name/tools-bin " /proc/mouns; then
+if grep -qs "/mnt/data/$name/tools-bin " /proc/mounts; then
   echo "umount tools-bin"
   sudo umount /mnt/data/$name/tools-bin
 fi

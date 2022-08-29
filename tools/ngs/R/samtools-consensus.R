@@ -9,9 +9,9 @@
 # KM 26.4.2012
 
 # samtools path
-samtools.binary <- c(file.path(chipster.tools.path, "samtools","samtools"))
-bcftools.binary <- c(file.path (chipster.tools.path, "samtools","bcftools","bcftools"))
-vcfutils.binary <- c(file.path (chipster.tools.path, "samtools","bcftools","vcfutils.pl"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19","samtools"))
+bcftools.binary <- c(file.path (chipster.tools.path, "samtools-0.1.19","bcftools","bcftools"))
+vcfutils.binary <- c(file.path (chipster.tools.path, "samtools-0.1.19","bcftools","vcfutils.pl"))
 
 
 system("echo Running command: > output.log")

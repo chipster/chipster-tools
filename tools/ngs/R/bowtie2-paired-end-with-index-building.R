@@ -29,6 +29,7 @@
 # PARAMETER OPTIONAL no.dovetail: "Not concordant when mates extend past each other" TYPE [yes, no] DEFAULT no (If the mates "dovetail", that is if one mate alignment extends past the beginning of the other such that the wrong mate begins upstream, consider that to be concordant. Default: mates cannot dovetail in a concordant alignment. )
 # PARAMETER OPTIONAL no.contain: "Not concordant when one mate alignment contains other" TYPE [yes, no] DEFAULT no (If one mate alignment contains the other, consider that to be non-concordant. Default: a mate can contain the other in a concordant alignment.)
 # PARAMETER OPTIONAL no.overlap: "Not concordant when mates overlap at all"  TYPE [yes, no] DEFAULT no (If one mate alignment overlaps the other at all, consider that to be non-concordant. Default: mates can overlap in a concordant alignment.)
+# RUNTIME R-4.1.1
 
 # KM 10-01.2012
 # EK 8.5.2013 replaced samtools -q 1 with Bowtie --no-unal to remove unaligned reads from BAM
@@ -60,22 +61,22 @@ bowtie2.index.binary <- file.path(chipster.module.path,"shell","check_bowtie2_in
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type",genome.filetype," > bowtie2.log")
-system(echo.command)
+runExternal(echo.command)
 
 
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  system("echo Extracting tar formatted gemome index file >> bowtie2.log")
-  system("tar -tf genome.txt >> bowtie2.log")
+  runExternal("echo Extracting tar formatted gemome index file >> bowtie2.log")
+  runExternal("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
-  system("ls -l >> bowtie2.log")
+  runExternal("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {
   # Do indexing
   #check sequence file type
-  emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+  emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
   options(scipen = 999)
   inputfile.to.check <- ("genome.txt")
   sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
@@ -88,16 +89,14 @@ if (genome.filetype == "tar") {
 
 
   print("Indexing the genome...")
-  system("echo Indexing the genome... >> bowtie2.log")
+  runExternal("echo Indexing the genome... >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
-  cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")
-  system(cp.command)
-  system("ls -l >> bowtie2.log")
+  runExternal("ls -l >> bowtie2.log")
   new_index_created <- ("yes")
 }
 echo.command <- paste("echo Internal genome name:",bowtie2.genome," >> bowtie2.log")
-system(echo.command)
+runExternal(echo.command)
 
 command.start <- paste("bash -c '",bowtie.binary)
 rdg.value <- paste(rdg.open,rdg.ext,sep = ",")
@@ -185,34 +184,34 @@ bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
 echo.command <- paste("echo '",bowtie.command,"' >> bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 if (file.size("alignment.sam") < 1) {
-  system("cat bowtie2.log")
+  runExternal("cat bowtie2.log")
   stop("Bowtie2 failed! Check the tail of the ouput below for more information.")
 }
 
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # rename result files according to the index parameter
-system("mv alignment.sorted.bam bowtie2.bam")
+runExternal("mv alignment.sorted.bam bowtie2.bam")
 if (index.file == "index_file") {
-  system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+  runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 }
 
 #if (unaligned.file== "yes"){
@@ -221,8 +220,8 @@ if (index.file == "index_file") {
 #}
 
 if (discordant.file == "yes") {
-  system("mv failed.1 failed_1.fq")
-  system("mv failed.2 failed_2.fq")
+  runExternal("mv failed.1 failed_1.fq")
+  runExternal("mv failed.2 failed_2.fq")
 }
 
 # Substitute display names to log for clarity
@@ -256,3 +255,9 @@ if (new_index_created == "yes") {
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
+documentVersion("Bowtie 2",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

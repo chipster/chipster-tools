@@ -24,6 +24,7 @@
 # PARAMETER OPTIONAL max.discordant: "Maximum number of hits to report for discordant pairs" TYPE INTEGER DEFAULT 10 (Maximum number of alignments to output in the XA tag for disconcordant read pairs, excluding singletons. If a read has more than INT hits, the XA tag will not be written. Corresponds to the command line parameter bwa sampe -N.) 
 # PARAMETER OPTIONAL max.insert: "Maximum insert size" TYPE INTEGER DEFAULT 500 (Maximum insert size for a read pair to be considered being mapped properly. This option is only used when there are not enough good alignments to infer the distribution of insert sizes. Corresponds to the command line parameter bwa sampe -a.)
 # PARAMETER OPTIONAL max.occurrence: "Maximum occurrences for one end" TYPE INTEGER DEFAULT 100000 (Maximum occurrences of a read for pairing. A read with more occurrneces will be treated as a single-end read. Reducing this parameter helps faster pairing. The default value is 100000. For reads shorter than 30bp, applying a smaller value is recommended to get a sensible speed at the cost of pairing accuracy. Corresponds to the command line parameter bwa sampe -o.)
+# RUNTIME R-4.1.1
 
 # KM 26.8.2011
 # AMS 19.6.2012 Added unzipping
@@ -43,7 +44,7 @@ for (i in 1:nrow(input.names)) {
 # bwa
 bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 #bwa.indexes <- file.path(chipster.tools.path, "bwa_indexes")
 bwa.genome <- file.path(chipster.tools.path, "genomes", "indexes", "bwa", organism)
 command.start <- paste("bash -c '", bwa.binary)
@@ -93,45 +94,48 @@ for (i in 1:length(reads1.list)) {
 	# Run first set
 	command.end <- paste(bwa.genome, reads1.list[i], "1>", sai1.file, "2>> bwa.log'")
 	bwa.command <- paste(command.start, mode.parameters, command.end)
-	system(bwa.command)
+
+	documentCommand(bwa.command)
+	
+	runExternal(bwa.command)
 	
 	# Run second set
 	command.end <- paste(bwa.genome, reads2.list[i], "1>", sai2.file, "2>> bwa.log'")
 	bwa.command <- paste(command.start, mode.parameters, command.end)
-	system(bwa.command)
+	runExternal(bwa.command)
 	
 	# sai to sam conversion
 	sampe.parameters <- paste("sampe -n", alignment.no, "-a", max.insert, "-o" , max.occurrence , "-N" , max.discordant )
 	sampe.end <- paste(bwa.genome, sai1.file, sai2.file, reads1.list[i], reads2.list[i], "1>", sam.file, "2>>bwa.log'" )
 	sampe.command <- paste( command.start, sampe.parameters , sampe.end )
-	system(sampe.command)
+	runExternal(sampe.command)
 			
 	# convert sam to bam
-	system(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
 }
 
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")
@@ -158,3 +162,10 @@ outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

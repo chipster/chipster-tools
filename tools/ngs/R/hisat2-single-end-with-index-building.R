@@ -13,6 +13,7 @@
 # PARAMETER OPTIONAL no.softclip: "Disallow soft clipping" TYPE [nosoft: "No soft-clipping", yessoft: "Use soft-clipping"] DEFAULT yessoft (Is soft-cliping used. By default HISAT2 may soft-clip reads near their 5' and 3' ends.)
 # PARAMETER OPTIONAL dta: "Require long anchor lengths for subsequent assembly" TYPE [nodta: "Don't require", yesdta: "Require"] DEFAULT nodta (With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.)
 # PARAMETER OPTIONAL bai: "Index BAM" TYPE [yes, no] DEFAULT no (Index BAM file.)
+# RUNTIME R-4.1.1
 
 # AO 30.5.2017 First version
 # EK 18.10.2017 Polishing
@@ -28,10 +29,10 @@ options(scipen = 10)
 # setting up HISAT binaries (and paths)
 hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
 hisat.index.binary <- file.path(chipster.tools.path,"hisat2","hisat2-build")
-samtools.binary <- file.path(chipster.tools.path,"samtools-1.2","samtools")
+samtools.binary <- file.path(chipster.tools.path,"samtools","bin","samtools")
 
 # Document version numbers
-hisat2.version.command <- paste(hisat.binary, "--help |grep HISAT2 | awk '{print $3}'")
+hisat2.version.command <- paste(hisat.binary, "--version |grep hisat2 | awk '{print $3}'")
 version <- system(hisat2.version.command,intern = TRUE)
 documentVersion("HISAT2",version)
 samtools.version.command <- paste(samtools.binary, "--version | head -1 | awk '{print $2}'")
@@ -49,13 +50,13 @@ if (fileOk("genome.txt")) {
   genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
   hg_ifn <- ("")
   echo.command <- paste("echo Host genome file type",genome.filetype," > hisat.log")
-  system(echo.command)
+  runExternal(echo.command)
   new_index_created <- ("no")
   # case 1. Ready calculated indexes in tar format
   if (genome.filetype == "tar") {
-    system("echo Extracting tar formatted gemome index file >> hisat.log")
+    runExternal("echo Extracting tar formatted gemome index file >> hisat.log")
     # Untar. Folders are flattened
-    system("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
+    runExternal("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
     # Check index base name
     if (file.exists(Sys.glob("*.1.ht2"))) {
       f <- list.files(getwd(),pattern = "\\.1.ht2$")
@@ -69,17 +70,17 @@ if (fileOk("genome.txt")) {
     # case 2. Fasta file
   } else {
     # Do indexing
-    system("echo Indexing the genome... >> hisat.log")
-    system("echo >> hisat.log")
+    runExternal("echo Indexing the genome... >> hisat.log")
+    runExternal("echo >> hisat.log")
     hisat2.genome <- strip_name(input.display.names$genome.txt)
     index.command <- paste("bash -c '",hisat.index.binary,"-p",chipster.threads.max,"genome.txt",hisat2.genome,"2>>hisat.log","'")
-    system(paste("echo ",index.command," >> hisat.log"))
-    system(index.command)
+    runExternal(paste("echo ",index.command," >> hisat.log"))
+    runExternal(index.command)
     echo.command <- paste("echo Internal genome name:",hisat2.genome," >> hisat.log")
-    system(echo.command)
+    runExternal(echo.command)
     # Make tar package from the index
     if (file.exists(Sys.glob("*.1.ht*"))) {
-      system("tar cf hisat2_index.tar *.ht*")
+      runExternal("tar cf hisat2_index.tar *.ht*")
     }
   }
 } else {
@@ -140,6 +141,8 @@ command <- paste(hisat.binary)
 # Add the parameters
 command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
 
+documentCommand(command)
+
 # Run command
 documentCommand(command)
 runExternal(command)
@@ -147,7 +150,7 @@ runExternal(command)
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam",minsize = 100)) {
   # Rename result files
-  system("mv hisat.sorted.bam hisat.bam")
+  runExternal("mv hisat.sorted.bam hisat.bam")
   # Change file names in BAM header to display names
   displayNamesToBAM("hisat.bam")
   # Index BAM

@@ -6,7 +6,7 @@
 # EK 10.1.2012
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # sort bam
 system(paste(samtools.binary, "sort alignment.bam alignment-sorted"))

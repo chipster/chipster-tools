@@ -41,7 +41,7 @@ system(command)
 # Only index if BAM not empty to prevent returning an empty .bai file
 if (fileOk("merged_tagged.bam", minsize=100)){
 	# Index BAM
-	samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+	samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
 	system(paste(samtools.binary, "index merged_tagged.bam > merged_tagged.bam.bai"))
 }
 # stop(paste('CHIPSTER-NOTE: ', command))
