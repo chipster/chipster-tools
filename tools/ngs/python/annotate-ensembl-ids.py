@@ -85,10 +85,11 @@ with open("annotated.tsv", "w") as annotated:
 		# keep the colum title of first column
 		annotated.write(column_titles[0] + "\tsymbol\tdescription\t" + "\t".join(column_titles[1:]) + "\n")
 
-	not_found_ids = []
 
 	for row_chunk in row_chunks:
 		print("annotate " + str(len(row_chunk)) + " gene(s)")
+
+		not_found_ids = []
 
 		# pick first column
 		id_list = [row[0] for row in row_chunk]
@@ -119,5 +120,6 @@ with open("annotated.tsv", "w") as annotated:
 			# print(ensemblid, symbol, description)
 			annotated.write(ensemblid + "\t" + symbol + "\t" + description + "\t" + "\t".join(other_columns) + "\n")
 		
+		# give up if most of the IDs in this chunk were not found
 		if len(not_found_ids) > 0.9 * len(row_chunk):
 			raise RuntimeError("CHIPSTER-NOTE: " + str(len(not_found_ids)) + "/" + str(len(row_chunk)) + " IDs not found. You can only annotate Ensembl IDs with this tool. The IDs need to be in the first column of the table.")
