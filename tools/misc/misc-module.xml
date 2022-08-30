@@ -139,6 +139,7 @@
 		<tool>factoextra.R</tool>
 		<tool module="ngs">hisat2-paired-end-storage.R</tool>
 		<tool module="ngs">hisat2-paired-end-test.R</tool>
+		<tool>verify-tools-bin.py</tool>
 
 	</category>
 
