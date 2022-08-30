@@ -31,7 +31,7 @@ for (i in 1:nrow(input.names)) {
 }
 
 # seurat.objects.list <- objects(pattern="seurat_obj")
-seurat.objects.list <- as.list(mget(objects(pattern="seurat_obj"))) 
+seurat.objects.list <- as.list(mget(objects(pattern="seurat_obj_"))) 
 
 # For testing, please ignore:
 # OUTPUT OPTIONAL seurat_obj_list.Robj
