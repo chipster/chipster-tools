@@ -45,7 +45,7 @@ sink(file="summary.txt")
     cat("\n###Removing Chimeras:###\n")
 
 # run isbimeradenovo / remove chimeras
-    seqtab.nochim <- removeBimeraDenovo(seqtab, method=method1, multithread=TRUE, verbose=TRUE)
+    seqtab.nochim <- removeBimeraDenovo(seqtab, method=method1, multithread=as.integer(chipster.threads.max), verbose=TRUE)
     num <- length(colnames(seqtab))-length(colnames(seqtab.nochim))
     cat("Identified ",num," bimeras out of ",length(colnames(seqtab))," input sequences\n")
     cat("Total amount of ASVs is: ")

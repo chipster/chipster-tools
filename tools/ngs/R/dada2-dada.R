@@ -1,4 +1,4 @@
-# TOOL dada2-dada.R: "Sample inference" (Given a tar package containing FASTQ files, this tool runs the learnErrors and dada commands from the DADA2 library. If the visualize error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function the ambigious bases Ns needs to be removed before from the fastq files. This tool can be used either for single or paired end reads. Please check the manual for more information.)
+# TOOL dada2-dada.R: "Sample inference" (Given a tar package of FASTQ files, this tool runs the learnErrors and dada commands from the DADA2 library. If the visualize error rates parameter is set to yes, the error rates are visualized to a pdf file. For the dada function the ambigious bases Ns needs to be removed before from the fastq files. This tool can be used either for single or paired end reads. Please check the manual for more information.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT dada_forward.Rda
 # OUTPUT OPTIONAL dada_reverse.Rda
@@ -6,12 +6,12 @@
 # OUTPUT OPTIONAL plotErrors.pdf
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end so one forward and one reverse FASTQ file for one sample.)
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
-# PARAMETER OPTIONAL pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check the manual.)
+# PARAMETER pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check the manual.)
 # RUNTIME R-4.1.1-asv
-# SLOTS 2
+
 
 # ES 15.07.2022
-# SLOTS 5
+# SLOTS 2  #with slots2 tool is faster ~2x
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt
 # OUTPUT OPTIONAL summary_stats.tsv
@@ -73,9 +73,9 @@ sink(file="log.txt")
 # Run learnErrors (slow)
   set.seed(100)
   cat("\nLearn error rates of forward reads:\n")
-  errF <- learnErrors(fnFs, multithread=TRUE)
+  errF <- learnErrors(fnFs, multithread=as.integer(chipster.threads.max))
   cat("\nLearn error rates of reverse reads:\n")
-  errR <- learnErrors(fnRs, multithread=TRUE)
+  errR <- learnErrors(fnRs, multithread=as.integer(chipster.threads.max))
 sink()
 
 # make a pdf file for visualizing error rates if ploterrors parameter is yes
@@ -93,9 +93,9 @@ if (ploterr == "yes"){
 if (pool=="independent"){
   sink(file="log2.txt")
   cat("\nDada function of forward reads:\n")
-  dadaFs <- dada(fnFs, err=errF, multithread=TRUE)
+  dadaFs <- dada(fnFs, err=errF, multithread=as.integer(chipster.threads.max))
   cat("\nDada function of reverse reads:\n")
-  dadaRs <- dada(fnRs, err=errR, multithread=TRUE)
+  dadaRs <- dada(fnRs, err=errR, multithread=as.integer(chipster.threads.max))
   cat("\n")
   cat("\nDada-class objects decribing DADA2 denoising results of forward reads:\n\n")
   print(dadaFs)
@@ -105,9 +105,9 @@ sink()
 }else{
   sink(file="log2.txt")
   cat("\nDada function of forward reads:\n")
-  dadaFs <- dada(fnFs, err=errF, pool="pseudo", multithread=TRUE)
+  dadaFs <- dada(fnFs, err=errF, pool="pseudo", multithread=as.integer(chipster.threads.max))
   cat("\nDada function of reverse reads:\n")
-  dadaRs <- dada(fnRs, err=errR, pool="pseudo", multithread=TRUE)
+  dadaRs <- dada(fnRs, err=errR, pool="pseudo", multithread=as.integer(chipster.threads.max))
   cat("\n")
   cat("\nDada-class objects decribing DADA2 denoising results of forward reads:\n\n")
   print(dadaFs)
@@ -129,7 +129,7 @@ sink(file="log.txt")
 # Run learnErrors (slow)
   cat("\nLearn error rates:\n")
   set.seed(100)
-  errF <- learnErrors(filenames, multithread=TRUE)
+  errF <- learnErrors(filenames, multithread=as.integer(chipster.threads.max))
 sink()
 
 # make a pdf file for visualizing error rates if ploterrors parameter is yes
@@ -142,7 +142,7 @@ if (ploterr == "yes"){
 if (pool=="independent"){
   sink(file="log2.txt")
   cat("\nDada function:\n")
-  dadaFs <- dada(filenames, err=errF, multithread=TRUE)
+  dadaFs <- dada(filenames, err=errF, multithread=as.integer(chipster.threads.max))
   cat("\n")
   cat("\nDada-class objects decribing DADA2 denoising results:\n\n")
   print(dadaFs)
@@ -150,7 +150,7 @@ if (pool=="independent"){
 }else{
   sink(file="log2.txt")
   cat("\nDada function:\n")
-  dadaFs <- dada(filenames, err=errF, pool="pseudo", multithread=TRUE)
+  dadaFs <- dada(filenames, err=errF, pool="pseudo", multithread=as.integer(chipster.threads.max))
   cat("\n")
   cat("\nDada-class objects decribing DADA2 denoising results:\n\n")
   print(dadaFs)
