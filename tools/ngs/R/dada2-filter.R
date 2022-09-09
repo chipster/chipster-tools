@@ -3,7 +3,7 @@
 # INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC (If the FASTQ files are not assigned into samples correctly, you can give a file containing this information. Check instructions from manual)
 # OUTPUT filtered.tar
 # OUTPUT summary.tsv
-# OUTPUT OPTIONAL samples.fastqs.txt
+# OUTPUT samples.fastqs.txt
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only the forward parameters.)
 # PARAMETER OPTIONAL truncf: "Truncate forward reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded. You can use this parameter for single and paired end reads.) 
 # PARAMETER OPTIONAL truncr: "Truncate reverse reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded. Use only for paired end reads.) 
@@ -12,8 +12,8 @@
 # PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done. Use only for paired end reads.)
 # PARAMETER OPTIONAL truncq: "Truncate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off.)
 # RUNTIME R-4.1.1-asv
-# SLOTS 2
 
+# SLOTS 2
 # ES 15.07.2022
 # OUTPUT OPTIONAL summary.txt
 
@@ -27,6 +27,7 @@ library(dada2)
 #check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.tar")
 
+#print(chipster.threads.max)
 # Read the contents of the tar file into a list
 system("tar tf reads.tar > tar.contents")
 file.list <- scan("tar.contents",what = "",sep = "\n")
@@ -125,7 +126,7 @@ if (!fileOk("input_list.txt")){
   # run filterAndTrim 
   out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(truncf,truncr),
                 maxN=maxns, maxEE=c(maxeef,maxeer), truncQ=truncq, rm.phix=TRUE,
-                compress=TRUE, multithread=TRUE, verbose=TRUE)
+                compress=TRUE, multithread=as.integer(chipster.threads.max), verbose=TRUE)
               
 
   # make a summary file
@@ -183,7 +184,7 @@ if (fileOk("input_list.txt")) {
   # run filterAndTrim 
   out <- filterAndTrim(filenames, filtreads, truncLen=truncf,
                 maxN=maxns, maxEE=maxeef, truncQ=truncq, rm.phix=TRUE,
-                compress=TRUE, multithread=TRUE, verbose=TRUE)
+                compress=TRUE, multithread=as.integer(chipster.threads.max), verbose=TRUE)
 
 x<-1
 file.create("samples.fastqs.txt")

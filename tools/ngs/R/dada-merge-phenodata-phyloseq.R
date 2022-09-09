@@ -1,4 +1,4 @@
-# TOOL dada-merge-phenodata.phyloseq.R: "Merge phenodata to the phyloseq object" (Merge a phenodata.tsv with the sample information to the given phyloseq object. )
+# TOOL dada-merge-phenodata-phyloseq.R: "Merge phenodata to the phyloseq object" (Merge a phenodata.tsv with the sample information to the given phyloseq object. )
 # INPUT ps_phe.Rda: "Phyloseq object without phenodata/sample information" TYPE GENERIC
 # INPUT META phenodata.tsv: "Class object produced by assign taxonomy" TYPE GENERIC
 # OUTPUT ps_sample_summary.txt

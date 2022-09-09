@@ -9,6 +9,7 @@
 # PARAMETER species: "Exact species level assignment?" TYPE [yes, no] DEFAULT yes (Do you want to assign the sequences to the species level if there is an exact match 100% identity between ASVs and sequenced reference strains?)
 # PARAMETER combine_tables: "Combine the taxonomy and the sequence table" TYPE [yes,no] DEFAULT yes (If set to yes, it combines the taxonomy and the sequence/ASV table into one .tsv file, otherwise the tsv file consist only of the taxonomy table.)
 # RUNTIME R-4.1.1-asv
+
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
 
@@ -29,7 +30,7 @@ if (file.exists("taxa_reference.fasta")){
 }
 set.seed(100) # Initialize random number generator for reproducibility
 # run command assignTaxonomy verbose not important
-taxa <- assignTaxonomy(seqtab.nochim, path1, minBoot=boot, multithread=FALSE)
+taxa <- assignTaxonomy(seqtab.nochim, path1, minBoot=boot, multithread=as.integer(chipster.threads.max))
 
 
 #check if parameter species yes, otherwise skip species level assignment. Use reference file if selected otherwise Silva v.138.1
@@ -66,9 +67,5 @@ if (combine_tables=="yes"){
     # print out only the taxonomy table
     write.table(taxa, file="taxonomy_assignment.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
 }
-
-
-
-
 
 #EOF
