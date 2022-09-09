@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in two samples" (This tool lists the cell type markers that are conserved across the two conditions, and the differentially expressed genes between the two conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.) 
+# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in multiple samples" (This tool lists the cell type markers that are conserved across the conditions, and the differentially expressed genes between the conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv

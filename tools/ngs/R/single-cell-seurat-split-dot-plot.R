@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-split-dot-plot.R: "Seurat v4 -Visualize genes with cell type specific responses in two samples" (This tool gives you plots showing user defined markers/genes across the conditions. This tool can be used for two sample combined Seurat objects.) 
+# TOOL single-cell-seurat-split-dot-plot.R: "Seurat v4 -Visualize genes with cell type specific responses in multiple samples" (This tool gives you plots showing user defined markers/genes across the conditions. This tool can be used for Seurat objects containing two or more samples.) 
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # INPUT OPTIONAL markers.txt: "Optional text file of the markers to plot" TYPE GENERIC (The names of the marker genes you wish to plot can also be given in the form of a text file, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d. In case the text file is provided, the markers to plot parameter is ignored.)
 # OUTPUT OPTIONAL split_dot_plot.pdf
