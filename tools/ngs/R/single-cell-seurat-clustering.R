@@ -4,6 +4,7 @@
 # OUTPUT OPTIONAL clusterPlot.pdf
 # OUTPUT seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
+# OUTPUT OPTIONAL average_expressions.tsv 
 # PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.5 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL perplex: "Perplexity, expected number of neighbors for tSNE plot" TYPE INTEGER DEFAULT 30 (Perplexity, expected number of neighbors. Default 30. Set to lower number if you have very few cells. Used for the tSNE visualisation of the clusters.)
@@ -73,23 +74,6 @@ cell_counts <- table(Idents(seurat_obj), seurat_obj$orig.ident)
 textplot(cell_counts, halign = "center", valign = "center", cex = 1)
 title(paste("Total number of cells: ", length(colnames(x = seurat_obj)), "\n Number of cells in each cluster:"))
 
-
-# Moved to a separate tool:
-# # Find all markers
-#markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = TRUE)
-#markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
-#
-#if (length(warnings()) > 0) {
-#  # or !is.null(warnings())
-#  stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
-#}
-#
-#write.table(as.matrix(markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-## Plot top10 genes of each cluster as a heatmap
-#top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
-#
-## Heatmap
-#DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) + NoLegend()
 
 dev.off() # close the pdf
 
