@@ -4,11 +4,14 @@
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_2.Robj
 # OUTPUT OPTIONAL biomarker_plot.pdf
+# OUTPUT OPTIONAL average_expressions.tsv 
+# OUTPUT OPTIONAL percentage_of_cells_expressing.tsv
 # PARAMETER OPTIONAL biomarker: "Gene name\(s\)" TYPE STRING DEFAULT "MS4A1, LYZ" (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE and UMAP plots.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
+# PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression and percentage of cell expressing in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns a table with 'average' expression and percentage of cells expressing the user defined genes in each cluster.)
 # RUNTIME R-4.1.0-single-cell
 
 
@@ -84,5 +87,30 @@ RidgePlot(seurat_obj, features = biomarker, ncol = 2)
 
 # close the pdf
 dev.off() 
+
+# Average expression table
+# If requested, return expression for an 'average' single cell in each cluster.
+if (output_aver_expr == "T") {
+
+  library(tidyr)
+
+  a <- DotPlot(object = seurat_obj, features = biomarker)
+  b <- a$data
+
+  # Percentages:
+  percentages <- select(b, features.plot, pct.exp, id)  %>% spread(id, pct.exp)
+  row.names(percentages) <- percentages[,1] # pick the gene names as row names
+  percentages <- round(percentages[,-1], digits=2) # remove gene name columns and round the numbers
+  # Write to table
+  write.table(percentages, file = "percentage_of_cells_expressing.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+  # Average expressions:
+  ave.expressions <- select(b, features.plot, avg.exp, id) %>% spread(id, avg.exp)
+  row.names(ave.expressions) <- ave.expressions[,1] # pick the gene names as row names
+  ave.expressions <- round(ave.expressions[,-1], digits=3) # remove gene name columns and round the numbers
+  # Write to table
+  write.table(ave.expressions, file = "average_expressions.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
+}
 
 # EOF
