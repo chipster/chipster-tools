@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL dada_reverse.Rda
 # OUTPUT summary.txt
 # OUTPUT OPTIONAL plotErrors.pdf
-# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end so one forward and one reverse FASTQ file for one sample.)
+# PARAMETER type: "Is the data paired end, IonTorrent or other types of single end reads?" TYPE [paired, IonTorrent, single] DEFAULT paired (Are all the reads paired end or is the data IonTorrent or are the reads other types of single end reads like ITS?)
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
 # PARAMETER pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check the manual.)
 # RUNTIME R-4.1.1-asv
@@ -46,8 +46,8 @@ filenames <- list.files("input_folder", full.names=TRUE)
  # Sort the filenames _R1 _R2, samples have different names
 filenames <- sort(filenames)
 
-# if the reads are paired 
-if (paired=="paired"){
+# if the reads are paired end 
+if (type=="paired"){
 
 # check if the lenght of files in the input_folder is even (all the fastq files have a pair), else error
 number <- length(filenames)%%2
@@ -119,7 +119,7 @@ sink()
 save(dadaFs, file = "dada_forward.Rda")
 save(dadaRs, file = "dada_reverse.Rda")
 
-# ----------------- single end reads, the same thing without reverse parts --------------------------------------------------
+# ----------------- if single end reads, the same thing without reverse parts, if ionTorrent change options --------------------------------------------------
 }else{
 
 # take out the sample names
@@ -141,16 +141,31 @@ if (ploterr == "yes"){
 #run dada() and make a summary. If pool=pseudo then run with parameter pseudo
 if (pool=="independent"){
   sink(file="log2.txt")
-  cat("\nDada function:\n")
-  dadaFs <- dada(filenames, err=errF, multithread=as.integer(chipster.threads.max))
+  cat("\n# Dada() function\nType of pooling: Independent\n")
+  if (type=="IonTorrent"){ #set homopolymer gab penalty -1 and band size 32
+    setDadaOpt(HOMOPOLYMER_GAP_PENALTY=-1, BAND_SIZE=32)
+    cat("Data: IonTorrent\nHOMOPOLYMER_GAB_PENALTY= ",getDadaOpt("HOMOPOLYMER_GAP_PENALTY"),"\n")
+    dadaFs <- dada(filenames, err=errF, multithread=as.integer(chipster.threads.max))
+    
+  }else{
+    cat("Data: single end reads\n")
+    dadaFs <- dada(filenames, err=errF, multithread=as.integer(chipster.threads.max),verbose=TRUE)
+  }
   cat("\n")
   cat("\nDada-class objects describing DADA2 denoising results:\n\n")
   print(dadaFs)
   sink()
 }else{
   sink(file="log2.txt")
-  cat("\nDada function:\n")
-  dadaFs <- dada(filenames, err=errF, pool="pseudo", multithread=as.integer(chipster.threads.max))
+  cat("\n# Dada() function\nType of pooling: Pseudo-pooling\n")
+  if (type=="IonTorrent"){
+    setDadaOpt(HOMOPOLYMER_GAP_PENALTY=-1, BAND_SIZE=32)
+    cat("Data: IonTorrent\nHOMOPOLYMER_GAB_PENALTY= ",getDadaOpt("HOMOPOLYMER_GAP_PENALTY"),"\n")
+    dadaFs <- dada(filenames, err=errF, multithread=as.integer(chipster.threads.max))
+  }else{
+    cat("Data: single end reads\n")
+    dadaFs <- dada(filenames, err=errF, pool="pseudo", multithread=as.integer(chipster.threads.max))
+  }
   cat("\n")
   cat("\nDada-class objects describing DADA2 denoising results:\n\n")
   print(dadaFs)
