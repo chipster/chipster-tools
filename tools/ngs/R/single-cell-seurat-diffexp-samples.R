@@ -9,7 +9,10 @@
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
 # PARAMETER OPTIONAL pval.cutoff.conserved: "Adjusted p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the conserved cluster marker genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
+# PARAMETER OPTIONAL mincellsconserved: "Minimum number of cells in one of the groups for conserved markers" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in a each sample in the cluster in question.)
 # RUNTIME R-4.1.0-single-cell
+
+
 
 
 # 2018-16-05 ML 
@@ -18,6 +21,7 @@
 # 30.10.2019 ML Add filtering parameters
 # 02.12.2019 EK Change FC filter to use logfc.threshold prefiltering, add adjusted p-value filtering for DE genes
 # 2021-10-04 ML Update to Seurat v4
+# 2022-09-20 ML Add min.cells.group parameter  
 
 library(Seurat)
 
@@ -34,8 +38,8 @@ if (exists("seurat_obj")) {
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
-cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-    verbose = FALSE, logfc.threshold = logFC.conserved)
+cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive, 
+    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved)
 
 
 # Filter conserved marker genes based on adj p-val:
