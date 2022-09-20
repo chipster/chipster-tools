@@ -77,23 +77,6 @@ textplot(cell_counts, halign = "center", valign = "center", cex = 1)
 title(paste("Total number of cells: ", length(colnames(x = seurat_obj)), "\n Number of cells in each cluster:"))
 
 
-# Moved to a separate tool:
-# # Find all markers
-#markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = TRUE)
-#markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
-#
-#if (length(warnings()) > 0) {
-#  # or !is.null(warnings())
-#  stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
-#}
-#
-#write.table(as.matrix(markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-## Plot top10 genes of each cluster as a heatmap
-#top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
-#
-## Heatmap
-#DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) + NoLegend()
-
 dev.off() # close the pdf
 
 # Average expression table

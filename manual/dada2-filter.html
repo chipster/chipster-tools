@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Filter sequences with DADA2</h2>
+
+<h3>Description</h3>
+
+<p>
+Given a tar package of FASTQ files, this tool filters the input sequences which don't fullfill the user defined criteria.
+This tool can be used either for single or paired end reads, but the type of the data needs to be specified. If the reads are single end, 
+use only those forward read parameters.
+<br>The filtered FASTQ files are put in one tar package
+</p>
+
+<h3>Parameters</h3>
+<ul>
+    <li>Is the data paired end or single end reads (paired, single) [paired]</li>
+    <li>Truncate forward reads after this amount of bases ( 0- ) [0] </li>
+    <li>Truncate reverse reads after this amount of bases (0 - ) [0]</li>
+    <li>Discard input sequences with more than specified number of Ns (0 - ) [0]</li>
+    <li>Discard forward sequences with more than the specified number of expected errors (0 - ) [empty]</li>
+    <li>Discard forward sequences with more than the specified number of expected errors (0 - ) [empty]</li>
+    <li>Truncate reads at the first instance of a quality score less than or equal to the specified number (0 - ) [2]</li>
+    <li>The number of nucleotides to remove from start of each read</li>
+</ul>
+
+<h3>Details</h3>
+<p>
+This tool takes a Tar package of FASTQ files (you can create one using the tool Utilities / Make a Tar package) and filters
+them based on the user specified parameters. The FASTQ files in the tar package can be compressed.
+<br>
+The data can be either paired end or single end reads, but you need to specify the right type with the first parameter.
+<br>
+If the reads are single end, then the parameters "Truncate reverse reads after this amount of bases" and 
+"Discard reverse sequences with more than the specified number of expected errors" are not used. 
+<br>
+If the reads are paired end, then for one sample one reverse and one forward FASTQ file should be provided in which case
+filtering is performed on the forward and reverse reads independently, and both reads must pass for the read pair no to be filtered.
+<br>
+<br>
+Truncate reads after specified amount of bases is set to 0 by default which means that no truncation will happen.
+<br>
+Setting the parameter "Truncate reads at the first instance of a quality score less than or equal" to 0, will turn off this behaviour.
+<br>
+For example, if parameter TRUNCQ=2 is set, it means that it will truncate the read at the first nucleotide with a quality score of 2 (if there is one). 
+The read is only then discarded if it is now shorter than truncLen.
+<br>
+Max Ns should be kept 0 if you want to continue with the ASV/DADA2 pipeline, because the dada() function doesn't allow any Ns.
+<br>
+By default, the maximum expected error parameter is not used which will mean that the parameter is set to 'Inf'. After truncation, reads with more 
+than the specified number of expected errors will be discarded. 
+<br>Expected errors are calculated from the nominal definition of the quality score: sum(10^(-Q/10)).
+<br>
+DADA2 tutorial suggest that the maximum expected errors threshold should be set to 2. 
+<br> If your reads are high quality and you want to speed up downstream computation, you can try to tighten this parameter.
+<br>
+<br>
+Note that this tool discards reads that match against PhiX genome.
+<br>
+<br>
+Running the tool "Read quality with MultiQC for many FASTQ files" can help to determine the values for the parameters.
+<br> If quality drops sharply at the end of your reads, reduce truncLen. 
+<br>
+If too few reads are passing the filter, try to change the parameter values for example by increasing
+the maximun expected error and/or reducing truncQ. 
+<br>
+Remember when choosing the truncLen parameter you must maintain the overlap region for paired end reads after truncation to merge them to contigs later.
+<br>
+<br>
+If the data is paired end:
+<br>
+The FASTQ files/pair from one sample is recognized by the name of the files. Therefore those should be named so that the files from 
+one sample/pair should have the same name but a different tag and the forward files should be before the reverse files 
+after the sort() function.
+<br>
+The filtered FASTQ files will be named by splitting the filename with '_' and adding a 'F' or 'R' tag to the name.
+<br>
+You can check how the FASTQ files were assigned to samples from the result file samples.fastqs.txt. If the assignment
+to samples is not correct, you can make a samples.fastqs.txt file yourself and give it as input. 
+<br>
+This file has 3 columns: sample name, name of the forward FASTQ file (R1), and name of the reverse FASTQ file name (R2) 
+which have been separated with tabulator ('\t'), So the file and the names should be named like this:
+<br>
+<pre> 
+sample1  sample1_xx_R1.fastq  sample1_xx_R2.fastq  
+</pre>      
+<br>
+If the data is single end reads, you can use that input file to rename/specify the sample names. Otherwise,
+the filtered FASTQ files will be named by splitting the filename with '_'. If the reads are single end, the samples.fastqs.txt
+will have only 2 columns: sample name + '\t' + filename
+<br>
+<br>
+This tool is based on the filterAndTrim() tool from the DADA2 package.
+<p>
+
+<h3>Output</h3>
+</p>
+The analysis output consists of the following:
+<ul>
+    <li>filtered.tar: A Tar package containing all the filtered FASTQ files. </li>
+    <li>summary.txt: Summary statistics on how many reads where filtered from each sample.</li>
+    <li>samples.fastqs.txt: Shows how the FASTQ files were assigned to samples</li>
+</ul>
+</p>
+
+<h3>References</h3>
+<p>
+    check filterAndTrim() from the dada2 manual: <br>
+<a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+<br>
+<a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
+<br>
+by Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJ, Holmes SP (2016). 13(7), 581-3. <br>
+<a href="https://www.researchgate.net/publication/345890170_DADA2_High_resolution_sample_inference_from_amplicon_data"> DADA2: High resolution sample inference from Illumina amplicon data. Nature Methods </a> 
+</p>
+</body>

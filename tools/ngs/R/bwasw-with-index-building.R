@@ -16,6 +16,7 @@
 # PARAMETER OPTIONAL sa.interval: "Maximum SA interval size" TYPE INTEGER DEFAULT 3 (Maximum SA interval size for initiating a seed. Higher value increases accuracy at the cost of speed. Corresponds to the command line parameter -s.)
 # PARAMETER OPTIONAL min.support: "Reverse alignment limit" TYPE INTEGER DEFAULT 5 (Minimum number of seeds supporting the resultant alignment to skip reverse alignment. Corresponds to the command line parameter -N)
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments are reported per read" TYPE  INTEGER DEFAULT 3 (Maximum number of alignments to report. Corresponds to the command line parameter bwa samse -n )
+# RUNTIME R-4.1.1
 
 # KM 24.8.2011
 # AMS 19.6.2012 Added unzipping
@@ -33,7 +34,7 @@ command.start <- paste("bash -c '", bwa.binary)
 
 # Do indexing
 print("Indexing the genome...")
-system("echo Indexing the genome... > bwa.log")
+runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 #genome.dir <- system(check.command, intern = TRUE)
 #bwa.genome <- file.path( genome.dir , "genome.txt")
@@ -46,38 +47,38 @@ mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.pen
 command.end <- paste( bwa.genome , "reads.txt 1> alignment.sai 2>> bwa.log'")
 
 # run bwa alignment
-system("echo Running the alignment with command: >> bwa.log")
+runExternal("echo Running the alignment with command: >> bwa.log")
 bwa.command <- paste(command.start, mode.parameters, command.end)
 echo.command <- paste("echo '",bwa.command ,"'  >> bwa.log")
-system(echo.command)
+runExternal(echo.command)
 #stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(bwa.command)
+runExternal(bwa.command)
 
 # sai to sam conversion
-system("echo Running sai to sam conversion with command: >> bwa.log")
+runExternal("echo Running sai to sam conversion with command: >> bwa.log")
 samse.parameters <- paste("samse -n", alignment.no )
 samse.end <- paste(bwa.genome, "-f alignment.sam alignment.sai reads.txt >> bwa.log'" )
 samse.command <- paste( command.start, samse.parameters , samse.end )
 echo.command <- paste("echo '",samse.command )
-system(echo.command)
+runExternal(echo.command)
 echo.command <- paste("echo '",samse.end," >> bwa.log" )
-system(echo.command)
-system(samse.command)
+runExternal(echo.command)
+runExternal(samse.command)
 
 		
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system("echo Converting sam to bam format. >> bwa.log")
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+runExternal("echo Converting sam to bam format. >> bwa.log")
+runExternal(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")

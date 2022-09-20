@@ -47,7 +47,7 @@ options(scipen = 10)
 # setting up TopHat
 tophat.binary <- c(file.path(chipster.tools.path, "tophat2", "tophat2"))
 path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))
-path.samtools <- c(file.path(chipster.tools.path, "samtools"))
+path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
 set.path <-paste(sep="", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 path.bowtie.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "bowtie2", organism))
 path.tophat.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "tophat2", organism))
@@ -106,7 +106,7 @@ system("echo >> tophat.log")
 system(command)
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # sort bam (removed because TopHat itself does the sorting)
 # system(paste(samtools.binary, "sort tophat_out/accepted_hits.bam tophat"))

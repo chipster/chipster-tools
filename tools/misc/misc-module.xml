@@ -139,7 +139,20 @@
 		<tool>factoextra.R</tool>
 		<tool module="ngs">hisat2-paired-end-storage.R</tool>
 		<tool module="ngs">hisat2-paired-end-test.R</tool>
+		<tool>verify-tools-bin.py</tool>
 
 	</category>
+
+	<!-- <category name="Genomes" color="#83010b">
+		<tool>genome-download.py</tool>
+		<tool>filter-fasta.py</tool>
+		<tool>index-bowtie.py</tool>
+		<tool>index-bowtie2.py</tool>
+		<tool>index-bwa.py</tool>
+		<tool>index-gtf.py</tool>
+		<tool>index-hisat2-large.py</tool>
+		<tool>index-hisat2.py</tool>
+		<tool>index-star.py</tool>
+	</category> -->
 
 </module>

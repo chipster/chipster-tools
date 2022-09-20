@@ -18,7 +18,7 @@
 # PARAMETER OPTIONAL r: "Require that the fraction overlap be reciprocal for A and B" TYPE [yes, no] DEFAULT no (Require that the fraction overlap be reciprocal for A and B. In other words, if minumum overlap is 0.90 and this option is selected, this requires that B overlap 90% of A and A also overlaps 90% of B.)
 # PARAMETER OPTIONAL ubam: "Write uncompressed BAM output" TYPE [yes, no] DEFAULT no (Write uncompressed BAM output. Default is to write compressed BAM.)
 # PARAMETER OPTIONAL bed: "When using BAM input, write output as BED" TYPE [yes, no] DEFAULT no (When using BAM input, the default is to write output in BAM.)
-# PARAMETER OPTIONAL split: "Treat split BAM or BED12 entries as distinct BED intervals" TYPE [yes, no] DEFAULT no (Treat "split" BAM (i.e., having an “N” CIGAR operation\) or BED12 entries as distinct BED intervals.)
+# PARAMETER OPTIONAL split: "Treat split BAM or BED12 entries as distinct BED intervals" TYPE [yes, no] DEFAULT no (Treat "split" BAM (i.e., having an ï¿½Nï¿½ CIGAR operation\) or BED12 entries as distinct BED intervals.)
 
 # AMS 23.4.2012
 # AMS 11.10.2012 Fixed BAM file support
@@ -26,7 +26,7 @@
 
 # binary
 binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "intersectBed"))
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # options
 options <- paste("")

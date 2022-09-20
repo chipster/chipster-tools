@@ -6,7 +6,7 @@
 # AMS 2020-01-21
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
 
 # Change command
 system(paste(samtools.binary,"view -h alignment.bam | sed s/XS:A:+/XS:A:P/ | sed s/XS:A:-/XS:A:+/ | sed s/XS:A:P/XS:A:-/ |",samtools.binary,"view -bS - > alignment-edited.bam"))
