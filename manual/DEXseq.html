@@ -28,8 +28,9 @@ In this case no graphical output is generated.</p>
 
 <p>p-values are corrected for multiple testing using the Benjamini-Hochberg method. If a gene has at least one exon below the given threshold, all its exons will be included in the result list.</p>
 
-<p>Please note that if you have a tens or hundreds of samples and you are studying an organism that has many genes and exons, DEXSeq will take days to run and it will eventually fail.
-One option is to make a chromosome specific GTF (in order to reduce the number of exon bins tested) and use the tool "Differential exon expression using DEXSeq and own GTF".
+<p>Please note that if you have a tens or hundreds of samples and an organism that has many genes and exons, DEXSeq will take days to run and it will eventually fail.
+One option is to reduce the number of genes and thereby exon bins to be tested. 
+  You can make for example a chromosome-specific GTF and use the tool "Count aligned reads per exons for DEXSeq using own GTF" for counting.
   </p> 
 <h3>Output</h3>
 <p>The analysis output consists of the following files:</p>
