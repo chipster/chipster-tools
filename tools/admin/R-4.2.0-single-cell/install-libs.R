@@ -22,3 +22,5 @@ BiocManager::install('multtest')
 
 # requires multtest
 install.packages('metap')
+
+install.packages("hdf5r")
