@@ -2,7 +2,7 @@
 # INPUT seurat_obj_integrated.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integration_plot.pdf
 # PARAMETER OPTIONAL genes: "Features to plot" TYPE STRING DEFAULT "L4" (Names of the features to plot. If you list multiple gene names, use comma as separator.)
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 
 # 2022-08-05 IH
 

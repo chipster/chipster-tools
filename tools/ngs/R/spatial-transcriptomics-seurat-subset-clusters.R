@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # OUTPUT OPTIONAL subset.pdf
 # PARAMETER OPTIONAL clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 
 # 2022-08-03 IH
 

@@ -2,7 +2,7 @@
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_multiple.Robj
 # PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the samples.)
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 # SLOTS 3
 
 # 2022-07-21 IH

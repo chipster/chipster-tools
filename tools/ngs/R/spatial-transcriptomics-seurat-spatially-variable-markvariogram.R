@@ -1,7 +1,7 @@
 # TOOL spatial-transcriptomics-seurat-spatially-variable-markvariogram.R: "Seurat v4 -Identify spatially variable genes using markvariogram" (Identify genes that have spatial patterning without taking cluster information or spatial annotation into account.)
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot2.pdf
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 
 # 2022-08-01 IH
  

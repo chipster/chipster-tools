@@ -4,7 +4,8 @@
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
 # PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
+
 
 # 2022-07-29 IH
 
@@ -15,6 +16,10 @@ library(dplyr)
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_spatial_obj_pca.Robj")
+
+# kokeillaan:
+seurat_obj = PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
+
 
 #Differential expression
 de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test)

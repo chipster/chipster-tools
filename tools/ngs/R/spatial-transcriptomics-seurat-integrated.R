@@ -3,7 +3,7 @@
 # INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration.)
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # OUTPUT OPTIONAL UMAP_plot.pdf
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 # SLOTS 3
 
 library(Seurat)
