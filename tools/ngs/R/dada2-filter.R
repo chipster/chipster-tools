@@ -1,4 +1,4 @@
-# TOOL dada2-filter.R: "Filter sequences with DADA2" (Given a tar package of FASTQ files, this tool filters the input sequences which don't fullfill the user defined criteria. This tool can be used either for single or paired end reads. If the reads are single end, then use only the parameters for forward reads. For more information please check the manual.)
+# TOOL dada2-filter.R: "Filter and trim sequences with DADA2" (Given a tar package of FASTQ files, this tool filters the input sequences which don't fullfill the user defined criteria. This tool can be used either for single or paired end reads. If the reads are single end, then use only the parameters for forward reads. For more information please check the manual.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC (If the FASTQ files are not assigned into samples correctly, you can give a file containing this information. Check instructions from manual)
 # OUTPUT filtered.tar
@@ -12,6 +12,7 @@
 # PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done. Use only for paired end reads.)
 # PARAMETER OPTIONAL truncq: "Truncate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off.)
 # PARAMETER OPTIONAL triml: "The number of nucleotides to remove from start of each read" TYPE INTEGER FROM 0 DEFAULT 0 (The number of nucleotides to remove from the start of each read. If both truncLen and trimLeft are provided, filtered reads will have length truncLen-trimLeft.)
+# PARAMETER OPTIONAL minlen: "Remove reads which are shorter than this" TYPE INTEGER FROM 0 DEFAULT 0 (Removes reads which are shorter than the specified value. Min length is enforced after all other trimming and truncation. This parameter is especially usefull when truncLen parameter is not used for example with ITS data.)
 # RUNTIME R-4.1.1-asv
 
 # SLOTS 2
@@ -86,7 +87,6 @@ if (fileOk("input_list.txt")) {
 
   # check if the lenght of files in the input_folder is even, else error
   number <- length(filenames)%%2
-  
   if (number != 0){
       stop(paste('CHIPSTER-NOTE: ',"It seems that some of your fastq files doesn`t have a pair"))
       }
@@ -126,7 +126,7 @@ if (!fileOk("input_list.txt")){
   }
   # run filterAndTrim 
   out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs, truncLen=c(truncf,truncr),
-                maxN=maxns, maxEE=c(maxeef,maxeer), truncQ=truncq, rm.phix=TRUE,
+                maxN=maxns, maxEE=c(maxeef,maxeer), truncQ=truncq, minLen = minlen, rm.phix=TRUE,
                 compress=TRUE, multithread=as.integer(chipster.threads.max), verbose=TRUE)
               
 
@@ -184,7 +184,7 @@ if (fileOk("input_list.txt")) {
 
   # run filterAndTrim 
   out <- filterAndTrim(filenames, filtreads, truncLen=truncf,
-                maxN=maxns, maxEE=maxeef, truncQ=truncq, rm.phix=TRUE,
+                maxN=maxns, maxEE=maxeef, truncQ=truncq, minLen = minlen, rm.phix=TRUE,
                 compress=TRUE, multithread=as.integer(chipster.threads.max), verbose=TRUE)
 
 x<-1
@@ -205,3 +205,4 @@ system("gzip output_folder/*.fq")
 system("cd output_folder && tar cf ../filtered.tar *")
 
 #EOF
+
