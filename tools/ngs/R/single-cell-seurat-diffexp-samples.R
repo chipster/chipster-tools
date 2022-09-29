@@ -23,6 +23,8 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2022-07-21 ML Tune for SCTransform data
 # 2022-09-22 ML Fix conserved markers filtering for multiple sample case, add sanity check for cluster number
+# 2022-09-20 ML Add min.cells.group parameter  
+
 
 library(Seurat)
 
@@ -46,7 +48,7 @@ if is.na(match(cluster, levels(Idents(data.combined))) ){
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
-cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive, 
+cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,  
     verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved)
 
 

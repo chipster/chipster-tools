@@ -22,3 +22,6 @@ BiocManager::install('multtest')
 
 # requires multtest
 install.packages('metap')
+
+install.packages("hdf5r")
+BiocManager::install('limma')
