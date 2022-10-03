@@ -41,9 +41,9 @@ if (normalisation.method == "SCT"){
 }
 
 # Check that this cluster is available in data:
-if is.na(match(cluster, levels(Idents(data.combined))) ){
-  stop("CHIPSTER-NOTE: Cluster given as input can not be found in the Seurat object!")
-}
+# if is.na(match(cluster, levels(Idents(data.combined))) ){
+#   stop("CHIPSTER-NOTE: Cluster given as input can not be found in the Seurat object!")
+#  }
 
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
