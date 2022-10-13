@@ -269,6 +269,8 @@
 	</category>
 
 	<category name="Microbial amplicon data preprocessing for ASV" color="#a49900">
+		<tool>identify-primers.R</tool>
+		<tool>cutadapt.R</tool>
 		<tool>dada2-filter.R</tool>
 		<tool>dada2-dada.R</tool>
 		<tool>dada2-merge.R</tool>
