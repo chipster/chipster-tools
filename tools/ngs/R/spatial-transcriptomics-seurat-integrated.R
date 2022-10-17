@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # OUTPUT OPTIONAL UMAP_plot.pdf
 # RUNTIME R-4.2.0-single-cell
-# SLOTS 3
+# SLOTS 5
 
 library(Seurat)
 library(ggplot2)
