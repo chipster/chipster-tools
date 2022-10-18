@@ -8,6 +8,7 @@
 
 # 2022-07-15 IH
 # 2022-10-13 ML Coordinates to integers -check and input folder handling
+# 2022-10-18 ML Add samplename to a metadata field
 
 library(Seurat)
 library(ggplot2)
@@ -71,6 +72,9 @@ if (class(seurat_obj@images[[sample_name]]@coordinates[["tissue"]]) == "characte
   seurat_obj@images[[sample_name]]@coordinates[["imagerow"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagerow"]])
   seurat_obj@images[[sample_name]]@coordinates[["imagecol"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagecol"]])
 }
+
+# Add samplename to metadata field (for plotting)
+seurat_obj@meta.data$orig.ident <- sample_name 
 
 
 # Open the pdf file for plotting
