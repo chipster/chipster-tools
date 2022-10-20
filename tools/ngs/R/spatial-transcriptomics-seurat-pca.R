@@ -9,6 +9,7 @@
 # RUNTIME R-4.2.0-single-cell
 
 # 2022-07-27 IH
+# 2022-10-20 ML Add UMAP plot with sample names
 
 library(Seurat)
 library(dplyr)
@@ -38,8 +39,12 @@ seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
 # Open the pdf file for plotting
 pdf(file="UMAP_plot.pdf", , width=9, height=12) 
 
-#visualise the results of the clustering 
-DimPlot(seurat_obj, reduction = "umap", label = TRUE)
+# visualise the results of the clustering 
+# Also draw UMAP plot with orig ident (handy when there are multiple samples)
+# DimPlot(seurat_obj, reduction = "umap", group.by = c("ident", "orig.ident"))
+# DimPlot(seurat_obj, reduction = "umap", label = TRUE)
+DimPlot(seurat_obj, reduction = "umap", group.by = "ident")
+DimPlot(seurat_obj, reduction = "umap", group.by = "orig.ident")
 
 SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3)
 
