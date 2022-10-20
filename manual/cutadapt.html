@@ -3,91 +3,76 @@
 <head><title></title></head>
 <body>
 
-Notes
--a 3´ adapter after  -A 
-Cutadapt deals with 3’ adapters by removing the adapter itself and any sequence that may follow
+<h2>Remove primers and adapters with Cutadapt</h2>
 
+<h3>Description</h3>
 
--g 5' adapter before -G
-the adapter sequence needs to either appear in full somewhere within the read (internal match) or at the start (5’ end) of it,
-where in the latter case also partial occurrences are allowed. n all cases, the adapter itself and the sequence preceding it is removed.
+<p>
+Given a tar package of FASTQ files, this tool tries to remove the adapter or primer sequences given as parameters 
+using the commandline tool <a href="https://cutadapt.readthedocs.io/en/stable/">Cutadapt</a>. The FASTQ files can be compressed. 
 
-Anchored 5’ adapters ^
-adapter that is expected to occur in full length at the beginning of the read.
+</p>
 
--e error-rate default 0.1
-minimum overlap default 3.
--e and -O set the maximum error rate and minimum overlap parameters 
+<h3>Parameters</h3>
+<ul>
+    <li>Is the data paired end or single end reads (paired, single) [paired]</li>
+    <li>The 5´ end adapter to be trimmed</li>
+    <li>The 3' end adapter to be trimmed</li>
+</ul>
 
+<h3>Details</h3>
+<p>
+Given a tar package of FASTQ files, this tools removes the 5' end and 3' end primers found from the fastq files. You can use the tool "Identify primers and correct orientation"
+before and after primer trimming to check if the adapter sequences were actually found from the FASTQ files and removed correctly. You can copy the right orientation of the 
+primer from the report and use it with this tool. 
+<br>
+<br>
+Note that if the output from the tool "Identify primers and the correct orientation" seems to be weird, it might be a good idea to remove the ambiguous 'N' nucleotides from the FASTQ files.
 
--o output file name
+<br>
+<br>
+This tool can be used for paired and single end reads. If the reads are paired end, this tool assumes that the forward and reverse files have the same name but a different tag
+on it. 
+<br>
+If your reads are paired end, then the adapters from the reverse files will be removed by removing the reverse complement of the 3´and 5´adapters. 
+<br>
+Cutadapt deals with the 3´ adapters by removing the adapter itself and any sequence that may follow it.
+<br>
+The 5´ adapters needs to either appear full somewhere within the read or at the start in the 5´ end of the read when also partially occurences are allowed. 
+<br>
+Cutadapt removes the sequence preceding the 5' adapter. 
+<br>
+<br>
+Cutadapt searches for the adapter in all the reads and removes it when it finds it. Thus, all the reads which were present in input file will be present in the output file aswell.
+<br>
+<br>
+Cutadapt removes and identifys adapter sequences even if there are few errors between the adapter and the matching sequence. 
+Cutadapt uses error treshold of 0.1 which means that it allows one error in every 10 nucleotides. 
+The allowed errors are mismatches, insertions and deletions. 
+<br>
+In addition, the minimun overlap between the adapter sequence and the read needs to be 3 base pairs long which reduce the risk for random matches. 
+<br>
+For more information on the Cutadapt command please check the <a href="https://cutadapt.readthedocs.io/en/stable/guide.html#">User guide</a>
+<br>
+<br>
+As the output, you will get one tar package containing all the FASTQ files from which the adapters were removed and a summary txt filename
+which has all the information on the process produced by Cutadapt.
+</p>
 
-Cutadapt searches for the adapter in all reads and removes it when it finds it. 
-Unless you use a filtering option, all reads that were present in the input file will also be present in the output file, some of them trimmed, some of them not. 
-Even reads that were trimmed to a length of zero are output. All of this can be changed with command-line options, explained further down
+<h3>Output</h3>
+<p>
+The analysis output consists of the following:
+<ul>
+    <li>adapters_removed.tar: A tar package containing all the FASTQ files from which the specified adapters were removed</li>
+    <li>summary.txt: Summary produced by Cutadapt. Information about the adapter trimming.</li>
+</ul>
 
-paired or single end!
-
-<a href="https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf">Xutadapt user guide</a>
-
-support compressed input automaically .gz :)  and output. FASTQ or FASTA
-redirect 2> report.txt
-
-
-Multi-core support
-Cutadapt supports parallel processing, that is, it can use multiple CPU cores. Multi-core is not enabled by default. 
-To enable it, use the option -j N (or the spelled-out version --cores=N), where N is the number of cores to use.
-
-Cutadapt can do a lot more in addition to removing adapters:
-1. adapter trimming after quality trimming before length trimming
-2. filtering options to remove too short reads
-
-All searches for adapter sequences are error tolerant. Allowed errors are mismatches, insertions and deletions. 
-For example, if you search for the adapter sequence ADAPTER and the error tolerance is set appropriately (as explained below),
-then also ADABTER will be found (with 1 mismatch), as well as ADAPTR (with 1 deletion), and also ADAPPTER (with 1 insertion). 
-If insertions and deletions are disabled with --no-indels, then mismatches are the only type of errors.
-The actual error rate is computed as the number of errors in the match divided by the length of the matching part of the adapter.
-For example, an adapter match of length 8 containing 1 error has an error rate of 1/8=0.125. At the default maximum error rate 0.1, 
-it would not be found, but a match of length 10 containing 1 error has an error rate of 1/10=0.1 and would be found.
-
-- When not anchored
-
-
-Any N wildcard characters in the adapter sequence are skipped when computing the error rate.
-- Should be removed before
-
-To reduce the number of falsely trimmed bases, the alignment algorithm requires that at least three bases of the adapter are aligned to the read.
-
-To change this, use option --revcomp or its abbreviation --rc. If given, Cutadapt searches both the read and its reverse complement for adapters. 
-If the reverse complemented read yields a better match, then that version of the read is kept. That is, the output file will contain the reverse-complemented sequence. 
-
-instead of writing ten A in a row (AAAAAAAAAA), write A{10} 
-
-Can also be used for quality trimming:
-length filtering first 5: -u 5  last 5 : -u -5    
-
-quality filtering -q 
-The -q (or --quality-cutoff) parameter can be used to trim low-quality ends from reads. If you specify a single cutoff value, the 3’ end of each read is trimmed
-It is also possible to also trim from the 5’ end by specifying two comma-separated cutoffs as 5’ cutoff,3’ cutoff.
-Quality trimming is done before any adapter trimming.
-
-To shorten each read down to a certain length, use the --length option or the short version -l:
-
-Also many filtering options. 
-
-
-Paired end filtering:
-
-In paired-end mode, Cutadapt checks whether the input files are properly paired. An error is raised if one of the files contains more reads than the other or if the read names in the two files do not match.
-The read name comparison ignores a trailing /1 or /2 to allow processing some old Illumina paired-end files.
-Cutadapt will always ensure that it is also removed from the other file.
-
-Linked adapters or not? 
-if not use -n 2 or more if needed
-
-
-Illumina truseq
-
-you can skip the warning:
- One or more of your adapter sequences may be incomplete.
-Please see the detailed output above.
+</p>
+<h3>References</h3>
+<p>
+<a href="https://journal.embnet.org/index.php/embnetjournal/article/view/200">Cutadapt reference</a>
+<br>
+<a href="https://cutadapt.readthedocs.io/en/stable/guide.html#trimming-paired-end-reads">Cutadapt user guide</a>
+<br>
+<a href="https://cutadapt.readthedocs.io/en/stable/">Cutadapt</a>
+</p>

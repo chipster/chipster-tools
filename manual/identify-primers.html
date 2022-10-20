@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Identify primers and check the correct orientation</h2>
+
+<h3>Description</h3>
+
+<p>
+Given a tar package of fastq files or forward and reverse FASTQ files independently, this tool check if the adapters given as parameters 
+were found how many times in which orientation from one sample. This tool uses the Biostrings and ShortRead libraries. 
+
+</p>
+
+<h3>Parameters</h3>
+<ul>
+    <li>Are the reads paired or single end?  (paired, single) [single]</li>
+    <li>The 5´ end adapter to be trimmed:</li>
+    <li>The 3' end adapter to be trimmed:</li>
+
+</ul>
+
+<h3>Details</h3>
+<p>
+This tool can be used to check if the 3´ / 5' primers were found from the sequence. You can give either a tar package of FASTQ files
+or the forward/reverse FASTQ file independently. If you give a tar package, you need to specify if the reads are paired or single end.
+<br>
+It's recommended to run this tool before and after the adapter removal to be sure that the adapters were remove in correct orientation.
+<br>
+Please note that it might be a good idea to remove the ambigious bases for example with the tool "Filter and trim sequences with DADA2"
+because the presence pf 'N' bases makes the accurate mapping of short primer sequences difficult. 
+If you have 'N' bases the output tsv table might look weird. 
+<br>
+<br>
+Please give the adapter sequence nucleotides using the DNA strings. The allowed letters/nucleotide codes can be seen <a href="https://www.bioinformatics.org/sms/iupac.html">here</a>.
+<br>
+This tool will use only one sample to check for the given primers and report how many times it was found in the read. Assuming that 
+all the files/samples were created using the same library preparation, it's sufficient to just process one sample. 
+<br>
+So, in other words, if you give a tar package containing many samples, only one sample will be used to check for the primers.  
+<br>
+<br>
+If you have paired end reads, the samples in the tar package should be named so that the forward and reverse files from one sample 
+should have the same name but a different tag. 
+<br>
+<br>
+This tool will also create a orientation-summary.txt file which has all the orientations of the 3' and 5' adapters. So, you can see 
+and then copy the right orientation from there to Cutadapt tool to remove those. For more information on that check the tool Cutadapt.
+
+</p>
+
+<h3>Output</h3>
+</p>
+The analysis output consists of the following:
+<ul>
+    <li>primer-summary.tsv: A tsv table showing how many times the given adapters were found from one sample and in which orientation.</li>
+    <li>orientations_summary.txt: A txt file to see all the different orientations of the adapters.</li>
+</ul>
+</p>
+
+<h3>References</h3>
+<p>
+<a href="https://benjjneb.github.io/dada2/ITS_workflow.html">DADA2 ITS pipeline</a>
+<br>
+<a href="https://bioconductor.org/packages/devel/bioc/manuals/Biostrings/man/Biostrings.pdf">Biostrings - DNAstring</a>
+
+</p>
+</body>

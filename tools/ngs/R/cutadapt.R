@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL adapters_removed.tar
 # OUTPUT report.txt
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
-# PARAMETER OPTIONAL adapter5: "Forward or the 5' adapter to be trimmed" TYPE STRING
+# PARAMETER OPTIONAL adapter5: "The 5' adapter to be trimmed" TYPE STRING
 # PARAMETER OPTIONAL adapter3: "The 3' adapter to be trimmed" TYPE STRING
 # RUNTIME R-4.1.1-asv
 
@@ -104,10 +104,10 @@ if (paired =="single"){
     x=x+1
     system(command)
   }
-}else{ #paired lets have fun
+}else{ #paired 
   x<-1
   for (file in fnFs){
-    command <- paste(binary, R1.flags, R2.flags,"--rc","-n", 2,"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x], "> report.txt")
+    command <- paste(binary, R1.flags, R2.flags,"-n", 2,"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x], "> report.txt")
     x=x+1
     system(command)
 }
