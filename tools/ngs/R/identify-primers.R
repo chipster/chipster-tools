@@ -1,4 +1,4 @@
-# TOOL identify-primers.R: "Identify primers and the correct orientation" (Given a fastq file and the adapter or primer sequences, this tool checks if the adapter/primer sequences were found in the sample and in which orientation. The FASTQ files can be in a tar package but then you need to specify if the reads are paired end or not. )
+# TOOL identify-primers.R: "Identify primers and the correct orientation" (Given a FASTQ file and the adapter or primer sequences, this tool checks if the adapter/primer sequences were found in the sample and in which orientation. The FASTQ files can be in a tar package but then you need to specify if the reads are paired end or not. )
 # INPUT OPTIONAL reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # INPUT OPTIONAL file1.fastq: "Forward fastq file" TYPE GENERIC ("Forward fastq file")
 # INPUT OPTIONAL file2.fastq: "Reverse fastq file" TYPE GENERIC ("Reverse fastq file")

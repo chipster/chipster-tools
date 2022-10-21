@@ -1,13 +1,14 @@
-# TOOL cutadapt.R: "Remove primers and adpters with Cutadapt" (Given a tar package of fastq files, this tool removes the primer and adapter sequences.)
+# TOOL cutadapt.R: "Remove primers and adpters with Cutadapt" (Given a tar package of FASTQ files, this tool removes the primer and adapter sequences given as parameters.)
 # INPUT OPTIONAL reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL adapters_removed.tar
 # OUTPUT report.txt
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
-# PARAMETER OPTIONAL adapter5: "The 5' adapter to be trimmed" TYPE STRING
-# PARAMETER OPTIONAL adapter3: "The 3' adapter to be trimmed" TYPE STRING
+# PARAMETER OPTIONAL adapter5: "The 5' end adapter to be trimmed" TYPE STRING
+# PARAMETER OPTIONAL adapter3: "The 3' end adapter to be trimmed" TYPE STRING
 # RUNTIME R-4.1.1-asv
 
 # ES 30.9.2022
+# added multi-core support 20.10.2022
 # INPUT OPTIONAL file.fastq: "fastq file" TYPE GENERIC
 
 
@@ -66,11 +67,11 @@ if (paired=="paired"){
   # sorted filenames, allways forward,reverse,forward....
   forward <- seq(1,length(filenames),by=2)
   fnFs <- filenames[forward]
-  fnFs.cut <- file.path("output_folder",paste0(basename(fnFs),"-cut-F.fastq.gz"))
+  fnFs.cut <- file.path("output_folder",paste0(sapply(strsplit(basename(fnFs), "_"), `[`, 1),"_cut_F.fastq.gz"))
 
   reverse <- seq(2,length(filenames), by=2)
   fnRs <- filenames[reverse]
-  fnRs.cut<- file.path("output_folder",paste0(basename(fnRs),"-cut-R.fastq.gz"))
+  fnRs.cut<- file.path("output_folder",paste0(sapply(strsplit(basename(fnFs), "_"), `[`, 1),"_cut_R.fastq.gz"))
 }else{
   #fnFs <- filenames
   cutreads <- file.path("output_folder",paste0(sample.names,"_cut.fastq.gz"))
@@ -84,35 +85,35 @@ if (paired=="paired"){
 if (adapter3==""){
   R1.flags <- paste("-g", adapter5)
   if (paired=="paired"){ #for reverse reads make a reverse complement
-    R2.flags <- paste("-G", dada2:::rc(adapter5))
+    R2.flags <- paste("-A", dada2:::rc(adapter5))
   }
 }else if(adapter5==""){
   R1.flags <- paste("-a", adapter3)
   if (paired=="paired"){ #for reverse reads make a reverse complement
-    R2.flags <- paste("-A", dada2:::rc(adapter3))}
+    R2.flags <- paste("-G", dada2:::rc(adapter3))} #s
 }else{
   R1.flags <- paste("-g", adapter5, "-a", adapter3)   #dada2:::rc()
-  if (paired=="paired"){ #for reverse reads make a reverse complement
-    R2.flags <- paste("-G", dada2:::rc(adapter5), "-A", dada2:::rc(adapter3))
+  if (paired=="paired"){ #for reverse reads make a reverse complement and other way around
+    #R2.flags <- paste("-G", dada2:::rc(adapter5), "-A", dada2:::rc(adapter3))
+    R2.flags <- paste("-G", dada2:::rc(adapter3), "-A", dada2:::rc(adapter5))
 }}
 
 #if paired use also R2.flags and 2 input files at once
 if (paired =="single"){
   x<-1
   for (file in filenames){
-    command <- paste(binary, R1.flags,"--rc","-n", 2,"-o",cutreads[x], file, "> report.txt")
+    command <- paste(binary, R1.flags,"--rc","-n", 2,"-j", as.integer(chipster.threads.max),"-o",cutreads[x], file, "> report.txt")
     x=x+1
     system(command)
   }
 }else{ #paired 
   x<-1
   for (file in fnFs){
-    command <- paste(binary, R1.flags, R2.flags,"-n", 2,"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x], "> report.txt")
+    command <- paste(binary, R1.flags, R2.flags,"-n", 2,"-j", as.integer(chipster.threads.max),"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x], "> report.txt")
     x=x+1
     system(command)
 }
 }
-
 
 
 # make a tar package from the output folder
