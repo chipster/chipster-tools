@@ -74,6 +74,7 @@ if (class(seurat_obj@images[[sample_name]]@coordinates[["tissue"]]) == "characte
 }
 
 # Add samplename to metadata field (for plotting)
+seurat_obj <- RenameIdents(seurat_obj, "SeuratProject" = sample_name)
 seurat_obj@meta.data$orig.ident <- sample_name 
 
 
