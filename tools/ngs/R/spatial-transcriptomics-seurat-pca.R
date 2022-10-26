@@ -1,7 +1,7 @@
-# TOOL spatial-transcriptomics-seurat-pca.R: "Seurat v4 - PCA, clustering, and visualisation" (This tool performs principal component analysis on the highly variable genes detected by SCTranform. It then clusters the spots using those PCs, and visualizes the clusters using UMAP and SpatialDimPlot.)
+# TOOL spatial-transcriptomics-seurat-pca.R: "Seurat v4 -PCA, clustering, and visualisation" (This tool performs principal component analysis on the highly variable genes detected by SCTranform. It then clusters the spots using those PCs, and visualizes the clusters using UMAP and SpatialDimPlot.)
 # INPUT OPTIONAL seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL UMAP_plot.pdf
-# OUTPUT OPTIONAL seurat_spatial_obj_pca.Robj
+# OUTPUT OPTIONAL seurat_spatial_obj_pca_clust.Robj
 # OUTPUT OPTIONAL PCAloadings.txt
 # PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 30 (How many principal components to compute and use in UMAP. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
@@ -52,6 +52,6 @@ SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3)
 dev.off()
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_spatial_obj_pca.Robj")
+save(seurat_obj, file="seurat_spatial_obj_pca_clust.Robj")
 
 ## EOF
