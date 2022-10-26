@@ -202,7 +202,7 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single cell RNA-seq" color="#2196F3">	   	
+	<category name="Single-cell RNA-seq" color="#2196F3">	   	
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool> 	
 		<tool>single-cell-seurat-filter-regress.R</tool>	
@@ -237,7 +237,7 @@
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
 
-	<category name="Spatial Transcriptomics" color="#37dddd">	   	
+	<category name="Spatially resolved transcriptomics" color="#37dddd">	   	
 		<tool>spatial-transcriptomics-seurat-setup.R</tool>
 		<tool>spatial-transcriptomics-seurat-sctransform.R</tool>	
 		<tool>spatial-transcriptomics-seurat-multiple-samples.R</tool>	
