@@ -1,8 +1,8 @@
-# TOOL spatial-transcriptomics-seurat-integrated.R: "Seurat v4 -Integration with single-cell data" (Integrate spatial data with scRNA-seq reference to predict the proportion of different celltypes in the Visium spots.)
+# TOOL spatial-transcriptomics-seurat-integrated.R: "Seurat v4 -Integration with scRNA-seq data" (Integrate spatial data with scRNA-seq reference to predict the proportion of different celltypes in the Visium spots.)
 # INPUT seurat_obj_subset.Robj: "Seurat object" TYPE GENERIC
 # INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration.)
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
-# OUTPUT OPTIONAL UMAP_plot.pdf
+# OUTPUT OPTIONAL reference_UMAP_plot.pdf
 # RUNTIME R-4.2.0-single-cell
 # SLOTS 5
 
@@ -27,7 +27,7 @@ seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", verbose = FALSE) %>%
     RunPCA(verbose = FALSE)
 
 # Open the pdf file for plotting
-pdf(file="UMAP_plot.pdf", width=13, height=7) 
+pdf(file="reference_UMAP_plot.pdf", width=13, height=7) 
 
 # Visualise the reference data
 # the annotation is stored in the 'subclass' column of object metadata
