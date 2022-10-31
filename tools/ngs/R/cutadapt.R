@@ -3,8 +3,8 @@
 # OUTPUT OPTIONAL adapters_removed.tar
 # OUTPUT report.txt
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
-# PARAMETER OPTIONAL adapter5: "The 5' end adapter to be trimmed" TYPE STRING
-# PARAMETER OPTIONAL adapter3: "The 3' end adapter to be trimmed" TYPE STRING
+# PARAMETER OPTIONAL adapter5: "The 5 end adapter/primer to be trimmed" TYPE STRING
+# PARAMETER OPTIONAL adapter3: "The 3 end adapter/primer to be trimmed" TYPE STRING
 # RUNTIME R-4.1.1-asv
 
 # ES 30.9.2022

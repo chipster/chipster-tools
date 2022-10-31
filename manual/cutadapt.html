@@ -26,15 +26,18 @@ Given a tar package of FASTQ files, this tools removes the 5' end and 3' end pri
 before and after primer trimming to check if the adapter sequences were actually found from the FASTQ files and removed correctly. You can copy the right orientation of the 
 primer from the report and use it with this tool. 
 <br>
+Cutadapt searches for the adapter in all the reads and removes it when it finds it. Thus, all the reads which were present in input file will be present in the output file aswell.
+<br>
 <br>
 Note that it might be a good idea to remove the ambiguous 'N' nucleotides from the FASTQ files before.
-
 <br>
 <br>
 This tool can be used for paired and single end reads. If the reads are paired end, this tool assumes that the forward and reverse files have the same name but a different tag
 on it. 
 <br>
 If your reads are paired end, then the adapters from the reverse files will be removed by removing the reverse complement of the 3´ and 5´ adapters given as parameters. 
+<br>
+Give the adapter sequences allways as in the orientation they exist in the forward reads!
 <br>
 Please give the adapter sequences using DNA strings. The allowed letters/nucleotide codes can be seen <a href="https://www.bioinformatics.org/sms/iupac.html">here</a>.
 <br>
@@ -45,10 +48,8 @@ The 5´ adapters needs to either appear full somewhere within the read or at the
 Cutadapt removes the sequence preceding the 5' adapter. 
 <br>
 <br>
-Cutadapt searches for the adapter in all the reads and removes it when it finds it. Thus, all the reads which were present in input file will be present in the output file aswell.
-<br>
-As a sanity check, allways go through the "report.txt" file to check which adapter sequences were removed and how long the removed sequences were. If the removed sequence was very long doublecheck
-that you removed the correct adapter from the 3´and 5' ends and not vice versa. 
+As a sanity check, allways go through the "report.txt" file to check which adapter sequences were removed and how long the removed sequences were. If the removed sequences were very long doublecheck
+that you removed the correct adapter from the 3´ and 5' ends and not vice versa. 
 <br>
 <br>
 Cutadapt removes and identifys adapter sequences even if there are few errors between the adapter and the matching sequence. 
