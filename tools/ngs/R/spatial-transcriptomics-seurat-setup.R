@@ -9,6 +9,7 @@
 # 2022-07-15 IH
 # 2022-10-13 ML Coordinates to integers -check and input folder handling
 # 2022-10-18 ML Add samplename to a metadata field
+# 2022-11-01 ML Add top expressed genes boxplot
 
 library(Seurat)
 library(ggplot2)
@@ -87,6 +88,14 @@ seurat_obj <- PercentageFeatureSet(seurat_obj, "^Hb.*-", col.name = "percent_hb"
 VlnPlot(seurat_obj, features = c("nCount_Spatial",  "nFeature_Spatial"), pt.size = 0.1, ncol = 2) + NoLegend()
 VlnPlot(seurat_obj, features = c("percent_mito","percent_hb"), pt.size = 0.1, ncol = 2) + NoLegend()
 SpatialFeaturePlot(seurat_obj, c("nCount_Spatial", "nFeature_Spatial", "percent_mito")) # + theme(legend.position = "right")
+
+# Top expressing genes
+# Code from: https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Top_expressed_genes)
+C <- seurat_obj@assays$Spatial@counts
+C@x = C@x/rep.int(colSums(C), diff(C@p))
+most_expressed <- order(Matrix::rowSums(C), decreasing = T)[20:1]
+boxplot(as.matrix(t(C[most_expressed, ])), cex = 0.1, las = 1, xlab = "% total count per spot",
+    col = (scales::hue_pal())(20)[20:1], horizontal = TRUE)
 
 # close the pdf
  dev.off() 
