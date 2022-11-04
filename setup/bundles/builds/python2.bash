@@ -22,6 +22,9 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
   # simply copy the old files (built in Ubuntu 16.04), because we cannot build these anymore in Ubuntu 20.04
   f="python2-Ubuntu-16.04_2021-08-25.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
+
+  # installed in bundle_python-3.8.11
+  rm -rf $TOOLS_PATH/multiqc
   
   ls -lah $TOOLS_PATH/
 
@@ -30,7 +33,6 @@ EOF
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/Python-2.7.12 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/htseq $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/macs $JOB_NAME $BUILD_NUMBER
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/multiqc $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/rseqc $JOB_NAME $BUILD_NUMBER
 
 exit $?

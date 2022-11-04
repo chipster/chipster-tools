@@ -17,25 +17,28 @@ function finish {
 trap finish EXIT
 
 bash $BUNDLE_SCRIPTS_DIR/start-pod.bash $JOB_NAME $BUILD_NUMBER $image \"$BUNDLE_COLLECTION_VERSION\"
+
+bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER root - <<EOF
+  apt-get install -q -y unzip
+EOF
   
 bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
-  # simply copy the old files (built in Ubuntu 16.04), because we cannot build these anymore in Ubuntu 20.04
-  f="binaries-Ubuntu-16.04_2021-08-25.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
+  # FastQC, GPL v3 or later
+
+  wget -nv https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip
+  unzip -q fastqc_v0.11.9.zip
+  chmod a+x FastQC/fastqc
+  mv FastQC fastqc-0.11.9
+  mv fastqc-0.11.9 ${TOOLS_PATH}/
+  rm fastqc_v0.11.9.zip
   
   cd $TOOLS_PATH
-  # these are now installed in bundle_aligners or not used anymore
-  rm -rf STAR bowtie bowtie2 bwa hisat2 samtools tophat tophat2 tophat tophat-1.3.2.Linux_x86_64 tophat-2.1.1.Linux_x86_64
-
-  # make space for the new version
-  mv FastQC fastqc-0.11.3
+  ln -s fastqc-0.11.9 fastqc
 
   ls -lah $TOOLS_PATH/
-
-  # used to be:
-  # checkout https://github.com/chipster/chipster-tools.git
-  # cd build && sudo bash run_install_chipster.bash
   
 EOF
 
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/'*' $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/fastqc-0.11.9 $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/fastqc $JOB_NAME $BUILD_NUMBER
