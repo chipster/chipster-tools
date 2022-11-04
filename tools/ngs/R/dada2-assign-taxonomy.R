@@ -9,7 +9,10 @@
 # PARAMETER species: "Exact species level assignment?" TYPE [yes, no] DEFAULT yes (Do you want to assign the sequences to the species level if there is an exact match 100% identity between ASVs and sequenced reference strains?)
 # PARAMETER combine_tables: "Combine the taxonomy and the sequence table" TYPE [yes,no] DEFAULT yes (If set to yes, it combines the taxonomy and the sequence/ASV table into one .tsv file, otherwise the tsv file consist only of the taxonomy table.)
 # RUNTIME R-4.1.1-asv
+# SLOTS 2
 
+# ES 08.2022 
+# added slot 2 for unite/ITD databases
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
 
@@ -30,7 +33,7 @@ if (file.exists("taxa_reference.fasta")){
 }
 set.seed(100) # Initialize random number generator for reproducibility
 # run command assignTaxonomy verbose not important
-taxa <- assignTaxonomy(seqtab.nochim, path1, minBoot=boot, multithread=as.integer(chipster.threads.max))
+taxa <- assignTaxonomy(seqtab.nochim, path1, minBoot=boot, multithread=as.integer(chipster.threads.max), tryRC = TRUE)
 
 
 #check if parameter species yes, otherwise skip species level assignment. Use reference file if selected otherwise Silva v.138.1
@@ -40,14 +43,14 @@ if (species=="yes"){
     }else{
         if (file.exists("taxa_reference.fasta")){
             stop(paste('CHIPSTER-NOTE: ',"You didn't give a reference file for exact Species level assignment, but you wanted to use your own 
-            reference file for assignTaxonomy and selected the addSpecies parameter yes"))
+            reference file for assignTaxonomy and selected the addSpecies parameter yes. Run the tool again by selecting addSpecies no."))
         }else{
             path2 <-  c(file.path(chipster.tools.path,"dada2-silva-reference","silva_species_assignment_v138.1.fa"))
         }
     
     }
     # run addSpecies()
-    taxa <- addSpecies(taxa, path2)
+    taxa <- addSpecies(taxa, path2, tryRC=TRUE)
 }
 
 # save the taxonomy table as taxonomy-assignment-matrix.Rda

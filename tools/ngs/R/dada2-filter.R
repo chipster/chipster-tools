@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL maxeef: "Discard forward sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done. You can use this parameter for single and paired end reads.)
 # PARAMETER OPTIONAL maxeer: "Discard reverse sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 (After truncation, reads with more than this amount of expected errors will be discarded. If this parameter is not set, no expected error filtering is done. Use only for paired end reads.)
 # PARAMETER OPTIONAL truncq: "Truncate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off.)
-# PARAMETER OPTIONAL triml: "The number of nucleotides to remove from start of each read" TYPE INTEGER FROM 0 DEFAULT 0 (The number of nucleotides to remove from the start of each read. If both truncLen and trimLeft are provided, filtered reads will have length truncLen-trimLeft.)
+# PARAMETER OPTIONAL triml: "The number of nucleotides to remove from start of each read" TYPE INTEGER FROM 0 DEFAULT 0 (The number of nucleotides to remove from the start of each read. If both truncLen and trimLeft are provided, filtered reads will have length trimLeft-truncLen.)
 # PARAMETER OPTIONAL minlen: "Remove reads which are shorter than this" TYPE INTEGER FROM 0 DEFAULT 0 (Removes reads which are shorter than the specified value. Min length is enforced after all other trimming and truncation. This parameter is especially usefull when truncLen parameter is not used for example with ITS data.)
 # RUNTIME R-4.1.1-asv
 
@@ -104,7 +104,7 @@ if (fileOk("input_list.txt")) {
 if (!fileOk("input_list.txt")){
     sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
   }
-
+ 
   # put the reverse and forward reads to own folders  problem with pattern
   #fnFs <- sort(list.files("input_folder", pattern="_R1_001.fastq", full.names = TRUE))
   #fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
@@ -115,7 +115,7 @@ if (!fileOk("input_list.txt")){
   filtRs <- file.path("output_folder", paste0(sample.names, "_R_filt.fastq.gz"))
   names(filtRs) <- sample.names
   names(filtFs) <- sample.names
-  
+
 
   # if maxeer or maxeef not selected 
   if (is.na(maxeef)){

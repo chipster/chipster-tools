@@ -4,8 +4,8 @@
 # OUTPUT seurat_obj_combined.Robj
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER OPTIONAL anchor.identification.method: "Anchor identification method" TYPE [cca:CCA, rpca:RPCA] DEFAULT cca (Which anchor identification method to use. By default, canonical correlation analysis CCA is used, but user can also decide to use the faster and more conservative reciprocal PCA approach. Check from the manual in which cases this option is recommended.)
-# PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 20 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
-# PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 20 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
+# PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 30 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
+# PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 30 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
 # PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
 # RUNTIME R-4.2.0-single-cell
 # SLOTS 3
@@ -75,7 +75,7 @@ if (ref.sample.names != "No references selected"){
 # 1. identify anchors using the FindIntegrationAnchors function
 data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, reduction = anchor.identification.method, normalization.method = normalisation.method, reference = ref.sample.numbers) # dims = Which dimensions to use from the CCA to specify the neighbor search space
 
-# 2. use these anchors to integrate the two datasets together with IntegrateData.
+# 2. use these anchors to integrate the datasets together with IntegrateData.
 data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute, normalization.method = normalisation.method) # dims = Number of PCs to use in the weighting procedure
 
 DefaultAssay(data.combined) <- "integrated"

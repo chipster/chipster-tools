@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL dada_reverse.Rda
 # OUTPUT summary.txt
 # OUTPUT OPTIONAL plotErrors.pdf
-# PARAMETER type: "Is the data paired end, IonTorrent or other types of single end reads?" TYPE [paired, IonTorrent, single] DEFAULT paired (Are all the reads paired end or is the data IonTorrent or are the reads other types of single end reads like ITS?)
+# PARAMETER type: "Is the data paired end reads, IonTorrent or other types of single end reads?" TYPE [paired, IonTorrent, single] DEFAULT paired (Are all the reads paired end or is the data IonTorrent or are the reads other types of single end reads?)
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
 # PARAMETER pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check the manual.)
 # RUNTIME R-4.1.1-asv
