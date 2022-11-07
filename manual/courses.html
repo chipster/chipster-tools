@@ -7,43 +7,129 @@
 
 <body>
 
-	<h2>Chipster training courses</h2>
+	<h2>Data analysis training materials</h2>
 
 
-	<p>We run several bioinformatics courses on different topics every year in Finland and abroad. The courses at CSC
-		are open for everybody,
-		but you can also contact us to discuss options for hosting a course on your site.</p>
+	<p>We run several data analysis courses every year in Finland and abroad. The courses at CSC
+		are open for everybody, and you can also contact us to discuss options for hosting a course at your institute.</p>
 
-	<p>We make our course materials publicly available so that anyone can download them for their own use.
+	<p>You are welcome to use our course materials, please find them below. 
 		The materials include slides and exercises, and many courses have also lecture videos.
 		The exercise data are available as example sessions on the Chipster server, and
 		we also provide ready-made analysis sessions which you can use as a reference when doing exercises on your own.
 	</p>
 
 	<p>
-		We also provide <b>training accounts</b> to our Chipster server in Finland.
-		Note, that users from Finnish universities and research institutes can use their HAKA and VIRTU logins to access
-		Chipster, so no training account is needed.
-		However, <b>we kindly ask you to inform us about upcoming Chipster courses</b>
+		In order to do the exercercises users from Finnish universities and research institutes can use their HAKA and VIRTU logins to access
+		Chipster, and <b>training accounts</b> are available for others. <b>Please inform us about your upcoming Chipster courses</b>
 		(number of participants, type of analysis jobs) so that we can add computing resources to the server if needed.
 	</p>
 	</p>
-
-	<p>We run currently the following Chipster courses (follow the links for more info). CSC runs also <a
-			href="https://research.csc.fi/bioscience-learning-materials">other bioinformatics courses</a>,
-		you can find the upcoming courses in our <a href="https://www.csc.fi/en/training">course
-			calendar</a>.</p>
+	<p>	We run currently the following Chipster courses (follow the links for more info): 
+		<!--CSC runs also <a href="https://research.csc.fi/bioscience-learning-materials">other bioinformatics courses</a>,
+		you can find the upcoming courses in our <a href="https://www.csc.fi/en/training">course calendar</a>.
+	</p>
 
 	<ol>
+		<li> <a href="#visium">Visium data analysis (spatially resolved transcriptomics)</a> </li>
+		<li> <a href="#single-cell">Single-cell RNA-seq data analysis</a> </li>
 		<li> <a href="#rna">RNA-seq data analysis</a> </li>
 		<li> <a href="#quantseq">3' RNA-seq data analysis (QuantSeq)</a> </li>
-		<li> <a href="#single-cell">Single cell RNA-seq data analysis</a> </li>
-		<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
 		<li> <a href="#16S">Microbial community analysis </a> </li>
+		<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
 		<li> <a href="#variant">Detection and annotation of genomic variants</a> </li>
 		<li> <a href="#chip">ChIP-seq data analysis</a> </li>
 		<li> <a href="#microarray">Microarray data analysis</a> </li>
 	</ol>
+	<hr>
+	<hr>
+	<h3><a name="visium">Visium data analysis (spatially resolved transcriptomics)</a></h3>
+
+	<br>
+	<br>This course covers the analysis of 10X Visium data using Seurat v4. We usually run it as a three-hour module after the single-cell RNA-seq course, 
+	because part of the theory is the same. You will learn how to
+
+	<ul>
+		<li>create a Seurat v4 object</li>
+		<li>perform QC and filter out low quality spots (damaged tissue)</li>
+		<li>normalize gene expression values and detect highly variable genes with SCTransform</li>
+		<li>reduce dimensions with PCA using the highly variable genes</li>
+		<li>Use the PCs to cluster spots with graph based clustering</li>
+		<li>visualize clusters with UMAP and overlay with the tissue image</li>
+		<li>detect spatially variable genes</li>
+		<li>visualise gene expression on the tissue image</li>
+		<li>integrate samples using the mutual nearest neighbor approach (anchors)</li>
+		<li>subset anatomical regions</li>
+		<li>predict cell type composition in spots: Integrate with scRNA-seq data</li>
+	</ul>
+	Course material:
+	<ul>
+		<li><a href="https://chipster.csc.fi/material/single-cell/visium_slides.pdf">slides</a> (2022)</li>
+		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBSUi3uGOemwT36u5sscXBS">lecture videos</a> (2022)
+		<li><a href="https://chipster.csc.fi/material/single-cell/visium_exercises.pdf">exercises (2022)</a>.
+			The data are available on Chipster server in the example sessions listed in the exercise sheet.</li>
+	</ul>
+	<br>
+	<hr>
+
+	<h3><a name="single-cell">Single-cell RNA-seq data analysis</a></h3>
+
+	<br>
+	<u>Course 1 (October 2022)</u>
+	<br>This course covers the analysis of 10X data using Seurat v4, from digital gene expression matrix (DGE) to clustering cells and finding marker genes for those clusters. 
+	It also covers how to compare two samples and detect conserved cluster markers and differentially expressed genes in them. The course takes one day. You will learn how to
+	<ul>
+		<li>create Seurat v4 object</li>
+		<li>perform QC and filter out low quality cells</li>
+		<li>normalize expression values</li>
+		<li>detect highly variable genes using VST</li>
+		<li>scale data and regress out unwanted variability</li>
+		<li>perform principle component analysis (PCA) and select PCs to be used for clustering</li>
+		<li>cluster cells</li>
+		<li>visualize clusters with UMAP and tSNE</li>
+		<li>find marker genes for the clusters</li>
+		<li>visualize marker genes with UMAP, violin plot and ridge plot</li>
+		<li>run canonical correlation analysis (CCA) to identify common sources of variation between two datasets</li>
+		<li>integrate samples using the mutual nearest neighbor approach (anchors)</li>
+		<li>find conserved cluster marker genes for two samples</li>
+		<li>find differentially expressed genes in a cluster between two samples</li>
+		<li>visualize genes with cell type specific responses in two samples</li>
+	</ul>
+	Course material:
+	<ul>
+		<li><a href="https://chipster.csc.fi/material/single-cell/scrnaseq2022.pdf">slides</a> (2022)</li>
+		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elALRmEKHrEL0OeRnJvpPW5q">lecture videos</a> (2021)
+		<li><a href="https://chipster.csc.fi/material/single-cell/scrnaseq2022exercises.pdf">exercises: Clustering
+				10X Genomics data and Integrated analysis of two samples (2022)</a>.
+			The data are available on Chipster server in the example sessions listed in the exercise sheet.</li>
+		<li>Note: excellent <a href="https://www.youtube.com/playlist?list=PLjiXAZO27elC_xnk7gVNM85I2IQl5BEJN">lecture
+				videos covering scRNA-seq theory</a> from another course (May 2019)</li>
+	</ul>
+	<br>
+	<u>Course 2 (March 2019)</u>
+	<br>This course covers the preprocessing of DropSeq data from raw reads to a DGE. The course takes half a day. You will learn how to
+	<ul>
+		<li>check the quality of reads with FastQC</li>
+		<li>tag reads with cell and molecular barcodes</li>
+		<li>trim and filter reads</li>
+		<li>align reads to the reference genome with HISAT2 and STAR</li>
+		<li>tag reads with gene names</li>
+		<li>estimate the number of usable cells by checking the inflection point</li>
+		<li>detect bead synthesis errors</li>
+		<li>create and filter DGE</li>
+	</ul>
+
+	Course material:
+	<ul>
+		<li><a href="https://chipster.csc.fi/material/single-cell/single_cell_RNAseq2019.pdf">slides</a> (March 2019)
+		</li>
+		<!--  <li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD-tnVMX_oYTCF1mWOmB8Xo">lecture and exercise videos</a> on one sample analysis</li>
+		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD3R5bcssgM5JTcgyytKB9M">tutorial videos</a> on integrated analysis of two samples</li>-->
+		<li><a href="https://chipster.csc.fi/material/single-cell/Single-cell-exercises-DropSeq-2018.pdf">exercises:
+				Preprocessing DropSeq data</a>. The data is available on Chipster server in the example session listed
+			in the exercise sheet.</li>
+	</ul>
+
 	<hr>
 
 	<h3><a name="rna">RNA-seq data analysis</a></h3>
@@ -93,6 +179,7 @@
 				href="https://www.crcpress.com/RNA-seq-Data-Analysis-A-Practical-Approach/Korpelainen-Tuimala-Somervuo-Huss-Wong/p/book/9781466595002">book</a>
 			which might be useful for you when getting started.</li>
 	</ul>
+
 	<hr>
 
 	<h3><a name="quantseq">3' RNA-seq data analysis (QuantSeq)</a></h3>
@@ -123,91 +210,7 @@
 		From count table to differentially expressed genes</a>. Mouse model of Kawasaki Disease, treatment with IL-1 receptor antagonist, Anakinra (6 samples).</li>
 		<li><a href="https://www.youtube.com/watch?v=NT96sQ_3X_0">lecture video</a>
 		</li>
-	<hr>
-	<h3><a name="single-cell">Single cell RNA-seq data analysis</a></h3>
 
-	<br>
-	<u>Course 1 (October 2021)</u>
-	<br>This course covers the analysis of 10X data using Seurat v4, from digital gene expression matrix (DGE) to clustering cells and finding marker genes for those clusters. 
-	It also covers how to compare two samples and detect conserved cluster markers and differentially expressed genes in them. The course takes one day. You will learn how to
-	<ul>
-		<li>create Seurat v4 object</li>
-		<li>perform QC and filter out low quality cells</li>
-		<li>normalize expression values</li>
-		<li>detect highly variable genes using VST</li>
-		<li>scale data and regress out unwanted variability</li>
-		<li>perform principle component analysis (PCA) and select PCs to be used for clustering</li>
-		<li>cluster cells</li>
-		<li>visualize clusters with UMAP and tSNE</li>
-		<li>find marker genes for the clusters</li>
-		<li>visualize marker genes with UMAP, violin plot and ridge plot</li>
-		<li>run canonical correlation analysis (CCA) to identify common sources of variation between two datasets</li>
-		<li>integrate samples using the mutual nearest neighbor approach (anchors)</li>
-		<li>find conserved cluster marker genes for two samples</li>
-		<li>find differentially expressed genes in a cluster between two samples</li>
-		<li>visualize genes with cell type specific responses in two samples</li>
-	</ul>
-	Course material:
-	<ul>
-		<li><a href="https://chipster.csc.fi/material/single-cell/scrnaseq2021.pdf">slides</a> (2021)</li>
-		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elALRmEKHrEL0OeRnJvpPW5q">lecture videos</a> (2021)
-		<li><a href="https://chipster.csc.fi/material/single-cell/scrnaseq2021exercises.pdf">exercises: Clustering
-				10X Genomics data and Integrated analysis of two samples (2021)</a>.
-			The data are available on Chipster server in the example sessions listed in the exercise sheet.</li>
-		<li>Note: excellent <a href="https://www.youtube.com/playlist?list=PLjiXAZO27elC_xnk7gVNM85I2IQl5BEJN">lecture
-				videos covering scRNA-seq theory</a> from another course (May 2019)</li>
-	</ul>
-	<br>
-	<u>Course 2 (March 2019)</u>
-	<br>This course covers the preprocessing of DropSeq data from raw reads to a DGE. The course takes half a day. You will learn how to
-	<ul>
-		<li>check the quality of reads with FastQC</li>
-		<li>tag reads with cell and molecular barcodes</li>
-		<li>trim and filter reads</li>
-		<li>align reads to the reference genome with HISAT2 and STAR</li>
-		<li>tag reads with gene names</li>
-		<li>estimate the number of usable cells by checking the inflection point</li>
-		<li>detect bead synthesis errors</li>
-		<li>create and filter DGE</li>
-	</ul>
-
-	Course material:
-	<ul>
-		<li><a href="https://chipster.csc.fi/material/single-cell/single_cell_RNAseq2019.pdf">slides</a> (March 2019)
-		</li>
-		<!--  <li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD-tnVMX_oYTCF1mWOmB8Xo">lecture and exercise videos</a> on one sample analysis</li>
-		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elD3R5bcssgM5JTcgyytKB9M">tutorial videos</a> on integrated analysis of two samples</li>-->
-		<li><a href="https://chipster.csc.fi/material/single-cell/Single-cell-exercises-DropSeq-2018.pdf">exercises:
-				Preprocessing DropSeq data</a>. The data is available on Chipster server in the example session listed
-			in the exercise sheet.</li>
-	</ul>
-	<hr>
-
-	<h3><a name="virusdetect">Virus detection using small RNA-seq</a></h3>
-
-	This course introduces the VirusDetect pipeline covering all the analysis steps and file formats. VirusDetect allows
-	you to detect known viruses and identify news ones by sequencing small RNAs (siRNA) in host samples. siRNA sequences
-	are assembled to contigs and compared to known virus sequences.
-	The course takes about 5 hours. You will learn how to
-	<ul>
-		<li>run VirusDetect and interpret the result files</li>
-		<li>subtract reads originating from the host genome</li>
-		<li>set parameters for filtering the BLAST matches</li>
-	</ul>
-
-	Course material (2018):
-	<ul>
-		<li><a href="https://chipster.csc.fi/material/virusdetect/VirusDetect2017.pdf">slides</a></li>
-		<li><a href="https://www.youtube.com/watch?v=Z-zxzeQxRkQ&index=2&list=PLjiXAZO27elCYwsme8hPqdw0zCTd8mXs6&t=0s">lecture
-				video from a webinar</a></li>
-		<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
-		<ol>
-			<li><a href="https://chipster.csc.fi/material/virusdetect/exercises1_VirusDetect_potato.pdf">Potato
-					dataset</a> with different amounts of reads.</li>
-			<li><a href="https://chipster.csc.fi/material/virusdetect/exercises2_VirusDetect_raspberry.pdf">Rasberry
-					dataset</a> demonstrates how to provide the host genome.</li>
-		</ol>
-	</ul>
 	<hr>
 
 	<h3><a name="16S">Microbial community analysis</a></h3>
@@ -272,6 +275,35 @@
 		</ul>
 		
 	</ul>
+		
+	<hr>
+		
+	<h3><a name="virusdetect">Virus detection using small RNA-seq</a></h3>
+
+	This course introduces the VirusDetect pipeline covering all the analysis steps and file formats. VirusDetect allows
+	you to detect known viruses and identify news ones by sequencing small RNAs (siRNA) in host samples. siRNA sequences
+	are assembled to contigs and compared to known virus sequences.
+	The course takes about 5 hours. You will learn how to
+	<ul>
+		<li>run VirusDetect and interpret the result files</li>
+		<li>subtract reads originating from the host genome</li>
+		<li>set parameters for filtering the BLAST matches</li>
+	</ul>
+
+	Course material (2018):
+	<ul>
+		<li><a href="https://chipster.csc.fi/material/virusdetect/VirusDetect2017.pdf">slides</a></li>
+		<li><a href="https://www.youtube.com/watch?v=Z-zxzeQxRkQ&index=2&list=PLjiXAZO27elCYwsme8hPqdw0zCTd8mXs6&t=0s">lecture
+				video from a webinar</a></li>
+		<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
+		<ol>
+			<li><a href="https://chipster.csc.fi/material/virusdetect/exercises1_VirusDetect_potato.pdf">Potato
+					dataset</a> with different amounts of reads.</li>
+			<li><a href="https://chipster.csc.fi/material/virusdetect/exercises2_VirusDetect_raspberry.pdf">Rasberry
+					dataset</a> demonstrates how to provide the host genome.</li>
+		</ol>
+	</ul>
+		
 	<hr>
 
 	<h3><a name="variant">Detection and annotation of genomic variants</a></h3>
