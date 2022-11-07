@@ -42,11 +42,11 @@
 		<li> <a href="#microarray">Microarray data analysis</a> </li>
 	</ol>
 	<hr>
-	<hr>
+
 	<h3><a name="visium">Visium data analysis (spatially resolved transcriptomics)</a></h3>
 
 	<br>
-	<br>This course covers the analysis of 10X Visium data using Seurat v4. We usually run it as a three-hour module after the single-cell RNA-seq course, 
+	This course covers the analysis of 10X Visium data using Seurat v4. We usually run it as a three-hour module after the single-cell RNA-seq course, 
 	because part of the theory is the same. You will learn how to
 
 	<ul>
@@ -54,7 +54,7 @@
 		<li>perform QC and filter out low quality spots (damaged tissue)</li>
 		<li>normalize gene expression values and detect highly variable genes with SCTransform</li>
 		<li>reduce dimensions with PCA using the highly variable genes</li>
-		<li>Use the PCs to cluster spots with graph based clustering</li>
+		<li>use the PCs to cluster spots with graph based clustering</li>
 		<li>visualize clusters with UMAP and overlay with the tissue image</li>
 		<li>detect spatially variable genes</li>
 		<li>visualise gene expression on the tissue image</li>
@@ -66,7 +66,7 @@
 	<ul>
 		<li><a href="https://chipster.csc.fi/material/single-cell/Visium_slides.pdf">slides</a> (2022)</li>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBSUi3uGOemwT36u5sscXBS">lecture videos</a> (2022)
-		<li><a href="https://chipster.csc.fi/material/single-cell/Visium_exercises.pdf">exercises (2022)</a>.
+		<li><a href="https://chipster.csc.fi/material/single-cell/Visium_exercises.pdf">exercises</a> (2022).
 			The data are available on Chipster server in the example sessions listed in the exercise sheet.</li>
 	</ul>
 	<br>
@@ -76,7 +76,7 @@
 
 	<br>
 	<u>Course 1 (October 2022)</u>
-	<br>This course covers the analysis of 10X data using Seurat v4, from digital gene expression matrix (DGE) to clustering cells and finding marker genes for those clusters. 
+	<br>This course covers the analysis of 10X data using Seurat v4 and SingleR, from digital gene expression matrix (DGE) to clustering cells and finding marker genes for those clusters. 
 	It also covers how to compare two samples and detect conserved cluster markers and differentially expressed genes in them. The course takes one day. You will learn how to
 	<ul>
 		<li>create Seurat v4 object</li>
@@ -89,7 +89,7 @@
 		<li>visualize clusters with UMAP and tSNE</li>
 		<li>find marker genes for the clusters</li>
 		<li>visualize marker genes with UMAP, violin plot and ridge plot</li>
-		<li>add cell type information to clusters using SingleR</li>
+		<li>annotate clusters with cell type information using SingleR</li>
 		<li>run canonical correlation analysis (CCA) to identify common sources of variation between two datasets</li>
 		<li>integrate samples using the mutual nearest neighbor approach (anchors)</li>
 		<li>find conserved cluster marker genes for two samples</li>
