@@ -22,7 +22,7 @@ load("seurat_spatial_obj_pca.Robj")
 
 # Parallelise
 library(future)
-plan("multiprocess", workers = as.integer(chipster.threads.max))
+plan("multisession", workers = as.integer(chipster.threads.max))
 
 
 # Find spatially variable features using markvariogram
