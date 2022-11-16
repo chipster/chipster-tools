@@ -17,8 +17,7 @@ def main():
     output_gtf = "output.gtf"
     output_bed = "output.bed"
 
-    bwa = chipster_tools_path + "/bwa/bwa"
-
+    # TODO update dexseq_preprare_annotation.py to get rid of old Python 2
     python = chipster_tools_path + "/Python-2.7.12/bin/python"
     dexseq_prepare_annotation = chipster_tools_path + "/dexseq-exoncounts/dexseq_prepare_annotation.py"
     gtf2bed = chipster_tools_path + "/gtf2bed/gtf2bed.pl"
@@ -28,7 +27,7 @@ def main():
 
     run_process([python, dexseq_prepare_annotation, input_gtf, output_gtf])
 
-    run_bash(gtf2bed + " " + input_gtf + ".gtf > " + output_bed)
+    run_bash(gtf2bed + " " + input_gtf + " > " + output_bed)
         
     output_names = {
         output_gtf: "dexseq/" + gtf_basename + ".DEXSeq.gtf",

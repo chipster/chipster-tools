@@ -25,15 +25,15 @@ def main():
 
     star = chipster_tools_path + "/STAR/STAR"
     
-    session_input_fa = tool_utils.read_input_definitions()[input_fa]
-    fa_basename = tool_utils.remove_postfix(session_input_fa, '.fa')
+    session_input_gtf = tool_utils.read_input_definitions()[input_gtf]
+    gtf_basename = tool_utils.remove_postfix(session_input_gtf, '.gtf')
 
     run_process([star, "--runThreadN", chipster_threads_max, "--runMode", "genomeGenerate", "--genomeDir", ".", "--genomeFastaFiles", input_fa])
 
     print("inspect index")
 
     if not os.path.exists("SA") or not os.path.exists("SAindex"):
-        raise RuntimeError("STAR indexing of genome " + fa_basename + " failed")
+        raise RuntimeError("STAR indexing of genome " + gtf_basename + " failed")
         
     run_process(["ls", "-lah"])
 
@@ -53,7 +53,7 @@ def main():
     output_names = {}
 
     for output in outputs:
-        output_names[output] = fa_basename + "/" + output
+        output_names[output] = gtf_basename + "/" + output
 
     tool_utils.write_output_definitions(output_names)
     
