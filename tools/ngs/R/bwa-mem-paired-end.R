@@ -3,10 +3,12 @@
 # INPUT reads1.txt: "Paired-end read set 1 to align" TYPE GENERIC 
 # INPUT reads2.txt: "Paired-end read set 2 to align" TYPE GENERIC 
 # OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
-# OUTPUT bwa.log 
+# OUTPUT bwa.log
+# OUTPUT OPTIONAL bwa.bam.bai  
 # PARAMETER organism: "Genome or transcriptome" TYPE [Arabidopsis_thaliana.TAIR10, Bos_taurus.UMD3.1, Canis_familiaris.CanFam3.1, Drosophila_melanogaster.BDGP6, Felis_catus.Felis_catus_6.2, Gallus_gallus.Galgal4, Gallus_gallus.Gallus_gallus-5.0, Gasterosteus_aculeatus.BROADS1, Halorubrum_lacusprofundi_atcc_49239.ASM2220v1, Homo_sapiens.GRCh37.75, Homo_sapiens.GRCh38, Homo_sapiens_mirna, Medicago_truncatula.MedtrA17_4.0, Mus_musculus.GRCm38, Mus_musculus_mirna, Oryza_sativa.IRGSP-1.0, Ovis_aries.Oar_v3.1, Populus_trichocarpa.JGI2.0, Rattus_norvegicus_mirna, Rattus_norvegicus.Rnor_5.0, Rattus_norvegicus.Rnor_6.0, Schizosaccharomyces_pombe.ASM294v2, Solanum_tuberosum.SolTub_3.0, Sus_scrofa.Sscrofa10.2, Vitis_vinifera.IGGP_12x, Yersinia_enterocolitica_subsp_palearctica_y11.ASM25317v1, Yersinia_pseudotuberculosis_ip_32953_gca_000834295.ASM83429v1] DEFAULT Homo_sapiens.GRCh38 (Genome or transcriptome that you would like to align your reads against.)
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.)
 # PARAMETER mode: "Data source" TYPE [normal: " Illumina, 454, IonTorrent reads longer than 70 base pairs", pacbio: "PacBio subreads"] DEFAULT normal (Defining the type of reads will instruct the tool to use a predefined set of parameters optimized for that read type.)
+# RUNTIME R-4.1.1
 
 # KM 11.11.2014
 
@@ -30,24 +32,26 @@ bwa.command <- paste(command.start, mode.parameters, command.end)
 
 echo.command <- paste("echo '", bwa.binary , mode.parameters, bwa.genome, "reads1.txt reads2.txt' > bwa.log" )
 #stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(echo.command)
-system(bwa.command)
+runExternal(echo.command)
+runExternal(bwa.command)
 		
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+syrunExternalstem(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+if (index.file == "index_file") {
+  runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
+}
 
 # Handle output names
 #

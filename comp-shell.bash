@@ -10,7 +10,6 @@ image_repo="docker-registry.rahti.csc.fi/chipster-images/"
 image_pull_policy="Always"
 
 if [[ $1 == "--local-image" ]]; then
-  image_repo=""
   image_pull_policy="Never"
   shift
 fi

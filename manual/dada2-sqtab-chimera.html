@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Make a sequence table and remove chimeras</h2>
+
+  <h3>Description</h3>
+  
+  <p>
+    This tool makes an ASV/sequence-table, removes chimeras and produces an output file
+    to check how many reads were removed as chimeric sequences. 
+    </p>
+    
+    <h3>Parameters</h3>
+    <ul>
+      <li>Method to identify chimeras (consensus, pooled) [consensus]</li>  
+    </ul>
+    
+    <h3>Details</h3>
+    <p>
+    As an input you can give:
+    <ul>
+        <li>If single end reads: The dada-class object as a .Rda file which is the output from the tool "Sample 
+            inference". Name: dada_forward.Rda</li> 
+        <li>If paired end reads: The .Rda object, which is the output from the tool "Combine paired reads to contigs with Dada2".
+           Name: contigs.Rda</li> 
+      </ul>
+    <br>
+    At first, this tool uses the makeSequenceTable() function to construct an ASV table, a higher-resolution version of the OTU table produced by traditional methods.
+    <br>
+    <br>
+    The ASV table is used as the input for the removeBimeraDenovo() function which is a convenience interface for chimera removal.
+    To the summary.txt file is printed how many ASVs was found before and after the chimera removal.
+    <br>
+    Chimeras are sequences formed from two or more biological sequences joined together.
+    Amplicons with chimeric sequences can form during PCR when closely related sequences are amplified. 
+    The majority of chimeras are believed to arise from incomplete extension: During subsequent cycles of PCR, a partially extended strand can bind to a template derived from a different but similar sequence.
+    This then acts as a primer that is extended to form a chimeric sequence.
+    <br>
+    <br>
+    With removeBimeraDenovo() chimeric sequences are identified if they 
+    can be exactly reconstructed by combining a left-segment and a right-segment from two more abundant “parent” sequences.
+    <br>
+    A bimera is a two-parent chimera, in which the left side is made up of one parent sequence,
+    and the right-side made up of a second parent sequence.
+    <br>
+    If the method is consensus, the samples in the sequence table are independently checked for
+    bimeras, and a consensus decision on each sequence variant is made. It runs the isBimeraDenovoTable() function.
+    <br>
+    If the method is pooled, the samples in the sequence table are all pooled together for bimera
+    identification. It runs the isBimeraDenovo() function.
+    <br>
+    <br>
+    At last, the number of reads which made it through the chimera removal, are printed to the reads_summary.tsv table and 
+    the number of ASV sequences removed as bimeric is printed to the summary.txt file.
+    <br>
+    If most of your reads are removed as chimeric, upstream processing may need to be revisited. 
+    In many cases this is caused by primer sequences with ambiguous nucleotides that were not
+    removed prior to beginning the DADA2 pipeline.
+    </p>
+  
+    <h3>Output</h3>
+    <p>
+    The analysis output consists of the following:
+    <ul>
+        <li>seqtab.nochim: An object of matching sequence table saved as .Rda file. It's the output of the removeBimeraDenovo() function </li>
+        <li>reads_summary.tsv: Summary table to see how many reads were removed as chimeric</li>
+        <li>summary.txt: Text file to see how many ASVs were found and how many were removed as chimeric</li>
+        <li>sequence_table_nochim.tsv: The sequence (ASV) table produced after the removeBimeraDenovo() function printed out in a .tsv file. The column names/names of each ASV sequence are being edited to asv0, asv1... to make it easier to investigate the table.</li>
+    </ul>
+    </p>
+    
+    <h3>References</h3>
+    <p>
+        check mergePairs(), makeSequenceTable() and removeBimeraDenovo() comamnds from the dada2 manual: <br>
+    <a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+    <br>
+    <a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
+    <br>
+    by Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJ, Holmes SP (2016). 13(7), 581-3. <br>
+    <a href="https://www.researchgate.net/publication/345890170_DADA2_High_resolution_sample_inference_from_amplicon_data"> DADA2: High resolution sample inference from Illumina amplicon data. Nature Methods </a> 
+    </p>
+    </body>

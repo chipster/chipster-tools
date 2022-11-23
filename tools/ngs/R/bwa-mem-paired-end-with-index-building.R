@@ -3,10 +3,12 @@
 # INPUT reads1.txt: "Reads to align" TYPE GENERIC 
 # INPUT reads2.txt: "Reads to align" TYPE GENERIC 
 # INPUT genome.txt: "Reference genome" TYPE GENERIC
-# OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
-# OUTPUT bwa.log 
+# OUTPUT bwa.bam  
+# OUTPUT bwa.log
+# OUTPUT OPTIONAL bwa.bam.bai
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.) 
 # PARAMETER mode: "Data source" TYPE [ normal: " Illumina, 454, IonTorrent reads longer than 70 base pairs", pacbio: "PacBio subreads"] DEFAULT normal (Defining the type of reads will instruct the tool to use a predefined set of parameters optimized for that read type.)
+# RUNTIME R-4.1.1
 
 # KM 11.11.2014
 
@@ -23,7 +25,7 @@ command.start <- paste("bash -c '", bwa.binary)
 
 # Do indexing
 print("Indexing the genome...")
-system("echo Indexing the genome... > bwa.log")
+runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
 
 #genome.dir <- system(check.command, intern = TRUE)
@@ -40,24 +42,26 @@ bwa.command <- paste(command.start, mode.parameters, command.end)
 
 echo.command <- paste("echo '", bwa.binary , mode.parameters, bwa.genome, "reads.txt ' > bwa.log" )
 #stop(paste('CHIPSTER-NOTE: ', bwa.command))
-system(echo.command)
-system(bwa.command)
+runExternal(echo.command)
+runExternal(bwa.command)
 		
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+if (index.file == "index_file") {
+  runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
+}
 
 # Handle output names
 #

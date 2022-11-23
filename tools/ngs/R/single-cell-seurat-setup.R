@@ -1,7 +1,7 @@
-# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are two options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix as input. If you are planning to combine samples later on, make sure you name them in this tool.)
+# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are 3 options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix or a 10X CellRanger hdf5 file as input. If you are planning to combine samples later on, make sure you name them in this tool!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
-# INPUT OPTIONAL hdf5.h5: "HDF5 input file" TYPE GENERIC
+# INPUT OPTIONAL hdf5.h5: "10X CellRanger hdf5 input file" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
@@ -9,8 +9,8 @@
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
-# RUNTIME R-4.1.0-single-cell
-# SLOTS 5
+# RUNTIME R-4.2.0-single-cell
+# SLOTS 2
 
 
 # 2017-06-06 ML

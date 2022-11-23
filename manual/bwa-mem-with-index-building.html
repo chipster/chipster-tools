@@ -13,9 +13,9 @@ is used as the reads file for single-end alignment.
 If three input files are defined, then paired end analysis is performed.
 </p>
 
-<h3>Alignment parameters</h3>
-
+<h3>Parameters</h3>
 <ul>
+<li><b>Create an index file</b> Create index file for BAM.</li>
 <li><b>Minimum seed length</b> Matches shorter than this will be missed 
 when looking for maximal exact matches or MEMs in the first alignment phase.(BWA MEM option -k)</li>
 <li><b>Maximum gap length</b> Gaps longer than this will not be found. Note also that scoring matrix and hit 
@@ -27,10 +27,6 @@ length affect the maximum gap length, in addition to this band width parameter.(
 <li><b>Penalty for end clipping</b> Penalty for 5'- and 3'-end clipping. When performing the Smith-Waterman 
 extension of the seed alignments, BWA-MEM keeps track of the best score reaching the end of the read. 
 If this score is larger than the best SW score minus the clipping penalty, clipping will not be applied (BWA MEM option -L).</li>
-</ul>
-
-<h3>Read group parameters</h3>
-<ul>
 <li><b>Read group identifier</b> If you want to add the read group line into the BAM file, 
  you have to define read group identifier (DI:<i>value</i>).</li>
 <li><b>Sample name for read group</b> The name of the sample sequenced in this read group (SM:<i>value</i>).</li>

@@ -5,6 +5,7 @@
 # PARAMETER maxee: "Discard sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 DEFAULT 1 (Decimal number to discard bad quality sequences. Decimal from 0 -, Default 1.)
 
 # ES 21.7.2021
+# ES  11.8.2022
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -21,9 +22,6 @@ documentVersion("Vsearch",version)
 system("tar tf contigs.tar > tar.contents")
 file.list <- scan("tar.contents",what = "",sep = "\n")
 
-
-
-
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
     stop(paste('CHIPSTER-NOTE: ',"It seems your input file is not a valid Tar package. Please check your input file."))
@@ -37,29 +35,27 @@ system("mkdir input_folder")
 system("mkdir output_folder")
 
 # make 4 vectors for summary.tsv dataframe
-vector_names <- c()
 vector_sequences <- c()
 vector_discard <- c()
 vector_proportion <- c()
 
 
-
 # untar the tar package to input_folder and list the filenames
 untar("contigs.tar", exdir = "input_folder")
-filenames <- list.files("input_folder")
+filenames <- list.files("input_folder", full.names=TRUE)
+txt_filenames <- list.files("input_folder")
+#file names
+sample.names <- sapply(strsplit(basename(txt_filenames), "_"), `[`, 1)
 
+x<-1
 # run the fastq_filter tool for every file
 for (file in filenames) {
-    #take the file name out without .gz
-    name <- strsplit(file, '.',fixed=TRUE)
-    name <- name[[1]][1]
-    vector_names <- c(vector_names,name)
+  
     # name the input and output file
-    output_fastq <- paste("output_folder/", name, ".fq", sep="")
-    input_fastq <- paste("input_folder/",file, sep="")
-
+    output_fastq <- paste0("output_folder/", sample.names[x])
+    x <- x+1
     # make the fastq_filter command
-    command <- paste(binary,"--fastq_filter", input_fastq, "--fastq_maxee", maxee, "--fastqout", output_fastq, ">>summary_test.txt 2>&1")
+    command <- paste(binary,"--fastq_filter", file, "--fastq_maxee", maxee, "--fastqout", output_fastq, ">>summary_test.txt 2>&1")
     # run command
     runExternal(command)
     documentCommand(command)
@@ -81,11 +77,11 @@ for (row in summary_data){
         disc <- disc +strtoi(info[[1]][8])
     }
 }
-vector_names <- append(vector_names,"All",0)
+sample.names <- append(sample.names,"All",0)
 vector_sequences <- append(vector_sequences, all,0)
 vector_discard <- append(vector_discard, disc,0)
 vector_proportion <- append(vector_proportion,"",0)
-summ.data <- data.frame("Sample"= vector_names,"Sequences_kept"=vector_sequences, "Sequences_discarded"= vector_discard, "Percentage_of_discarded" = vector_proportion)
+summ.data <- data.frame("Sample"= sample.names,"Sequences_kept"=vector_sequences, "Sequences_discarded"= vector_discard, "Percentage_of_discarded" = vector_proportion)
 write.table(summ.data, file ="summary.tsv", row.names = FALSE)
 #make a output tar package named contigs.tar and qzip all the files
 system("gzip output_folder/*.fq")

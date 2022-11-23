@@ -16,7 +16,7 @@ unzipIfGZipFile("reads2.fq")
 
 # set up Bowtie2 and SAMtools
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # read the transcriptome selection
 transcriptome <- file.path(chipster.tools.path, "express_files", transcriptome)
