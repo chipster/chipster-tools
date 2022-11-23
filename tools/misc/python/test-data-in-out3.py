@@ -8,5 +8,8 @@ import shutil
 import time
 
 time.sleep(delay)
+
+print("chipster_threads_max: " + chipster_threads_max)
+print("chipster_memory_max: " + chipster_memory_max)
 shutil.copyfile('input', 'output')
 

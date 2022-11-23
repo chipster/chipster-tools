@@ -6,6 +6,7 @@
 # OUTPUT bowtie2.log
 # OUTPUT OPTIONAL unaligned_1.fq
 # OUTPUT OPTIONAL bowtie2_index.tar
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.)
 # PARAMETER strategy: "Alignment strategy to use" TYPE [--very-fast: "Very fast", --fast: "Fast", --sensitive: "Sensitive", --very-sensitive: "Very sensitive", --very-fast-local: "Very fast local", -fast-local: "Fast local", --sensitive-local: "Sensitive local", --very-sensitive-local: "Very sensitive local"] DEFAULT --sensitive (The alignment strategy to be used. Bowtie2 can map the reads using end-to-end or local alignments. When local alignment is used, Bowtie2 might "trim" or "clip" some read characters from one or both ends of the alignment if doing so maximizes the alignment score. Bowtie2 uses heuristics for mapping the reads to the reference genome. Several Bowtie2 parameters affect simultaneously both to the sensitivity and to computing time. In Chipster you can choose the sensitivity level with a set of pre-defined parameter combinations that allow you to tune the balance between the computing time and mapping sensitivity.)
 # PARAMETER quality.format: "Quality value format used" TYPE [--phred33: "Sanger - Phred+33", --phred64: "Illumina GA v1.3-1.5 - Phred+64", --ignore-quals: "Fixed 30 for all"] DEFAULT --phred33 (Quality scale used in the fastq-file.)
 # PARAMETER alignment.no: "How many valid alignments are reported per read" TYPE [0: "Best based on the mapping quality", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "All alignments"] DEFAULT 0 (By default, Bowtie2 reports only the best alignment of the read (based on the mapping quality\). Optionally, if there are several, equally good alignments, you can choose how many of them should be reported?)
@@ -17,6 +18,7 @@
 # PARAMETER OPTIONAL rdg.ext: "Gap extension penalty for the reads" TYPE INTEGER FROM 0 TO 20 DEFAULT 3 (Gap extension penalty for the reads. Default value: 3. )
 # PARAMETER OPTIONAL rfg.open: "Gap opening penalty for the reference" TYPE INTEGER FROM 0 TO 20 DEFAULT 5 (Gap opening penalty for the reference. Default value: 5. )
 # PARAMETER OPTIONAL rfg.ext: "Gap extension penalty for the reference" TYPE INTEGER FROM 0 TO 20 DEFAULT 3 (Gap extension penalty for the reference. Default value: 3. )
+# RUNTIME R-4.1.1
 
 # KM 23.10.2012
 # EK 8.5.2013 replaced samtools -q 1 with Bowtie --no-unal to remove unaligned reads from BAM
@@ -46,20 +48,20 @@ bowtie2.index.binary <- file.path(chipster.module.path,"shell","check_bowtie2_in
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type",genome.filetype," > bowtie2.log")
-system(echo.command)
+runExternal(echo.command)
 
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  system("echo Extarting tar formatted gemome index file >> bowtie2.log")
-  system("tar -tf genome.txt >> bowtie2.log")
+  runExternal("echo Extarting tar formatted gemome index file >> bowtie2.log")
+  runExternal("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
   #system("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {
   #check sequece file type
-  emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+  emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
   options(scipen = 999)
   inputfile.to.check <- ("genome.txt")
   sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
@@ -71,13 +73,11 @@ if (genome.filetype == "tar") {
 
   # Do indexing
   print("Indexing the genome...")
-  system("echo Indexing the genome... >> bowtie2.log")
+  runExternal("echo Indexing the genome... >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
   bowtie2.genome <- system(check.command,intern = TRUE)
   #genome.dir <- system(check.command, intern = TRUE)
   #bowtie2.genome <- file.path( genome.dir , "genome.txt")
-  cp.command <- paste("cp ",bowtie2.genome,"_bowtie2_index.tar ./bowtie2_index.tar ",sep = "")
-  system(cp.command)
   new_index_created <- ("yes")
 }
 #echo.command <- paste("echo Internal genome name:", bowtie2.genome, " >> bowtie2.log")
@@ -132,36 +132,38 @@ command.end <- paste("-x",bowtie2.genome,"-U",reads1,"1> alignment.sam 2>> bowti
 # run bowtie
 bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
-system("echo Launching Bowtie2 alignment >> bowtie2.log")
+runExternal("echo Launching Bowtie2 alignment >> bowtie2.log")
 echo.command <- paste("echo '",bowtie.command,"' >> bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 if (file.size("alignment.sam") < 1) {
-  system("cat bowtie2.log")
+  runExternal("cat bowtie2.log")
   stop("Bowtie2 failed! Check the tail of the ouput below for more information.")
 }
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
 # Substitute display names to BAM header for clarity
 displayNamesToBAM("alignment.sorted.bam")
 
-# rename result files
-system("mv alignment.sorted.bam bowtie2.bam")
-system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+# rename result files according to the index parameter
+runExternal("mv alignment.sorted.bam bowtie2.bam")
+if (index.file == "index_file") {
+  runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+}
 
 if (unaligned.file == "yes") {
-  system("mv unaligned unaligned_1.fq")
+  runExternal("mv unaligned unaligned_1.fq")
 }
 
 # Substitute display names to log for clarity
@@ -188,3 +190,9 @@ if (new_index_created == "yes") {
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
+documentVersion("Bowtie 2",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

@@ -23,7 +23,7 @@
 # 22.9.2016 EK Clarified strandedness options
 
 # sort bam if the data is paired-end
-samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
 if(paired == "yes"){
 	system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
 	bam<-"name-sorted.bam"

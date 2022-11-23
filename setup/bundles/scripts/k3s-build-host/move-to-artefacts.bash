@@ -40,6 +40,7 @@ bash $(dirname "$0")/run-in-pod.bash $JOB_NAME $BUILD_NUMBER root - <<EOF
 
   #echo "chown to 1000:1000"
   chown -R 1000:1000 $nfs_client_bundle
+  chmod -R go-rwxst,u=rwX,go=rX $nfs_client_bundle
 EOF
 
 show_elapsed $start_time

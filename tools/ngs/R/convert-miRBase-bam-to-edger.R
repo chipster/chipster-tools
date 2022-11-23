@@ -10,7 +10,7 @@
 source(file.path(chipster.common.path, "tool-utils.R"))
 
 # Convert to SAM, grep miRNA name (removes unaligned reads), count, filter on tag number
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
 counts.command <- paste(samtools.binary,"view -q 10 bam_file.bam | awk '{print $3}' | grep -v '^*' | sort -k1 | uniq -c | awk '{if($1>",count_limit,")print $2\"\t\"$1}'> counts.tsv")
 system(counts.command)
 

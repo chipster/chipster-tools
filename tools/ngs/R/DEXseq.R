@@ -7,13 +7,14 @@
 # OUTPUT OPTIONAL dexseq-dispersion-plot.pdf: dexseq-dispersion-plot.pdf
 # PARAMETER OPTIONAL organism: "Reference organism" TYPE ["FILES genomes/dexseq .DEXSeq.gtf"] DEFAULT "SYMLINK_TARGET genomes/dexseq/default .DEXSeq.gtf" (Which organism is your data from.)
 # PARAMETER pvalue: "Threshold for adjusted p-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Threshold for BH adjusted p-values. If a gene has at least one exon below this p-value, all its exons will be included in the result list.)
-# SLOTS 2
+# SLOTS 5
 
 # 18.07.2013 JTT, Created
 # 25.04.2014 MK, Modified for R-3.0
 # 04.07.2014 AMS, New genome/gtf/index locations & names
 # 08.07.2015 EK, Removed dexseq-all-genes.tsv from the results.
 # 15.07.2016 ML, switched tools to newer versions
+# 17.8.2022 ML, slots = 5 temporarily to allow customer to run with their big data
 
 # Loads the library 
 library(DEXSeq)

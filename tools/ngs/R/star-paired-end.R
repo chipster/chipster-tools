@@ -8,12 +8,14 @@
 # OUTPUT OPTIONAL Log_progress.txt
 # OUTPUT OPTIONAL Log_final.txt
 # PARAMETER organism: "Genome" TYPE [Homo_sapiens.GRCh38.95, Mus_musculus.GRCm38.95, Rattus_norvegicus.Rnor_6.0.95] DEFAULT Homo_sapiens.GRCh38.95 (Genome that you would like to align your reads against.)
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.)
 # PARAMETER OPTIONAL alignments.per.read: "Maximum alignments per read" TYPE INTEGER DEFAULT 10 (Maximum number of multiple alignments allowed for a read: if exceeded, the read is considered unmapped.)
 # PARAMETER OPTIONAL mismatches.per.pair: "Maximum mismatches per alignment" TYPE INTEGER DEFAULT 10 (Maximum number of mismatches per alignment. Use value 999 to switch off this filter.)
 # PARAMETER OPTIONAL out.filter.mismatch.nover.lmax: "Mismatch ratio" TYPE DECIMAL DEFAULT 0.3 (Alignment will be output only if its ratio of mismatches to mapped length is less than or equal to this value.)
 # PARAMETER OPTIONAL align.intron.min: "Minimum intron size" TYPE INTEGER DEFAULT 21 (Minimum intron size.)
 # PARAMETER OPTIONAL align.intron.max: "Maximum intron size" TYPE INTEGER DEFAULT 0 (If 0, max intron size will be determined automatically, please see the manual page.)
 # PARAMETER OPTIONAL align.mates.gap.max: "Maximum gap between two mates" TYPE INTEGER DEFAULT 0 (If 0, max intron gap will be determined automatically, please see the manual page.)
+# PARAMETER OPTIONAL log.files: "Create log files" TYPE [final_log: "Final log only", final_and_progress: "Final and progress logs", no_logs: "No logs"] DEFAULT final_log (Do you want to create a log file? By default only the final log is created.)
 # SLOTS 5
 
 source(file.path(chipster.common.path,"tool-utils.R"))
@@ -27,13 +29,14 @@ for (i in 1:nrow(input.names)) {
 }
 
 # setting up STAR
-star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
+# latest STAR is not compatible with old indexes
+# use the latest version, set runtime R-4.1.1 and latest samtools after indexes are updated
+# star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
+star.binary <- c(file.path(chipster.tools.path,"STAR-2.5.3a","STAR"))
 path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
 path.gtf <- c(file.path(chipster.tools.path,"genomes","gtf",organism))
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
-
-version <- system(paste(star.binary,"--version"),intern = TRUE)
-documentVersion("STAR",version)
+samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
+#samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # Input files
 if (fileOk("reads1.txt",0) && fileOk("reads2.txt",0)) {
@@ -79,17 +82,22 @@ command <- paste(command,"--outFilterMismatchNoverLmax",out.filter.mismatch.nove
 documentCommand(command)
 runExternal(command)
 
-# rename result files
-system("mv Log.progress.out Log_progress.txt")
-system("mv Log.final.out Log_final.txt")
-system("mv Aligned.sortedByCoord.out.bam alignment.bam")
+# rename result files according to the parameter
+if (log.files == "final_log") {
+  runExternal("mv Log.final.out Log_final.txt")
+} else if (log.files == "final_and_progress") {
+  runExternal("mv Log.progress.out Log_progress.txt")
+  runExternal("mv Log.final.out Log_final.txt")
+}
+runExternal("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
 # Change file named in BAM header to display names
-displayNamesToBAM("alignment.bam")
+displayNamesToBAM("alignment.bam", samtools.binary)
 
 # index bam
-system(paste(samtools.binary,"index alignment.bam"))
-
+if (index.file == "index_file") {
+  runExternal(paste(samtools.binary,"index alignment.bam"))
+}
 # Determine base name
 inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads001.fq)
@@ -101,3 +109,10 @@ outputnames[2,] <- c("alignment.bam.bai",paste(basename,".bam.bai",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+star.version <- system(paste(star.binary,"--version"),intern = TRUE)
+documentVersion("STAR",star.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

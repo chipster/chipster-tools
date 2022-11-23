@@ -8,6 +8,7 @@
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments should Bowtie2 search" TYPE [20: "20", 100: "100", 1000: "1000"] DEFAULT 20 (How many alignments should Bowtie2 search per read.)
 # PARAMETER OPTIONAL fragmentlength: "Mean fragment length" TYPE INTEGER FROM 10 TO 10000 DEFAULT 200 (While the empirical distribution is estimated from paired-end reads on-the-fly, this value parameterizes the prior distribution. If only single-end reads are available, this prior distribution is also used to determine the effective length.)
 # PARAMETER OPTIONAL fragmentlengthstdev: "Fragment length standard deviation" TYPE INTEGER FROM 5 TO 200 DEFAULT 60 (While the empirical distribution is estimated from paired-end reads on-the-fly, this value parameterizes the prior distribution. If only single-end reads are available, this prior distribution is also used to determine the effective length.)
+# RUNTIME R-4.1.1
 
 # EK 28.4.2014
 # EK 23.5.2014 updated Bowtie2 command, added identifier sorting and piping to eXpress

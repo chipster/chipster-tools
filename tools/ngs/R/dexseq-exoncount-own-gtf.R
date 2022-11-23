@@ -18,7 +18,7 @@ source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("annotation.gtf")
 
 # if BAM contains paired-end data, sort it by read names
-samtools.binary <- file.path(chipster.tools.path, "samtools", "samtools")
+samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
 if(paired == "yes"){
 	system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
 	bam<-"name-sorted.bam"
@@ -26,14 +26,15 @@ if(paired == "yes"){
 	bam<-"alignment.bam"
 }
 
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
+
 # User provided GTF need to be preprocessed
 prepare.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_prepare_annotation.py")
-prepare.command <- paste("python", prepare.binary, "annotation.gtf annotation.dexseq.gtf")
+prepare.command <- paste(python.binary, prepare.binary, "annotation.gtf annotation.dexseq.gtf")
 system(prepare.command)
 
 # counts reads per non-overlapping exonic regions
 dexseq.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_count.py")
-python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
 dexseq.command <- paste(python.binary, dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, "annotation.dexseq.gtf", bam, "exon-counts-out.tsv")
 system(dexseq.command)
 

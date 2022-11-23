@@ -18,6 +18,7 @@
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments are reported per read" TYPE [1, 2, 3] DEFAULT 1 (If there are several, equally good alignments, how many should be reported?)
 # PARAMETER OPTIONAL multiread.file: "Put multireads to a separate file" TYPE [yes, no] DEFAULT no (If you chose not to have alignments for reads which map to multiple positions, would you like to store these reads to a separate fastq file?)
 # PARAMETER OPTIONAL unaligned.file: "Put unaligned reads to a separate file" TYPE [yes, no] DEFAULT no (Would you like to store unaligned reads to a new fastq file? Note that also multireads will be added to this file, unless you asked them to be put to a separate file.)
+# RUNTIME R-4.1.1
 
 # EK 20.6.2011
 # AMS 19.6.2012 Added unzipping
@@ -32,7 +33,7 @@ unzipIfGZipFile("genome.txt")
 genome.base <- "genome"
 bowtie.index.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie-build"))
 command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", genome.base)
-system(command.indexing)
+runExternal(command.indexing)
 
 
 # bowtie
@@ -54,29 +55,29 @@ multiread.output <- ifelse(multiread.file == "yes", "--max multireads.fastq", ""
 output.parameters <- paste(unaligned.output, multiread.output)
 
 # command ending
-command.end <- paste(genome.base, "reads.txt 1> alignment.sam 2> bowtie.log'")
+command.end <- paste("-x", genome.base, "reads.txt 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
 bowtie.command <- paste(command.start, common.parameters, quality.parameter, mode.parameters, output.parameters, command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
-system(bowtie.command)
+runExternal(bowtie.command)
 
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary, "view -bS -q 1 alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary, "view -bS -q 1 alignment.sam -o alignment.bam"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bowtie.bam")
-system("mv alignment.sorted.bam.bai bowtie.bam.bai")
+runExternal("mv alignment.sorted.bam bowtie.bam")
+runExternal("mv alignment.sorted.bam.bai bowtie.bam.bai")
 
 # Handle output names
 #
@@ -98,3 +99,9 @@ outputnames[4,] <- c("multireads.fastq", paste(basename, "_multireads.fq", sep="
 # Write output definitions file
 write_output_definitions(outputnames)
 
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie"),intern = TRUE)
+documentVersion("Bowtie",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

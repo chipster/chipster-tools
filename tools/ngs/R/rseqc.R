@@ -20,7 +20,7 @@
 
 rseqc.path <- c(file.path(chipster.tools.path, "rseqc"))
 
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 system(paste(samtools.binary, "index alignment.bam > alignment.bam.bai"))
 
 # Which BED to use.

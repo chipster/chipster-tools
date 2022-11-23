@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v4 -Combine multiple samples </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool can be used to merge or integrate multiple Seurat objects for later joined analysis.
+
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Combining method [merge]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As inputs, give the Seurat objects generated with the <b>Seurat Setup tool</b> and
+        preprocessed with the <b>SCTransform</b> tool. <br>
+    </p>
+
+    </p>
+
+    <h4>Merge vs integration as the combining method</h4>
+
+    <p>
+        The <b>"combining method</b> parameter determines which method to use for the combining.
+        By default, merge is used, but user can also choose to use integration.
+        Merge simply combines the objects into one.
+    </p>
+
+    <p>
+        The integration method uses Canonical correlation analysis (CCA) to identify common sources of variation between
+        the datasets.
+        After this, the tool identifies anchors, gives scores (=weights) to these anchors
+        and then uses these anchors to integrate the datasets.
+        The integration method should be used when there are strong batch effects present in the data as it can remove them.
+        
+
+    <h3>Further information</h3>
+
+    <p>
+        For more details on integration, please check the vignette for introduction on integration with single-cell data<a
+            href="https://satijalab.org/seurat/articles/integration_introduction.html">
+            "Introduction to scRNA-seq integration"</a>.
+    </p>
+
+    
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+            Chipster. </li>
+    </ul>
+
+
+
+</body>

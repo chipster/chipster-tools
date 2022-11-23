@@ -3,11 +3,11 @@
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL seurat_obj_pca.Robj
 # OUTPUT OPTIONAL PCAloadings.txt
-# PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 20 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
+# PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 50 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 
 
 # OUTPUT OPTIONAL log.txt
@@ -18,7 +18,8 @@
 # 2018-01-11 ML update Seurat version to 2.2.0
 # 2018-09-26 ML add num.of.pcas parameter for datasets with fewer cells
 # 2019-06-12 ML Seurat v3
-# 2021-10-04 ML Update to Seurat v4
+# 2021-10-04 ML update to Seurat v4
+# 2022-10-03 EK increase the default number of PCs to 50 as in Seurat
 
 library(Seurat)
 library(dplyr)
