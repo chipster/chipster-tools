@@ -4,11 +4,12 @@
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # OUTPUT bowtie2.bam 
-# OUTPUT bowtie2.bam.bai 
 # OUTPUT bowtie2.log 
+# OUTPUT OPTIONAL bowtie2.bam.bai 
 # OUTPUT OPTIONAL failed_1.fq
 # OUTPUT OPTIONAL failed_2.fq
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/bowtie2 .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bowtie2/default .fa" (Genome or transcriptome that you would like to align your reads against.)
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.)
 # PARAMETER strategy: "Alignment strategy to use" TYPE [--very-fast: "Very fast", --fast: "Fast", --sensitive: "Sensitive", --very-sensitive: "Very sensitive", --very-fast-local: "Very fast local", -fast-local: "Fast local", --sensitive-local: "Sensitive local", --very-sensitive-local: "Very sensitive local"] DEFAULT --sensitive (The alignment strategy to be used. Bowtie2 can map the reads using end-to-end or local alignments. When local alignment is used, Bowtie2 might "trim" or "clip" some read characters from one or both ends of the alignment if doing so maximizes the alignment score. Bowtie2 uses heuristics for mapping the reads to the reference genome. Several Bowtie2 parameters affect simultaneously both to the sensitivity and to computing time. In Chipster you can choose the sensitivity level from a set of pre-defined parameter combinations that allow you to tune the balance between the computing time and mapping sensitivity.)
 # PARAMETER quality.format: "Quality value format used" TYPE [--phred33: "Sanger - Phred+33", --phred64: "Illumina GA v1.3-1.5 - Phred+64", --ignore-quals: "Fixed 30 for all"] DEFAULT --phred33 (Quality scale used in the fastq-file.)
 # PARAMETER alignment.no: "How many valid alignments are reported per read" TYPE [0: "Best based on the mapping quality", 1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "All alignments"] DEFAULT 0 (By default Bowtie2 reports only the best alignment of the read (based on the mapping quality\). If there are several equally good alignments, you can choose how many of them should be reported.)
@@ -28,6 +29,7 @@
 # PARAMETER OPTIONAL no.dovetail: "Not concordant when mates extend past each other" TYPE [yes, no] DEFAULT no (If the mates "dovetail", that is if one mate alignment extends past the beginning of the other such that the wrong mate begins upstream, consider that to be concordant. Default: mates cannot dovetail in a concordant alignment. ) 
 # PARAMETER OPTIONAL no.contain: "Not concordant when one mate alignment contains other" TYPE [yes, no] DEFAULT no (If one mate alignment contains the other, consider that to be non-concordant. Default: a mate can contain the other in a concordant alignment.)
 # PARAMETER OPTIONAL no.overlap: "Not concordant when mates overlap at all"  TYPE [yes, no] DEFAULT no (If one mate alignment overlaps the other at all, consider that to be non-concordant. Default: mates can overlap in a concordant alignment.)
+# RUNTIME R-4.1.1
 
 # KM 10-01.2012
 # EK 8.5.2013 replaced samtools -q 1 with Bowtie --no-unal to remove unaligned reads from BAM
@@ -97,7 +99,7 @@ if (discordant.file == "yes") {
 }
 
 # Check if reads are in FASTA format 
-emboss.path <- file.path(chipster.tools.path,"emboss","bin")
+emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
 sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
 sfcheck.command <- paste(sfcheck.binary,emboss.path,"reads001.fq")
 str.filetype <- system(sfcheck.command,intern = TRUE)
@@ -139,31 +141,33 @@ bowtie.command <- paste(command.start,parameters,command.end)
 #stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 
 echo.command <- paste("echo '",bowtie.command,"' > bowtie2.log")
-system(echo.command)
-system(bowtie.command)
+runExternal(echo.command)
+runExternal(bowtie.command)
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # convert sam to bam
-system(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary,"sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
 
-# rename result files
-system("mv alignment.sorted.bam bowtie2.bam")
-system("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+# rename result files according to the index parameter
+runExternal("mv alignment.sorted.bam bowtie2.bam")
+if (index.file == "index_file") {
+  runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+}
 
 if (discordant.file == "yes") {
-  system("mv failed.1 failed_1.fq")
-  system("mv failed.2 failed_2.fq")
+  runExternal("mv failed.1 failed_1.fq")
+  runExternal("mv failed.2 failed_2.fq")
 }
 
 # Substitute display names to log for clarity
@@ -192,3 +196,10 @@ outputnames[4,] <- c("failed_2.fq",paste(base2,"_failed.fq",sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
+documentVersion("Bowtie 2",bowtie.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

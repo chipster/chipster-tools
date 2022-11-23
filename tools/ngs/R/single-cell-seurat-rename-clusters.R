@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL clusterPlotRenamed.pdf
 # OUTPUT OPTIONAL seurat_obj_renamed.Robj
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
-# RUNTIME R-4.1.0-single-cell
+# RUNTIME R-4.2.0-single-cell
 
 
 # OUTPUT OPTIONAL log.txt
@@ -34,8 +34,8 @@ new.cluster.ids <- clusternames[,1]
 if(length(new.cluster.ids) != length(levels(seurat_obj)) ) {
     stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
 }
-if(row.names(clusternames) != levels(seurat_obj) ){
-    stop("CHIPSTER-NOTE: The cluster numbers in the input table need to be the same as in the Seurat object.")
+if(  !identical(row.names(clusternames), levels(seurat_obj)) ) {
+    stop("CHIPSTER-NOTE: The cluster names = numbers in the input table need to be the same as in the Seurat object.")
 
 }
 

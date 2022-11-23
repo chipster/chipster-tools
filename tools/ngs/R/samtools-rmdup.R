@@ -7,7 +7,7 @@
 # EK 12.1.2012
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # parameters
 single.end <- ifelse(end.type == "paired", "", "-s")

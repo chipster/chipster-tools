@@ -5,9 +5,10 @@
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
 # OUTPUT bwa.log 
+# OUTPUT OPTIONAL bwa.bam.bai 
 # OUTPUT OPTIONAL bwa_index.tar
+# PARAMETER OPTIONAL index.file: "Create index file" TYPE [index_file: "Create index file", no_index: "No index file"] DEFAULT no_index (Creates index file for BAM. By default no index file.)
 # PARAMETER OPTIONAL minseedlen: "Minimum seed length" TYPE INTEGER DEFAULT 19 (Matches shorter than this will be missed when looking for maximal exact matches or MEMs in the first alignment phase.)
 # PARAMETER OPTIONAL bandwith: "Maximum gap length" TYPE INTEGER DEFAULT 100 (Gaps longer than this will not be found. Note also scoring matrix and hit length affect the maximum gap length, in addition to this band width parameter.)
 # PARAMETER OPTIONAL matchscore: "Match score" TYPE INTEGER DEFAULT 1 (Score for a matching base.)
@@ -19,6 +20,7 @@
 # PARAMETER OPTIONAL rgsm: "Sample name for read group" TYPE STRING (The name of the sample sequenced in this read group. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rgpl: "Platform for read group" TYPE [ none: "Not defined", ILLUMINA, SOLID, LS454, HELICOS, PACBIO] DEFAULT none (Platform\/technology used to produce the read. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
 # PARAMETER OPTIONAL rglb: "Library identifier for read group" TYPE STRING (DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes. Note that you have to fill in also the read group identifier parameter for the read group information to appear in the BAM file.)
+# RUNTIME R-4.1.1
 
 # KM 1.9.2015
 
@@ -37,31 +39,33 @@ for (i in 1:nrow(input.names)) {
 # read input names
 inputnames <- read_input_definitions()
 
-# bwa
-bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa mem")
+# bwa binary
+bwa.binary <- file.path(chipster.tools.path, "bwa", "bwa")
+# bwa mem binary
+bwa.mem.binary <- paste(bwa.binary, "mem")
 bwa.index.binary <- file.path(chipster.module.path, "shell", "check_bwa_index.sh")
-samtools.binary <- file.path(chipster.tools.path, "samtools-1.2", "samtools")
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE )
 hg_ifn <- ("")
 echo.command <- paste("echo Host genome file type", genome.filetype, " > bwa.log")
-system(echo.command)
+runExternal(echo.command)
 
 new_index_created <- ("no")
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar"){
-	system("echo Extarting tar formatted gemome index file >> bwa.log")
-	system("tar -tf genome.txt >> bwa.log")
+	runExternal("echo Extracting tar formatted gemome index file >> bwa.log")
+	runExternal("tar -tf genome.txt >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt | tail -1 ")	
 	bwa.genome <- system(check.command, intern = TRUE)
 	if ( bwa.genome == "wrong_tar_content"){
 		stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")	
 	}
-	system("ls -l >> bwa.log")	
+	runExternal("ls -l >> bwa.log")	
 # case 2. Fasta file
 }else{
 	#check sequece file type
-	emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+	emboss.path <- file.path(chipster.tools.path, "emboss-20.04" ,"bin")
 	options(scipen=999)
 	inputfile.to.check <- ("genome.txt")
 	sfcheck.binary <- file.path(chipster.module.path ,"../misc/shell/sfcheck.sh")
@@ -72,19 +76,18 @@ if (genome.filetype == "tar"){
 		stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
 	}
 	#Do indexing
-	system("echo Calculating gemome indexes >> bwa.log")
+	runExternal("echo Calculating gemome indexes >> bwa.log")
 	check.command <- paste( bwa.index.binary, "genome.txt -tar| tail -1 ")
 	bwa.genome <- system(check.command, intern = TRUE)
 	cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./bwa_index.tar ", sep ="")
-	system(cp.command)
+	runExternal(cp.command)
 	new_index_created <- ("yes")
 }
 echo.command <- paste("echo Internal genome name:", bwa.genome, " >> bwa.log")
-system(echo.command)
-
+runExternal(echo.command)
 
 # bwa
-command.start <-(bwa.binary)
+command.start <-(bwa.mem.binary)
 
 bwa.parameters <- paste("-M", "-k", minseedlen, "-w", bandwith, "-A", matchscore, "-B", mismatchscore, "-O", gapopen, "-E", gapextension, "-L",  clippenalty )
 
@@ -163,37 +166,42 @@ for (i in 1:length(reads1.list)) {
 	# run bwa alignment
 	bwa.command <- paste(command.start, bwa.parameters, command.end)
 	
+	documentCommand(bwa.command)
+
 	#stop(paste('CHIPSTER-NOTE: ', bwa.command))
+	# why the log is empty if this is run with runExternal()?
 	system(bwa.command)
 	
 	# convert sam to bam
-	system(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
+	runExternal(paste(samtools.binary, "view -b", sam.file, "-o", bam.file))
 }		
 
-system("echo BWA ready >> bwa.log")
+runExternal("echo BWA ready >> bwa.log")
 #system("ls -l >> bwa.log")
 # Join bam files
 if (fileOk("2.bam")){
 	# more than one bam exists, so join them
-	system("ls *.bam > bam.list")
-	system(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+	runExternal("ls *.bam > bam.list")
+	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
 }else{
 	# only one bam, so just rename it
-	system("mv 1.bam alignment.bam")
+	runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
 displayNamesToBAM("alignment.bam")
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment.sorted"))
+runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-system(paste(samtools.binary, "index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # rename result files
-system("mv alignment.sorted.bam bwa.bam")
-system("mv alignment.sorted.bam.bai bwa.bam.bai")
+runExternal("mv alignment.sorted.bam bwa.bam")
+if (index.file == "index_file") {
+  runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
+}
 
 # Substitute display names to log for clarity
 displayNamesToFile("bwa.log")
@@ -230,3 +238,10 @@ if ( new_index_created == "yes"){
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
+# save version information
+bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
+documentVersion("BWA",bwa.version)
+
+samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
+documentVersion("Samtools",samtools.version)

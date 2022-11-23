@@ -3,7 +3,7 @@
 <head><title></title></head>
 <body>
 
-<h2>RNA-seq / Count aligned reads per genes with HTSeq</h2>
+<h2>Count aligned reads per genes with HTSeq</h2>
 
 <h3>Description</h3>
 
@@ -31,7 +31,7 @@ Given mapped reads in a BAM file, this tool counts how many reads map to each ge
 By default the GFF attribute gene_id is used as a feature ID. Several GFF lines (e.g. exons) with the same feature ID will be considered as parts of the same feature,
 and the feature ID is used to identify the counts in the output table. In other words, a gene is considered as a union of all its exons.
 There are three different modes to handle reads which overlap with more than one gene.
- These are illustrated in the <a href="http://www-huber.embl.de/users/anders/HTSeq/doc/count.html">HTSeq manual</a>.
+ These are illustrated in the <a href="https://htseq.readthedocs.io/en/master/htseqcount.html">HTSeq manual</a>.
 </p>
 <p>
 If your RNA-seq data was produced with a stranded protocol, it is important that you select the correct strandedness option in the parameter "Is the data stranded and how", as this affects the counting: 
@@ -68,7 +68,8 @@ listing how many reads
 <h3>References</h3>
 
 <p>
-This tool is based on the <a href = "http://www-huber.embl.de/users/anders/HTSeq/doc/index.html">HTSeq package</a> by Simon Anders.</p>
+Please cite <a href = "https://academic.oup.com/bioinformatics/article/38/10/2943/6551247">Analysing high-throughput sequencing data in Python with HTSeq 2.0</a> by Putri et al (Bioinformatics, Volume 38, Issue 10, 15 May 2022, Pages 2943–2945).
+</p>
 
 </body>
 

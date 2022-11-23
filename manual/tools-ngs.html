@@ -44,7 +44,7 @@
                 <!-- <li> <a href="deseq2-pca-heatmap.html">PCA and heatmap of samples with DESeq2</a></li> -->
                 <li> <a href="heatmap-for-rnaseq.html">Heatmap for RNA-seq results</a></li>
                 <li> <a href="check-fastq.html">Check FASTQC file for errors</a></li>
-                <!-- <li> <a href="multiqc.html">Combine reports using MultiQC</a></li> broken--> 
+                <!-- <li> <a href="multiqc.html">Combine reports using MultiQC</a></li> broken-->
                 <br>
                 <br>
                 <b><a name="preprocessing">Preprocessing</a></b>
@@ -230,21 +230,29 @@
                 <br>
                 <br>
                 <b><a name="singlecell">Single-cell RNA-seq</a></b>
-                <li><a href="single-cell-seurat-setup-v3.html">Seurat -Setup and QC</a></li>
-                <li><a href="single-cell-scater-QC.html">Scater - QC</a></li> 
-                <li><a href="single-cell-seurat-filter-regress-v3.html">Seurat -Filter, normalize, regress and detect variable genes</a></li>
-                <li><a href="single-cell-seurat-sctransform.html">Seurat v3 -SCTransform: Filter, normalize, regress and detect variable genes</a></li>
-                <li><a href="single-cell-seurat-pca-v3.html">Seurat -PCA</a></li>
-                <li><a href="single-cell-seurat-clustering-v3.html">Seurat -Clustering and detection of cluster marker genes</a></li>
-                <li><a href="single-cell-seurat-find-markers-v3.html">Seurat -Find differentially expressed genes between clusters</a></li>
-                <li><a href="single-cell-seurat-gene-plots-v3.html">Seurat -Visualize biomarker(s)</a></li>
-                <li><a href="single-cell-seurat-featureplot-v3.html">Seurat -Visualise features in UMAP plot </a></li>
-                <li><a href="single-cell-seurat-CCA-v3.html">Seurat -Combine two samples</a></li>
-                <li><a href="single-cell-seurat-integrated-analysis-v3.html">Seurat -Integrated analysis of two samples</a></li>
-                <li><a href="single-cell-seurat-diffexp-samples-v3.html">Seurat -Find conserved cluster markers and DE genes in two samples</a></li>
-                <li><a href="single-cell-seurat-split-dot-plot-v3.html">Seurat -Visualize genes with cell type specific responses in two samples</a></li>
+                <li><a href="single-cell-seurat-setup.html">Seurat -Setup and QC</a></li>
+                <li><a href="single-cell-scater-QC.html">Scater - QC</a></li>
+                <li><a href="single-cell-seurat-filter-regress.html">Seurat -Filter, normalize, regress and detect
+                                variable genes</a></li>
+                <li><a href="single-cell-seurat-sctransform.html">Seurat v3 -SCTransform: Filter, normalize, regress and
+                                detect variable genes</a></li>
+                <li><a href="single-cell-seurat-pca.html">Seurat -PCA</a></li>
+                <li><a href="single-cell-seurat-clustering.html">Seurat -Clustering and detection of cluster marker
+                                genes</a></li>
+                <li><a href="single-cell-seurat-find-markers.html">Seurat -Find differentially expressed genes between
+                                clusters</a></li>
+                <li><a href="single-cell-seurat-gene-plots.html">Seurat -Visualize biomarker(s)</a></li>
+                <li><a href="single-cell-seurat-featureplot.html">Seurat -Visualise features in UMAP plot </a></li>
+                <li><a href="single-cell-seurat-CCA.html">Seurat -Combine two samples</a></li>
+                <li><a href="single-cell-seurat-integrated-analysis.html">Seurat -Integrated analysis of two samples</a>
+                </li>
+                <li><a href="single-cell-seurat-diffexp-samples.html">Seurat -Find conserved cluster markers and DE
+                                genes in two samples</a></li>
+                <li><a href="single-cell-seurat-split-dot-plot.html">Seurat -Visualize genes with cell type specific
+                                responses in two samples</a></li>
                 <li><a href="single-cell-seurat-extract-cluster.html">Seurat -Extract cells in a cluster</a></li>
-                <li><a href="single-cell-seurat-subset.html">Seurat -Subset Seurat objects based on gene expression</a> </li>
+                <li><a href="single-cell-seurat-subset.html">Seurat -Subset Seurat objects based on gene expression</a>
+                </li>
                 <!-- DropSeq tools:-->
                 <li><a href="single-cell-preprocessing.html">Preprocessing of DropSeq FASTQ files</a></li>
                 <!-- <li><a href="picard-fastqtosam.html">FASTQ to BAM</a></li> -->
@@ -287,8 +295,10 @@
                 <li><a href="mothur-filterseqs.html">Filter sequence alignment</a></li>
                 <li><a href="mothur-precluster.html">Precluster aligned sequences</a></li>
                 <li><a href="mothur-chimera-uchime.html">Remove chimeric sequences</a></li>
-                <li><a href="mothur-classifyseqs.html">Classify 16S or 18S sequences to taxonomic units using Silva</a></li>
-                <li><a href="mothur-classifyseqs-its.html">Classify ITS sequences to taxonomic units using UNITE</a></li>
+                <li><a href="mothur-classifyseqs.html">Classify 16S or 18S sequences to taxonomic units using Silva</a>
+                </li>
+                <li><a href="mothur-classifyseqs-its.html">Classify ITS sequences to taxonomic units using UNITE</a>
+                </li>
                 <!--<li><a href="mothur-classify-counttable.html">Produce count table and phenodata</li> -->
                 <!-- <li><a href="mothur-analyses.html">Statistical analysis for marker gene studies</a></li> -->
                 <li><a href="mothur-seq-error.html">Asses error rates</a></li>
@@ -302,7 +312,8 @@
                 <b><a name="microanalysis">Microbial amplicon data analyses</a></b>
                 <li><a href="mothur-phyloseq-inputs.html">Generate input files for phyloseq</a></li>
                 <li><a href="metabarcoding-import.html">Convert mothur files into phyloseq object</a></li>
-                <li><a href="metabarcoding-rarecurve-alpha.html">Sequence numbers, rarefaction curve and alpha diversity estimates</a></li>
+                <li><a href="metabarcoding-rarecurve-alpha.html">Sequence numbers, rarefaction curve and alpha diversity
+                                estimates</a></li>
                 <li><a href="metabarcoding-rarefy-even.html">Rarefy to even depth</a></li>
                 <li><a href="metabarcoding-taxon-overview.html">Overview of taxon composition</a></li>
                 <li><a href="metabarcoding-filter-taxgroup.html">Filter by taxonomic group</a></li>
@@ -315,8 +326,10 @@
                 <li><a href="metabarcoding-distance-ordination.html">Distance matrices and ordinations</a></li>
                 <li><a href="metabarcoding-global-permanova.html">Global PERMANOVA for OTU abundance data</a></li>
                 <li><a href="metabarcoding-permdisp.html">PERMDISP for OTU abundance data</a></li>
-                <li><a href="metabarcoding-pairwise-permanova.html">Post-hoc pairwise PERMANOVA for OTU abundance data</a></li>
-                <li><a href="metabarcoding-pairwise-tukey.html">Post-hoc pairwise Tukey's HSD for OTU abundance data</a></li>
+                <li><a href="metabarcoding-pairwise-permanova.html">Post-hoc pairwise PERMANOVA for OTU abundance
+                                data</a></li>
+                <li><a href="metabarcoding-pairwise-tukey.html">Post-hoc pairwise Tukey's HSD for OTU abundance data</a>
+                </li>
                 <li><a href="metabarcoding-deseq2.html">Differential OTU abundance analysis using DESeq2</a></li>
                 <br>
                 <br>
@@ -347,7 +360,7 @@
                 </li>
                 <li><a href="acgh-expression-test.html">Test for copy number induced expression changes</a></li>
                 <li><a href="acgh-plot-combined-expression.html">Plot copy number induced gene expression</a></li>
-                
+
         </ul>
 
 </body>
