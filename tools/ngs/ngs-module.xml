@@ -42,6 +42,7 @@
 		<tool module="common">merge-tables.R</tool>
 		<tool module="common">general_file_processing.R</tool>	
 		<tool>row_count.R</tool>
+		<tool>remove-duplicate-genes.py</tool>
 		<tool>process-preprocessed-counts.R</tool>
 		<tool>normalise-counts.R</tool>
 		<tool>deseq2-normalized-counts-for-gene.R</tool>
@@ -259,7 +260,7 @@
 		<tool>ngs-find-peaks-macs-two.R</tool>
 		<tool>ngs-find-peaks-fseq.R</tool>		
 		<tool>ngs-find-nearest-genes.R</tool>
-		<tool>ngs-find-unique-genes.R</tool>
+		<tool>remove-duplicate-genes.py</tool>
 		<tool>pathways-ngs-hyperg-go.R</tool>
 		<tool>ngs-find-motifs-jaspar.R</tool>
 		<tool>dimont-extract-data.R</tool>

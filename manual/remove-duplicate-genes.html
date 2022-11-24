@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>ChIP-seq /  Remove duplicate genes</h2>
+
+<h3>Description</h3>
+
+This tool takes a list of gene identifiers and removes duplicates. The output file is compatible with downstream tools used for example for pathway analysis.
+<br>
+<br>
+<h3>Parameters</h3>
+
+<ul>
+<li>ID column [ensembl_id]</li>
+</ul>
+
+<br>
+
+<h3>Details</h3>
+
+<p>The identifier column can be selected from the parameter. If the file contains a column <code>ensembl_id</code>, it will be selected by default.</p> 
+
+<p>If the file has column <code>location</code>, then it's values affect which row among same IDs will be kept. The values are prioritised as follows:</p>
+
+<ul>
+    <li>upstream</li>
+	<li>overlapStart</li>
+	<li>inside</li>
+	<li>overlapEnd</li>
+	<li>downstream</li>
+    <li>any other value</li> 
+</ul>
+
+<br>
+<h3>Output</h3>
+
+<p>The analysis output is a table of annotated genes, which is compatible with downstream tools used for example for pathway analysis.</p>
+
+<p>The file rows are sorted according to the text in the ID column.</p>
+
+<br>
+
+</body>
+
