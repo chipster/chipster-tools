@@ -25,18 +25,19 @@ def main():
     session_input_gtf = tool_utils.read_input_definitions()[input_gtf]
     gtf_basename = tool_utils.remove_postfix(session_input_gtf, '.gtf')
 
-    # Create a splice site file
-    run_bash(extract_splice_sites + " " + input_gtf  + " > " + gtf_basename + ".ss")
-
-    # Create an exon file
-    run_bash(extract_exons + " " + input_gtf + " > " + gtf_basename + ".exon")
-
     # Run hisat2-build with splice site and exon annotations, this consumes lot of ram: ~200G for human
     # rat would require 0.5 TB RAM with --ss and --exon https://www.biostars.org/p/344449/
     if gtf_basename.startswith("Rattus_norvegicus"):
         print("not using splice sites and exon for rat")
         run_process([hisat2_build, "-p", chipster_threads_max, input_fa, "output"])
+        
     else:
+        # Create a splice site file
+        run_bash(extract_splice_sites + " " + input_gtf  + " > " + gtf_basename + ".ss")
+
+        # Create an exon file
+        run_bash(extract_exons + " " + input_gtf + " > " + gtf_basename + ".exon")
+        
         run_process([hisat2_build, "-p", chipster_threads_max, "--ss", gtf_basename + ".ss", "--exon", gtf_basename + ".exon", input_fa, "output"])
 
     print("inspect index")
