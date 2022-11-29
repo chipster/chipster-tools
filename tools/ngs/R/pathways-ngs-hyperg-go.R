@@ -1,9 +1,9 @@
-# TOOL pathways-ngs-hyperg-go.R: "GO enrichment for list of genes" (Performs a statistical test for enrichment of GO terms in a query list of genes. The input file should be from the tool \"Find unique and annotated genes\".)
+# TOOL pathways-ngs-hyperg-go.R: "GO enrichment for list of genes" (Given ENSEMBL or Entrez gene identifiers, performs a statistical test for enrichment of GO terms in a query list of genes.)
 # INPUT gene-list.tsv: gene-list.tsv TYPE GENERIC 
 # OUTPUT hypergeo-go.tsv: hypergeo-go.tsv 
 # OUTPUT hypergeo-go.html: hypergeo-go.html 
 # PARAMETER genome: "Genome" TYPE [org.Hs.eg.db: "human", org.Mm.eg.db: "mouse", org.Rn.eg.db: "rat", org.Ag.eg.db: "arabidopsis", org.Dm.eg.db: "fruitfly"] DEFAULT org.Hs.eg.db (Reference organism.)
-# PARAMETER column: "Identifier column" TYPE COLUMN_SEL DEFAULT entrezgene (Column containing gene identifiers. Identifiers should either be Entrez or EnsEMBL identifiers. When left blank, the first column is used.)
+# PARAMETER column: "Identifier column" TYPE COLUMN_SEL DEFAULT entrezgene (Column containing gene identifiers. Untitled means the first column if there is no title. Identifiers should either be Entrez or ENSEMBL identifiers.)
 # PARAMETER OPTIONAL ontology: Ontology TYPE [all: all, biological_process: "biological process", molecular_function: "molecular function", cellular_component: "cellular component"] DEFAULT biological_process (The ontology to be analyzed.)
 # PARAMETER OPTIONAL p.value.threshold: "P-value threshold" TYPE DECIMAL DEFAULT 0.05 (P-value threshold.)
 # PARAMETER OPTIONAL minimum.population: "Minimum population" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 5 (Minimum number of genes required to be in a pathway.)
