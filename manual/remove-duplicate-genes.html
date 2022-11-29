@@ -3,7 +3,7 @@
 <head><title></title></head>
 <body>
 
-<h2>ChIP-seq /  Remove duplicate genes</h2>
+<h2>Remove duplicate genes</h2>
 
 <h3>Description</h3>
 
@@ -13,16 +13,18 @@ This tool takes a list of gene identifiers and removes duplicates. The output fi
 <h3>Parameters</h3>
 
 <ul>
-<li>ID column [ensembl_id]</li>
+<li>ID column</li>
 </ul>
 
 <br>
 
 <h3>Details</h3>
 
-<p>The identifier column can be selected from the parameter. If the file contains a column <code>ensembl_id</code>, it will be selected by default.</p> 
+<p>The identifier column can be selected from the parameter. If the file contains a column called ensembl_id, it will be selected by default.</p> 
 
-<p>If the file has column <code>location</code>, then it's values affect which row among same IDs will be kept. The values are prioritised as follows:</p>
+<p>If the same gene appears on several rows, the first row is kept and the others are removed. 
+	However, if the file has a column called location (e.g. for ChIP-seq data), then its values affect which row among the same IDs is kept. 
+	The values are prioritised as follows:</p>
 
 <ul>
     <li>upstream</li>
