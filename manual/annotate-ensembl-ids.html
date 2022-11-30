@@ -7,11 +7,11 @@
 
 <body>
 
-    <h2>Utilities/ Annotate Ensembl identifiers</h2>
+    <h2>Annotate Ensembl identifiers</h2>
 
     <h3>Description</h3>
 
-    <p>Annotates Ensembl identifiers in the input table with gene symbols (external gene names) and descriptions. </p>
+    <p>Annotates Ensembl identifiers in the input table with gene symbols and descriptions. </p>
 
     <h3>Parameters</h3>
 
@@ -19,8 +19,8 @@
     
     <h3>Details</h3>
 
-    <p> Ensembl REST API is used to fetch the annotations. Ensembl IDs need to be in the first column or as
-        row names in the input file. </p>
+    <p> Ensembl REST API is used to fetch the annotations. Ensembl IDs can be in the first column or as
+        row names in the input file. They can also be in the middle of the file if the column title is ensembl_id.</p>
 
     <p> Maximum of 100 000 Ensembl IDs can be annotated in one job. </p>
 
