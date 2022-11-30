@@ -21,8 +21,9 @@ library(reshape2)
 
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 
+#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 # Count table and phenodata preparations:
 
 # Reads the data and tabulates it

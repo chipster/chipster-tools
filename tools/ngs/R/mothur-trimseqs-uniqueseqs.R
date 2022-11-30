@@ -18,6 +18,8 @@
 # PARAMETER OPTIONAL pdiffs: "Maximum differences to primer sequences" TYPE INTEGER FROM 0 TO 10 (Maximum number of allowed differences to primer sequences)
 # PARAMETER OPTIONAL bdiffs: "Maximum differences to barcode sequences" TYPE INTEGER FROM 0 TO 10 (Maximum number of allowed differences to barcode sequences)
 
+
+# RUNTIME R-4.1.1
 # AMS 05.06.2013
 # EK 11.04.2017 Renamed tool, changed names file to count file, removed qual file, modified summary to show total seqs
 # OUTPUT OPTIONAL reads.trim.names
@@ -30,7 +32,7 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("reads.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
