@@ -7,7 +7,7 @@
 # PARAMETER OPTIONAL group_column: "Phenodata variable for showing grouping" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable describing groping which is added to alpha diversity table for improved readability and for calculating means within groups.)
 # PARAMETER OPTIONAL group1: "Group 1 for Wilcoxon rank sum test  (if >2 groups overall)" TYPE STRING DEFAULT empty (First sample group name (one of the sample groups under the phenodata variable used for grouping\) for Wilcoxon rank sum test  )
 # PARAMETER OPTIONAL group2: "Group 2 for Wilcoxon rank sum test  (if >2 groups overall)" TYPE STRING DEFAULT empty (Second sample group name (one of the sample groups under the phenodata variable used for grouping\) for Wilcoxon rank sum test  )
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 # ES 9.7.2021 alpha diversity estimates for rarefied data
@@ -52,7 +52,9 @@ pdf("ps_rarecurve.pdf")
 
 # Plot rarefaction curve
 set.seed(1)
-rarecurve(t(otu_table(ps)), step = 100, 
+otu_table <- otu_table(ps)
+class(otu_table) <- "matrix"
+rarecurve(t(otu_table), step = 100, 
           cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs / ASVs", xlab = "No. of sequences")
 
 # Close the report PDF
@@ -168,7 +170,7 @@ sink("ps_alphadiv.txt")
         }else{
             if (test1==FALSE || test2 == FALSE){
                 cat("###You have more than 2 groups. Couldn't find groups",group1,",",group2," from Phenodata file.### \n", sep=" ")
-                cat("Give the right groupnames as parameters.")
+                cat("Give the correct group names as parameters.")
             }else{
                 cat("### Wilcoxon rank sum test between groups:",group1,",",group2, sep = " ")
                 cat("\n\n")
@@ -183,7 +185,7 @@ sink("ps_alphadiv.txt")
             }
         }
         }else{
-            cat("### For calculating means and Wilcoxon rank sum test, you need to select the group column in the parameter tab.###")
+            cat("### In order to calculate means and Wilcoxon rank sum test, you need to specify the phenodata variable .###")
         }
     cat("\n\n")
 sink()
@@ -193,13 +195,14 @@ if((group_column!="empty")){
     group <- richness[,group_column]
     groups <- levels(group)
     Pielou <-richness[,"pielou"]
-    #if more than 2 groups and group1 and group2 specified
-  
+    #if more than 2 groups need to specify group1 and group2
+    print(test1)
+    print(test2)
     if (length(groups) > 2 && test1 == TRUE && test2 == TRUE){
         groups <- c(group1,group2)
-       
+        print("jee")
     }
-    print(length(groups))
+ 
 #plot_richness(ps, color=group_column, measures=c("Observed","Chao1","Shannon")) + geom_point(size=5,alpha=0.7)
 #ggplot(richness, aes(group,Pielou, colour=group)) + geom_point(size=5,alpha=0.7) + labs(title="Pielou's evennes"))
 #dev.off()
@@ -207,7 +210,7 @@ if((group_column!="empty")){
     if (length(groups) == 2){
         symnum_args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols =c("p<0.0001  ****", "p<0.001  ***", "p<0.01  **", "p<0.05  *","p>0.05  ns")) 
         plot1 <- plot_richness(ps, x=group_column, color=group_column, measures=c("Observed","Chao1","Shannon")) + geom_boxplot(alpha=0.7)+ geom_point(size=3,alpha=0.7) + labs(title="\t\t\t\tRichness estimates") + stat_compare_means(method="wilcox.test", comparisons=list(groups), label="p.signif",symnum.args=symnum_args) 
-        plot2 <- ggplot(richness, aes(group,Pielou, colour=group)) + geom_boxplot(alpha=0.7) + geom_point(size=3,alpha=0.7) + labs(title="\t\t\t\tPielou's evennes") + stat_compare_means(method="wilcox.test", comparisons=list(groups))
+        plot2 <- ggplot(richness, aes(group,Pielou, colour=group)) + geom_boxplot(alpha=0.7) + geom_point(size=3,alpha=0.7) + labs(title="\t\t\t\tPielou's evennes") + stat_compare_means(method="wilcox.test", comparisons=list(groups), label="p.signif",symnum.args=symnum_args)
     # sample names + geom_text_repel(aes(label = rownames(richness)))
     }else{
         plot1 <- plot_richness(ps, x=group_column, color=group_column, measures=c("Observed","Chao1","Shannon")) + geom_boxplot(alpha=0.7)+ geom_point(size=3,alpha=0.7) + labs(title="\t\t\t\tRichness estimates")
