@@ -1,15 +1,17 @@
 # TOOL mothur-makecontigs.R: "Combine paired reads to contigs with Mothur" (Combines paired reads to sequence contigs within each sample, and puts all the resulting sequences in one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can make a Tar package of your FASTQ files using the Utilities tool Make a tar package. The tool tries to assign the FASTQ files into samples based on the file names, but you can also provide a file containing this information, please see the manual. We recommend you to use tool "Combine paired reads to contigs with VSEARCH" because it performs better)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # INPUT OPTIONAL input_list: "List of FASTQ files by sample" TYPE GENERIC
+# OUTPUT log3.txt
 # OUTPUT contigs.summary.tsv
 # OUTPUT contigs.fasta.gz
-# OUTPUT contigs.groups
+# OUTPUT contigs.count_table
 # OUTPUT contig.numbers.txt
 # OUTPUT samples.fastqs.txt
-
 # RUNTIME R-4.1.1
+
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
+# ES 1.12.2022 Changed to use new mothur version 1.48, produce count file not a gorup file
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -18,7 +20,7 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("reads.tar")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 data.path <- c(file.path(chipster.tools.path,"mothur-data"))
 template.path <- c(file.path(data.path,"silva.bacteria.fasta"))
 version <- system(paste(binary,"--version"),intern = TRUE)
@@ -67,7 +69,16 @@ system("cat *.logfile >> log.tmp")
 
 # rename the result files
 system("mv fastq.trim.contigs.fasta contigs.fasta")
-system("mv fastq.contigs.groups contigs.groups")
+
+
+# Run Mothur count.seqs 
+countseqs.options <- paste("count.seqs(count=fastq.contigs.count_table, compress=f)",sep="") 
+documentCommand(countseqs.options)
+write(countseqs.options,"countseqs.mth",append = FALSE)
+command <- paste(binary,"countseqs.mth","> log3.txt")
+system(command)
+system("cat *.logfile >> log.tmp")
+system("mv fastq.contigs.full.count_table contigs.count_table")
 
 # Post process output
 system("sed -n  '/Group count: / ,/Output File/p' log2.txt > contig.numbers.txt")

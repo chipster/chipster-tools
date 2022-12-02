@@ -284,7 +284,8 @@
 	<category name="Microbial amplicon data preprocessing for OTU" color="#a49900">
 		<!-- <tool>test-mothur.R</tool> -->
 		<tool>mothur-trimseqs-uniqueseqs.R</tool>
-		<tool>mothur-makegroup.R</tool>
+		<!-- <tool>mothur-makegroup.R</tool> -->
+		<tool>mothur-makecount.R</tool>
 		<tool>fastq-mergepairs.R</tool>
 		<tool>mothur-makecontigs.R</tool>
 		<tool>fastq-filter.R</tool> 
