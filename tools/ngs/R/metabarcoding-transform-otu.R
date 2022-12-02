@@ -8,7 +8,7 @@
 # OUTPUT OPTIONAL deseq2.Rda
 # PARAMETER treatment: "Data treatment" TYPE [clr: "Centered log-ratio transfomation with pseudocount", relabund: "Relative abundances \(%\)", hellinger: "Hellinger transformation", deseq2: "DESeq2 format conversion and variance-stabilizing transformation"] DEFAULT clr (Choice between data transformation types)
 # PARAMETER OPTIONAL group_column1: "Phenodata variable used for DESeq2 conversion" TYPE METACOLUMN_SEL DEFAULT empty (Select a phenodata variable used to specify the experimental design when converting the data to DESeq2 format.)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

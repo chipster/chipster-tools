@@ -7,7 +7,7 @@
 # PARAMETER OPTIONAL type: "Level of biological organization for tabulating taxon composition" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus"] DEFAULT phylum (Level of biological organization for plot construction \(default is phylum\))
 # PARAMETER OPTIONAL facet1: "Phenodata variable 1 for plot faceting" TYPE METACOLUMN_SEL DEFAULT EMPTY (First phenodata variable used for plot faceting.)
 # PARAMETER OPTIONAL facet2: "Phenodata variable 2 for plot faceting" TYPE METACOLUMN_SEL DEFAULT EMPTY (Second phenodata variable used for plot faceting.)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

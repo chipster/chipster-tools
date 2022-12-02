@@ -7,7 +7,7 @@
 # PARAMETER legtax: "Higher-level taxonomic grouping for differential abundance plot" TYPE [Phylum: "Phylum", Class: "Class", Order: "Order", Family: "Family"] DEFAULT Phylum (Higher-level taxonomic classification used for differential abundance plotting; default is phylum. The level chosen here should be higher than that selected under the \"Lower-level taxonomic grouping...\" menu.)
 # PARAMETER OPTIONAL group1: "Group 1 for DESeq2 contrasts (if >2 groups overall)" TYPE STRING DEFAULT empty (First sample group name (one of the sample groups under the phenodata variable used for the analysis\))
 # PARAMETER OPTIONAL group2: "Group 2 for DESeq2 contrasts (if >2 groups overall)" TYPE STRING DEFAULT empty (Second sample group name (one of the sample groups under the phenodata variable used for the analysis\))
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

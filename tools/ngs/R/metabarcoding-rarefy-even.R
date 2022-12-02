@@ -2,7 +2,7 @@
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT ps_rarefied.txt: ps_rarefied.txt
 # OUTPUT ps_rarefied.Rda: ps_rarefied.Rda
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

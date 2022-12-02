@@ -15,7 +15,7 @@
 # PARAMETER OPTIONAL cap_variable3: "Phenodata variable 3 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (3rd phenodata variable used in the \"formula\" argument when performing db-RDA)
 # PARAMETER OPTIONAL cap_variable4: "Phenodata variable 4 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (4th phenodata variable used in the \"formula\" argument when performing db-RDA)
 # PARAMETER OPTIONAL cap_variable5: "Phenodata variable 5 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (5th phenodata variable used in the \"formula\" argument when performing db-RDA)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

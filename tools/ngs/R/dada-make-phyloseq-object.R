@@ -4,7 +4,7 @@
 # OUTPUT META phenodata.tsv: "Phenodata" 
 # OUTPUT ps_nophe.Rda
 # OUTPUT ps_summary.txt
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 
 # ES 18.8.2022
