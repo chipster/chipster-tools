@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Utilities / Split table</h2>
+
+<h3>Description</h3>
+
+<p>
+Splits a TSV format table into several files.
+</p>
+
+
+<h3>Parameters</h3>
+
+<ul>
+<li>Substitute existing header with "identifier" and "sample" (yes, no) [no]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+Tool splits TSV (tab separated columns/values) format table into several files.<br />
+All files share the first column of the input table, typically an identifier.<br />
+For each additional column a file is created containing the first column of the original file and the single additional column.<br />
+<br />
+If option substitute existing header is set to "yes":<br />
+- The column title of the first column is set to "identifier".<br />
+- The column title of the additional columns are named to "sample".<br />
+- The original column titles of the additional columns are part of the new file names.<br />
+This is for example needed for Microarray -> Normalisation -> Illumina.
+</p>
+
+<h3>Output</h3>
+
+<p>
+<ul>
+	<li>split{...}{_colTitle}.tsv: The splitted tsv files, starting with split02.tsv, containing column1(identifier) and column2(sample)</li> 
+</p>
+
+
+
