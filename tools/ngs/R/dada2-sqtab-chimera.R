@@ -3,7 +3,7 @@
 # OUTPUT seqtab_nochim.Rda
 # OUTPUT reads_summary.tsv
 # OUTPUT summary.txt
-# OUTPUT sequence_table_nochim.tsv
+# OUTPUT sequence_table_nochim.tsv 
 # PARAMETER method1: "Method to identify chimeras" TYPE [consensus, pooled] DEFAULT consensus (Identification by consensus across samples or identification from pooled sequences)
 # RUNTIME R-4.1.1-asv
 
@@ -28,10 +28,14 @@ if(exists("dadaFs")){ #single reads, rename
 }
 # Construct sequence table from given .Rda object -> ASV-table Construct a sample-by-sequence observation matrix.
 seqtab <- makeSequenceTable(object)
-
-#rename the rows by splitting the name with _
-sample.names <- sapply(strsplit(rownames(seqtab), "_"), `[`, 1)
-rownames(seqtab) <- sample.names
+#print(names(object))
+# if mergers and one sample: "sequence"  "abundance" "forward"   "reverse"   "nmatch"    "nmismatch" "nindel"    "prefer"    "accept"
+# if dadafs and one sample: "denoised"   "clustering" "sequence"   "quality" "birth_subs" "trans" "map" "err_in"  "err_out" "opts" "pval"
+if (names(object)[1] != "sequence" && names(object)[1] != "denoised") {
+    #rename the rows by splitting the name with _
+    sample.names <- sapply(strsplit(rownames(seqtab), "_"), `[`, 1)
+    rownames(seqtab) <- sample.names
+}
 
 #Distribution of sequence lengths, make it look nicer/ add rowname Counts:
 data_table <- table(nchar(getSequences(seqtab)))
@@ -61,21 +65,40 @@ sink(file="summary.txt")
 sink()
 
 
-# track reads that were removed asand make a tsv table
+# track reads that were removed and make a tsv table
+# 
+# rename sequences to asv1, asv2... makes visualization easier
 getN <- function(x) sum(getUniques(x))
-track <- cbind(sapply(object, getN), rowSums(seqtab.nochim))
-colnames(track) <- c( name, "Removed chimeras")
-rownames(track) <- sample.names
-write.table(track, file="reads_summary.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
+seqtab.nochim2 <- seqtab.nochim
+
+if(names(object)[1] != "sequence" && names(object)[1] != "denoised"){ # If processing a single sample, remove the sapply calls: e.g. replace sapply(object, getN) with getN(dadaFs)
+    track <- cbind(sapply(object, getN), rowSums(seqtab.nochim))
+    rownames(track) <- sample.names
+    colnames(track) <- c( name, "Removed chimeras")
+    write.table(track, file="reads_summary.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
+    
+    colnames(seqtab.nochim2)<-paste0("ASV", seq(length(colnames(seqtab.nochim2))))
+    write.table(seqtab.nochim2, file="sequence_table_nochim.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
+
+}else{
+    
+    track <- cbind(getN(object),rowSums(seqtab.nochim))
+    #sample.names="Sample1" # rename to sample 1 if only one sample
+    colnames(track) <- c( name, "Removed chimeras")
+    write.table(track, file="reads_summary.tsv", sep="\t", row.names=FALSE, col.names=T, quote=F)
+    
+    colnames(seqtab.nochim2)<-paste0("ASV", seq(length(colnames(seqtab.nochim2))))
+    write.table(seqtab.nochim2, file="sequence_table_nochim.tsv", sep="\t", row.names=FALSE, col.names=T, quote=F)
+}
+
+
 
 
 # print out asv sequence table rename asv:s
 # rename sequences to asv1, asv2... makes it easier just for visualisation
-seqtab.nochim2 <- seqtab.nochim
-colnames(seqtab.nochim2)<-paste0("ASV", seq(length(colnames(seqtab.nochim2))))
-write.table(seqtab.nochim2, file="sequence_table_nochim.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
+#seqtab.nochim2 <- seqtab.nochim
+
 
 # save the object as .Rda 
 save(seqtab.nochim, file = "seqtab_nochim.Rda")
 
-#print(seqtab.nochim[rownames(seqtab.nochim) != "Mock"],)
