@@ -1,10 +1,10 @@
-# TOOL cutadapt.R: "Remove primers and adpters with Cutadapt" (Given a tar package of FASTQ files, this tool removes the primer and adapter sequences given as parameters.)
+# TOOL cutadapt.R: "Remove primers and adpters with Cutadapt" (Given a tar package of FASTQ files, this tool tries to remove the primer and adapter sequences given in parameters tab. This tool is based on the tool Cutadapt )
 # INPUT OPTIONAL reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
-# OUTPUT OPTIONAL adapters_removed.tar
+# OUTPUT adapters_removed.tar
 # OUTPUT report.txt
-# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
-# PARAMETER OPTIONAL adapter5: "The 5 end adapter/primer to be trimmed" TYPE STRING
-# PARAMETER OPTIONAL adapter3: "The 3 end adapter/primer to be trimmed" TYPE STRING
+# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample.)
+# PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer)
+# PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer)
 # RUNTIME R-4.1.1-asv
 
 # ES 30.9.2022
