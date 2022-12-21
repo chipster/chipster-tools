@@ -7,13 +7,15 @@
 # PARAMETER minoverlap: "The minimum length of the overlap required for merging the forward and reverse reads" TYPE INTEGER FROM 0 DEFAULT 12 (By default the overlap area should be at least 12 base pairs long.)
 # PARAMETER maxmismatch: "The maximum number of mismatches allowed in the overlap region" TYPE INTEGER FROM 0 DEFAULT 0 (By default no mismatches are allowed in the overlap region.)
 # PARAMETER trimoverhang: "Should the overhangs in the alignment be trimmed off?" TYPE [Yes, No] DEFAULT No (Should the overhangs be removed, when the reverse read extend past the start of the forward read and vice versa.)
-# PARAMETER concatenate: "Should the forward and reverse-compelented reverse reads be concatenated?" TYPE [Yes, No] DEFAULT No (Should the forward and reverse-compelented reverse reads be concatenated rather than merged? If it is set to yes, 10 Ns are being inserted between them. Use this parameter just, if your reads are not overlapping. )
 # RUNTIME R-4.1.1-asv
 
 # ES 11.08.2022
+# ES 21.12.2022 added parameter trimOverhang
 # OUTPUT OPTIONAL contigs.txt
 # OUTPUT OPTIONAL contigs2.txt
 # PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely the name is Mock)
+# PARAMETER concatenate: "Should the forward and reverse-compelented reverse reads be concatenated?" TYPE [Yes, No] DEFAULT No (Should the forward and reverse-compelented reverse reads be concatenated rather than merged? If it is set to yes, 10 Ns are being inserted between them. Use this parameter just, if your reads are not overlapping. )
+
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -80,13 +82,9 @@ if (trimoverhang=="Yes"){
 }else{
   trimoverhang=FALSE
 }
-if (concatenate=="Yes"){
-  concatenate=TRUE
-}else{
-  concatenate=FALSE
-}
+
 # run command mergePairs
-mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, justConcatenate=concatenate, trimOverhang=, verbose=TRUE)
+mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, trimOverhang=trimoverhang, verbose=TRUE)
 #sink()
 save(mergers, file="contigs.Rda" )
 
