@@ -17,6 +17,9 @@ library(patchwork)
 library(dplyr)
 library(Matrix)
 
+# Replace empty spaces in sample name with underscore _ :
+sample_name <- gsub(" ", "_", sample_name)
+
 # Read the contents of the tar file into a list
 system("tar tf files.tar > tar.contents 2>> log.txt")
 file.list <- scan("tar.contents", what = "", sep = "\n")
