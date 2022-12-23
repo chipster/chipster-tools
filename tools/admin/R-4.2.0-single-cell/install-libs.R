@@ -25,3 +25,5 @@ install.packages('metap')
 
 install.packages("hdf5r")
 BiocManager::install('limma')
+
+install.packages("Rfast2")
