@@ -4,13 +4,12 @@
 # OUTPUT OPTIONAL chimeras.removed.fasta.gz
 # OUTPUT OPTIONAL chimeras.removed.summary.tsv
 # OUTPUT OPTIONAL chimeras.removed.count_table
-# OUTPUT OPTIONAL log.txt
-# OUTPUT OPTIONAL log2.txt
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "16S rRNA Silva gold bacteria", none: "none, de novo"] DEFAULT bacterial (You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. Note that if you choose none, you have to give a count table as input.)
 # PARAMETER OPTIONAL method: "Method" TYPE [vsearch, uchime] DEFAULT vsearch (Chimera detection method to use. Note that VSEARCH is much faster than the UCHIME method.)
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (De novo chimera detection uses the more abundant sequences from the same sample to check the query sequence. When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false.)
 
-
+# RUNTIME R-4.1.1
+# Not working with the new mothur version and vsreach version 2.17.1 when using the silva reference file.
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt
 
@@ -23,6 +22,7 @@
 # EK 9.6.2017 changed both methods to use the fasta-formatted reference silva.gold.ng.fasta, because vsearch doesn't worked with the aligned format (silva.gold.align). Removed the full reference as it wasn't really full.
 # EK 3.9.2018 updated silva.gold path
 # EK 11.5.2020 Zip output fasta
+
 
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
