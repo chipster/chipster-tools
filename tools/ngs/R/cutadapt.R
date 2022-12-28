@@ -145,11 +145,7 @@ if (paired =="single"){
     command <- paste(binary, R1.flags,"--rc","-n", 2,"-j", as.integer(chipster.threads.max),"-o",cutreads[x], file, "> report2.txt")
     x=x+1
     system(command)
-    rows <- readLines("report2.txt")
-    for (row in rows) {
-      write(row, file = "report.txt", append=TRUE)
-    }
-    write("\n", file = "report.txt", append=TRUE)
+    system("cat report2.txt >> report.txt")
   }
 }else{ #paired 
   x<-1
@@ -157,12 +153,12 @@ if (paired =="single"){
     command <- paste(binary, R1.flags, R2.flags,"-n", 2,"-j", as.integer(chipster.threads.max),"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x] , "> report2.txt")
     x=x+1
     system(command)
-    rows <- readLines("report2.txt")
-    for (row in rows) {
-      write(row, file = "report.txt", append=TRUE)
-    }
-    write("\n", file = "report.txt", append=TRUE)
-    
+    #rows <- readLines("report2.txt")
+    #for (row in rows) {
+     # write(row, file = "report.txt", append=TRUE)
+   #}
+    #write("\n", file = "report.txt", append=TRUE)
+    system("cat report2.txt >> report.txt")
     
 }
 
