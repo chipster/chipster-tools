@@ -6,7 +6,6 @@
 # OUTPUT OPTIONAL screened.groups
 # OUTPUT summary.screened.tsv
 # OUTPUT OPTIONAL screened.count_table
-# OUTPUT log.txt 
 # PARAMETER OPTIONAL maxambig: "Maximum number of ambiguous bases" TYPE INTEGER (How many ambiguous bases are allowed in a sequence)
 # PARAMETER OPTIONAL maxhomop: "Maximum homopolymer length" TYPE INTEGER (Maximum length of homopolymers allowed)
 # PARAMETER OPTIONAL minlength: "Minimum length" TYPE INTEGER (What is the minimum length of the sequences to be kept?)
@@ -20,6 +19,8 @@
 # ML 03.03.2016
 # ML 17.3.2017 Clarify inputs and outputs
 # ES 1.12.2022 Changed to use new mothur version 1.48
+
+# OUTPUT log.txt 
 
 #Output File Names: 
 #reads.trim.unique.good.fasta

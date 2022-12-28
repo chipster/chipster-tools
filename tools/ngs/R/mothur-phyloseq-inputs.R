@@ -21,6 +21,7 @@
 # STORAGE 2000
 
 # AMS JH EK 2020-2021
+# ES 28.12.2022 not possible to update to new mothur version because reshape library not in the RUNTIME R-4.1.1, use old until reshsape updated
 
 # reshape2 library
 library(reshape2)

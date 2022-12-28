@@ -3,8 +3,10 @@
 # OUTPUT reads.fasta
 # OUTPUT basequalities.qual
 # OUTPUT reads.summary.tsv
+# RUNTIME R-4.1.1
 
 # EK 11.04.2017
+# ES 28.12.2022 use new version of Mothur
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -13,8 +15,8 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("a.fastq")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 

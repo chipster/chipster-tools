@@ -1,8 +1,5 @@
 # TOOL mothur-makecount.R: "Combine FASTQ files into one FASTA file and make a Mothur count file" (Combines FASTQ files of all samples to one FASTA file and creates a Mothur count file for it. Input file should be a tar file and the files in the tar package can be gzipped.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
-# OUTPUT log1.txt
-# OUTPUT log2.txt
-# OUTPUT log3.txt
 # OUTPUT sequences.count_table
 # OUTPUT sequences-summary.tsv
 # OUTPUT sequences.fasta.gz
@@ -10,6 +7,9 @@
 
 # ES 1.12.2022 new mothur version needs count 
 #Fastx not in new ubuntu, emboss is. Other possibility is mothur fastq.info
+# OUTPUT log1.txt
+# OUTPUT log2.txt
+# OUTPUT log3.txt
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -70,8 +70,8 @@ for (file in filenames) {
 fasta_names <- sub(".","", fasta_names)
 group_names <- sub(".","",group_names)
 
-print(fasta_names)
-print(group_names)
+#print(fasta_names)
+#print(group_names)
 
 # Binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))

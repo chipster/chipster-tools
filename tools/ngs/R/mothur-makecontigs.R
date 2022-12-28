@@ -1,7 +1,6 @@
 # TOOL mothur-makecontigs.R: "Combine paired reads to contigs with Mothur" (Combines paired reads to sequence contigs within each sample, and puts all the resulting sequences in one fasta file. Input file is a single Tar package containing all the FASTQ files, which can be gzipped. You can make a Tar package of your FASTQ files using the Utilities tool Make a tar package. The tool tries to assign the FASTQ files into samples based on the file names, but you can also provide a file containing this information, please see the manual. We recommend you to use tool "Combine paired reads to contigs with VSEARCH" because it performs better)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
 # INPUT OPTIONAL input_list: "List of FASTQ files by sample" TYPE GENERIC
-# OUTPUT log3.txt
 # OUTPUT contigs.summary.tsv
 # OUTPUT contigs.fasta.gz
 # OUTPUT contigs.count_table
@@ -12,6 +11,8 @@
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
 # ES 1.12.2022 Changed to use new mothur version 1.48, produce count file not a gorup file
+
+# OUTPUT log3.txt
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))

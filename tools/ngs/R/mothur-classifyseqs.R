@@ -7,6 +7,7 @@
 # OUTPUT classification-summary.tsv
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own:"own reference"] DEFAULT silva (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
+# RUNTIME R-4.1.1
 
 # EK 18.06.2013
 # JTT 28.8.2013 count table and phenodata added
@@ -18,6 +19,7 @@
 # EK 25.3.2021  removed parameters for removing lineages as this is now handled with Phyloseq tools "Remove selected taxa" and "Filter by taxonomic group"
 # EK 25.3.2021  add option to use own reference
 # EK 19.4.2021  updated to Silva v138.1
+# ES 28.12.2022 updated to use new mothur version and runtime R-4.1.1
 
 # to be removed later:
 # OUTPUT OPTIONAL log.txt
@@ -39,8 +41,8 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
