@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta-formatted alignment and a count file or names file, this tool pre-clusters sequences in order to remove sequences 
+Given a fasta-formatted alignment and a count file or names file, this tool preclusters sequences in order to remove sequences 
 that are likely to contain sequencing errors.
 </p>
 
@@ -18,16 +18,18 @@ that are likely to contain sequencing errors.
 
 <h3>Details</h3>
 <p>
-The basic idea is that abundant sequences are more likely to generate erroneous sequences than rare sequences. 
+The basic idea is that abundant sequences are more likely to generate erroneous sequences. 
 With that in mind, the algorithm proceeds by ranking sequences in order of their abundance. 
 It then walks through the list of sequences looking for rarer sequences that are within 
-one or more mismatch for every 100 bases of the original sequence. 
-Those that are within this threshold are merged with the larger sequence. 
-By pre-clustering you remove a large number of sequences making the distance calculation much faster. 
+one mismatch for every 100 bases of the original sequence. 
+Those that are within this threshold are merged with the more abundant sequence. 
+By preclustering you remove a large number of sequences, which makes the distance calculation much faster. 
 </p>
 <p>
 You can allow more mismatches per 100 bases by tuning the <b>Number of differences allowed</b> parameter.
 </p>
+Note that this tool does not accept hyphens in sample names. 
+  If the tool produces an empty result file, please check in the count file if any of the sample names has a hyphen and remove it.
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Pre.cluster">Pre.cluster</a> command of the Mothur package.
 </p>
@@ -39,7 +41,7 @@ This tool is based on the <a href="http://www.mothur.org/wiki/Pre.cluster">Pre.c
 
 <p>The analysis output consists of the following:</p>
 <ul>
-<li>preclustered.fasta: Alignment with preclustered sequences</li> 
+<li>preclustered.fasta: Alignment containing the preclustered sequences</li> 
 <li>preclustered-summary.tsv: Summary statistics for the alignment </li> 
 <li>preclustered.count: Count file with preclustered sequences </li>
 </ul>
