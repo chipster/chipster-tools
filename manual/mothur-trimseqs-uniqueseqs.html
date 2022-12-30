@@ -8,7 +8,8 @@
 <h3>Description</h3>
 
 <p>
-Given a fasta, qual and oligos file, this tool trims primers and barcodes and filters reads for several criteria, including uniqueness.
+Given a fasta and oligos file, this tool trims primers and barcodes and filters reads for several criteria, including uniqueness. You can give 
+a QUAL file as well. 
 </p>
 
 <h3>Parameters</h3>
@@ -33,7 +34,7 @@ Also duplicate reads are removed and a count_table is produced showing how many 
 </p>
 
 <p>
-This tool is based on the <a href="http://www.mothur.org/wiki/Trim.seqs">Trim.seqs</a>, <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> and <a href="http://www.mothur.org/wiki/Count.seqs">Count.seqs</a> commands of the Mothur package.
+This tool is based on the <a href="http://www.mothur.org/wiki/Trim.seqs">Trim.seqs</a>, <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> and <a href="https://mothur.org/wiki/summary.seqs/">summary.seqs</a> commands of the Mothur package.
 </p>
 
 
@@ -42,7 +43,6 @@ This tool is based on the <a href="http://www.mothur.org/wiki/Trim.seqs">Trim.se
 <p>The analysis output consists of the following files:</p>
 <ul>
 <li>trim.unique.fasta: Trimmed and filtered unique sequences.</li>
-<li>trim.groups: List showing from which sample each sequence comes from.</li>
 <li>trim.unique.count_table: Table showing how many times each representative sequence occurs in the different samples.</li>
 <li>summary.trim.unique.tsv: Summary statistics for the sequences</li>
 </ul>
