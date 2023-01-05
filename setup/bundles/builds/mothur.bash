@@ -53,7 +53,8 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   mkdir -p ${TOOLS_PATH}/mothur-unite-reference/  
   # let's keep the old v8 too for now, because mothur 1.48.0 complains about ";" in the end of lines in v9
   curl -s https://a3s.fi/bundle-builds/mothur-UNITEv8_2020-12-15.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-unite-reference/
-  curl -s https://a3s.fi/bundle-builds/mothur-UNITEv9_2022-10-28.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-unite-reference/
+  # do not install v9 because the tool would show it in parameter options
+  # curl -s https://a3s.fi/bundle-builds/mothur-UNITEv9_2022-10-28.tar.lz4  | lz4 -d | tar -x -C ${TOOLS_PATH}/mothur-unite-reference/
 
   ls -lah
 EOF
