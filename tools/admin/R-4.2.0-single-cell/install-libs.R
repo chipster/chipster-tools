@@ -27,3 +27,5 @@ install.packages("hdf5r")
 BiocManager::install('limma')
 
 install.packages("Rfast2")
+
+BiocManager::install("glmGamPoi")
