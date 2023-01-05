@@ -24,3 +24,4 @@ BiocManager::install("DESeq2")
 # something installed this already
 # BiocManager::install("phyloseq")
 
+install.packages("ashr")

@@ -27,9 +27,9 @@ if (type == "species" &&
 		stop("Data set lacks species-level assignments; please choose another level of organization.")
 }
 
-# Remove class Chloroplast
+# Remove order Chloroplast
 if (remove.chloroplast == "yes") {
-	ps <- subset_taxa(ps, Class != "Chloroplast")
+	ps <- subset_taxa(ps, Order != "Chloroplast")
 }
 
 # Remove family Mitochondria
