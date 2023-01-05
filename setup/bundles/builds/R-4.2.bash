@@ -20,7 +20,7 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
   # variable f needs to be escaped to be evaluated only later on the k3s host
   f="R-4.2.0-single-cell_2022-12-22.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
-  f="R-4.2.0-phyloseq_2022-11-02.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
+  f="R-4.2.0-phyloseq_2023-01-05.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
 
   ls -lah $TOOLS_PATH/
 EOF
