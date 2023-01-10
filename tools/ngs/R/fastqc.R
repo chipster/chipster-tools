@@ -5,10 +5,12 @@
 # OUTPUT OPTIONAL reads.mqc
 # PARAMETER filetype: "File type" TYPE [fastq: "FASTQ", bam: "BAM"] DEFAULT fastq (Select input file type.)
 # PARAMETER OPTIONAL mqc: "Create input for MultiQC" TYPE [yes, no] DEFAULT no (Create a .mqc file to generate a MultiQC raport.)
+# RUNTIME R-4.1.1
 
 # 2014.12.16 AMS Changed output to PDF, removed parameter for all plots
 # 2015.09.10 AMS New version embeds pictures in html, so changed output to html 
 # 2016.02.23 ML Improved error message 
+# 2022.12.02 ES updated to new version
 
 #library(png)
 #library(gplots)
@@ -25,7 +27,7 @@ if (isGZipFile(input.file)) {
 }
 
 # binary
-binary <- file.path(chipster.tools.path, "FastQC", "fastqc")
+binary <- file.path(chipster.tools.path, "fastqc", "fastqc")
 
 # command
 command <- paste(binary, "-f", filetype, input.file, "--extract")

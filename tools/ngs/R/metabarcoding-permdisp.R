@@ -6,7 +6,7 @@
 # PARAMETER pheno1: "Phenodata variable 1" TYPE METACOLUMN_SEL (Phenodata variable used for first PERMDISP analysis)
 # PARAMETER OPTIONAL pheno2: "Phenodata variable 2" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable used for second PERMDISP analysis)
 # PARAMETER OPTIONAL pheno3: "Phenodata variable 3" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable used for third PERMDISP analysis)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

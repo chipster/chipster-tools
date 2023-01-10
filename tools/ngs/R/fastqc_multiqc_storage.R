@@ -2,9 +2,11 @@
 # INPUT reads{...}.fq: "FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL multiqc_report.html
 # OUTPUT OPTIONAL error_log.txt
+# RUNTIME R-4.1.1
 # STORAGE 1000
 
 # 2018.09.10 AMS
+# 2022.12.02 ES updated to new version
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 #source(file.path(chipster.common.path,"zip-utils.R"))
@@ -24,7 +26,7 @@ system("ls -l")
 system("ls *.tar *.tar.* *.tgz |xargs -i tar xf {} --xform='s#^.+/##x' 2>/dev/null")
 
 # binary
-fastqc.binary <- file.path(chipster.tools.path,"FastQC","fastqc")
+fastqc.binary <- file.path(chipster.tools.path,"fastqc","fastqc")
 multiqc.binary <- file.path(chipster.tools.path,"multiqc","multiqc")
 
 # Document versions

@@ -6,6 +6,7 @@
 # SLOTS 3
 
 # 2022-07-21 IH
+# 2022-10-13 ML nfeatures = 3000 fix
 
 library(Seurat)
 library(ggplot2)
@@ -48,7 +49,7 @@ if (method == "integration") {
     options(future.globals.maxSize = 3000 * 1024^2)  # set allowed size to 3K MiB
 
     # Select features that are repeatedly variable across datasets for integration
-    features <- SelectIntegrationFeatures(seurat_objects, nfeatures = 300, verbose = FALSE)
+    features <- SelectIntegrationFeatures(seurat_objects, nfeatures = 3000, verbose = FALSE)
     # run PrepSCTIntegration to compute the sctransform residuals for all genes in the datasets
     seurat_objects <- PrepSCTIntegration(object.list = seurat_objects, anchor.features = features,
     verbose = FALSE)

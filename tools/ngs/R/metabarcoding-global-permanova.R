@@ -6,7 +6,7 @@
 # PARAMETER pheno1: "Phenodata variable 1" TYPE METACOLUMN_SEL (First phenodata variable used to specify the formula to be tested)
 # PARAMETER OPTIONAL pheno2: "Phenodata variable 2" TYPE METACOLUMN_SEL DEFAULT EMPTY (Second phenodata variable used to specify the formula to be tested)
 # PARAMETER OPTIONAL pheno3: "Phenodata variable 3" TYPE METACOLUMN_SEL DEFAULT EMPTY (Third phenodata variable used to specify the formula to be tested)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

@@ -26,9 +26,9 @@
 	<ul>
 		<li>Name of the cluster [3]</li>
 		<li>Return only positive marker genes [TRUE]</li>
-		<li>Fold change threshold for conserved markers in log scale [0.25]</li>
-		<li>Fold change threshold for differentially expressed genes in log scale [0.25]</li>
-		<li>Adjusted p-value cutoff for conserved markers [0.05]</li>
+		<li>Fold change threshold for conserved markers in log2 scale [0.25]</li>
+		<li>Fold change threshold for differentially expressed genes in log2 scale [0.25]</li>
+		<li>p-value cutoff for conserved markers [0.05]</li>
 		<li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
 		<li>Minimum number of cells in one of the groups for conserved markers [3]</li>
 	</ul>
@@ -83,8 +83,8 @@
 		This file has as many column groups as there are samples in the data.
 		In addition to the columns listed above, this table contains also the following columns:
 	<ul>
-		<li> max_pval = maximum p-value of the two samples (note: not looking at the adjusted p-values)</li>
-		<li> min_pval = minimum p-value of the two samples (note: not looking at the adjusted p-values)</li>
+		<li> max_pval = maximum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
+		<li> min_pval = minimum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
 	</ul>
 	</p>
 

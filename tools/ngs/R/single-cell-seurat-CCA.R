@@ -65,7 +65,7 @@ if (normalisation.method == "normal"){
     DefaultAssay(data.combined) <- "integrated"
 
     # Note: Skip ScaleData when using SCTransform
-    data.combined <- ScaleData(data.combined, verbose = FALSE)  
+    # data.combined <- ScaleData(data.combined, verbose = FALSE)  
     data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
 }
 
