@@ -4,8 +4,7 @@
 # OUTPUT OPTIONAL error_log.txt
 # OUTPUT OPTIONAL reads.mqc
 # PARAMETER filetype: "File type" TYPE [fastq: "FASTQ", bam: "BAM"] DEFAULT fastq (Select input file type.)
-# PARAMETER OPTIONAL mqc: "Create input for MultiQC" TYPE [yes, no] DEFAULT no (Create a .mqc file to generate a MultiQC raport.)
-# RUNTIME R-4.1.1
+# RUNTIME R-4.1.1-fastqc
 
 # 2014.12.16 AMS Changed output to PDF, removed parameter for all plots
 # 2015.09.10 AMS New version embeds pictures in html, so changed output to html 
