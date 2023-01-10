@@ -16,6 +16,7 @@ suitable for classifying eukaryotes.
 <h3>Parameters</h3>
 <ul>
   <li>The minimum bootstrap confidence for assigning a taxonomic level. (0 - 100 ) [50]</li>
+  <li>Try the reverse-complement of each sequence for classification if it is a better match to the reference sequence</li>
   <li>Do you want to assign the sequences to the species level? (yes, no) [yes]</li>
   <li>Combine the taxonomy and the sequence table. (yes, no) [yes]</li>
 </ul>
@@ -35,7 +36,7 @@ The minimum bootsrap confidence of 50 means that at least 50 of the 100 bootstra
 for those sequences. 
 <br>
 <br>
-Assign Taxonomy will also test the reverse complement of each sequence for classification and use it, if it's a better match to the reference sequences.
+If you set the try reverse-complement parameter to be yes, use the reverse-complement of each sequences for classification if it is a better match to the reference sequences than the original sequence.
 <br>
 <br>
 If you want to use your own reference files, please provide the reference FASTA file as input.

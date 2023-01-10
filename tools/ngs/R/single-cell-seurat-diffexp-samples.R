@@ -11,6 +11,8 @@
 # PARAMETER OPTIONAL pval.cutoff.conserved: "p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the p-value of the conserved cluster marker genes: by default, p-values bigger than 0.05 in any sample are filtered out. This is looking at the max_pval column of the results table.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL mincellsconserved: "Minimum number of cells in one of the groups for conserved markers" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in a each sample in the cluster in question.)
+# PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
+# PARAMETER OPTIONAL minpct_conserved: "Limit testing for conserved markers to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in the cluster in question or in all the other cells. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # RUNTIME R-4.2.0-single-cell
 
 
@@ -23,7 +25,7 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2022-07-21 ML Tune for SCTransform data
 # 2022-09-22 ML Fix conserved markers filtering for multiple sample case, add sanity check for cluster number
-# 2022-09-20 ML Add min.cells.group parameter  
+# 2022-09-20 ML Add min.cells.group parameter to allow outputting all the genes  
 
 
 library(Seurat)
@@ -49,7 +51,7 @@ if (normalisation.method == "SCT"){
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,  
-    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved)
+    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved)
 
 
 # Filter conserved marker genes based on adj p-val:
@@ -76,9 +78,9 @@ if (length(lvls) < 2) {
   ident1 <- paste(cluster, "_", lvls[1], sep = "")
   ident2 <- paste(cluster, "_", lvls[2], sep = "")
   if (normalisation.method == "SCT"){
-    cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+    cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
   } else { 
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
   }
   # Filter DE genes based on adj p-val:
   de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de))
@@ -93,11 +95,11 @@ if (length(lvls) < 2) {
     # i:th sample vs all the others (= -i)
     ident1 <- paste(cluster, "_", lvls[i], sep = "")
     ident2 <- paste(cluster, "_", lvls[-i], sep = "")
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+    # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
     if (normalisation.method == "SCT"){
-      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
     } else { 
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
     }
     # Filter DE genes based on adj p-val:
     de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de) )

@@ -1,4 +1,4 @@
-# TOOL dada2-sqtab-chimera.R: "Make a sequence table and remove chimeras" (This tool makes a sequence table / ASV-table and removes chimeras. As the input you can give either if you have single end reads the output .Rda object from the tool Sample inference or if you have paired end data the output .Rda object from the tool Combine paired reads to contigs with Dada2. )
+# TOOL dada2-sqtab-chimera.R: "Make an ASV table and remove chimeras" (This tool makes an ASV-table and removes chimeras. As the input you can give either if you have single end reads the output .Rda object from the tool Sample inference or if you have paired end data the output .Rda object from the tool Combine paired reads to contigs with Dada2. )
 # INPUT object.Rda: "Either mergers object named contigs.Rda or dada-class object named dada-forward.Rda"  TYPE GENERIC (Dada-class object named dada-forward.Rda if single end reads or a mergers object named contigs.Rda if paired end reads.)
 # OUTPUT seqtab_nochim.Rda
 # OUTPUT reads_summary.tsv

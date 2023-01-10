@@ -1,4 +1,4 @@
-# TOOL mothur-precluster.R: "Precluster aligned sequences" (Clusters together very similar sequences in order to remove possible sequencing errors. In addition to the fasta file, you need to give count_table file or names file. This tool is based on the Mothur tool pre.cluster.)
+# TOOL mothur-precluster.R: "Precluster aligned sequences" (Clusters together very similar sequences in order to remove possible sequencing errors. In addition to the fasta file, you need to give count_table file or names file. Note that sample names should not contain hyphens. This tool is based on the Mothur tool pre.cluster.)
 # INPUT a.fasta: "FASTA file" TYPE FASTA
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.count_table: "Count table" TYPE MOTHUR_COUNT

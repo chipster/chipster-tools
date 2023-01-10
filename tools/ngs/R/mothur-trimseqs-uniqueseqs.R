@@ -1,4 +1,4 @@
-# TOOL mothur-trimseqs-uniqueseqs.R: "Trim primers and barcodes and filter reads" (Removes primers and barcodes and filters reads for several criteria, including uniqueness. This tool is based on the Mothur tools trim.seqs, unique.seqs and count.seqs.)
+# TOOL mothur-trimseqs-uniqueseqs.R: "Trim primers and barcodes and filter reads" (Removes primers and barcodes and filters reads for several criteria, including uniqueness. Note that Mothur does not accept hyphens in sample names, so you need to remove them from the oligos file if you have any. This tool is based on the Mothur tools trim.seqs, unique.seqs and count.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # INPUT reads.oligos: "Oligos" TYPE MOTHUR_OLIGOS
 # INPUT OPTIONAL reads.qual: "QUAL file" TYPE GENERIC
