@@ -23,6 +23,13 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   # simply copy the old files (built in Ubuntu 16.04), because we cannot build these anymore in Ubuntu 20.04
   f="binaries-Ubuntu-16.04_2021-08-25.tar.lz4"; wget https://a3s.fi/bundle-builds/\$f; lz4 -d \$f -c | tar x -C $TOOLS_PATH; rm \$f
   
+  cd $TOOLS_PATH
+  # these are now installed in bundle_aligners or not used anymore
+  rm -rf STAR bowtie bowtie2 bwa hisat2 samtools tophat tophat2 tophat tophat-1.3.2.Linux_x86_64 tophat-2.1.1.Linux_x86_64
+
+  # make space for the new version
+  mv FastQC fastqc-0.11.3
+
   ls -lah $TOOLS_PATH/
 
   # used to be:

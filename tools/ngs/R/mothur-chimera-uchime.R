@@ -10,6 +10,7 @@
 # PARAMETER OPTIONAL method: "Method" TYPE [vsearch, uchime] DEFAULT vsearch (Chimera detection method to use. Note that VSEARCH is much faster than the UCHIME method.)
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (De novo chimera detection uses the more abundant sequences from the same sample to check the query sequence. When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false.)
 
+
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt
 
@@ -33,7 +34,8 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 

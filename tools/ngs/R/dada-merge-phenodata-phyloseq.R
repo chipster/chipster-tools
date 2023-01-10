@@ -1,10 +1,10 @@
-# TOOL dada-merge-phenodata.phyloseq.R: "Merge phenodata to the phyloseq object" (Merge a phenodata.tsv with the sample information to the given phyloseq object. )
+# TOOL dada-merge-phenodata-phyloseq.R: "Merge phenodata to the phyloseq object" (Merge a phenodata.tsv with the sample information to the given phyloseq object. )
 # INPUT ps_phe.Rda: "Phyloseq object without phenodata/sample information" TYPE GENERIC
 # INPUT META phenodata.tsv: "Class object produced by assign taxonomy" TYPE GENERIC
 # OUTPUT ps_sample_summary.txt
 # OUTPUT ps.Rda
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))

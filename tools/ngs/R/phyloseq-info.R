@@ -8,10 +8,12 @@
 # PARAMETER taxa: "Do you want to extract the taxonomy table" TYPE [yes,no] DEFAULT no
 # PARAMETER ref: "Do you want to extract the full DNA sequences stored to refseq" TYPE [yes,no] DEFAULT no
 # PARAMETER sample: "Do you want to extract the sample information" TYPE [yes,no] DEFAULT no
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
-# ES 15.8.2022 
+
+# ES 15.8.2022 phyloseq from 1.30 -> 1.40
 # Load phyloseq
+
 library(phyloseq)
 #packageVersion("phyloseq")
 

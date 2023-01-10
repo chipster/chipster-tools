@@ -6,6 +6,7 @@
 # OUTPUT filtered-unique-summary.tsv
 # OUTPUT filtered-unique.count_table
 
+# RUNTIME R-4.1.1
 # EK 05.06.2013
 # ML 17.03.2017 Add optional count-table for summary file
 # EK 22.03.2017 Added unique.seqs after filtering
@@ -18,7 +19,8 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("a.align")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 

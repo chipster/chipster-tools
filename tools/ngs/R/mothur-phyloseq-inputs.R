@@ -31,7 +31,8 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("file.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 

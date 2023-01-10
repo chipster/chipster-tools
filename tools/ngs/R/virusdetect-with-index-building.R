@@ -180,7 +180,7 @@ if ( blast_ref == "yes") {
 
 if ( blast_bam == "yes") {
 	
-	samtools.binary <- c(file.path(chipster.tools.path, "samtools", "samtools"))
+	samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 	#blastn_matches.sam
 	if (file.exists("result_inputseq/inputseq.blastn.sam")){
 		system ("mv result_inputseq/inputseq.blastn.sam blastn.sam")

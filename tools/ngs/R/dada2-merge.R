@@ -3,7 +3,7 @@
 # INPUT reverse.Rda: "DADA-class object of reverse reads" TYPE GENERIC (dada-class object saved as .Rda file and created with dada function.)
 # INPUT reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC (Tar package containing those FASTQ files which were used to create the dada-class objects.)
 # OUTPUT contigs.Rda
-# OUTPUT OPTIONAL contigs_summary.tsv
+# OUTPUT contigs_summary.tsv
 # PARAMETER minoverlap: "The minimum length of the overlap required for merging the forward and reverse reads" TYPE INTEGER FROM 0 DEFAULT 12 (By default the overlap area should be at least 12 base pairs long.)
 # PARAMETER maxmismatch: "The maximum number of mismatches allowed in the overlap region" TYPE INTEGER FROM 0 DEFAULT 0 (By default no mismatches are allowed in the overlap region.)
 # RUNTIME R-4.1.1-asv

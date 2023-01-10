@@ -3,7 +3,7 @@
 # OUTPUT ps_pruned.Rda: ps_pruned.Rda
 # OUTPUT ps_pruned.txt: ps_pruned.txt
 # PARAMETER type: "Filtering threshold (no. of occurrences)" TYPE [0: "\>0", 1: "\>1", 2: "\>2"] DEFAULT 2 (Choose an option to retain OTUs with more than zero, single or two occurrences; the default is >2)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
 

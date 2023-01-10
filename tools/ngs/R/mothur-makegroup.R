@@ -71,7 +71,7 @@ fasta_names <- sub(".","", fasta_names)
 group_names <- sub(".","",group_names)
 
 # Binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 

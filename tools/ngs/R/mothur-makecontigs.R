@@ -7,6 +7,7 @@
 # OUTPUT contig.numbers.txt
 # OUTPUT samples.fastqs.txt
 
+# RUNTIME R-4.1.1
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
 
@@ -17,7 +18,7 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("reads.tar")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 data.path <- c(file.path(chipster.tools.path,"mothur-data"))
 template.path <- c(file.path(data.path,"silva.bacteria.fasta"))
 version <- system(paste(binary,"--version"),intern = TRUE)
