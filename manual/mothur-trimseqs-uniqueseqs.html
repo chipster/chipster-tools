@@ -29,10 +29,14 @@ a QUAL file as well.
 
 <h3>Details</h3>
 <p>
-Trims primers and barcodes provided in an <a href="https://www.mothur.org/wiki/Oligos_File">oligos file</a>, and filters out reads which don't fulfill the user-defined criteria.
+This tool trims from the sequences the primers and barcodes provided in the <a href="https://www.mothur.org/wiki/Oligos_File">oligos file</a>,
+  and filters out reads which don't fulfill the user-defined criteria.
 Also duplicate reads are removed and a count_table is produced showing how many times each representative sequence occurs in the different samples. 
 </p>
-
+<p>
+The oligos file contains sample names for each barcode. Please note that <b>Mothur does not accept hyphens in sample names</b>, 
+  so you need to remove them from the oligos file if you have any.
+</p>  
 <p>
 This tool is based on the <a href="http://www.mothur.org/wiki/Trim.seqs">Trim.seqs</a>, <a href="http://www.mothur.org/wiki/Unique.seqs">Unique.seqs</a> and <a href="https://mothur.org/wiki/summary.seqs/">summary.seqs</a> commands of the Mothur package.
 </p>

@@ -129,7 +129,15 @@ if (!fileOk("input_list.txt")){
                 maxN=maxns, maxEE=c(maxeef,maxeer), truncQ=truncq, minLen = minlen, rm.phix=TRUE,
                 compress=TRUE, multithread=as.integer(chipster.threads.max), verbose=TRUE)
               
-
+  if (length(filenames)>2){
+    #print(length("double_many",filenames)
+    rownames(out) <- sample.names
+    write.table(out, file ="summary.tsv", sep='\t')
+  }else{
+    #print(length("pair",filenames))
+    write.table(out, file ="summary.tsv", sep='\t', row.names=FALSE)
+    print(out)
+  }
   # make a summary file
   #sink("summary.txt")
   #	cat("\n\n\n")
@@ -187,6 +195,14 @@ if (fileOk("input_list.txt")) {
                 maxN=maxns, maxEE=maxeef, truncQ=truncq, minLen = minlen, rm.phix=TRUE,
                 compress=TRUE, multithread=as.integer(chipster.threads.max), verbose=TRUE)
 
+if (length(filenames)>1){
+  #print(length("sing_many",filenames))
+  rownames(out) <- sample.names
+  write.table(out, file ="summary.tsv", sep='\t')
+}else{
+  #print(length(filenames))
+  write.table(out, file ="summary.tsv", sep='\t', row.names=FALSE)
+}
 x<-1
 file.create("samples.fastqs.txt")
 for (name in sample.names){
@@ -197,8 +213,8 @@ for (name in sample.names){
 }
 
 # make summary.tsv table
-rownames(out) <- sample.names
-write.table(out, file ="summary.tsv", sep='\t')
+#rownames(out) <- sample.names
+#write.table(out, file ="summary.tsv", sep='\t', row.names=FALSE)
 
 #make a output tar package named filtered.tar and gzip
 system("gzip output_folder/*.fq")

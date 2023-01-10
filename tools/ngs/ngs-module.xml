@@ -39,6 +39,7 @@
 		<tool module="common">select_columns.R</tool>
 		<tool module="common">sort_and_select_columns.R</tool>
 		<tool module="common">join_tsv_files.R</tool>
+		<tool module="common">split_tsv_file.R</tool>
 		<tool module="common">merge-tables.R</tool>
 		<tool module="common">general_file_processing.R</tool>	
 		<tool>row_count.R</tool>
@@ -272,6 +273,8 @@
 	</category>
 
 	<category name="Microbial amplicon data preprocessing for ASV" color="#a49900">
+		<tool>identify-primers.R</tool>
+		<tool>cutadapt.R</tool>
 		<tool>dada2-filter.R</tool>
 		<tool>dada2-dada.R</tool>
 		<tool>dada2-merge.R</tool>

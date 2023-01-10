@@ -8,7 +8,7 @@
 # OUTPUT OPTIONAL setup_seurat_obj.Robj
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
-# PARAMETER OPTIONAL groupident: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
+# PARAMETER OPTIONAL sample_name: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.2.0-single-cell
 # SLOTS 2
 
@@ -32,6 +32,11 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+
+# Replace empty spaces in sample and project name with underscore _ :
+sample_name <- gsub(" ", "_", sample_name)
+project.name <- gsub(" ", "_", project.name)
+
 
 # If using DropSeq data:
 if (file.exists("dropseq.tsv")) {
@@ -82,8 +87,8 @@ if (class(dat) == "list") {
 }
 
 # For sample detection later on
-if (groupident != "empty") {
-  seurat_obj@meta.data$stim <- groupident
+if (sample_name != "empty") {
+  seurat_obj@meta.data$stim <- sample_name
 }
 
 
