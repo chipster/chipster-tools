@@ -2,7 +2,6 @@
 # INPUT reads TYPE GENERIC
 # OUTPUT OPTIONAL reads_fastqc.html
 # OUTPUT OPTIONAL error_log.txt
-# OUTPUT OPTIONAL reads.mqc
 # PARAMETER filetype: "File type" TYPE [fastq: "FASTQ", bam: "BAM"] DEFAULT fastq (Select input file type.)
 # RUNTIME R-4.1.1-fastqc
 
@@ -40,17 +39,6 @@ if(fileNotOk("reads_fastqc.html")){
 
 # read input names
 inputnames <- read_input_definitions()
-
-if ((mqc == "yes") && fileOk("reads_fastqc.zip")){
-	# The results folder needs to be renamed to retain the original sample name in the MultiQC report
-	newname <- paste(strip_name(inputnames$reads), "_fastqc", sep="")
-	system("unzip reads_fastqc.zip")
-	system(paste("sed -i s/reads/",newname,"/ reads_fastqc/fastqc_data.txt", sep=""))
-	system(paste("mv reads_fastqc", newname))
-	# tar & gzip for portability
-	system(paste("tar zcf reads.mqc", newname))	
-}
-#system("ls -l > mqc.gz")
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow=2, ncol=2)
