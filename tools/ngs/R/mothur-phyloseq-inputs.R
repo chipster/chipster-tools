@@ -23,6 +23,7 @@
 
 # AMS JH EK 2020-2021
 # ES 28.12.2022 not possible to update to new mothur version because reshape library not in the RUNTIME R-4.1.1, use old until reshsape updated
+# EK 10.01.2023 updated to Mothur 1.48.0 using RUNTIME R-4.2.0-phyloseq which contains the reshape library
 
 # reshape2 library
 library(reshape2)
@@ -33,7 +34,6 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("file.fasta")
 
 # binary
-# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
