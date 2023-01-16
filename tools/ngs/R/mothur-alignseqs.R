@@ -8,8 +8,8 @@
 # PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
+# RUNTIME R-4.1.1
 # SLOTS 2
-
 
 # EK 05.06.2013
 # ML 21.12.2016 update (new Silva version)
@@ -18,10 +18,10 @@
 # ML 15.3.2017 add pcr.seqs options
 # EK 22.8.2018 updated Silva to v132, added processors parameter to pcr.seqs and align.seqs
 # EK 19.4.2021 updated to Silva v138.1
+# ES 1.12.2022 Changed to use new mothur version 1.48
 
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
 # OUTPUT log.txt
-
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -31,6 +31,7 @@ unzipIfGZipFile("reads.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 

@@ -6,12 +6,16 @@
 # OUTPUT contigs_summary.tsv
 # PARAMETER minoverlap: "The minimum length of the overlap required for merging the forward and reverse reads" TYPE INTEGER FROM 0 DEFAULT 12 (By default the overlap area should be at least 12 base pairs long.)
 # PARAMETER maxmismatch: "The maximum number of mismatches allowed in the overlap region" TYPE INTEGER FROM 0 DEFAULT 0 (By default no mismatches are allowed in the overlap region.)
+# PARAMETER trimoverhang: "Should the overhangs in the alignment be trimmed off?" TYPE [Yes, No] DEFAULT No (Should the overhangs be removed, when the reverse read extend past the start of the forward read and vice versa.)
 # RUNTIME R-4.1.1-asv
 
 # ES 11.08.2022
+# ES 21.12.2022 added parameter trimOverhang
 # OUTPUT OPTIONAL contigs.txt
 # OUTPUT OPTIONAL contigs2.txt
 # PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely the name is Mock)
+# PARAMETER concatenate: "Should the forward and reverse-compelented reverse reads be concatenated?" TYPE [Yes, No] DEFAULT No (Should the forward and reverse-compelented reverse reads be concatenated rather than merged? If it is set to yes, 10 Ns are being inserted between them. Use this parameter just, if your reads are not overlapping. )
+
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -72,23 +76,37 @@ fnRs <- filenames[reverse]
     #cat("\nmergePairs:\n")
    # errF <- learnErrors(fnFs, multithread=TRUE, verbose=TRUE)
 
-mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, verbose=TRUE)
+# change the variable to TRUE or FALSE
+if (trimoverhang=="Yes"){
+  trimoverhang=TRUE
+}else{
+  trimoverhang=FALSE
+}
+
+# run command mergePairs
+mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap=minoverlap, maxMismatch=maxmismatch, trimOverhang=trimoverhang, verbose=TRUE)
 #sink()
-
-print(mergers$abundance)
-
-
 save(mergers, file="contigs.Rda" )
+
 
 #rename the rows by splitting the name with _
 sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
 
-
 # track reads through these tools and make a tsv table
 getN <- function(x) sum(getUniques(x))
-track <- cbind(sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN))
-colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
-rownames(track) <- sample.names
-write.table(track, file="contigs_summary.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
+if(length(filenames)<3){ # If processing a single sample, remove the sapply calls: e.g. replace sapply(dadaFs, getN) with getN(dadaFs)
+    track <- cbind(getN(dadaFs),getN(dadaRs),getN(mergers))
+    colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
+    #rownames(track) <- sample.names
+    write.table(track, file="contigs_summary.tsv", sep="\t", row.names=FALSE, col.names=T, quote=F)
+
+}else{
+  track <- cbind(sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN))
+  colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
+  rownames(track) <- sample.names
+  write.table(track, file="contigs_summary.tsv", sep="\t", row.names=TRUE, col.names=T, quote=F)
+}
+
+
 
 

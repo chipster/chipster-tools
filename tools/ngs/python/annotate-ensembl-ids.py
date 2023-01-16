@@ -1,4 +1,4 @@
-# TOOL annotate-ensembl-ids.py: "Annotate Ensembl identifiers" (Annotates Ensembl IDs with gene symbols and descriptions, creates a new table containing these and the values in the original input file. The Ensembl IDs need to be either the rownames or in the first column of the input table.)
+# TOOL annotate-ensembl-ids.py: "Annotate Ensembl identifiers" (Annotates Ensembl IDs with gene symbols and descriptions, creates a new table containing these and the values in the original input file. The Ensembl IDs can be either the rownames or in the first column of the input table. They can also be in the middle if the name of the column is ensembl_id.)
 # INPUT genelist.tsv: genelist.tsv TYPE GENERIC
 # OUTPUT annotated.tsv: annotated.tsv 
 # RUNTIME python3
@@ -58,6 +58,29 @@ with open("genelist.tsv") as fd:
 
 print("found " + str(len(rows)) + " rows")
 
+no_first_column_title = len(column_titles) + 1 == len(rows[0])
+
+# use column "ensembl_id" if it exists, otherwise use the first column
+id_col_index = 0
+id_col_title = None
+other_col_titles = None
+
+try:
+	column_to_find = "ensembl_id"
+
+	id_col_index = column_titles.index(column_to_find)
+	id_col_title = column_titles[id_col_index]
+	other_col_titles = column_titles.copy()
+	other_col_titles.pop(id_col_index)
+
+	if no_first_column_title:
+		# the first column title is missing i.e. R rowname
+		id_col_index = id_col_index + 1
+		print("the first column does not have title, new column index: " + str(id_col_index)) 
+
+except ValueError:
+	print("column '" + column_to_find + "' not found, using first")
+
 # there is a limit how many IDs can be queried in one request
 max_ids_per_query = 1000
 
@@ -66,7 +89,7 @@ max_chunks = 100
 
 row_chunks = chunks(rows, max_ids_per_query)
 
-print("going to make " + str(len(row_chunks)) + " requests")
+print("going to make " + str(len(row_chunks)) + " request(s)")
 
 if len(row_chunks) > max_chunks:
 	raise RuntimeError("CHIPSTER-NOTE: Max " + str(max_chunks * max_ids_per_query) + 
@@ -78,12 +101,12 @@ with open("annotated.tsv", "w") as annotated:
 
 	print("write column titles")
 
-	if len(column_titles) + 1 == len(rows[0]):
+	if no_first_column_title:
 		# the first column title is missing i.e. R rowname
 		annotated.write("symbol\tdescription\t" + "\t".join(column_titles) + "\n")
 	else:
 		# keep the colum title of first column
-		annotated.write(column_titles[0] + "\tsymbol\tdescription\t" + "\t".join(column_titles[1:]) + "\n")
+		annotated.write(id_col_title + "\tsymbol\tdescription\t" + "\t".join(other_col_titles) + "\n")
 
 
 	for row_chunk in row_chunks:
@@ -91,14 +114,15 @@ with open("annotated.tsv", "w") as annotated:
 
 		not_found_ids = []
 
-		# pick first column
-		id_list = [row[0] for row in row_chunk]
+		# pick the id column
+		id_list = [row[id_col_index] for row in row_chunk]
 
 		response = annotate(id_list)
 
 		for row in row_chunk:
-			ensemblid = row[0]
-			other_columns = row[1:]
+			ensemblid = row[id_col_index]
+			other_columns = row.copy()
+			other_columns.pop(id_col_index)
 
 			id_response = response.get(ensemblid)
 

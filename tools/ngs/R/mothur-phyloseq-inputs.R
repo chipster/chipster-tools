@@ -17,10 +17,13 @@
 # OUTPUT OPTIONAL file.agc.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "16S, 18S or archaeal", its: "ITS or Ion Torrent data"] DEFAULT other (Choice between ITS vs other data. Note that Ion Torrent data needs to be specified)
 # PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
+# RUNTIME R-4.2.0-phyloseq
 # SLOTS 4
 # STORAGE 2000
 
 # AMS JH EK 2020-2021
+# ES 28.12.2022 not possible to update to new mothur version because reshape library not in the RUNTIME R-4.1.1, use old until reshsape updated
+# EK 10.01.2023 updated to Mothur 1.48.0 using RUNTIME R-4.2.0-phyloseq which contains the reshape library
 
 # reshape2 library
 library(reshape2)

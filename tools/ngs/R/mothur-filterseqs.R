@@ -5,11 +5,13 @@
 # OUTPUT filtered-log.txt
 # OUTPUT filtered-unique-summary.tsv
 # OUTPUT filtered-unique.count_table
+# RUNTIME R-4.1.1
 
 # EK 05.06.2013
 # ML 17.03.2017 Add optional count-table for summary file
 # EK 22.03.2017 Added unique.seqs after filtering
 # EK 11.05.2020 Zip output fasta
+# ES 1.12.2022 Changed to use new mothur version 1.48
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -19,6 +21,7 @@ unzipIfGZipFile("a.align")
 
 # binary
 binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
@@ -43,23 +46,24 @@ system("grep -A 4 filtered log_raw.txt > filtered-log.txt")
 uniqueseq.options <- paste("unique.seqs(fasta=a.filter.fasta, count=a.count_table)")
 documentCommand(uniqueseq.options)
 write(uniqueseq.options,"batch.mth",append = FALSE)
-
-# command 2
 command2 <- paste(binary,"batch.mth","> log.txt 2>&1")
-
-# run
 system(command2)
 
 ## Post process output
 system("mv a.filter.unique.fasta filtered-unique.fasta")
-system("mv a.filter.count_table filtered-unique.count_table")
+
+countseqs.options <- paste("count.seqs(count=a.filter.count_table, compress=f)",sep="") 
+documentCommand(countseqs.options)
+write(countseqs.options,"batch.mth",append = FALSE)
+command <- paste(binary,"batch.mth",">> log3.txt")
+system(command)
+system("mv a.filter.full.count_table filtered-unique.count_table")
 
 # batch file 3
 summaryseq.options <- paste("summary.seqs(fasta=filtered-unique.fasta, count=filtered-unique.count_table")
 summaryseq.options <- paste(summaryseq.options,", processors=",chipster.threads.max,")",sep = "")
 documentCommand(summaryseq.options)
 write(summaryseq.options,"summary.mth",append = FALSE)
-
 # command 3
 command3 <- paste(binary,"summary.mth","> log_raw.txt")
 

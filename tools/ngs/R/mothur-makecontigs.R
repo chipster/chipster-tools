@@ -3,12 +3,16 @@
 # INPUT OPTIONAL input_list: "List of FASTQ files by sample" TYPE GENERIC
 # OUTPUT contigs.summary.tsv
 # OUTPUT contigs.fasta.gz
-# OUTPUT contigs.groups
+# OUTPUT contigs.count_table
 # OUTPUT contig.numbers.txt
 # OUTPUT samples.fastqs.txt
+# RUNTIME R-4.1.1
 
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
+# ES 1.12.2022 Changed to use new mothur version 1.48, produce count file not a gorup file
+
+# OUTPUT log3.txt
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
@@ -66,7 +70,16 @@ system("cat *.logfile >> log.tmp")
 
 # rename the result files
 system("mv fastq.trim.contigs.fasta contigs.fasta")
-system("mv fastq.contigs.groups contigs.groups")
+
+
+# Run Mothur count.seqs 
+countseqs.options <- paste("count.seqs(count=fastq.contigs.count_table, compress=f)",sep="") 
+documentCommand(countseqs.options)
+write(countseqs.options,"countseqs.mth",append = FALSE)
+command <- paste(binary,"countseqs.mth","> log3.txt")
+system(command)
+system("cat *.logfile >> log.tmp")
+system("mv fastq.contigs.full.count_table contigs.count_table")
 
 # Post process output
 system("sed -n  '/Group count: / ,/Output File/p' log2.txt > contig.numbers.txt")

@@ -4,7 +4,7 @@
 # OUTPUT META phenodata.tsv: "Phenodata" 
 # OUTPUT ps_nophe.Rda
 # OUTPUT ps_summary.txt
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
 
 
 # ES 18.8.2022
@@ -66,6 +66,27 @@ colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Fami
 if (taxlength == "7"){
 colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
 }
+
+# Replacing NAs in taxonomy table with the best available classification:
+# extracting taxonomy table from the phyloseq object
+ps.tax <- tax_table(ps)
+
+# vector for abbreviations of taxonomic levels
+taxabb <- c("ki", "ph", "cl", "or", "fa", "ge")
+
+# for loop for replacing NAs
+# when an entry does not have an NA, it is saved as tmptax
+# if the next entry is NA, the previous tmptax is used in paste
+
+for(i in 1:nrow(ps.tax)) {
+  for(j in 1:ncol(ps.tax)) {
+    if(is.na(ps.tax[i,j]) == TRUE) { ps.tax[i,j] <- paste(tmptax,taxabb[j],sep="_")}
+    else { tmptax <- ps.tax[i,j]}
+  }
+}
+# returning the modified taxonomy table to the phyloseq object
+tax_table(ps) <- ps.tax
+
 # take out the sample names
 samples.out <- sample_names(ps) 
 # write phenodata.tsv
