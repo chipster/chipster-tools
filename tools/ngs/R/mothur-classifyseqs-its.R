@@ -7,10 +7,12 @@
 # OUTPUT classification-summary.tsv
 # PARAMETER reference: "Reference" TYPE [own: "own reference", "FILES mothur-unite-reference .tax"] DEFAULT own (The reference options marked with _s are from the UNITE download2 set, so they comprise of all quality filtered unclustered UNITE and INSD sequences for Fungi \(887 399 for UNITE v8.2\). The options without _s are from the UNITE download1 set, which contains sequences included in the UNITE species hypotheses \(565 915 for UNITE v8.2\). The dynamic options are based on varying clustering thresholds for different species hypothesis. These choices were made manually by experts of those particular lineages of fungi.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
+# RUNTIME R-4.1.1
 
 # AMS 18.12.2020
 # EK 10.2.2021 removed unnecessary remove.lineages parameters
 # EK 8.4.2021 removed parameters for removing unknown and user-specified lineages
+# EK 16.1.2023 moved to Mothur v1.48
 
 # PARAMETER OPTIONAL remove.chloroplast: "Remove taxon Chloroplast" TYPE [yes, no] DEFAULT yes (Remove taxon Chloroplast.)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove taxon Mitochondria" TYPE [yes, no] DEFAULT yes (Remove taxon Mitochondria.)
@@ -30,8 +32,8 @@ source(file.path(chipster.common.path,"zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
 version <- system(paste(binary,"--version"),intern = TRUE)
 documentVersion("Mothur",version)
 
