@@ -104,7 +104,6 @@ command <- paste(binary,"trim.mth") #, ">> log2.txt"
 # run
 system(command)
 
-system("ls -l")
 # Run Mothur count.seqs to get full count table
 countseqs.options <- paste("count.seqs(count=reads.trim.unique.count_table, compress=f)",sep="") 
 documentCommand(countseqs.options)
