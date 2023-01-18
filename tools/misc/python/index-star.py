@@ -35,26 +35,6 @@ def main():
         raise RuntimeError("STAR indexing of genome " + fa_basename + " failed")
         
     run_process(["ls", "-lah"])
-
-    # rename index files to fixed output names and define real names for the client
-
-    outputs = [
-        "SA",
-        "SAindex",
-        "Genome",
-        "chrLength.txt",
-        "chrName.txt",
-        "chrNameLength.txt",
-        "chrStart.txt",
-        "genomeParameters.txt",
-    ]
-
-    output_names = {}
-
-    for output in outputs:
-        output_names[output] = fa_basename + "/" + output
-
-    tool_utils.write_output_definitions(output_names)
     
 def run_bash(cmd: str):
     run_process(["bash", "-c", cmd])

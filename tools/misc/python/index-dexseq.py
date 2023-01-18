@@ -1,7 +1,6 @@
-# TOOL index-gtf.py: "Create GTF indexes" ()
+# TOOL index-dexseq.py: "Create DEXSeq index" ()
 # INPUT input.gtf TYPE GENERIC
 # OUTPUT output.gtf
-# OUTPUT output.bed
 # RUNTIME python3
 
 # add the tools dir to path, because __main__ script cannot use relative imports
@@ -15,23 +14,18 @@ def main():
 
     input_gtf = "input.gtf"
     output_gtf = "output.gtf"
-    output_bed = "output.bed"
 
     # TODO update dexseq_preprare_annotation.py to get rid of old Python 2
     python = chipster_tools_path + "/Python-2.7.12/bin/python"
     dexseq_prepare_annotation = chipster_tools_path + "/dexseq-exoncounts/dexseq_prepare_annotation.py"
-    gtf2bed = chipster_tools_path + "/gtf2bed/gtf2bed.pl"
 
     session_input_gtf = tool_utils.read_input_definitions()[input_gtf]
     gtf_basename = tool_utils.remove_postfix(session_input_gtf, '.gtf')
 
     run_process([python, dexseq_prepare_annotation, input_gtf, output_gtf])
-
-    run_bash(gtf2bed + " " + input_gtf + " > " + output_bed)
         
     output_names = {
-        output_gtf: "dexseq/" + gtf_basename + ".DEXSeq.gtf",
-        output_bed: "bed/" + gtf_basename + ".bed",
+        output_gtf: gtf_basename + ".DEXSeq.gtf",
     }
 
     tool_utils.write_output_definitions(output_names)
