@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Download genome from Ensembl</h2>
+
+    <h3>Description</h3>
+
+    <p>Download genome fasta and gtf files from Ensembl. The files are downloaded from the Ensembl FTP server. 
+        Verteberates are downloaded from <a href="http://ftp.ensembl.org/pub/">ftp.ensembl.org</a> other species are
+        downloaded from <a href="http://ftp.ensemblgenomes.org/pub/">ftp.ensemblgenomes.org</a>.
+    </p>
+
+    <h3>Parameters</h3>
+    <p>
+        
+        <ul>
+            <li>Species [drosophila_melanogaster]</li>
+            <p>
+                Like written e.g. in this <a href="http://ftp.ensembl.org/pub/release-108/fasta/">directory listing</a>.
+            </p>
+            <li>Version [BDGP6.32]</li>
+            <p>
+                Genome assembly version
+            </p>
+            <li>Ensembl release [current]</li>
+            <p>
+                Use <code>current</code>> to use the latest Ensembl release. If you want to download older 
+                version, go the <a href="http://www.ensembl.org/Drosophila_melanogaster/Info/Index">species' Ensembl page</a>. 
+                The dropdown menu on the left lists all the different genome versions and their latest Ensembl releases. For example,
+                To download the BDGP6.22 assembly of Drosophila melanogaster, set this parameter to <code>release-98</code>.
+            </p>
+            <li>Ensembl site (verteberates, fungi, plants, bacteria) [verteberates]</li>
+            <li>Action (Check version, Download) [Download]</li>
+            <p>
+                The tool can be used in the two modes. The mode <code>Download</code> finds the requested genome from the server
+                and downloads it. The other mode <code>Check version</code> only checks that the requested
+                genome version is found from the server and then the tool finishes successfully or with an error accordingly. This 
+                is mostly useful for going external scripts that want to check the versions before starting the slow download.
+            </p>
+            <li>Preferred assembly (Toplevel, Primary assembly) [Primary assembly]</li>
+            <p>
+                Toplevel file includes chromsomes, regions not assembled into chromosomes and N padded haplotype/patch regions. 
+                Primary assembly contains all toplevel sequence regions excluding haplotypes and patches.
+            </p>
+        </ul>
+    </p>
+
+    <h3>Input</h3>
+    <p>
+        None
+    </p>
+
+    <h3>Output</h3>
+    <p>
+        <ul>
+            <li>output.fa: reference genome fasta</li>
+            <li>output.gtf: reference genome gtf</li>
+        </ul>
+    </p>
+
+    <h3>Reference</h3>
+
+    <p>This tools downloads data from <a href=https://www.ensembl.org/">Ensembl</a>. Please see their page of <a href="http://www.ensembl.org/info/about/publications.html">Scientific Publications</a> for how to cite.</p>
+
+</body>
