@@ -52,7 +52,8 @@ if (treatment == "hellinger"){
 # Data without VST transformation assigned to ps0 (used for DESeq2 analysis)
 
 if (treatment == "deseq2"){
-	deseq2_formula <- as.formula(paste0("formula(~", group_column1, ")"))
+	# deseq2_formula <- as.formula(paste0("formula(~", group_column1, ")"))
+	deseq2_formula <- as.formula(paste0("~ ", group_column1, collapse = " "))
 	diagdds <- phyloseq_to_deseq2(ps, deseq2_formula)
 	gm_mean <- function(x, na.rm = TRUE){
 		exp(sum(log(x[x > 0]), na.rm = na.rm) / length(x))
