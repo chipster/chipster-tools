@@ -18,7 +18,9 @@ def main():
 
     samtools = chipster_tools_path + "/samtools-1.2/samtools"
 
-    session_input_fa = tool_utils.read_input_definitions()[input_fa].replace(".dna.toplevel", "")
+    session_input_fa = tool_utils.read_input_definitions()[input_fa]\
+        .replace(".dna.toplevel", "")\
+        .replace(".dna.primary_assembly", "")
 
     karyotype_chr = None
 
