@@ -95,8 +95,8 @@
 		<tool module="common">make_namelist.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
-	    <tool module="common">share_via_object_storage.R</tool>
-	    <tool module="common">basespace.R</tool>		 
+	    	<tool module="common">share_via_object_storage.R</tool>
+	    	<tool module="common">basespace.R</tool>		 
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
@@ -125,7 +125,7 @@
 		<tool>bowtie2.R</tool>
 		<tool>bowtie2-paired-end.R</tool>
 		<tool>bowtie2-with-index-building.R</tool>
-	    <tool>bowtie2-paired-end-with-index-building.R</tool>
+	    	<tool>bowtie2-paired-end-with-index-building.R</tool>
 		<tool>hisat2.R</tool>
 		<tool>hisat2-paired-end.R</tool>		
 		<tool>hisat2-single-end-with-index-building.R</tool>		
@@ -141,9 +141,9 @@
 		<tool>bowtie-paired-end-with-index-building.R</tool>
 		<tool>tophat2.R</tool>
 		<tool>tophat2-single-end.R</tool>
-	    <tool>tophat2-with-index-building.R</tool>
+	    	<tool>tophat2-with-index-building.R</tool>
 		<tool>tophat2-single-end-with-index-building.R</tool>
-	    <tool>bwa.R</tool>
+	    	<tool>bwa.R</tool>
 		<tool>bwa-paired-end.R</tool>
 		<tool>bwa-with-index-building.R</tool>
 		<tool>bwa-paired-end-with-index-building.R</tool>
@@ -236,7 +236,7 @@
 		<!--<tool>single-cell-TagBam.R</tool> --> 
 		<!--<tool>single-cell-FilterBam.R</tool> --> 
 		<!--<tool>picard-samtofastq.R</tool> --> 		
-	    <!--<tool>picard-sortsam.R</tool>	--> 
+	    	<!--<tool>picard-sortsam.R</tool>	--> 
 		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
@@ -303,15 +303,13 @@
 		<tool>mothur-seq-error.R</tool>
 		<tool>mothur-phyloseq-inputs.R</tool>
 		<tool>metabarcoding-import.R</tool>
-		<!--
-		<tool>mothur-classify-counttable.R</tool>
-	    <tool>mothur-analyses.R</tool>
-	    -->
-	    <tool>mothur-summaryseqs.R</tool>
-	    <tool>mothur-sffinfo.R</tool>
-	    <tool>mothur-fastqinfo.R</tool>	      
-    	<tool>merge-fasta-qual.R</tool>
-    	<tool module="misc">fixed_text_conversions.R</tool>
+		<!-- <tool>mothur-classify-counttable.R</tool> -->
+	    	<!-- <tool>mothur-analyses.R</tool> -->
+	    	<tool>mothur-summaryseqs.R</tool>
+	    	<!-- <tool>mothur-sffinfo.R</tool> -->
+	    	<tool>mothur-fastqinfo.R</tool>	      
+    		<!-- <tool>merge-fasta-qual.R</tool> -->
+    		<tool module="misc">fixed_text_conversions.R</tool>
 	</category>
 
 	<category name="Microbial amplicon data analyses" color="#a49900">
@@ -325,13 +323,13 @@
 		<tool>metabarcoding-single-double.R</tool>
 		<tool>metabarcoding-prevalence-filter.R</tool>
 		<tool>metabarcoding-transform-otu.R</tool>
-	    <tool>metabarcoding-stacked-barplot.R</tool>
-	    <tool>metabarcoding-distance-ordination.R</tool>
-	    <tool>metabarcoding-global-permanova.R</tool>
-	    <tool>metabarcoding-permdisp.R</tool>	      
-    	<tool>metabarcoding-pairwise-permanova.R</tool>
-	<tool>metabarcoding-pairwise-tukey.R</tool>
-	<tool>metabarcoding-deseq2.R</tool>
+	    	<tool>metabarcoding-stacked-barplot.R</tool>
+	    	<tool>metabarcoding-distance-ordination.R</tool>
+	    	<tool>metabarcoding-global-permanova.R</tool>
+	    	<tool>metabarcoding-permdisp.R</tool>	      
+    		<tool>metabarcoding-pairwise-permanova.R</tool>
+		<tool>metabarcoding-pairwise-tukey.R</tool>
+		<tool>metabarcoding-deseq2.R</tool>
 	</category>
 	
 	<category name="CNA-seq" color="#83010b">
