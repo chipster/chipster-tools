@@ -6,4 +6,3 @@
 
 line<-system("wc -l input.txt", intern = TRUE)
 write(line, file = "output.txt")
-
