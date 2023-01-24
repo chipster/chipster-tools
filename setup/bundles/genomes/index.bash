@@ -55,6 +55,3 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER root - <<EOF
   # this is the job_dir path, but I don't want to chown everything by accident
   chown -R 1000:1000 /mnt/artefacts/index_genomes/$BUILD_NUMBER
 EOF
-
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/genomes $JOB_NAME $BUILD_NUMBER
-
