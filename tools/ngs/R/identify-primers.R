@@ -4,7 +4,7 @@
 # INPUT OPTIONAL file2.fastq: "Reverse fastq file" TYPE GENERIC ("Reverse fastq file")
 # OUTPUT primer_summary.tsv
 # OUTPUT orientations_summary.txt
-# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end? If yes, then identify primers from forward and reverse reads.)
+# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (If paired end, identify primers from forward and reverse reads.)
 # PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer)
 # PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer)
 # RUNTIME R-4.1.1-asv
@@ -12,9 +12,6 @@
 # ES 13.10.2022
 # could use either tar package or fastq files as input, Decided to use tar, because it's more convenient in the pipeline
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
-
-# LG 24.01.2022
-# PARAMETER paired: "If paired end, identify primers from forward and reverse reads." TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
