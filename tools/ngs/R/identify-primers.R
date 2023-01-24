@@ -13,6 +13,9 @@
 # could use either tar package or fastq files as input, Decided to use tar, because it's more convenient in the pipeline
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
 
+# LG 24.01.2022
+# PARAMETER paired: "If paired end, identify primers from forward and reverse reads." TYPE [paired, single] DEFAULT single (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads,use only those forward parameters.)
+
 source(file.path(chipster.common.path,"tool-utils.R"))
 source(file.path(chipster.common.path,"zip-utils.R"))
 
