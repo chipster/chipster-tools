@@ -199,7 +199,7 @@ function download_results {
       create_symlink $fasta genomes/fasta default $fasta_basename
       
       create_symlink $fasta genomes/indexes/bwa default $fasta_basename
-      create_symlink $gtf_basename.fa genomes/indexes/bowtie2 default $fasta_basename
+      create_symlink $fasta_basename.fa genomes/indexes/bowtie2 default $fasta_basename
       create_symlink $gtf_basename.fa genomes/indexes/hisat2 default $gtf_basename
       create_symlink $fasta_basename genomes/indexes/star default ""
     fi
