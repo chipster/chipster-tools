@@ -4,3 +4,5 @@
 
 system("cp input output")
 print("hello! hei!")
+
+print('Bonjour')
