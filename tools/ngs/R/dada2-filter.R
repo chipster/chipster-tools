@@ -4,7 +4,7 @@
 # OUTPUT filtered.fastqs.tar
 # OUTPUT summary.tsv
 # OUTPUT samples.fastqs.txt
-# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end, so one forward and one reverse FASTQ file for one sample. If single end reads, use only those forward parameters.)
+# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (If single end reads, use only those forward parameters.)
 # PARAMETER OPTIONAL truncf: "Truncate forward reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded. You can use this parameter for single and paired end reads.) 
 # PARAMETER OPTIONAL truncr: "Truncate reverse reads after this amount of bases" TYPE INTEGER FROM 0 DEFAULT 0 (Default 0 means no truncation. Truncate reads after truncLen bases. Reads shorter than this are discarded. Use only for paired end reads.) 
 # PARAMETER OPTIONAL maxns: "Discard input sequences with more than specified number of Ns" TYPE INTEGER FROM 0 DEFAULT 0 (Sequences with more than the specified number of Ns will be discarded. Note that the dada function does not allow any Ns.)
