@@ -4,7 +4,7 @@
 # INPUT OPTIONAL file2.fastq: "Reverse fastq file" TYPE GENERIC ("Reverse fastq file")
 # OUTPUT primer_summary.tsv
 # OUTPUT orientations_summary.txt
-# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Are all the reads paired end? If yes, then identify primers from forward and reverse reads.)
+# PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (If paired end, identify primers from forward and reverse reads.)
 # PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer)
 # PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer)
 # RUNTIME R-4.1.1-asv

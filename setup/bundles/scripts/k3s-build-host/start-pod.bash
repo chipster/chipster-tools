@@ -73,6 +73,8 @@ spec:
       containers:
       - name: $name
         image: docker-registry.rahti.csc.fi/chipster-images-beta/$image
+        command: ["sleep"]
+        args: ["inf"]
         volumeMounts:
         - name: tools-bin
           mountPath: /mnt/tools

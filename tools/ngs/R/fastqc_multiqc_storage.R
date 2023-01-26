@@ -2,7 +2,7 @@
 # INPUT reads{...}.fq: "FASTQ files" TYPE GENERIC
 # OUTPUT OPTIONAL multiqc_report.html
 # OUTPUT OPTIONAL error_log.txt
-# RUNTIME R-4.1.1
+# RUNTIME R-4.1.1-fastqc
 # STORAGE 1000
 
 # 2018.09.10 AMS
@@ -35,8 +35,10 @@ documentVersion("FastQC",version)
 version <- system(paste(multiqc.binary,"--version"),intern = TRUE)
 documentVersion("MultiQC",version)
 
+fastq.files <- system("ls *.fastq *.fastq.gz *.fq *.fq.qz",intern = TRUE)
+
 # commands
-fastqc.command <- paste(fastqc.binary,"-f fastq --noextract *")
+fastqc.command <- paste(fastqc.binary,"-f fastq --noextract ", paste(fastq.files, collapse = " "))
 multiqc.command <- paste(multiqc.binary,"--module fastqc .")
 
 documentCommand(fastqc.command)
