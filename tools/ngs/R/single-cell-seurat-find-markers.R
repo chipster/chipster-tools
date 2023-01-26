@@ -62,11 +62,11 @@ if (find.all.markers == TRUE){
 }else { # Comparing only one cluster to all others or 
     # Comparing to all other cells (default): 
     if (cluster2 == "all others") { 
-        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup, return.thresh = returnthresh)
+        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
     }else { 
       # comparing to another user determined cluster(s):
         cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
-        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup, return.thresh = returnthresh)
+        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
     }
   write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
  }
