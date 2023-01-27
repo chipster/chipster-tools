@@ -11,6 +11,10 @@
 # AMS 21.4.2015 
 # ML 25.2.2021 Add option to give multiple gene names as input (as a list or tsv file)
 
+if (!file.exists("genelist.tsv") && gene.names == ''){
+	stop("CHIPSTER-NOTE: The parameter 'Gene names' was empty. Please enter this criteria before re-running script.")
+ }
+
 # Loads the libraries
 library(DESeq2)
 library(ggplot2)
