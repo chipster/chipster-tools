@@ -4,8 +4,13 @@
 # INPUT META phenodata.tsv: "Phenodata file" TYPE GENERIC
 # OUTPUT OPTIONAL normalized_counts.pdf
 # PARAMETER OPTIONAL gene.names: "Gene names" TYPE STRING (Gene name\(s\). If you list multiple gene names, separate them with comma \(,\). Note that this list is NOT used if you give a list as a tsv file as input!)
+# PARAMETER OPTIONAL plot.type: "Plot type" TYPE [scatter,box] DEFAULT scatter
 # PARAMETER OPTIONAL show.names: "Show names in plot" TYPE [yes, no] DEFAULT yes (Show sample names in plot. In more complex cases this may make the plot too cluttered. To plot sample names, you need to determine them in the description column in phenodata file!)
 # PARAMETER OPTIONAL how.many: "How many of the top genes from the input file are plotted" TYPE INTEGER FROM 1 DEFAULT 5 (If you give the genes to plot as an tsv file, this parameter sets the number of genes from the top of the table you wish to plot. Note that the pdf grows very large when you add more plots to it.)
+  
+ if (!file.exists("genelist.tsv") && gene.names == ''){
+	stop("CHIPSTER-NOTE: The parameter 'Gene names' was empty. Please enter this criteria before re-running script.")
+ }
 
 
 # AMS 21.4.2015 
@@ -55,7 +60,14 @@ pdf(file="normalized_counts.pdf")
 for (i in 1:length(gene.names.clean) ) { 
 	gene.name.to.print <- gene.names.clean[i]
   	d <- plotCounts(dds, gene=gene.name.to.print, intgroup="condition", returnData=TRUE)
-  	if (show.names == "yes"){
+  	if (plot.type == "boxplot"){
+		print(ggplot(d, aes(x=condition, y=count, log="y")) + 
+		geom_boxplot(color="blue", size=3, shape=5) +
+		ylab("normalized counts") +
+		xlab("group") +
+		ggtitle(gene.name.to.print) )
+		}
+	else if (show.names == "yes"){
 		  # Check that there are descriptions in phenodata file that can be used in plotting:
 			if (is.na(pmatch("description", colnames(phenodata)))) { 
   			stop("CHIPSTER-NOTE: To plot sample names, you need to determine them in the description column in phenodata file!")
