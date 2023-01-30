@@ -60,9 +60,9 @@ pdf(file="normalized_counts.pdf")
 for (i in 1:length(gene.names.clean) ) { 
 	gene.name.to.print <- gene.names.clean[i]
   	d <- plotCounts(dds, gene=gene.name.to.print, intgroup="condition", returnData=TRUE)
-  	if (plot.type == "boxplot"){
+  	if (plot.type == "box"){
 		print(ggplot(d, aes(x=condition, y=count, log="y")) + 
-		geom_boxplot(color="blue", size=3, shape=5) +
+		geom_boxplot(color="blue") +
 		ylab("normalized counts") +
 		xlab("group") +
 		ggtitle(gene.name.to.print) )
