@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL normalized_counts.pdf
 # PARAMETER OPTIONAL gene.names: "Gene names" TYPE STRING (Gene name\(s\). If you list multiple gene names, separate them with comma \(,\). Note that this list is NOT used if you give a list as a tsv file as input!)
 # PARAMETER OPTIONAL plot.type: "Plot type" TYPE [scatter,box] DEFAULT scatter
-# PARAMETER OPTIONAL show.names: "Show names in plot" TYPE [yes, no] DEFAULT yes (Show sample names in plot. In more complex cases this may make the plot too cluttered. To plot sample names, you need to determine them in the description column in phenodata file!)
+# PARAMETER OPTIONAL show.names: "Show names in scatter plot" TYPE [yes, no] DEFAULT yes (Show sample names in scatter plot. In more complex cases this may make the scatter plot too cluttered. To plot sample names, you need to determine them in the description column in phenodata file!)
 # PARAMETER OPTIONAL how.many: "How many of the top genes from the input file are plotted" TYPE INTEGER FROM 1 DEFAULT 5 (If you give the genes to plot as an tsv file, this parameter sets the number of genes from the top of the table you wish to plot. Note that the pdf grows very large when you add more plots to it.)
   
  if (!file.exists("genelist.tsv") && gene.names == ''){
