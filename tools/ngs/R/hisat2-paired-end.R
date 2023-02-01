@@ -16,6 +16,7 @@
 # PARAMETER OPTIONAL dta.cufflinks: "Tailor alignments for Cufflinks" TYPE [yes, no] DEFAULT no (Report alignments tailored specifically for Cufflinks transcript assembly. With this option, HISAT2 looks for novel splice sites with three signals, GT-AG, GC-AG, AT-AC, but all user-provided splice sites are used irrespective of their signals. HISAT2 produces an optional XS field for every spliced alignment.)
 # PARAMETER OPTIONAL bai: "Index BAM" TYPE [yes, no] DEFAULT no (Index BAM file.)
 # RUNTIME R-4.1.1
+# SLOTS 2
 
 # AO 30.05.2017 First version
 # EK 18.10.2017 Polishing
