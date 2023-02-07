@@ -14,6 +14,7 @@
 # PARAMETER OPTIONAL only.positive: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (When this parameter is set to true, only genes with positive log2 fold change are listed in the result file. NOTE, for listing all markers, this is currently set to FALSE regardless what you choose here.)
 # PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
 # RUNTIME R-4.2.0-single-cell
+# SLOTS 5
 
 
 # 13.06.2017 ML
