@@ -9,7 +9,7 @@
 # OUTPUT OPTIONAL {...}.cram: "cram files"
 # OUTPUT OPTIONAL {...}.crai: "cram files"
 # PARAMETER entry_id: "ENA ID" TYPE STRING DEFAULT "entry" (Give the ID of the ENA dataset to be retrieved. For example: SRR000021) 
-# PARAMETER format: "Data to retrieve" TYPE [default: "Default format", fastq: "fastq reads", fasta: "fasta sequence", embl: "embl formatted sequence" ] DEFAULT default (Define the data forma for retried data. Not that if you retrieve NGS reads, you should use fastq format in stead of default format)
+# PARAMETER format: "Data to retrieve" TYPE [default: "Default format", fastq: "fastq reads", fasta: "fasta sequence", embl: "embl formatted sequence" ] DEFAULT default (Define the format for retrieved data. Note that you should use fastq format instead of default format for reads.)
 # PARAMETER index: "Download CRAM index" TYPE [yes: "Yes", no: "No" ] DEFAULT no ( Download CRAM index files with submitted CRAM files, if any. This selection is ignored if fastq format is selected.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
 
