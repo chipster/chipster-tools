@@ -10,8 +10,8 @@
 	<h2>Differential expression analysis using DESeq2</h2>
 
 	<h3>Description</h3>
-	Differential expression analysis using the DESeq2 Bioconductor package. This tool allows you to have more than two
-	experimental groups and
+	Differential expression analysis using the DESeq2 Bioconductor package.
+	This tool allows you to have more than two experimental groups and
 	account for a second experimental factor.
 
 	<br>
@@ -33,8 +33,7 @@
 	<br>This tool takes as input a table of raw counts. The count table has to be associated with a phenodata file
 	describing the experimental groups.
 	These files are best created by the tool "Utilities / Define NGS experiment", which combines count files for
-	different samples to one table,
-	and creates a phenodata file for it.
+	different samples to one table, and creates a phenodata file for it.
 	<br><br>
 	DESeq2 performs an internal normalization where geometric mean is calculated for each gene across all samples.
 	The counts for a gene in each sample is then divided by this mean.
@@ -47,8 +46,15 @@
 	the user can choose to choose "poscounts" method. This method calculates a modified geometric mean
 	by taking the n-th root of the product of the non-zero counts.
 	<br><br>
-	As small numbers of replicates make it impossible to estimate within-group variance reliably, DESeq2 uses shrinkage
-	estimation for dispersions and fold changes.
+	As small numbers of replicates make it impossible to estimate within-group variance reliably, shrinkage
+	estimation function lfcShrink is used for dispersions and fold changes. We use the adaptive shrinkage estimator,
+	"ashr" estimator.
+	See <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#moreshrink">
+		more about shrinkage estimation</a>.
+
+
+
+	<br><br>
 	A dispersion value is estimated for each gene through a model fit procedure.
 	You need to have biological replicates of each experiment condition in order to estimate dispersion properly.
 	If there are no replicates, DESeq will estimate dispersion using the samples from the different conditions as
@@ -93,7 +99,16 @@ from a likelihood ratio test of a model including the groups and the additional 
 			outliers. <br></li>
 		<li>deseq2_report.pdf: A PDF file containing:
 			<ul>
-				<li>MA scatter plot where the significantly differentially expressed genes are highlighted. <br></li>
+				<li>MA scatter plot where the significantly differentially expressed genes are highlighted.
+					Plotted before and after the LFC shrinking.
+					Shows the log2 fold changes attributable to a given variable over the mean of normalized counts
+					for all the samples in the DESeqDataSet.
+					<ul>
+						<li>blue dot = adjusted p value is less than the given threshold</li>
+						<li>blue triangle = points which fall out of the window are plotted as open triangles pointing
+							either up or down </li>
+					</ul>
+				</li>
 				<li>Plot of dispersion estimates at different count levels, showing
 					<ul>
 						<li>black dot = dispersion estimate for each gene as obtained by considering the information
@@ -105,7 +120,7 @@ from a likelihood ratio test of a model including the groups and the additional 
 							dispersion outliers and not shrunk toward the fitted trend line</li>
 					</ul>
 				</li>
-				<li>Plot of the raw and adjusted p-value distributions of the statistical test. <br></li>
+				<li>Plot of the raw and adjusted p-value distributions of the statistical test, showing <br></li>
 			</ul>
 		</li>
 	</ul>
@@ -119,4 +134,8 @@ from a likelihood ratio test of a model including the groups and the additional 
 			estimation of fold change and
 			dispersion for RNA-Seq data with DESeq2.</a> Genome Biol. 2014 15:550</p>
 
+	<p>
+		ashr shrinkage method: Stephens, M. (2016) False discovery rates: a new deal. Biostatistics, 18:2.
+		<a href="https://doi.org/10.1093/biostatistics/kxw041">https://doi.org/10.1093/biostatistics/kxw041</a>
+	</p>
 </body>
