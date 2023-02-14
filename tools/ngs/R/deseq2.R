@@ -5,15 +5,20 @@
 # OUTPUT OPTIONAL summary.txt
 # OUTPUT OPTIONAL deseq2_report.pdf
 # OUTPUT OPTIONAL de-list-deseq2.bed
-# OUTPUT OPTIONAL dds.Robj
-# OUTPUT OPTIONAL output_table.tsv 
-# OUTPUT OPTIONAL res.Robj
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
 # PARAMETER OPTIONAL ad_factor: "Column describing additional experimental factor" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing an additional experimental factor. If given, p-values in the output table are from a likelihood ratio test of a model including the experimental groups and experimental factor, vs a model which only includes the experimental factor.)
 # PARAMETER OPTIONAL p.value.cutoff: "Cutoff for the adjusted P-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for Benjamini-Hochberg adjusted p-value. Note that the developers of DESeq2 use 0.1 as a default cut-off.)
 # PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
 # PARAMETER OPTIONAL size.factor.estimation.type: "Method for estimating size factors" TYPE [ratio:"ratio", poscounts:"poscounts"] DEFAULT ratio (Which size estimation method to use. Default option "ratio" uses the standard median ratio method introduced in DESeq. "poscounts" offers alternative estimator, which can be used even when all genes contain a sample with a zero.)
-# RUNTIME R-3.6.1-phyloseq
+# RUNTIME R-4.2.0-phyloseq
+
+
+
+## OLD:  RUNTIME R-3.6.1-phyloseq
+# For testing:
+# OUTPUT OPTIONAL dds.Robj
+# OUTPUT OPTIONAL output_table.tsv 
+# OUTPUT OPTIONAL res.Robj
 
 # MK 15.04.2014, added the possibility to use DESeq2 in dea-deseq.R 
 # AMS 17.06.2014, split the DESeq2 part to a separate tool
@@ -26,10 +31,12 @@
 # ML+SS 18.10.2016, Fixed plotting & rounding and formatting when more than 2 groups
 # ML+SS 08.05.2018, comparison possible also when >9 groups
 # ML 10.5.2022, Move to R-3.6.1 and DESeq 1.26.0, add the size factor estimation type parameter to cope with cases when all genes contain a sample with a zero.
+# ML 02.02.2023, Add the LFC shrink (this was previously inside DESeq function)
 
 #column <-"group"
 #ad_factor<-"EMPTY"
 #p.value.cutoff<-0.05
+
 
 # Load the library
 source(file.path(chipster.common.path, "bed-utils.R"))
@@ -62,12 +69,22 @@ if (ad_factor == "EMPTY") {
 # Vector / variable that holds comparison names
 results_name <- NULL 
 
-
 dds <- DESeq(dds, sfType=size.factor.estimation.type)
 
-# Calculate statistic for differential expression, merge with original data table, keep significant DEGs, remove NAs and sort by FDR. If there are more than 2 groups, get pairwise results for each comparison.
+# save(dds, file="dds.Robj")
+
+
+# Calculate statistic for differential expression, merge with original data table, keep significant DEGs, remove NAs and sort by FDR. 
+# If there are more than 2 groups, get pairwise results for each comparison.
+
+# Two groups:
 if (length(unique(groups)) == 2) {
 	res <- results(dds,alpha=p.value.cutoff)
+
+	# LFC shrink, needs to be after results function. (This step was previously inside DESeq function)
+	resLFC <- lfcShrink(dds, res=res, type="ashr")
+	res <- resLFC
+
 	sig <- cbind(dat, res)
 	sig <- as.data.frame(sig)
 	#sig <- sig[! (is.na(sig$padj)), ]
@@ -76,7 +93,12 @@ if (length(unique(groups)) == 2) {
 	sig <- sig[ order(sig$padj), ]
 	# Open pdf file for output
 	pdf(file="deseq2_report.pdf") 
-	plotMA(dds,alpha=p.value.cutoff,main=c("DESeq2 MA-plot, FDR =", p.value.cutoff),ylim=c(-2,2))
+	## MA plot before lfcShrink:
+	# plotMA(dds, alpha=p.value.cutoff, main=c("DESeq2 MA-plot, FDR =", p.value.cutoff), ylim=c(-2,2))
+	# MA plot after lfcShrink:
+	plotMA(resLFC, alpha=p.value.cutoff ,main=c("DESeq2 MA-plot with LFC shrink (used in result table), FDR =", p.value.cutoff), ylim=c(-2,2))
+
+	# Summary into a txt file
 	sink("summary.txt")
 	summary(res, alpha=p.value.cutoff)
 	sink()
@@ -88,8 +110,17 @@ if (length(unique(groups)) == 2) {
 		write.table(cbind(sig[,1:ndat], round(sig[, (ndat+1):(nmax-2)], digits=2), format(sig[, (nmax-1):nmax], digits=4, scientific=T)), file="de-list-deseq2.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 	}
 	
+
+# More than 2 groups:	
 } else if (length(unique(groups)) > 2){
 	test_results <- dds
+
+	# Open pdf file for output
+	pdf(file="deseq2_report.pdf") 
+
+	## MA plot before lfcShrink:
+	# plotMA(dds,alpha=p.value.cutoff,main=c("DESeq2 MA-plot, FDR =", p.value.cutoff),ylim=c(-2,2))
+
 	res <- NULL
 	# going through all the pairwise comparisons (i vs j):
 	conditions <- colData(test_results)$condition 
@@ -99,13 +130,29 @@ if (length(unique(groups)) == 2) {
 		for  (j in (i+1) : nlevels(conditions) ) {
 			i_label <- levels(conditions)[i]
 			j_label <- levels(conditions)[j]
-			pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j_label,i_label))) # note: j,i => j-i
-			# building the table:
-			if(is.null(res)) res <- pairwise_results else  res <-  cbind(res, pairwise_results)
-			results_name <- c(results_name, paste(i_label,"_vs_", j_label, sep=""))
+			# Old version, 1/2023: pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j_label,i_label))) # note: j,i => j-i
+     		res2 <- results(test_results, contrast=c("condition",j_label,i_label)) # note: j,i => j-i
+      		
+      		# LFC shrink, needs to be after results function. (This step was previously inside DESeq function)
+      		resLFC <- lfcShrink(dds, res=res2, type="ashr")
+      		res2 <- resLFC
+      
+      		pairwise_results <- as.data.frame(res2)
+
+  			# building the table:
+       		if(is.null(res)) res <- pairwise_results else  res <-  cbind(res, pairwise_results)
+    
+      		results_name <- c(results_name, paste(i_label,"_vs_", j_label, sep=""))
+
+			# MA plot after LFC shrink:
+			plotMA(resLFC,alpha=p.value.cutoff,main=c("DESeq2 MA-plot with LFC shrink, FDR =", p.value.cutoff, " comparison = ", results_name[length(results_name)]),ylim=c(-2,2)) # , cex = 3
+
 		}
 	}
-	colnames(res) <- paste(colnames(res), rep(results_name,each=6), sep=".")
+
+	# "stat" column no longer there, 1/2023. Old version: colnames(res) <- paste(colnames(res), rep(results_name,each=6), sep=".")
+	number_of_cols_in_res <- length(pairwise_results)
+  	colnames(res) <- paste(colnames(res), rep(results_name,each=number_of_cols_in_res), sep=".")
 	min_padj <- apply(res[, grep("padj", colnames(res))], 1, min)
 	sig <- cbind(dat, res, min_padj=min_padj)
 	sig <- sig[ (sig$min_padj <=  p.value.cutoff), ]
@@ -113,9 +160,7 @@ if (length(unique(groups)) == 2) {
 	sig <- sig[ order(sig$min_padj), ] 
 	sig <- sig[, -grep("min_padj", colnames(sig))]
 	
-	# Open pdf file for output
-	pdf(file="deseq2_report.pdf") 
-	plotMA(dds,alpha=p.value.cutoff,main=c("DESeq2 MA-plot, FDR =", p.value.cutoff),ylim=c(-2,2))
+	# Summary into a txt file	
 	sink("summary.txt")
 	summary(res, alpha=p.value.cutoff)
 	sink()
@@ -138,16 +183,18 @@ if (length(unique(groups)) == 2) {
 } 
 
 
-# Create a template output table for plotting. If having N genes and 3 comparisons, this conversion results in a data matrix that has Nx3 rows 
+# Create a template output table for plotting. 
+# If having N genes and 3 comparisons, this conversion results in a data matrix that has Nx3 rows (cells?)
 output_table <- NULL
 colnames(res) <- gsub("\\..*$", "", colnames(res))
 for(i in grep("baseMean$", colnames(res))) {
+	# How many columns per comparison = col_size
 	col_size <- grep("padj", colnames(res))[1] - grep("baseMean", colnames(res))[1]
+	# Clue together the counts (=dat) and the i:th comparison from the results table (=res)
 	output_table <- rbind(output_table, cbind(dat, res[, (i:(i+col_size))]))
 }
 rownames(output_table) <- make.names(rep(rownames(res), length(grep("baseMean$", colnames(res)))), unique=T)
 output_table <- as.data.frame(output_table)
-
 
 # If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
 if (bed == "yes"){
@@ -169,6 +216,21 @@ if (bed == "yes"){
 	}
 }	
 
+
+# Combined MA-plot, when there are more than 2 groups. 
+if (length(unique(groups)) > 2){
+	# Define function for making MA-plot.
+	plotDE <- function(res)
+		plot(res$baseMean, res$log2FoldChange,
+			log="x", pch=20, cex=.25, col = ifelse( res$padj < p.value.cutoff, "blue", "black"),
+			main="MA plot with LFC shrink, all comparisons", xlab="mean counts", ylab="log2(fold change)") 
+	# Make MA-plot
+ 	plotDE(unique(output_table))
+ 	legend (x="topleft", legend=c("significant","not significant"), col=c("blue","black"), cex=1, pch=19)
+	abline(h = 0, col = "darkgreen", lwd = 2) 
+ 	# abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2) # 
+}
+
 # Make dispersion plot
 plotDispEsts(dds, main="Dispersion plot", cex=0.2)
 legend(x="topright", legend="fitted dispersion", col="red", cex=1, pch="-")
@@ -179,20 +241,9 @@ hist(output_table$pval, breaks=100, col="blue", border="slateblue", freq=FALSE, 
 hist(output_table$padj, breaks=100, col="red", border="slateblue", add=TRUE, freq=FALSE)
 abline(v=p.value.cutoff, lwd=2, lty=2, col="black")
 legend (x="topright", legend=c("p-values","adjusted p-values", "significance cutoff"), col=c("blue","red","black"), cex=1, pch=15)
+
+
 # Close pdf
-dev.off()
-
-# MA-plot when there are more than 2 groups. Define function for making MA-plot.
-# plotDE <- function(res)
-#	plot(res$baseMean, res$log2FoldChange,
-#			log="x", pch=20, cex=.25, col = ifelse( res$padj < p.value.cutoff, "red", "black"),
-#			main="MA plot", xlab="mean counts", ylab="log2(fold change)") 
-# Make MA-plot
-# pdf(file="ma-plot-deseq2.pdf")
-# plotDE(unique(output_table))
-# legend (x="topleft", legend=c("significant","not significant"), col=c("red","black"), cex=1, pch=19)
-# abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2)
-# dev.off()
-
+ dev.off()
 
 # EOF
