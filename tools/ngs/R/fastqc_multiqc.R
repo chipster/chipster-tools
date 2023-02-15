@@ -34,7 +34,7 @@ documentVersion("FastQC",version)
 version <- system(paste(multiqc.binary,"--version"),intern = TRUE)
 documentVersion("MultiQC",version)
 
-fastq.files <- system("ls *.fastq *.fastq.gz *.fq *.fq.qz",intern = TRUE)
+fastq.files <- system("ls *.fastq *.fastq.gz *.fq *.fq.gz",intern = TRUE)
 
 # commands
 fastqc.command <- paste(fastqc.binary,"-f fastq --noextract ", paste(fastq.files, collapse = " "))
