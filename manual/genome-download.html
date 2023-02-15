@@ -26,11 +26,11 @@
             </p>
             <li>Version [BDGP6.32]</li>
             <p>
-                Genome assembly version
+                Genome assembly version.
             </p>
             <li>Ensembl release [current]</li>
             <p>
-                Use <code>current</code>> to use the latest Ensembl release. If you want to download older 
+                Use <code>current</code> to use the latest Ensembl release. If you want to download older 
                 version, go the <a href="http://www.ensembl.org/Drosophila_melanogaster/Info/Index">species' Ensembl page</a>. 
                 The dropdown menu on the left lists all the different genome versions and their latest Ensembl releases. For example,
                 To download the BDGP6.22 assembly of Drosophila melanogaster, set this parameter to <code>release-98</code>.
@@ -41,12 +41,13 @@
                 The tool can be used in the two modes. The mode <code>Download</code> finds the requested genome from the server
                 and downloads it. The other mode <code>Check version</code> only checks that the requested
                 genome version is found from the server and then the tool finishes successfully or with an error accordingly. This 
-                is mostly useful for going external scripts that want to check the versions before starting the slow download.
+                is mostly useful for external scripts that want to check the versions before starting the slow download.
             </p>
             <li>Preferred assembly (Toplevel, Primary assembly) [Primary assembly]</li>
             <p>
                 Toplevel file includes chromsomes, regions not assembled into chromosomes and N padded haplotype/patch regions. 
-                Primary assembly contains all toplevel sequence regions excluding haplotypes and patches.
+                Primary assembly contains all toplevel sequence regions excluding haplotypes and patches. When Primary assembly is not available,  
+                the tool will automatically fall back to the Toplevel assembly.
             </p>
         </ul>
     </p>
@@ -66,6 +67,6 @@
 
     <h3>Reference</h3>
 
-    <p>This tools downloads data from <a href=https://www.ensembl.org/">Ensembl</a>. Please see their page of <a href="http://www.ensembl.org/info/about/publications.html">Scientific Publications</a> for how to cite.</p>
+    <p>This tools downloads data from <a href="https://www.ensembl.org/">Ensembl</a>. Please see their page of <a href="http://www.ensembl.org/info/about/publications.html">Scientific Publications</a> for how to cite.</p>
 
 </body>
