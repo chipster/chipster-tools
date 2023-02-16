@@ -115,7 +115,8 @@
 		<tool>acgh-segment.R</tool>
 		<tool>acgh-call-aberrations.R</tool>
 		<tool module="common">acgh-identify-regions.R</tool>
-		<tool module="common">acgh-add-cytobands.R</tool>
+		<!-- cytoband data was removed in genome update 2023-01-15-->
+		<!-- <tool module="common">acgh-add-cytobands.R</tool> -->
 		<tool module="common">acgh-count-overlapping-cnvs.R</tool>
 		<tool module="common">acgh-plot-frequencies.R</tool>
 		<tool module="common">cna-count-aberrations.R</tool>
