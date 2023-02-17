@@ -29,24 +29,23 @@
     <h3>Details</h3>
 
     <p>
-        The tool filters out spots with broken cells, and then it performs the three steps included in the SCTransform tool: normalization, scaling and finding variable
+        The tool filters out spots with damaged cells, and then performs the three steps included in the SCTransform tool: normalization, scaling and finding variable
         genes.
     </p>
     <p>
         As input, you can give the Seurat object from the tool "Seurat v4 -Setup and QC". 
-        In multiple sample analysis, the normalised Seurat objects can in the next step be combined using the tool "Seurat v4 -Combine multiple samples".
+        In multiple sample analysis, the normalised Seurat objects can be combined during the next step, when using the tool "Seurat v4 -Combine multiple samples".
     </p>
     <p>
         Compared to the basic Seurat normalization + scaling + variable gene finding,
-        the SCTransform workflow performs more effective normalization,
-        strongly removing technical effects from the data.
+        the SCTransform workflow performs more effective normalization, removing technical effects from the data.
         This allows more PCs to be selected in the PCA step, as the higher PCs are more likely to represent
         subtle, but biologically relevant, sources of heterogeneity instead of variation in sequencing depth.
     </p>
 
 
     <ol>
-        <li><b>Filtering</b> is performed in order to remove broken spots.
+        <li><b>Filtering</b> is performed in order to remove damaged spots.
             You can use the QC-plots.pdf to estimate the parameters for this step.</li>
         <br>
         <li><b>Expression values are normalized</b> using the SCTransform normalisation method, which uses
@@ -55,7 +54,7 @@
             The parameters for the model are estimated by pooling information across genes that are expressed at
             similar levels.
             This should remove the technical variation but preserve the biological heterogeneity,
-            and avoid over-fitting the model to the data.
+            while also avoiding overfitting the model to the data.
         </li>
         <br>
         <li><b>Genes which are highly variable across the cells are detected</b> using the Pearson residuals
@@ -78,7 +77,7 @@
 
     <ul>
 
-        <li>seurat_obj_sctransform.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+        <li>seurat_obj_sctransform.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not viewable in
             Chipster. </li>
     </ul>
 
