@@ -12,7 +12,7 @@
     <h3>Description</h3>
 
     <p>
-        This tool can be used to merge or integrate multiple Seurat objects for later joined analysis.
+        This tool can be used to merge or integrate multiple Seurat objects for downstream joint analysis.
 
     </p>
 
@@ -34,17 +34,16 @@
     <h4>Merge vs integration as the combining method</h4>
 
     <p>
-        The <b>"combining method</b> parameter determines which method to use for the combining.
-        By default, merge is used, but user can also choose to use integration.
+        The <b>"combining method"</b> parameter determines which method is used to combine.
+        By default, merge is used, but the user can also choose to use integration.
         Merge simply combines the objects into one.
     </p>
 
     <p>
-        The integration method uses Canonical correlation analysis (CCA) to identify common sources of variation between
-        the datasets.
-        After this, the tool identifies anchors, gives scores (=weights) to these anchors
-        and then uses these anchors to integrate the datasets.
-        The integration method should be used when there are strong batch effects present in the data as it can remove them.
+        The integration method uses Canonical correlation analysis (CCA) to identify common sources of variation across datasets.
+        After this, the tool identifies anchors, generates scores (=weights) for these anchors
+        and then uses the anchors to integrate the datasets.
+        The integration method should be used to remove strong batch effects present in the data.
         
 
     <h3>Further information</h3>
@@ -61,7 +60,7 @@
 
     <ul>
 
-        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not viewable in
             Chipster. </li>
     </ul>
 
