@@ -7,12 +7,13 @@
 
 # JTT, 06.02.2008, Sort samples
 # MG,  16.11.2010, modified to also generate a re-ordered phenodata file to reflect the re-ordered data
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Default parameters
 #column<-"group"
  
 # Loads libraries
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Loads data (which file to search)
 file<-c("normalized.tsv")

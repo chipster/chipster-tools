@@ -12,6 +12,7 @@
 
 # MG 5.11.2009: Accounting for changes in SparseM package regarding matrix.csr class
 # MK 29.08.2013: Bug preventing ploting of plots without any genes in the shaded region fixed. Added ability to analyse factorial categories and numeric categories
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # PARAMETER which.ontology [KEGG, GO] DEFAULT KEGG (Which ontology to use in the test?)
 # Parameter settings (default) for testing purposes
@@ -32,7 +33,7 @@ library(safe)
 library(multtest)
 
 # Reads the chiptype from phenodata table
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 if(phenodata$chiptype[1]!="cDNA" | phenodata$chiptype[1]!="Illumina") {
 	# Saves the chiptype into object lib
 	lib<-phenodata$chiptype[1]

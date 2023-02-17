@@ -9,6 +9,7 @@
 # JTT 02.10.2007: Boxplot
 # MG 15.09.2011: Updated colors and legend
 # MK 10.10.2013: User can choose which phenodata column is used for coloring bars
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Renaming variables
 w<-image.width
@@ -23,7 +24,7 @@ calls<-dat[,grep("flag", names(dat))]
 dat2<-dat[,grep("chip", names(dat))]
 
 # Loads phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 if(length(grep(column, colnames(phenodata))) == 0) {
 	stop("CHIPSTER-NOTE: You need to select phenodata column to run this analysis")
 }

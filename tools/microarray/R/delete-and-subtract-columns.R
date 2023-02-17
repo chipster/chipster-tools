@@ -8,6 +8,7 @@
 
 # Deletes columns from data and subtacts their (average values) from other columns which they are associated with
 # MK 13.08.2013
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Sanity checks
 if(column1=="EMPTY" || column2=="EMPTY") {
@@ -17,7 +18,7 @@ if(column1=="EMPTY" || column2=="EMPTY") {
 # Loads the data
 file<-c("normalized.tsv")
 dat<-read.table(file, sep="\t", header=T, row.names=1)
-phenodata <- read.table('phenodata.tsv', header=TRUE, sep='\t', as.is=TRUE)
+phenodata <- read.table('phenodata.tsv', header=TRUE, sep='\t', quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # identify matrices (chip, flag, segmented, ...) present in the data
 datnames <- colnames(dat)

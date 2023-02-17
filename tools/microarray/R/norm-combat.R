@@ -9,6 +9,7 @@
 # ComBat batch correction analysis
 # MK 25.06.2013
 # ML 24.08.2016 Fixed (batch as.numeric)
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Loading libraries
 library(sva)
@@ -19,7 +20,7 @@ dat <- read.table(file, header=T, sep="\t", row.names=1)
 
 # Loads Batch information
 file <- "phenodata.tsv";
-phenodata <- read.table(file, header=T, sep="\t")
+phenodata <- read.table(file, header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Merge batches to matrix
 if(batch1 == "EMPTY" & batch2 == "EMPTY" & batch3 == "EMPTY") { stop("CHIPSTER-NOTE: no batches defined"); }

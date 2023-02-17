@@ -17,6 +17,7 @@
 # MK, 05.02.2013, added paired tests for limma, t-test and Wilcox
 # ML, 14.10.2016, FC direction fixes by oheil + RankProd fixes
 # ML, 18.5.2017, Remove RankProd from production for fixing
+# OH,09.09.2021, additional parameters for phenodata read.table
 
 # PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered.)
 
@@ -43,7 +44,7 @@ calls <- dat[,grep("flag", names(dat))]
 dat2  <- as.matrix(dat[,grep("chip", names(dat))])
 
 # Test needs a parameter "groups" that specifies the grouping of the samples
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 groups<-phenodata[,pmatch(column,colnames(phenodata))]
 
 if(exists("pairing")) {

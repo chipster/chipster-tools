@@ -10,6 +10,7 @@
 # MK, 24.06.2013 created linear Modelling using limma
 # OH, 12.02.2015, getting columns from phenodata using which rather than grep in order to get exact matches
 # ML, 07.11.2016, simplify the outputs 
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Loads the libraries
 library(limma)
@@ -22,7 +23,7 @@ dat		<- read.table(file, header=T, sep="\t", row.names=1)
 dat2	<- dat[,grep("chip", names(dat))]
 
 # Loads phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Loads design-matrix
 design	<- read.table("design.tsv", header=T, sep="\t", row.names=1)

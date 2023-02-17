@@ -16,6 +16,7 @@
 # MG 03.05.2010: to exclude single gene genesets and added group labels in plots. Added more info columns in results table
 # MK 03.09.2013: updated to R.3.0 which does not support globaltest / geneplot functions
 # EK 05.11.2014: clarified the text.
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 #column<-"group"
 #pathway.or.genelist <-"KEGG"
@@ -23,7 +24,7 @@
 #number.of.groups.to.visualize <-16
 
 # Loading the libraries
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 if(phenodata$chiptype[1]!="cDNA" | phenodata$chiptype[1]!="Illumina") {
    # Saves the chiptype into object lib
    lib<-phenodata$chiptype[1]

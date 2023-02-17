@@ -7,6 +7,7 @@
 
 # JTT: 25.4.2008: Association analysis with normalized SNP data
 # MG, 14.10.2009: modified 
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Read in data
 dat<-read.table("normalized.tsv", header=T, sep="\t", row.names=1, comment.char = "")
@@ -16,7 +17,7 @@ calls<-dat[,grep("flag", names(dat))]
 dat2<-dat[,grep("chip", names(dat))]
 
 # Test needs a parameter "groups" that specifies the grouping of the samples
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 groups<-phenodata[,pmatch(column,colnames(phenodata))]
 
 # Select only samples in group 1 (controls)

@@ -9,6 +9,8 @@
 # Ilari Scheinin <firstname.lastname@gmail.com>
 # 2012-10-12
 
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
+
 # read data set 1
 file1 <- 'normalized_1.tsv'
 dat <- read.table(file1, header=TRUE, sep='\t', quote='', row.names=1, check.names=FALSE)
@@ -60,8 +62,8 @@ if (ncol(ratios) == ncol(calls))
   dat <- cbind(dat, calls)
 
 # process phenodata
-phenodata1 <- read.table('phenodata_1.tsv', header=TRUE, sep='\t', as.is=TRUE)
-phenodata2 <- read.table('phenodata_2.tsv', header=TRUE, sep='\t', as.is=TRUE)
+phenodata1 <- read.table('phenodata_1.tsv', header=TRUE, sep='\t', quote='', as.is=TRUE, check.names=FALSE, comment.char='')
+phenodata2 <- read.table('phenodata_2.tsv', header=TRUE, sep='\t', quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # fill in columns present only in one phenodata table
 for (col in setdiff(colnames(phenodata1), colnames(phenodata2)))

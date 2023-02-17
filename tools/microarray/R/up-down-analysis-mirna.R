@@ -14,6 +14,7 @@
 # MG, 25.2.2010
 # MG, 10.2.2011, now gets the gene symbols from the org.HS.eg.db package and adds rownames the output tables to allow use of Venn diagram
 # EK, 28.5.2014, updated descriptions
+# OH,09.09.2021, additional parameters for phenodata read.table
 
 # Loads the libraries
 library(RmiR)
@@ -22,8 +23,8 @@ library(org.Hs.eg.db)
 # Loads the normalized data and phenodata files
 data_1 <- read.table(file="normalized_mirna.tsv", header=T, sep="\t", row.names=1)
 data_2 <- read.table(file="normalized_gene.tsv", header=T, sep="\t", row.names=1)
-phenodata_1 <- read.table("phenodata_mirna.tsv", header=T, sep="\t")
-phenodata_2 <- read.table("phenodata_gene.tsv", header=T, sep="\t")
+phenodata_1 <- read.table("phenodata_mirna.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
+phenodata_2 <- read.table("phenodata_gene.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Figure out which is the miRNA data
 if (phenodata_1$chiptype[1] == "miRNA") {

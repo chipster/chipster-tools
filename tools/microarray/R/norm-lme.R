@@ -10,6 +10,8 @@
 # JTT: 12.7.2006 Crated linear Mixed Model
 # JTT: 19.10.2006: Modified to use nlme library
 # MK: 22.05.2013: Noise factor parameter added 
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
+
 
 #column.groups<-"group"
 #column.random<-"age"
@@ -26,7 +28,7 @@ calls<-dat[,grep("flag", names(dat))]
 dat2<-dat[,grep("chip", names(dat))]
 
 # Loads phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 
 # Test needs a parameter "groups" that specifies the grouping of the samples
 # and a parameter random that specifies the random effect such as day or technician

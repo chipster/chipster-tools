@@ -11,6 +11,7 @@
 
 # JTT 03.10.2007: Dendrogram
 # MG 25.11.2010: Increased the gene/sample limit to 20000
+# modified by OH,09.09.2021, additional parameters for phenodata read.table
 
 # Renaming variables
 w<-image.width
@@ -28,7 +29,7 @@ file<-c("normalized.tsv")
 dat<-read.table(file, header=T, sep="\t", row.names=1)
 
 # Loads the phenodata
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
+phenodata<-read.table("phenodata.tsv", header=T, sep="\t", quote='', as.is=TRUE, check.names=FALSE, comment.char='')
 groups<-phenodata[,pmatch(column,colnames(phenodata))]
 
 # Separates expression values and flags
