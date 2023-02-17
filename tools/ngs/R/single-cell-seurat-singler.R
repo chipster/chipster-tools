@@ -8,6 +8,7 @@
 # PARAMETER celldex.index: "CellDex reference to use" TYPE [HumanPrimaryCellAtlasData: "Human primary cell atlas", BlueprintEncodeData: "Blueprint ENCODE", MouseRNAseqData: "Mouse RNA-seq", ImmGenData: "Immunological Genome Project", DatabaseImmuneCellExpressionData: "Database of Immune Cell Expression", NovershternHematopoieticData: "Novershtern hematopoietic data", MonacoImmuneData: "Monaco Immune data"] DEFAULT MonacoImmuneData (Which CellDex reference to use for annotations.)
 # PARAMETER OPTIONAL point.size: "Point size in plot" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
 # RUNTIME R-4.2.0-single-cell
+# SLOTS 5
 
 
 
