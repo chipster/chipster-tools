@@ -27,6 +27,9 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   # these are now installed in bundle_aligners or not used anymore
   rm -rf STAR bowtie bowtie2 bwa hisat2 samtools tophat tophat2 tophat tophat-1.3.2.Linux_x86_64 tophat-2.1.1.Linux_x86_64
 
+  # these are now installed in bundle_binaries2
+  rm -rf enabrowsertools, enabrowsertools-1.5.4
+
   # make space for the new version
   mv FastQC fastqc-0.11.3
 

@@ -135,10 +135,7 @@ def check_version(species: str, release: str, version: str, ftp_version: str) ->
         raise RuntimeError("""
 
             Version of """ + species + """ in """ + release + """ is set to """ + version + """, but the version on the server is """ + ftp_version + """
-            - find out the last release which still contains """ + version + """ and replace """ + release + """ with it in genomes.tsv
-            - consider disabling the indexing of the old version
-            - add a new row for the new version
-            
+            - find out the last release which still contains """ + version + """ and replace """ + release + """ with it.
             """)
 
 def download(host: str, species: str, release: str, ftp_release: str) -> str:
