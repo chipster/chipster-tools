@@ -12,6 +12,7 @@
 # PARAMETER format: "Data to retrieve" TYPE [default: "Default format", fastq: "fastq reads", fasta: "fasta sequence", embl: "embl formatted sequence" ] DEFAULT default (Define the format for retrieved data. Note that you should use fastq format instead of default format for reads.)
 # PARAMETER index: "Download CRAM index" TYPE [yes: "Yes", no: "No" ] DEFAULT no ( Download CRAM index files with submitted CRAM files, if any. This selection is ignored if fastq format is selected.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
+# RUNTIME R-4.1.1
 
 # KM 21.03.2019
 
