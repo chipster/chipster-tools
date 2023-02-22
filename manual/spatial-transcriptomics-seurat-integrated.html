@@ -12,33 +12,33 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool integrates the spatial data with scRNA-seq data to predict the proportion of different celltypes in the Visium spots.
+		This tool integrates the spatial data with scRNA-seq data to predict the proportion of different cell types in the Visium spots.
 	</p>
 
 	<h3>Details</h3>
 
 	<p>
-		This tool enables the prediction of the underlying composition of cell types present in each of the spatial voxels in the Visium spots. 
-		It applies the 'anchor'-based integration to enable the probabilistic transfer of annotations from the scRNA-seq reference to the query set.
+		This tool enables the prediction of the underlying composition of cell types present in each of the Visium spot spatial voxels. 
+		It applies 'anchor'-based integration to enable the probabilistic transfer of annotations from the scRNA-seq reference to the query set.
 	</p>
 
 	<p>
-		As an input, give the Seurat object and the reference scRNA-seq dataset. 
-		The reference set should contain all the celltypes you expect to find in your spots, ideally from the exact same tissue.
+		Please provide both the Seurat object and the reference scRNA-seq dataset as inputs. 
+		The reference dataset should contain all the expected cell types, ideally from the exact same tissue.
 	</p>
 
 	<p>
 		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat tutorials
-			for integration with single-cell data</a>.
+			for integration with scRNA-seq data</a>.
 	</p>
 
 	<h3>Output</h3>
 
 	<ul>
 
-		<li>seurat_obj_integrated.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+		<li>seurat_obj_integrated.Robj: This is the Seurat R-object to pass to the next Seurat tool, or to import into R. However, this is not viewable in
 			Chipster. </li>
-		<li>reference_UMAP_plot.pdf: UMAP plot showing the reference data and the annotations. </li>
+		<li>reference_UMAP_plot.pdf: This is the UMAP plot showing the reference data and annotations. </li>
 	</ul>
 
 
