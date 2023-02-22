@@ -12,22 +12,22 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool is an alternative to the "Seurat v4 -Identify spatially variable genes based on clusters". It searches features that exhibit spatial patterning in the absence of pre-annotation. 
+		This tool is an alternative to the "Seurat v4 -Identify spatially variable genes based on clusters". It searches for features that exhibit spatial patterning in the absence of pre-annotation. 
     </p>
 	
 
 	<h3>Details</h3>
 
 	<p>
-        This tool identifies features exhibiting spatial patterning by using the method markvariogram for the selection. 
+        This tool identifies and selects features exhibiting spatial patterning by using the method markvariogram. 
 		Markvariogram models spatial transcriptomics data as a mark point process and computes a 'variogram', which identifies genes whose expression level is dependent on their spatial location. 
-		More specifically, this process calculates gamma(r) values measuring the dependence between two spots a certain “r” distance apart. We only compute these values for variable genes (where variation is calculated independently of spatial location).
-		As a result, a visualisation of the expression of the top 6 features is then drawn with the SpatialFeaturePlot.
+		Specifically, this process calculates gamma(r) values measuring the dependence between two spots that are a certain “r” distance apart. These values are only computed for variable genes (where variation is calculated independently of spatial location).
+		The expression levels of the top 6 features are displayed in the SpatialFeaturePlot.
 
     </p>
 
 	<p>
-		As input, you can give the Seurat object from the Seurat v4- PCA, clustering and visualisation. <br>
+		As input, you can provide the Seurat object generated using the tool: Seurat v4- PCA, clustering and visualisation. <br>
 	</p>
 
 	<p>
