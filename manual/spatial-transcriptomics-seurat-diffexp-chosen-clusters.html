@@ -12,7 +12,7 @@
     <h3>Description</h3>
 
     <p>
-        Find differentially expressed genes between two clusters that meet FindMarkers criteria.
+        Find differentially expressed genes (DEGs) between two clusters.
     </p>
 
     <h3>Parameters</h3>
@@ -35,6 +35,10 @@
     </p>
     <p>
         Select the test used for differential expression. Options for this are the Wilcoxon Rank Sum Test (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST. Wilcox is set as the default.
+    </p>
+    <p>
+        The FindMarkers() function finds DEGs for cell type identity classes (e.g., CD4 T cells, T Helper cells). This function has a parameter for min.pct, or genes found in a minimum percentage of spots in the two clusters, where the default is set to 0.1 or 10%.
+        The function also includes the logfc.threshold parameter, which is a threshold where genes need to be at least a certain X-fold difference between the two groups of cells; the default is set to 0.25 or 25%.
     </p>
     
     <h3>Output</h3>
