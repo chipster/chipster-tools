@@ -1,4 +1,4 @@
-# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference with RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files.)
+# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference with RSeQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files.)
 # INPUT reads1.fq: "Read 1 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL user_genome: "Genome to align against" TYPE GENERIC
