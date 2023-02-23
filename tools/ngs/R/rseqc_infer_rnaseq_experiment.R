@@ -5,6 +5,8 @@
 # INPUT OPTIONAL user_bed: "BED file" TYPE GENERIC
 # OUTPUT experiment_data.txt
 # OUTPUT OPTIONAL inner_distance.pdf
+# OUTPUT OPTIONAL alignment.sam
+# OUTPUT OPTIONAL bowtie2.log
 # PARAMETER organism: "Organism" TYPE [other: "Own reference files", "FILES genomes/bed .bed"] DEFAULT other (Choose one of the reference organisms or provide your own reference genome and BED file. It is also possible to use own BED file with one of the provided reference genomes.)
 # PARAMETER innerdistance: "Calculate inner distance" TYPE [yes, no] DEFAULT no (Calculate inner distance for paired reads.)
 # RUNTIME R-4.1.1
