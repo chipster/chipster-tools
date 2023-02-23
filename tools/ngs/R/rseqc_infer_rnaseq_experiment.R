@@ -3,7 +3,7 @@
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL user_genome: "Genome to align against" TYPE GENERIC
 # INPUT OPTIONAL user_bed: "BED file" TYPE GENERIC
-# OUTPUT experiment_data.txt
+# OUTPUT OPTIONAL experiment_data.txt
 # OUTPUT OPTIONAL inner_distance.pdf
 # OUTPUT OPTIONAL alignment.sam
 # OUTPUT OPTIONAL bowtie2.log
