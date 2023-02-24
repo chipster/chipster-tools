@@ -3,34 +3,46 @@
 <head><title></title></head>
 <body>
 
-<h2>Retrieve Data from ENA database</h2>
+<h2>Retrieve data from ENA database</h2>
 
 <h3>Description</h3>
 
 <p>
 This tool retrieves data from the <a href="https://www.ebi.ac.uk/ena">ENA database</a> based on the ID of a data set.
 The data retrieval and processing is done with the <a href="https://github.com/enasequence/enaBrowserTools">enaDataGet<a> 
-program.</p><p>
+program.
+</p>
+  
+<h3>Parameters</h3>  
 
+<ul>
+<li>ENA ID</li>
+<li>Data format</li> (Default, FASTQ, FASTA, EMBL formatted sequence) [Default]
+<li>Download index for CRAM files (No, Yes) [No]</li>
+<li>Create a log file (No, Yes) [No]</li>
+</ul>
 
 <h3>Details</h3>
 
 <p>
-To be able to use this tool, you must know the ENA ID of the data set you wish to retrieve. 
-As ENA stores data in many different levels and formats, the files retrieved form ENA may be 
+Please provide the ENA ID of the data set you wish to retrieve. 
+As ENA stores data in many different levels and formats, the files retrieved from ENA may be 
 in different formats depending on the data type that the ID refers to. In most cases you can 
-use default the format proposed by the enaDataGet program, but if you are retrieving NGS reads 
-data you should explicitly define the data format to be fastq, as the SRA format, that is the 
-default option, can't be used in Chipster.
-
+use default the format proposed by the enaDataGet program. However, <b>for NGS reads 
+data you should define the data format to be FASTQ</b>. 
+This is because for reads the enaDataGet program uses the SRA format as the default, and it is not usable in Chipster.
+</p>
+<p>
 As the ENA data sets can be very large, downloading the data can take a long time.
-</p><p>
-Sample entry names:
+</p>
+<p>
+Examples of output with different format options:
 <ul>
-<li><b>ERR925793</b> : will return cram formatted alignment file (16030_8#1.cram)
-<li><b>ERR925793 with fastq output format</b> : will return fastq formatted reads file (ERR925793_1.fastq.gz)
-<li><b>AH001094</b>: will return embl formatted sequence file (AH001094.dat)
-<li><b>AH001094 with fasta output format</b>: will return fasta formatted sequence file (AH001094.dat)
+<li><b>SRR16313683 with FASTQ output format</b>: will return FASTQ formatted reads file (SRR16313683.fastq.gz)</li>
+<li><b>ERR925793</b>: will return CRAM formatted alignment file (16030_8#1.cram)</li>
+<li><b>ERR925793 with FASTQ output format</b>: will return FASTQ formatted reads file (ERR925793_1.fastq.gz)</li>
+<li><b>AH001094</b>: will return EMBL formatted sequence file (AH001094.dat)</li>
+<li><b>AH001094 with FASTA output format</b>: will return FASTA formatted sequence file (AH001094.fasta)</li>
 </ul>
 
 
