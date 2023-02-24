@@ -12,29 +12,33 @@
     <h3>Description</h3>
 
     <p>
-        Find differentially expressed genes between  pre-annotated anatomical regions within the tissue.
+        Find differentially expressed genes (DEGs) between two clusters.
     </p>
 
     <h3>Parameters</h3>
     <ul>
-        <li>Cluster to identify markers for [1]</li>
+        <li>Cluster to identify markers [1]</li>
         <li>Cluster for comparison [2]</li>
-        <li>Test used in the differential expression [wilcox]
+        <li>Test used for differential expression [wilcox]
     </ul>
 
 
     <h3>Details</h3>
 
     <p>
-        As inputs, you can give the Seurat object from the Seurat v4- PCA, clustering and visualisation. <br>
+        As an input, you can provide the Seurat object generated using the tool: Seurat v4- PCA, clustering and visualisation. <br>
     </p>
 
     <p>
-        Select the clusters you want to find spatially variable genes. As an example, the differential expression is performed between cluster 1 and 2.
-        The first cluster is used as the identity class to define markers for and the other as the identity class for comparison.
+        Select the clusters in which you would like to identify spatially variable genes. As an example, differential expression is performed between clusters 1 and 2.
+        The first cluster is used as the identity class to define markers and the second cluster is used as the identity class for comparison.
     </p>
     <p>
-        Select the test used for the differential expression. Options for this are the Wilcoxon Rank sum test and the hurdle model tailored to scRNA-seq analysis called MAST. By default wilcox is used.
+        Select the test used for differential expression. Options for this are the Wilcoxon Rank Sum Test (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST. Wilcox is set as the default.
+    </p>
+    <p>
+        The FindMarkers() function finds DEGs between clusters. This function has a parameter for min.pct, or genes found in a minimum percentage of spots in the two clusters, where the default is set to 0.1 or 10%.
+        The function also includes the logfc.threshold parameter, which is a threshold where genes need to be at least a certain X-fold difference between the two groups of spots; the default is set to 0.25 or 25%.
     </p>
     
     <h3>Output</h3>

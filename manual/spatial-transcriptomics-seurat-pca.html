@@ -12,13 +12,13 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool performs principal component analysis (PCA) on the highly variable genes, selected using
+		This tool performs principal component analysis (PCA) on the highly variable genes, which were previously selected using
 		the tool <b>Seurat v4 -Filter spots, normalize with SCTransform and detect high-variance genes</b>.
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
-		<li>Number of PCs to compute [30]</li>
+		<li>Number of principal components (PCs) to compute [30]</li>
 		<li>Print loadings in a file [no]</li>
 		<li>Number of genes to list in the loadings file [5]</li>
 	</ul>
@@ -27,26 +27,25 @@
 	<h3>Details</h3>
 
 	<p>
-		As input, give a Seurat R-object (Robj).
+		Provide a Seurat R-object (Robj) as input.
 	</p>
 
 	<p>
-		If you have low number of spots in your data, you might get an error message. Try lowering the number of
-		principal components to compute.
+		If you have few spots in your data, you may get an error message. Try lowering the number of
+		PCs to compute.
 	</p>
 
 	<p>
-		This tool produces the following cluster plots.
+		This tool produces the following cluster plots:
 		<ul>
-			<li>Dimplot showing the results of the dimensional reduction on a 2D scatter plot where each point is a spot and it's positioned based on the spot embeddings determined by the reduction technique.
+			<li>Dimplot, shows the results of the dimensional reduction on a 2D scatterplot where each point is a spot positioned based on the spot embeddings determined by the reduction technique.
 			</li>
-			<li>SpatialDimPlot showing the resulting clusters overlaid on the tissue image.</li>
+			<li>SpatialDimPlot, shows the resulting clusters overlaid on the tissue image.</li>
 		</ul>
 	</p>
 
 	<p>
-		You can also request the tool to output a txt file which lists the top N (default = 5)
-		genes associated with high/low loadings for the first 5 PCs in the <b>PCAloadings.txt</b> file.
+		You can also use the tool to output a *.txt file. This file will list the top genes (default = 5) associated with high or low loadings for the first 5 PCs in the <b>PCAloadings.txt</b> file.
 	</p>
 
 	<p>
@@ -57,11 +56,11 @@
 
 	<ul>
 
-		<li>seurat_obj_pca_clust.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+		<li>seurat_obj_pca_clust.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not viewable in
 			Chipster. </li>
-		<li>UMAP_plot.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of
+		<li>UMAP_plot.pdf: A plot presenting the PCs. Last plots are meant to aid in the selection of
 			the PCs for the downstream analysis. </li>
-		<li>PCAloadings.txt: If requested, the loadings (=genes responsible) of principal components </li>
+		<li>PCAloadings.txt: If selected, the loadings (=genes responsible) of PCs</li>
 	</ul>
 
 
