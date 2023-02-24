@@ -1,4 +1,4 @@
-# TOOL enafetch.R: "Retrieve data from ENA database" (Retrieve data from the ENA database based on the entry ID or name.)
+# TOOL enafetch.R: "Retrieve data from ENA database" (Retrieve data from the ENA database based on the entry ID or name. ENA contains high throughput sequencing data from many sources, including the Sequence Read Archive, SRA.)
 # OUTPUT OPTIONAL enafetch.log
 # OUTPUT OPTIONAL {...}.gz: "gzipped files"
 # OUTPUT OPTIONAL {...}.fasta: "fasta files"
