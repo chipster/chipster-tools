@@ -52,3 +52,5 @@ EOF
 
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/fastqc-0.11.9 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/fastqc $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/enabrowsertools $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/enaBrowserTools-7075a896f822e3ea3d3fac8bc10bcfeeb2506685 $JOB_NAME $BUILD_NUMBER
