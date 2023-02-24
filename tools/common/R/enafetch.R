@@ -1,4 +1,4 @@
-# TOOL enafetch.R: "Retrieve datasets from ENA database" (Retrieve data from the ENA database based on the entry ID or name.)
+# TOOL enafetch.R: "Retrieve data from ENA database" (Retrieve data from the European Nucleotide Archive, ENA. ENA contains high throughput sequencing data from many sources, including the Sequence Read Archive, SRA.)
 # OUTPUT OPTIONAL enafetch.log
 # OUTPUT OPTIONAL {...}.gz: "gzipped files"
 # OUTPUT OPTIONAL {...}.fasta: "fasta files"
@@ -8,10 +8,11 @@
 # OUTPUT OPTIONAL {...}.bam: "bam files"
 # OUTPUT OPTIONAL {...}.cram: "cram files"
 # OUTPUT OPTIONAL {...}.crai: "cram files"
-# PARAMETER entry_id: "ENA ID" TYPE STRING DEFAULT "entry" (Give the ID of the ENA dataset to be retrieved. For example: SRR000021) 
-# PARAMETER format: "Data to retrieve" TYPE [default: "Default format", fastq: "fastq reads", fasta: "fasta sequence", embl: "embl formatted sequence" ] DEFAULT default (Define the format for retrieved data. Note that you should use fastq format instead of default format for reads.)
-# PARAMETER index: "Download CRAM index" TYPE [yes: "Yes", no: "No" ] DEFAULT no ( Download CRAM index files with submitted CRAM files, if any. This selection is ignored if fastq format is selected.)
-# PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
+# PARAMETER entry_id: "ENA ID" TYPE STRING DEFAULT "entry" (Give the ID of the ENA dataset to be retrieved. For example SRR000021) 
+# PARAMETER format: "Data format" TYPE [default: "Default", fastq: "FASTQ", fasta: "FASTA", embl: "EMBL formatted sequence" ] DEFAULT default (Define the format for retrieved data. Please use the FASTQ format for reads.)
+# PARAMETER index: "Download CRAM index" TYPE [yes: "Yes", no: "No" ] DEFAULT no (Download CRAM index files with submitted CRAM files, if any. This selection is ignored if FASTQ format is selected.)
+# PARAMETER OPTIONAL save_log: "Create a log file" TYPE [yes: Yes, no: No] DEFAULT no (Should a log file be produced.)
+# RUNTIME R-4.1.1
 
 # KM 21.03.2019
 

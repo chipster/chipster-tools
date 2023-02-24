@@ -5,11 +5,13 @@
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
 # PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
+# PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (By default, this tool lists all markers. When this parameter is set to TRUE, only genes with positive log2 fold change are listed in the result file.)
 # RUNTIME R-4.2.0-single-cell
 
 
 # 2022-07-29 IH
 # 2022-10-20 ML Add output for spatially_variable_genes.tsv
+# 2023-02-23 LG Add only.pos parameter
 
 library(Seurat)
 library(ggplot2)
@@ -24,7 +26,7 @@ seurat_obj = PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
 
 # Differential expression
-de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test)
+de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test, only.pos = FALSE)
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")

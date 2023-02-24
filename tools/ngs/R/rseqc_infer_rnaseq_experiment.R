@@ -1,12 +1,14 @@
-# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference with RseQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files.)
+# TOOL rseqc_infer_rnaseq_experiment.R: "RNA-seq strandedness inference with RSeQC" (Given FASTQ files, this tool aligns a subset of the reads against a reference genome. Alignments are then compared to reference annotation to infer strandedness. Please see the manual for help with interpreting the results. You can use reference genomes and annotation provided in Chipster or use your own files.)
 # INPUT reads1.fq: "Read 1 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL reads2.fq: "Read 2 FASTQ" TYPE GENERIC
 # INPUT OPTIONAL user_genome: "Genome to align against" TYPE GENERIC
 # INPUT OPTIONAL user_bed: "BED file" TYPE GENERIC
 # OUTPUT experiment_data.txt
 # OUTPUT OPTIONAL inner_distance.pdf
-# PARAMETER organism: "Organism" TYPE [other: "Own reference files", "FILES genomes/bed .bed"] DEFAULT other (Choose one of the reference organisms or provide your own reference genome and BED file. It is also possible to use own BED file with one of the provided reference genomes.)
+# PARAMETER organism: "Organism" TYPE [other: "Own reference files", "FILES genomes/indexes/bowtie2 .fa"] DEFAULT other (Choose one of the reference organisms or provide your own reference genome and BED file. It is also possible to use own BED file with one of the provided reference genomes.)
 # PARAMETER innerdistance: "Calculate inner distance" TYPE [yes, no] DEFAULT no (Calculate inner distance for paired reads.)
+
+# the old RSeQC doesn't work in new Ubuntu
 # RUNTIME R-4.1.1
 
 # Functions 
@@ -35,7 +37,7 @@ if (pe) {
 # Was genome file provided
 if (fileOk("user_genome")) {
   if (fileOk("user_bed")) {
-    bowtie.index.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2-build"))
+    bowtie.index.binary <- c(file.path(chipster.tools.path,"bowtie2-2.2.9","bowtie2-build"))
     command.indexing <- paste(bowtie.index.binary,"-f","user_genome","user_genome")
     system(command.indexing)
   } else {
@@ -43,7 +45,7 @@ if (fileOk("user_genome")) {
   }
 }
 # Align against reference genome
-bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
+bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2-2.2.9","bowtie2"))
 
 if (organism != "other") {
   bowtie.genome <- c(file.path(chipster.tools.path,"genomes","indexes","bowtie2",organism))
@@ -64,7 +66,10 @@ bowtie.command <- paste(bowtie.command,"-S alignment.sam 2>> bowtie2.log'")
 system(bowtie.command)
 
 if (organism != "other") {
-  bed <- file.path(chipster.tools.path,"genomes","bed",paste(organism,".bed",sep = "",collapse = ""))
+  # bed file is named after the gtf file and includes the Ensembl release: Mus_musculus.GRCm38.102
+  # Bowtie2 index is named after the fasta file without the Ensembl release: Mus_musculus.GRCm38
+  # search the bed file with the Bowtie2 index name
+  bed <- Sys.glob(file.path(chipster.tools.path,"genomes","bed",paste(organism,"*.bed",sep = "",collapse = "")))
 } else {
   # Only BED provided
   if (fileNotOk("user_genome")) {

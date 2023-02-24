@@ -32,6 +32,7 @@
 
 	<category name="Utilities" color="#d59f45">
 		<tool>ngs-create-experiment.R</tool>
+		<tool module="common">enafetch.R</tool>
 		<tool>ngs-filter-annotations.R</tool>
 		<tool>ngs-filter-results-column.R</tool>
 		<tool>filter-bed-value.R</tool>
@@ -78,9 +79,8 @@
 		<tool>bedtools-fastafrombed.R</tool>		
 		<!-- 
 		<tool module="common">srafetch.R</tool>
-	    <tool module="common">srabamfetch.R</tool>
+	    	<tool module="common">srabamfetch.R</tool>
 		 -->
-		<tool module="common">enafetch.R</tool>
 		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
@@ -139,11 +139,9 @@
 		<tool>bowtie-paired-end.R</tool>
 		<tool>bowtie-with-index-building.R</tool>
 		<tool>bowtie-paired-end-with-index-building.R</tool>
-		<tool>tophat2.R</tool>
-		<tool>tophat2-single-end.R</tool>
-	    	<tool>tophat2-with-index-building.R</tool>
+		<tool>tophat2-with-index-building.R</tool>
 		<tool>tophat2-single-end-with-index-building.R</tool>
-	    	<tool>bwa.R</tool>
+		<tool>bwa.R</tool>
 		<tool>bwa-paired-end.R</tool>
 		<tool>bwa-with-index-building.R</tool>
 		<tool>bwa-paired-end-with-index-building.R</tool>
@@ -341,7 +339,8 @@
 		<tool>cna-segment.R</tool>
 		<tool>cna-call-aberrations.R</tool>
 		<tool module="common">acgh-identify-regions.R</tool>
-		<tool module="common">acgh-add-cytobands.R</tool>
+		<!-- cytoband data was removed in genome update 2023-01-15-->
+		<!-- <tool module="common">acgh-add-cytobands.R</tool> -->
 		<tool module="common">acgh-count-overlapping-cnvs.R</tool>
 		<tool module="common">acgh-plot-frequencies.R</tool>
 		<tool module="common">cna-count-aberrations.R</tool>

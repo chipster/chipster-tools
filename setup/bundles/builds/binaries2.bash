@@ -36,6 +36,16 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   cd $TOOLS_PATH
   ln -s fastqc-0.11.9 fastqc
 
+  # Enabrowsertools
+
+  cd $TMPDIR_PATH
+  # download this specific commit, because the latest release version 1.5.4 from 2020 tries to use deprecated ssl v1
+  wget https://github.com/enasequence/enaBrowserTools/archive/7075a896f822e3ea3d3fac8bc10bcfeeb2506685.tar.gz
+  tar xzf 7075a896f822e3ea3d3fac8bc10bcfeeb2506685.tar.gz -C ${TOOLS_PATH}/
+  cd ${TOOLS_PATH}
+  ln -s enaBrowserTools-7075a896f822e3ea3d3fac8bc10bcfeeb2506685 enabrowsertools
+
+
   ls -lah $TOOLS_PATH/
   
 EOF
