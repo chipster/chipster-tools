@@ -32,6 +32,7 @@
 
 	<category name="Utilities" color="#d59f45">
 		<tool>ngs-create-experiment.R</tool>
+		<tool module="common">enafetch.R</tool>
 		<tool>ngs-filter-annotations.R</tool>
 		<tool>ngs-filter-results-column.R</tool>
 		<tool>filter-bed-value.R</tool>
@@ -78,9 +79,8 @@
 		<tool>bedtools-fastafrombed.R</tool>		
 		<!-- 
 		<tool module="common">srafetch.R</tool>
-	    <tool module="common">srabamfetch.R</tool>
+	    	<tool module="common">srabamfetch.R</tool>
 		 -->
-		<tool module="common">enafetch.R</tool>
 		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>

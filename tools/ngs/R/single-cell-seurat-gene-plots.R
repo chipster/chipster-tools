@@ -7,6 +7,7 @@
 # OUTPUT OPTIONAL average_expressions.tsv 
 # OUTPUT OPTIONAL percentage_of_cells_expressing.tsv
 # PARAMETER OPTIONAL biomarker: "Gene name\(s\)" TYPE STRING DEFAULT "MS4A1, LYZ" (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
+# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE and UMAP plots.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
@@ -44,9 +45,13 @@ if (exists("data.combined") ){
 	seurat_obj <- data.combined
 }
 
-# Commented out, as in case of SCTransformed data, for plots to work, this needs to be "SCT"
-## In case some other type of array is set:
-## DefaultAssay(seurat_obj) <- "RNA"
+
+# In case some other type of assay is set:
+if (normalisation.method == "SCT"){
+  DefaultAssay(seurat_obj) <- "SCT"
+}else{
+ DefaultAssay(seurat_obj) <- "RNA"
+}
 
 # Use genes text file if provided, else the gene parameter is used
 if (fileOk("genes.txt",0)) {
@@ -66,7 +71,7 @@ if (sum(is.na((match(biomarker, all.genes)))) > 1) {
   stop(paste('CHIPSTER-NOTE: ', "The genes you requested were not found in this dataset:", not.found))
   }
 
-#continue even if one gene is missing
+# continue even if one gene is missing
 if (!all(!is.na(match(biomarker, all.genes)))) { 
   not.found <- biomarker[is.na(match(biomarker, all.genes))==TRUE]
   print(paste("Continuing the visualization without the one gene not found: ", not.found))
@@ -110,6 +115,7 @@ if (output_aver_expr == "T") {
   ave.expressions <- round(ave.expressions[,-1], digits=3) # remove gene name columns and round the numbers
   # Write to table
   write.table(ave.expressions, file = "average_expressions.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
 
 }
 
