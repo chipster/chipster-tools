@@ -12,10 +12,10 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool filters out cells (potential empties, multiplets and broken cells) and normalizes gene expression values. It then detects highly variable genes and 
-		regresses out technical sources of variation. You can also choose to regress out the differences caused by the cell cycle stage.
+		This tool filters out both empty and damaged cells, as well as multiplets and then normalizes gene expression values. It then detects highly variable genes and 
+		regresses out any technical sources of variation. You can also choose to regress out the differences caused by the cell cycle stage.
 		<br>
-		<b>Note</b> that you can alternatively use the tool <a
+		Alternatively, you can use the tool <a
 			href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-sctransform.html">Seurat -SCTransform: Filter cells,
 			normalize expression, and detect variable genes</a>
 	</p>
@@ -23,7 +23,7 @@
 	<h3>Parameters</h3>
 	<p>
 	<ul>
-		<li>Filter out cells which have less than this many genes expressed [200]</li>
+		<li>Filter out cells which have fewer than this many genes expressed [200]</li>
 		<li>Filter out cells which have more than this many genes expressed [2500]</li>
 		<li>Filter out cells which have higher mitochondrial transcript percentage [5]</li>
 		<li>Perform global scaling normalization [yes]</li>
@@ -37,51 +37,54 @@
 	<h3>Details</h3>
 
 	<p>
-		The tool performs the following four steps. As an input, give the Seurat R-object (Robj) from the Seurat setup tool.
+		The tool performs the following four steps. Please provide the Seurat R-object (Robj) as the input, which was generated using the Seurat setup tool.
 	</p>
 
 
 	<ol>
-		<li><b>Filtering</b> is performed in order to remove empties, multiplets and broken cells.
-			You can use the QC-plots.pdf from the <b>Seurat- Setup and QC</b> tool to estimate the the upper limit for
+		<li><b>Filtering</b> is performed to remove empty and damaged cells, as well as multiplets.
+			You can use the QC-plots.pdf generated using the <b>Seurat- Setup and QC</b> tool to estimate the upper limit of
 			the number of expressed genes per cell and mitochondrial transcript percentage.</li>
 		<br>
-		<li><b>Expression values are normalized</b> across the cells using global scaling normalization: the UMI counts of a gene in a
+		<li><b>Expression values are normalized</b> across the cells using global scaling normalization: the unique molecular identifier (UMI) counts of a gene in a
 			cell is divided by the total number of UMIs in that cell, the ratio is multiplied by a scale
 			factor (10,000 by default) and log-transformed.
 		</li>
 		<br>
-		<li><b>Genes which show high variation in expression across the cells are detected</b> using VST (Variance Stablizing Transformation). Briefly,
-		the mean and variance are computed for each gene using the unnormalized UMI counts and both mean and variance are log10 transformed.
-		A curve is fit to predict the variance of each gene as a function of its mean expression. 
+		<li><b>Genes which show high variation in expression across the cells are detected</b> using Variance Stablizing Transformation (VST). 
+		The mean and variance are computed for each gene using the unnormalized UMI counts and then they are both log10 transformed.
+		A curve is fitted to predict the variance of each gene as a function of its mean expression. 
 		The counts are standardized by deducting from the expression value of gene X in cell Y the mean expression of gene X, and dividing this by the predicted standard deviation of gene X.
 		The impact of technical outliers is reduced by setting the max of standardized counts to the square root of number of cells.
 		Finally, the variance of the standardized values across all cells is computed for each gene.
 		Genes are then ranked based on their standardized variance, and the top 2000 genes are used for PCA and clustering.
 		</li>
 		<br>
-		<li><b>Uninteresting sources of variation in the expression values are regressed out</b> in order to improve
-			dimensionality reduction and clustering later on.
+		<li><b>Uninteresting sources of variation in the expression values are regressed out</b> to improve
+			dimensionality reduction and clustering downstream.
 			Seurat implements a basic regression by constructing linear models to predict gene expression based on
-			user-defined variables. This tool regresses on <i>the number of detected molecules per cell</i> as well as the <i>percentage of
+			user-defined variables. This tool regresses out <i>the number of detected molecules per cell</i> as well as the <i>percentage of
 				mitochondrial transcript content</i>.
 
 			<br><br>You can also choose to regress out <i>cell cycle differences</i>.
-			By choosing <i> all differences</i> the tool removes all signal associated with cell cycle.
-			In some cases this method can negatively impact downstream analysis,
+			By choosing <i> all differences</i>, the tool removes all signal associated with the cell cycle.
+			In some cases, this method can negatively impact downstream analysis,
 			particularly in differentiating processes, where stem cells are quiescent and differentiated cells are
 			proliferating (or vice versa).
-			Alternatively you can <i>regress out the difference between the G2M and S phase scores</i>.
+			Alternatively, you can <i>regress out the difference between the G2M and S phase scores</i>.
 			This means that signals separating non-cycling cells and cycling cells will be maintained, but differences
-			in cell cycle phase amongst proliferating cells (which are often uninteresting), will be regressed out of
-			the data. For more information, check out the <a
+			in cell cycle phase amongst proliferating cells (which are often uninteresting) will be regressed out of
+			the data. For more information, please refer to the <a
 				href="https://satijalab.org/seurat/cell_cycle_vignette.html#assign-cell-cycle-scores">Seurat vignette on cell cycle scoring and regression</a>.
 			<br>
 			In the current Seurat version, the list of cell cycle markers (from <a
-				href="http://science.sciencemag.org/content/352/6282/189"> Tirosh et al, 2015 </a>) is loaded with
-			Seurat;
+				href="http://science.sciencemag.org/content/352/6282/189"> Tirosh <i>et al.,</i> 2015</a>) is loaded with
+			Seurat:
+	<p>
 			<br>
-			s.genes
+			<br>
+			s.genes:
+			</br>
 			<br>
 			"MCM5" "PCNA" "TYMS" "FEN1" "MCM2"
 			"MCM4" "RRM1" "UNG" "GINS2" "MCM6"
@@ -93,7 +96,9 @@
 			"BLM" "CASP8AP2" "USP1" "CLSPN" "POLA1"
 			"CHAF1B" "BRIP1" "E2F8"
 			<br>
-			g2m.genes
+			<br>
+			g2m.genes:
+			</br>
 			<br>
 			"HMGB2" "CDK1" "NUSAP1" "UBE2C" "BIRC5"
 			"TPX2" "TOP2A" "NDC80" "CKS2" "NUF2"
@@ -106,26 +111,26 @@
 			"KIF23" "HMMR" "AURKA" "PSRC1" "ANLN"
 			"LBR" "CKAP5" "CENPE" "CTCF" "NEK2"
 			"G2E3" "GAS2L3" "CBX5" "CENPA"
-
+	</p>
 		</li>
 	</ol>
 
 
 	<p>
-		For more details, please check the <a href="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8">publication by Stuart et al</a> and the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
+		For more details, please refer to the <a href="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8">publication by Stuart <i>et al.</i></a> and the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
 	</p>
 
 	<h3>Output</h3>
 
 	<ul>
 
-		<li>seurat_obj_preprocess.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+		<li>seurat_obj_preprocess.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not viewable in
 			Chipster. </li>
-		<li>Dispersion.pdf: The variation vs average expression plots (in the second plot, the 10 most highly variable
+		<li>Dispersion.pdf: The variation vs. average expression plots (in the second plot, the 10 most highly variable
 			genes are labeled).
-			If you selected to regress out cell cycle differences, PCA plots on cell cycle genes before and after the
-			regression
-			will be added in the end of this pdf. Also lists the number of highly variable genes. </li>
+			If you selected to regress out cell cycle differences, PCA plots of cell cycle genes (before and after the
+			regression)
+			will be added to the end of the PDF. Also, it lists the number of highly variable genes.</li>
 	</ul>
 
 
