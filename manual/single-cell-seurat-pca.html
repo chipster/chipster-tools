@@ -12,14 +12,14 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool performs principal component analysis (PCA) on the highly variable genes across the single cells,
+		This tool performs principal component analysis (PCA) on the highly variable genes across the single cells
 		selected using
 		the tool <b>Filtering, regression and detection of variable genes</b>.
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
-		<li>Number of principal components to plot as heatmaps [12]</li>
+		<li>Number of principal components (PCs) to plot as heatmaps [12]</li>
 		<li>Number of PCs to compute [20]</li>
 		<li>Print loadings in a file [no]</li>
 		<li>Number of genes to list in the loadings file [5]</li>
@@ -29,78 +29,75 @@
 	<h3>Details</h3>
 
 	<p>
-		As input, give the Seurat R-object (Robj) from the tool Seurat -Filtering, regression and detection of variable
+		Please input the Seurat R-object (Robj) that was generated using the tool Seurat -Filtering, regression and detection of variable
 		genes.
 	</p>
 
 	<p>
-		If you have low number of cells in your data, you might get an error message. Try lowering the number of
-		principal components to compute.
+		If you have a low number of cells in your data, you may receive an error message. In this case, try lowering the number of
+		PCs to compute.
 	</p>
 
 	<p>
-		To overcome the extensive technical noise in any single gene for scRNA-seq data,
-		Seurat clusters cells based on their PCA scores,
-		with each PC essentially representing a 'metagene' that combines information across a correlated gene set.
-		Determining how many PCs to include downstream is therefore an important step, but it can be challenging.
-		The result file <b>PCAplots.pdf</b> contains several plots which can help to explore the primary sources of
-		heterogeneity in the dataset and to decide
-		which principal components to include in the downstream analysis.
+		To overcome extensive technical noise in any single gene for scRNA-seq data,
+		Seurat clusters cells based on their PCA scores. It does so by having 
+		each PC represent a 'metagene' combining information across a correlated gene set.
+		Therefore, even though determining the number of PCs to include is an important step, it can also be challenging.
+		The result file <b>PCAplots.pdf</b> contains several plots showing the primary sources of
+		heterogeneity in the dataset, as well as provides a basis for deciding
+		the number of PCs to include downstream.
 	</p>
 
 	<p>
-		In the first plot, the top genes associated with the first two principal components are shown.
-		Second plot shows the PCA plot: principal components 1 and 2 for the cells in the dataset, and the third plot
-		is a heatmap focusing on principal component 1.
+		In the first plot, the top genes associated with the first two PCs are shown.
+		The second plot shows the PCA plot: PCs 1 and 2 represent the cells in the dataset, and the third plot
+		is a heatmap focusing on PC 1.
 	</p>
 	<p>
-		In <b>heatmap </b>, both cells and genes are sorted by their principal component scores: both extremes are
+		In the <b>heatmap</b>, both cells and genes are sorted by their PC scores: both extremes are
 		shown.
-		Rows (y-axis) represent the extreme genes, and columns (x-axis) are the extreme cells.
-		They are "extreme" in their PCA scores, so those genes that basically best determine that particular principal
-		component,
-		i.e. the separation between the cells. Similarly for the cells: these cells "furthest away"
-		(in the yellow or purple end) from each other on this spectrum of PC1. Purple: positive correlation, yellow:
+		Rows represent 'extreme' genes, and columns are 'extreme' cells.
+		They are 'extreme' in their PCA scores, so they are the genes which best determine the particular PC,
+		i.e., the separation between cells. Similarly, cells that are 'furthest away'
+		(in the yellow or purple end) from each other are on the PC 1 spectrum. Purple: positive correlation, yellow:
 		negative correlation.
-		The heatmap might be handy for checking whether the genes reveal what that particular PC might be all about:
-		for example, if the genes seem to be related to cell-cycle phase, one might want to consider regressing out that
-		effect, or at least it's good to acknowledge this.
+		The heatmap may be useful to cross-check with the PC.
+		For example, if the genes seem to be related to the cell cycle phase, one may want to consider regressing out that
+		effect, or at least it is good to acknowledge this.
 	</p>
 
 	<p>
-		Next plots can be used to decide which principal components to use. By default, 12 heatmaps are plotted,
-		focusing on the 12 first principal components, in which both cells and genes are sorted by their principal
-		component scores.
-		You can change the number of heatmaps to plot. Explore especially the PCs which you choose for downstream
+		Next, plots can be used to decide which PCs to use. By default, 12 heatmaps are plotted,
+		focusing on the first 12 PCs, in which both cells and genes are sorted by their PC scores.
+		You can change the number of heatmaps to plot. Please explore the PCs for downstream
 		analysis:
 		heatmaps can display the 'extremes' across both genes and cells,
-		and can be useful to exclude PCs that may be driven primarily by ribosomal/mitochondrial or cell cycle genes.
+		and it can be useful to exclude PCs that may be driven primarily by ribosomal, mitochondrial, or cell cycle genes.
 	</p>
 
 	<p>
-		The last plot shows the standard deviations of the principal components.
-		Here, the <b>cutoff</b> is where there is an elbow in the graph.
+		The last plot shows the standard deviations (SDs) of the PCs.
+		The <b>cutoff</b> can be identified by the 'elbow' in the graph.
 	</p>
 
 	<p>
-		You can also request the tool to output a txt file which lists the top N (default = 5)
-		genes associated with high/low loadings for the first 5 PCs in the <b>PCAloadings.txt</b> file.
+		You can also use the tool to output a *.txt file listing the top N (default = 5)
+		genes associated with high and low loadings for the first 5 PCs in the <b>PCAloadings.txt</b> file.
 	</p>
 
 	<p>
-		For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
+		For more details, please refer to the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
 	</p>
 
 	<h3>Output</h3>
 
 	<ul>
 
-		<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+		<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not viewable in
 			Chipster. </li>
 		<!--  <li>PCAgenes.txt: Top genes associated with first principal components</li>-->
-		<li>PCAplots.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of
-			the PCs for the downstream analysis. </li>
-		<li>PCAloadings.txt: If requested, the loadings (=genes responsible) of principal components </li>
+		<li>PCAplots.pdf: Plots presenting the PCs. The last plots are meant to aid in the selection of PCs for downstream analysis. </li>
+		<li>PCAloadings.txt: If selected, the loadings (=genes responsible) of the PCs.</li>
 	</ul>
 
 
