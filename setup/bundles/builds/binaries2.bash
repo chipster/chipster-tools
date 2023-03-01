@@ -45,6 +45,15 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   cd ${TOOLS_PATH}
   ln -s enaBrowserTools-7075a896f822e3ea3d3fac8bc10bcfeeb2506685 enabrowsertools
 
+  # Ghostscript, AGPL
+
+  cd $TMPDIR_PATH
+  wget https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs1000/ghostscript-10.0.0-linux-x86_64.tgz
+  tar xf ghostscript-10.0.0-linux-x86_64.tgz -C ${TOOLS_PATH}/
+  cd ${TOOLS_PATH}
+  mv ghostscript-10.0.0-linux-x86_64 ghostscript-10.0.0
+  cd ${TOOLS_PATH}/ghostscript-10.0.0
+  ln -s gs-1000-linux-x86_64 gs
 
   ls -lah $TOOLS_PATH/
   
@@ -54,3 +63,4 @@ bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/fastqc-0.11.9 $JOB_N
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/fastqc $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/enabrowsertools $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/enaBrowserTools-7075a896f822e3ea3d3fac8bc10bcfeeb2506685 $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/ghostscript-10.0.0 $JOB_NAME $BUILD_NUMBER
