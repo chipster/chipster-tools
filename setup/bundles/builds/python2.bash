@@ -25,6 +25,8 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
   # installed in bundle_python-3.8.11
   rm -rf $TOOLS_PATH/multiqc
+
+  mv $TOOLS_PATH/rseqc $TOOLS_PATH/rseqc-2.6.4
   
   ls -lah $TOOLS_PATH/
 
@@ -33,7 +35,7 @@ EOF
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/Python-2.7.12 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/htseq $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/macs $JOB_NAME $BUILD_NUMBER
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/rseqc $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/rseqc-2.6.4 $JOB_NAME $BUILD_NUMBER
 
 exit $?
 
