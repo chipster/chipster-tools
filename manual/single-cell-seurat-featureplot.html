@@ -8,9 +8,8 @@
 <h3>Description</h3>
 
 <p>
-Color single cells on a UMAP dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc. 
-As input the user gives the Seurat R-object (.Robj) after the clustering step, 
-and selects the feature of interest.
+Color single cells on a UMAP dimensional reduction plot according to a feature, i.e., gene expression, PC scores, number of genes detected, etc. 
+You can input the Seurat R-object (.Robj) after the clustering step and select the feature of interest.
 </p>
  
  <h3>Parameters</h3>
@@ -22,23 +21,22 @@ and selects the feature of interest.
  <h3>Details</h3>
  
 <p>
-The resulting UMAP dimension reduction plot colors the single cells according the selected features 
-available in Seurat objects, such as
+The resulting UMAP dimensional reduction plot colors the single cells according to the selected features 
+available in the Seurat objects, such as the
  percentage of mitochondrial genes (percent.mito), number of unique molecular identifiers (nUMI),
- number of genes expressed (nGene) or effect on the first principal components (PCA1 and PCA2).
- The plot can be used to visually estimate how the features may effect on the clustering results.
- <br>Size of the dots representing the cells can be altered.
+ number of genes expressed (nGene), or effect on principal components 1 and 2 (PC 1 and PC 2).
+ The plot can be used to visually estimate how the features may impact the clustering results. Size of the dots representing the cells can be altered.
 </p>
 
 
 <p>
-For more details, please check the <a href="https://www.rdocumentation.org/packages/Seurat/versions/2.3.4/topics/FeaturePlot">the original tool documentation</a>.
+For more details, please refer to <a href="https://www.rdocumentation.org/packages/Seurat/versions/2.3.4/topics/FeaturePlot">the original tool documentation</a>.
 </p>
 
 <h3>Output</h3>
 
 <ul>
-<li>UMAPplot.pdf: UMAP plot colored based on the selected feature </li>
+<li>UMAPplot.pdf: UMAP plot colored based on the selected feature</li>
 </ul>
 
 
