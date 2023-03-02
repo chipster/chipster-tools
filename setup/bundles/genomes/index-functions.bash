@@ -130,9 +130,11 @@ function download_results {
     echo "copy gtf and fasta"
     cp $filter_genomes/$genome_dir/$gtf $job_dir/genomes/gtf/
     cp $filter_genomes/$genome_dir/$fasta $job_dir/genomes/fasta/
+    cp $filter_genomes/$genome_dir/$fasta.fai $job_dir/genomes/fasta/
     
     add_file_to_package genomes/gtf $gtf $gtf_basename
     add_file_to_package genomes/fasta $fasta $fasta_basename
+    add_file_to_package genomes/fasta $fasta.fai $fasta_basename
     
     chipster --quiet session open $session_name
     

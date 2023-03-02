@@ -25,6 +25,9 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER root - <<EOF
   apt-get install -y python3-dev
   apt-get install -y libssl-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev
   apt-get install -y libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev libffi-dev uuid-dev
+
+  # for RSeQC
+  apt-get install -y gcc libz-dev
 EOF
   
 bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
@@ -49,7 +52,12 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   bin/pip3 install multiqc
   mkdir ${TOOLS_PATH}/multiqc
   ln -s ../python-3.8.11/bin/multiqc ${TOOLS_PATH}/multiqc/multiqc
+
+  bin/pip3 install RSeQC==5.0.1
+  ln -s python-3.8.11/bin/ ${TOOLS_PATH}/rseqc
+
 EOF
 
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/python-3.8.11 $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/multiqc $JOB_NAME $BUILD_NUMBER
+bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/rseqc $JOB_NAME $BUILD_NUMBER
