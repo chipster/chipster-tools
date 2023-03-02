@@ -12,7 +12,7 @@
     <h3>Description</h3>
 
     <p>
-        This tool can be used to annotate clustered scRNAseq data by comparing it to
+        This tool can be used to annotate clustered scRNA-seq data by comparing it to
         the CellDex annotation datasets.
 
     </p>
@@ -27,20 +27,20 @@
     <h3>Details</h3>
 
     <p>
-        SingleR is an automatic annotation method for single-cell RNA sequencing (scRNAseq)
-        data (Aran et al. 2019).
-        Given a reference dataset of samples (single-cell or bulk) with known labels,
+        SingleR is an automatic annotation method for single-cell RNA sequencing (scRNA-seq)
+        data (Aran <i>et al.,</i> 2019).
+        Given a reference dataset of samples (scRNA-seq or bulk) with known labels,
         it labels new cells from a test dataset based on similarity to the reference.
         The CellDex package provides access to several reference datasets
         (mostly derived from bulk RNA-seq or microarray data) through dedicated retrieval functions.
-        User can select the CellDex package to be used as reference.
+        You can select the CellDex package to be used as the reference.
 
-        As inputs, give a Seurat object which includes the clustering information. <br>
+       Please input the Seurat object including clustering information. <br>
 
     </p>
 
     <p>
-        For more details, please check:
+        For more details, please refer to the following:
     <ul>
         <li> <a href="https://bioconductor.org/packages/3.14/bioc/html/SingleR.html"></a>
             SingleR package documentation</a></li>
@@ -59,11 +59,10 @@
 
     <ul>
 
-        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object including the annotations in the metadata field.
-            Not viewable Chipster, but can be exported and examined in R. </li>
-        <li>singleR_annotation_plots.pdf: Plots showing annotation diagnostics </li>
-        <li>annotations_main.tsv: Main level annotations table </li>
-        <li>annotations_fine.tsv: Fine level annotations table </li>
+        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object including the annotations in the metadata field. While it is not viewable in Chipster, it can be exported and examined in R. </li>
+        <li>singleR_annotation_plots.pdf: Plots showing annotation diagnostics</li>
+        <li>annotations_main.tsv: Main level annotations table</li>
+        <li>annotations_fine.tsv: Fine level annotations table</li>
 
     </ul>
 
