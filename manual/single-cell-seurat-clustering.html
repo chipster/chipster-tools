@@ -12,59 +12,59 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool clusters cells and visualizes the result in tSNE and UMAp plots.
+		This tool clusters cells and visualizes the results using t-SNE and UMAP plots.
 
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
-		<li>Number of principal components to use [10]</li>
+		<li>Number of principal components (PCs) to use [10]</li>
 		<li>Resolution for granularity [0.5]</li>
-		<li>Perplexity, expected number of neighbors for tSNE plot [30]</li>
-		<li>Point size in tSNE and UMAP plots [30]</li>
-		<li>Give a list of average expression in each cluster [no]</li>
+		<li>Perplexity, expected number of neighbors in t-SNE plot [30]</li>
+		<li>Point size in t-SNE and UMAP plots [30]</li>
+		<li>Provide a list of average expressions in each cluster [no]</li>
 	</ul>
 
 	<h3>Details</h3>
 
 	<p>
 		Cells are clustered using principal components (PCs) rather than genes.
-		Therefore you need to give as input the Seurat R-object from the Seurat PCA -tool.
-		That tool also produces PC heatmaps and the elbow plot, which help you to decide the number of PCs to use.
+		You need to input the Seurat R-object that was generated using the Seurat PCA -tool.
+		That tool also produced PC heatmaps and an elbow plot, which help you to decide the number of PCs to use.
 		<br><br>
-		If you have low number of cells in your data, try lowering the perplexity parameter (the expected number of
+		If you have a low number of cells in your data, try lowering the perplexity parameter (the expected number of
 		neighbours).
 		<br><br>
 		Graph-based clustering is performed using the Seurat function FindClusters, which first constructs a KNN graph
 		using the Euclidean distance in PCA space,
 		and then refines the edge weights between any two cells based on the shared overlap in their local neighborhoods
-		(Jaccards distance).
-		It then cuts the graph in clusters using the Louvain algorithm which optimizes the standard modularity function
+		(Jaccard's distance).
+		It then divides the graph into clusters using the Louvain algorithm which optimizes the standard modularity function
 		(please see the links below for more information).
 		<br><br>
 		The <b>resolution</b> parameter sets the 'granularity',
-		with increased values leading to more clusters.
-		It has been found that setting this parameter between 0.6-1.2 typically returns good results for single cell
+		where increased values leads to a higher number of clusters.
+		It has been found that this parameter, when set between 0.6-1.2, typically returns interpretable results for single cell
 		datasets
-		of around 3K cells. Optimal resolution often increases for larger datasets
-		-use a value above (below) 1.0 if you want to obtain a larger (smaller) number of communities.
+		of around 3k cells. Optimal resolution often increases for larger datasets.
+		Use a value above 1.0 if you would like to obtain a larger number of communities, and below 1.0 if you would like a smaller number of communities.
 		<br>
 	</p>
 
 	<p>
-		In order to visualize the clusters, non-linear dimensional reduction is performed using tSNE and UMAP on the
+		To visualize the clusters, non-linear dimensional reduction is performed using t-SNE and UMAP on the
 		same PCs as
-		used for the graph-based clustering, and the plots in <b>clusterPlots.pdf</b> are then colored by the clustering
+		used for the graph-based clustering. The plots in <b>clusterPlots.pdf</b> are then colored by the clustering
 		results.
-		Cells belonging to the same cluster should co-localize on the tSNE plot, because tSNE aims to place cells, which
+		Cells belonging to the same cluster should co-localize on the t-SNE plot because t-SNE aims to place cells which
 		have a similar
-		local neighborhood in high-dimensional space, together in low-dimensional space. The perplexity parameter is a
-		guess
-		about the number of close neighbors each cell has, so it allows you to balance attention between local and
+		local neighborhood in a high-dimensional space together, yet in a low-dimensional space. The perplexity parameter is an
+		estimate
+		about the number of close neighbors each cell has, so it allows you to balance attention between the local and
 		global aspects of the data (<a href="https://distill.pub/2016/misread-tsne/">read more</a>).
-		If you have low number of cells, try lowering the perplexity value. Unlike tSNE, UMAP also considers the global
+		If you have a low number of cells, try lowering the perplexity value. Unlike t-SNE, UMAP also considers the global
 		aspects of the data.
-		Later on, you can choose whether you want to plot tSNE or UMAP plots.
+		Downstream, you can choose whether you would like to plot t-SNE or UMAP plots.
 	</p>
 
 	<p>
@@ -74,13 +74,12 @@
 	</p>
 
 	<p>
-		For more details, please check:<br>
-		The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
-		<br><br>
-		The Seurat clustering approach was heavily inspired by the manuscripts
+		For more details, please refer to the <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
+		<br>
+		The Seurat clustering approach was predominantly inspired by the manuscripts
 		<a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq,
 			Xu and Su, Bioinformatics, 2015</a> and
-		<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a> which applied
+		<a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine <i>et al.,</i> Cell, 2015</a> which applied
 		graph-based clustering approaches to scRNA-seq data and CyTOF data, respectively.<br>
 		<br><br>
 	</p>
@@ -88,10 +87,10 @@
 	<h3>Output</h3>
 
 	<ul>
-		<li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not
+		<li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not
 			viewable in
 			Chipster. </li>
-		<li>clusterPlot.pdf: Cluster visualization in tSNE and UMAP plots</li>
+		<li>clusterPlot.pdf: Cluster visualization in t-SNE and UMAP plots</li>
 		<li>aver_expr_in_clusters.tsv: A table for "average expression" for each gene in each cluster</li>
 	</ul>
 
