@@ -18,7 +18,7 @@ do
     -p release=$RELEASE \
     -p site=$SITE \
     -p action=check_version
-done < ~/jobs/$JOB_NAME/files/$GENOMES
+done < ~/git/chipster-tools/setup/bundles/genomes/$GENOMES
 
 chipster session delete download-genomes-version-check-$BUILD_NUMBER
 
@@ -56,8 +56,8 @@ do
    chipster --quiet session delete $session_name
    popd
    
-done < ~/jobs/$JOB_NAME/files/$GENOMES
+done < ~/git/chipster-tools/setup/bundles/genomes/$GENOMES
 
-cp ~/jobs/$JOB_NAME/files/$GENOMES genomes.txt
+cp ~/git/chipster-tools/setup/bundles/genomes/$GENOMES genomes.txt
 
 echo "finished downloads at $(date --iso-8601=seconds)"
