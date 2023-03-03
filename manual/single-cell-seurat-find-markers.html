@@ -7,7 +7,7 @@
 
 <body>
 
-	<h2>Seurat -Find differentially expressed genes between clusters</h2>
+	<h2>Seurat -Find differentially expressed genes (DEGs) between clusters</h2>
 
 	<h3>Description</h3>
 
@@ -38,7 +38,7 @@
 		If the <b>Find all markers</b> parameter is set to FALSE (default), the Seurat function FindMarkers is used to identify
 		positive and negative marker genes for the clusters of interest,
 		determined by the user.
-		Specifically, differentially expressed genes are tested between the cluster of interest and all the other cells.
+		Specifically, differentially expressed genes (DEGs) are tested between the cluster of interest and all the other cells.
 		You can also compare the cluster of interest to another cluster(s) by typing
 		a number in the parameter field.
 		When comparing to a group of clusters, separate the clusters by using a comma (,).
@@ -77,7 +77,7 @@
 		The <b>markers.tsv</b> results file contains marker genes and associated statistics. Please note that by default, only
 		genes with positive log2-fold change are listed in the results file:
 	<ul>
-		<li><b>p-val</b> = p-values for the differentially expressed genes (DEGs) (larger the p-value -> higher the
+		<li><b>p-val</b> = p-values for the DEGs (larger the p-value -> higher the
 			likelihood that the gene is in the list is just by chance) </li>
 		<li><b>avg_log2FC</b> = average log2-fold change (how much higher or lower the expression of this gene is in
 			the particular
