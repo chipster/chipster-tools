@@ -7,19 +7,25 @@
 
 <body>
 
-	<h2>Seurat -Find conserved cluster markers and DE genes in multiple samples </h2>
+	<h2>Seurat -Find conserved cluster markers and differentially expressed genes (DEGs) in multiple samples </h2>
 
 	<h3>Description</h3>
 
 	<p>
-		For a given cluster this tool gives you
+		For a given cluster, this tool provides the following information:
 	<ul>
-		<li> the cell type markers that are conserved across all the conditions (conserved_markers.tsv)</li>
-		<li> differentially expressed genes between the conditions (de-list.tsv) </li>
-		<li> OR, in case of more than 2 samples, differentially expressed genes of each sample compared to all the other
-			samples (de-list_samplenameVsAllOthers.tsv) </li>
+		<li> cell type markers conserved across all conditions (conserved_markers.tsv)</li>
+		<li> differentially expressed genes (DEGs) between conditions (de-list.tsv) </li>
 	</ul>
-	Conditions/samples are determined in the Setup tool with the Sample or Group name parameter.
+	OR, in case of more than two samples:
+	
+	<br><br>
+	<ul>
+		<li> DEGs of each sample compared to all other
+			samples (de-list_samplenameVsAllOthers.tsv) </li>
+	
+	</ul>
+	Both conditions and samples are determined using the Setup tool when using the Sample or Group name parameter.
 	</p>
 
 	<h3>Parameters</h3>
@@ -27,9 +33,9 @@
 		<li>Name of the cluster [3]</li>
 		<li>Return only positive marker genes [TRUE]</li>
 		<li>Fold change threshold for conserved markers in log2 scale [0.25]</li>
-		<li>Fold change threshold for differentially expressed genes in log2 scale [0.25]</li>
+		<li>Fold change threshold for DEGs in log2 scale [0.25]</li>
 		<li>p-value cutoff for conserved markers [0.05]</li>
-		<li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
+		<li>Adjusted p-value cutoff for DEGs [0.05]</li>
 		<li>Minimum number of cells in one of the groups for conserved markers [3]</li>
 	</ul>
 
@@ -37,59 +43,58 @@
 	<h3>Details</h3>
 
 	<p>
-		As inputs, give the combined Seurat object. <br>
+		Please provide the combined Seurat object. <br>
 	</p>
 
 	<p>
-		Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter
+		Select the cluster you would like to inspect by setting its name in the parameter field. As an example, the parameter
 		is set to cluster "3".
 	</p>
 
 	<p>
-		You can filter both the conserved marker genes and the differentially expressed genes using the parameters. By
+		You can filter both the conserved marker genes and the DEGs using the parameters. By
 		default, only genes with
-		adjusted p-value < 0.05 are listed in the result table and only positive markers are kept. Note that Seurat
-			adjusts p-values using the rather conserved Bonferroni method for multiple testing correction. </p>
-			<p>You can choose to include in the analysis only genes whose average fold change is higher than a selected
+		adjusted p-values of less than 0.05 are listed in the results table. Additionally, only positive markers are kept. Please note that Seurat
+			adjusts p-values using the Bonferroni method for multiple testing correction. </p>
+			<p>In the analysis, you can opt to include only genes whose average log fold change is higher than a selected
 				value. This prefiltering speeds up the analysis
 				and narrows down the result list.
 			</p>
-			<p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the two
+			<p>The result table <b>de-list.tsv</b> contains genes which are differentially expressed (DE) between the two
 				conditions in the selected cluster. In case of more than 2 samples, there will be as many
 				files as there are samples, named <b>de-list_samplenamevsAllOthers.tsv</b>. The columns in these files
-				include
+				include:
 			<ul>
-				<li><b>p_val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
-					likelihood that the gene is in the list just be chance) </li>
-				<li><b>p_val_adj</b> = adjusted p-value. This value is corrected for multiple testing:
-					when we test thousands of genes, we can get some statistically significantly
-					differentially expressed genes just by chance. There are different methods to correct for this,
-					Seurat uses the Bonferroni method. When filtering the table and reporting your results,
-					use this value.</li>
+				<li><b>p_val</b> = p-values for the DEGs (if the p-value is larger, there is a greater likelihood that
+				 the gene is in the list just by chance) </li>
+				<li><b>p_val_adj</b> = adjusted p-value. This value is corrected using multiple testing correction:
+					when we test thousands of genes, we may identify some DEGs just by chance. There are different methods to correct for this,
+					and Seurat specifically uses the Bonferroni method. When filtering the table and reporting your results,
+					please use these values.</li>
 				<li><b>avg_logFC</b> = average log2 fold change (how much higher or lower the expression of this gene is
-					in the chosen cluster between the conditions </li>
-				<li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene.
-					Note, that numbering is based on alphabets: earlier in the alphabets -> 1, the other one -> 2.
-					So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in alphabets.
+					in the chosen cluster between conditions) </li>
+				<li><b>pct.1</b> = the percentage of the cells in condition 1 show some expression for this gene.
+					Please note: numbering is based on alphabetical order: earlier in the alphabets -> 1, the other one -> 2.
+					So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in the English alphabet.
 				</li>
-				<li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene
+				<li><b>pct.2</b> = the percentage of cells in condition 2 show some expression for this gene
 				</li>
 			</ul>
 	</p>
 
 	<p>
 		<b>conserved_markers.tsv</b> contains a ranked list of conserved marker genes for the chosen cluster
-		(= genes that show specific expression in this particular cell type/cluster, regardless of the treatment).
-		This file has as many column groups as there are samples in the data.
-		In addition to the columns listed above, this table contains also the following columns:
+		(= genes that show specific expression in this particular cell type or cluster, regardless of the treatment).
+		This file has as many column groups as number of samples in the data.
+		In addition to the columns listed above, this table contains the following columns:
 	<ul>
-		<li> max_pval = maximum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
-		<li> min_pval = minimum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
+		<li> max_pval = maximum unadjusted p-value of the samples</li>
+		<li> min_pval = minimum unadjusted p-value of the samples</li>
 	</ul>
 	</p>
 
 	<p>
-		For more details, please check the <a
+		For more details, please refer to <a
 			href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
 			for multiple sample analysis</a>.
 	</p>
@@ -97,9 +102,13 @@
 	<h3>Output</h3>
 
 	<ul>
-		<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
-		<li>de-list.tsv: Differentially expressed genes between the conditions </li>
-		<li>OR several de-list_samplenameVsAllOthers.tsv files: Differentially expressed genes between each sample and
+		<li>conserved_markers.tsv: Conserved cell type markers across conditions </li>
+		<li>de-list.tsv: DEGs between conditions </li>
+	</ul>
+	OR
+	
+	<ul>
+		<li>several de-list_samplenameVsAllOthers.tsv files: DEGs between each sample and
 			all other samples</li>
 	</ul>
 
