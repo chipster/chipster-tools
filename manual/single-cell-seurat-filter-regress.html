@@ -54,10 +54,7 @@
 		<li><b>Genes which show high variation in expression across the cells are detected</b> using Variance Stablizing Transformation (VST). 
 		The mean and variance are computed for each gene using the unnormalized UMI counts and then they are both log10 transformed.
 		A curve is fitted to predict the variance of each gene as a function of its mean expression. 
-		The counts are standardized by deducting from the expression value of gene X in cell Y the mean expression of gene X, and dividing this by the predicted standard deviation of gene X.
-		The impact of technical outliers is reduced by setting the max of standardized counts to the square root of number of cells.
-		Finally, the variance of the standardized values across all cells is computed for each gene.
-		Genes are then ranked based on their standardized variance, and the top 2000 genes are used for PCA and clustering.
+		For more information, please refer to <a href='https://www.cell.com/action/showPdf?pii=S0092-8674(19)30559-8'>this publication</a>.
 		</li>
 		<br>
 		<li><b>Uninteresting sources of variation in the expression values are regressed out</b> to improve
@@ -80,7 +77,7 @@
 			In the current Seurat version, the list of cell cycle markers (from <a
 				href="http://science.sciencemag.org/content/352/6282/189"> Tirosh <i>et al.,</i> 2015</a>) is loaded with
 			Seurat:
-	<p>
+	
 			<br>
 			<br>
 			s.genes:
@@ -111,7 +108,7 @@
 			"KIF23" "HMMR" "AURKA" "PSRC1" "ANLN"
 			"LBR" "CKAP5" "CENPE" "CTCF" "NEK2"
 			"G2E3" "GAS2L3" "CBX5" "CENPA"
-	</p>
+	
 		</li>
 	</ol>
 
