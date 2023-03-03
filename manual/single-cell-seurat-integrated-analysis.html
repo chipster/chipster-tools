@@ -12,9 +12,9 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool performs integrated analysis of multiple samples: it clusters the cells and visualizes the clusters
+		This tool performs integrated analysis of multiple samples. It clusters the cells and visualizes the clusters
 		using
-		UMAP, tSNE or PCA. As an input, give the Seurat object generated with "Seurat v3 -Combine multiple samples"
+		UMAP, t-SNE, or PCA. You can input the Seurat object generated using the "Seurat v3 -Combine multiple samples"
 		tool.
 	</p>
 
@@ -22,44 +22,43 @@
 	<ul>
 		<li>Number of PCs to use [20]</li>
 		<li>Resolution for granularity [0.5]</li>
-		<li>Visualisation of clusters with tSNE, UMAP or PCA [UMAP]</li>
+		<li>Visualisation of clusters with t-SNE, UMAP, or PCA [UMAP]</li>
 		<li>Point size in cluster plot [0.5]</li>
-		<li>Give a list of average expression in each cluster [no]</li>
+		<li>Provide a list of the average expression levels found in each cluster [no]</li>
 	</ul>
 
 	<h3>Details</h3>
 
 	<p>
-		This tool clusters the cells by constructing a Shared Nearest Neighbor (SNN) graph. It first determines the K
+		This tool clusters the cells by constructing a Shared Nearest Neighbor (SNN) plot. It first determines the K
 		(20) nearest neighbors of each cell and then uses this KNN graph to construct the SNN graph by calculating the
 		neighborhood overlap (Jaccard index)
-		between every cell and its 20 nearest neighbors. It performs the clustering in the principal component (PC)
-		space and allows the user to define how many PCs to use.
+		between each cell and its 20 nearest neighbors. It performs the clustering in the principal component (PC)
+		space. You can select the number of PCs.
 	</p>
 
 	<p>
-		The resolution parameter sets the 'granularity' of the clustering,
+		The resolution parameter sets the 'granularity' of the clustering
 		with increased values leading to a greater number of clusters.
-		Setting this parameter between 0.6-1.2 typically returns good results for single cell datasets of around 3K
+		Setting this parameter between 0.6-1.2 typically returns interpretable results for single cell datasets of around 3K
 		cells.
-		Optimal resolution often increases for larger datasets -use a value above (below) 1.0 if you want to obtain a
-		larger
-		(smaller) number of communities.
+		Optimal resolution often increases for larger datasets. Use a value above (or below) 1.0 if you would like to obtain a
+		larger (or smaller) number of communities.
 	</p>
 
 	<p>
-		Clustering results are visualized with either UMAP, tSNE or PCA plot, and you can decide the point size for a
-		cell in these plots.
+		Clustering results are visualized with either a UMAP, t-SNE or PCA plot, where you can select the plot point size for the
+		cells.
 	</p>
 
 	<p>
 		The tool can also return a table with expression for an 'average' single cell in each cluster.
-		Read more about the <a
+		Please refer to this: <a
 			href="https://rdrr.io/github/satijalab/seurat/man/AverageExpression.html">AverageExpression function</a>.
 	</p>
 
 	<p>
-		For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
+		For more details, please refer to the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
 			for multiple sample analysis</a>.
 	</p>
 
@@ -67,9 +66,9 @@
 
 	<ul>
 
-		<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+		<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but not viewable in
 			Chipster. </li>
-		<li>integrated_plot.pdf: Cluster visualization with UMAP or tSNE. </li>
+		<li>integrated_plot.pdf: Cluster visualization with UMAP or t-SNE. </li>
 		<li>aver_expr_in_clusters.tsv: A table for "average expression" for each gene in each cluster</li>
 	</ul>
 
