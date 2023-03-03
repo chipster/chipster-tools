@@ -32,14 +32,13 @@
 
 	<p>
 		If the <b>Find all markers</b> parameter is set to TRUE, the Seurat function FindAllMarkers is used to list
-		the markers for all clusters. In this case, each cluster is compared to all the other clusters.
-		This parameter overwrites the selection of cluster numbers in the two parameters below.
-		This option outputs a large table containing all the markers.
+		the markers for all clusters, where each cluster is compared to all other clusters. This option outputs a large table containing all the markers.
+		Please note: When the parameter is set to TRUE, the parameters "Cluster of interest" and "Cluster to compare with" are not applicable, so any input in those fields becomes irrelevant.
 
 		If the <b>Find all markers</b> parameter is set to FALSE (default), the Seurat function FindMarkers is used to identify
 		positive and negative marker genes for the clusters of interest,
 		determined by the user.
-		By default, differentially expressed genes are tested between the cluster of interest and all the other cells.
+		Specifically, differentially expressed genes are tested between the cluster of interest and all the other cells.
 		You can also compare the cluster of interest to another cluster(s) by typing
 		a number in the parameter field.
 		When comparing to a group of clusters, separate the clusters by using a comma (,).
