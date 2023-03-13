@@ -8,7 +8,7 @@
 <h3>Description</h3>
 
 <p>
-This tool gives you a subset of the data: only those cells in a user defined cluster.
+This tool subsets the data by only extracting cells belonging to a user-defined cluster.
 
 </p>
  
@@ -21,15 +21,15 @@ This tool gives you a subset of the data: only those cells in a user defined clu
  <h3>Details</h3>
   
 <p>
-As inputs, give the Seurat object created AFTER clustering step: either after
+Please input the Seurat object created <i>after</i> one of the two clustering steps listed below:
 <ul>
- 	<li><b>Seurat v3 -Clustering and detection of cluster marker genes</b> tool,</li>
- 	<li>or after <b>Seurat v3 -Integrated analysis of two samples</b> tool in case of two sample analysis. </li>
+ 	<li><b>Seurat v3 -Clustering and detection of cluster marker genes</b> tool</li>
+ 	<li><b>Seurat v3 -Integrated analysis of two samples</b> tool (used for two sample analysis)</li>
 </ul>
 </p>
 
 <p>
-Select the cluster you want to inspect by setting its name in the parameter field. 
+Select the cluster you would like to inspect by setting its name in the parameter field. 
 As an example, the parameter is set to cluster "3".
 </p>
 
@@ -37,24 +37,24 @@ As an example, the parameter is set to cluster "3".
 You can continue analysing this subsetted R-object by running the Seurat tools again;
 in the case you started with a single sample 
 (subsetting after <b>Seurat v3 -Clustering and detection of cluster marker genes</b> tool),
-you can start with the filtering and finding variable genes, and continue from there.
+you can start by filtering and finding variable genes, and continue from there.
 <br>
 If you started with a combined Seurat object of two samples
 (subsetting after <b>Seurat v3 -Integrated analysis of two samples</b> tool),
-you can continue by running the after <b>Seurat v3 -Integrated analysis of two samples</b> tool again.
+you can continue by running the same tool again.
 </p>
 
 <p>
-Note that the cell filtering (number of genes per cell, mito%) done in the original dataset
-effect this object as well.  
+Please note that the cell filtering (number of genes per cell, mito%) performed on the original dataset
+impacts this object as well.  
 </p>
 
 
 <h3>Output</h3>
 
 <ul>
-<li>seurat_obj_subset.Robj: The Seurat R-object containing only the cells in the chosen clustesr. Can be passed to the next Seurat tool, or imported to R. Not viewable in Chipster. </li>
-<li>QCplots.pdf: Quality control plots (similar to the ones in Setup tool.)</li>
+<li>seurat_obj_subset.Robj: The Seurat R-object containing only the cells in the chosen cluster. This can be passed to the next Seurat tool, or imported into R, but is not viewable in Chipster.</li>
+<li>QCplots.pdf: Quality control (QC) plots (similar to the ones in Setup tool)</li>
 </ul>
 
 
