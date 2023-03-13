@@ -7,13 +7,13 @@
 
 <body>
 
-	<h2>Seurat -Visualize genes with cell type specific responses in multiple samples</h2>
+	<h2>Seurat -Visualize genes with cell type-specific responses in multiple samples</h2>
 
 	<h3>Description</h3>
 
 	<p>
-		This tool gives you plots showing user defined markers/genes across the conditions.
-		This tool can be used for Seurat objects containing two or more samples.
+		This tool generates plots based on your selection of markers or genes across conditions.
+		This tool can be used on Seurat objects containing two or more samples.
 	</p>
 
 	<h3>Parameters</h3>
@@ -25,42 +25,42 @@
 	<h3>Details</h3>
 
 	<p>
-		As inputs, give a combined Seurat object. <br>
+		Please input a combined Seurat object. <br>
 	</p>
 
 	<p>
-		Select the markers you want to inspect by listing them in the parameter row. The markers can also be given in
-		then form of a text file to the input field.
-		Separate the names with comma (,). As an example, the parameter is set to markers "CD3D, CREM, HSPH1, SELL,
+		Select the markers you would like to inspect by listing them in the parameter row. The markers can also be input
+		in a text file format.
+		Separate the names with comma(s) (,). As an example, the parameter is set to markers "CD3D, CREM, HSPH1, SELL,
 		GIMAP5".
 	</p>
 
 	<p>
-		The "SplitDotPlotGG" can be useful for viewing conserved cell type markers across conditions,
-		showing both the expression level and the percentage of cells in a cluster expressing any given gene.
+		The "SplitDotPlotGG" can be useful for visualizing conserved cell type markers across conditions,
+		showing both the expression level and percentage of cells in a cluster expressing any given gene.
 		The <b>size of the dot</b> encodes the percentage of cells within a class (=cluster),
 		while the <b>color</b> encodes the AverageExpression level of 'expressing' cells (stronger color, more
-		experssion).
+		expression).
 	</p>
 
 	<p>
-		Another useful way to visualize the changes in gene expression is with the FeatureHeatmap function.
-		This will display FeaturePlots of the list of given genes, split by the condition.
+		Another useful way to visualize the changes in gene expression is using the FeatureHeatmap function.
+		This will display FeaturePlots of the gene list, split according to condition.
 	</p>
 
 	<p>
-		In case of more than 2 samples, the plots are divided to multiple pages.
+		In case of more than two samples, the plots are divided into multiple pages.
 	</p>
 
 	<p>
-		For more details, please check the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
+		For more details, please refer to the <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorials
 			for multiple sample analysis</a>.
 	</p>
 
 	<h3>Output</h3>
 
 	<ul>
-		<li>split_dot_plot.pdf: Plots showing user defined markers/genes across the conditions </li>
+		<li>split_dot_plot.pdf: Plots showing user-defined markers or genes across conditions </li>
 	</ul>
 
 
