@@ -19,8 +19,8 @@
 
     <h3>Parameters</h3>
     <ul>
-        <li>Name of the samples to compare to</li>
-        <li>Name of the samples to compare with</li>
+        <li>Name of samples in 1st group</li>
+        <li>Name of samples in 2nd group</li>
         <li>Name of the cluster [3]</li>
         <li>Return only positive marker genes [TRUE]</li>
         <li>Fold change threshold for differentially expressed genes (DEGs) in log scale [0.25]</li>
@@ -63,12 +63,10 @@
                     Seurat uses the Bonferroni method. When filtering the table and reporting results,
                     please use this value.</li>
                 <li><b>avg_logFC</b> = average log2 fold change (how much higher or lower the expression of this gene is
-                    in the chosen cluster between conditions) </li>
-                <li><b>pct.1</b> = what percentage of the cells in condition 1 show some expression for this gene.
-                    Please note, numbering is based on alphabetical order: earlier in the alphabets -> 1, the other one -> 2.
-                    For example, <i>CTRL</i> -> 1 and <i>STIM</i> -> 2, as the letter C comes before S when alphabetized.
+                    in the chosen cluster between conditions). Samples from the 2nd group are compared to samples from the 1st group.</li>
+                <li><b>pct.1</b> = what percentage of the cells in 1st group show some expression for this gene.
                 </li>
-                <li><b>pct.2</b> = what percentage of the cells in condition 2 show some expression for this gene
+                <li><b>pct.2</b> = what percentage of the cells in 2nd group show some expression for this gene
                 </li>
             </ul>
     </p>
