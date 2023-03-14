@@ -7,8 +7,6 @@
 # OUTPUT OPTIONAL inner_distance.pdf
 # PARAMETER organism: "Organism" TYPE [other: "Own reference files", "FILES genomes/indexes/bowtie2 .fa"] DEFAULT other (Choose one of the reference organisms or provide your own reference genome and BED file. It is also possible to use own BED file with one of the provided reference genomes.)
 # PARAMETER innerdistance: "Calculate inner distance" TYPE [yes, no] DEFAULT no (Calculate inner distance for paired reads.)
-
-# the old RSeQC doesn't work in new Ubuntu
 # RUNTIME R-4.1.1
 
 # Functions 
@@ -37,7 +35,7 @@ if (pe) {
 # Was genome file provided
 if (fileOk("user_genome")) {
   if (fileOk("user_bed")) {
-    bowtie.index.binary <- c(file.path(chipster.tools.path,"bowtie2-2.2.9","bowtie2-build"))
+    bowtie.index.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2-build"))
     command.indexing <- paste(bowtie.index.binary,"-f","user_genome","user_genome")
     system(command.indexing)
   } else {
@@ -45,7 +43,7 @@ if (fileOk("user_genome")) {
   }
 }
 # Align against reference genome
-bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2-2.2.9","bowtie2"))
+bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
 
 if (organism != "other") {
   bowtie.genome <- c(file.path(chipster.tools.path,"genomes","indexes","bowtie2",organism))
