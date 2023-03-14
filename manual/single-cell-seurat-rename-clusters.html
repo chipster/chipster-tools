@@ -12,26 +12,26 @@
     <h3>Description</h3>
 
     <p>
-        With this tool, you can rename the clusters.
+        This tool allows you to rename clusters.
     </p>
 
     <h3>Parameters</h3>
     <ul>
-        <li>Point size in tSNE and UMAP plots [1]</li>
+        <li>Point size in t-SNE and UMAP plots [1]</li>
     </ul>
 
     <h3>Details</h3>
 
     <p>
-        With this tool, you can rename the clusters:
-        for example, instead of "0", "1", "2"... give clusters names according the recognised cell markers
-        or cell types, such as "NK", "CD8+ T", "Platelet".
-        For this purpose, you need to create (for example with in Excel, text editor...)
-        a tab separated .tsv file, which has the old cluster names in first column, and the
+        You can use this tool to rename clusters.
+        For example, instead of "0", "1", or "2", you can provide cluster names according to recognised cell markers
+        or cell types, such as "NK", "CD8+ T", or "Platelet".
+        To do so, you will need to create
+        a tab separated file (.tsv) using a program like Excel or another text editor. The file should contain old cluster names in first column and the
         new names in the second column.
     </p>
     <p>
-        Like this:
+        The layout should look similar to this:
 
     <table>
         <tr>
@@ -59,28 +59,28 @@
     </p>
 
     <p>
-        Note, that you need to give the same old cluster names (0, 1, 2...) in same order
-        as they are in the Seurat R-object. You need to give name to each cluster (you can't have
+        Please note that you will need to provide the old cluster names (0, 1, 2...) in the same order
+        as in the Seurat R-object. You will also need to provide the name of each cluster (you cannot have
         empty cells in the input table).
     </p>
 
     <p></p>
 
     <p>
-        For more details, please check:<br>
-        The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
+        For more details, please refer to the
+        <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
 
     </p>
 
     <h3>Output</h3>
 
     <ul>
-        <li>seurat_obj_renamed.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not
+        <li>seurat_obj_renamed.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R, but it is not
             viewable in
             Chipster. </li>
-        <li>clusterPlotRenamed.pdf: Cluster visualization in tSNE and UMAP plots, heatmap showing the expression of top
+        <li>clusterPlotRenamed.pdf: Cluster visualization of t-SNE and UMAP plots, specifically a heatmap showing the expression of top
             ten marker genes (in
-            terms of fold change) for each cluster. </li>
+            terms of fold change) for each cluster.</li>
     </ul>
 
 
