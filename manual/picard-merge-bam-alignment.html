@@ -7,30 +7,29 @@
 
 <h3>Description</h3>
 
-<p>This Picard tool merges alignment data from a normal aligned BAM file with data in an unmapped BAM file.
- Before merging, the tool also sorts the aligned BAM file by queryname (QNAME), so that merging is possible.
-This tool produces a new BAM file that includes all aligned and unaligned reads and also carries 
-forward additional read attributes from the unmapped BAM 
+<p>This Picard tool merges alignment data from a standardly aligned BAM file with data in an unmapped BAM file.
+ Before merging, the tool also sorts the aligned BAM file by queryname (QNAME) so that merging is possible.
+This tool produces a new BAM file that includes all aligned and unaligned reads, while also retaining the additional read attributes from the unmapped BAM 
 (attributes that are otherwise lost in the process of alignment). 
-The purpose of this tool is to use information from the unmapped BAM to fix up aligner output.  
-In short, this tool can be used to add the cell and molecular barcode and other tags  
-that were lost during the alignment to the aligned BAM file.
+The purpose of this tool is to use information from the unmapped BAM to fix aligner output.  
+In short, this tool can be used to add the cell and molecular barcode information, as well as other tags  
+that may have been lost when aligning to the aligned BAM file.
 </p>
 
 <p>After merging, Drop-seq tool TagReadWithGeneExon adds a BAM tag GE to reads which overlap an exon of a gene. 
 This tag contains the gene name, as reported in the GTF genome annotation file. 
-For more details, please check the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
+For more details, please refer to the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf/">Drop-seq manual.</a>
 </p>
 
  
 <p>
-Note that this tool ignores secondary alignments.</p>
+Please note that this tool does not account for secondary alignments.</p>
 
 <p>
-Make sure you choose the same reference that was used in the alignment, and check that the input files are assigned correctly!</p>
+Please ensure that you select the same reference that was used in the alignment, and please check that the input files are assigned correctly.</p>
 
 <p>
-For more details, please check the <a href="https://broadinstitute.github.io/picard/command-line-overview.html/">home page of Picard tools.</a>
+For more details, please refer to the <a href="https://broadinstitute.github.io/picard/command-line-overview.html/">home page of Picard tools.</a>
 </p>
 
 
@@ -39,13 +38,14 @@ For more details, please check the <a href="https://broadinstitute.github.io/pic
 		<li>Reference [Homo_sapiens.GRCh38] (Homo_sapiens.GRCh38, Mus_musculus.GRCm38)</li>
 				<li>Organism [other]</li>
 	</ul>
-Chipster provides Ensembl-based GTF files for many organisms in the pull-down menu. If you would like to use your own GTF, set the organism parameter to other and check that your GTF file has been correctly assigned in the parameter panel.
+Chipster provides Ensembl-based GTF files for many organisms in the dropdown menu. If you would like to use your own GTF, please set the organism parameter to "other" and check that your GTF file has been correctly assigned in the parameter panel.
 		
 
-
+<p>
 <h3>Output</h3>
+</p>
 
 <ul>
-<li>merged.bam: Merged BAM file where reads overlapping an exon are tagged with gene name.</li></ul>
+<li>merged.bam: Merged BAM file where reads overlapping an exon are tagged with a gene name.</li></ul>
 
 </body>
