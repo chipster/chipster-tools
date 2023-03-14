@@ -7,13 +7,13 @@
 
 <body>
 
-    <h2>Seurat -Subset Seurat objects based on gene expression </h2>
+    <h2>Seurat -Subset Seurat object based on gene expression</h2>
 
     <h3>Description</h3>
 
     <p>
-        This tool gives you a subset of the data: only those cells that have expression in a user defined gene.
-        Expression threshold is given as a parameter.
+        This tool generates a subset of the data comprised of cells having expression in a user-defined gene.
+        Please set the expression threshold parameter.
 
     </p>
 
@@ -27,20 +27,20 @@
     <h3>Details</h3>
 
     <p>
-        As inputs, give a Seurat object.
+        Please input the Seurat object.
     </p>
 
     <p>
-        Select the gene based on which you want to subset the data (as an example, this parameter is set to "MS4A1").
-        Then select the expression value threshold (as an exampe, this parameter is set to 1).
+        Select a gene of interest that will be used to then subset the data (as an example, this parameter is set to "MS4A1").
+        Then select the expression value threshold (as an example, this parameter is set to 1).
     </p>
 
     <h3>Output</h3>
 
     <ul>
         <li>seurat_obj_subset.Robj: The Seurat R-object containing only the cells expressing a given gene above the
-            threshold value. Can be passed to the next Seurat tool, or imported to R. Not viewable in Chipster. </li>
-        <li>subset_plot.pdf: Gives the number of cells left in the subset</li>
+            threshold value. It can be passed to the next Seurat tool, or imported into R, but it is not viewable in Chipster.</li>
+        <li>subset_plot.pdf: This is a visual for the number of remaining cells in the subset</li>
     </ul>
 
 
