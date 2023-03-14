@@ -17,6 +17,9 @@
 # SLOTS 5
 
 
+# PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
+
+
 # 2018-16-05 ML 
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
@@ -51,7 +54,7 @@ if (normalisation.method == "SCT"){
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,  
-    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved)
+    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
 
 
 # Filter conserved marker genes based on adj p-val:
@@ -78,15 +81,20 @@ if (length(lvls) < 2) {
   ident1 <- paste(cluster, "_", lvls[1], sep = "")
   ident2 <- paste(cluster, "_", lvls[2], sep = "")
   if (normalisation.method == "SCT"){
-    cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
+    cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
   } else { 
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
+    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
   }
   # Filter DE genes based on adj p-val:
   de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de))
 
-  # Write to table
-  write.table(de2, file = "de-list.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+  # Comparison name for the output file:
+    comparison.name <- paste(lvls[1], "_vs_", lvls[2], sep="")
+    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+
+ # Write to table
+    write.table(de2, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    # write.table(de2, file = "de-list.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 # If there are more than 2 samples in the data:
 } else { 
@@ -97,9 +105,9 @@ if (length(lvls) < 2) {
     ident2 <- paste(cluster, "_", lvls[-i], sep = "")
     # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
     if (normalisation.method == "SCT"){
-      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
+      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
     } else { 
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct)
+    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
     }
     # Filter DE genes based on adj p-val:
     de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de) )
