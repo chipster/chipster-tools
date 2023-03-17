@@ -11,36 +11,36 @@
 
 	<h3>Description</h3>
 
-	<p>This Drop-seq tool does two things:
+	<p>This Drop-seq tool does the following two tasks:
 		<ol>
 			<li>identifies and corrects bead synthesis errors</li>
 			<li>extracts gene expression values from a BAM file where reads have been tagged with gene names</li>
 		</ol>
-		In the <b>bead synthesis step (step 1)</b> the tool identifies cell barcodes with aberrant fixed UMI bases.
-		If only the last UMI base is fixed as a T, the cell barcode is corrected (the last base is trimmed off) and
-		all cell barcodes with identical sequence at the first 11 bases are merged together.
+		In the <b>bead synthesis step (step 1),</b> the tool identifies cell barcodes with aberrant fixed UMI bases.
+		If the last UMI base is fixed as a T, the cell barcode is then corrected (the last base is trimmed off) and
+		all cell barcodes with identical sequences at the first 11 bases are merged together.
 		If any other UMI base is fixed, the reads with that cell barcode are discarded.
 	</p>
 	<p>
-		The tool asks the user to select a number of barcodes on which to perform the correction.
-		In the original Drop-seq manual, the tool developers guide users to use roughly 2 times the
-		anticipated number cells,
-		as they have empirically found that this allows to recover nearly every defective cell barcode
-		that corresponds to a STAMP (rather than an empty bead cell barcode). </p>
+		You will need to select the number of barcodes undergoing correction.
+		In the original Drop-seq manual, the tool developers guide users to use roughly 2x the
+		anticipated number of cells,
+		as this allows recovering most defective cell barcodes
+		corresponding to STAMPs (single-cell transcriptomes attached to
+		microparticles), rather than empty bead cell barcodes.</p>
 	<p>
-		This program reads in the BAM file, and looks at the distribution of bases at each position of all UMIs
-		for a cell barcode. It detects unusual distributions of base frequency, where a base with &ge; 80% frequency at
-		any position is detected as an error. Barcodes with less than 25 total UMIs are ignored.
+		This program reads in the BAM file and analyses the UMI's distribution of bases at each position. It detects any unusual base frequency distributions, where a base with &ge; 80% frequency at
+		any position is detected as an error. Barcodes containing &#60; 25 total UMIs are not taken into account.
 	</p>
 	<p>
-		The tool also checks for PRIMER_MATCHes, where the UMI perfectly matches one of the PCR primers.
-		These cell barcodes are dropped.
-		These errors are only detected if a PRIMER_SEQUENCE argument is supplied as a parameter.
+		The tool also identifies PRIMER_MATCHes, where the UMIs perfectly match one of the PCR primers.
+		These cell barcodes are then dropped.
+		Errors are only detected if a PRIMER_SEQUENCE argument is supplied as a parameter.
 	</p>
 
 	<p>
-		From the <b>digital expression stage (step 2)</b>, there are two outputs available:
-		<br>-the primary is the DGE matrix, with each a row for each gene, and a column for each cell
+		After <b>digital expression stage (step 2)</b>, two outputs are available:
+		<br>-the primary is the DGE matrix, comprised of a row for each gene and a column for each cell
 		<br>-the secondary analysis is a summary of the DGE matrix on a per cell level,
 		indicating the number of genes and transcripts observed.
 	</p>
@@ -51,18 +51,18 @@
 			<li>For each gene, find the molecular barcodes on the exons of that gene.</li>
 			<li>Determine how many HQ mapped reads are assigned to each barcode.</li>
 			<li>Collapse barcodes by edit distance.</li>
-			<li>Throw away barcodes with less than threshold # of reads.</li>
+			<li>Discard barcodes with less than a certain threshold number of reads.</li>
 			<li>Count the number of remaining unique molecular barcodes for the gene.</li>
 		</ol>
-		This program requires a tag for what gene a read is on, a molecular barcode tag, and a exon tag.
-		The exon and gene tags may not be present on every read.
+		This program requires a tag indicating which gene is assigned to which read, a molecular barcode tag, and an exon tag.
+		Exon and gene tags may not be identified at every read.
 	</p>
 
 	<p>
 		<b>The selection of the sets of cells:</b> <br>
 		Choose first the selection criteria (<b>How to filter the DGE matrix</b>):
 		<ul>
-			<li>Number of core barcodes: Counts the number of reads per cell barcode and include N top cells with
+			<li>Number of core barcodes: Counts the number of reads per cell barcode and include N top cells with the
 				most
 				reads.</li>
 			<li>Min number of genes per cell: Select cells that have at least this many genes detected.</li>
@@ -71,7 +71,7 @@
 	</p>
 
 	<p>
-		For more details, please check the <a
+		For more details, please refer to the <a
 			href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">Drop-seq
 			manual.</a>
 	</p>
@@ -81,7 +81,7 @@
 	<ul>
 		<li>Estimate the number of barcodes for correction [2000]</li>
 		<li>Sequence [AAGCAGTGGTATCAACGCAGAGTGAATGGG]</li>
-		<li>How to filter the DGE matrix [Min number of genes per cell]</li>
+		<li>How to filter the DGE matrix [Minimum number of genes per cell]</li>
 		<li>Filtering threshold [0]</li>
 	</ul>
 
