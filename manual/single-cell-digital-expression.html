@@ -17,7 +17,7 @@
 			<li>extracts gene expression values from a BAM file where reads have been tagged with gene names</li>
 		</ol>
 		In the <b>bead synthesis step (step 1),</b> the tool identifies cell barcodes with aberrant fixed UMI bases.
-		If the last UMI base is fixed as a T, the cell barcode is then corrected (the last base is trimmed off) and
+		Normally each read has a 12 base cell barcode followed by an 8 base UMI. However, ChemGenes beads can contain synthesis errors and lack one base from the cell barcode. When this occurs, the 12th cell barcode base is actually the first UMI base, and the last UMI base is actually the first base of the polyT. If the last UMI base is fixed as a T, the cell barcode is then corrected (the last base is trimmed off) and
 		all cell barcodes with identical sequences at the first 11 bases are merged together.
 		If any other UMI base is fixed, the reads with that cell barcode are discarded.
 	</p>
