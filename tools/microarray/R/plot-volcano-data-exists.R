@@ -26,7 +26,7 @@ if(fold.change.column=="EMPTY") {
 if(p.value.column=="EMPTY") {
    stop("CHIPSTER-NOTE: You haven't selected a column for p-value! Tool cannot be executed.")
 }
-if(sum(grep("p.adjusted", colnames(dat)))==0) {
+if(sum(grep(("p.adjusted|padj|FDR"), colnames(dat)))==0) {
    stop("CHIPSTER-NOTE: You don't have any P-value columns in the dataset! Please run some statistical test first.")
 }
 
