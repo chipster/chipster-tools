@@ -341,3 +341,8 @@ if ( save_log == "no") {
 	system ("rm -f vd.log")
 }
 
+system("ls -l")
+system("ls -l result_inputseq")
+system("ls -l vd_output")
+system("cat bwa.log")
+system("cat vd.log")
