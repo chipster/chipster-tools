@@ -4,6 +4,7 @@
 # PARAMETER fold.change.column: "Fold change column" TYPE COLUMN_SEL DEFAULT EMPTY (Column that contains the fold change values)
 # PARAMETER p.value.column: "p-value column" TYPE COLUMN_SEL DEFAULT EMPTY (Column that contains the p-values)
 # PARAMETER p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off for significant results. Significant results are plotted with red dots)
+# PARAMETER OPTIONAL gene.names: "Gene names" TYPE INTEGER FROM 0 TO 50 DEFAULT 10 (Choose to add labels to top genes on plot, select a number between 0 and 50)
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
@@ -36,9 +37,14 @@ pvalues<-dat[,grep(p.value.column, colnames(dat))]
 dot_colors <- rep(1,length(pvalues))
 dot_colors[pvalues <= p.value.threshold] <- 2
 
+# Plot label cutoff
+cutoff<-sort(pvalues)[gene.names]
+sign.genes<-which(pvalues <= cutoff)
+
 # Plotting
 pdf(file="volcanoP.pdf", width=w/72, height=h/72)
-plot(expression, -log10(pvalues), xlim=c(-max(abs(expression)), max(abs(expression))), main="Volcano plot", pch=19, col=dot_colors, xlab="log2 (fold change)", ylab="-log10 (p)")
+plot(expression, -log10(pvalues), xlim=c(-max(abs(expression)), max(abs(expression))), main="Volcano plot", pch=19, col=dot_colors, xlab="log2 (fold change)", ylab="-log10 (p)", cex = 0.25)
+text(x=expression[sign.genes], y=-log10(pvalues[sign.genes]), label=row.names(dat)[sign.genes], cex=0.5, col = 'blue')
 abline(h=-log10(p.value.threshold), lty=2)
 dev.off()
 
