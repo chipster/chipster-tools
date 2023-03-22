@@ -63,9 +63,9 @@ cortex_1 <- subset(seurat_spatial_obj_pca_ANTERIOR, orig.ident == "anterior1")
 cortex_1@images$posterior1 = NULL
 
 # subset for a specific region
-cortex_1 <- subset(cortex_1, anterior1_imagerow > 400 | anterior1_imagecol < 150, invert = TRUE)
-cortex_1 <- subset(cortex_1, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
-cortex_1 <- subset(cortex_1, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
+# cortex_1 <- subset(cortex_1, anterior1_imagerow > 400 | anterior1_imagecol < 150, invert = TRUE)
+# cortex_1 <- subset(cortex_1, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
+# cortex_1 <- subset(cortex_1, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
 
 # also subset for Frontal cortex_1 clusters
 cortex_1 <- subset(cortex_1, idents = c(0, 1, 3, 6, 7))
@@ -96,19 +96,6 @@ suppressPackageStartupMessages(require(Biobase))
 ```
 
 ```{r}
-# remove.packages('SCDC')
-# detach("package:SCDC", unload = TRUE)
-# library(SCDC) # check that it is offloaded
-```
-
-```{r}
-# install.packages("githubinstall")
-# library(githubinstall)
-# install_github("meichendong/SCDC", ref = github_pull("31"))
-# # library(SCDC)
-```
-
-```{r}
 allen_reference@active.assay = "RNA"
 
 markers_sc <- FindAllMarkers(allen_reference, only.pos = TRUE, logfc.threshold = 0.1,
@@ -116,12 +103,6 @@ markers_sc <- FindAllMarkers(allen_reference, only.pos = TRUE, logfc.threshold =
     return.thresh = 0.05, assay = "RNA")
 
 markers_sc <- markers_sc[markers_sc$gene %in% rownames(cortex_1),] # NEW 21.03
-
-# gene_names <- seurat_spatial_obj_pca_ANTERIOR@assays[["Spatial"]]@counts@Dimnames[[1]] # ML and LG commented 21.03
-
-# Filter for genes that are also present in the ST data's genes
-# markers_sc <- markers_sc[markers_sc$gene %in% rownames(seurat_obj_integrated), ]
-# markers_sc <- markers_sc[markers_sc$gene %in% gene_names, ] # ML and LG commented 21.03
 
 # Select top 20 genes per cluster, select top by first p-value, then absolute
 # diff in pct, then quota of pct.
@@ -143,27 +124,6 @@ eset_SC <- ExpressionSet(assayData = as.matrix(allen_reference@assays$RNA@counts
 eset_ST <- ExpressionSet(assayData = as.matrix(cortex_1@assays$Spatial@counts[m_feats,
     ]), phenoData = AnnotatedDataFrame(cortex_1@meta.data))
 
-```
-
-
-```{r}
-# Create Expression Sets
-# For SCDC both the SC and the ST data need to be in the format of an Expression set with the count matrices as AssayData. We also subset the matrices for the genes we selected in the previous step.
-
-# pddataframe <- AnnotatedDataFrame(allen_reference@meta.data)@data
-# pd <- new("AnnotatedDataFrame", data = pddataframe)
-# 
-# 
-# adata <- as.matrix(allen_reference@assays$RNA@counts[m_feats,
-#     ])
-# 
-# # needed to be transposed (unlike vignette)
-# eset_SC <- ExpressionSet(assayData = t(adata)
-#     , phenoData = pd)
-# 
-# # also needed to be transposed (unlike vignette)
-# eset_ST <- ExpressionSet(assayData = t(as.matrix(seurat_obj_integrated@assays$Spatial@counts[m_feats,
-#     ])), phenoData = AnnotatedDataFrame(seurat_obj_integrated@meta.data))
 ```
 
 # Deconvolve
