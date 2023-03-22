@@ -1,6 +1,7 @@
 # TOOL filter-fasta.py: "Filter fasta" (Keep only primary chromosomes in fasta. Chromosomes that have karyotype data in Ensembl are considered as the primary chromosomes.)
 # INPUT input.fa TYPE GENERIC
 # OUTPUT output.fa
+# OUTPUT output.fa.fai
 # RUNTIME python3
 
 # add the tools dir to path, because __main__ script cannot use relative imports
@@ -15,6 +16,8 @@ def main():
 
     input_fa = "input.fa"
     output_fa = "output.fa"
+    input_fai = "input.fa.fai"
+    output_fai = "output.fa.fai"
 
     samtools = chipster_tools_path + "/samtools-1.2/samtools"
 
@@ -54,6 +57,7 @@ def main():
 
         #run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
         os.rename(input_fa, output_fa)
+        os.rename(input_fai, output_fai)
     
     else:
 
@@ -67,11 +71,14 @@ def main():
 		        # chromosome exists before running samtools 
                 print("no chromosome " + chromosome + " in fasta, skipping")
 
-    # write better file names for client
-    
+        # create index for the filtered fasta, because it's used in samtools-snp-indel-single.R
+        print("index the output genome")
+        run_process([samtools, "faidx", output_fa])
 
+    # write better file names for client
     output_names = {
         output_fa: session_input_fa,
+        output_fai: session_input_fa + ".fai"
     }
 
     tool_utils.write_output_definitions(output_names)

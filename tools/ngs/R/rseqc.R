@@ -1,4 +1,4 @@
-# TOOL rseqc.R: "RNA-seq quality metrics with RseQC" (Given an RNA-seq BAM file, this tool reports several quality metrics such as coverage uniformity, gene and junction saturation, junction annotation and alignment statistics. You can provide your own BED file with gene and exon locations, OR use one of the existing annotations by selecting the correct reference organism in the parameters. This tool is based on the RSeQC package.)
+# TOOL rseqc.R: "RNA-seq quality metrics with RSeQC" (Given an RNA-seq BAM file, this tool reports several quality metrics such as coverage uniformity, gene and junction saturation, junction annotation and alignment statistics. You can provide your own BED file with gene and exon locations, or use one of the existing annotations by selecting the correct reference organism in the parameters. This tool is based on the RSeQC package.)
 # INPUT alignment.bam: "BAM file" TYPE GENERIC
 # INPUT OPTIONAL reference_file: "Own BED file \(when not using an existing reference\)" TYPE GENERIC
 # OUTPUT OPTIONAL RSeQC.txt
@@ -7,6 +7,7 @@
 # PARAMETER chr: "Chromosome names in my BAM file look like" TYPE [chr1, 1] DEFAULT 1 (Chromosome names must match in the BAM file and in the annotation. Check your BAM and choose accordingly. This only applies if you have generated your BAM outside Chipster and are using one of the reference organisms.)
 # PARAMETER OPTIONAL rpkm: "Generate RPKM saturation plot" TYPE [yes, no] DEFAULT no (BAM file containing more than 100 million alignments will make this analysis very slow. Try disabling it if RSeQC takes a very long time or fails to complete.)
 # PARAMETER OPTIONAL paired: "Generate inner distance plot" TYPE [yes, no] DEFAULT no (Calculate the inner distance between two paired RNA reads. The distance is the mRNA length between two paired reads.)
+# RUNTIME R-4.1.1
 
 
 # PARAMETER OPTIONAL strandedness: "Strandedness of reads" TYPE [none, 1++1--,2+-2-+: "1++,1--,2+-,2-+", 1+-1-+2++2--: "1+-,1-+,2++,2--", ++--: "++,--", +--+: "+-,-+"] DEFAULT none (How reads were stranded during sequencing. This only needed for RPKM saturation plot. If unsure, use tool RNA-seq strandedness inference and inner distance estimation using RseQC.)
@@ -17,10 +18,12 @@
 # AMS 03.12.2014 improved error handling for the plots
 # AMS 07.04.2015, combined pdf outputs
 # AMS 21.11.2016, tools-bin Python, RSeQC 2.6.4, internal BED files
+# PK 28.2.2023 samtools 1.15.1, RSeQC 5.0.1
 
 rseqc.path <- c(file.path(chipster.tools.path, "rseqc"))
+gs.path <- c(file.path(chipster.tools.path, "ghostscript-10.0.0", "gs"))
 
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 system(paste(samtools.binary, "index alignment.bam > alignment.bam.bai"))
 
 # Which BED to use.
@@ -104,7 +107,7 @@ if (paired == "yes"){
 }
 
 # Join the PDFs 
-system("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=RSeQC_report.pdf *.pdf")
+system(paste(gs.path, "-dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=RSeQC_report.pdf *.pdf"))
 
 # Handle output names
 source(file.path(chipster.common.path, "tool-utils.R"))
