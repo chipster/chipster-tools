@@ -1,110 +1,31 @@
 # TOOL deconv-test.R: "Deconv test" (Deconv test help text) 
+# INPUT seurat_obj_subset.Robj: "Seurat object" TYPE GENERIC
+# INPUT allen_cortex: "Allen Reference" TYPE GENERIC
+# OUTPUT OPTIONAL seurat_obj_deconv.Robj
+# OUTPUT OPTIONAL SpatialFeaturePlot.pdf
+# OUTPUT OPTIONAL SpatialPlot.pdf
+# OUTPUT OPTIONAL VlnPlot.pdf
+# RUNTIME R-4.2.0-single-cell
 
----
-title: "Deconvolution"
-output: html_document
-date: "2023-02-13"
----
-
-# Setup (with input files, libraries):
-
-```{r fixing-Matrix-package-version-number-incompatibility-issue-with-R-version}
-# packageVersion('Matrix') # 1.5.1
-# suppressMessages(remove.packages('Matrix'))
-# install.packages('Matrix', quiet = TRUE)
-```
-
-```{r fixing-Matrix-package-version-number-incompatibility-issue-with-R-version}
-packageVersion('Matrix') # 1.5.3
-library('Matrix')
-# https://github.com/satijalab/seurat/issues/6746
-```
-
-```{r loading-libraries}
 library(dplyr, quietly = TRUE)
 library(Seurat, quietly = TRUE)
-library(SeuratData, quietly = TRUE)
-```
+suppressPackageStartupMessages(require(SCDC))
+suppressPackageStartupMessages(require(Biobase))
 
-```{r loading-input-Seurat-object}
-# load('/Users/lgerber/Downloads/seurat_obj_integrated.Robj')
-# seurat_obj_integrated <- seurat_obj
-# rm(seurat_obj)
-```
+system('ls')
 
-```{r loading-input-Seurat-object}
-# load('/Users/lgerber/Downloads/seurat_obj_subset.Robj')
-# seurat_obj_subset <- seurat_obj
-# rm(seurat_obj)
-```
-
-```{r loading-input-Seurat-object}
-# load('/Users/lgerber/Downloads/seurat_spatial_obj_pca_INTEGRATED.Robj')
-# seurat_spatial_obj_pca_INTEGRATED <- seurat_obj
-# rm(seurat_obj)
-```
-
-```{r loading-input-Seurat-object}
-load('/Users/lgerber/Downloads/seurat_spatial_obj_pca_ANTERIOR.Robj')
-seurat_spatial_obj_pca_ANTERIOR <- seurat_obj
-rm(seurat_obj)
-```
-
-```{r loading-input-allen-reference}
-allen_reference <- readRDS("/Users/lgerber/Downloads/allen_cortex.rds")
-```
-
-# Subset ST for cortex_1
-
-```{r}
-# subset for the anterior dataset
-cortex_1 <- subset(seurat_spatial_obj_pca_ANTERIOR, orig.ident == "anterior1")
-
-# there seems to be an error in the subsetting, so the posterior1 image is not
-# removed, do it manually
-cortex_1@images$posterior1 = NULL
-
-# subset for a specific region
-# cortex_1 <- subset(cortex_1, anterior1_imagerow > 400 | anterior1_imagecol < 150, invert = TRUE)
-# cortex_1 <- subset(cortex_1, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
-# cortex_1 <- subset(cortex_1, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
-
-# also subset for Frontal cortex_1 clusters
-cortex_1 <- subset(cortex_1, idents = c(0, 1, 3, 6, 7))
-# subset(cortex_1, idents = c(1, 2, 3, 4, 5)) # removed 5
-
-p1 <- SpatialDimPlot(cortex_1, crop = TRUE, label = TRUE)
-p2 <- SpatialDimPlot(cortex_1, crop = FALSE, label = TRUE, pt.size.factor = 1, label.size = 3)
-p1 + p2
-```
-
+# Load the reference dataset
+allen_cortex <- readRDS("allen_cortex")
 
 # Deconvolution:
 
-```{r}
-inst = installed.packages()
+allen_cortex@active.assay = "RNA"
 
-install.packages("remotes", quiet = TRUE)
-
-if (!("xbioc" %in% rownames(inst))) {
-    remotes::install_github("renozao/xbioc")
-}
-if (!("SCDC" %in% rownames(inst))) {
-    remotes::install_github("meichendong/SCDC")
-}
-
-suppressPackageStartupMessages(require(SCDC))
-suppressPackageStartupMessages(require(Biobase))
-```
-
-```{r}
-allen_reference@active.assay = "RNA"
-
-markers_sc <- FindAllMarkers(allen_reference, only.pos = TRUE, logfc.threshold = 0.1,
+markers_sc <- FindAllMarkers(allen_cortex, only.pos = TRUE, logfc.threshold = 0.1,
     test.use = "wilcox", min.pct = 0.05, min.diff.pct = 0.1, max.cells.per.ident = 200,
     return.thresh = 0.05, assay = "RNA")
 
-markers_sc <- markers_sc[markers_sc$gene %in% rownames(cortex_1),] # NEW 21.03
+markers_sc <- markers_sc[markers_sc$gene %in% rownames(seurat_obj),] # NEW 21.03
 
 # Select top 20 genes per cluster, select top by first p-value, then absolute
 # diff in pct, then quota of pct.
@@ -117,57 +38,59 @@ markers_sc %>%
     top_n(50, pct.diff) %>%
     top_n(20, log.pct.diff) -> top20
 m_feats <- unique(as.character(top20$gene))
-```
 
 
-```{r}
-eset_SC <- ExpressionSet(assayData = as.matrix(allen_reference@assays$RNA@counts[m_feats,
-    ]), phenoData = AnnotatedDataFrame(allen_reference@meta.data))
-eset_ST <- ExpressionSet(assayData = as.matrix(cortex_1@assays$Spatial@counts[m_feats,
-    ]), phenoData = AnnotatedDataFrame(cortex_1@meta.data))
-
-```
+eset_SC <- ExpressionSet(assayData = as.matrix(allen_cortex@assays$RNA@counts[m_feats,
+    ]), phenoData = AnnotatedDataFrame(allen_cortex@meta.data))
+eset_ST <- ExpressionSet(assayData = as.matrix(seurat_obj@assays$Spatial@counts[m_feats,
+    ]), phenoData = AnnotatedDataFrame(seurat_obj@meta.data))
 
 # Deconvolve
 
-```{r}
 deconvolution_crc <- SCDC::SCDC_prop(bulk.eset = eset_ST, sc.eset = eset_SC, ct.varname = "subclass",
     ct.sub = as.character(unique(eset_SC$subclass)))
-```
 
-```{r}
-head(deconvolution_crc$prop.est.mvw)
-```
 
-```{r}
-cortex_1@assays[["SCDC"]] <- CreateAssayObject(data = t(deconvolution_crc$prop.est.mvw))
+# head(deconvolution_crc$prop.est.mvw)
+
+seurat_obj@assays[["SCDC"]] <- CreateAssayObject(data = t(deconvolution_crc$prop.est.mvw))
 
 # Seems to be a bug in SeuratData package that the key is not set and any
 # plotting function etc. will throw an error.
-if (length(cortex_1@assays$SCDC@key) == 0) {
-    cortex_1@assays$SCDC@key = "scdc_"
+if (length(seurat_obj@assays$SCDC@key) == 0) {
+    seurat_obj@assays$SCDC@key = "scdc_"
 }
-```
 
 # Plotting:
 
-```{r}
-DefaultAssay(cortex_1) <- "SCDC"
-SpatialFeaturePlot(cortex_1, features = c("L2/3 IT", "L4"), pt.size.factor = 1.6, ncol = 2,
+pdf(file="SpatialFeaturePlot.pdf")
+
+DefaultAssay(seurat_obj) <- "SCDC"
+SpatialFeaturePlot(seurat_obj, features = c("L2/3 IT", "L4"), pt.size.factor = 1.6, ncol = 2,
     crop = TRUE)
-# SpatialFeaturePlot(as.data.frame(cortex_1@assays[["SCDC"]]@data), features = c("L2/3 IT", "L4"), pt.size.factor = 1.6, ncol = 2, crop = TRUE)
-                   
-# as.data.frame(seurat_obj_integrated@assays[["SCDC"]]@data) # ncol = 2
-```
 
-```{r}
-cortex_1 <- FindSpatiallyVariableFeatures(cortex_1, assay = "SCDC", selection.method = "markvariogram",
-    features = rownames(cortex_1), r.metric = 5, slot = "data")
-top.clusters <- head(SpatiallyVariableFeatures(cortex_1), 4)
-SpatialPlot(object = cortex_1, features = top.clusters, ncol = 2)
-```
+dev.off()
 
-```{r}
-VlnPlot(cortex_1, group.by = "seurat_clusters", features = top.clusters, pt.size = 0,
+pdf(file="SpatialPlot.pdf")
+
+seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCDC", selection.method = "markvariogram",
+    features = rownames(seurat_obj), r.metric = 5, slot = "data")
+top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), 4)
+SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
+
+dev.off()
+
+pdf(file="VlnPlot.pdf")
+VlnPlot(seurat_obj, group.by = "seurat_clusters", features = top.clusters, pt.size = 0,
     ncol = 2)
-```
+dev.off()
+
+# 3.23:
+# do I need dev.off() each time?
+# get rid of all print statements
+# find out why downloading of devtools is not working (prereq for SeuratData package)
+
+# For the manual:
+# Make it clear that:
+# Add information about creating a NEW seurat subsetted object manually (not the one from the sample session) based
+# on the clusters found in the UMAP 3rd figure (which was in the sample session) (pick 5 clusters using this 3rd figure)
