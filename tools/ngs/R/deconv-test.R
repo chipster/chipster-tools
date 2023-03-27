@@ -6,16 +6,23 @@
 # OUTPUT OPTIONAL SpatialPlot.pdf
 # OUTPUT OPTIONAL VlnPlot.pdf
 # RUNTIME R-4.2.0-single-cell
+# SLOTS 4
 
 library(dplyr, quietly = TRUE)
 library(Seurat, quietly = TRUE)
-suppressPackageStartupMessages(require(SCDC))
+# suppressPackageStartupMessages(require(SCDC))
 suppressPackageStartupMessages(require(Biobase))
+# library(githubinstall)
 
+# install_github("meichendong/SCDC", ref = github_pull("31"))
+packageDescription('SCDC')
 system('ls')
 
 # Load the reference dataset
 allen_cortex <- readRDS("allen_cortex")
+
+# Load the R-Seurat-object (called seurat_obj)
+load("seurat_obj_subset.Robj")
 
 # Deconvolution:
 
@@ -47,8 +54,8 @@ eset_ST <- ExpressionSet(assayData = as.matrix(seurat_obj@assays$Spatial@counts[
 
 # Deconvolve
 
-deconvolution_crc <- SCDC::SCDC_prop(bulk.eset = eset_ST, sc.eset = eset_SC, ct.varname = "subclass",
-    ct.sub = as.character(unique(eset_SC$subclass)))
+deconvolution_crc <- suppressMessages(SCDC::SCDC_prop(bulk.eset = eset_ST, sc.eset = eset_SC, ct.varname = "subclass",
+    ct.sub = as.character(unique(eset_SC$subclass))))
 
 
 # head(deconvolution_crc$prop.est.mvw)
@@ -61,6 +68,11 @@ if (length(seurat_obj@assays$SCDC@key) == 0) {
     seurat_obj@assays$SCDC@key = "scdc_"
 }
 
+# testing b/c Seurat object has incorrect assay
+# seurat_obj@active.assay = 'SCDC'
+
+save(seurat_obj, file="seurat_obj_deconv.Robj")
+
 # Plotting:
 
 pdf(file="SpatialFeaturePlot.pdf")
@@ -70,6 +82,7 @@ SpatialFeaturePlot(seurat_obj, features = c("L2/3 IT", "L4"), pt.size.factor = 1
     crop = TRUE)
 
 dev.off()
+
 
 pdf(file="SpatialPlot.pdf")
 
@@ -85,10 +98,12 @@ VlnPlot(seurat_obj, group.by = "seurat_clusters", features = top.clusters, pt.si
     ncol = 2)
 dev.off()
 
+
 # 3.23:
 # do I need dev.off() each time?
 # get rid of all print statements
 # find out why downloading of devtools is not working (prereq for SeuratData package)
+# add possibility to change the cell features as a parameter for the user (look at the list of 23 and make a dropdown)
 
 # For the manual:
 # Make it clear that:
