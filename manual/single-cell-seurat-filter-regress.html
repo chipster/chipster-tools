@@ -12,7 +12,7 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool filters out both empty and damaged cells, as well as multiplets and then normalizes gene expression values. It then detects highly variable genes and 
+		This tool filters out both empties and damaged cells, as well as multiplets and then normalizes gene expression values. It then detects highly variable genes and 
 		regresses out any technical sources of variation. You can also choose to regress out the differences caused by the cell cycle stage.
 		<br>
 		Alternatively, you can use the tool <a
@@ -42,7 +42,7 @@
 
 
 	<ol>
-		<li><b>Filtering</b> is performed to remove empty and damaged cells, as well as multiplets.
+		<li><b>Filtering</b> is performed to remove empties and damaged cells, as well as multiplets.
 			You can use the QC-plots.pdf generated using the <b>Seurat- Setup and QC</b> tool to estimate the upper limit of
 			the number of expressed genes per cell and mitochondrial transcript percentage.</li>
 		<br>
@@ -54,6 +54,12 @@
 		<li><b>Genes which show high variation in expression across the cells are detected</b> using Variance Stablizing Transformation (VST). 
 		The mean and variance are computed for each gene using the unnormalized UMI counts and then they are both log10 transformed.
 		A curve is fitted to predict the variance of each gene as a function of its mean expression. 
+		
+		<!-- The counts are standardized by deducting from the expression value of gene X in cell Y the mean expression of gene X, and dividing this by the predicted standard deviation of gene X.
+		The impact of technical outliers is reduced by setting the max of standardized counts to the square root of number of cells.
+		Finally, the variance of the standardized values across all cells is computed for each gene.
+		Genes are then ranked based on their standardized variance, and the top 2000 genes are used for PCA and clustering. -->
+		
 		For more information, please refer to <a href='https://www.cell.com/action/showPdf?pii=S0092-8674(19)30559-8'>this publication</a>.
 		</li>
 		<br>
