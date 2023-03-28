@@ -14,7 +14,7 @@
     <p>
         This tool uses the SCTransform method for normalization, scaling, and finding variable genes.
         You can also choose to regress out differences caused by the cell cycle stage.
-        Before normalization, the tool filters out empty and damaged cells, as well as multiplets.
+        Before normalization, the tool filters out empties and damaged cells, as well as multiplets.
         <br>
         <b>Please note</b>, this tool and the <a
             href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-filter-regress-v3.html">Seurat -Filter,
@@ -53,7 +53,7 @@
 
 
     <ol>
-        <li><b>Filtering</b> is performed to remove empty and damaged cells, as well as multiplets.
+        <li><b>Filtering</b> is performed to remove empties and damaged cells, as well as multiplets.
             You can use the QC-plots.pdf to estimate the parameters for this step.</li>
         <br>
         <li><b>Expression values are normalized</b> using the SCTransform normalisation method, which uses
