@@ -25,7 +25,7 @@
 		(number of participants, type of analysis jobs) so that we can add computing resources to the server if needed.
 	</p>
 	</p>
-	<p>	We run currently the following Chipster courses (follow the links for more info): 
+	<p>	We run currently the following Chipster courses (please follow the links for more info): 
 		<!--CSC runs also <a href="https://research.csc.fi/bioscience-learning-materials">other bioinformatics courses</a>,
 		you can find the upcoming courses in our <a href="https://www.csc.fi/en/training">course calendar</a>.-->
 	</p>
@@ -216,16 +216,17 @@
 
 	<h3><a name="16S">Microbial community analysis</a></h3>
 
-	This course introduces microbiome analysis methods, tools, and file formats. 
+	These two courses introduce microbiome data analysis methods, tools, and file formats. 
 	You will learn how to preprocess amplicon sequencing data and how to compare the structure of microbial communities using ordinations and multivariate statistics.
-	The course covers the whole workflow from quality control and filtering to quantification and statistical analysis using Mothur and Phyloseq tools integrated in Chipster.
+	The courses cover the whole workflow from quality control and filtering to quantification and statistical analysis using either Mothur and VSEARCH 
+	(for OTU analysis) or DADA2 (for ASV analysis) and Phyloseq tools integrated in Chipster.
 	MiSeq 16S data is used in the exercises, but the course covers also the basic principles of
 	IonTorrent and ITS data analyses. The course takes two days.
 	 
 	<br>
 	<br>
 	
-	Course contents:
+	Course 1 contents: OTU- based analysis with Mothur, VSEARCH and Phyloseq (2021)
 	<ul>
 		<li>Checking the quality of reads with MultiQC</li>
 		<li>Preprocessing </li>
@@ -263,8 +264,38 @@
 		<li>Relative abundance plots</li>
 		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
 	</ul>
+		
+	Course 2 contents: ASV- based analysis with DADA2 and Phyloseq (2023)
+	<ul>
+		<li>Checking the quality of reads with MultiQC</li>
+		<li>Preprocessing </li>
+		<ul>
+			<li>Remove primers/adapters with Cutadapt</li>
+			<li>Filter and trim reads</li>
+		</ul>
+		<li>Sample/ASV inference</li>
+		<li>Combine paired reads to contigs</li>
+		<li>Make an ASV table and remove chimeras</li>
+		<li>Assign taxonomy</li>
+		<li>Make a phyloseq object</li>
+		<li>Merge phenodata to the phyloseq object</li>
+		<li>Data inspection and tidying using phyloseq</li>
+		<ul>
+			<li>Removing unwanted taxa</li>	
+			<li>Filtering singletons and doubletons</li>
+			<li>Prevalence filtering</li>
+		</ul>
+		<li>Data transformation, ordination and conversion</li>
+		<ul>
+			<li>CLR, Hellinger and % relative abundance</li>
+			<li>nMDS and db-RDA</li>
+			<li>DESeq2 format conversion and variance-stabilising transformation</li>
+		</ul>
+		<li>Relative abundance plots</li>
+		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
+	</ul>
 
-	Course material (2021):
+	Course 1 material (2021):
 	<ul>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBjPaknlze6BkxebpEuj9KL">lecture videos</a></li>
 		<li><a href="https://drive.google.com/file/d/1NKlzqSqTTJZEYwVVJ12USLXzc8VbWhrA/view">part 1 slides</a></li>
@@ -274,6 +305,15 @@
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d1.html">part 1 exercises</a></li>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d2.html">part 2 exercises</a></li>
 		</ul>
+		
+	</ul>
+	
+	Course 2 material (2023):
+	<ul>
+		<li><a href="https://www.youtube.com/playlist?">lecture videos</a></li>
+		<li><a href="ttps://chipster.csc.fi/material/asv/microbiomeCommunityAnalysisASV.pdf">DADA2 part slides</a></li>
+		<li><a href="https://github.com/csc-training/chipster-microbial/blob/master/docs/slides/d2.pdf">Phyloseq part slides</a></li>
+		<li>Example analysis session in Chipster: 08_microbial_community_analysis_16S_ASV_preprocessing_DADA2</li
 		
 	</ul>
 		
