@@ -61,13 +61,14 @@
 		i.e., the separation between cells. Similarly, cells that are 'furthest away'
 		(in the yellow or purple end) from each other are on the PC 1 spectrum. Purple: positive correlation, yellow:
 		negative correlation.
-		The heatmap may be useful to cross-check with the PC.
+		You can then scan each gene list generated for each PC-specific heatmap; if you spot a PC dominated by ribosomal or cell cycle genes, 
+		you may want to take note of this when interpreting your results, as these do not provide relevant biological information.
 		For example, if the genes seem to be related to the cell cycle phase, one may want to consider regressing out that
 		effect, or at least it is good to acknowledge this.
 	</p>
 
 	<p>
-		Next, plots can be used to decide which PCs to use. By default, 12 heatmaps are plotted,
+		The subsequent heatmaps, each corresponding to a single PC, can be used to decide which PCs to use. By default, 12 heatmaps are plotted,
 		focusing on the first 12 PCs, in which both cells and genes are sorted by their PC scores.
 		You can change the number of heatmaps to plot. Please explore the PCs for downstream
 		analysis:
