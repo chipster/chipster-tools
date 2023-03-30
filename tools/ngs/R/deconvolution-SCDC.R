@@ -47,8 +47,8 @@ markers_sc %>%
     group_by(cluster) %>%
     top_n(-100, p_val) %>%
     top_n(50, pct.diff) %>%
-    top_n(top.genes, log.pct.diff) -> top20
-m_feats <- unique(as.character(top20$gene))
+    top_n(top.genes, log.pct.diff) -> top_num_genes
+m_feats <- unique(as.character(top_num_genes$gene))
 
 
 eset_SC <- ExpressionSet(assayData = as.matrix(allen_cortex@assays$RNA@counts[m_feats,
