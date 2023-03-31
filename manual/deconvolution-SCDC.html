@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Deconvolution Tool (SCDC)</title></head>
+<body>
+<h2>Deconvolution Tool (SCDC)</h2>
+
+<h3>Description</h3>
+
+<p>
+    This tool estimates the abundance (or proportion) of different celltypes
+    in Visium spots using a single cell reference dataset.
+</p>
+
+<h3>Parameters</h3>
+<ul>
+<li>Subset of clusters ['L4']</li>
+<li>Top genes [20]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+Please input the Seurat R-object (Robj) and single-cell RNA-sequencing (scRNA-seq) reference dataset. (Please be mindful of the order that you click each object,
+as the Seurat object should be first and the reference dataset should be second.)
+<br>
+<br>
+The input Seurat object may first need to be generated
+using the tool: <b>Seurat v4 -Subset out anatomical regions based on clusters</b>. To select clusters present in the data, you can refer to
+the third plot generated using the tool <b>Seurat v4 -PCA, clustering, and visualisation</b>. This plot shows all of the the color-coded clusters which have been mapped to 
+different anatomical regions of the tissue slice.
+</p>
+
+<p>
+If you would like more information about the SCDC tool, please refer to the following two resources:
+
+<ul>
+<li><a href="https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Deconvolution"><b>NBIS (National Bioinformatics Infrastructure Sweden) tutorial</b></a>
+on the deconvolution of spatially resolved transcriptomics (SRT) data</li>
+<br>
+<li><a href="https://meichendong.github.io/SCDC/articles/SCDC.html" ><b>SCDC: Bulk Gene Expression Deconvolution by Multiple Single-Cell RNA Sequencing References</b></a>
+vignette, written by its own developer, Meichen Dong.</li>
+</ul>
+</p>
+
+<h3>Outputs</h3>
+
+<ul>
+
+<li><b>seurat_obj_deconv.Robj</b>: This Seurat R-object now includes a new SCDC assay, and this can be imported into R. However, this is not viewable in
+    Chipster.</li>
+
+<br>
+
+<li><b>SpatialFeaturePlot.pdf</b>: Plot(s) are generated for each selected celltype. Different colored spots are overlayed on top of the tissue slice.
+    The colors represent the predicted proportions of that particular celltype in that geographic area of the tissue slice.</li>
+
+<br>
+
+<li><b>SpatialPlot.pdf</b>: Four tissue slice plots with corresponding colored spots are generated -- one for each of the top four celltypes.
+
+<br>
+<br>
+
+<li><b>VlnPlot.pdf</b>: Four violin plots are generated -- one for each of the top four celltypes. The x-axis shows the selected clusters, each designated by its corresponding number,
+    and the y-axis shows each cluster's expression level.</li>
+
+</ul>
+
+
+
+</body>
+</html>
+
+
+<!-- For the manual:
+Make it clear that:
+Add information about creating a NEW seurat subsetted object manually (not the one from the sample session) based
+on the clusters found in the UMAP 3rd figure (which was in the sample session) (pick 5 clusters using this 3rd figure) -->
+
+    <!-- This plots a feature or discrete grouping (e.g., cluster assignments) as spots over the image that was collected.</li> -->
+<!-- This definition was taken from https://satijalab.org/seurat/reference/spatialplot -->
