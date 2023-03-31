@@ -7,6 +7,7 @@
 # OUTPUT OPTIONAL VlnPlot.pdf
 # PARAMETER clusters: "Subset of clusters" TYPE STRING DEFAULT "L4" (Subset clusters by using their cell type name\(s\). If you list multiple clusters, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\". Please do not use a space in between the comma\(s\).)
 # PARAMETER top.genes: "Top genes" TYPE INTEGER FROM 20 TO 50 DEFAULT 20 (Select the number \(between 20 and 50\) of top genes to include in the analysis.)
+# PARAMETER top_num_cluster: "Top clusters" TYPE INTEGER FROM 1 TO 10 DEFAULT 4 (Select the number \(between 1 and 10\) of top clusters to include in the analysis.)
 # RUNTIME R-4.2.0-single-cell
 # SLOTS 4
 
@@ -92,7 +93,7 @@ pdf(file="SpatialPlot.pdf")
 
 seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCDC", selection.method = "markvariogram",
     features = rownames(seurat_obj), r.metric = 5, slot = "data")
-top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), 4)
+top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), top_num_cluster)
 SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
 
 dev.off()
