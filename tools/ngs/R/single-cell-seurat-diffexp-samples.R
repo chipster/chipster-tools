@@ -29,6 +29,7 @@
 # 2022-07-21 ML Tune for SCTransform data
 # 2022-09-22 ML Fix conserved markers filtering for multiple sample case, add sanity check for cluster number
 # 2022-09-20 ML Add min.cells.group parameter to allow outputting all the genes  
+# 2023-04-03 ML Add parameters so that it is possible to print out all the genes + simplify code
 
 
 library(Seurat)
@@ -50,20 +51,15 @@ if (normalisation.method == "SCT"){
 #   stop("CHIPSTER-NOTE: Cluster given as input can not be found in the Seurat object!")
 #  }
 
+DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
-DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,  
     verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
 
-
-# Filter conserved marker genes based on adj p-val:
-# dat2 <- subset(cluster.markers, (CTRL_p_val_adj < pval.cutoff.conserved & STIM_p_val_adj < pval.cutoff.conserved))
-# dat2 <- subset(cluster.markers, (cluster.markers[,5] < pval.cutoff.conserved & cluster.markers[,10] < pval.cutoff.conserved))
-dat2 <- subset(cluster.markers, cluster.markers[,"max_pval"] < pval.cutoff.conserved)
-
 # Write to table
-write.table(dat2, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
@@ -85,16 +81,14 @@ if (length(lvls) < 2) {
   } else { 
     cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
   }
-  # Filter DE genes based on adj p-val:
-  de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de))
+ 
 
   # Comparison name for the output file:
     comparison.name <- paste(lvls[1], "_vs_", lvls[2], sep="")
     name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
 
  # Write to table
-    write.table(de2, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
-    # write.table(de2, file = "de-list.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 # If there are more than 2 samples in the data:
 } else { 
@@ -109,15 +103,13 @@ if (length(lvls) < 2) {
     } else { 
     cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
     }
-    # Filter DE genes based on adj p-val:
-    de2 <- subset(cluster_response, (p_val_adj < pval.cutoff.de) )
 
     # Comparison name for the output file:
     comparison.name <- paste(lvls[i], "vsAllOthers", sep="")
     name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
 
     # Write to table
-    write.table(de2, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
   } 
 } 
 # Save the Robj for the next tool
