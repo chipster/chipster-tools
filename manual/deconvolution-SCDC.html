@@ -13,26 +13,26 @@
 
 <h3>Parameters</h3>
 <ul>
-<li>Number of marker genes computed for each cell type in reference data [20]</li>
-<li>Celltype(s) from the reference data to be plotted in SpatialFeaturePlot [L4] </li>
-<li>Number of the most spatially variable celltypes to be plotted [4]</li>
+<li>Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot [L4]</li>
+<li>Number of marker genes computed for each cell type in the reference dataset [20]</li>
+<li>Number of most spatially variable cell types to be plotted [4]</li>
 </ul>
 
 <h3>Details</h3>
 
 <p>
-Please input the Seurat R-object (.Robj) and single-cell RNA-sequencing (scRNA-seq) reference dataset (.rds). 
-    Please check that your input files are correctly assigned under the parameters.
+Please input the Seurat R-object (*.Robj) and single-cell RNA-sequencing (scRNA-seq) reference dataset (*.RDS). 
+    In the parameters window, please check that your input files are assigned to the correct objects.
 <br>
 <br>
-The input Seurat object may first need to be generated
+The input Seurat R-object may first need to be generated
 using the tool: <b>Seurat v4 -Subset out anatomical regions based on clusters</b>. 
-When using this tool you want to select clusters containing cell types that are (most likely) present in the reference dataset.
-To help you in the selection, you can refer to the third plot generated using the tool <b>Seurat v4 -PCA, clustering, and visualisation</b>. 
-This plot shows all of the the color-coded clusters which have been mapped to different anatomical regions of the tissue slice.
+When using this tool, please select clusters containing cell types expected to be found in the reference dataset (e.g., astrocytes if analysing a brain tissue slice, etc.).
+To help you with your selection, you can refer to the third plot generated using the tool <b>Seurat v4 -PCA, clustering, and visualisation</b>. 
+This plot shows all the color-coded clusters which have been mapped to different anatomical regions of the tissue slice.
 </p>
 <p>
-The tool does the following analysis steps:
+The tool performs the following analysis steps:
 </p>
 <ol>
 <p>
@@ -71,7 +71,7 @@ vignette, written by its own developer, Meichen Dong.</li>
 
 <ul>
 <p>
-<li><b>seurat_obj_deconv.Robj</b>: This Seurat object now includes a new SCDC assay, and this can be imported into R. However, this is not viewable in
+<li><b>seurat_obj_deconv.Robj</b>: This Seurat R-object now includes a new SCDC assay, and this can be imported into R. However, this is not viewable in
     Chipster.</li>
 </p>
 <p>
