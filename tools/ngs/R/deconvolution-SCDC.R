@@ -1,13 +1,13 @@
-# TOOL deconvolution-SCDC.R: "Deconvolution using SCDC"
-# INPUT seurat_obj_subset.Robj: "Seurat object" TYPE GENERIC
+# TOOL deconvolution-SCDC.R: "Deconvolution using SCDC" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset.)
+# INPUT seurat_obj_subset.Robj: "Seurat Object Containing Visium Data" TYPE GENERIC
 # INPUT allen_cortex: "Allen Reference" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_deconv.Robj
 # OUTPUT OPTIONAL SpatialFeaturePlot.pdf
 # OUTPUT OPTIONAL SpatialPlot.pdf
 # OUTPUT OPTIONAL VlnPlot.pdf
-# PARAMETER clusters: "Subset of clusters" TYPE STRING DEFAULT "L4" (Subset clusters by using their cell type name\(s\). If you list multiple clusters, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\". Please do not use a space in between the comma\(s\).)
-# PARAMETER top.genes: "Top genes" TYPE INTEGER FROM 20 TO 50 DEFAULT 20 (Select the number \(between 20 and 50\) of top genes to include in the analysis.)
-# PARAMETER top_num_cluster: "Top clusters" TYPE INTEGER FROM 1 TO 10 DEFAULT 4 (Select the number \(between 1 and 10\) of top clusters to include in the analysis.)
+# PARAMETER clusters: "Subset of Clusters" TYPE STRING DEFAULT "L4" (Subset clusters by using their cell type name\(s\). If you list multiple clusters, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\". Please do not use a space in between the comma\(s\).)
+# PARAMETER top.genes: "Number of Marker Genes" TYPE INTEGER FROM 20 TO 50 DEFAULT 20 (Select the number \(between 20 and 50\) of marker genes \(for each cluster in the reference dataset\) to be used in the deconvolution step.)
+# PARAMETER top_num_cluster: "Top Clusters" TYPE INTEGER FROM 1 TO 10 DEFAULT 4 (Select the number \(between 1 and 10\) of top clusters to include in the analysis. Top clusters refers to cell types whose location is spatially restricted, as determined by the Markvariogram method; this then determines how many cell types are plotted.)
 # RUNTIME R-4.2.0-single-cell
 # SLOTS 4
 
