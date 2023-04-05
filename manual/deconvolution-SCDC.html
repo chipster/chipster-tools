@@ -13,8 +13,8 @@
 
 <h3>Parameters</h3>
 <ul>
-<li>Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot [L4]</li>
 <li>Number of marker genes computed for each cell type in the reference dataset [20]</li>
+<li>Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot [L4]</li>
 <li>Number of most spatially variable cell types to be plotted [4]</li>
 </ul>
 
@@ -27,7 +27,7 @@ Please input the Seurat R-object (*.Robj) and single-cell RNA-sequencing (scRNA-
 <br>
 The input Seurat R-object may first need to be generated
 using the tool: <b>Seurat v4 -Subset out anatomical regions based on clusters</b>. 
-When using this tool, please select clusters containing cell types expected to be found in the reference dataset (e.g., astrocytes if analysing a brain tissue slice, melanocytes for skin tissue slice, etc.).
+When using this tool, please select clusters containing cell types expected to be found in the reference dataset (e.g., astrocytes if analysing a brain tissue slice, melanocytes for a skin tissue slice, etc.).
 To help you with making your selection, you can refer to the third plot generated using the tool <b>Seurat v4 -PCA, clustering, and visualisation</b>. 
 This plot shows all the color-coded clusters which have been mapped to different anatomical regions of the tissue slice.
 </p>
@@ -37,7 +37,7 @@ The tool performs the following analysis steps:
 <ol>
 <p>
 <li>Detects cluster marker genes in the reference dataset and uses them to subset the spatially resolved transcriptomics (SRT) data. 
-    The parameter indicating the number of marker genes is used to select the number of top differentially expressed genes (DEGs) used.
+    The parameter indicating the number of marker genes is used to select the number of top differentially expressed genes (DEGs).
     It is recommended to run the analysis using a larger set of genes; however, using fewer genes can reduce the analysis runtime.</li>
 </p>
 <p>
