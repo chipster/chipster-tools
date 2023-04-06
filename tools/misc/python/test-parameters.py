@@ -8,6 +8,7 @@
 # PARAMETER OPTIONAL column: Column TYPE COLUMN_SEL
 # PARAMETER OPTIONAL metacolumn: "Phenodata column" TYPE METACOLUMN_SEL
 # PARAMETER OPTIONAL unchecked: "Unchecked string" TYPE UNCHECKED_STRING
+# RUNTIME python3
 
 # deprecated
 # PARAMETER OPTIONAL file: File TYPE INPUT_SEL
@@ -19,5 +20,10 @@ with open('output.txt', 'w') as f:
     f.write('enum	' + str(enum) + '\n')
     f.write('column	' + str(column) + '\n')
     f.write('metacolumn	' + str(metacolumn) + '\n')
-#	f.write('string	' + unchecked + '\n')
-#	f.write('file	' + str(file) + '\n')
+    f.write('unchecked string: \n')
+    
+    # adapted from https://docs.python.org/3/howto/unicode.html#unicode-properties
+    for i, c in enumerate(unchecked):
+        f.write(str(i) + '\t' + '%04x' % ord(c) + '\n')
+
+#    f.write('file	' + str(file) + '\n')
