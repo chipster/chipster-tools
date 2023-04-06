@@ -28,9 +28,9 @@
 # 2022-07-21 ML Tune for SCTransform data
 # 2022-09-22 ML Fix conserved markers filtering for multiple sample case, add sanity check for cluster number
 # 2022-09-20 ML Add min.cells.group parameter to allow outputting all the genes
-# 2023-02-10 LG Add 5 slots
+# 2023-02-10 LG Add 2 slots
 # 2023-04-03 ML Add parameters so that it is possible to print out all the genes + simplify code
-# 2023-04-06 LG Remove 5 slots
+# 2023-04-06 LG Remove 5 slots - Discrepancy in number of slots added v. removed
 
 
 library(Seurat)
