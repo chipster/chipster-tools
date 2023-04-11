@@ -1,4 +1,4 @@
-# TOOL deconvolution-SCDC.R: "Deconvolution using SCDC" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset.)
+# TOOL deconvolution-SCDC.R: "Seurat v4 and SCDC -Identify cell types using deconvolution" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset.)
 # INPUT seurat_obj_subset.Robj: "Seurat Object Containing Visium Data" TYPE GENERIC
 # INPUT allen_cortex: "Allen Reference" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_deconv.Robj
