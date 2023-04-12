@@ -211,27 +211,68 @@
 		From count table to differentially expressed genes</a>. Mouse model of Kawasaki Disease, treatment with IL-1 receptor antagonist, Anakinra (6 samples).</li>
 		<li><a href="https://www.youtube.com/watch?v=NT96sQ_3X_0">lecture video</a>
 		</li>
-
+	</ul>
 	<hr>
 
 	<h3><a name="16S">Microbial community analysis</a></h3>
 
-	These two courses introduce microbiome data analysis methods, tools, and file formats. 
+	We offer two courses for microbial community analysis. Course 1 covers amplicon sequence variant (ASV) analysis using DADA2 and Phyloseq. Course 2
+	covers OTU-based analysis using Mothur and Phyloseq. Both courses introduce microbiome data analysis methods, tools, and file formats. 
 	You will learn how to preprocess amplicon sequencing data and how to compare the structure of microbial communities using ordinations and multivariate statistics.
-	The courses cover the whole workflow from quality control and filtering to quantification and statistical analysis using either Mothur and VSEARCH 
-	(for OTU analysis) or DADA2 (for ASV analysis) and Phyloseq tools integrated in Chipster.
-	MiSeq 16S data is used in the exercises, but the course covers also the basic principles of
-	IonTorrent and ITS data analyses. The course takes two days.
+	The courses cover the whole workflow from quality control and filtering to quantification and statistical analysis.
+	MiSeq 16S data is used in the exercises, but the courses cover also the basic principles of
+	IonTorrent and ITS data analyses. The courses takes two days.
 	 
 	<br>
 	<br>
+	Course 1: ASV-based analysis with DADA2 and Phyloseq (2023)
 	
-	Course 1 contents: OTU- based analysis with Mothur, VSEARCH and Phyloseq (2021)
+	Topics covered:
 	<ul>
 		<li>Checking the quality of reads with MultiQC</li>
 		<li>Preprocessing </li>
 		<ul>
-			<li>Combining paired reads to contigs</li>
+			<li>Remove primers/adapters with Cutadapt</li>
+			<li>Filter and trim reads</li>
+		</ul>
+		<li>Sample/ASV inference</li>
+		<li>Combine paired reads to contigs</li>
+		<li>Make an ASV table and remove chimeras</li>
+		<li>Assign taxonomy</li>
+		<li>Make a phyloseq object</li>
+		<li>Merge phenodata to the phyloseq object</li>
+		<li>Data inspection and tidying using phyloseq</li>
+		<ul>
+			<li>Removing unwanted taxa</li>	
+			<li>Filtering singletons and doubletons</li>
+			<li>Prevalence filtering</li>
+		</ul>
+		<li>Data transformation, ordination and conversion</li>
+		<ul>
+			<li>CLR, Hellinger and % relative abundance</li>
+			<li>nMDS and db-RDA</li>
+			<li>DESeq2 format conversion and variance-stabilising transformation</li>
+		</ul>
+		<li>Relative abundance plots</li>
+		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
+	</ul>
+	
+	Course material:
+	<ul>
+		<li><a href="https://www.youtube.com/playlist?">lecture videos</a></li>
+		<li><a href="ttps://chipster.csc.fi/material/asv/microbiomeCommunityAnalysisASV.pdf">DADA2 part slides</a></li>
+		<li><a href="https://github.com/csc-training/chipster-microbial/blob/master/docs/slides/d2.pdf">Phyloseq part slides</a></li>
+		<li>Example analysis session in Chipster: 08_microbial_community_analysis_16S_ASV_preprocessing_DADA2</li
+	</ul>
+	
+	Course 2: OTU-based analysis with Mothur, VSEARCH and Phyloseq (2021)
+	
+	Topics covered:
+	<ul>
+		<li>Checking the quality of reads with MultiQC</li>
+		<li>Preprocessing </li>
+		<ul>
+			<li>Combining paired reads to contigs with VSEARCH</li>
 			<li>Screening sequences for length and ambiguous bases</li>
 			<li>Removing identical sequences</li>
 		</ul>
@@ -265,37 +306,7 @@
 		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
 	</ul>
 		
-	Course 2 contents: ASV- based analysis with DADA2 and Phyloseq (2023)
-	<ul>
-		<li>Checking the quality of reads with MultiQC</li>
-		<li>Preprocessing </li>
-		<ul>
-			<li>Remove primers/adapters with Cutadapt</li>
-			<li>Filter and trim reads</li>
-		</ul>
-		<li>Sample/ASV inference</li>
-		<li>Combine paired reads to contigs</li>
-		<li>Make an ASV table and remove chimeras</li>
-		<li>Assign taxonomy</li>
-		<li>Make a phyloseq object</li>
-		<li>Merge phenodata to the phyloseq object</li>
-		<li>Data inspection and tidying using phyloseq</li>
-		<ul>
-			<li>Removing unwanted taxa</li>	
-			<li>Filtering singletons and doubletons</li>
-			<li>Prevalence filtering</li>
-		</ul>
-		<li>Data transformation, ordination and conversion</li>
-		<ul>
-			<li>CLR, Hellinger and % relative abundance</li>
-			<li>nMDS and db-RDA</li>
-			<li>DESeq2 format conversion and variance-stabilising transformation</li>
-		</ul>
-		<li>Relative abundance plots</li>
-		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
-	</ul>
-
-	Course 1 material (2021):
+	Course material:
 	<ul>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBjPaknlze6BkxebpEuj9KL">lecture videos</a></li>
 		<li><a href="https://drive.google.com/file/d/1NKlzqSqTTJZEYwVVJ12USLXzc8VbWhrA/view">part 1 slides</a></li>
@@ -304,18 +315,10 @@
 		<ul>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d1.html">part 1 exercises</a></li>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d2.html">part 2 exercises</a></li>
-		</ul>
-		
+		</ul>	
 	</ul>
 	
-	Course 2 material (2023):
-	<ul>
-		<li><a href="https://www.youtube.com/playlist?">lecture videos</a></li>
-		<li><a href="ttps://chipster.csc.fi/material/asv/microbiomeCommunityAnalysisASV.pdf">DADA2 part slides</a></li>
-		<li><a href="https://github.com/csc-training/chipster-microbial/blob/master/docs/slides/d2.pdf">Phyloseq part slides</a></li>
-		<li>Example analysis session in Chipster: 08_microbial_community_analysis_16S_ASV_preprocessing_DADA2</li
-		
-	</ul>
+	
 		
 	<hr>
 		
