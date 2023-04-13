@@ -8,8 +8,9 @@
 # PARAMETER top.genes: "Number of marker genes computed for each cell type in the reference dataset" TYPE INTEGER FROM 20 TO 100 DEFAULT 20 (Select the number \(between 20 and 100\) of marker genes \(for each cluster in the reference dataset\) to be used in the deconvolution step.)
 # PARAMETER clusters: "Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot" TYPE STRING DEFAULT "L4" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # PARAMETER top_num_cluster: "Number of most spatially variable cell types to be plotted in SpatialPlot and violin plots" TYPE INTEGER FROM 1 TO 10 DEFAULT 4 (Select the number of top cell type\(s\) \(between 1 and 10\) to include in the analysis. These cell types are spatially restricted to particular location\(s\), as determined by the Markvariogram method.)
-# RUNTIME R-4.2.0-single-cell
-# SLOTS 4
+# RUNTIME R-4.2.3-single-cell
+# SLOTS 2
+# TOOLS_BIN ""
 
 library(dplyr, quietly = TRUE)
 library(Seurat, quietly = TRUE)
