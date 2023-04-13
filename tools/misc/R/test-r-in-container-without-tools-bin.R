@@ -2,7 +2,7 @@
 # INPUT input: "input" TYPE GENERIC (Just some test file)
 # OUTPUT output
 # RUNTIME R-4.2.3
-# TOOLS-BIN ""
+# TOOLS_BIN ""
 
 system("cp input output")
 print("hello! hei!")
