@@ -25,7 +25,7 @@
 		(number of participants, type of analysis jobs) so that we can add computing resources to the server if needed.
 	</p>
 	</p>
-	<p>	We run currently the following Chipster courses (follow the links for more info): 
+	<p>	We run currently the following Chipster courses (please follow the links for more info): 
 		<!--CSC runs also <a href="https://research.csc.fi/bioscience-learning-materials">other bioinformatics courses</a>,
 		you can find the upcoming courses in our <a href="https://www.csc.fi/en/training">course calendar</a>.-->
 	</p>
@@ -33,9 +33,9 @@
 	<ol>
 		<li> <a href="#visium">Visium data analysis (spatially resolved transcriptomics)</a> </li>
 		<li> <a href="#single-cell">Single-cell RNA-seq data analysis</a> </li>
-		<li> <a href="#rna">RNA-seq data analysis</a> </li>
+		<li> <a href="#rna">Bulk RNA-seq data analysis</a> </li>
 		<li> <a href="#quantseq">3' RNA-seq data analysis (QuantSeq)</a> </li>
-		<li> <a href="#16S">Microbial community analysis </a> </li>
+		<li> <a href="#microbiome">Microbial community analysis </a> </li>
 		<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
 		<li> <a href="#variant">Detection and annotation of genomic variants</a> </li>
 		<li> <a href="#chip">ChIP-seq data analysis</a> </li>
@@ -133,7 +133,7 @@
 
 	<hr>
 
-	<h3><a name="rna">RNA-seq data analysis</a></h3>
+	<h3><a name="rna">Bulk RNA-seq data analysis</a></h3>
 
 	This course introduces RNA-seq data analysis methods, tools and file formats. It covers all the steps from quality
 	control and alignment to quantification and differential expression analysis, and also experimental design is
@@ -154,10 +154,10 @@
 		<li>perform pathway analysis with ConsensusPathDB</li>
 	</ul>
 
-	Course material (2022):
+	Course material (2023):
 	<ul>
-		<li><a href="https://chipster.csc.fi/material/rna/IntroductionToChipsterAndCourse.pdf">introductory slides about Chipster and the course</a></li>
-		<li><a href="https://chipster.csc.fi/material/rna/RNAseqDataAnalysis2022.pdf">slides on RNA-seq data analysis</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/Chipster.pdf">introductory slides about Chipster and the course</a></li>
+		<li><a href="https://chipster.csc.fi/material/rna/RNAseqDataAnalysis2023.pdf">slides on RNA-seq data analysis</a></li>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBj3KYi7ACscgOxlNkNOxPc">lecture videos</a> (2019-2022)
 		</li>
 		<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
@@ -211,26 +211,68 @@
 		From count table to differentially expressed genes</a>. Mouse model of Kawasaki Disease, treatment with IL-1 receptor antagonist, Anakinra (6 samples).</li>
 		<li><a href="https://www.youtube.com/watch?v=NT96sQ_3X_0">lecture video</a>
 		</li>
-
+	</ul>
 	<hr>
 
-	<h3><a name="16S">Microbial community analysis</a></h3>
+	<h3><a name="microbiome">Microbial community analysis</a></h3>
 
-	This course introduces microbiome analysis methods, tools, and file formats. 
-	You will learn how to preprocess amplicon sequencing data and how to compare the structure of microbial communities using ordinations and multivariate statistics.
-	The course covers the whole workflow from quality control and filtering to quantification and statistical analysis using Mothur and Phyloseq tools integrated in Chipster.
-	MiSeq 16S data is used in the exercises, but the course covers also the basic principles of
-	IonTorrent and ITS data analyses. The course takes two days.
+	We offer two courses for microbial community analysis: Course 1 covers amplicon sequence variant (ASV) analysis using DADA2, and Course 2
+	covers OTU-based analysis using Mothur. Both courses contain a Phyloseq-based part where you learn to how to compare the structure of microbial communities 
+	using ordinations and multivariate statistics.	The courses introduce the whole workflow from quality control and filtering to quantification and statistical analysis.
+	MiSeq 16S data is used in the exercises, but also the steps specific to IonTorrent and ITS data analyses are explained. The courses take two days.
 	 
 	<br>
 	<br>
-	
-	Course contents:
+	<u>Course 1: ASV-based analysis with DADA2 and Phyloseq (2023)</u>
+	<br>
+	<br>
+	Topics covered:
 	<ul>
 		<li>Checking the quality of reads with MultiQC</li>
 		<li>Preprocessing </li>
 		<ul>
-			<li>Combining paired reads to contigs</li>
+			<li>Remove primers/adapters with Cutadapt</li>
+			<li>Filter and trim reads</li>
+		</ul>
+		<li>Sample/ASV inference</li>
+		<li>Combine paired reads to contigs</li>
+		<li>Make an ASV table and remove chimeras</li>
+		<li>Assign taxonomy</li>
+		<li>Make a phyloseq object</li>
+		<li>Merge phenodata to the phyloseq object</li>
+		<li>Data inspection and tidying using phyloseq</li>
+		<ul>
+			<li>Removing unwanted taxa</li>	
+			<li>Filtering singletons and doubletons</li>
+			<li>Prevalence filtering</li>
+		</ul>
+		<li>Data transformation, ordination and conversion</li>
+		<ul>
+			<li>CLR, Hellinger and % relative abundance</li>
+			<li>nMDS and db-RDA</li>
+			<li>DESeq2 format conversion and variance-stabilising transformation</li>
+		</ul>
+		<li>Relative abundance plots</li>
+		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
+	</ul>
+	
+	Course material:
+	<ul>
+		<li><a href="https://www.youtube.com/playlist?">lecture videos</a></li>
+		<li><a href="ttps://chipster.csc.fi/material/asv/microbiomeCommunityAnalysisASV.pdf">DADA2 part slides</a></li>
+		<li><a href="https://github.com/csc-training/chipster-microbial/blob/master/docs/slides/d2.pdf">Phyloseq part slides</a></li>
+		<li>Example analysis session in Chipster: 08_microbial_community_analysis_16S_ASV_preprocessing_DADA2</li>
+	</ul>
+	<br>
+	<u>Course 2: OTU-based analysis with Mothur, VSEARCH and Phyloseq (2021)</u>
+	<br>
+	<br>
+	Topics covered:
+	<ul>
+		<li>Checking the quality of reads with MultiQC</li>
+		<li>Preprocessing </li>
+		<ul>
+			<li>Combining paired reads to contigs with VSEARCH</li>
 			<li>Screening sequences for length and ambiguous bases</li>
 			<li>Removing identical sequences</li>
 		</ul>
@@ -263,8 +305,8 @@
 		<li>Relative abundance plots</li>
 		<li>Community comparisons using PERMANOVA, PERMDISP and DESeq2</li>
 	</ul>
-
-	Course material (2021):
+	
+	Course material:
 	<ul>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBjPaknlze6BkxebpEuj9KL">lecture videos</a></li>
 		<li><a href="https://drive.google.com/file/d/1NKlzqSqTTJZEYwVVJ12USLXzc8VbWhrA/view">part 1 slides</a></li>
@@ -273,9 +315,8 @@
 		<ul>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d1.html">part 1 exercises</a></li>
 			<li><a href="https://csc-training.github.io/chipster-microbial/exercises/d2.html">part 2 exercises</a></li>
-		</ul>
-		
-	</ul>
+		</ul>	
+	</ul>	
 		
 	<hr>
 		
