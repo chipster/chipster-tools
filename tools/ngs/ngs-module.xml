@@ -47,7 +47,8 @@
 		<tool>remove-duplicate-genes.py</tool>
 		<tool>process-preprocessed-counts.R</tool>
 		<tool>normalise-counts.R</tool>
-		<tool>annotate-ensembl-ids.py</tool>		
+		<tool>annotate-ensembl-ids.py</tool>
+		<tool module="common">plot-volcano-data-exists.R</tool>		
 		<tool>samtools-index.R</tool>
 		<tool>samtools-sort-index-BAM.R</tool>
 		<tool>samtools-convert-SAMtoBAM-sort-index.R</tool>
