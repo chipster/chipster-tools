@@ -7,3 +7,12 @@
 # PARAMETER OPTIONAL column: Column TYPE COLUMN_SEL 
 # PARAMETER OPTIONAL metacolumn: "Phenodata column" TYPE METACOLUMN_SEL 
 # PARAMETER OPTIONAL file: File TYPE INPUT_SEL
+
+print(paste("int: ", int))
+print(paste("dec: ", dec))
+print(paste("string: ", string))
+print(paste("unchecked:", unchecked))
+print(paste("enum:", enum))
+print(paste("column:", column))
+print(paste("metacolumn:", metacolumn))
+print(paste("file:", file))

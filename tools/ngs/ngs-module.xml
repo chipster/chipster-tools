@@ -252,6 +252,7 @@
 		<tool>spatial-transcriptomics-seurat-subset-clusters.R</tool>
 		<tool>spatial-transcriptomics-seurat-integrated.R</tool>
 		<tool>spatial-transcriptomics-seurat-visualise-integration.R</tool>
+		<tool>deconvolution-SCDC.R</tool>
 	</category>
 
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
