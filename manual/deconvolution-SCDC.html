@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Deconvolution Tool (SCDC)</title></head>
+<body>
+<h2>Deconvolution Tool (SCDC)</h2>
+
+<h3>Description</h3>
+
+<p>
+    This tool estimates the abundance (or proportion) of different cell types
+    in Visium spots using a single cell reference dataset.
+</p>
+
+<h3>Parameters</h3>
+<ul>
+<li>Number of marker genes computed for each cell type in the reference dataset [20]</li>
+<li>Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot [L4]</li>
+<li>Number of most spatially variable cell types to be plotted [4]</li>
+</ul>
+
+<h3>Details</h3>
+
+<p>
+Please input the Seurat R-object (*.Robj) and single-cell RNA-sequencing (scRNA-seq) reference dataset (*.RDS). 
+    In the parameters window, please check that your input files are assigned to the correct objects.
+<br>
+<br>
+The input Seurat R-object may first need to be generated
+using the tool: <b>Seurat v4 -Subset out anatomical regions based on clusters</b>. 
+When using this tool, please select clusters containing cell types expected to be found in the reference dataset (e.g., astrocytes if analysing a brain tissue slice, melanocytes for a skin tissue slice, etc.).
+To help you with making your selection, you can refer to the third plot generated using the tool <b>Seurat v4 -PCA, clustering, and visualisation</b>. 
+This plot shows all the color-coded clusters which have been mapped to different anatomical regions of the tissue slice.
+</p>
+<p>
+The tool performs the following analysis steps:
+</p>
+<ol>
+<p>
+<li>Detects cluster marker genes in the reference dataset and uses them to subset the spatially resolved transcriptomics (SRT) data. 
+    The parameter indicating the number of marker genes is used to select the number of top differentially expressed genes (DEGs).
+    It is recommended to run the analysis using a larger set of genes; however, using fewer genes can reduce the analysis runtime.</li>
+</p>
+<p>
+<li>Uses the detected marker genes for deconvolution.</li>
+</p>
+<p>
+<li>Plots the predicted proportions of selected cell types (the first parameter) for each Visium spot in SpatialFeaturePlot.</li>
+</p>
+<p>
+<li>Detects spatially variable cell types using the Markvariogram method and plots them in the SpatialPlot and the ViolinPlot. By default, only 
+    the top four most spatially variable cell types are plotted. </li>
+</p>
+</ol>
+
+<p>
+If you would like more information about the SCDC tool, please refer to the following two resources:
+
+<ul>
+<p>
+<li><a href="https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Deconvolution"><b>NBIS (National Bioinformatics Infrastructure Sweden) tutorial</b></a>
+on the deconvolution of spatially resolved transcriptomics (SRT) data</li>
+</p>
+<p>
+<li><a href="https://meichendong.github.io/SCDC/articles/SCDC.html" ><b>SCDC: Bulk Gene Expression Deconvolution by Multiple Single-Cell RNA Sequencing References</b></a>
+vignette, written by its own developer, Meichen Dong.</li>
+</p>
+</ul>
+</p>
+
+<h3>Outputs</h3>
+
+<ul>
+<p>
+<li><b>seurat_obj_deconv.Robj</b>: This Seurat R-object now includes a new SCDC assay, and this can be imported into R. However, this is not viewable in
+    Chipster.</li>
+</p>
+<p>
+<li><b>SpatialFeaturePlot.pdf</b>: Plot(s) are generated for each selected cell type. Different colored spots are overlayed on top of the tissue slice.
+    The colors represent the predicted proportions of each cell type for each Visium spot.</li>
+</p>
+<li><b>SpatialPlot.pdf</b>: The top tissue slice plots with corresponding colored spots are generated -- one for each of the top cell types.
+<p>
+<li><b>VlnPlot.pdf</b>: The top violin plots are generated -- one for each of the top cell types. The x-axis shows the selected clusters, each designated by its corresponding number,
+    and the y-axis shows each cluster's expression level.</li>
+</p>
+</ul>
+
+
+
+</body>
+</html>
+
+
+<!-- For the manual:
+Make it clear that:
+Add information about creating a NEW seurat subsetted object manually (not the one from the sample session) based
+on the clusters found in the UMAP 3rd figure (which was in the sample session) (pick 5 clusters using this 3rd figure) -->
+
+    <!-- This plots a feature or discrete grouping (e.g., cluster assignments) as spots over the image that was collected.</li> -->
+<!-- This definition was taken from https://satijalab.org/seurat/reference/spatialplot -->
