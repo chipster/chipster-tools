@@ -13,7 +13,8 @@
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # PARAMETER OPTIONAL output_aver_expr: "For each gene, list the average expression and percentage of cells expressing it in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns two tables: average expression and percentage of cells expressing the user defined genes in each cluster.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 
 
@@ -26,7 +27,8 @@
 
 # for UMAP:
 library(reticulate)
-use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
+Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+#use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 
 library(Seurat)

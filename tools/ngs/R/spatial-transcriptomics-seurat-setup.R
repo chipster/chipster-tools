@@ -3,8 +3,9 @@
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf 
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample in multisample analysis.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
 # SLOTS 2
+# TOOLS_BIN ""
 
 # 2022-07-15 IH
 # 2022-10-13 ML Coordinates to integers -check and input folder handling

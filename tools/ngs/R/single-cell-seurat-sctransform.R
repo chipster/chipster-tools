@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out dead cells. The cells to be kept must have lower percentage of mitochondrial transcripts than this.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
 
 
 
@@ -34,7 +34,8 @@ load("seurat_obj.Robj")
 pdf(file="Dispersion_plot.pdf", width=13, height=7) 
 
 # For cell cycle filtering, read in a list of cell cycle markers, from Tirosh et al, 2015
-cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+#cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+cc.genes <- readLines(con = file.path("/opt/chipster/tools-bin/seurat/regev_lab_cell_cycle_genes.txt"))
 # We can segregate this list into markers of G2/M phase and markers of S phase
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]

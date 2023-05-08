@@ -13,7 +13,8 @@
 # PARAMETER OPTIONAL mincellsconserved: "Minimum number of cells in one of the groups for conserved markers" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in a each sample in the cluster in question.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # PARAMETER OPTIONAL minpct_conserved: "Limit testing for conserved markers to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in the cluster in question or in all the other cells. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 
 # PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)

@@ -6,7 +6,8 @@
 # PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 30 (How many principal components to compute and use in UMAP. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 # 2022-07-27 IH
 # 2022-10-20 ML Add UMAP plot with sample names

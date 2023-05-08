@@ -2,7 +2,8 @@
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL spatialdimplot.pdf
 # PARAMETER OPTIONAL clusters: "Clusters to plot" TYPE STRING DEFAULT "2, 1" (You can which clusters to plot. If you list multiple clusters, use comma \(,\) as separator.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 # 2022-07-28 IH 
 

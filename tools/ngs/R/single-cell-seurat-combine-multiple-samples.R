@@ -7,7 +7,8 @@
 # PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 30 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 30 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
 # PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 
 # 2021-12-30 ML
