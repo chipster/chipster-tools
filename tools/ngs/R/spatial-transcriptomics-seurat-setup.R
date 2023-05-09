@@ -2,7 +2,7 @@
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf 
-# PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample in multisample analysis.)
+# PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample in multisample analysis. Make sure the samples are named differently if you have multiple samples.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
