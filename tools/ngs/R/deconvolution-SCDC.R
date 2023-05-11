@@ -1,9 +1,9 @@
-# TOOL deconvolution-SCDC.R: "Seurat v4 and SCDC -Identify cell types using deconvolution" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset.)
+# TOOL deconvolution-SCDC.R: "Seurat v4 and SCDC -Identify cell types using deconvolution" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset. Spatially variable cell types are also predicted and plotted. )
 # INPUT seurat_obj_subset.Robj: "Seurat Object Containing Visium Data" TYPE GENERIC
 # INPUT reference: "scRNA-seq reference data" TYPE GENERIC (scRNA-seq reference data used for the deconvolution. You can find one for example from the Allen Brain Atlas.)
 # OUTPUT OPTIONAL seurat_obj_deconv.Robj
 # OUTPUT OPTIONAL SpatialFeaturePlot.pdf
-# OUTPUT OPTIONAL deconvolution_plot.pdf
+# OUTPUT OPTIONAL spatially_variable_cell_types.pdf
 # PARAMETER top.genes: "Number of marker genes computed for each cell type in the reference dataset" TYPE INTEGER FROM 20 TO 100 DEFAULT 20 (Select the number \(between 20 and 100\) of marker genes \(for each cluster in the reference dataset\) to be used in the deconvolution step.)
 # PARAMETER clusters: "Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot" TYPE UNCHECKED_STRING DEFAULT "L4" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # PARAMETER top_num_cluster: "Number of most spatially variable cell types to be plotted in SpatialPlot and violin plots" TYPE INTEGER FROM 1 TO 10 DEFAULT 4 (Select the number of top cell type\(s\) \(between 1 and 10\) to include in the analysis. These cell types are spatially restricted to particular location\(s\), as determined by the Markvariogram method.)
@@ -89,7 +89,7 @@ SpatialFeaturePlot(seurat_obj, features = clusters, pt.size.factor = 1.6, ncol =
 dev.off()
 
 
-pdf(file="deconvolution_plot.pdf")
+pdf(file="spatially_variable_cell_types.pdf")
 
 seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCDC", selection.method = "markvariogram",
     features = rownames(seurat_obj), r.metric = 5, slot = "data")
