@@ -9,6 +9,7 @@
 # PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
 # RUNTIME R-4.2.3-single-cell
 # TOOLS_BIN ""
+# SLOTS 3
 
 
 # 2021-12-30 ML
@@ -18,6 +19,7 @@
 # 2022-05-05 ML Rewrite the code, add option to use only part of samples as references
 # 2023-02-03 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
+# 2023-02-01 ML Return to the original 3 slots
 
 
 
