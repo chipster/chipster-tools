@@ -85,6 +85,7 @@
 		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
+		<tool module="common">extract_gzip_tar_storage.py</tool>
 		<tool module="common">extract_zip.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_tar.R</tool>
