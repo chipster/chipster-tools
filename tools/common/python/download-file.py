@@ -82,12 +82,9 @@ t1 = time.perf_counter()
 last_reported_size = 0
 start_time = t1
 
-# first report every second
-# after 10 seconds report every 10 seconds
-# after 1 min report every minute and so on
-report_intervals = [ 1, 10, 60, 10 * 60, 60 * 60]
-# prefer long intervals
-report_intervals.reverse()
+# report every second at first and then gradually raise the interval
+report_interval = 1
+report_interval_multiplier = 1.2
 
 print("downloading...")
 
@@ -97,15 +94,10 @@ with open('downloaded_file', 'wb') as file:
 		downloaded_size += len(data)		
 
 		t2 = time.perf_counter()
-
-		# pick suitable reporting interval based on the download duration
-		# take all intervals which are smaller than the current job duration and then take first 
-		# (longest, because the list was reversed)
-		# set default to 1, because everything is filtered out during the first second
-		report_interval = next(filter(lambda interval: (t2 - start_time) > interval, report_intervals), 1)
 		
 		if t2 - t1 > report_interval:
 
+			report_interval = report_interval * report_interval_multiplier
 			speed = (downloaded_size - last_reported_size) / (t2 - t1)
 			t1 = t2
 			last_reported_size = downloaded_size		
