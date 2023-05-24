@@ -83,6 +83,7 @@
 	    	<tool module="common">srabamfetch.R</tool>
 		 -->
 		<tool>fi.csc.chipster.tools.common.DownloadFile.java</tool>
+		<tool module="common">download-file.py</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
 		<tool module="common">extract_gzip_tar_storage.py</tool>
