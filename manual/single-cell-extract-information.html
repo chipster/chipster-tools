@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+	<title>Extract information from Seurat object</title>
+</head>
+<body>
+
+	<h2>Extract information from Seurat object</h2>
+
+	<h3>Description</h3>
+
+	<p>
+			With this tool you can extract information from the Seurat object. The tool will produce
+			<li>a text file containing information of the different slots in the Seurat object</li>
+			<li>a table of the meta.data data frame in the Seurat object </li>
+	</p>
+
+	<h3>Details</h3>
+
+	<p>
+	This tool can be used to access the data stored in the Seurat object. Moreover, this tool can be used to check whether your scRNA-seq data can be used as the reference dataset in the spatially resolved trancriptomics tools: "Seurat v4 -Integration with scRNA-seq data" and "Seurat v4 and SCDC -Identify cell types using deconvolution".
+	</p>
+	<p>
+		As input, you can give a Seurat R-object (Robj) or an RDS file containing scRNA-seq data.
+	</p>
+
+
+    <h3>Output</h3>
+
+	<ul>
+
+		<li>slots.txt: Text file containing information of the different slots in the Seurat object </li>
+		<li>meta_data.tsv: Table of the meta.data data frame in the Seurat object</li>
