@@ -1,4 +1,4 @@
-# TOOL extract_gzip_tar.py: "Extract .tar or .tar.gz file" (Extract a tar file. The file can be gzipped (usually has a file extension .tar.gz.\)
+# TOOL extract_gzip_tar_storage.py: "Extract large .tar or .tar.gz file" (Use this tool if the size of the package and extracted files exceeds 200 GB. Extract a tar file. The file can be gzipped (usually has a file extension .tar.gz.\)
 # All files are extracted by default, but you can choose to extract only one or some of the files by giving the names of the files to be extracted as a parameter. Alternatively you can provide a list of filenames as a text file, one name per line. 
 # To see the contents of a .tar file, use tool \"Utilities: List contents of a tar file\".)
 # INPUT input_file: ".tar.gz file" TYPE GENERIC (Tar file. Can be gzip compressed.)
@@ -7,6 +7,7 @@
 # PARAMETER OPTIONAL names: "Extract by filename" TYPE STRING (Filenames of the files to extract. If more than one, separate names with a comma (e.g. abc123_1.fq,abc123_2.fq\). Alternatively you can provide a list of filenames as a text file, one name per line.)
 # PARAMETER OPTIONAL extensions: "Extract by extension" TYPE STRING (Filename extension of the files to extract (e.g .html\). If more than one, separate with a comma (e.g .txt,.log\).)
 # RUNTIME python3
+# STORAGE 1000
 # TOOLS_BIN ""
 
 import os

@@ -10,6 +10,7 @@
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL sample_name: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.2.3-single-cell
+# SLOTS 2
 # TOOLS_BIN ""
 
 # 2017-06-06 ML
@@ -23,6 +24,7 @@
 # 2022-04-01 ML Add HDF5 input file option
 # 2023-02-01 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
+# 2023-02-01 ML Return to the original 2 slots
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."

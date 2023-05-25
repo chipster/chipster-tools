@@ -9,6 +9,7 @@
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
 # RUNTIME R-4.2.3-single-cell
+# SLOTS 2
 
 
 
@@ -18,6 +19,7 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2023-02-01 ML Add 5 slots
 # 2023-04-06 LG Remove 2 slots - Discrepancy in number of slots added v. removed
+# 2023-02-01 ML Return to the original 2 slots
 
 # Source: https://github.com/satijalab/seurat/issues/1679
 
