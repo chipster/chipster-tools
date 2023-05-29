@@ -1,5 +1,6 @@
 # TOOL single-cell-extract-information.R: "Extract information from Seurat object" (This tool extracts data from Seurat object.)  
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# INPUT OPTIONAL combined_seurat_obj.Robj: "Combined seurat object" TYPE GENERIC
 # INPUT OPTIONAL reference: "Seurat object stored in an RDS file " TYPE GENERIC 
 # OUTPUT OPTIONAL slots.txt
 # OUTPUT OPTIONAL meta_data.tsv
@@ -16,7 +17,10 @@ if (file.exists("reference") ){
 if (file.exists("seurat_obj.Robj") ){
 	load("seurat_obj.Robj")
 }
-
+if (file.exists("combined_seurat_obj.Robj") ){
+	load("combined_seurat_obj.Robj")
+	seurat_obj <- data.combined
+}
 # Create a text file of the different slots in the Seurat object
 sink("slots.txt")
 
