@@ -9,9 +9,9 @@
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT Project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL sample_name: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
 # SLOTS 5
-
+# TOOLS_BIN ""
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -22,7 +22,6 @@
 # 2019-09-30 EK add spport for lower case mitochondrial gene names
 # 2021-10-04 ML Update to Seurat v4
 # 2022-04-01 ML Add HDF5 input file option
-# 2023-06-14 ML Make 10X tar package input option to accept gzipped files and files with longer names
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."

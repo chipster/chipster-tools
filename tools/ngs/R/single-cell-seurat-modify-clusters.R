@@ -7,7 +7,8 @@
 # PARAMETER remove.include: "Do you wish to remove or include these clusters" TYPE [remove, include] DEFAULT remove (Select whether you want to remove or include the clusters listed above.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation of clusters with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use in plots.)
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 0.5 (Point size for the dimensionality reduction plot.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 
 # 2021-12-28 ML 

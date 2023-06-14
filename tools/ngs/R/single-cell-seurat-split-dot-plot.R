@@ -5,7 +5,7 @@
 # PARAMETER OPTIONAL markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
 
 
 # 2018-16-05 ML
@@ -21,7 +21,8 @@
 
 # for UMAP:
 library(reticulate)
-use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
+Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+#use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 library(readr)  

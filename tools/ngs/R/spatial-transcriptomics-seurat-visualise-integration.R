@@ -1,10 +1,11 @@
-# TOOL spatial-transcriptomics-seurat-visualise-integration.R: "Seurat v4 -Visualise integration" (Visualise the underlying composition of cell types in each spatial spot.)
+# TOOL spatial-transcriptomics-seurat-visualise-integration.R: "Seurat v4 -Visualise cell types after integration with scRNA-seq data" (Visualise the underlying composition of cell types in each spatial spot.)
 # INPUT seurat_obj_integrated.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integration_plot.pdf
 # PARAMETER OPTIONAL genes: "Features to plot" TYPE STRING DEFAULT "L4" (Names of the features to plot. If you list multiple gene names, use comma as separator.)
-# PARAMETER OPTIONAL method.to.use: "Method to use" TYPE [markvariogram: markvariogram, moransi: moransi] DEFAULT markvariogram (Method to use. Mark variogram takes longer to run, Morans I is faster.)
+# PARAMETER OPTIONAL method.to.use: "Method to use" TYPE [markvariogram: markvariogram, moransi: moransi] DEFAULT markvariogram (Method to use. Markvariogram takes longer to run, Morans I is faster.)
 # PARAMETER OPTIONAL number.of.top.features: "Number of features to plot" TYPE INTEGER DEFAULT 6 (How many top features to plot.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 # 2022-08-05 IH
 # 2022-10-20 ML Add moransi option 

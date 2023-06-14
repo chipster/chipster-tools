@@ -13,8 +13,8 @@
 # PARAMETER OPTIONAL mincellsconserved: "Minimum number of cells in one of the groups for conserved markers" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in a each sample in the cluster in question.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # PARAMETER OPTIONAL minpct_conserved: "Limit testing for conserved markers to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in the cluster in question or in all the other cells. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# RUNTIME R-4.2.0-single-cell
-# SLOTS 5
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 
 # PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
@@ -28,8 +28,10 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2022-07-21 ML Tune for SCTransform data
 # 2022-09-22 ML Fix conserved markers filtering for multiple sample case, add sanity check for cluster number
-# 2022-09-20 ML Add min.cells.group parameter to allow outputting all the genes  
+# 2022-09-20 ML Add min.cells.group parameter to allow outputting all the genes
+# 2023-02-10 LG Add 2 slots
 # 2023-04-03 ML Add parameters so that it is possible to print out all the genes + simplify code
+# 2023-04-06 LG Remove 5 slots - Discrepancy in number of slots added v. removed
 
 
 library(Seurat)

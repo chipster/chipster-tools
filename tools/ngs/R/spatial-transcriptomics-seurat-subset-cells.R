@@ -4,7 +4,8 @@
 # OUTPUT OPTIONAL subset2.pdf
 # PARAMETER OPTIONAL rows: "Choose cell rows" TYPE INTEGER DEFAULT 400 (Check with spatialdimplot which cell rows to remove.)
 # PARAMETER OPTIONAL columns: "Choose cell columns" TYPE INTEGER DEFAULT 150 (Check with spatialdimplot which cell columns to remove.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 library(Seurat)
 library(ggplot2)

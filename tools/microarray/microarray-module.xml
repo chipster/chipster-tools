@@ -141,7 +141,7 @@
 		<tool>plot-idiogram.R</tool>
 		<tool>plot-chrom-pos.R</tool>
 		<tool>plot-volcano.R</tool>
-		<tool>plot-volcano-data-exists.R</tool>
+		<tool module="common">plot-volcano-data-exists.R</tool>
 		<tool>plot-boxplot.R</tool>
 		<tool>plot-dendrogram.R</tool>
 		<tool>plot-histogram.R</tool>

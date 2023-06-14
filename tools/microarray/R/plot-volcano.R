@@ -1,4 +1,4 @@
-# TOOL plot-volcano.R: "Volcano plot" (Tests whether the genes are differentially expressed using one-sample t-test, and plots the result in a form of a Volcano plot, but a table with the original data, the scaled fold change values and the adjusted p-values is also output. This tool is best suited for 2-color array data, where the comparison to a common reference is done on the array.)
+# TOOL plot-volcano.R: "Volcano plot with t-test" (Tests whether the genes are differentially expressed using one-sample t-test, and plots the result in a form of a Volcano plot, but a table with the original data, the scaled fold change values and the adjusted p-values is also output. This tool is best suited for 2-color array data, where the comparison to a common reference is done on the array.)
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
 # OUTPUT volcanoP.pdf: volcanoP.pdf 
 # OUTPUT volcanoSE.pdf: volcanoSE.pdf 

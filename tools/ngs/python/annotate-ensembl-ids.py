@@ -67,7 +67,7 @@ other_col_titles = None
 
 try:
 	column_to_find = "ensembl_id"
-
+	
 	id_col_index = column_titles.index(column_to_find)
 	id_col_title = column_titles[id_col_index]
 	other_col_titles = column_titles.copy()
@@ -80,6 +80,13 @@ try:
 
 except ValueError:
 	print("column '" + column_to_find + "' not found, using first")
+
+	if no_first_column_title:
+		other_col_titles = column_titles
+	else:
+		id_col_title = column_titles[0]
+		other_col_titles = column_titles.copy()
+		other_col_titles.pop(0)
 
 # there is a limit how many IDs can be queried in one request
 max_ids_per_query = 1000
@@ -105,6 +112,7 @@ with open("annotated.tsv", "w") as annotated:
 		# the first column title is missing i.e. R rowname
 		annotated.write("symbol\tdescription\t" + "\t".join(column_titles) + "\n")
 	else:
+		print("keep the column title of first column: " + str(id_col_title))
 		# keep the colum title of first column
 		annotated.write(id_col_title + "\tsymbol\tdescription\t" + "\t".join(other_col_titles) + "\n")
 

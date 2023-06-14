@@ -7,8 +7,8 @@
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
-# RUNTIME R-4.2.0-single-cell
-# SLOTS 5
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 # OUTPUT OPTIONAL log.txt
 # NOTE: num.of.pcas set to 20 to make runs faster, original default = 50.
@@ -20,6 +20,8 @@
 # 2019-06-12 ML Seurat v3
 # 2021-10-04 ML update to Seurat v4
 # 2022-10-03 EK increase the default number of PCs to 50 as in Seurat
+# 2023-02-09 LG Add 5 slots
+# 2023-04-06 LG Remove 5 slots
 
 library(Seurat)
 library(dplyr)

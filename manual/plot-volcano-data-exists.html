@@ -3,32 +3,34 @@
 <head><title></title></head>
 <body>
 
-<h2>Visualisation / Volcano plot from existing results</h2>
+<h2>Visualisation / Volcano plot</h2>
 
 <h3>Description</h3>
 
-<p>Creates a volcano plot on the basis of existing information.</p>
+<p>Creates a volcano plot from results of a statistical test.</p>
 
 <h3>Parameters</h3>
 
 <ul>
 <li>P-value column</li>
 <li>Fold change column</li>
+<li>Gene names (0...50) [10]</li>
+<li>Gene labels</li>
 <li>Image width (200...3200) [600]</li>
 <li>Image height (200...3200) [600]</li>
 </ul>
 
 <h3>Details</h3>
 
-<p>This tool creates a volcano plot from data which contains genewise p-values and fold changes. The values can be created by 
-by using the empirical Bayes method when running for example the tool Statistics /Two group tests). In the plot, dots of genes
-of which p-value is below a given threshold are red. The threshold is indicated with a dashed horizontal line.</p>
+<p>This tool creates a volcano plot from data containing genewise p-values and fold changes. In the plot, red dots represent genes below the p-value threshold. The threshold is indicated with a dashed horizontal line.</p>
 
 <h3>Output</h3>
 
-<p>A PNG image containing the Volcano plot:</p>
+<p>An image containing the Volcano plot:</p>
 
-<img src="volcanoPe2.pdf">
+<!-- #toolbar=0 hides huge page preview in Chrome. The pdf viewer in Firefox and Safari is 
+simple enough anyway -->
+<embed src="volcanoPe2.pdf#toolbar=0" width="640px" height="640px" />
 
 </body>
 

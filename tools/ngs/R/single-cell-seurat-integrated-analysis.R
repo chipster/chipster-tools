@@ -11,8 +11,9 @@
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 0.5 (Point size for the dimensionality reduction plot.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
 # SLOTS 2
+# TOOLS_BIN ""
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
 # PARAMETER OPTIONAL output_norm_table: "Give a table of log-normalized values with cluster and sample information" TYPE [T: yes, F: no] DEFAULT F (Returns a table with the log-normalised UMI counts for all cells and all genes, along with the information on which sample and which cluster the cell belongs to.)
@@ -32,7 +33,8 @@
 
 # for UMAP:
 library(reticulate)
-use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
+Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+#use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 library(gplots)

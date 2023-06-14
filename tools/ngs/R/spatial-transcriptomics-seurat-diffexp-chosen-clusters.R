@@ -8,8 +8,8 @@
 # PARAMETER OPTIONAL logfc_threshold: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.25 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only_pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (By default, this tool lists all markers. When this parameter is set to TRUE, only genes with positive log2 fold change are listed in the result file.)
-# RUNTIME R-4.2.0-single-cell
-
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 # 2022-07-29 IH
 # 2022-10-20 ML Add output for spatially_variable_genes.tsv
