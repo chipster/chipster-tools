@@ -1,20 +1,23 @@
-# TOOL single-cell-extract-information.R: "Extract information from Seurat object" (This tool extracts data from Seurat object.)  
-# INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# TOOL single-cell-extract-information.R: "Seurat v4 -Extract information from Seurat object" (This tool extracts data from Seurat object.)  
+# INPUT OPTIONAL seurat_obj.Robj: "Input" TYPE GENERIC (A Seurat object or an RDS file.)
 # OUTPUT OPTIONAL slots.txt
 # OUTPUT OPTIONAL gene_list.tsv
 # OUTPUT OPTIONAL var_genes.tsv
 # OUTPUT OPTIONAL commands.tsv
 # OUTPUT OPTIONAL meta_data.tsv
+# OUTPUT OPTIONAL spatial_image.pdf
 # PARAMETER OPTIONAL gene_list: "Print list of the genes" TYPE [yes, no] DEFAULT no
-# PARAMETER OPTIONAL cell_list: "Print list of the cells" TYPE [yes, no] DEFAULT no
-# PARAMETER OPTIONAL commands: "Print commands table" TYPE [yes, no] DEFAULT no
 # PARAMETER OPTIONAL var_genes_list: "Print highly variable genes" TYPE [yes, no] DEFAULT no
-# PARAMETER OPTIONAL meta_data: "Print metadata stored in the object" TYPE [yes, no] DEFAULT no
+# PARAMETER OPTIONAL commands: "Print commands table" TYPE [yes, no] DEFAULT no
+# PARAMETER OPTIONAL meta_data: "Print metadata stored in the object" TYPE [yes, no] DEFAULT no	
+# PARAMETER OPTIONAL spatial_image: "Print the tissue image stored in the object" TYPE [yes, no] DEFAULT no	
 # RUNTIME R-4.2.3-single-cell
 # TOOLS_BIN ""  
 
 library(dplyr, quietly = TRUE)
 library(Seurat, quietly = TRUE)
+library(gplots)
+library(ggplot2)
 
 source(file.path(chipster.common.path,"tool-utils.R"))
 
@@ -66,6 +69,10 @@ if (gene_list== "yes" || var_genes_list == "yes"){
 	if (seurat_obj@active.assay == "integrated") {
 		genes <- obj$integrated@data@Dimnames[1]
 		var_genes <- data.frame(obj$integrated@var.features)
+	# Object contains spatially transcriptomic data
+	} else if (seurat_obj@active.assay == "Spatial"){
+		genes <- obj$Spatial@counts@Dimnames[1]
+		var_genes <- data.frame(obj$Spatial@var.features)
 	# Object has been normalised with SCTransform
 	} else if (seurat_obj@active.assay == "SCT"){
 		genes <- obj$SCT@counts@Dimnames[1]
@@ -75,8 +82,8 @@ if (gene_list== "yes" || var_genes_list == "yes"){
 		genes <- obj$RNA@counts@Dimnames[1]
 		var_genes <- data.frame(obj$RNA@var.features)
 	} else {
-		stop(paste('CHIPSTER-NOTE: ',"Object doesn't contain single-cell RNA-seq data."))
-	}
+		stop(paste('CHIPSTER-NOTE: ',"Object doesn't contain single-cell RNA-seq or spatially resolved data."))
+	}	
 	# Write out the gene list
 	if (gene_list== "yes") {
 		names(genes)[1] <- "Genes"
@@ -100,6 +107,19 @@ if (commands == "yes") {
 if (meta_data == "yes") {
 	write.table(as.data.frame(as.matrix(seurat_obj@meta.data)), file = "meta_data.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
+
+# Print the tissue image
+if (spatial_image == "yes") {
+	if(length(seurat_obj@images) != 0) {
+		pdf(file="spatial_image.pdf", width=9, height=9)
+		# print needed because otherwise would only print the last line inside the braces
+		print(SpatialDimPlot(seurat_obj, pt.size.factor = 0))
+		dev.off() # close the pdf
+	} else {
+		stop(paste('CHIPSTER-NOTE: ',"Object doesn't contain any spatial image information."))
+	}
+}	
+
 
 
 
