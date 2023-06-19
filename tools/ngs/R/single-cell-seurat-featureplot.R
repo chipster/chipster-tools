@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-featureplot.R: "Seurat v4 -Visualise features in UMAP plot" (Color single cells on a UMAP dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.)
+# TOOL single-cell-seurat-featureplot.R: "Seurat v4 -Visualize features in UMAP plot" (Color single cells on a UMAP dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL UMAPplot.pdf
 # PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mt, nCount_RNA, nFeature_RNA] DEFAULT percent.mt (Denotes which feature to use for coloring the cells.)

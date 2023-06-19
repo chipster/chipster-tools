@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-pca.R: "Seurat v4 -PCA, clustering, and visualisation" (This tool performs principal component analysis on the highly variable genes detected by SCTranform. It then clusters the spots using those PCs, and visualizes the clusters using UMAP and SpatialDimPlot.)
+# TOOL spatial-transcriptomics-seurat-pca.R: "Seurat v4 -PCA, clustering, and visualization" (This tool performs principal component analysis on the highly variable genes detected by SCTranform. It then clusters the spots using those PCs, and visualizes the clusters using UMAP and SpatialDimPlot.)
 # INPUT OPTIONAL seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL UMAP_plot.pdf
 # OUTPUT OPTIONAL seurat_spatial_obj_pca_clust.Robj
