@@ -16,7 +16,7 @@
 # 09.05.2014 MK, Added several new organisms. Added possibility to annotate Ensembl IDs as well.
 # 25.06.2014 EK, Clarified parameters.
 # 03.06.2020 ML, fix broken url (http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:004352 =>  http://amigo.geneontology.org/amigo/term/GO:0043524)
-
+# 20.06.2023 ML, fix case when the first column in original data has column name
 
 # load packages
 library(genome, character.only=T)
@@ -26,6 +26,7 @@ library(R2HTML)
 
 # read input
 dat <- read.table('gene-list.tsv', header=TRUE, sep='\t', as.is=TRUE, row.names=1)
+# Note: the colname of the first column (if there is one) is lost here. 
 
 # convert list of reference genes from Ensembl to Entrez IDs
 # ensembl.to.entrez <- as.list(org.Hs.egENSEMBL2EG)
@@ -34,17 +35,31 @@ ensembl.to.entrez <- as.list(get(lib))
 reference.genes <- unique(unlist(ensembl.to.entrez))
 ens_identifiers <- names(unlist(ensembl.to.entrez))
 
-# see if column is the first "empty" element, indicating that the user wishes to use row.names
+# See if "column" is the first "empty" element, indicating that the user wishes to use row.names
+# = user has selected the "untitled" column. It can look like one of these in R:
 if(length(column) == 0 || column == " " || column == "") {
 	selected.genes <- row.names(dat)
-} else {
+# If user has selected a column name from the drop down menu, that is not present in the "dat",
+# it has to be the 
+# first column, as that is the only one not read in with the read.table function. 
+}else if ( !any(colnames(dat) %in% column) ){
+	# selected.genes <- as.character(dat[,1])
+	selected.genes <- row.names(dat)
+	length(selected.genes)
+	selected.genes[1:10]
+# Otherwise, use the column selected by user:	
+}else {
 	column <- grep(paste("^", column, "$", sep=""), colnames(dat))
 	selected.genes <- as.character(dat[,column])
+	length(selected.genes)
+	selected.genes[1:10]
 }
 
 # check if IDs match more EnsEMBL or Entrez genes
 if(length(intersect(selected.genes, reference.genes)) < length(intersect(selected.genes, ens_identifiers))) {
 	selected.genes <- unique(unlist(ensembl.to.entrez[selected.genes]))
+	length(selected.genes)
+	selected.genes[1:10]
 }
 
 # check for conditional testing and multiple testing correction
