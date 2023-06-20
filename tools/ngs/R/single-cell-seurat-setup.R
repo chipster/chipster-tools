@@ -22,6 +22,11 @@
 # 2019-09-30 EK add spport for lower case mitochondrial gene names
 # 2021-10-04 ML Update to Seurat v4
 # 2022-04-01 ML Add HDF5 input file option
+# 2023-02-01 ML Add 5 slots
+# 2023-04-06 LG Remove 5 slots
+# 2023-02-01 ML Return to the original 2 slots
+# 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
+
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."

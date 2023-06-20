@@ -254,6 +254,7 @@
 		<tool>spatial-transcriptomics-seurat-diffexp-chosen-clusters.R</tool>	
 		<tool>spatial-transcriptomics-seurat-spatially-variable-markvariogram.R</tool>
 		<tool>spatial-transcriptomics-seurat-subset-clusters.R</tool>
+		<tool>single-cell-extract-information.R</tool>
 		<tool>spatial-transcriptomics-seurat-integrated.R</tool>
 		<tool>spatial-transcriptomics-seurat-visualise-integration.R</tool>
 		<tool>deconvolution-SCDC.R</tool>

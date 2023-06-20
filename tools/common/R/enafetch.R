@@ -1,5 +1,4 @@
 # TOOL enafetch.R: "Retrieve data from ENA database" (Retrieve data from the European Nucleotide Archive, ENA. ENA contains high throughput sequencing data from many sources, including the Sequence Read Archive, SRA.)
-# OUTPUT OPTIONAL enafetch.log
 # OUTPUT OPTIONAL {...}.gz: "gzipped files"
 # OUTPUT OPTIONAL {...}.fasta: "fasta files"
 # OUTPUT OPTIONAL {...}.dat: "embl files"
@@ -10,40 +9,69 @@
 # OUTPUT OPTIONAL {...}.crai: "cram files"
 # PARAMETER entry_id: "ENA ID" TYPE STRING DEFAULT "entry" (Give the ID of the ENA dataset to be retrieved. For example SRR000021) 
 # PARAMETER format: "Data format" TYPE [default: "Default", fastq: "FASTQ", fasta: "FASTA", embl: "EMBL formatted sequence" ] DEFAULT default (Define the format for retrieved data. Please use the FASTQ format for reads.)
-# PARAMETER index: "Download CRAM index" TYPE [yes: "Yes", no: "No" ] DEFAULT no (Download CRAM index files with submitted CRAM files, if any. This selection is ignored if FASTQ format is selected.)
-# PARAMETER OPTIONAL save_log: "Create a log file" TYPE [yes: Yes, no: No] DEFAULT no (Should a log file be produced.)
-# RUNTIME R-4.1.1
+# IMAGE comp-r-4-2-3-enabrowsertools
+# RUNTIME R-4.2.3
+# TOOLS_BIN ""
 
-# KM 21.03.2019
+source(file.path(chipster.common.path, "tool-utils.R"))
 
-
-ena.path <- file.path(chipster.tools.path, "enabrowsertools/python3")
-#ena.path <- ("/opt/chipster/tools_local/enaBrowserTools-1.5.4/python")
-#turn of cacheing
+# use enabrowsertools from the image
+ena.path <- file.path("/opt/chipster/tools", "enabrowsertools/python3")
 ena.binary <- file.path(ena.path, "enaDataGet")
 
-index.option <- (" ")
+if ( format != "default" ){
+	command.full <- paste(ena.binary, '-f', format, entry_id)
+} else {
+	command.full <- paste(ena.binary, entry_id)
+}
 
-if ( index == "yes"){
-	if ( format != "fastq" ){
-    	index.option <- ("-i")
+runExternal(command.full)
+
+ena.version <- system(paste(ena.binary,"--version"),intern = TRUE)
+documentVersion("enaBrowserTools",ena.version)
+documentCommand(command.full)
+
+system("find")
+
+file.found = FALSE
+
+# fastq files are stored in a subdirectory. Move them to current directory (but keep them gzipped)
+# cram files are stored in a subdirectory. Move them to current diretory. Those are not gzipped.
+for(file in list.files(recursive = TRUE, include.dirs = TRUE)) {
+	if (dir.exists(file)) {
+		print(paste("skip directory", file))
+	} else {
+		if (any(endsWith(file, c(".gz", ".fasta", ".dat", ".txt", ".xml", ".bam", ".cram", ".crai")))) {
+			file.found = TRUE
+			filename <- basename(file)
+
+			if (file == filename) {
+				print(paste("no need to move file", file))
+			} else {
+				# move file from the subfolder to the job working diretory
+				print(paste("move file", file, " to ", filename))
+				file.rename(file, filename)
+			}
+
+			# gunzip fasta and dat files if needed 
+			# .fastq.gz files shouldn't be extracted
+			if (any(endsWith(file, c(".fasta.gz", ".dat.gz")))) {
+				# TODO find suitable ENA ID to test this
+				print(paste("extract file", filename))
+				runExternal(paste("gunzip", filename))
+			}
+
+		} else {
+			print(paste("skip unknown file type:", file))
+		}
 	}
 }
 
-if ( format != "default" ){
-command.full <- paste(ena.binary, index.option, '-f', format, entry_id, ' 1>>enafetch.log 2>>enafetch.log')
-}else{
-	command.full <- paste(ena.binary, index.option, entry_id, ' 1>>enafetch.log 2>>enafetch.log')
+system("find")
+
+if (!file.found) {
+	stop("CHIPSTER-NOTE: no results, click 'Show screen output' to see details")
 }
-cat(command.full, "\n", file="enafetch.log", append=TRUE)
-system(command.full)
-#temporary bug fix. Command needs to be run twice to get both fastq files
-#system(command.full)
-
-# fasta and dat files are downloaded to the current directory
-# gunzip them if needed 
-system("gunzip *.gz")
-
 
 ##check storage resources and needs
 #freespace <- system(" df ./ | awk '{print $4}' ", intern = TRUE )
@@ -55,34 +83,3 @@ system("gunzip *.gz")
 #if ( freespace < space_needed ){
 #	stop("CHIPSTER-NOTE: THe SRA entry you are trying to retrieve is too larage for the chipster server")
 #}
-
-#fastq files are stored to a subdrectory. Copy them to current directory (but keep them gzipped)
-system("cp ./*/* ./")
-system("cp ./*/*/* ./")
-## check that we got something
-#gz.files <- Sys.glob("*.gz")
-#if (length(gz.files) == 0) {
-#	system('echo enafetch.log:')
-#	system('cat enafetch.log')
-#	stop("Fetching fastq files failed, see the end of the details for more information")
-#}
-
-system("ls -l >> enafetch.log")
-
-## rename outputs and create output names file
-#source(file.path(chipster.common.path, "tool-utils.R"))
-#outputnames <- matrix(NA, nrow=length(gz.files), ncol=2)
-#for (i in 1:length(gz.files)) {
-#	original.name <- gz.files[i]
-#	new.name <- paste("ena_", i, ".gz", sep ="")
-#	outputnames[i,] <- c(new.name, original.name)
-#	system(paste("mv", original.name, new.name))
-#}
-#write_output_definitions(outputnames)
-
-cat("--------------------", "\n", file="enafetch.log", append=TRUE)
-system("ls -l >> enafetch.log")
-
-if ( save_log == "no") {
-	system ("rm -f enafetch.log")
-}
