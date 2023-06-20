@@ -15,9 +15,8 @@
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
-ena.path <- file.path(chipster.tools.path, "enabrowsertools/python3")
-#ena.path <- ("/opt/chipster/tools_local/enaBrowserTools-1.5.4/python")
-#turn of cacheing
+# use enabrowsertools from the image
+ena.path <- file.path("/opt/chipster/tools", "enabrowsertools/python3")
 ena.binary <- file.path(ena.path, "enaDataGet")
 
 if ( format != "default" ){
