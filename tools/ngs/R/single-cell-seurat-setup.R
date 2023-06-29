@@ -10,6 +10,7 @@
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL sample_name: "Sample or group name" TYPE STRING DEFAULT empty (Type the group or sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.2.3-single-cell
+# SLOTS 5
 # TOOLS_BIN ""
 
 # 2017-06-06 ML
@@ -23,6 +24,9 @@
 # 2022-04-01 ML Add HDF5 input file option
 # 2023-02-01 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
+# 2023-02-01 ML Return to the original 2 slots
+# 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
+
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
@@ -58,6 +62,26 @@ if (file.exists("dropseq.tsv")) {
   # Open tar package. Make a folder called datadir, open the tar there so that each file
   # will be on the root level (remove everything from the name until the last "/" with the --xform option)
   system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
+
+  # If the features.tsv, barcodes.tsv and matrix.mtx files are gzipped, open them:
+  if (length(list.files(path ="datadir/", pattern = "*matrix.mtx.gz")) >= 1) {
+    system("cd datadir; gzip -d *matrix.mtx.gz")
+  }
+  if (length(list.files(path ="datadir/", pattern = "*features.tsv.gz")) >= 1) {
+    system("cd datadir; gzip -d *features.tsv.gz")
+  }
+   if (length(list.files(path ="datadir/", pattern = "*genes.tsv.gz")) >= 1) {
+    system("cd datadir; gzip -d *genes.tsv.gz")
+  }
+  if (length(list.files(path ="datadir/", pattern = "*barcodes.tsv.gz")) >= 1) {
+    system("cd datadir; gzip -d *barcodes.tsv.gz")
+  }
+
+  # If features.tsv, barcodes.tsv and matrix.mtx files have something extra in the name, remove the extra:
+  system("cd datadir; mv *features.tsv features.tsv")
+  system("cd datadir; mv *genes.tsv genes.tsv")
+  system("cd datadir; mv *barcodes.tsv barcodes.tsv")
+  system("cd datadir; mv *matrix.mtx matrix.mtx")
 
   # rename features.tsv as genes.tsv (Read10X SHOULD work with features.tsv as well, but it doesn't, yet at least)
   if (file.exists("datadir/features.tsv")) {

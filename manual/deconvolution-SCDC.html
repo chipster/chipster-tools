@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Deconvolution Tool (SCDC)</title></head>
+<head><title>Seurat v4 and SCDC -Identify cell types using deconvolution</title></head>
 <body>
-<h2>Deconvolution Tool (SCDC)</h2>
+<h2>Seurat v4 and SCDC -Identify cell types using deconvolution</h2>
 
 <h3>Description</h3>
 
 <p>
     This tool estimates the abundance (or proportion) of different cell types
-    in Visium spots using a single cell reference dataset.
+    in Visium spots using a single cell reference dataset. Spatially variable cell types are also predicted and plotted. 
 </p>
 
 <h3>Parameters</h3>
@@ -78,9 +78,7 @@ vignette, written by its own developer, Meichen Dong.</li>
 <li><b>SpatialFeaturePlot.pdf</b>: Plot(s) are generated for each selected cell type. Different colored spots are overlayed on top of the tissue slice.
     The colors represent the predicted proportions of each cell type for each Visium spot.</li>
 </p>
-<li><b>SpatialPlot.pdf</b>: The top tissue slice plots with corresponding colored spots are generated -- one for each of the top cell types.
-<p>
-<li><b>VlnPlot.pdf</b>: The top violin plots are generated -- one for each of the top cell types. The x-axis shows the selected clusters, each designated by its corresponding number,
+<li><b>spatially_variable_cell_types.pdf</b>: A pdf file containing the spatial plot(s) and the violion plot(s). In the spatial plot the top tissue slice plots with corresponding colored spots are generated -- one for each of the top cell types. Also the top violin plots are generated for each of the top cell types. The x-axis shows the selected clusters, each designated by its corresponding number,
     and the y-axis shows each cluster's expression level.</li>
 </p>
 </ul>

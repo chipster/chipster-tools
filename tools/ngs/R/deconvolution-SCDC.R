@@ -1,10 +1,9 @@
-# TOOL deconvolution-SCDC.R: "Seurat v4 and SCDC -Identify cell types using deconvolution" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset.)
+# TOOL deconvolution-SCDC.R: "Seurat v4 and SCDC -Identify cell types using deconvolution" (This tool estimates the abundance \(or proportion\) of different cell types in Visium spots using a single cell reference dataset. Spatially variable cell types are also predicted and plotted. )
 # INPUT seurat_obj_subset.Robj: "Seurat Object Containing Visium Data" TYPE GENERIC
-# INPUT allen_cortex: "Allen Reference" TYPE GENERIC
+# INPUT reference: "scRNA-seq reference data" TYPE GENERIC (scRNA-seq reference data used for the deconvolution. You can find one for example from the Allen Brain Atlas.)
 # OUTPUT OPTIONAL seurat_obj_deconv.Robj
 # OUTPUT OPTIONAL SpatialFeaturePlot.pdf
-# OUTPUT OPTIONAL SpatialPlot.pdf
-# OUTPUT OPTIONAL VlnPlot.pdf
+# OUTPUT OPTIONAL spatially_variable_cell_types.pdf
 # PARAMETER top.genes: "Number of marker genes computed for each cell type in the reference dataset" TYPE INTEGER FROM 20 TO 100 DEFAULT 20 (Select the number \(between 20 and 100\) of marker genes \(for each cluster in the reference dataset\) to be used in the deconvolution step.)
 # PARAMETER clusters: "Cell type(s) from the reference dataset to be plotted in SpatialFeaturePlot" TYPE UNCHECKED_STRING DEFAULT "L4" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # PARAMETER top_num_cluster: "Number of most spatially variable cell types to be plotted in SpatialPlot and violin plots" TYPE INTEGER FROM 1 TO 10 DEFAULT 4 (Select the number of top cell type\(s\) \(between 1 and 10\) to include in the analysis. These cell types are spatially restricted to particular location\(s\), as determined by the Markvariogram method.)
@@ -23,7 +22,7 @@ packageDescription('SCDC')
 system('ls')
 
 # Load the reference dataset
-allen_cortex <- readRDS("allen_cortex")
+reference <- readRDS("reference")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj_subset.Robj")
@@ -32,9 +31,9 @@ clusters <- trimws(unlist(strsplit(clusters, ",")))
 
 # Deconvolution:
 
-allen_cortex@active.assay = "RNA"
+reference@active.assay = "RNA"
 
-markers_sc <- FindAllMarkers(allen_cortex, only.pos = TRUE, logfc.threshold = 0.1,
+markers_sc <- FindAllMarkers(reference, only.pos = TRUE, logfc.threshold = 0.1,
     test.use = "wilcox", min.pct = 0.05, min.diff.pct = 0.1, max.cells.per.ident = 200,
     return.thresh = 0.05, assay = "RNA")
 
@@ -53,8 +52,8 @@ markers_sc %>%
 m_feats <- unique(as.character(top_num_genes$gene))
 
 
-eset_SC <- ExpressionSet(assayData = as.matrix(allen_cortex@assays$RNA@counts[m_feats,
-    ]), phenoData = AnnotatedDataFrame(allen_cortex@meta.data))
+eset_SC <- ExpressionSet(assayData = as.matrix(reference@assays$RNA@counts[m_feats,
+    ]), phenoData = AnnotatedDataFrame(reference@meta.data))
 eset_ST <- ExpressionSet(assayData = as.matrix(seurat_obj@assays$Spatial@counts[m_feats,
     ]), phenoData = AnnotatedDataFrame(seurat_obj@meta.data))
 
@@ -90,16 +89,14 @@ SpatialFeaturePlot(seurat_obj, features = clusters, pt.size.factor = 1.6, ncol =
 dev.off()
 
 
-pdf(file="SpatialPlot.pdf")
+pdf(file="spatially_variable_cell_types.pdf")
 
 seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCDC", selection.method = "markvariogram",
     features = rownames(seurat_obj), r.metric = 5, slot = "data")
 top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), top_num_cluster)
 SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
-
-dev.off()
-
-pdf(file="VlnPlot.pdf")
+#dev.off()
+#pdf(file="VlnPlot.pdf")
 VlnPlot(seurat_obj, group.by = "seurat_clusters", features = top.clusters, pt.size = 0,
     ncol = 2)
 dev.off()
