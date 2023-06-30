@@ -40,7 +40,8 @@ if (exists("data.combined")) {
 }
 
 # Let’s convert our Seurat object to single cell experiment (SCE) for convenience
-sce <- as.SingleCellExperiment(DietSeurat(seurat_obj))
+# sce <- as.SingleCellExperiment(DietSeurat(seurat_obj)) # DietSeurat: only necessary parts
+sce <- as.SingleCellExperiment(seurat_obj)
 
 
 # HumanPrimaryCellAtlasData, BlueprintEncodeData, MouseRNAseqData, ImmGenData, DatabaseImmuneCellExpressionData, NovershternHematopoieticData, MonacoImmuneData
@@ -70,18 +71,33 @@ seurat_obj@meta.data$annotation.fine <- annotation.fine$pruned.labels
 
 
 # Visualise, in pdf plots:
-pdf(file = "singleR_annotation_plots.pdf",, width = 13, height = 7)
+# pdf(file = "singleR_annotation_plots.pdf", width = 13, height = 7)
+pdf(file = "singleR_annotation_plots.pdf")
+
+# Annotation based on clusters (not cell by cell):
+annotation.main.clusters <- SingleR(test = sce, assay.type.test = 1, ref = ref, labels = ref$label.main, clusters = Idents(seurat_obj))
+new.cluster.ids <- annotation.main.clusters$labels
+names(new.cluster.ids) <- levels(seurat_obj)
+seurat_obj_annotated_clusters <- seurat_obj
+seurat_obj_annotated_clusters <- RenameIdents(seurat_obj, new.cluster.ids)
+
+# Plot first just the clusters, to ease the comparison:
+DimPlot(seurat_obj, label = T , repel = T, label.size = 3, pt.size = point.size) + ggtitle('Clusters in UMAP plot')
+# DimPlot(seurat_obj_annotated_clusters, reduction = 'umap', label = T)
+DimPlot(seurat_obj_annotated_clusters, label = T , repel = T, label.size = 3, pt.size = point.size) + ggtitle('Main annotations based on clusters')
+
+
 # Visualise:
 seurat_obj <- SetIdent(seurat_obj, value = "annotation.main")
-DimPlot(seurat_obj, label = T , repel = T, label.size = 3, pt.size = point.size) + NoLegend() + ggtitle('Main annotations')
+DimPlot(seurat_obj, reduction = 'umap', label = T , repel = T, label.size = 3, pt.size = point.size)  + ggtitle('Main annotations, per cell') # + NoLegend()
 
 seurat_obj <- SetIdent(seurat_obj, value = "annotation.fine")
-DimPlot(seurat_obj, label = T , repel = T, label.size = 3, pt.size = point.size) + NoLegend() + ggtitle('Fine annotations')
+DimPlot(seurat_obj, label = T , repel = T, label.size = 3, pt.size = point.size) + NoLegend() + ggtitle('Fine annotations, per cell') # NoLegend used because legends will take so much space.
 
-plotScoreHeatmap(annotation.main)
+plotScoreHeatmap(annotation.main) + NoLegend()
 plotDeltaDistribution(annotation.main, ncol = 3)
  
-plotScoreHeatmap(annotation.fine)
+plotScoreHeatmap(annotation.fine) + NoLegend()
 plotDeltaDistribution(annotation.fine, ncol = 3)
 dev.off() # close the pdf
 

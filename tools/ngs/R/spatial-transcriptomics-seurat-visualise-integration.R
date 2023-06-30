@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-visualise-integration.R: "Seurat v4 -Visualise cell types after integration with scRNA-seq data" (Visualise the underlying composition of cell types in each spatial spot.)
+# TOOL spatial-transcriptomics-seurat-visualise-integration.R: "Seurat v4 -Visualize cell types after integration with scRNA-seq data" (Visualize the underlying composition of cell types in each spatial spot.)
 # INPUT seurat_obj_integrated.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integration_plot.pdf
 # PARAMETER OPTIONAL genes: "Features to plot" TYPE STRING DEFAULT "L4" (Names of the features to plot. If you list multiple gene names, use comma as separator.)

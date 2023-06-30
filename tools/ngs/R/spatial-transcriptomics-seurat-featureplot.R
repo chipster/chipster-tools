@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-featureplot.R: "Seurat v4 -Visualise gene expression" (Visualise molecular data on top of the tissue histology.)
+# TOOL spatial-transcriptomics-seurat-featureplot.R: "Seurat v4 -Visualize gene expression" (Visualize molecular data on top of the tissue histology.)
 # INPUT OPTIONAL seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Feature_plot.pdf 
 # PARAMETER OPTIONAL genes: "Gene name\(s\)" TYPE STRING DEFAULT "Hpca, Ttr" (Name\(s\) of the gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
