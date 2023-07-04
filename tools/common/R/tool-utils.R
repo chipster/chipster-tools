@@ -276,9 +276,17 @@ displayNamesToFile <- function(input.file) {
 #
 documentCommand <- function(command.string) {
   # Substitute input names
-  input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
-  for (i in 1:nrow(input.names)) {
-    command.string <- gsub(input.names[i,1],input.names[i,2],command.string)
+  input.names <- tryCatch(
+    read.table("chipster-inputs.tsv",header = FALSE,sep = "\t"),
+    error=function(e) {
+      print("no inputs")
+      NULL
+    })
+
+  if (!is.null(input.names)) {
+    for (i in 1:nrow(input.names)) {
+      command.string <- gsub(input.names[i,1],input.names[i,2],command.string)
+    }
   }
   cat("##","COMMAND:",command.string,"\n")
 }

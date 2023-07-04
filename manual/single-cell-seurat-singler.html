@@ -38,7 +38,21 @@
         As inputs, give a Seurat object which includes the clustering information. <br>
 
     </p>
-
+    <p>
+        Main and fine annotations are done cell by cell, and this data is returned as tsv tables and in the 
+        Seurat object (in fields: seurat_obj@meta.data$annotation.main and seurat_obj@meta.data$annotation.fine).
+        The annotation results are also shown in the pdf file as <b>UMAP plots</b>, together with heatmap and violin plots
+        that can be used to estimate the confidence of the annotations. Before the main and fine annotations
+        there's also the UMAP plot colored according the clustering result, and after that the annotations
+        according the clusters. 
+    </p>
+    <p>
+        The <b>heatmaps</b> display the scores for all cells across all reference labels: ideally, each cell (=column) 
+        has one score that is much higher (=yellow) than the rest. Similar diagnostic can be viewed in the 
+        violion plots, where per cell "deltas" are shown. Deltas are the difference between the score for the highest
+        label and the median across all labels for each cell.
+    </p>
+   
     <p>
         For more details, please check:
     <ul>
@@ -59,7 +73,7 @@
 
     <ul>
 
-        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object including the annotations in the metadata field.
+        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object including the cell-wise annotations in the metadata field.
             Not viewable Chipster, but can be exported and examined in R. </li>
         <li>singleR_annotation_plots.pdf: Plots showing annotation diagnostics </li>
         <li>annotations_main.tsv: Main level annotations table </li>
