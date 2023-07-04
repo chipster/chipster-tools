@@ -43,7 +43,7 @@
 
 # for UMAP:
 library(reticulate)
-Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+Sys.setenv(RETICULATE_PYTHON = paste(chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/python"))
 #use_python("/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
