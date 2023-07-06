@@ -7,7 +7,7 @@
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (If your reads are paired end, the reverse complement of the 3' and 5' adapters will be removed from the reverse reads.)
 # PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer.)
 # PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer.)
-# PARAMETER OPTIONAL discarduntrimmed: "Remove reads which were not trimmed" TYPE [yes, no] DEFAULT no (Remove reads which were not trimmed.)
+# PARAMETER OPTIONAL discarduntrimmed: "Remove reads which were not trimmed" TYPE [yes, no] DEFAULT no (Remove reads which did not contain an adapter.)
 # RUNTIME R-4.1.1-asv
 
 # ES 30.9.2022
