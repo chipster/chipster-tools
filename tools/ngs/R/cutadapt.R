@@ -1,12 +1,13 @@
-# TOOL cutadapt.R: "Remove primers and adapters with Cutadapt" (Given a tar package of FASTQ files, this tool tries to remove the primer and adapter sequences given in parameters tab. This tool is based on the tool Cutadapt )
+# TOOL cutadapt.R: "Remove primers and adapters with Cutadapt" (Given a tar package of FASTQ files, this tool tries to remove the primer and adapter sequences given in parameters tab. This tool is based on the tool Cutadapt.)
 # INPUT OPTIONAL reads.tar: "Tar package containing the FASTQ files" TYPE GENERIC
-# INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC (If the FASTQ files are not assigned into samples correctly, you can give a file containing this information. Check instructions from manual)
+# INPUT OPTIONAL input_list.txt: "List of FASTQ files by sample" TYPE GENERIC (If the FASTQ files are not assigned into samples correctly, you can give a file containing this information. Check instructions from manual.)
 # OUTPUT adapters_removed.tar
 # OUTPUT report.txt
 # OUTPUT OPTIONAL samples.fastqs.txt
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (If your reads are paired end, then the adapters from the reverse files will be removed by removing the reverse complement of the 3' and 5' adapters given as parameters.)
-# PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer)
-# PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer)
+# PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer.)
+# PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer.)
+# PARAMETER OPTIONAL discarduntrimmed: "Remove reads which were not trimmed" TYPE [yes, no] DEFAULT no (Remove reads which were not trimmed.)
 # RUNTIME R-4.1.1-asv
 
 # ES 30.9.2022
@@ -137,12 +138,18 @@ if (adapter3==""){
     R2.flags <- paste("-G", dada2:::rc(adapter3), "-A", dada2:::rc(adapter5))
 }}
 
+if (discarduntrimmed == "yes"){
+  dut <-("--discard-untrimmed")
+}else{
+  dut <- ""
+}
+
 #sink(file="report.txt")
 #if paired use also R2.flags and 2 input files at once
 if (paired =="single"){
   x<-1
   for (file in filenames){
-    command <- paste(binary, R1.flags,"--rc","-n", 2,"-j", as.integer(chipster.threads.max),"-o",cutreads[x], file, "> report2.txt")
+    command <- paste(binary, dut, R1.flags,"--rc","-n", 2,"-j", as.integer(chipster.threads.max),"-o",cutreads[x], file, "> report2.txt")
     x=x+1
     system(command)
     system("cat report2.txt >> report.txt")
@@ -150,7 +157,7 @@ if (paired =="single"){
 }else{ #paired 
   x<-1
   for (file in fnFs){
-    command <- paste(binary, R1.flags, R2.flags,"-n", 2,"-j", as.integer(chipster.threads.max),"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x] , "> report2.txt")
+    command <- paste(binary, dut, R1.flags, R2.flags,"-n", 2,"-j", as.integer(chipster.threads.max),"-o",fnFs.cut[x],"-p", fnRs.cut[x], file, fnRs[x] , "> report2.txt")
     x=x+1
     system(command)
     #rows <- readLines("report2.txt")
