@@ -8,8 +8,8 @@
 <h3>Description</h3>
 
 <p>
-Given a tar package of FASTQ files, this tool tries to remove the adapter or primer sequences given as parameters 
-using the commandline tool <a href="https://cutadapt.readthedocs.io/en/stable/">Cutadapt</a>. The FASTQ files can be compressed. 
+Given a tar package of FASTQ files, this tool tries to remove the adapter or primer sequences given as parameters. The FASTQ files can be compressed.
+This tool is based on <a href="https://cutadapt.readthedocs.io/en/stable/">Cutadapt</a>.  
 
 </p>
 
@@ -22,43 +22,40 @@ using the commandline tool <a href="https://cutadapt.readthedocs.io/en/stable/">
 
 <h3>Details</h3>
 <p>
-Given a tar package of FASTQ files, this tools removes the 5' end and 3' end primers found from the fastq files. You can use the tool "Identify primers and correct orientation"
+This tools removes the specified 5' and 3' end primers from the FASTQ files. You can use the tool "Identify primers and correct orientation"
 before and after primer trimming to check if the adapter sequences were actually found from the FASTQ files and removed correctly. You can copy the right orientation of the 
 primer from the report and use it with this tool. 
 <br>
-Cutadapt searches for the adapter in all the reads and removes it when it finds it. Thus, all the reads which were present in input file will be present in the output file aswell.
+All the reads which were present in input file will be present in the output file as well.
 <br>
 <br>
-Note that it might be a good idea to remove the ambiguous 'N' nucleotides from the FASTQ files before.
+Note that it might be a good idea to remove the ambiguous 'N' nucleotides from the FASTQ files before using Cutadapt.
 <br>
 <br>
 This tool can be used for paired and single end reads. If the reads are paired end, this tool assumes that the forward and reverse files have the same name but a different tag
 on it. 
 <br>
-If your reads are paired end, then the adapters from the reverse files will be removed by removing the reverse complement of the 3´ and 5´ adapters given as parameters. 
 <br>
-Give the adapter sequences allways as in the orientation they exist in the forward reads!
+Please give the adapter sequences using DNA strings. The allowed letters/nucleotide codes can be found <a href="https://www.bioinformatics.org/sms/iupac.html">here</a>. 
+Give the adapter sequences always as in the orientation they exist in the forward reads. 
+If your reads are paired end, then the adapters from the reverse files will be removed by removing the reverse complement of the 3´ and 5´ adapters given as parameters.
 <br>
-Please give the adapter sequences using DNA strings. The allowed letters/nucleotide codes can be seen <a href="https://www.bioinformatics.org/sms/iupac.html">here</a>.
 <br>
 Cutadapt deals with the 3´ adapters by removing the adapter itself and any sequence that may follow it.
-<br>
-The 5´ adapters needs to either appear full somewhere within the read or at the start in the 5´ end of the read when also partially occurences are allowed. 
-<br>
+The 5´ adapters need to either appear full somewhere within the read, or at the start in the 5´ end of the read when also partially occurences are allowed. 
 Cutadapt removes the sequence preceding the 5' adapter. 
 <br>
 <br>
-As a sanity check, allways go through the "report.txt" file to check which adapter sequences were removed and how long the removed sequences were. If the removed sequences were very long doublecheck
+As a sanity check, always go through the report.txt file to check which adapter sequences were removed and how long the removed sequences were. If the removed sequences were very long, double-check
 that you removed the correct adapter from the 3´ and 5' ends and not vice versa. 
 <br>
 <br>
-Cutadapt removes and identifys adapter sequences even if there are few errors between the adapter and the matching sequence. 
+Cutadapt removes and identifies adapter sequences even if there are errors between the adapter and the matching sequence. 
 Cutadapt uses an error treshold of 0.1 which means that it allows one error in every 10 nucleotides. 
 The allowed errors are mismatches, insertions and deletions. 
+In addition, the minimun overlap between the adapter sequence and the read needs to be at least 3 base pairs long, which reduces the risk of random matches. 
 <br>
-In addition, the minimun overlap between the adapter sequence and the read needs to be at least 3 base pairs long which reduce the risk of random matches. 
-<br>
-For more information on the Cutadapt tool please check the <a href="https://cutadapt.readthedocs.io/en/stable/guide.html#">User guide</a>
+For more information on Cutadapt please check the <a href="https://cutadapt.readthedocs.io/en/stable/guide.html#">User guide</a>
 <br>
 <br>
 As the output, you will get one tar package containing all the FASTQ files from which the adapters were removed and a summary txt file
