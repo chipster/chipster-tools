@@ -11,6 +11,7 @@
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # RUNTIME R-4.2.3-single-cell
+# SLOTS 3
 # TOOLS_BIN ""
 
 # 2018-16-05 ML 
@@ -23,6 +24,7 @@
 # 2023-02-10 LG Add 2 slots
 # 2023-04-03 ML Add parameters so that it is possible to print out all the genes + simplify code
 # 2023-04-06 LG Remove 5 slots - Discrepancy in number of slots added v. removed
+# 2023-07-11 ML Add 3 slots
 
 library(Seurat)
 
