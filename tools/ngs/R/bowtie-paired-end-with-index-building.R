@@ -31,6 +31,8 @@
 # EK 1.11.2012 fixed genome parameter and SAM output
 # AMS 11.11.2013 Added thread support
 
+source(file.path(chipster.common.path, "tool-utils.R"))
+
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fq")
@@ -45,6 +47,8 @@ runExternal(command.indexing)
 
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie"))
+version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+documentVersion("Bowtie",version)
 command.start <- paste("bash -c '", bowtie.binary)
 
 # common parameters
@@ -73,6 +77,9 @@ runExternal(bowtie.command)
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
+version <- system(paste(samtools.binary,"--version | head -1 | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("SAMtools",version)
+
 
 # convert sam to bam
 runExternal(paste(samtools.binary, "view -bS -q 1 alignment.sam -o alignment.bam"))
@@ -110,10 +117,3 @@ outputnames[6,] <- c("multireads_2.fq", paste(base2, "_multireads.fq", sep=""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
-# save version information
-bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie"),intern = TRUE)
-documentVersion("Bowtie",bowtie.version)
-
-samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
-documentVersion("Samtools",samtools.version)

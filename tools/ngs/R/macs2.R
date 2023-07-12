@@ -29,8 +29,12 @@
 # 07.10.2014 AMS, Simplified script structure
 # 13.10.2014 EK, Modified to use MACS2.1.0
 
+source(file.path(chipster.common.path, "tool-utils.R"))
+
 # MACS binary
 macs.binary <- file.path(chipster.tools.path,"macs","macs2")
+version <- system(paste(macs.binary,"--version 2>&1| grep macs | tail -1 | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("MACS2",version)
 
 # Options
 

@@ -13,6 +13,8 @@
 # EK 28.4.2014
 # EK 23.5.2014 updated Bowtie2 command, added identifier sorting and piping to eXpress
 
+source(file.path(chipster.common.path, "tool-utils.R"))
+
 # check out if the fastq files are compressed and if so unzip them
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fq")
@@ -21,8 +23,13 @@ unzipIfGZipFile("transcripts.fasta")
 
 # set up Bowtie2 tools and eXpress
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
+version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+documentVersion("Bowtie",version)
 bowtie.build.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2-build"))
 express.binary <- c(file.path(chipster.tools.path, "express", "express"))
+version <- system(paste(express.binary,"2>&1 |head -2 |tail -1 | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("eXpress",version)
+
 
 # make Bowtie index for the transcripts
 bowtie.build.command <- paste(bowtie.build.binary, "-offrate=1 -f transcripts.fasta transcriptome")
