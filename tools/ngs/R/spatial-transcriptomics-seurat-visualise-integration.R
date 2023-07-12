@@ -1,7 +1,7 @@
 # TOOL spatial-transcriptomics-seurat-visualise-integration.R: "Seurat v4 -Visualize cell types after integration with scRNA-seq data" (Visualize the underlying composition of cell types in each spatial spot.)
 # INPUT seurat_obj_integrated.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integration_plot.pdf
-# PARAMETER OPTIONAL genes: "Features to plot" TYPE STRING DEFAULT "L4" (Names of the features to plot. If you list multiple gene names, use comma as separator.)
+# PARAMETER OPTIONAL genes: "Features to plot" TYPE UNCHECKED_STRING DEFAULT "L4" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # PARAMETER OPTIONAL method.to.use: "Method to use" TYPE [markvariogram: markvariogram, moransi: moransi] DEFAULT markvariogram (Method to use. Markvariogram takes longer to run, Morans I is faster.)
 # PARAMETER OPTIONAL number.of.top.features: "Number of features to plot" TYPE INTEGER DEFAULT 6 (How many top features to plot.)
 # RUNTIME R-4.2.3-single-cell
