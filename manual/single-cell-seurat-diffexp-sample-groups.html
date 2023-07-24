@@ -7,21 +7,20 @@
 
 <body>
 
-    <h2>Seurat -Find DE genes between chosen samples </h2>
+    <h2>Seurat -Find DE genes between sample groups </h2>
 
     <h3>Description</h3>
 
     <p>
-        For a given cluster, this tool gives you the differentially expressed genes between the samples
+        For a given cluster, this tool gives you the differentially expressed genes between the sample groups
         listed by the user.
-        Conditions/samples are determined in the Setup tool with the Sample name parameter.
-        If you are listing multiple samples, separate them with comma (,).
+        Sample groups are determined in the Setup tool with the Sample group parameter.
     </p>
 
     <h3>Parameters</h3>
     <ul>
-        <li>Name of the samples to compare to</li>
-        <li>Name of the samples to compare with</li>
+        <li>Name of the sample group to compare to</li>
+        <li>Name of the sample group compare with</li>
         <li>Name of the cluster [3]</li>
         <li>Return only positive marker genes [TRUE]</li>
         <li>Fold change threshold for differentially expressed genes in log scale [0.25]</li>
@@ -41,9 +40,8 @@
     </p>
 
     <p>
-        Select the samples or list of samples which you want to compare to each other by typing the sample names
-        to the parameter fields. If you are listing multiple samples, use comma as separator: for example,
-        type: "CTRL, CTRL_2" (withouth the hyphens "") in first field and "STIM, STIM_2" in the second.
+        Select the sample groups which you want to compare to each other by typing the sample group names
+        to the parameter fields. 
     </p>
 
     <p>
@@ -87,8 +85,8 @@
     <h3>Output</h3>
 
     <ul>
-        <li>de-list_samplenames_vs_Samplesnames_in_clusterclustername.tsv files: Differentially expressed genes between
-            the user defined samples
+        <li>de-list_sample_group_name1_vs_sample_group_name2_in_clusterclustername.tsv files: Differentially expressed genes between
+            the user defined sample groups
     </ul>
 
 

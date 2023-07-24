@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # RUNTIME R-4.2.3-single-cell
-# SLOTS 3
+# SLOTS 2
 # TOOLS_BIN ""
 
 # 2018-16-05 ML 
@@ -52,9 +52,10 @@ samples2.cluster <- paste(cluster, "_", samples2.ok, sep="")
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT"){
   data.combined <- PrepSCTFindMarkers(data.combined)
-  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
 } else { 
-  cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+  cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+
 }
 
 
