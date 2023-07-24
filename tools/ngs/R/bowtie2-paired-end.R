@@ -51,6 +51,8 @@ for (i in 1:nrow(input.names)) {
 
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
+version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+documentVersion("Bowtie",version)
 bowtie.genome <- c(file.path(chipster.tools.path,"genomes","indexes","bowtie2",organism))
 command.start <- paste("bash -c '",bowtie.binary)
 rdg.value <- paste(rdg.open,rdg.ext,sep = ",")
@@ -146,6 +148,8 @@ runExternal(bowtie.command)
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
+version <- system(paste(samtools.binary,"--version | head -1 | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("SAMtools",version)
 
 # convert sam to bam
 runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
@@ -197,9 +201,3 @@ outputnames[4,] <- c("failed_2.fq",paste(base2,"_failed.fq",sep = ""))
 # Write output definitions file
 write_output_definitions(outputnames)
 
-# save version information
-bowtie.version <- system(paste(bowtie.binary,"--version | grep bowtie2"),intern = TRUE)
-documentVersion("Bowtie 2",bowtie.version)
-
-samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
-documentVersion("Samtools",samtools.version)

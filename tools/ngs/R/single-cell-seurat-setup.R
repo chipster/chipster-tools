@@ -27,6 +27,7 @@
 # 2023-04-06 LG Remove 5 slots
 # 2023-02-01 ML Return to the original 2 slots
 # 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
+# 2023-07-12 ML Mitogenes with Mt- 
 
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
@@ -119,7 +120,7 @@ seurat_obj$type <-  sample.group
 # QC
 # % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
 # NOTE: The pattern provided works for human and mouse gene names. You may need to adjust depending on your system of interest
-seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-")
+seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-")
 
 
 # pdf plots

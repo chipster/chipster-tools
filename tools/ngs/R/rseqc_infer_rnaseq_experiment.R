@@ -27,6 +27,8 @@ if (file.exists("reads2.fq")) {
 
 # Make subsets of FASTQ files for faster processing
 seqtk.binary <- file.path(chipster.tools.path,"seqtk","seqtk")
+version <- system(paste(seqtk.binary,"2>&1 |head -3 |tail -1 | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("Seqtk",version)
 system(paste(seqtk.binary,"sample -s 15 reads1.fq 200000 > subset.reads1.fq"))
 if (pe) {
   system(paste(seqtk.binary,"sample -s 15 reads2.fq 200000 > subset.reads2.fq"))
@@ -44,6 +46,8 @@ if (fileOk("user_genome")) {
 }
 # Align against reference genome
 bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
+version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+documentVersion("Bowtie",version)
 
 if (organism != "other") {
   bowtie.genome <- c(file.path(chipster.tools.path,"genomes","indexes","bowtie2",organism))

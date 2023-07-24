@@ -11,6 +11,7 @@
 # PARAMETER OPTIONAL genes: "Genes to filter" TYPE [NULL: Null, mt: Mitochondrial, Hb: Hemoglobin, both: Both] DEFAULT NULL (You can choose to remove genes based on the top expressed genes plot for example mitochondrial or hemoglobin genes.)
 
 # 2022-07-19 IH
+# 2023-07-12 IH Mitogenes with Mt- and MT- (copied from ML)
 
 library(Seurat)
 
@@ -18,7 +19,7 @@ library(Seurat)
 load("seurat_spatial_setup.Robj")
 
 # Subset: remove potential empties, multiplets and broken cells based on parameters
-seurat_obj <- PercentageFeatureSet(seurat_obj, "^mt-", col.name = "percent_mito")
+seurat_obj <- PercentageFeatureSet(seurat_obj, "^MT-|^mt-|^Mt-", col.name = "percent_mito")
 seurat_obj <- PercentageFeatureSet(seurat_obj, "^Hb.*-", col.name = "percent_hb")
 seurat_obj= seurat_obj[, seurat_obj$percent_mito < mitocutoff & seurat_obj$percent_hb < hbcutoff]
 

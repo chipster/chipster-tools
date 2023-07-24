@@ -55,8 +55,14 @@ options(scipen = 10)
 
 # setting up TopHat
 tophat.binary <- c(file.path(chipster.tools.path, "tophat2", "tophat2"))
+version <- system(paste(tophat.binary,"--version | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("TopHat",version)
+
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2-2.2.9", "bowtie2"))
+version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+documentVersion("Bowtie",version)
 bowtie2.index.binary <- file.path(chipster.module.path, "shell", "check_bowtie2_index.sh")
+
 path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))
 path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
 set.path <-paste(sep="", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
@@ -143,6 +149,8 @@ runExternal(command)
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
+version <- system(paste(samtools.binary,"2>&1 |head -3 |tail -1 | cut -d ' ' -f 2"),intern = TRUE)
+documentVersion("SAMtools",version)
 
 # sort bam (removed because TopHat itself does the sorting)
 # system(paste(samtools.binary, "sort tophat_out/accepted_hits.bam tophat"))
@@ -226,12 +234,5 @@ outputnames[2,] <- c("tophat.bam.bai", paste(basename, ".bam.bai", sep =""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
-# save version information
-tophat.version <- system(paste(tophat.binary,"--version"),intern = TRUE)
-documentVersion("TopHat 2",tophat.version)
-
-samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
-documentVersion("Samtools",samtools.version)
 
 #EOF
