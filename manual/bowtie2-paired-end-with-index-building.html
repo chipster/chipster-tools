@@ -15,7 +15,8 @@
         paired-end reads
         to a reference genome. You need to supply the reads in two or more files containing the paired reads in
         the same
-        order and a FASTA formatted reference sequence.
+        order. You also need to provide 
+        the reference genome as an input either in a FASTA format or as a tar package with Bowtie index. 
 
     </p>
     <p>
@@ -216,11 +217,16 @@
     </table>
 
 
+
     <h3>Output</h3>
 
     <p>This tool returns the alignment in BAM format and an index file for it (.bai). It also produces a log file,
         which allows you to see what percentage of the reads align with the selected parameter settings. Optionally also
         fastq files are produced for the unaligned reads, or reads that align discordantly.
+    </p>
+    <p>
+        If you use a FASTA format genome, the tool will produce a .tar file with the Bowtie2 indexes.
+        If you run the tool again with the same genome, you should use the .tar file as the genome input, as this saves the time needed to generate the indexes.
     </p>
 
 
