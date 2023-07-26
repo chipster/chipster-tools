@@ -13,8 +13,8 @@
 
     <p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> to align
         single-end reads
-        to a reference genome. You need to supply the reads in one or more FASTQ files. You also need to provide a FASTA formatted
-        reference sequence.
+        to a reference genome. You need to supply the reads in one or more FASTQ files. You also need to provide 
+        the reference genome as an input either in a FASTA format or as a tar package with Bowtie index.
     </p>
     <p>
     <p>After running Bowtie2, Chipster converts the alignment file to BAM format, and sorts and indexes it using the <a
@@ -160,7 +160,11 @@
 
     <p>This tool returns the alignment in BAM format and an index file for it (.bai). It also produces a log file,
         which allows you to see what percentage of the reads align with the selected parameter settings. Optionally also
-        a fastq file is produced for the unaligned reads.
+        a fastq file is produced for the unaligned reads. 
+    </p>
+    <p>
+        If you use a FASTA format genome, the tool will produce a .tar file with the Bowtie2 indexes.
+        If you run the tool again with the same genome, you should use the .tar file as the genome input, as this saves the time needed to generate the indexes.
     </p>
 
     <h3>Reference</h3>
