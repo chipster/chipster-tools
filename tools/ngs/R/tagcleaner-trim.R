@@ -2,7 +2,7 @@
 # INPUT reads: "FASTQ/FASTA file" TYPE GENERIC
 # INPUT OPTIONAL qual: "QUAL file" TYPE GENERIC
 # OUTPUT trim.log.txt
-# OUTPUT OPTIONAL trimmed.fq.gz
+# OUTPUT OPTIONAL trimmed.fastq.gz
 # OUTPUT OPTIONAL trimmed.fasta.gz
 # OUTPUT OPTIONAL trimmed.qual.gz
 # PARAMETER input.type: "Input type" TYPE [FASTQ, FASTA] DEFAULT FASTQ (Input type. If using a FASTA file you can provide an optional QUAL file to trim sequences and their quality scores.)
@@ -16,6 +16,8 @@
 
 # AMS 2013.02.18
 # AMS 11.3.2014, gzip fastq outputs
+
+source(file.path(chipster.common.path,"tool-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -71,9 +73,12 @@ command <- paste(tagcleaner.binary, options)
 
 # run
 system(command)
+
+# gzip
 system("gzip *.fastq")
 system("gzip *.fasta")
 system("gzip *.qual")
+
 
 # Handle output names
 source(file.path(chipster.common.path, "tool-utils.R"))
@@ -86,10 +91,12 @@ outputnames <- matrix(NA, nrow=3, ncol=2)
 
 base1 <- strip_name(inputnames$reads)
 
-outputnames[1,] <- c("trimmed.fastq.gz", paste(base1, "trimmed.fq.gz", sep =""))
+outputnames[1,] <- c("trimmed.fastq.gz", paste(base1, "_trimmed.fastq.gz", sep =""))
 outputnames[2,] <- c("trimmed.fasta.gz", paste(base1, ".fasta.gz", sep =""))
 outputnames[3,] <- c("trimmed.qual.gz", paste(base1, ".qual.gz", sep =""))
 
+outputnames
 
 # Write output definitions file
 write_output_definitions(outputnames)
+
