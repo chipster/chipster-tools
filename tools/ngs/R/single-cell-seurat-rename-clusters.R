@@ -1,8 +1,8 @@
 # TOOL single-cell-seurat-rename-clusters.R: "Seurat v4 -Rename clusters" (You can use this tool to rename the clusters.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # INPUT cluster_names.tsv: "Cluster name table in tsv format" TYPE GENERIC
-# OUTPUT OPTIONAL clusterPlotRenamed.pdf
 # OUTPUT OPTIONAL seurat_obj_renamed.Robj
+# OUTPUT OPTIONAL clusterPlotRenamed.pdf
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
 # RUNTIME R-4.2.0-single-cell
 

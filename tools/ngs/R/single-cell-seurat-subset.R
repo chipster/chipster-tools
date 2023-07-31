@@ -1,8 +1,8 @@
 # TOOL single-cell-seurat-subset.R: "Seurat v4 -Subset Seurat objects based on gene expression" (Subset cells in a Seurat object based on the expression level of a gene or feature. Gene name and expression threshold are given as parameters.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# OUTPUT seurat_obj_subset.Robj
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL subset_plot.pdf
-# OUTPUT seurat_obj_subset.Robj
 # PARAMETER OPTIONAL gene: "Gene" TYPE STRING DEFAULT "MS4A1" (Gene or feature name for subsetting. Set below the threshold for expression value.)
 # PARAMETER OPTIONAL threshold: "Expression level threshold" TYPE DECIMAL DEFAULT 1 (Subset cells with higher than this expression in the gene selected above.)
 # RUNTIME R-4.2.3-single-cell
