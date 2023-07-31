@@ -2,10 +2,10 @@
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
 # INPUT OPTIONAL hdf5.h5: "10X CellRanger hdf5 input file" TYPE GENERIC
+# OUTPUT OPTIONAL setup_seurat_obj.Robj
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
-# OUTPUT OPTIONAL setup_seurat_obj.Robj
 # PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT My_project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
@@ -13,6 +13,10 @@
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
+
+
+
+
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -39,6 +43,13 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+
+library(Biobase)
+source(file.path(chipster.common.path, "tool-utils.R"))
+#version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+package.version("Seurat")
+version <- package.version("Seurat")
+documentVersion("Seurat",version)
 
 # Replace empty spaces in sample and project name with underscore _ :
 sample_name <- gsub(" ", "_", sample_name)
