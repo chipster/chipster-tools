@@ -32,7 +32,7 @@ clusternames <- read.table("cluster_names.tsv", sep="\t", header=T, row.names=1)
 new.cluster.ids <- clusternames[,1]
 
 # Some checks:
-if(length(new.cluster.ids) != lenght(levels(seurat_obj)) ) {
+if(length(new.cluster.ids) != length(levels(seurat_obj)) ) {
     stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
 }
 if(row.names(clusternames) != levels(seurat_obj) ){
