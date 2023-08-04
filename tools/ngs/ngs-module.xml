@@ -20,13 +20,14 @@
 		<tool>fastx-quality-filter.R</tool>
 		<!-- <tool>prinseq-trimmer.R</tool>	-->
 		<tool>trimmomatic.R</tool>
+		<tool>trimmomatic-for-iontorrent.R</tool>
 		<tool>fastx-trimmer.R</tool>
 		<tool>tagcleaner-trim.R</tool>	
 		<tool>tagcleaner-predict.R</tool>	
 		<tool>tagcleaner-statistics.R</tool>
 		<tool>umi_tools-extract.R</tool>
 		<tool>bbduk-trim.R</tool>
-		<tool>umi_tools-dedup.R</tool>		
+		<tool>umi_tools-dedup.R</tool>	
 		
 	</category>
 
@@ -96,6 +97,7 @@
 		<tool module="common">gzip.R</tool>	
 		<tool>a5-miseq.R</tool>
 		<tool module="common">make_namelist.R</tool>
+		<tool module="common">remove-special-characters.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
 	    	<tool module="common">share_via_object_storage.R</tool>
