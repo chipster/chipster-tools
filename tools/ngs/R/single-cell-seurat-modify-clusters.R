@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-modify-clusters.R: "Seurat v4 -Remove clusters" (Remove particular clusters from data.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL log.txt
 # OUTPUT seurat_obj_modified_clusters.Robj
+# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL ClusterPlots.pdf 
 # PARAMETER cluster.identifier: "Names of the clusters to remove or include" TYPE STRING DEFAULT "3" (Name or names of the clusters you wish to keep or remove. If you list several, separate them with comma.)
 # PARAMETER remove.include: "Do you wish to remove or include these clusters" TYPE [remove, include] DEFAULT remove (Select whether you want to remove or include the clusters listed above.)

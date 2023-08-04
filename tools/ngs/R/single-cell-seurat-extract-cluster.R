@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-extract-cluster.R: "Seurat v4 BETA -Extract cells in a cluster" (Extract cells in a particular cluster into a new R-object for closer inspection. As input, use R-object after clustering the data. Read the tool manual to see how you can continue the analysis.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL log.txt
 # OUTPUT seurat_obj_subset.Robj
+# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL QCplots.pdf 
 # PARAMETER cluster.identifier: "Name of the cluster to extract" TYPE STRING DEFAULT "3" (Name of the cluster you wish to extract.)
 # RUNTIME R-4.2.3-single-cell
