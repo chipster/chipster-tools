@@ -22,11 +22,22 @@
         <ul>
             <li>Species [drosophila_melanogaster]</li>
             <p>
-                Like written e.g. in this <a href="http://ftp.ensembl.org/pub/release-108/fasta/">directory listing</a>.
+                Like written in the directory listing for 
+                <a href="http://ftp.ensembl.org/pub/current_fasta/">verteberates</a>, 
+                <a href="http://ftp.ensemblgenomes.org/pub/fungi/current/fasta/">fungi</a>, 
+                <a href="http://ftp.ensemblgenomes.org/pub/plants/current/fasta/">plants</a> or in 
+                <a href="http://ftp.ensemblgenomes.org/pub/bacteria/current/fasta/">one of the bacteria collections</a>. 
+                Omit the trailing forward slash character "/".
             </p>
             <li>Version [BDGP6.32]</li>
             <p>
-                Genome assembly version.
+                To find the genome assembly version, use the above links to find your species, open it, and then open 
+                a folder called "dna". For example, for the fruit fly this would be 
+                <a href="http://ftp.ensembl.org/pub/current_fasta/drosophila_melanogaster/dna/">http://ftp.ensembl.org/pub/current_fasta/drosophila_melanogaster/dna/</a>. 
+                Locate a fasta file package from the file listing, which 
+                ends with ".dna.toplevel.fa.gz". In this case it is "Drosophila_melanogaster.BDGP6.46.dna.toplevel.fa.gz". It starts with a species
+                name (but now the first letter is in uppercase), followed by a period "." and ends with ".dna.toplevel.fa.gz". In the middle you can find the genome version
+                in the correct format: "BDGP6.32".
             </p>
             <li>Ensembl release [current]</li>
             <p>
@@ -36,6 +47,10 @@
                 To download the BDGP6.22 assembly of Drosophila melanogaster, set this parameter to <code>release-98</code>.
             </p>
             <li>Ensembl site (verteberates, fungi, plants, bacteria) [verteberates]</li>
+            <p>
+                Check the address of the file listing. If it starts with ensembl.org, select 
+                "verteberates". If if starts ensemblgenomes.org, select "fungi", "plants" or "bacteria".
+            </p>
             <li>Action (Check version, Download) [Download]</li>
             <p>
                 The tool can be used in the two modes. The mode <code>Download</code> finds the requested genome from the server
