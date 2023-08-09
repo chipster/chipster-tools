@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title>Chipster genomes</title>
+</head>
+
+<body>
+
+    <h2>Chipster genomes</h2>
+
+    <h3>Introduction</h3>
+
+    <p>Chipster includes prebuilt aligner indexes for <a href="https://github.com/chipster/chipster-tools/blob/master/setup/bundles/genomes/genomes.tsv">many organisms</a>. This page describes how those 
+        indexes were created, but also shows how you can build indexes for additional organisms, as 
+        long as it's found from <a href="https://www.ensembl.org">Ensembl</a>. Fasta and expecially 
+        GTF files obtained from other sources often have format differences that cause this process
+        to fail.
+    </p>
+
+    <p>Note: Building Hisat2 indexes for larger genomes (e.g. mammals) exceeds the maximum amount of memory 
+    for one job in <a href="https://chipster.csc.fi">chipster.csc.fi</a>. Please <a href="https://chipster.rahtiapp.fi/contact">
+    contact us</a> if you need Hisat2 indexes for new large genomes.
+    </p>
+
+    <p>
+        Let's build a Hisat2 index for a fruit fly as an example.
+    </p>
+
+    <h3>Download fasta and gtf files</h3>
+
+    <p>
+        Download first the fasta and GTF files using a tool <a href="genome-download.html">Download genome from Ensembl</a>. 
+        Please see the tool manual to find the name and version of the genome in a correct format.
+    </p>
+
+    <h3>Filter fasta</h3>
+
+    <p>Select the downloaded fasta file and run a tool <a href="filter-fasta.html">Filter fasta</a> to keep only primary chromosomes.</p>
+    
+    <h3>Index</h3>
+
+    <p>Now we are ready to build an aligner index. For example to build an index for Hisat2, select the filtered
+        fasta file and the downloaded GTF file and run a tool <a href="index-hisat2.html">Create Hisat2 index</a>.
+    </p>
+
+    <h3>Make a tar package</h3>
+    <p> The Chipster aligners expect to get your own indexes in a tar package. Select the index files produced in the 
+        previous step and run the tool <a href="make_tar.html">Make a tar package</a>. 
+    </p>
+
+    <h3>How to use your own index</h3>
+
+    <p>Upload your .fastq.gz files to the same Chipster session. Select your .fastq.gz files and your index tar package.
+        Select an "own genome" version of the aligner, for example 
+        <a href="hisat2-paired-end-with-index-building.html">HISAT2 for paired-end reads and own genome</a>. See
+        the manual page of the particular aligner for details.
+    </p>
+</body>
