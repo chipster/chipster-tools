@@ -2,6 +2,7 @@
 # INPUT sites{...}.vcf: "VCF files" TYPE GENERIC
 # OUTPUT pon.vcf.gz
 # PARAMETER OPTIONAL gatk.minsamplecount: "Minumum sample count" TYPE INTEGER DEFAULT 2 (Number of samples containing a variant site required to include it in the panel of normals.) 
+# SLOTS 5
 
 source(file.path(chipster.common.path, "gatk-utils.R"))
 source(file.path(chipster.common.path, "tool-utils.R"))
@@ -11,7 +12,7 @@ source(file.path(chipster.common.path, "vcf-utils.R"))
 # binaries
 gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 
-command <- paste(gatk.binary, "CreateSomaticPanelOfNormals")
+command <- paste(gatk.binary, "CreateSomaticPanelOfNormals", "--java-options '-Xmx36G'")
 
 # Add VCF files
 inputs <- paste("")
