@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # RUNTIME R-4.2.3-single-cell
-# SLOTS 2
+# SLOTS 5
 # TOOLS_BIN ""
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
