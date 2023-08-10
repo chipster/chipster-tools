@@ -93,8 +93,10 @@ if (length(unique(groups)) == 2) {
 	sig <- sig[ order(sig$padj), ]
 	# Open pdf file for output
 	pdf(file="deseq2_report.pdf") 
+
 	## MA plot before lfcShrink:
 	# plotMA(dds, alpha=p.value.cutoff, main=c("DESeq2 MA-plot, FDR =", p.value.cutoff), ylim=c(-2,2))
+	
 	# MA plot after lfcShrink:
 	plotMA(resLFC, alpha=p.value.cutoff ,main=c("DESeq2 MA-plot with LFC shrink (used in result table), FDR =", p.value.cutoff), ylim=c(-2,2))
 
@@ -130,12 +132,21 @@ if (length(unique(groups)) == 2) {
 		for  (j in (i+1) : nlevels(conditions) ) {
 			i_label <- levels(conditions)[i]
 			j_label <- levels(conditions)[j]
-			# Old version, 1/2023: pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j_label,i_label))) # note: j,i => j-i
+
+
+			# Old version, 1/2023: 
+			# pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j_label,i_label))) # note: j,i => j-i
      		res2 <- results(test_results, contrast=c("condition",j_label,i_label)) # note: j,i => j-i
       		
       		# LFC shrink, needs to be after results function. (This step was previously inside DESeq function)
       		resLFC <- lfcShrink(dds, res=res2, type="ashr")
       		res2 <- resLFC
+
+			# Summary into a txt file	
+			sink("summary.txt", append = TRUE)
+			print(paste("Comparison: ", i_label,"_vs_", j_label, sep=""))
+			summary(res2, alpha=p.value.cutoff)
+			sink()
       
       		pairwise_results <- as.data.frame(res2)
 
@@ -160,10 +171,6 @@ if (length(unique(groups)) == 2) {
 	sig <- sig[ order(sig$min_padj), ] 
 	sig <- sig[, -grep("min_padj", colnames(sig))]
 	
-	# Summary into a txt file	
-	sink("summary.txt")
-	summary(res, alpha=p.value.cutoff)
-	sink()
 	
 	# Output significant DEGs
 	if (dim(sig)[1] > 0) {
@@ -196,6 +203,11 @@ for(i in grep("baseMean$", colnames(res))) {
 rownames(output_table) <- make.names(rep(rownames(res), length(grep("baseMean$", colnames(res)))), unique=T)
 output_table <- as.data.frame(output_table)
 
+# testing:
+#  write.table(output_table, file="output_table.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+#  save(output_table, file = "res.Robj")
+
+
 # If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
 if (bed == "yes"){
 	if("chr" %in% colnames(dat)) {
@@ -222,11 +234,11 @@ if (length(unique(groups)) > 2){
 	# Define function for making MA-plot.
 	plotDE <- function(res)
 		plot(res$baseMean, res$log2FoldChange,
-			log="x", pch=20, cex=.25, col = ifelse( res$padj < p.value.cutoff, "blue", "black"),
+			log="x", ylim=c(-2,2), pch=20, cex=.25, col = ifelse( res$padj < p.value.cutoff, "blue", "black"),
 			main="MA plot with LFC shrink, all comparisons", xlab="mean counts", ylab="log2(fold change)") 
 	# Make MA-plot
  	plotDE(unique(output_table))
- 	legend (x="topleft", legend=c("significant","not significant"), col=c("blue","black"), cex=1, pch=19)
+ 	legend (x="topleft", legend=c("significant based on adj. p-val","not significant"), col=c("blue","black"), cex=1, pch=19)
 	abline(h = 0, col = "darkgreen", lwd = 2) 
  	# abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2) # 
 }
