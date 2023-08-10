@@ -1,10 +1,11 @@
 # TOOL single-cell-seurat-rename-clusters.R: "Seurat v4 -Rename clusters" (You can use this tool to rename the clusters.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # INPUT cluster_names.tsv: "Cluster name table in tsv format" TYPE GENERIC
-# OUTPUT OPTIONAL clusterPlotRenamed.pdf
 # OUTPUT OPTIONAL seurat_obj_renamed.Robj
+# OUTPUT OPTIONAL clusterPlotRenamed.pdf
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
-# RUNTIME R-4.2.0-single-cell
+# RUNTIME R-4.2.3-single-cell
+# TOOLS_BIN ""
 
 
 # OUTPUT OPTIONAL log.txt
@@ -31,6 +32,9 @@ clusternames <- read.table("cluster_names.tsv", sep="\t", header=T, row.names=1)
 new.cluster.ids <- clusternames[,1]
 
 # Some checks:
+if(is.null(seurat_obj@commands$FindClusters)) {
+  stop("CHIPSTER-NOTE: No cluster information in the Seurat object! Make sure you select an object that has gone through either Clustering or Integrated analysis of multiple samples tool.")
+}
 if(length(new.cluster.ids) != length(levels(seurat_obj)) ) {
     stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
 }

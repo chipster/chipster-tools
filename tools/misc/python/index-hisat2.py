@@ -3,7 +3,7 @@
 # INPUT input.gtf TYPE GENERIC
 # OUTPUT output{...}
 # RUNTIME python3
-# SLOTS 10
+# SLOTS 5
 
 # add the tools dir to path, because __main__ script cannot use relative imports
 sys.path.append(os.getcwd() + "/../toolbox/tools")

@@ -1,8 +1,8 @@
 # TOOL single-cell-seurat-clustering.R: "Seurat v4 -Clustering" (Clusters cells and performs tSNE and UMAP for visualization purposes.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# OUTPUT seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL clusterPlot.pdf
-# OUTPUT seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER OPTIONAL pcs_use: "Number of principal components to use" TYPE INTEGER DEFAULT 10 (How many principal components to use. User must define this based on the PCA-elbow and PCA plots from the setup tool. Seurat developers encourage to test with different parameters, and use preferably more than less PCs for downstream analysis.)

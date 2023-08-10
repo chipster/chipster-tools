@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-integrated-analysis.R: "Seurat v4 -Integrated analysis of multiple samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for combined Seurat objects that have multiple samples in them.)
 # INPUT combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT seurat_obj_combined_integrated.Robj
+# OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
 # OUTPUT OPTIONAL log_normalized.tsv
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # RUNTIME R-4.2.3-single-cell
-# SLOTS 2
+# SLOTS 5
 # TOOLS_BIN ""
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:

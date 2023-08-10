@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-find-markers.R: "Seurat v4 -Find differentially expressed genes between clusters" (Find genes which are differentially expressed between given clusters or between a specified cluster and all the other cells.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL seurat_obj_markers.Robj
+# OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL markers.tsv
 # OUTPUT OPTIONAL all_markers.tsv
 # OUTPUT OPTIONAL Top10Heatmap.pdf

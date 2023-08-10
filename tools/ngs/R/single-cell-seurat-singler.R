@@ -1,8 +1,8 @@
 # TOOL single-cell-seurat-singler.R: "SingleR cluster annotation" (Annotate your cell clusters using SingleR tool and CellDex annotation packages.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
+# OUTPUT OPTIONAL seurat_obj_singler_annotations.Robj
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL singleR_annotation_plots.pdf
-# OUTPUT OPTIONAL seurat_obj_singler_annotations.Robj
 # OUTPUT OPTIONAL annotations_main.tsv
 # OUTPUT OPTIONAL annotations_fine.tsv
 # PARAMETER celldex.index: "CellDex reference to use" TYPE [HumanPrimaryCellAtlasData: "Human primary cell atlas", BlueprintEncodeData: "Blueprint ENCODE", MouseRNAseqData: "Mouse RNA-seq", ImmGenData: "Immunological Genome Project", DatabaseImmuneCellExpressionData: "Database of Immune Cell Expression", NovershternHematopoieticData: "Novershtern hematopoietic data", MonacoImmuneData: "Monaco Immune data"] DEFAULT MonacoImmuneData (Which CellDex reference to use for annotations.)
