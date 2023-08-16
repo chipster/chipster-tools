@@ -30,14 +30,6 @@ def remove_postfix(string, postfix):
     return string
 
 
-# Prints out version information.
-#
-def document_version(application, version_string):
-    print("## VERSION: " + application)
-    for line in version_string.splitlines():
-        print("## " + line)
-
-
 # adapted from https://stackoverflow.com/a/1094933
 def human_readable(num, suffix="B"):
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
