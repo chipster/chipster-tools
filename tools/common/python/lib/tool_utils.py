@@ -38,17 +38,6 @@ def document_version(application, version_string):
         print("## " + line)
 
 
-def document_python_version():
-    python_version = (
-        str(sys.version_info.major)
-        + "."
-        + str(sys.version_info.minor)
-        + "."
-        + str(sys.version_info.micro)
-    )
-    document_version("python", python_version)
-
-
 # adapted from https://stackoverflow.com/a/1094933
 def human_readable(num, suffix="B"):
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
