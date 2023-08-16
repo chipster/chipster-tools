@@ -13,7 +13,7 @@ import os
 import zipfile
 import shutil
 import subprocess
-from tool_utils import *
+import tool_utils
 
 
 def main():
@@ -95,7 +95,7 @@ def main():
                 shutil.copyfileobj(infile, outfile)
 
     # set dataset names
-    write_output_definitions(output_names)
+    tool_utils.write_output_definitions(output_names)
 
 
 if __name__ == "__main__":
