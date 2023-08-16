@@ -4,16 +4,14 @@
 # OUTPUT output.fa.fai
 # RUNTIME python3
 
-# add the tools dir to path, because __main__ script cannot use relative imports
-sys.path.append(os.getcwd() + "/../toolbox/tools")
-from common.python import tool_utils
+import tool_utils
 import subprocess
 from typing import Iterable
 import os
 import requests
 
-def main():
 
+def main():
     input_fa = "input.fa"
     output_fa = "output.fa"
     input_fai = "input.fa.fai"
@@ -21,9 +19,11 @@ def main():
 
     samtools = chipster_tools_path + "/samtools-1.2/samtools"
 
-    session_input_fa = tool_utils.read_input_definitions()[input_fa]\
-        .replace(".dna.toplevel", "")\
+    session_input_fa = (
+        tool_utils.read_input_definitions()[input_fa]
+        .replace(".dna.toplevel", "")
         .replace(".dna.primary_assembly", "")
+    )
 
     karyotype_chr = None
 
@@ -31,7 +31,10 @@ def main():
         karyotype_chr = get_karyotype_chromosomes(session_input_fa)
     except requests.exceptions.HTTPError as err:
         if err.response.status_code == 400:
-            print("failed to get chromosomes. Most likely the species is not available in the Ensembl Rest API. Keeping all chromosomes.", err)
+            print(
+                "failed to get chromosomes. Most likely the species is not available in the Ensembl Rest API. Keeping all chromosomes.",
+                err,
+            )
         else:
             # raise the same exception again
             raise
@@ -55,20 +58,27 @@ def main():
     if karyotype_chr == None or len(karyotype_chr) == 0:
         print("no karyotype chromosomes, keeping all")
 
-        #run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
+        # run_bash("bgzip --decompress --stdout " + input_fa + " > " + output_fa)
         os.rename(input_fa, output_fa)
         os.rename(input_fai, output_fai)
-    
-    else:
 
+    else:
         for chromosome in karyotype_chr:
             if chromosome in fasta_chr_set:
                 print("copy chromosome", chromosome)
-                run_bash(samtools + " faidx " + input_fa + " " + chromosome + " >> " + output_fa)
+                run_bash(
+                    samtools
+                    + " faidx "
+                    + input_fa
+                    + " "
+                    + chromosome
+                    + " >> "
+                    + output_fa
+                )
             else:
                 # if the chromosome isn't found, samtools returns an emtpy sequence
-		        # we don't want to add new chromosomes to old fastas, so check that the 
-		        # chromosome exists before running samtools 
+                # we don't want to add new chromosomes to old fastas, so check that the
+                # chromosome exists before running samtools
                 print("no chromosome " + chromosome + " in fasta, skipping")
 
         # create index for the filtered fasta, because it's used in samtools-snp-indel-single.R
@@ -76,32 +86,36 @@ def main():
         run_process([samtools, "faidx", output_fa])
 
     # write better file names for client
-    output_names = {
-        output_fa: session_input_fa,
-        output_fai: session_input_fa + ".fai"
-    }
+    output_names = {output_fa: session_input_fa, output_fai: session_input_fa + ".fai"}
 
     tool_utils.write_output_definitions(output_names)
+
 
 def run_bash(cmd: str):
     run_process(["bash", "-c", cmd])
 
+
 def run_process(cmd: Iterable[str]):
     process = subprocess.run(cmd)
     if process.returncode != 0:
-        raise RuntimeError("process failed with return code: " + str(process.returncode) + ", command: " + str(cmd))
+        raise RuntimeError(
+            "process failed with return code: "
+            + str(process.returncode)
+            + ", command: "
+            + str(cmd)
+        )
+
 
 def get_karyotype_chromosomes(name: str):
-
-    # a string before the first period 
+    # a string before the first period
     # (drosophila_melanogaster)
     species_name = name.split(".", 1)[0].lower()
 
     server = "https://rest.ensembl.org"
     ext = "/info/assembly/" + species_name + "?"
- 
-    r = requests.get(server+ext, headers={ "Content-Type" : "application/json"})
- 
+
+    r = requests.get(server + ext, headers={"Content-Type": "application/json"})
+
     if not r.ok:
         r.raise_for_status()
 
@@ -110,5 +124,6 @@ def get_karyotype_chromosomes(name: str):
     karyotype = decoded["karyotype"]
 
     return set(karyotype)
+
 
 main()
