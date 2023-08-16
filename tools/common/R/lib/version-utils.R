@@ -6,6 +6,7 @@ printVersion <- function(application, version.string) {
 }
 
 documentVersion <- function(application, version.string) {
+  # print(paste(application, version.string))
   write(version.string, file = file.path(chipster.versions.path, paste(application, ".txt", sep = "")))
 }
 
@@ -14,10 +15,8 @@ documentRVersion <- function() {
 }
 
 documentRSessionInfo <- function() {
-  documentVersion("R", R.version.string)
-  documentVersion("R sessionInfo", capture.output(sessionInfo()))
+  documentVersion("R Session Info", capture.output(sessionInfo()))
 }
-
 
 # This is called from java code RCompJob.java
 #
