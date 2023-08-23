@@ -1,12 +1,12 @@
-# TOOL metabarcoding-stacked-barplot.R: "OTU relative abundance bar plots" (This tool is used to visualize OTU relative abundance data within a phyloseq object using ggplot2. The tool produces stacked bar plots that are built using a user-specified level of biological organization \(with a maximum of displaying 22 taxa\). Options may be specified for faceting \(up to two phenodata variables\) and using a minimal OTU relative abundance threshold. Requires a phyloseq object in Rda format as the input. To use this tool, OTU abundances must be provided as relative abundances \(with per-column OTU abundances adding up to 1\).)
+# TOOL metabarcoding-stacked-barplot.R: "Relative abundance bar plots" (Visualizes OTU relative abundance data with stacked bar plots that are built using a user-specified level of biological organization \(with a maximum of displaying 22 taxa\). You can set a minimal OTU relative abundance threshold for plotting. The plot can be divided into subplots based on a phenodata column. Requires a phyloseq object in Rda format as the input. To use this tool, OTU abundances must be provided as relative abundances \(with per-column OTU abundances adding up to 1\).)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_barplot.pdf
 # PARAMETER xvar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
 # PARAMETER OPTIONAL thresh: "Relative abundance cut-off threshold \(%\) for excluding OTUs" TYPE INTEGER FROM 0 TO 99 DEFAULT 0
 # PARAMETER OPTIONAL type: "Level of biological organization for tabulating taxon composition" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus"] DEFAULT phylum (Level of biological organization for plot construction \(default is phylum\))
-# PARAMETER OPTIONAL facet1: "Phenodata variable 1 for plot faceting" TYPE METACOLUMN_SEL DEFAULT EMPTY (First phenodata variable used for plot faceting.)
-# PARAMETER OPTIONAL facet2: "Phenodata variable 2 for plot faceting" TYPE METACOLUMN_SEL DEFAULT EMPTY (Second phenodata variable used for plot faceting.)
+# PARAMETER OPTIONAL facet1: "Phenodata variable 1 for dividing plots into subplots" TYPE METACOLUMN_SEL DEFAULT EMPTY (First phenodata variable used for dividing plots into subplots.)
+# PARAMETER OPTIONAL facet2: "Phenodata variable 2 for dividing plots into subplots" TYPE METACOLUMN_SEL DEFAULT EMPTY (Second phenodata variable used for dividing plots into subplots.)
 # RUNTIME R-4.2.0-phyloseq
 
 # JH 2020
