@@ -15,7 +15,7 @@ This tool is based on <a href="https://cutadapt.readthedocs.io/en/stable/">Cutad
 
 <h3>Parameters</h3>
 <ul>
-    <li>Is the data paired end or single end reads (paired, single) [paired]</li>
+    <li>Are the reads paired end or single end (paired, single) [paired]</li>
     <li>The 5´ end adapter to be trimmed</li>
     <li>The 3' end adapter to be trimmed</li>
     <li>Remove reads which were not trimmed [yes, no] (no)</li>
@@ -44,7 +44,7 @@ If your reads are paired end, then the adapters from the reverse reads will be r
 <br>
 <br>
 Cutadapt deals with the 3´ adapters by removing the adapter itself and any sequence that may follow it.
-The 5´ adapters need to either appear full somewhere within the read, or at the start in the 5´ end of the read when also partially occurences are allowed. 
+The 5´ adapters need to either appear full somewhere within the read, or at the start in the 5´ end of the read when also partial occurences are allowed. 
 Cutadapt removes the sequence preceding the 5' adapter. 
 <br>
 <br>
@@ -69,7 +69,7 @@ which has all the information on the process conducted by Cutadapt.
 The analysis output consists of the following:
 <ul>
     <li>adapters_removed.tar: A tar package containing all the FASTQ files from which the specified adapters were removed</li>
-    <li>summary.txt: Summary produced by Cutadapt. Information about the adapter trimming.</li>
+    <li>report.txt: Summary produced by Cutadapt. Information about the adapter trimming.</li>
 </ul>
 
 </p>
