@@ -1,4 +1,4 @@
-# TOOL metabarcoding-additional-prevalence.R: "Additional prevalence summaries" (Prevalence summaries to assist with data preparation for downstream analyses. Plots total read counts against prevalence values for each phylum. Also tabulates the overall numbers of features with zero reads, one read \(singletons\) and two reads \(doubletons\). Requires a phyloseq object in Rda format as the input.) 
+# TOOL metabarcoding-additional-prevalence.R: "Prevalence summaries" (Prevalence summaries to assist with data preparation for downstream analyses. Plots total read counts against prevalence values for each phylum. Also tabulates the overall numbers of features with zero reads, one read \(singletons\) and two reads \(doubletons\). Requires a phyloseq object in Rda format as the input.) 
 # INPUT ps.Rda: "Phyloseq object in .Rda format" TYPE GENERIC
 # OUTPUT ps_prevalence.pdf: ps_prevalence.pdf
 # OUTPUT ps_low.txt: ps_low.txt
