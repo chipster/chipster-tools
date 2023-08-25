@@ -324,9 +324,9 @@
 		<tool>metabarcoding-filter-taxgroup.R</tool>
 		<tool>metabarcoding-filter-individual.R</tool>
 		<tool>metabarcoding-taxon-overview.R</tool>
-		<tool>metabarcoding-additional-prevalence.R</tool>		
-		<tool>metabarcoding-single-double.R</tool>
+		<tool>metabarcoding-additional-prevalence.R</tool>
 		<tool>metabarcoding-prevalence-filter.R</tool>
+		<tool>metabarcoding-single-double.R</tool>
 		<tool>metabarcoding-rarecurve-alpha.R</tool>
 		<tool>metabarcoding-rarefy-even.R</tool>
 		<tool>metabarcoding-transform-otu.R</tool>
