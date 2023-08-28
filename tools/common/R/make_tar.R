@@ -25,7 +25,7 @@ system("tar --exclude=\'chipster-inputs.tsv\' -cf chipster.tar *")
 
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Define output name
 if (nchar(name) > 0) {

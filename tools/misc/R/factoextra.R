@@ -3,7 +3,7 @@
 # OUTPUT output.tsv
 # RUNTIME R-4.1.1-statistics
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 library("factoextra")
 

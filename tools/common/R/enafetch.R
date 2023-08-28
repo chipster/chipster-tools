@@ -13,7 +13,7 @@
 # RUNTIME R-4.2.3
 # TOOLS_BIN ""
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # use enabrowsertools from the image
 ena.path <- file.path("/opt/chipster/tools", "enabrowsertools/python3")

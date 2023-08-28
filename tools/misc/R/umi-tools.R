@@ -3,7 +3,7 @@
 # OUTPUT output.tsv
 # RUNTIME R-4.1.1
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # active Python virtual environment "venv"
 venv_root <- "/opt/chipster/tools/umi-tools/venv"

@@ -31,7 +31,7 @@
 # EK 1.11.2012 fixed genome parameter and SAM output
 # AMS 11.11.2013 Added thread support
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -96,7 +96,7 @@ runExternal("mv alignment.sorted.bam.bai bowtie.bam.bai")
 
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

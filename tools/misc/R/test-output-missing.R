@@ -9,7 +9,7 @@
 # PARAMETER innerdistance: "Calculate inner distance" TYPE [yes, no] DEFAULT no (Calculate inner distance for paired reads.)
 
 # Functions
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
@@ -140,7 +140,7 @@ if (pe) {
   }
 }
 # Add input names to output
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 message <- paste(message, "\n\nInput files were assigned as follows:")

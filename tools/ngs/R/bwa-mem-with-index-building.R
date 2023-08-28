@@ -24,7 +24,7 @@
 
 # KM 1.9.2015
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 

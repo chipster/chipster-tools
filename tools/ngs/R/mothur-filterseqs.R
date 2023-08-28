@@ -13,7 +13,7 @@
 # EK 11.05.2020 Zip output fasta
 # ES 1.12.2022 Changed to use new mothur version 1.48
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

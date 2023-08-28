@@ -8,7 +8,7 @@
 # PARAMETER stats: "Produce statistics tables" TYPE [no, yes] DEFAULT no (Calculate average edit distance between the UMIs at each position, counts for unique combinations of UMI and position, and UMI-level summaries.)
 # RUNTIME R-4.1.1
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Index BAM
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))

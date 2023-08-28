@@ -15,7 +15,7 @@ system(paste(samtools.binary, "sort alignment.bam alignment-sorted"))
 system(paste(samtools.binary, "index alignment-sorted.bam"))
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

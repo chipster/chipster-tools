@@ -12,7 +12,7 @@
 # ML 04.07.2017 added option to use own GTF
 
 ## Source required functions
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 

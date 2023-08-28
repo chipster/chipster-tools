@@ -23,7 +23,7 @@
 # 10.07.2014 AMS, Updated genome sizes, added parameter userspecified.size
 # 12.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters and outputs, polished the script and output
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # MACS settings
 macs.binary <- file.path(chipster.tools.path, "macs", "macs14")

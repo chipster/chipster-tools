@@ -6,7 +6,7 @@
 # PARAMETER OPTIONAL add_md5sum: "Include md5 sum" TYPE [yes: Yes, no: No] DEFAULT no (Add md5 checksum file to the shared link)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the Mimimap2 mapping process.)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 s3.conf.base <- file.path(chipster.common.path, "../../admin/shell/s3.conf")
 copy_command <- paste("cp ", s3.conf.base, " s3.conf")

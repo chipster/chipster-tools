@@ -23,7 +23,7 @@
 # PARAMETER OPTIONAL keepdots: "Remove leading and trailing dots" TYPE [yes, no] DEFAULT yes (Remove leading and trailing dots.)
 # OUTPUT log.txt
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

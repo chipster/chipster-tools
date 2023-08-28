@@ -38,7 +38,7 @@ library(gplots)
 library(readr)
 
 # for the fileOk function
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")

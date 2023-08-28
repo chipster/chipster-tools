@@ -42,14 +42,14 @@ if (names == "yes" || names == "nonbac" || nchar(species) < 3) {
         system("mv ensemblfetch.fasta ensemblfetch.gtf")
 
         # Handle output names
-        source(file.path(chipster.common.path, "tool-utils.R"))
+        source(file.path(chipster.common.lib.path, "tool-utils.R"))
         outputnames <- matrix(NA, nrow = 1, ncol = 2)
         outputnames[1, ] <- c("ensemblfetch.gtf", paste(species, ".gtf", sep = ""))
         # Write output definitions file
         write_output_definitions(outputnames)
     } else {
         # Handle output names
-        source(file.path(chipster.common.path, "tool-utils.R"))
+        source(file.path(chipster.common.lib.path, "tool-utils.R"))
         outputnames <- matrix(NA, nrow = 1, ncol = 2)
         outputnames[1, ] <- c("ensemblfetch.fasta", paste(species, "_", type, ".fasta", sep = ""))
         # Write output definitions file

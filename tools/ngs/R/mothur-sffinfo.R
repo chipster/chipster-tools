@@ -8,7 +8,7 @@
 
 # AMS 19.06.2013
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # binary
 # binary <- c(file.path(chipster.tools.path,"mothur","mothur"))

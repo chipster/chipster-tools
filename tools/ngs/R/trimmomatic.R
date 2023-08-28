@@ -27,7 +27,7 @@
 # AMS 2014.11.27, corrected bug: trimmomatic was always run in SE mode
 # ML, 2015.12.17, added option to use own adapter files
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Check out if the files are compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -123,7 +123,7 @@ system("gzip *.fq")
 
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

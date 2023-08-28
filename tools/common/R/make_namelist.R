@@ -23,7 +23,7 @@ write.table(input.list, "files.txt", quote = FALSE, row.names = FALSE, col.names
 
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Define output name
 if (nchar(name) > 0) {

@@ -13,7 +13,7 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools
 system(paste(samtools.binary, "faidx sequence.fa"))
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

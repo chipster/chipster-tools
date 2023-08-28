@@ -3,7 +3,7 @@
 # INPUT OPTIONAL md5file: "MD5 file" TYPE GENERIC
 # OUTPUT OPTIONAL file.md5
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 #
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

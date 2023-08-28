@@ -10,7 +10,7 @@
 # EK 17.6.2011
 # EK 6.4.2021 Gzip fasta, parameter for producing a log file.
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

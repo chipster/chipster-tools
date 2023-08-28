@@ -26,7 +26,7 @@
 # AMS 19.6.2012 Added unzipping
 # AMS 11.11.2013 Added thread support
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 

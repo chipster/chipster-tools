@@ -1,7 +1,7 @@
 # Utilities for dealing with compressed files
 # MK: This is a copy from a file which can be found in the R-2.12 folder
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 
 unzipIfGZipFile <- function(file.name) {

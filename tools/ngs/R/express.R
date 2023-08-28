@@ -13,7 +13,7 @@
 # EK 28.4.2014
 # EK 23.5.2014 updated Bowtie2 command, added identifier sorting and piping to eXpress
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check out if the fastq files are compressed and if so unzip them
 source(file.path(chipster.common.path, "zip-utils.R"))

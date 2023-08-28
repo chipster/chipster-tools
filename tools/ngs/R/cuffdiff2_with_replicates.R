@@ -54,7 +54,7 @@ source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("annotation.gtf")
 unzipIfGZipFile("genome.fa")
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # binary
 cuffdiff.binary <- c(file.path(chipster.tools.path, "cufflinks2", "cuffdiff"))

@@ -17,7 +17,7 @@
 # AMS 2013.02.18
 # AMS 11.3.2014, gzip fastq outputs
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -81,7 +81,7 @@ system("gzip *.qual")
 
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

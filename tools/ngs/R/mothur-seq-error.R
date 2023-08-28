@@ -18,7 +18,7 @@
 # ES 03.08.2021
 # ES 28.12.2022 updated to use new mothur version and RUNTIME R-4.1.1
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

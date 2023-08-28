@@ -6,7 +6,7 @@
 system("tar tf file.tar > toc.txt")
 
 # Change display name
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 basename <- strip_name(inputnames$file.tar)

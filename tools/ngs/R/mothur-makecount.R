@@ -11,7 +11,7 @@
 # OUTPUT log2.txt
 # OUTPUT log3.txt
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # Binary emboss

@@ -87,7 +87,7 @@ line <- paste(line, "total\t", total, "\n", sep = "")
 write(line, "htseq-count-info.txt", append = TRUE)
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

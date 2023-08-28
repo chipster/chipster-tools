@@ -7,7 +7,7 @@
 # 2018.09.10 AMS
 # 2022.12.02 ES updated to new version
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # Rename input files to get the original banes in the report

@@ -44,7 +44,7 @@ library(Matrix)
 library(gplots)
 
 library(Biobase)
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
 package.version("Seurat")
 version <- package.version("Seurat")

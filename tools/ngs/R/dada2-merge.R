@@ -17,7 +17,7 @@
 # PARAMETER concatenate: "Should the forward and reverse-compelented reverse reads be concatenated?" TYPE [Yes, No] DEFAULT No (Should the forward and reverse-compelented reverse reads be concatenated rather than merged? If it is set to yes, 10 Ns are being inserted between them. Use this parameter just, if your reads are not overlapping. )
 
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # load library dada2

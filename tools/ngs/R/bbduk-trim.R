@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL minlength: "Minimum length for reads to be kept after trimming" TYPE INTEGER DEFAULT 20 (Reads shorter than this after trimming will be discarded.)
 # PARAMETER OPTIONAL log: "Produce log file" TYPE [yes,no] DEFAULT no (Produce log file.)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # Uncompress input if compressed

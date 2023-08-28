@@ -31,7 +31,7 @@
 # AMS 11.11.2013 Added thread support
 # AMS 04.07.2014 New genome/gtf/index locations & names
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.path, "zip-utils.R"))
@@ -91,7 +91,7 @@ runExternal("mv alignment.sorted.bam.bai bowtie.bam.bai")
 
 # Handle output names
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()

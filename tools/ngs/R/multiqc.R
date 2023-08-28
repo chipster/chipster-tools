@@ -5,7 +5,7 @@
 
 # 2018.09.10 AMS
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # All inputs are expected to be .tgz
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

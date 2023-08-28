@@ -2,7 +2,7 @@
 # INPUT file: "File to compress" TYPE GENERIC
 # OUTPUT OPTIONAL file.gz
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # We need to change the file name before compressing so it is preserved when uncompressing
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

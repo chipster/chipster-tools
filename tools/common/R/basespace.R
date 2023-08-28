@@ -57,7 +57,7 @@ if (save_log == "no") {
 # }
 
 ## rename outputs and create output names file
-# source(file.path(chipster.common.path, "tool-utils.R"))
+# source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # outputnames <- matrix(NA, nrow=length(fastq.files), ncol=2)
 # for (i in 1:length(fastq.files)) {
 # 	original.name <- fastq.files[i]

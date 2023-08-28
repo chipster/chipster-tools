@@ -12,7 +12,7 @@
 # ES 05.07.2021
 # ES 08.08.2022 # made it look much nicer
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

@@ -12,7 +12,7 @@
 # EK 17.6.2011
 # AMS 11.3.2014, gzip fastq outputs
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 

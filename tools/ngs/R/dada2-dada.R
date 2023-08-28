@@ -16,7 +16,7 @@
 # OUTPUT OPTIONAL log2.txt
 # OUTPUT OPTIONAL summary_stats.tsv
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # load library dada2

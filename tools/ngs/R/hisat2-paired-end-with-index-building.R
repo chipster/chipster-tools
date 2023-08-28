@@ -22,7 +22,7 @@
 
 ## Source required functions
 source(file.path(chipster.common.path, "zip-utils.R"))
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
 
 # Prefer fixed representation over exponential

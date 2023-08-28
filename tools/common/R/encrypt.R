@@ -7,7 +7,7 @@
 # PARAMETER OPTIONAL pwlen: "Password legnth" TYPE INTEGER DEFAULT 16 (Length of the encrytion password to be generated. This fied is ignored in the case of decryption.)
 # PARAMETER OPTIONAL dkey: "Decryption password" TYPE STRING (The password string that is used to open the encryption. This fiels is ignored in ecryption.)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # We need to change the file name before compressing so it is preserved when uncompressing
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

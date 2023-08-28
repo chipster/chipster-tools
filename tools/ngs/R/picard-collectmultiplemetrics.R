@@ -24,7 +24,7 @@ system("grep -A2 MEDIAN_INSERT_SIZE cmm.insert_size_metrics > insert_size_metric
 system("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=reports.pdf *.pdf")
 
 # Handle output names
-# source(file.path(chipster.common.path, "tool-utils.R"))
+# source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 # inputnames <- read_input_definitions()

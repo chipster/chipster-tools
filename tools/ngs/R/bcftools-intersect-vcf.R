@@ -33,7 +33,7 @@ system("mv tmp/0002.vcf 0002.vcf")
 system("mv tmp/0003.vcf 0003.vcf")
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow = 4, ncol = 2)

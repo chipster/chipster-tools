@@ -32,7 +32,7 @@
 # MK 05.05.2014:
 # See version control for code that could be used if reading the experiment setup from the phenodata file, like is done for microarray data.
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # MACS binary
 macs.binary <- file.path(chipster.tools.path, "macs", "macs14")

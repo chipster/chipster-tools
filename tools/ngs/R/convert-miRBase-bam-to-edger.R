@@ -7,7 +7,7 @@
 # MK 13.05.2013, fix bug in header formats
 # MK 12.05.2014, added check for file size
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Convert to SAM, grep miRNA name (removes unaligned reads), count, filter on tag number
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))

@@ -5,7 +5,7 @@
 # This is the same sorting principle that Chipster genome browser has, hence
 # using this function guarantees that sorted files are compatible with it.
 #
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 sort.gtf <- function(input, output) {
     runExternal(paste("java -cp  '", chipster.java.libs.path, "/*' fi.csc.chipster.tools.ngs.SortGtf ", input, " ", output, sep = ""))

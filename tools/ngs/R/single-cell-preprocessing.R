@@ -25,7 +25,7 @@
 
 # Handle output names
 # Source read_input_definitions and strip_name functions
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # read input names and strip file extension
 inputnames <- read_input_definitions()
 input1name <- inputnames$input.fastq.gz

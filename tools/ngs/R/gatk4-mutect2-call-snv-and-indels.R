@@ -22,7 +22,7 @@
 
 
 source(file.path(chipster.common.path, "gatk-utils.R"))
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "vcf-utils.R"))
 

@@ -2,7 +2,7 @@
 # INPUT file.gtf: "GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL gtftobed.bed
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # binary

@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL output.gz
 # PARAMETER remove: "Charackters to remove" TYPE [all: "all", ex:"\!", pi: "\|",hy: "-", us: "_", br: "\(\)", cb: "\{\}", sb: "\[\]", ac: "\'"] DEFAULT all (Characters to remove.)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 gzip <- FALSE

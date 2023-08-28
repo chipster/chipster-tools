@@ -29,7 +29,7 @@ library(Seurat)
 library(readr)
 
 # for the fileOk function
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Load the R-Seurat-object:
 load("combined_seurat_obj.Robj")

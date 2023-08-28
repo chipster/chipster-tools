@@ -19,7 +19,7 @@
 # OUTPUT OPTIONAL hs_err_pid17747.log
 
 ## Source required functions
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # runExternal writes log to stderr.log
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
@@ -87,7 +87,7 @@ if (fileOk("merged_tagged.bam", minsize = 100)) {
 
 # Handle output names
 # Source read_input_definitions and strip_name functions
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # read input names and strip file extension
 inputnames <- read_input_definitions()
 input1name <- inputnames$unmapped.bam # name from the unmapped.bam input

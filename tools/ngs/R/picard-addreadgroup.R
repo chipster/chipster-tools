@@ -7,7 +7,7 @@
 # PARAMETER rgpl: "Platform for read group" TYPE [ none: "Not defined",CAPILLARY, DNBSEQ, HELICOS, ILLUMINA, IONTORRENT, LS454, ONT, PACBIO, SOLID] DEFAULT ILLUMINA (Platform\/technology used to produce the read.)
 # PARAMETER rgpu: "Read Group platform unit" TYPE STRING DEFAULT "1" (Read Group platform unit \(e.g., flowcell-barcode.lane for Illumina or slide for SOLiD\).)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Picard binary
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
