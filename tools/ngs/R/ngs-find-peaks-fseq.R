@@ -94,7 +94,7 @@ rownames(data) <- data[, 4]
 
 
 # Sorting the BED
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 if (nrow(data) > 1) {
     data <- sort.bed(data)
 }

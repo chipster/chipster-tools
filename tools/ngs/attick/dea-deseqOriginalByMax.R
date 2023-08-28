@@ -132,7 +132,7 @@ significant_table <- significant_table[order(significant_table$pval), ]
 # 		bed_output <- output_table [,c("chr","start","end")]
 # 		bed_output <- cbind(bed_output,empty_column)
 # 		bed_output <- cbind(bed_output, output_table[,"log2FoldChange"])
-# 		source(file.path(chipster.common.path, "bed-utils.R"))
+# 		source(file.path(chipster.common.lib.path, "bed-utils.R"))
 # 		bed_output <- sort.bed(bed_output)
 # 		write.table(bed_output, file="de-list-deseq.bed", sep="\t", row.names=F, col.names=F, quote=F)
 # 	}
@@ -151,7 +151,7 @@ if (dim(significant_table)[1] > 0) {
 }
 
 # If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 these.colnames <- colnames(dat)
 if ("chr" %in% these.colnames) {
     if (dim(significant_table)[1] > 0) {

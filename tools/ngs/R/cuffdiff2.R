@@ -117,7 +117,7 @@ system(command)
 
 # The following code copied from dea-cufflinks.R
 #
-source(file.path(chipster.common.path, "bed-utils.R")) # bed sort
+source(file.path(chipster.common.lib.path, "bed-utils.R")) # bed sort
 
 # Only do post-processing if file exists
 if (file.exists("tmp/gene_exp.diff") && file.info("tmp/gene_exp.diff")$size > 0) {

@@ -165,7 +165,7 @@ runExternal("mv tophat_out/deletions.bed deletions.u.bed")
 runExternal("mv tophat_out/align_summary.txt tophat-summary.txt")
 
 # sorting BEDs
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 
 no.results <- "TRUE"
 

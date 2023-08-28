@@ -112,7 +112,7 @@ output <- output[order(output$chr, output$start), ]
 write.table(output, file = "macs2-peaks.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
 # Sort the peaks BED
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 if (file.exists("macs2_peaks.bed")) {
     bed <- read.table(file = "macs2_peaks.bed", skip = 0, sep = "\t")
     colnames(bed)[1:2] <- c("chr", "start")
@@ -121,7 +121,7 @@ if (file.exists("macs2_peaks.bed")) {
 }
 
 # Sort the summit BED
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 if (file.exists("macs2_summits.bed")) {
     bed <- read.table(file = "macs2_summits.bed", skip = 0, sep = "\t")
     colnames(bed)[1:2] <- c("chr", "start")

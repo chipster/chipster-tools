@@ -116,7 +116,7 @@ if (class(output) != "try-error") {
 }
 
 # Sort the summit BED
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 bed <- try(read.table(file = "macs2_summits.bed", skip = 0, sep = "\t"))
 if (class(bed) != "try-error") {
   colnames(bed)[1:2] <- c("chr", "start")

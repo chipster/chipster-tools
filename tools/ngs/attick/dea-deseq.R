@@ -26,7 +26,7 @@
 # AMS 07.04.2015, joined PDF outputs
 
 # Loads the libraries
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 library(DESeq)
 
 # Loads the counts data and extracts expression values

@@ -39,7 +39,7 @@
 
 
 # Load the library
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 library(DESeq2)
 
 # Load the counts data and extract expression value columns

@@ -145,7 +145,7 @@ if (dim(significant_results)[1] > 0) {
             gene_names <- rownames(output_table)
             bed_output <- cbind(bed_output, name = gene_names)
             bed_output <- cbind(bed_output, score = output_table[, "logFC"])
-            source(file.path(chipster.common.path, "bed-utils.R"))
+            source(file.path(chipster.common.lib.path, "bed-utils.R"))
             bed_output <- sort.bed(bed_output)
             write.table(bed_output, file = "de-list-edger.bed", sep = "\t", row.names = F, col.names = F, quote = F)
         }

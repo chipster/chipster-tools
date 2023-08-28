@@ -172,7 +172,7 @@ write.table(negoutput, file = "negative-peaks.tsv", sep = "\t", quote = FALSE, r
 system("mv results.log analysis-log.txt")
 
 # Sort the BED
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 if (file.exists("results_peaks.bed")) {
     bed <- read.table(file = "results_peaks.bed", skip = 0, sep = "\t")
     colnames(bed)[1:2] <- c("chr", "start")

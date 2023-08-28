@@ -24,7 +24,7 @@
 # AMS 17.06.2014, split DESeq2 to a separate tool
 
 # Loads the correct library
-source(file.path(chipster.common.path, "bed-utils.R"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
 library(DESeq2)
 
 # Loads the counts data and extract expression values
