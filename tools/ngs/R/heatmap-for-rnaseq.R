@@ -16,7 +16,7 @@
 # 30.08.2018 ML switch to pheatmap for plotting
 
 # Functions used:
-source(file.path(chipster.common.path, "tables-utils.R"))
+source(file.path(chipster.common.lib.path, "tables-utils.R"))
 source(file.path(chipster.common.path, "deseq-transform.R"))
 
 library("pheatmap")

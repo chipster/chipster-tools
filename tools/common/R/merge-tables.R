@@ -8,7 +8,7 @@
 # AMS 13.5.2016 modified to accept multiple inputs
 # ML 18.4.2019 Modify to use tables-utils.R merge_tables function
 
-source(file.path(chipster.common.path, "tables-utils.R"))
+source(file.path(chipster.common.lib.path, "tables-utils.R"))
 
 # Read the input names into a table
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
