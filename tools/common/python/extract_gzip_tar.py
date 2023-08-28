@@ -2,7 +2,7 @@
 # All files are extracted by default, but you can choose to extract only one or some of the files by giving the names of the files to be extracted as a parameter. Alternatively you can provide a list of filenames as a text file, one name per line. 
 # To see the contents of a .tar file, use tool \"Utilities: List contents of a tar file\".)
 # INPUT input_file: ".tar.gz file" TYPE GENERIC (Tar file. Can be gzip compressed.)
-# INPUT OPTIONAL file_list: "List of files to extract" TYPE GENERIC (List of files to extract. One Filename per line.)
+# INPUT OPTIONAL file_list: "List of files to extract" TYPE GENERIC (List of files to extract. One filename per line.)
 # OUTPUT output_file{...}: "Extracted file(s)"
 # PARAMETER OPTIONAL names: "Extract by filename" TYPE STRING (Filenames of the files to extract. If more than one, separate names with a comma (e.g. abc123_1.fq,abc123_2.fq\). Alternatively you can provide a list of filenames as a text file, one name per line.)
 # PARAMETER OPTIONAL extensions: "Extract by extension" TYPE STRING (Filename extension of the files to extract (e.g .html\). If more than one, separate with a comma (e.g .txt,.log\).)
