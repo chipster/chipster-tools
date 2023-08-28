@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL gatk.padding: "Interval padding" TYPE INTEGER DEFAULT 0 (Amount of padding in bp to add to each interval.)
 # PARAMETER OPTIONAL usevariants: "Use Variants VCF also for intervals" TYPE [yes, no] DEFAULT no (Do you wish to use same VCF file for both variants and intervals.)
 
-source(file.path(chipster.common.path, "gatk-utils.R"))
+source(file.path(chipster.common.lib.path, "gatk-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "vcf-utils.R"))

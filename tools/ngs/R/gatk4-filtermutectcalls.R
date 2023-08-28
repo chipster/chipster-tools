@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL statistics.tsv
 # OUTPUT OPTIONAL gatk_log.txt
 
-source(file.path(chipster.common.path, "gatk-utils.R"))
+source(file.path(chipster.common.lib.path, "gatk-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 

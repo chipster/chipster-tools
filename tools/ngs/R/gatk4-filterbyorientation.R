@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL gatk_log.txt
 # PARAMETER OPTIONAL gatk.artifactmodes: "Artifacts on the forward strand" TYPE STRING (PreAdapter Detail artifacts of interest on the forward strand. Format CtoA for a single artifact. If you want to give multiple artifacts, use comma to separate them:  CtoA,TtoG. Artifacts must be one base to one base \(e.g. 'CCtoCA' is illegal\). G>T is OxoG.)
 
-source(file.path(chipster.common.path, "gatk-utils.R"))
+source(file.path(chipster.common.lib.path, "gatk-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 

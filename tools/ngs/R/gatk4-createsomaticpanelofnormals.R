@@ -4,7 +4,7 @@
 # PARAMETER OPTIONAL gatk.minsamplecount: "Minumum sample count" TYPE INTEGER DEFAULT 2 (Number of samples containing a variant site required to include it in the panel of normals.)
 # SLOTS 3
 
-source(file.path(chipster.common.path, "gatk-utils.R"))
+source(file.path(chipster.common.lib.path, "gatk-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.path, "vcf-utils.R"))
