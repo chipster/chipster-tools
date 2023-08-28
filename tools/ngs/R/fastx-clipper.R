@@ -25,20 +25,20 @@ binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastx_clipper"))
 options <- paste("")
 options <- paste(options, "-a", adapter)
 if (minimum.alignment > 0) {
-	options <- paste(options, "-M", minimum.alignment)
+    options <- paste(options, "-M", minimum.alignment)
 }
 options <- paste(options, "-l", short)
 if (quality.format == "sanger") {
-	options <- paste(options, "-Q 33")
+    options <- paste(options, "-Q 33")
 }
 if (discard.n == "no") {
-	options <- paste(options, "-n")
+    options <- paste(options, "-n")
 }
 if (output.options == "clipped") {
-	options <- paste(options, "-c")
+    options <- paste(options, "-c")
 }
 if (output.options == "unclipped") {
-	options <- paste(options, "-C")
+    options <- paste(options, "-C")
 }
 
 # command
@@ -47,5 +47,3 @@ command <- paste(binary, "-v", options, "-i reads.fastq -o clipped.fastq  > clip
 # run
 system(command)
 system("gzip *.fastq")
-
-

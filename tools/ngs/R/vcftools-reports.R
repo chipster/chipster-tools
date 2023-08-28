@@ -1,5 +1,5 @@
 # TOOL vcftools-reports.R: "Calculate statistics on VCF file with VCFtools" (Given a VCF file, this tool calculates several statistics such as allele frequency and count, LD measure, and p-value for HWE. It can also produce the number and density of SNPs in bins of defined size. This tool is based on the VCFtools package.)
-# INPUT input.vcf: "VCF file" TYPE GENERIC 
+# INPUT input.vcf: "VCF file" TYPE GENERIC
 # OUTPUT OPTIONAL vcftools.log
 # OUTPUT OPTIONAL vcftools.frq.tsv
 # OUTPUT OPTIONAL vcftools.frq.count.tsv
@@ -28,35 +28,35 @@ vcftools.io.options <- paste("--vcf input.vcf", "--out vcftools")
 
 # statistics options
 if ((statistics.freq == "no") && (statistics.pvalue == "no") && (statistics.ld == "no") && (statistics.snpdensity == "0")) {
-	stop(paste('CHIPSTER-NOTE: ', "Please select at least one statistic to calculate"))
+    stop(paste("CHIPSTER-NOTE: ", "Please select at least one statistic to calculate"))
 }
 
-if (statistics.freq == "yes"){
-	command <- paste(vcftools.binary, vcftools.io.options, "--freq", "2>> vcftools.log")
-	system(command)
-	command <- paste(vcftools.binary, vcftools.io.options, "--counts", "2>> vcftools.log")
-	system(command)
+if (statistics.freq == "yes") {
+    command <- paste(vcftools.binary, vcftools.io.options, "--freq", "2>> vcftools.log")
+    system(command)
+    command <- paste(vcftools.binary, vcftools.io.options, "--counts", "2>> vcftools.log")
+    system(command)
 }
-if (statistics.pvalue == "yes"){
-	command <- paste(vcftools.binary, vcftools.io.options, "--hardy", "2>> vcftools.log")
-	system(command)
+if (statistics.pvalue == "yes") {
+    command <- paste(vcftools.binary, vcftools.io.options, "--hardy", "2>> vcftools.log")
+    system(command)
 }
-if (statistics.ld == "yes"){
-	command <- paste(vcftools.binary, vcftools.io.options, "--geno-r2", "2>> vcftools.log")
-	system(command)
+if (statistics.ld == "yes") {
+    command <- paste(vcftools.binary, vcftools.io.options, "--geno-r2", "2>> vcftools.log")
+    system(command)
 }
-if (statistics.snpdensity != "0"){
-	command <- paste(vcftools.binary, vcftools.io.options, "--SNPdensity", statistics.snpdensity, "2>> vcftools.log")
-	system(command)
+if (statistics.snpdensity != "0") {
+    command <- paste(vcftools.binary, vcftools.io.options, "--SNPdensity", statistics.snpdensity, "2>> vcftools.log")
+    system(command)
 }
 
 # Fix last column on .frq and .frq.count to be Chipster tsv compatible
 awk.command <- paste("| awk \'{printf $1\"\\t\"$2\"\\t\"$3\"\\t\"$4\"\\t\"$5; for(i=6;i<=NF;i++){printf \",%s\", $i} printf \"\\n\"}\'")
-if (file.exists("vcftools.frq")){
-	system(paste("cat vcftools.frq", awk.command, "> vcftools.frq.tsv"))
+if (file.exists("vcftools.frq")) {
+    system(paste("cat vcftools.frq", awk.command, "> vcftools.frq.tsv"))
 }
-if (file.exists("vcftools.frq.count")){
-	system(paste("cat vcftools.frq.count", awk.command, "> vcftools.frq.count.tsv"))
+if (file.exists("vcftools.frq.count")) {
+    system(paste("cat vcftools.frq.count", awk.command, "> vcftools.frq.count.tsv"))
 }
 # rename result files
 system("mv vcftools.hwe vcftools.hwe.tsv")

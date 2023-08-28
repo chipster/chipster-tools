@@ -32,7 +32,7 @@ seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features 
 plan("default") # return to normal
 
 # Open the pdf file for plotting
-pdf(file="Markerplot2.pdf", width=9, height=12) 
+pdf(file = "Markerplot2.pdf", width = 9, height = 12)
 
 # Visualise the identified top features
 top.features <- head(SpatiallyVariableFeatures(seurat_obj, selection.method = method.to.use), number.of.top.features)
@@ -47,4 +47,4 @@ dev.off()
 write.table(as.matrix(top.features), file = "spatially_variable_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 
-#EOF
+# EOF

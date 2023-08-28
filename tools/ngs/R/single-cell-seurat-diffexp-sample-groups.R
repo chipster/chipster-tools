@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-sample-groups.R: "Seurat v4 -Find DE genes between sample groups" (This tool lists the differentially expressed genes between user defined sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.) 
+# TOOL single-cell-seurat-diffexp-sample-groups.R: "Seurat v4 -Find DE genes between sample groups" (This tool lists the differentially expressed genes between user defined sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
@@ -15,7 +15,7 @@
 # SLOTS 2
 # TOOLS_BIN ""
 
-# 2018-16-05 ML 
+# 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
 # 30.10.2019 ML Add filtering parameters
@@ -41,7 +41,7 @@ if (exists("seurat_obj")) {
 
 
 # Set the identity as clusters:
-sel.clust = "seurat_clusters"
+sel.clust <- "seurat_clusters"
 data.combined <- SetIdent(data.combined, value = sel.clust)
 # table(data.combined@active.ident)
 
@@ -56,36 +56,35 @@ cell_selection <- SetIdent(cell_selection, value = "type")
 
 # Compute differentiall expression
 # When SCTransform was used to normalise the data, do a prep step:
-if (normalisation.method == "SCT"){
+if (normalisation.method == "SCT") {
   cell_selection <- PrepSCTFindMarkers(cell_selection)
   DGE_cell_selection <- FindAllMarkers(cell_selection, assay = "SCT", verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, only.pos = only.positive, return.thresh = pval.cutoff.de, only.pos = only.positive)
-
-} else { 
+} else {
   # DGE_cell_selection <- FindAllMarkers(cell_selection, log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
- DGE_cell_selection <- FindMarkers(cell_selection, ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+  DGE_cell_selection <- FindMarkers(cell_selection, ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 }
 
 # Plots
 pdf(file = "expressionPlots.pdf")
 
-    # Plot the expression across the “type”.
+# Plot the expression across the “type”.
 
-    DGE_cell_selection %>%
-      # group_by(cluster) %>%
-      top_n(-5, p_val) -> top5_cell_selection
+DGE_cell_selection %>%
+  # group_by(cluster) %>%
+  top_n(-5, p_val) -> top5_cell_selection
 
-    # VlnPlot(cell_selection, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1)
-   VlnPlot(cell_selection, features = as.character(rownames(top5_cell_selection)), ncol = 3,  group.by = "type", assay = "RNA", pt.size = 0.1)
+# VlnPlot(cell_selection, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1)
+VlnPlot(cell_selection, features = as.character(rownames(top5_cell_selection)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1)
 
-    # Plot these genes across all clusters, but split by “type”
-    # VlnPlot(data.combined, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
-  VlnPlot(data.combined, features = as.character(rownames(top5_cell_selection)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
+# Plot these genes across all clusters, but split by “type”
+# VlnPlot(data.combined, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
+VlnPlot(data.combined, features = as.character(rownames(top5_cell_selection)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
 
 dev.off() # close the pdf
 
 # Comparison name for the output file:
-comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep="_")
-name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
+name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
 # Write to table
 write.table(DGE_cell_selection, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
@@ -94,6 +93,3 @@ write.table(DGE_cell_selection, file = name.for.output.file, sep = "\t", row.nam
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")
 
 ## EOF
-
-
-

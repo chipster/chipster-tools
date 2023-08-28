@@ -28,23 +28,23 @@ system(paste(samtools.binary, "index alignment.bam > alignment.bam.bai"))
 
 # Which BED to use.
 # If user has provided a BED, we use it.
-if (file.exists("reference_file")){
-	bed.file <- paste("reference_file")
-}else{
-	if (organism == "other"){
-		stop(paste('CHIPSTER-NOTE: ', "Choose one of the reference organisms or provide your own BED file."))
-	}else{
-		# If not, we use the internal one.
-		internal.bed <- file.path(chipster.tools.path, "genomes", "bed", paste(organism, ".bed" ,sep="" ,collapse=""))
-		# If chromosome names in BAM have chr, we make a temporary copy of BED with chr names, otherwise we use it as is.
-		if(chr == "chr1"){
-			source(file.path(chipster.common.path, "gtf-utils.R"))
-			addChrToGtf(internal.bed, "internal_chr.bed") 
-			bed.file <- paste("internal_chr.bed")
-		}else{
-			bed.file <- paste(internal.bed)
-		}		
-	}
+if (file.exists("reference_file")) {
+    bed.file <- paste("reference_file")
+} else {
+    if (organism == "other") {
+        stop(paste("CHIPSTER-NOTE: ", "Choose one of the reference organisms or provide your own BED file."))
+    } else {
+        # If not, we use the internal one.
+        internal.bed <- file.path(chipster.tools.path, "genomes", "bed", paste(organism, ".bed", sep = "", collapse = ""))
+        # If chromosome names in BAM have chr, we make a temporary copy of BED with chr names, otherwise we use it as is.
+        if (chr == "chr1") {
+            source(file.path(chipster.common.path, "gtf-utils.R"))
+            addChrToGtf(internal.bed, "internal_chr.bed")
+            bed.file <- paste("internal_chr.bed")
+        } else {
+            bed.file <- paste(internal.bed)
+        }
+    }
 }
 
 
@@ -52,7 +52,7 @@ if (file.exists("reference_file")){
 binary <- c(file.path(rseqc.path, "geneBody_coverage.py"))
 command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
 system(command)
-try(source("RSeQC.geneBodyCoverage.r"), silent=TRUE)
+try(source("RSeQC.geneBodyCoverage.r"), silent = TRUE)
 # Outputs are renamed to control their order in the joined PDF
 system("mv RSeQC.geneBodyCoverage.curves.pdf 01.pdf")
 
@@ -60,7 +60,7 @@ system("mv RSeQC.geneBodyCoverage.curves.pdf 01.pdf")
 binary <- c(file.path(rseqc.path, "junction_saturation.py"))
 command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
 system(command)
-try(source("RSeQC.junctionSaturation_plot.r"), silent=TRUE)
+try(source("RSeQC.junctionSaturation_plot.r"), silent = TRUE)
 # Outputs are renamed to control their order in the joined PDF
 system("mv RSeQC.junctionSaturation_plot.pdf 02.pdf")
 
@@ -68,16 +68,16 @@ system("mv RSeQC.junctionSaturation_plot.pdf 02.pdf")
 binary <- c(file.path(rseqc.path, "junction_annotation.py"))
 command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
 system(command)
-try(source("RSeQC.junction_plot.r"), silent=TRUE)
+try(source("RSeQC.junction_plot.r"), silent = TRUE)
 # Outputs are renamed to control their order in the joined PDF
 system("mv RSeQC.splice_events.pdf 03.pdf")
 system("mv RSeQC.splice_junction.pdf 04.pdf")
 
-#RPKM_saturation
+# RPKM_saturation
 binary <- c(file.path(rseqc.path, "RPKM_saturation.py"))
 command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
 system(command)
-try(source("RSeQC.saturation.r"), silent=TRUE)
+try(source("RSeQC.saturation.r"), silent = TRUE)
 # Outputs are renamed to control their order in the joined PDF
 system("mv RSeQC.saturation.pdf 05.pdf")
 
@@ -97,16 +97,16 @@ command <- paste(binary, "-i alignment.bam -r", bed.file, ">> RSeQC.txt")
 system(command)
 
 # inner_distance
-if (paired == "yes"){
-	binary <- c(file.path(rseqc.path, "inner_distance.py"))
-	command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
-	system(command)
-	try(source("RSeQC.inner_distance_plot.r"), silent=TRUE)
-	# Outputs are renamed to control their order in the joined PDF
-	system("mv RSeQC.inner_distance_plot.pdf 06.pdf")
+if (paired == "yes") {
+    binary <- c(file.path(rseqc.path, "inner_distance.py"))
+    command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
+    system(command)
+    try(source("RSeQC.inner_distance_plot.r"), silent = TRUE)
+    # Outputs are renamed to control their order in the joined PDF
+    system("mv RSeQC.inner_distance_plot.pdf 06.pdf")
 }
 
-# Join the PDFs 
+# Join the PDFs
 system(paste(gs.path, "-dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=RSeQC_report.pdf *.pdf"))
 
 # Handle output names
@@ -118,9 +118,9 @@ inputnames <- read_input_definitions()
 base <- strip_name(inputnames$alignment.bam)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("RSeQC.txt", paste(base, "_rseqc.txt", sep=""))
-outputnames[2,] <- c("RSeQC_report.pdf", paste(base, "_rseqc.pdf", sep=""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("RSeQC.txt", paste(base, "_rseqc.txt", sep = ""))
+outputnames[2, ] <- c("RSeQC_report.pdf", paste(base, "_rseqc.pdf", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

@@ -6,12 +6,12 @@
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
 # RUNTIME R-4.2.0-phyloseq
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
 
 # Load phyloseq
 library(phyloseq)
-#packageVersion("phyloseq")
+# packageVersion("phyloseq")
 
 # load input files
 load("ps_phe.Rda")
@@ -21,7 +21,7 @@ phenodata <- read.delim("phenodata.tsv")
 rownames(phenodata) <- phenodata[, samplevar[1]]
 
 # merge the phenodata table with the sample information to the phyloseq object with merge_phyloseq() command
-ps <- merge_phyloseq(ps, sample_data(phenodata)) #sample_data(phenodata),
+ps <- merge_phyloseq(ps, sample_data(phenodata)) # sample_data(phenodata),
 
 # Print out basic descriptors
 ps_samplevars <- sample_variables(ps)
@@ -29,23 +29,23 @@ ps_samplenames <- sample_names(ps)
 
 # make a summary text file
 sink("ps_sample_summary.txt")
-	cat("\n\n\n")
-	cat("### Phyloseq object with sample information combined###\n")
-	cat("\n\n\n")
-	print(ps)
-	cat("\n\n\n")
-	cat("### Sample names ###\n")
-    cat("\n\n\n") 
-    print(ps_samplenames)
-    cat("\n\n\n")
-    cat("### Sample variables ###\n")
-    cat("\n\n\n")
-    print(ps_samplevars)
-    cat("\n\n\n")
+cat("\n\n\n")
+cat("### Phyloseq object with sample information combined###\n")
+cat("\n\n\n")
+print(ps)
+cat("\n\n\n")
+cat("### Sample names ###\n")
+cat("\n\n\n")
+print(ps_samplenames)
+cat("\n\n\n")
+cat("### Sample variables ###\n")
+cat("\n\n\n")
+print(ps_samplevars)
+cat("\n\n\n")
 sink()
 
 # save the phyloseq object
-save(ps, file="ps.Rda")
+save(ps, file = "ps.Rda")
 
-#print(sample_data(ps))
-#EOF
+# print(sample_data(ps))
+# EOF

@@ -1,5 +1,5 @@
 # TOOL samtools-index.R: "Index BAM" (Creates an index for a BAM file. This tool is based on the SAMtools package.)
-# INPUT alignment.bam TYPE GENERIC 
+# INPUT alignment.bam TYPE GENERIC
 # OUTPUT alignment.bam.bai
 
 
@@ -17,14 +17,8 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("alignment.bam.bai", paste(inputnames$alignment.bam, ".bai", sep =""))
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
+outputnames[1, ] <- c("alignment.bam.bai", paste(inputnames$alignment.bam, ".bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
-
-
-
-
-

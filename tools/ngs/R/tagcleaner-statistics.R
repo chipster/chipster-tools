@@ -17,24 +17,24 @@ tagcleaner.binary <- c(file.path(chipster.tools.path, "tagcleaner", "tagcleaner.
 
 # options
 options <- paste("")
-if (input.type == "FASTQ"){
-	options <- paste(options, "-fastq reads")
+if (input.type == "FASTQ") {
+    options <- paste(options, "-fastq reads")
 }
-if (input.type == "FASTA"){
-	options <- paste(options, "-fasta reads")
+if (input.type == "FASTA") {
+    options <- paste(options, "-fasta reads")
 }
 # options for parameters
 notags <- TRUE
-if (tag3 != "-"){
-	options <- paste(options, "-tag3", tag3)
-	notags <- FALSE	
+if (tag3 != "-") {
+    options <- paste(options, "-tag3", tag3)
+    notags <- FALSE
 }
-if (tag5 != "-"){
-	options <- paste(options, "-tag5", tag5)
-	notags <- FALSE
+if (tag5 != "-") {
+    options <- paste(options, "-tag5", tag5)
+    notags <- FALSE
 }
-if (notags){
-	stop('CHIPSTER-NOTE: No tag sequence specified. If tags are unknow, you can first use the "Predict primers/adaptors" tool.')
+if (notags) {
+    stop('CHIPSTER-NOTE: No tag sequence specified. If tags are unknow, you can first use the "Predict primers/adaptors" tool.')
 }
 # common options
 options <- paste(options, "-64")

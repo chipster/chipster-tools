@@ -24,5 +24,3 @@ command <- paste(binary, "-v", "-q", quality, "-p", percentage, quality.scale, "
 # run
 system(command)
 system("gzip *.fastq")
-
-

@@ -25,9 +25,9 @@
 # AMS 11.11.2013 Added thread support
 # When updating Bowtie2 to 2.2.x, remember to change mp parameter
 
-source(file.path(chipster.common.path,"bam-utils.R"))
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
 
 genomeFile <- "genome.txt"
 if (!file.exists(genomeFile)) {
@@ -35,21 +35,21 @@ if (!file.exists(genomeFile)) {
 }
 
 # check out if the file is compressed and if so unzip it
-input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i,1])
+  unzipIfGZipFile(input.names[i, 1])
 }
 
 # bowtie2
-bowtie.binary <- c(file.path(chipster.tools.path,"bowtie2","bowtie2"))
-version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
-documentVersion("Bowtie",version)
-bowtie2.index.binary <- file.path(chipster.module.path,"shell","check_bowtie2_index.sh")
+bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
+version <- system(paste(bowtie.binary, "--version | head -1 | cut -d ' ' -f 3"), intern = TRUE)
+documentVersion("Bowtie", version)
+bowtie2.index.binary <- file.path(chipster.module.path, "shell", "check_bowtie2_index.sh")
 
 
-genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2",intern = TRUE)
+genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE)
 hg_ifn <- ("")
-echo.command <- paste("echo Host genome file type",genome.filetype," > bowtie2.log")
+echo.command <- paste("echo Host genome file type", genome.filetype, " > bowtie2.log")
 runExternal(echo.command)
 
 new_index_created <- ("no")
@@ -57,18 +57,18 @@ new_index_created <- ("no")
 if (genome.filetype == "tar") {
   runExternal("echo Extarting tar formatted gemome index file >> bowtie2.log")
   runExternal("tar -tf genome.txt >> bowtie2.log")
-  check.command <- paste(bowtie2.index.binary,"genome.txt | tail -1 ")
-  bowtie2.genome <- system(check.command,intern = TRUE)
-  #system("ls -l >> bowtie2.log")
+  check.command <- paste(bowtie2.index.binary, "genome.txt | tail -1 ")
+  bowtie2.genome <- system(check.command, intern = TRUE)
+  # system("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {
-  #check sequece file type
-  emboss.path <- file.path(chipster.tools.path,"emboss-20.04","bin")
+  # check sequece file type
+  emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
   options(scipen = 999)
   inputfile.to.check <- ("genome.txt")
-  sfcheck.binary <- file.path(chipster.module.path,"../misc/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary,emboss.path,inputfile.to.check)
-  str.filetype <- system(sfcheck.command,intern = TRUE)
+  sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+  str.filetype <- system(sfcheck.command, intern = TRUE)
   if (str.filetype == "Not an EMBOSS compatible sequence file") {
     stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
   }
@@ -76,45 +76,45 @@ if (genome.filetype == "tar") {
   # Do indexing
   print("Indexing the genome...")
   runExternal("echo Indexing the genome... >> bowtie2.log")
-  check.command <- paste(bowtie2.index.binary,"genome.txt -tar | tail -1 ")
-  bowtie2.genome <- system(check.command,intern = TRUE)
-  #genome.dir <- system(check.command, intern = TRUE)
-  #bowtie2.genome <- file.path( genome.dir , "genome.txt")
+  check.command <- paste(bowtie2.index.binary, "genome.txt -tar | tail -1 ")
+  bowtie2.genome <- system(check.command, intern = TRUE)
+  # genome.dir <- system(check.command, intern = TRUE)
+  # bowtie2.genome <- file.path( genome.dir , "genome.txt")
   new_index_created <- ("yes")
 }
-#echo.command <- paste("echo Internal genome name:", bowtie2.genome, " >> bowtie2.log")
-#system(echo.command)
-#echo.command <- paste("echo current >> bowtie2.log; ls -l >> bowtie2.log; echo ",bowtie2.genome, " >> bowtie2.log; ls -l ", bowtie2.genome, "* >> bowtie2.log", sep="")
-#system(echo.command)
-#bowtie.genome <- c(file.path(chipster.tools.path, "bowtie2", "indexes" , genome))
-command.start <- paste("bash -c '",bowtie.binary)
-rdg.value <- paste(rdg.open,rdg.ext,sep = ",")
-rfg.value <- paste(rfg.open,rfg.ext,sep = ",")
+# echo.command <- paste("echo Internal genome name:", bowtie2.genome, " >> bowtie2.log")
+# system(echo.command)
+# echo.command <- paste("echo current >> bowtie2.log; ls -l >> bowtie2.log; echo ",bowtie2.genome, " >> bowtie2.log; ls -l ", bowtie2.genome, "* >> bowtie2.log", sep="")
+# system(echo.command)
+# bowtie.genome <- c(file.path(chipster.tools.path, "bowtie2", "indexes" , genome))
+command.start <- paste("bash -c '", bowtie.binary)
+rdg.value <- paste(rdg.open, rdg.ext, sep = ",")
+rfg.value <- paste(rfg.open, rfg.ext, sep = ",")
 
-parameters <- paste(strategy,"--mp",mp,"--np",np,"--rdg",rdg.value,"--rfg",rfg.value,quality.format,"--no-unal","-p",chipster.threads.max)
+parameters <- paste(strategy, "--mp", mp, "--np", np, "--rdg", rdg.value, "--rfg", rfg.value, quality.format, "--no-unal", "-p", chipster.threads.max)
 
 if (alignment.no > 0) {
   if (alignment.no == 6) {
-    parameters <- paste(parameters,"-a")
+    parameters <- paste(parameters, "-a")
   }
   if (alignment.no < 6) {
-    parameters <- paste(parameters,"-k",alignment.no)
+    parameters <- paste(parameters, "-k", alignment.no)
   }
 }
 
 # Local alignment specific parameters
 if (strategy == "--very-fast-local" || strategy == "--fast-local" || strategy == "--sensitive-local" || strategy == "--very-sensitive-local") {
-  parameters <- paste(parameters,"--local --ma",ma)
+  parameters <- paste(parameters, "--local --ma", ma)
 }
 
 if (unaligned.file == "yes") {
-  parameters <- paste(parameters,"--un unaligned")
+  parameters <- paste(parameters, "--un unaligned")
 }
 
 
 # output parameters
-#output.parameters <- paste(unaligned.output, multiread.output)
-#stop(paste('CHIPSTER-NOTE: ', parameters))
+# output.parameters <- paste(unaligned.output, multiread.output)
+# stop(paste('CHIPSTER-NOTE: ', parameters))
 
 # Check if reads are in FASTA format
 # emboss.path <- file.path(chipster.tools.path,"emboss","bin")
@@ -123,19 +123,19 @@ if (unaligned.file == "yes") {
 # str.filetype <- system(sfcheck.command,intern = TRUE)
 # if (str.filetype == "fasta") {
 #  parameters <- paste(parameters,"-f")
-#}
+# }
 
 # Input fastq names
-reads1 <- paste(grep("reads",input.names[,1],value = TRUE),sep = "",collapse = ",")
+reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")
 
 # command ending
-command.end <- paste("-x",bowtie2.genome,"-U",reads1,"1> alignment.sam 2>> bowtie2.log'")
+command.end <- paste("-x", bowtie2.genome, "-U", reads1, "1> alignment.sam 2>> bowtie2.log'")
 
 # run bowtie
-bowtie.command <- paste(command.start,parameters,command.end)
-#stop(paste('CHIPSTER-NOTE: ', bowtie.command))
+bowtie.command <- paste(command.start, parameters, command.end)
+# stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal("echo Launching Bowtie2 alignment >> bowtie2.log")
-echo.command <- paste("echo '",bowtie.command,"' >> bowtie2.log")
+echo.command <- paste("echo '", bowtie.command, "' >> bowtie2.log")
 runExternal(echo.command)
 runExternal(bowtie.command)
 
@@ -145,17 +145,17 @@ if (file.size("alignment.sam") < 1) {
 }
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
-version <- system(paste(samtools.binary,"--version | head -1 | cut -d ' ' -f 2"),intern = TRUE)
-documentVersion("SAMtools",version)
+version <- system(paste(samtools.binary, "--version | head -1 | cut -d ' ' -f 2"), intern = TRUE)
+documentVersion("SAMtools", version)
 
 # convert sam to bam
-runExternal(paste(samtools.binary,"view -bS alignment.sam -o alignment.bam"))
+runExternal(paste(samtools.binary, "view -bS alignment.sam -o alignment.bam"))
 
 # sort bam
-runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
-runExternal(paste(samtools.binary,"index alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 
 # Substitute display names to BAM header for clarity
 displayNamesToBAM("alignment.sorted.bam")
@@ -183,14 +183,13 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads001.fq)
 
 # Make a matrix of output names
-outputnames <- matrix(NA,nrow = 4,ncol = 2)
-outputnames[1,] <- c("bowtie2.bam",paste(basename,".bam",sep = ""))
-outputnames[2,] <- c("bowtie2.bam.bai",paste(basename,".bam.bai",sep = ""))
-outputnames[3,] <- c("unaligned_1.fq",paste(basename,"_unaligned.fq",sep = ""))
+outputnames <- matrix(NA, nrow = 4, ncol = 2)
+outputnames[1, ] <- c("bowtie2.bam", paste(basename, ".bam", sep = ""))
+outputnames[2, ] <- c("bowtie2.bam.bai", paste(basename, ".bam.bai", sep = ""))
+outputnames[3, ] <- c("unaligned_1.fq", paste(basename, "_unaligned.fq", sep = ""))
 if (new_index_created == "yes") {
   hg_ifn <- strip_name(inputnames$genome.txt)
-  outputnames[4,] <- c("bowtie2_index.tar",paste(hg_ifn,"_bowtie2_index.tar",sep = ""))
+  outputnames[4, ] <- c("bowtie2_index.tar", paste(hg_ifn, "_bowtie2_index.tar", sep = ""))
 }
 # Write output definitions file
 write_output_definitions(outputnames)
-

@@ -2,9 +2,9 @@
 # INPUT alignment.bam: "BAM alignment file" TYPE GENERIC
 # OUTPUT OPTIONAL marked.bam
 # OUTPUT OPTIONAL marked.bam.bai
-# OUTPUT OPTIONAL duplicateMetrics.tsv 
+# OUTPUT OPTIONAL duplicateMetrics.tsv
 
-# 2015.09.09 AMS 
+# 2015.09.09 AMS
 
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
@@ -15,7 +15,7 @@ system(picard.command)
 
 system(paste(samtools.binary, "index marked.bam > marked.bam.bai"))
 
-# duplicateMetrics 
+# duplicateMetrics
 system("grep -A2 LIBRARY duplicateMetrics.txt > duplicateMetrics.tsv")
 
 # Handle output names
@@ -24,12 +24,12 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 # read input names
 inputnames <- read_input_definitions()
 
-basename  <- strip_name(inputnames$alignment.bam)
+basename <- strip_name(inputnames$alignment.bam)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("marked.bam", paste(basename, "_dedup.bam", sep =""))
-outputnames[2,] <- c("marked.bam.bai", paste(basename, "_dedup.bam.bai", sep =""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("marked.bam", paste(basename, "_dedup.bam", sep = ""))
+outputnames[2, ] <- c("marked.bam.bai", paste(basename, "_dedup.bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

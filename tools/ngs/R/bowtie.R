@@ -1,10 +1,10 @@
-# TOOL bowtie.R: "Bowtie for single end reads" (Bowtie aligns reads to genome, transcriptome, known miRNAs, etc. There are two modes: mismatches are considered either throughout the read, or only in the user-defined left part of the read. In the latter case also quality values are taken into account. Results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser. 
+# TOOL bowtie.R: "Bowtie for single end reads" (Bowtie aligns reads to genome, transcriptome, known miRNAs, etc. There are two modes: mismatches are considered either throughout the read, or only in the user-defined left part of the read. In the latter case also quality values are taken into account. Results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser.
 # Note that this Bowtie tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie for single end reads and own genome\".)
-# INPUT reads.txt: "Reads to align" TYPE GENERIC 
-# OUTPUT bowtie.bam 
-# OUTPUT bowtie.bam.bai 
-# OUTPUT bowtie.log 
-# OUTPUT OPTIONAL unaligned-reads.fastq 
+# INPUT reads.txt: "Reads to align" TYPE GENERIC
+# OUTPUT bowtie.bam
+# OUTPUT bowtie.bam.bai
+# OUTPUT bowtie.log
+# OUTPUT OPTIONAL unaligned-reads.fastq
 # OUTPUT OPTIONAL multireads.fastq
 # PARAMETER organism: "Genome or transcriptome" TYPE ["FILES genomes/indexes/bowtie .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bowtie/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER max.mismatches: "Number of mismatches allowed" TYPE [0, 1, 2, 3] DEFAULT 2 (How many mismatches are the alignments allowed to have?)
@@ -31,8 +31,8 @@ unzipIfGZipFile("reads.txt")
 
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie"))
-version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
-documentVersion("Bowtie",version)
+version <- system(paste(bowtie.binary, "--version | head -1 | cut -d ' ' -f 3"), intern = TRUE)
+documentVersion("Bowtie", version)
 bowtie.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "bowtie", organism))
 
 command.start <- paste("bash -c '", bowtie.binary)
@@ -56,20 +56,20 @@ command.end <- paste("-x", bowtie.index, "reads.txt 1> alignment.sam 2> bowtie.l
 
 # run bowtie
 bowtie.command <- paste(command.start, common.parameters, quality.parameter, mode.parameters, output.parameters, command.end)
-#stop(paste('CHIPSTER-NOTE: ', bowtie.command))
+# stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal(bowtie.command)
 
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
-version <- system(paste(samtools.binary,"--version | head -1 | cut -d ' ' -f 2"),intern = TRUE)
-documentVersion("SAMtools",version)
+version <- system(paste(samtools.binary, "--version | head -1 | cut -d ' ' -f 2"), intern = TRUE)
+documentVersion("SAMtools", version)
 
 # convert sam to bam, removes unaligned reads
 runExternal(paste(samtools.binary, "view -bS -q 1 alignment.sam -o alignment.bam"))
 
 # sort bam
-runExternal(paste(samtools.binary,"sort alignment.bam -o alignment.sorted.bam"))
+runExternal(paste(samtools.binary, "sort alignment.bam -o alignment.sorted.bam"))
 
 # index bam
 runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
@@ -89,11 +89,11 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads.txt)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=4, ncol=2)
-outputnames[1,] <- c("bowtie.bam", paste(basename, ".bam", sep =""))
-outputnames[2,] <- c("bowtie.bam.bai", paste(basename, ".bam.bai", sep =""))
-outputnames[3,] <- c("unaligned-reads.fastq", paste(basename, "_unaligned.fq", sep=""))
-outputnames[4,] <- c("multireads.fastq", paste(basename, "_multireads.fq", sep=""))
+outputnames <- matrix(NA, nrow = 4, ncol = 2)
+outputnames[1, ] <- c("bowtie.bam", paste(basename, ".bam", sep = ""))
+outputnames[2, ] <- c("bowtie.bam.bai", paste(basename, ".bam.bai", sep = ""))
+outputnames[3, ] <- c("unaligned-reads.fastq", paste(basename, "_unaligned.fq", sep = ""))
+outputnames[4, ] <- c("multireads.fastq", paste(basename, "_multireads.fq", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

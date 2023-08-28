@@ -37,9 +37,9 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
-	unzipIfGZipFile(input.names[i,1])	
+    unzipIfGZipFile(input.names[i, 1])
 }
 
 options(scipen = 10)
@@ -47,24 +47,24 @@ options(scipen = 10)
 
 # setting up TopHat
 tophat.binary <- c(file.path(chipster.tools.path, "tophat2", "tophat2"))
-version <- system(paste(tophat.binary,"--version | cut -d ' ' -f 2"),intern = TRUE)
-documentVersion("TopHat",version)
+version <- system(paste(tophat.binary, "--version | cut -d ' ' -f 2"), intern = TRUE)
+documentVersion("TopHat", version)
 
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
-version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
-documentVersion("Bowtie",version)
+version <- system(paste(bowtie.binary, "--version | head -1 | cut -d ' ' -f 3"), intern = TRUE)
+documentVersion("Bowtie", version)
 bowtie2.index.binary <- file.path(chipster.module.path, "shell", "check_bowtie2_index.sh")
 path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))
 
 path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
-set.path <-paste(sep="", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
+set.path <- paste(sep = "", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 
 # Do indexing
 print("Indexing the genome...")
 runExternal("echo Indexing the genome... > bowtie2.log")
-check.command <- paste ( bowtie2.index.binary, "genome.txt| tail -1 ")
+check.command <- paste(bowtie2.index.binary, "genome.txt| tail -1 ")
 genome.dir <- system(check.command, intern = TRUE)
-bowtie2.genome <- file.path( genome.dir , "genome.txt")
+bowtie2.genome <- file.path(genome.dir, "genome.txt")
 bowtie2.genome <- dirname(bowtie2.genome)
 
 # command start
@@ -73,26 +73,26 @@ command.start <- paste("bash -c '", set.path, tophat.binary)
 # parameters
 command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
 
-if (mismatches > 2){
-	command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
+if (mismatches > 2) {
+    command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
 }
 
-if ( quality.format == "phred64") {
-	command.parameters <- paste(command.parameters, "--phred64-quals")
+if (quality.format == "phred64") {
+    command.parameters <- paste(command.parameters, "--phred64-quals")
 }
 
 # optional GTF command, if a GTF file has been provided by user
-if (file.exists("genes.gtf")){
-	if (no.novel.juncs == "yes") {
-		command.parameters <- paste(command.parameters, "-G", "genes.gtf", "--no-novel-juncs")
-	} else {
-		command.parameters <- paste(command.parameters, "-G", "genes.gtf")
-	}
+if (file.exists("genes.gtf")) {
+    if (no.novel.juncs == "yes") {
+        command.parameters <- paste(command.parameters, "-G", "genes.gtf", "--no-novel-juncs")
+    } else {
+        command.parameters <- paste(command.parameters, "-G", "genes.gtf")
+    }
 }
 
 
 # Input fastq names
-reads1 <- paste(grep("reads", input.names[,1], value = TRUE), sep="", collapse=",")
+reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")
 
 # command ending
 command.end <- paste(bowtie2.genome, reads1, "2>> tophat.log'")
@@ -100,10 +100,10 @@ command.end <- paste(bowtie2.genome, reads1, "2>> tophat.log'")
 # run tophat
 command <- paste(command.start, command.parameters, command.end)
 
-echo.command <- paste("echo '",command ,"' 2>> tophat.log " )
+echo.command <- paste("echo '", command, "' 2>> tophat.log ")
 runExternal(echo.command)
 runExternal("echo >> tophat.log")
-#stop(paste('CHIPSTER-NOTE: ', command))
+# stop(paste('CHIPSTER-NOTE: ', command))
 
 documentCommand(command)
 
@@ -112,12 +112,12 @@ runExternal(command)
 
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
-version <- system(paste(samtools.binary,"2>&1 |head -3 |tail -1 | cut -d ' ' -f 2"),intern = TRUE)
-documentVersion("SAMtools",version)
+version <- system(paste(samtools.binary, "2>&1 |head -3 |tail -1 | cut -d ' ' -f 2"), intern = TRUE)
+documentVersion("SAMtools", version)
 
 # sort bam (removed because TopHat itself does the sorting)
 # system(paste(samtools.binary, "sort tophat_out/accepted_hits.bam tophat"))
-runExternal("mv tophat_out/accepted_hits.bam tophat.bam") 
+runExternal("mv tophat_out/accepted_hits.bam tophat.bam")
 
 # index bam
 runExternal(paste(samtools.binary, "index tophat.bam"))
@@ -131,44 +131,44 @@ runExternal("mv tophat_out/align_summary.txt tophat-summary.txt")
 source(file.path(chipster.common.path, "bed-utils.R"))
 
 
-if (file.exists("junctions.u.bed")){
-	size <- file.info("junctions.u.bed")$size
-	if (size > 100){	
-		bed <- read.table(file="junctions.u.bed", skip=1, sep="\t")
-		colnames(bed)[1:2] <- c("chr", "start")
-		sorted.bed <- sort.bed(bed)
-		write.table(sorted.bed, file="junctions.bed", sep="\t", row.names=F, col.names=F, quote=F)
-	}	
+if (file.exists("junctions.u.bed")) {
+    size <- file.info("junctions.u.bed")$size
+    if (size > 100) {
+        bed <- read.table(file = "junctions.u.bed", skip = 1, sep = "\t")
+        colnames(bed)[1:2] <- c("chr", "start")
+        sorted.bed <- sort.bed(bed)
+        write.table(sorted.bed, file = "junctions.bed", sep = "\t", row.names = F, col.names = F, quote = F)
+    }
 }
 
-if (file.exists("insertions.u.bed")){
-	size <- file.info("insertions.u.bed")$size
-	if (size > 100){
-		bed <- read.table(file="insertions.u.bed", skip=1, sep="\t")
-		colnames(bed)[1:2] <- c("chr", "start")
-		sorted.bed <- sort.bed(bed)
-		write.table(sorted.bed, file="insertions.bed", sep="\t", row.names=F, col.names=F, quote=F)
-	}
+if (file.exists("insertions.u.bed")) {
+    size <- file.info("insertions.u.bed")$size
+    if (size > 100) {
+        bed <- read.table(file = "insertions.u.bed", skip = 1, sep = "\t")
+        colnames(bed)[1:2] <- c("chr", "start")
+        sorted.bed <- sort.bed(bed)
+        write.table(sorted.bed, file = "insertions.bed", sep = "\t", row.names = F, col.names = F, quote = F)
+    }
 }
 
-if (file.exists("deletions.u.bed")){
-	size <- file.info("deletions.u.bed")$size
-	if (size > 100){
-		bed <- read.table(file="deletions.u.bed", skip=1, sep="\t")
-		colnames(bed)[1:2] <- c("chr", "start")
-		sorted.bed <- sort.bed(bed)
-		write.table(sorted.bed, file="deletions.bed", sep="\t", row.names=F, col.names=F, quote=F)
-	}
+if (file.exists("deletions.u.bed")) {
+    size <- file.info("deletions.u.bed")$size
+    if (size > 100) {
+        bed <- read.table(file = "deletions.u.bed", skip = 1, sep = "\t")
+        colnames(bed)[1:2] <- c("chr", "start")
+        sorted.bed <- sort.bed(bed)
+        write.table(sorted.bed, file = "deletions.bed", sep = "\t", row.names = F, col.names = F, quote = F)
+    }
 }
 
 # If no BAM file is produced, return the whole logs folder as a tar package
-if (fileNotOk("tophat.bam")){
-	runExternal("tar cf logs.tar tophat_out/logs/*")	
+if (fileNotOk("tophat.bam")) {
+    runExternal("tar cf logs.tar tophat_out/logs/*")
 }
 
-if (!(file.exists("tophat-summary.txt"))){
-	#system("mv tophat_out/logs/tophat.log tophat2.log")
-	runExternal("mv tophat.log tophat2.log")
+if (!(file.exists("tophat-summary.txt"))) {
+    # system("mv tophat_out/logs/tophat.log tophat2.log")
+    runExternal("mv tophat.log tophat2.log")
 }
 
 # Handle output names
@@ -181,11 +181,11 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads001.fq)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("tophat.bam", paste(basename, ".bam", sep =""))
-outputnames[2,] <- c("tophat.bam.bai", paste(basename, ".bam.bai", sep =""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("tophat.bam", paste(basename, ".bam", sep = ""))
+outputnames[2, ] <- c("tophat.bam.bai", paste(basename, ".bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
 
-#EOF
+# EOF

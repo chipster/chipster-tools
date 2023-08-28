@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-CCA.R: "Seurat v4 -Combine two samples" (This tool can be used to integrate data and combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.) 
+# TOOL single-cell-seurat-CCA.R: "Seurat v4 -Combine two samples" (This tool can be used to integrate data and combine two Seurat objects for later joined analysis. The two objects need to be named when created in the Seurat setup tool.)
 # INPUT OPTIONAL seurat_obj1.Robj: "Seurat object 1" TYPE GENERIC
 # INPUT OPTIONAL seurat_obj2.Robj: "Seurat object 2" TYPE GENERIC
 # OUTPUT seurat_obj_combined.Robj
@@ -32,18 +32,17 @@ seurat_obj2 <- seurat_obj
 features <- SelectIntegrationFeatures(object.list = list(seurat_obj1, seurat_obj2))
 
 # If SCTransform was used to normalise the data, do a prep step:
-if (normalisation.method == "sctransform"){
+if (normalisation.method == "sctransform") {
     seurat_obj_list <- PrepSCTIntegration(object.list = list(seurat_obj1, seurat_obj2), anchor.features = features)
     # seurat_obj1 <- PrepSCTIntegration(object.list = seurat_obj1, anchor.features = features)
-   #  seurat_obj2 <- PrepSCTIntegration(object.list = seurat_obj2, anchor.features = features)
-
+    #  seurat_obj2 <- PrepSCTIntegration(object.list = seurat_obj2, anchor.features = features)
 }
 
 
-# Perform integration: 
+# Perform integration:
 
 # When data is normalised with NormalizeData:
-if (normalisation.method == "normal"){
+if (normalisation.method == "normal") {
     # 1. identify anchors using the FindIntegrationAnchors function
     data.anchors <- FindIntegrationAnchors(object.list = list(seurat_obj1, seurat_obj2), dims = 1:CCstocompute, anchor.features = features) # dims = Which dimensions to use from the CCA to specify the neighbor search space
     # 2. use these anchors to integrate the two datasets together with IntegrateData.
@@ -52,11 +51,11 @@ if (normalisation.method == "normal"){
     DefaultAssay(data.combined) <- "integrated"
 
     # Note: these steps are now done twice?
-    data.combined <- ScaleData(data.combined, verbose = FALSE)  
+    data.combined <- ScaleData(data.combined, verbose = FALSE)
     data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
 
-# When data is normalised with SCTransform:
-} else{
+    # When data is normalised with SCTransform:
+} else {
     # 1. identify anchors using the FindIntegrationAnchors function
     data.anchors <- FindIntegrationAnchors(object.list = seurat_obj_list, dims = 1:CCstocompute, anchor.features = features, normalization.method = "SCT") # dims = Which dimensions to use from the CCA to specify the neighbor search space
     # 2. use these anchors to integrate the two datasets together with IntegrateData.
@@ -65,7 +64,7 @@ if (normalisation.method == "normal"){
     DefaultAssay(data.combined) <- "integrated"
 
     # Note: Skip ScaleData when using SCTransform
-    # data.combined <- ScaleData(data.combined, verbose = FALSE)  
+    # data.combined <- ScaleData(data.combined, verbose = FALSE)
     data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
 }
 
@@ -80,9 +79,6 @@ if (normalisation.method == "normal"){
 # dev.off() # close the pdf
 
 # Save the Robj for the next tool
-save(data.combined, file="seurat_obj_combined.Robj")
+save(data.combined, file = "seurat_obj_combined.Robj")
 
 ## EOF
-
-
-

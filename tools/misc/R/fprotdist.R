@@ -1,5 +1,5 @@
 # TOOL fprotdist.R: "Protein distance algorithm" (Calculate protein distance matrix with PHYLIP program protdist)
-# INPUT OPTIONAL sequence: sequence TYPE GENERIC 
+# INPUT OPTIONAL sequence: sequence TYPE GENERIC
 # OUTPUT OPTIONAL protdist.txt
 # OUTPUT OPTIONAL fprotdist.log
 # PARAMETER OPTIONAL ncategories: "Number of substitution rate categories" TYPE INTEGER FROM 1 TO 9 DEFAULT 1 (Number of substitution rate categories)
@@ -16,30 +16,30 @@
 # PARAMETER OPTIONAL printdata: "Print data at start of run" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (Print data at start of run)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequence")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount sequence -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 100000){
-	stop(paste('Too many query sequences. Maximun is 100000 but your file contains ', num.queryseq ))
+if (num.queryseq > 100000) {
+    stop(paste("Too many query sequences. Maximun is 100000 but your file contains ", num.queryseq))
 }
 
 emboss.binary <- file.path(emboss.path, "fprotdist")
@@ -56,15 +56,15 @@ emboss.parameters <- paste(emboss.parameters, "-aacateg", aacateg)
 emboss.parameters <- paste(emboss.parameters, "-whichcode", whichcode)
 emboss.parameters <- paste(emboss.parameters, "-ease", ease)
 emboss.parameters <- paste(emboss.parameters, "-ttratio", ttratio)
-emboss.parameters <- paste(emboss.parameters, '-basefreq "', basefreq,'"')
+emboss.parameters <- paste(emboss.parameters, '-basefreq "', basefreq, '"')
 emboss.parameters <- paste(emboss.parameters, "-printdata", printdata)
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> fprotdist.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> fprotdist.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> fprotdist.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> fprotdist.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f fprotdist.log")
+if (save_log == "no") {
+    system("rm -f fprotdist.log")
 }

@@ -1,5 +1,5 @@
 # TOOL filter-by-column-value.R: "Filter using a column value" (Filters genes based on one numerical column.)
-# INPUT normalized.tsv: normalized.tsv TYPE GENERIC 
+# INPUT normalized.tsv: normalized.tsv TYPE GENERIC
 # OUTPUT column-value-filter.tsv: column-value-filter.tsv
 # PARAMETER column: "Column" TYPE COLUMN_SEL (Data column to filter by)
 # PARAMETER cutoff: "Cut-off" TYPE DECIMAL DEFAULT 1 (Cut-off for filtering)
@@ -16,32 +16,32 @@
 # modified, IS, 12.10.2012, to cope with tables with gene descriptions (that typically contain 's)
 
 # Loads the normalized data
-file <- 'normalized.tsv'
-dat <- read.table(file, header=TRUE, sep='\t', quote='', row.names=1, check.names=FALSE)
+file <- "normalized.tsv"
+dat <- read.table(file, header = TRUE, sep = "\t", quote = "", row.names = 1, check.names = FALSE)
 
 # Extract the data to a vector
 f <- dat[, column]
 # Filters the data
-if(smaller.or.larger=="equal-to") {
-	dat2<-dat[which(f==cutoff),]
+if (smaller.or.larger == "equal-to") {
+    dat2 <- dat[which(f == cutoff), ]
 }
-if(smaller.or.larger=="smaller-than") {
-	dat2<-dat[which(f<=cutoff),]
+if (smaller.or.larger == "smaller-than") {
+    dat2 <- dat[which(f <= cutoff), ]
 }
-if(smaller.or.larger=="larger-than") {
-	dat2<-dat[which(f>=cutoff),]
+if (smaller.or.larger == "larger-than") {
+    dat2 <- dat[which(f >= cutoff), ]
 }
-if(smaller.or.larger=="outside") {
-	cutoff_2 <- -cutoff
-	dat2<-dat[which(f>=cutoff | f<=cutoff_2),]
+if (smaller.or.larger == "outside") {
+    cutoff_2 <- -cutoff
+    dat2 <- dat[which(f >= cutoff | f <= cutoff_2), ]
 }
-if(smaller.or.larger=="within") {
-	cutoff_2 <- -cutoff
-	dat2<-dat[-which(f>=cutoff | f <=cutoff_2),]
+if (smaller.or.larger == "within") {
+    cutoff_2 <- -cutoff
+    dat2 <- dat[-which(f >= cutoff | f <= cutoff_2), ]
 }
 
 # Writing the data to disk
-options(scipen=10)
-write.table(dat2, "column-value-filter.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+options(scipen = 10)
+write.table(dat2, "column-value-filter.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 # EOF

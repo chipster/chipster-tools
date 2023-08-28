@@ -8,29 +8,28 @@
 
 # AMS 19.06.2013
 
-source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 # binary
-#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-version <- system(paste(binary,"--version"),intern = TRUE)
-documentVersion("Mothur",version)
+# binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path, "mothur-1.44.3", "mothur"))
+version <- system(paste(binary, "--version"), intern = TRUE)
+documentVersion("Mothur", version)
 
 # Options
 sffinfo.options <- ""
-sffinfo.options <- paste(sffinfo.options,"sffinfo(sff=reads.sff")
+sffinfo.options <- paste(sffinfo.options, "sffinfo(sff=reads.sff")
 if (trim == "no") {
-  sffinfo.options <- paste(sffinfo.options,", trim=F",sep = ",")
+  sffinfo.options <- paste(sffinfo.options, ", trim=F", sep = ",")
 }
-sffinfo.options <- paste(sffinfo.options,")",sep = "")
+sffinfo.options <- paste(sffinfo.options, ")", sep = "")
 
 # Write batch file
 documentCommand(sffinfo.options)
-write(sffinfo.options,"sffinfo.mth",append = FALSE)
+write(sffinfo.options, "sffinfo.mth", append = FALSE)
 
 # command
-command <- paste(binary,"sffinfo.mth")
+command <- paste(binary, "sffinfo.mth")
 
 # run
 system(command)
-

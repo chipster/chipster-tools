@@ -23,52 +23,52 @@ gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # If user provided fasta we use it, else use internal fasta
-if (organism == "other"){
-	# If user has provided a FASTA, we use it
-	if (file.exists("reference")){
-		file.rename("reference", "reference.fasta")
-	}
-}else{
-	# If not, we use the internal one.
-	internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism,".fa",sep="",collapse=""))
-	# If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
-	if(chr == "chr1"){
-		source(file.path(chipster.common.path, "seq-utils.R"))
-		addChrToFasta(internal.fa, "reference.fasta") 
-	}else{
-		file.copy(internal.fa, "reference.fasta")
-	}
-}	
+if (organism == "other") {
+    # If user has provided a FASTA, we use it
+    if (file.exists("reference")) {
+        file.rename("reference", "reference.fasta")
+    }
+} else {
+    # If not, we use the internal one.
+    internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa", sep = "", collapse = ""))
+    # If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
+    if (chr == "chr1") {
+        source(file.path(chipster.common.path, "seq-utils.R"))
+        addChrToFasta(internal.fa, "reference.fasta")
+    } else {
+        file.copy(internal.fa, "reference.fasta")
+    }
+}
 
 # Pre-process input files
 #
 # FASTA
 options <- ""
-if (fileOk("reference.fasta")){
-	formatGatkFasta("reference.fasta")
-	system("mv reference.fasta.dict reference.dict")	
-	options <- paste(options, "--reference reference.fasta")
+if (fileOk("reference.fasta")) {
+    formatGatkFasta("reference.fasta")
+    system("mv reference.fasta.dict reference.dict")
+    options <- paste(options, "--reference reference.fasta")
 }
 # BAM
 system(paste(samtools.binary, "index reads.bam > reads.bam.bai"))
 options <- paste(options, "-I reads.bam")
 # VCF
-if (fileOk("variants.vcf")){
-	formatGatkVcf("variants.vcf",chr)
-	options <-paste(options, "-V variants.vcf.gz")
+if (fileOk("variants.vcf")) {
+    formatGatkVcf("variants.vcf", chr)
+    options <- paste(options, "-V variants.vcf.gz")
 }
-if (fileOk("intervals.vcf")){
-	formatGatkVcf("intervals.vcf",chr)
-	options <-paste(options, "-L intervals.vcf.gz")	
-}else if (usevariants == "yes"){
-	options <-paste(options, "-L variants.vcf.gz")
+if (fileOk("intervals.vcf")) {
+    formatGatkVcf("intervals.vcf", chr)
+    options <- paste(options, "-L intervals.vcf.gz")
+} else if (usevariants == "yes") {
+    options <- paste(options, "-L variants.vcf.gz")
 }
 
-if (nchar(gatk.interval) > 0 ){
-	command <- paste(command, "-L", gatk.interval)
-	if (gatk.padding > 0){
-		command <- paste(command, "-ip", gatk.padding)
-	}
+if (nchar(gatk.interval) > 0) {
+    command <- paste(command, "-L", gatk.interval)
+    if (gatk.padding > 0) {
+        command <- paste(command, "-ip", gatk.padding)
+    }
 }
 
 
@@ -78,16 +78,16 @@ command <- paste(gatk.binary, "GetPileupSummaries", options, "-O GetPileupSummar
 runExternal(command)
 
 # Return error message if no result
-if (fileNotOk("GetPileupSummaries.tsv")){
-	system("mv stderr.log gatk_log.txt")
+if (fileNotOk("GetPileupSummaries.tsv")) {
+    system("mv stderr.log gatk_log.txt")
 }
 
 # read input names
 inputnames <- read_input_definitions()
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("GetPileupSummaries.tsv", paste(strip_name(inputnames$reads.bam), "_getpileupsummaries.tsv", sep=""))
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
+outputnames[1, ] <- c("GetPileupSummaries.tsv", paste(strip_name(inputnames$reads.bam), "_getpileupsummaries.tsv", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

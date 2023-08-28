@@ -9,8 +9,8 @@
 # ML 23.3.2016
 
 ## check out if the file is compressed and if so unzip it
-#source(file.path(chipster.common.path, "zip-utils.R"))
-#unzipIfGZipFile("reads.fasta")
+# source(file.path(chipster.common.path, "zip-utils.R"))
+# unzipIfGZipFile("reads.fasta")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
@@ -19,23 +19,23 @@ template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 
 # Add options
 pcrseqs.options <- ""
-pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=silva.bacteria.fasta", sep="")
-if (!is.na(start)){
-	pcrseqs.options <- paste(pcrseqs.options, ", start=", start, sep="")
+pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=silva.bacteria.fasta", sep = "")
+if (!is.na(start)) {
+    pcrseqs.options <- paste(pcrseqs.options, ", start=", start, sep = "")
 }
-if (!is.na(end)){
-	pcrseqs.options <- paste(pcrseqs.options, ", end=", end, sep="")
+if (!is.na(end)) {
+    pcrseqs.options <- paste(pcrseqs.options, ", end=", end, sep = "")
 }
-if (keepdots=="yes"){
-	pcrseqs.options <- paste(pcrseqs.options, ", keepdots=F", sep="")
+if (keepdots == "yes") {
+    pcrseqs.options <- paste(pcrseqs.options, ", keepdots=F", sep = "")
 }
-if (keepdots=="no"){
-	pcrseqs.options <- paste(pcrseqs.options, ", keepdots=T", sep="")
+if (keepdots == "no") {
+    pcrseqs.options <- paste(pcrseqs.options, ", keepdots=T", sep = "")
 }
-pcrseqs.options <- paste(pcrseqs.options, ")", sep="")
+pcrseqs.options <- paste(pcrseqs.options, ")", sep = "")
 
 # Write batch file
-write(pcrseqs.options, "pcrseq.mth", append=F)
+write(pcrseqs.options, "pcrseq.mth", append = F)
 
 # command
 command <- paste(binary, "pcrseq.mth")
@@ -47,7 +47,7 @@ system(command)
 system("mv silva.bacteria.pcr.fasta custom.reference.fasta")
 
 # batch file 2
-write("summary.seqs(fasta=custom.reference.fasta)", "summary.mth", append=F)
+write("summary.seqs(fasta=custom.reference.fasta)", "summary.mth", append = F)
 
 # command
 command2 <- paste(binary, "summary.mth", "> log_raw.txt")

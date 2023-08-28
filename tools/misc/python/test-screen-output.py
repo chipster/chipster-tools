@@ -5,6 +5,6 @@ import time
 
 i = 20
 print("Counting to %d" % (i))
-for x in range(0, i ):
+for x in range(0, i):
     print("Counting %d" % (x))
     time.sleep(1)

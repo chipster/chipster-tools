@@ -17,34 +17,34 @@ taxano <- ntaxa(ps)
 
 # if "Species" selected for taxon tabulation, check that using 7-level classification
 taxlength <- length(colnames(tax_table(ps)))
-if (type == "species" && 
-	taxlength == "6"){
-		stop("Data set lacks species-level assignments; please choose another level of organization.")
+if (type == "species" &&
+    taxlength == "6") {
+    stop("Data set lacks species-level assignments; please choose another level of organization.")
 }
 
 # Taxonomy table
-if (type == "phylum"){
-	taxonsummary <- table(tax_table(ps)[, "Phylum"], exclude = NULL) # column no. equivalents would be e.g. [, 2]
-	} else if (type == "class"){
-		taxonsummary <- table(tax_table(ps)[, "Class"], exclude = NULL)
-	} else if (type == "order"){
-		taxonsummary <- table(tax_table(ps)[, "Order"], exclude = NULL)
-	} else if (type == "family"){
-		taxonsummary <- table(tax_table(ps)[, "Family"], exclude = NULL)
-	} else if (type == "genus") {
-		taxonsummary <- table(tax_table(ps)[, "Genus"], exclude = NULL)
-	} else if (type == "species") {
-		taxonsummary <- table(tax_table(ps)[, "Species"], exclude = NULL)		
+if (type == "phylum") {
+    taxonsummary <- table(tax_table(ps)[, "Phylum"], exclude = NULL) # column no. equivalents would be e.g. [, 2]
+} else if (type == "class") {
+    taxonsummary <- table(tax_table(ps)[, "Class"], exclude = NULL)
+} else if (type == "order") {
+    taxonsummary <- table(tax_table(ps)[, "Order"], exclude = NULL)
+} else if (type == "family") {
+    taxonsummary <- table(tax_table(ps)[, "Family"], exclude = NULL)
+} else if (type == "genus") {
+    taxonsummary <- table(tax_table(ps)[, "Genus"], exclude = NULL)
+} else if (type == "species") {
+    taxonsummary <- table(tax_table(ps)[, "Species"], exclude = NULL)
 }
 
 sink("ps_taxon.txt")
-	cat("\n\n\n")
-	cat("### Overall no. of OTUs ###\n")
-	cat("\n\n\n")
-	print(taxano)
-	cat("\n\n\n")
-	cat("### Summary of taxon frequencies ###\n")
-	cat("\n\n\n")
-	print(taxonsummary)
-	cat("\n\n\n")
+cat("\n\n\n")
+cat("### Overall no. of OTUs ###\n")
+cat("\n\n\n")
+print(taxano)
+cat("\n\n\n")
+cat("### Summary of taxon frequencies ###\n")
+cat("\n\n\n")
+print(taxonsummary)
+cat("\n\n\n")
 sink()

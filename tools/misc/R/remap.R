@@ -1,7 +1,7 @@
 # TOOL remap.R: "Display restriction enzyme binding sites" (Display restriction enzyme binding sites in a nucleotide sequence)
-# INPUT sequence: "Input sequence" TYPE GENERIC 
-# OUTPUT OPTIONAL remap.html 
-# OUTPUT OPTIONAL remap.log 
+# INPUT sequence: "Input sequence" TYPE GENERIC
+# OUTPUT OPTIONAL remap.html
+# OUTPUT OPTIONAL remap.log
 # PARAMETER enzymes: "Comma separated enzyme list" TYPE STRING DEFAULT all (Rhe name 'all' reads in all enzyme names from the rebase database. You can specify enzymes by giving their names with commas between then, such as: 'hincii,hinfi,ppii,hindiii'.  The case of the names is not important.)
 # PARAMETER sitelen: "Minimum recognition site length" TYPE INTEGER FROM 2 TO 20 DEFAULT 4 (This sets the minimum length of the restriction enzyme recognition site. Any enzymes with sites shorter than this will be ignored.)
 # PARAMETER OPTIONAL mincuts: "Minimum cuts per RE" TYPE INTEGER FROM 1 TO 1000 DEFAULT 1 (This sets the minimum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut fewer times than this will be ignored.)
@@ -35,41 +35,41 @@
 
 
 # KM 8.11. 2013
-options(scipen=999)
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+options(scipen = 999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-#check sequece file type
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence" )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+# check sequece file type
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence")
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter sequence")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 100 ){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 100 but your file contains ', num.queryseq ))
+if (num.queryseq > 100) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 100 but your file contains ", num.queryseq))
 }
 
 seqlen.exe <- file.path(emboss.path, "infoseq -nohead -only -length  sequence -filter | sort -n |tail -1")
-str.seqlen <- system(seqlen.exe, intern = TRUE )
+str.seqlen <- system(seqlen.exe, intern = TRUE)
 num.seqlen <- as.integer(str.seqlen)
 
-if ( num.seqlen <  width ){
-	width <- num.seqlen 
+if (num.seqlen < width) {
+    width <- num.seqlen
 }
 
 emboss.binary <- file.path(emboss.path, "remap")
-emboss.parameters <- paste('sequence -auto -outfile remap.html -html Y')
+emboss.parameters <- paste("sequence -auto -outfile remap.html -html Y")
 emboss.parameters <- paste(emboss.parameters, "-enzymes", enzymes)
 emboss.parameters <- paste(emboss.parameters, "-sitelen", sitelen)
 emboss.parameters <- paste(emboss.parameters, "-mincuts", mincuts)
@@ -90,12 +90,12 @@ emboss.parameters <- paste(emboss.parameters, "-translation", translation)
 emboss.parameters <- paste(emboss.parameters, "-reverse", reverse)
 emboss.parameters <- paste(emboss.parameters, "-orfminsize", orfminsize)
 
-if (nchar(uppercase) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, '-uppercase "', uppercase, '"')
+if (nchar(uppercase) > 0) {
+    emboss.parameters <- paste(emboss.parameters, '-uppercase "', uppercase, '"')
 }
 
-if (nchar(highlight) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, '-highlight "', highlight,'"')
+if (nchar(highlight) > 0) {
+    emboss.parameters <- paste(emboss.parameters, '-highlight "', highlight, '"')
 }
 
 emboss.parameters <- paste(emboss.parameters, "-threeletter", threeletter)
@@ -109,12 +109,12 @@ emboss.parameters <- paste(emboss.parameters, "-offset", offset)
 
 
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> remap.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> remap.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> remap.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> remap.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f remap.log")
+if (save_log == "no") {
+    system("rm -f remap.log")
 }

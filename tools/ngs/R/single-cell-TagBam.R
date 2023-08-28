@@ -20,9 +20,9 @@ path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 # First round: cell barcode
 
 # command start
-command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=unaligned.bam OUTPUT=unaligned_tagged_cell.bam SUMMARY=summary_cell.txt", sep="")
+command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=unaligned.bam OUTPUT=unaligned_tagged_cell.bam SUMMARY=summary_cell.txt", sep = "")
 # parameters
-command.parameters <- paste("BASE_RANGE=", base_range_cell, " BASE_QUALITY=",base_quality ," BARCODED_READ=1 DISCARD_READ=False TAG_NAME=XC NUM_BASES_BELOW_QUALITY=1")
+command.parameters <- paste("BASE_RANGE=", base_range_cell, " BASE_QUALITY=", base_quality, " BARCODED_READ=1 DISCARD_READ=False TAG_NAME=XC NUM_BASES_BELOW_QUALITY=1")
 # run the tool
 command <- paste(command.start, command.parameters, " 2>> log.txt")
 system(command)
@@ -30,9 +30,9 @@ system(command)
 # Second round: molecule barcode
 
 # command start
-command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=unaligned_tagged_cell.bam OUTPUT=unaligned_tagged.bam SUMMARY=summary_molecular.txt", sep="")
+command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=unaligned_tagged_cell.bam OUTPUT=unaligned_tagged.bam SUMMARY=summary_molecular.txt", sep = "")
 # parameters
-command.parameters <- paste("BASE_RANGE=", base_range_mol, "BASE_QUALITY=", base_quality ," BARCODED_READ=1 DISCARD_READ=True TAG_NAME=XM NUM_BASES_BELOW_QUALITY=1")
+command.parameters <- paste("BASE_RANGE=", base_range_mol, "BASE_QUALITY=", base_quality, " BARCODED_READ=1 DISCARD_READ=True TAG_NAME=XM NUM_BASES_BELOW_QUALITY=1")
 
 # run the tool
 command <- paste(command.start, command.parameters, " 2>> log.txt")
@@ -40,4 +40,4 @@ system(command)
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 
-#EOF
+# EOF

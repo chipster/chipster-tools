@@ -8,9 +8,9 @@
 source(file.path(chipster.common.path, "tool-utils.R"))
 
 # All inputs are expected to be .tgz
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
-	system(paste("tar xf",(input.names[i,1])))	
+    system(paste("tar xf", (input.names[i, 1])))
 }
 
 
@@ -24,7 +24,6 @@ command <- paste(binary, ".")
 # run
 runExternal(command)
 
-if(fileNotOk("multiqc_report.html")){
-	system("mv stderr.log error_log.txt")
+if (fileNotOk("multiqc_report.html")) {
+    system("mv stderr.log error_log.txt")
 }
-

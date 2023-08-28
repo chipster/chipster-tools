@@ -6,12 +6,12 @@
 # RUNTIME R-4.1.1-fastqc
 
 # 2014.12.16 AMS Changed output to PDF, removed parameter for all plots
-# 2015.09.10 AMS New version embeds pictures in html, so changed output to html 
-# 2016.02.23 ML Improved error message 
+# 2015.09.10 AMS New version embeds pictures in html, so changed output to html
+# 2016.02.23 ML Improved error message
 # 2022.12.02 ES updated to new version
 
-#library(png)
-#library(gplots)
+# library(png)
+# library(gplots)
 
 # FastQC detects gzipped files by file extension so we need to add .gz
 # extension to compressed files.
@@ -20,8 +20,8 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 
 input.file <- "reads"
 if (isGZipFile(input.file)) {
-	system(paste("mv", input.file, "reads.gz"))
-	input.file <- "reads.gz"
+    system(paste("mv", input.file, "reads.gz"))
+    input.file <- "reads.gz"
 }
 
 # binary
@@ -33,17 +33,17 @@ command <- paste(binary, "-f", filetype, input.file, "--extract")
 # run
 runExternal(command)
 
-if(fileNotOk("reads_fastqc.html")){
-	system("mv stderr.log error_log.txt")
+if (fileNotOk("reads_fastqc.html")) {
+    system("mv stderr.log error_log.txt")
 }
 
 # read input names
 inputnames <- read_input_definitions()
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("reads_fastqc.html", paste(strip_name(inputnames$reads), "_fastqc.html", sep=""))
-outputnames[2,] <- c("reads.mqc", paste(strip_name(inputnames$reads), ".mqc", sep=""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("reads_fastqc.html", paste(strip_name(inputnames$reads), "_fastqc.html", sep = ""))
+outputnames[2, ] <- c("reads.mqc", paste(strip_name(inputnames$reads), ".mqc", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

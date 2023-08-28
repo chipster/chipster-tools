@@ -32,47 +32,47 @@
 # Add chr to chromosome names in BAM if necessary. Optional inputs are processed only if present.
 tfile <- "treatment.bam"
 if (chr == "1") {
-	source(file.path(chipster.common.path, "bam-utils.R"))
-	addChrToBAM("treatment.bam", "treatment_chr.bam")
-	system("mv treatment_chr.bam treatment.bam")
+    source(file.path(chipster.common.path, "bam-utils.R"))
+    addChrToBAM("treatment.bam", "treatment_chr.bam")
+    system("mv treatment_chr.bam treatment.bam")
 }
 cfile <- "control.bam"
 use.control <- file.exists(cfile)
-if (use.control){
-	if (chr == "1") {
-		addChrToBAM("control.bam", "control_chr.bam")
-		cfile <- "control_chr.bam"
-	}
+if (use.control) {
+    if (chr == "1") {
+        addChrToBAM("control.bam", "control_chr.bam")
+        cfile <- "control_chr.bam"
+    }
 }
 ifile <- "input.bam"
 use.input <- file.exists(ifile)
-if (use.input){
-	if (chr == "1") {
-		addChrToBAM("input.bam", "input_chr.bam")
-		ifile <- "input_chr.bam"
-	}
+if (use.input) {
+    if (chr == "1") {
+        addChrToBAM("input.bam", "input_chr.bam")
+        ifile <- "input_chr.bam"
+    }
 }
 
 # Processing the parameters
 if (genome == "hg19") {
-  genome <- "BSgenome.Hsapiens.UCSC.hg19"
-  pgenome <- "hg19"  
-  library(BSgenome.Hsapiens.UCSC.hg19)
+    genome <- "BSgenome.Hsapiens.UCSC.hg19"
+    pgenome <- "hg19"
+    library(BSgenome.Hsapiens.UCSC.hg19)
 }
 if (genome == "GRCh38") {
-	genome <- "BSgenome.Hsapiens.NCBI.GRCh38"
-	pgenome <- "hg38"  
-	library(BSgenome.Hsapiens.NCBI.GRCh38)
+    genome <- "BSgenome.Hsapiens.NCBI.GRCh38"
+    pgenome <- "hg38"
+    library(BSgenome.Hsapiens.NCBI.GRCh38)
 }
 if (genome == "mm10") {
-	genome <- "BSgenome.Mmusculus.UCSC.mm10"
-	pgenome <- "mm10"  
-	library(BSgenome.Mmusculus.UCSC.mm10)
+    genome <- "BSgenome.Mmusculus.UCSC.mm10"
+    pgenome <- "mm10"
+    library(BSgenome.Mmusculus.UCSC.mm10)
 }
 if (genome == "rn5") {
-	genome <- "BSgenome.Rnorvegicus.UCSC.rn5"
-	pgenome <- "rn5"  
-	library(BSgenome.Rnorvegicus.UCSC.rn5)
+    genome <- "BSgenome.Rnorvegicus.UCSC.rn5"
+    pgenome <- "rn5"
+    library(BSgenome.Rnorvegicus.UCSC.rn5)
 }
 
 fragment.length <- as.integer(fragment.length)
@@ -81,115 +81,115 @@ smoothing.extension <- as.integer(smoothing.extension)
 promoter.upstream <- as.integer(promoter.upstream)
 promoter.downstream <- as.integer(promoter.downstream)
 
-	
+
 # Load library to memory
 library(MEDIPS)
 
 # saturation analysis
-pdf("saturation.pdf", width=0, height=0, paper="a4r")
-sr.treatment <- MEDIPS.saturation(file=tfile, BSgenome=genome, extend=smoothing.extension, window_size=coverage.resolution)
-MEDIPS.plotSaturation(sr.treatment, main="Saturation analysis for treatment")
+pdf("saturation.pdf", width = 0, height = 0, paper = "a4r")
+sr.treatment <- MEDIPS.saturation(file = tfile, BSgenome = genome, extend = smoothing.extension, window_size = coverage.resolution)
+MEDIPS.plotSaturation(sr.treatment, main = "Saturation analysis for treatment")
 if (use.control) {
-  sr.control <- MEDIPS.saturation(file=cfile, BSgenome=genome, extend=smoothing.extension, window_size=coverage.resolution)
-  MEDIPS.plotSaturation(sr.control, main="Saturation analysis for control")
+    sr.control <- MEDIPS.saturation(file = cfile, BSgenome = genome, extend = smoothing.extension, window_size = coverage.resolution)
+    MEDIPS.plotSaturation(sr.control, main = "Saturation analysis for control")
 }
 if (use.input) {
-  sr.input <- MEDIPS.saturation(file=ifile, BSgenome=genome, extend=smoothing.extension, window_size=coverage.resolution)
-  MEDIPS.plotSaturation(sr.input, main="Saturation analysis for input")
+    sr.input <- MEDIPS.saturation(file = ifile, BSgenome = genome, extend = smoothing.extension, window_size = coverage.resolution)
+    MEDIPS.plotSaturation(sr.input, main = "Saturation analysis for input")
 }
 dev.off()
 
 # sequence pattern coverage
-pdf("coverage.pdf", width=0, height=0, paper="a4r")
-cr.treatment <- MEDIPS.seqCoverage(file=tfile, pattern="CG", BSgenome=genome, extend=smoothing.extension)
-MEDIPS.plotSeqCoverage(cr.treatment, type="pie")
+pdf("coverage.pdf", width = 0, height = 0, paper = "a4r")
+cr.treatment <- MEDIPS.seqCoverage(file = tfile, pattern = "CG", BSgenome = genome, extend = smoothing.extension)
+MEDIPS.plotSeqCoverage(cr.treatment, type = "pie")
 title("\n\ntreatment")
-MEDIPS.plotSeqCoverage(cr.treatment, type="hist")
+MEDIPS.plotSeqCoverage(cr.treatment, type = "hist")
 title("\n\ntreatment")
 if (use.control) {
-  cr.control <- MEDIPS.seqCoverage(file=cfile, pattern="CG", BSgenome=genome, extend=smoothing.extension)
-  MEDIPS.plotSeqCoverage(cr.control, type="pie")
-  title("\n\ncontrol")
-  MEDIPS.plotSeqCoverage(cr.control, type="hist")
-  title("\n\ncontrol")
+    cr.control <- MEDIPS.seqCoverage(file = cfile, pattern = "CG", BSgenome = genome, extend = smoothing.extension)
+    MEDIPS.plotSeqCoverage(cr.control, type = "pie")
+    title("\n\ncontrol")
+    MEDIPS.plotSeqCoverage(cr.control, type = "hist")
+    title("\n\ncontrol")
 }
 if (use.input) {
-  cr.input <- MEDIPS.seqCoverage(file=ifile, pattern="CG", BSgenome=genome, extend=smoothing.extension)
-  MEDIPS.plotSeqCoverage(cr.input, type="pie")
-  title("\n\ninput")
-  MEDIPS.plotSeqCoverage(cr.input, type="hist")
-  title("\n\ninput")
+    cr.input <- MEDIPS.seqCoverage(file = ifile, pattern = "CG", BSgenome = genome, extend = smoothing.extension)
+    MEDIPS.plotSeqCoverage(cr.input, type = "pie")
+    title("\n\ninput")
+    MEDIPS.plotSeqCoverage(cr.input, type = "hist")
+    title("\n\ninput")
 }
 dev.off()
 
 # Reads the data
-treatment <- MEDIPS.createSet(file=tfile, BSgenome=genome,  extend=as.numeric(smoothing.extension), window_size=as.numeric(coverage.resolution))
+treatment <- MEDIPS.createSet(file = tfile, BSgenome = genome, extend = as.numeric(smoothing.extension), window_size = as.numeric(coverage.resolution))
 if (use.control) {
-  control <- MEDIPS.createSet(file=cfile, BSgenome=genome, extend=as.numeric(smoothing.extension),  window_size=as.numeric(coverage.resolution))
+    control <- MEDIPS.createSet(file = cfile, BSgenome = genome, extend = as.numeric(smoothing.extension), window_size = as.numeric(coverage.resolution))
 }
 if (use.input) {
-  input <- MEDIPS.createSet(file=ifile, BSgenome=genome,  extend=as.numeric(smoothing.extension), window_size=as.numeric(coverage.resolution))
+    input <- MEDIPS.createSet(file = ifile, BSgenome = genome, extend = as.numeric(smoothing.extension), window_size = as.numeric(coverage.resolution))
 }
 
 # Coupling vector
-cs <- MEDIPS.couplingVector(pattern="CG", refObj=treatment)
+cs <- MEDIPS.couplingVector(pattern = "CG", refObj = treatment)
 
 # calibration
 library(png)
 tmpfiles <- c(tempfile(), tempfile())
-bitmap(tmpfiles[1], width=11.7, height=8.3, units='in', res=300)
+bitmap(tmpfiles[1], width = 11.7, height = 8.3, units = "in", res = 300)
 if (use.input) {
-  MEDIPS.plotCalibrationPlot(MSet=treatment, ISet=input, CSet=cs, main=paste("Calibration plot for treatment, ", treatment@chr_names[1]), plot_chr=treatment@chr_names[1])
+    MEDIPS.plotCalibrationPlot(MSet = treatment, ISet = input, CSet = cs, main = paste("Calibration plot for treatment, ", treatment@chr_names[1]), plot_chr = treatment@chr_names[1])
 } else {
-  MEDIPS.plotCalibrationPlot(MSet=treatment, CSet=cs, main=paste("Calibration plot for treatment, ", treatment@chr_names[1]), plot_chr=treatment@chr_names[1])
+    MEDIPS.plotCalibrationPlot(MSet = treatment, CSet = cs, main = paste("Calibration plot for treatment, ", treatment@chr_names[1]), plot_chr = treatment@chr_names[1])
 }
 dev.off()
 if (use.control) {
-  bitmap(tmpfiles[2], width=11.7, height=8.3, units='in', res=300)
-  MEDIPS.plotCalibrationPlot(MSet=control, CSet=cs, main=paste("Calibration plot for control, ", control@chr_names[1]), plot_chr=control@chr_names[1])
-  dev.off()
+    bitmap(tmpfiles[2], width = 11.7, height = 8.3, units = "in", res = 300)
+    MEDIPS.plotCalibrationPlot(MSet = control, CSet = cs, main = paste("Calibration plot for control, ", control@chr_names[1]), plot_chr = control@chr_names[1])
+    dev.off()
 }
 
-pdf("calibration.pdf", width=0, height=0, paper="a4r")
-par(mai=c(0, 0, 0, 0))
+pdf("calibration.pdf", width = 0, height = 0, paper = "a4r")
+par(mai = c(0, 0, 0, 0))
 plot.new()
 rasterImage(readPNG(tmpfiles[1]), 0, 0, 1, 1)
 if (use.control) {
-  plot.new()
-  rasterImage(readPNG(tmpfiles[2]), 0, 0, 1, 1)
+    plot.new()
+    rasterImage(readPNG(tmpfiles[2]), 0, 0, 1, 1)
 }
 dev.off()
 
 if (use.control) {
-	if (use.input) {
-		mr.edgeR <- MEDIPS.meth(MSet1=control, MSet2=treatment, ISet1=input, CSet=cs, diff.method="edgeR")
-	} else {
-		mr.edgeR <- MEDIPS.meth(MSet1=control, MSet2=treatment, CSet=cs, diff.method="edgeR")
-	}
+    if (use.input) {
+        mr.edgeR <- MEDIPS.meth(MSet1 = control, MSet2 = treatment, ISet1 = input, CSet = cs, diff.method = "edgeR")
+    } else {
+        mr.edgeR <- MEDIPS.meth(MSet1 = control, MSet2 = treatment, CSet = cs, diff.method = "edgeR")
+    }
 } else {
-	if (use.input) {
-		mr.edgeR <- MEDIPS.meth(MSet1=treatment, ISet1=input, CSet=cs, diff.method="edgeR")
-	} else {
-		mr.edgeR <- MEDIPS.meth(MSet1=treatment, CSet=cs, diff.method="edgeR")
-	}
+    if (use.input) {
+        mr.edgeR <- MEDIPS.meth(MSet1 = treatment, ISet1 = input, CSet = cs, diff.method = "edgeR")
+    } else {
+        mr.edgeR <- MEDIPS.meth(MSet1 = treatment, CSet = cs, diff.method = "edgeR")
+    }
 }
 colnames(mr.edgeR) <- sub("\\.bam\\.", ".", colnames(mr.edgeR))
-mr.edgeR <- mr.edgeR[, grep("\\.mean$", colnames(mr.edgeR), invert=TRUE)]
+mr.edgeR <- mr.edgeR[, grep("\\.mean$", colnames(mr.edgeR), invert = TRUE)]
 
 if (promoters.only == "yes") {
-	library(rtracklayer)
-	session <- browserSession()
-	genome(session) <- pgenome
-	query <- ucscTableQuery(session, "refGene")
-	refGene <- getTable(query)
-	minus <- refGene$strand == "-"
-	sta <- refGene$txStart - promoter.upstream
-	sta[minus] <- refGene$txEnd[minus] - promoter.downstream
-	sto <- refGene$txStart + promoter.downstream
-	sto[minus] <- refGene$txEnd[minus] + promoter.upstream
-	rois <- data.frame(chromosome=as.character(refGene$chrom), start=sta, end=sto, gene=as.character(refGene$name2), stringsAsFactors=FALSE)
-	mr.edgeR <- MEDIPS.selectROIs(results=mr.edgeR, rois=rois)
-	colnames(mr.edgeR)[colnames(mr.edgeR) == "ROI"] <- "symbol"
+    library(rtracklayer)
+    session <- browserSession()
+    genome(session) <- pgenome
+    query <- ucscTableQuery(session, "refGene")
+    refGene <- getTable(query)
+    minus <- refGene$strand == "-"
+    sta <- refGene$txStart - promoter.upstream
+    sta[minus] <- refGene$txEnd[minus] - promoter.downstream
+    sto <- refGene$txStart + promoter.downstream
+    sto[minus] <- refGene$txEnd[minus] + promoter.upstream
+    rois <- data.frame(chromosome = as.character(refGene$chrom), start = sta, end = sto, gene = as.character(refGene$name2), stringsAsFactors = FALSE)
+    mr.edgeR <- MEDIPS.selectROIs(results = mr.edgeR, rois = rois)
+    colnames(mr.edgeR)[colnames(mr.edgeR) == "ROI"] <- "symbol"
 }
 
 # order the result st
@@ -203,42 +203,45 @@ mr.edgeR <- mr.edgeR[order(chr, mr.edgeR$start), ]
 
 # remove duplicate rows when same coverage window overlaps multiple promoters
 conc <- function(x) {
-	x <- unique(x)
-	paste(x, collapse=";")
+    x <- unique(x)
+    paste(x, collapse = ";")
 }
 position <- sprintf("%s:%i-%i", mr.edgeR$chr, mr.edgeR$start, mr.edgeR$stop)
 duplicates <- unique(position[duplicated(position)])
-for (duplicate in duplicates)
-	mr.edgeR[position == duplicate, 'symbol'] <- conc(mr.edgeR[position == duplicate, 'symbol'])
+for (duplicate in duplicates) {
+    mr.edgeR[position == duplicate, "symbol"] <- conc(mr.edgeR[position == duplicate, "symbol"])
+}
 mr.edgeR <- mr.edgeR[!duplicated(position), ]
 position <- position[!duplicated(position)]
 rownames(mr.edgeR) <- position
 
-for (i in colnames(mr.edgeR))
-	if (is.numeric(mr.edgeR[, i]))
-		mr.edgeR[, i] <- round(mr.edgeR[, i], digits=3)
-
-options(scipen=10)
-
-if (save.bed == "yes") {
-	if ("symbol" %in% colnames(mr.edgeR)) {
-		gene <- mr.edgeR$symbol
-	} else {
-		gene <- position
-	}
-	bed <- data.frame(chromosome=mr.edgeR$chr, start=mr.edgeR$start, end=mr.edgeR$stop, name=gene, score=mr.edgeR$treatment.rpkm, strand=rep("+", nrow(mr.edgeR)), stringsAsFactors=FALSE)
-	bed$start <- bed$start - 1
-	write.table(bed, "treatment.bed", quote=FALSE, sep="\t", na="", row.names=FALSE, col.names=FALSE)
-	if (use.control) {
-		bed$score <- mr.edgeR$control.rpkm
-		write.table(bed, "control.bed", quote=FALSE, sep="\t", na="", row.names=FALSE, col.names=FALSE)
-	}
-	if (use.input) {
-		bed$score <- mr.edgeR$input.rpkm
-		write.table(bed, "input.bed", quote=FALSE, sep="\t", na="", row.names=FALSE, col.names=FALSE)
-	}
+for (i in colnames(mr.edgeR)) {
+    if (is.numeric(mr.edgeR[, i])) {
+        mr.edgeR[, i] <- round(mr.edgeR[, i], digits = 3)
+    }
 }
 
-write.table(mr.edgeR, file="methylation.tsv", quote=FALSE, sep="\t", na="")
+options(scipen = 10)
+
+if (save.bed == "yes") {
+    if ("symbol" %in% colnames(mr.edgeR)) {
+        gene <- mr.edgeR$symbol
+    } else {
+        gene <- position
+    }
+    bed <- data.frame(chromosome = mr.edgeR$chr, start = mr.edgeR$start, end = mr.edgeR$stop, name = gene, score = mr.edgeR$treatment.rpkm, strand = rep("+", nrow(mr.edgeR)), stringsAsFactors = FALSE)
+    bed$start <- bed$start - 1
+    write.table(bed, "treatment.bed", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = FALSE)
+    if (use.control) {
+        bed$score <- mr.edgeR$control.rpkm
+        write.table(bed, "control.bed", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = FALSE)
+    }
+    if (use.input) {
+        bed$score <- mr.edgeR$input.rpkm
+        write.table(bed, "input.bed", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = FALSE)
+    }
+}
+
+write.table(mr.edgeR, file = "methylation.tsv", quote = FALSE, sep = "\t", na = "")
 
 # EOF

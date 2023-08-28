@@ -8,7 +8,7 @@
 
 install.packages("BiocManager")
 # required by RVAideMemoire
-BiocManager::install('mixOmics')
+BiocManager::install("mixOmics")
 # start with this, because it seems to have more difficult dependencies than other libraries
 install.packages("RVAideMemoire")
 install.packages("data.table")
@@ -16,7 +16,7 @@ install.packages("dplyr")
 install.packages("ggplot2")
 install.packages("vegan")
 # I just happened to install in this order
-BiocManager::install('microbiome')
+BiocManager::install("microbiome")
 install.packages("plyr")
 
 BiocManager::install("DESeq2")

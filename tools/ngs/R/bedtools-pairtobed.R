@@ -5,8 +5,8 @@
 # OUTPUT OPTIONAL pairtobed.bam
 # OUTPUT OPTIONAL error.txt
 # PARAMETER abam: "File A is BAM format" TYPE [yes, no] DEFAULT no (Select yes if file A is BAM format.)
-# PARAMETER OPTIONAL ubam: "Write uncompressed BAM output" TYPE [yes,no] DEFAULT no (Write uncompressed BAM output. Default is to write compressed BAM.) 
-# PARAMETER OPTIONAL bedpe: "When using BAM input, write output as BEDPE." TYPE [yes,no] DEFAULT no (When using BAM input, write output as BEDPE. The default is to write output as BAM.) 
+# PARAMETER OPTIONAL ubam: "Write uncompressed BAM output" TYPE [yes,no] DEFAULT no (Write uncompressed BAM output. Default is to write compressed BAM.)
+# PARAMETER OPTIONAL bedpe: "When using BAM input, write output as BEDPE." TYPE [yes,no] DEFAULT no (When using BAM input, write output as BEDPE. The default is to write output as BAM.)
 # PARAMETER OPTIONAL ed: "Use BAM total edit distance for BEDPE score" TYPE [yes, no] DEFAULT no (Use BAM total edit distance (NM tag\) for BEDPE score. Default for BEDPE is to use the minimum of of the two mapping qualities for the pair. When this option is used the total edit distance from the two mates is reported as the score.)
 # PARAMETER OPTIONAL f: "Minimum overlap" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.000000001 (Minimum overlap required as a fraction of A (e.g. 0.05\). Default is 1E-9 (effectively 1bp\))
 # PARAMETER OPTIONAL s: "Force strandedness" TYPE [yes, no] DEFAULT no (Enforce strandedness when finding overlaps. Default is to ignore stand. Not applicable with  output type inspan or outspan.)
@@ -86,4 +86,3 @@ if (file.info("pairtobed.tmp")$size > 0) {
 } else {
   system("echo \"# No results found\" > error.txt")
 }
-

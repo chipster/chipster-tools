@@ -11,8 +11,8 @@
 
 # KM 18.7. 2014
 
-options(scipen=999)
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+options(scipen = 999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fastq")
@@ -20,34 +20,34 @@ unzipIfGZipFile("reads2.fastq")
 
 
 
-##check sequece file type
-#sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-#sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads1.fastq" )
-#str.filetype <- system(sfcheck.command, intern = TRUE )
+## check sequece file type
+# sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
+# sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads1.fastq" )
+# str.filetype <- system(sfcheck.command, intern = TRUE )
 #
-#if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-#	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
-#}
+# if ( str.filetype == "Not an EMBOSS compatible sequence file"){
+# 	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+# }
 #
-#sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads2.fastq" )
-#str.filetype <- system(sfcheck.command, intern = TRUE )
+# sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads2.fastq" )
+# str.filetype <- system(sfcheck.command, intern = TRUE )
 #
-#if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-#	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
-#}
+# if ( str.filetype == "Not an EMBOSS compatible sequence file"){
+# 	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+# }
 
 a5.binary <- c(file.path(chipster.tools.path, "a5_miseq", "bin", "a5_pipeline.pl"))
-a5.parameters <- paste('reads1.fastq reads2.fastq a5_assembly ')
+a5.parameters <- paste("reads1.fastq reads2.fastq a5_assembly ")
 
 
-command.full <- paste(a5.binary, a5.parameters, ' >> a5.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> a5.log' )
+command.full <- paste(a5.binary, a5.parameters, " >> a5.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> a5.log')
 system(echo.command)
 
 system(command.full)
-system ("mv a5_assembly.assembly_stats.csv a5_assembly_stats.tsv")
-system ("ls -l >> a5.log ")
+system("mv a5_assembly.assembly_stats.csv a5_assembly_stats.tsv")
+system("ls -l >> a5.log ")
 
-if ( save_log == "no") {
-	system ("rm -f a5.log")
+if (save_log == "no") {
+    system("rm -f a5.log")
 }

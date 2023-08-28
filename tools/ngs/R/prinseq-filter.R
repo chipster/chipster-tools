@@ -34,7 +34,7 @@
 # PARAMETER OPTIONAL lc.dust: "DUST low complexity threshold" TYPE INTEGER (Use DUST method with the given maximum allowed score, between 0 and 100.)
 # PARAMETER OPTIONAL lc.entropy: "ENTROPY low complexity threshold" TYPE INTEGER (Use ENTROPY method with the given minimum entropy value, between 0 and 100.)
 # PARAMETER OPTIONAL log.file: "Write a log file" TYPE [ n: "no", y: "yes"] DEFAULT y (Write a log file)
-# PARAMETER OPTIONAL output.mode: "Results to write out" TYPE [ filt: "accepted sequences only", both: "accepted and rejected sequences into separate files"] DEFAULT filt (With this section you can define if the sequences that get filtered out are collected to a separate file) 
+# PARAMETER OPTIONAL output.mode: "Results to write out" TYPE [ filt: "accepted sequences only", both: "accepted and rejected sequences into separate files"] DEFAULT filt (With this section you can define if the sequences that get filtered out are collected to a separate file)
 # PARAMETER OPTIONAL singletons: "Write singletons for paired end reads" TYPE [yes, no] DEFAULT no (Write singletons in separate files for paired end reads.)
 
 # Filter fastq and fasta files based on a number of criteria
@@ -57,133 +57,133 @@ unzipIfGZipFile("matepair_fastqfile")
 
 # Check whether input files are fastq
 if (input.mode == "fq") {
-	first_four_rows <- read.table(file="fastqfile", nrow=4, header=FALSE, sep="\t", check.names=FALSE, comment.char="")
-	## compare sequence ID with quality score id, but discard first character
-	#name_length <- nchar(as.character(first_four_rows[1,1]))
-	seq_char <- substr(as.character(first_four_rows[1,1]), start=1, stop=1)
-	quality_char <- substr(as.character(first_four_rows[3,1]), start=1, stop=1)
-	if (seq_char != "@") {
-		stop("CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'.")
-	}
-	if (quality_char != "+") {
-		stop("CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'.")
-	}
+    first_four_rows <- read.table(file = "fastqfile", nrow = 4, header = FALSE, sep = "\t", check.names = FALSE, comment.char = "")
+    ## compare sequence ID with quality score id, but discard first character
+    # name_length <- nchar(as.character(first_four_rows[1,1]))
+    seq_char <- substr(as.character(first_four_rows[1, 1]), start = 1, stop = 1)
+    quality_char <- substr(as.character(first_four_rows[3, 1]), start = 1, stop = 1)
+    if (seq_char != "@") {
+        stop("CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'.")
+    }
+    if (quality_char != "+") {
+        stop("CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'.")
+    }
 }
 
 # Check if two files were given as input, and if so run the python script
 # that interlaces the mate pairs into a single file
 input_files <- dir()
-is_paired_end <- (length(grep("matepair_fastqfile", input_files))>0)
+is_paired_end <- (length(grep("matepair_fastqfile", input_files)) > 0)
 
 # binary
-binary.prinseq <- c(file.path(chipster.tools.path, "prinseq", "prinseq-lite.pl" ))
+binary.prinseq <- c(file.path(chipster.tools.path, "prinseq", "prinseq-lite.pl"))
 
 # Parameters
 filter.params <- paste("")
 if (!is.na(max.len)) {
-	filter.params <- paste(filter.params, "-max_len",  max.len)
+    filter.params <- paste(filter.params, "-max_len", max.len)
 }
 
 if (!is.na(min.len)) {
-	filter.params <- paste(filter.params, "-min_len",  min.len)
+    filter.params <- paste(filter.params, "-min_len", min.len)
 }
 
 if (!is.na(max.gc)) {
-	filter.params <- paste(filter.params, "-max_gc",  max.gc)
+    filter.params <- paste(filter.params, "-max_gc", max.gc)
 }
 
 if (!is.na(min.gc)) {
-	filter.params <- paste(filter.params, "-min_gc",  min.gc)
+    filter.params <- paste(filter.params, "-min_gc", min.gc)
 }
 
 if (!is.na(min.qual.score)) {
-	filter.params <- paste(filter.params, "-min_qual_score",  min.qual.score)
+    filter.params <- paste(filter.params, "-min_qual_score", min.qual.score)
 }
 
-#if (!is.na(max.qual.score)) {
-#	filter.params <- paste(filter.params, "-max_qual_score",  max.qual.score)
-#}
+# if (!is.na(max.qual.score)) {
+# 	filter.params <- paste(filter.params, "-max_qual_score",  max.qual.score)
+# }
 
 if (!is.na(min.qual.mean)) {
-	filter.params <- paste(filter.params, "-min_qual_mean",  min.qual.mean)
+    filter.params <- paste(filter.params, "-min_qual_mean", min.qual.mean)
 }
 
-#if (!is.na(max.qual.mean)) {
-#	filter.params <- paste(filter.params, "-max_qual_mean",  max.qual.mean)
-#}
+# if (!is.na(max.qual.mean)) {
+# 	filter.params <- paste(filter.params, "-max_qual_mean",  max.qual.mean)
+# }
 
 if (!is.na(ns.max.p)) {
-	filter.params <- paste(filter.params, "-ns_max_p",  ns.max.p)
+    filter.params <- paste(filter.params, "-ns_max_p", ns.max.p)
 }
 
 if (!is.na(ns.max.n)) {
-	filter.params <- paste(filter.params, "-ns_max_n",  ns.max.n)
+    filter.params <- paste(filter.params, "-ns_max_n", ns.max.n)
 }
 
-#if (!is.na(seq.num)) {
-#	filter.params <- paste(filter.params, "-seq_num",  seq.num)
-#}
+# if (!is.na(seq.num)) {
+# 	filter.params <- paste(filter.params, "-seq_num",  seq.num)
+# }
 
 if (!is.na(lc.dust)) {
-	filter.params <- paste(filter.params, "-lc_method dust -lc_threshold", lc.dust )
+    filter.params <- paste(filter.params, "-lc_method dust -lc_threshold", lc.dust)
 }
 
 if (!is.na(lc.entropy)) {
-	filter.params <- paste(filter.params, "-lc_method entropy -lc_threshold", lc.entropy )
+    filter.params <- paste(filter.params, "-lc_method entropy -lc_threshold", lc.entropy)
 }
 
-if (derep > 0) {	
-	filter.params <- paste(filter.params, "-derep", derep )
-	if (derep == "1") {
-		filter.params <- paste(filter.params, "-derep_min", derep.min )
-	}
-	if (derep == "4") {
-		filter.params <- paste(filter.params, "-derep_min", derep.min )
-	}
+if (derep > 0) {
+    filter.params <- paste(filter.params, "-derep", derep)
+    if (derep == "1") {
+        filter.params <- paste(filter.params, "-derep_min", derep.min)
+    }
+    if (derep == "4") {
+        filter.params <- paste(filter.params, "-derep_min", derep.min)
+    }
 }
 
 if (noniupac == "yes") {
-	filter.params <- paste(filter.params, "-noniupac" )
+    filter.params <- paste(filter.params, "-noniupac")
 }
 
 if (phred64 == "y") {
-	filter.params <- paste(filter.params, "-phred64")
+    filter.params <- paste(filter.params, "-phred64")
 }
 
 if (input.mode == "fq") {
-	filter.params <- paste(filter.params, "-no_qual_header -fastq fastqfile")
-	if (is_paired_end) {
-		filter.params <- paste(filter.params, "-fastq2 matepair_fastqfile")
-	} 
+    filter.params <- paste(filter.params, "-no_qual_header -fastq fastqfile")
+    if (is_paired_end) {
+        filter.params <- paste(filter.params, "-fastq2 matepair_fastqfile")
+    }
 }
 
 if (input.mode == "fa") {
-	filter.params <- paste(filter.params, "-fasta fastqfile")
-	if (is_paired_end) {
-		filter.params <- paste(filter.params, "-fasta2 matepair_fastqfile")
-	} 
+    filter.params <- paste(filter.params, "-fasta fastqfile")
+    if (is_paired_end) {
+        filter.params <- paste(filter.params, "-fasta2 matepair_fastqfile")
+    }
 }
 
 if (output.mode == "both") {
-	filter.params <- paste(filter.params, "-out_bad rejected")
-}else{
-	filter.params <- paste(filter.params, "-out_bad null")
+    filter.params <- paste(filter.params, "-out_bad rejected")
+} else {
+    filter.params <- paste(filter.params, "-out_bad null")
 }
 
 filter.command <- paste(binary.prinseq, filter.params, "-out_good accepted")
 
 if (log.file == "y") {
-	system("echo Running PRINSEQ filtering with command: >> filter.log")
-	echo.command <- paste("echo '", filter.command, "'>> filter.log")
-	system(echo.command)
-	filter.command <- paste(filter.command, "-verbose 2>> filter.log")
+    system("echo Running PRINSEQ filtering with command: >> filter.log")
+    echo.command <- paste("echo '", filter.command, "'>> filter.log")
+    system(echo.command)
+    filter.command <- paste(filter.command, "-verbose 2>> filter.log")
 }
 
 system(filter.command)
 
 # There is no option in PRINSEQ to not write the singletons files, so if they are not required, we delete them.
-if (singletons == "no"){
-	system("rm -f *_singletons.*")
+if (singletons == "no") {
+    system("rm -f *_singletons.*")
 }
 
 # Comprees output files
@@ -198,36 +198,36 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=17, ncol=2)
+outputnames <- matrix(NA, nrow = 17, ncol = 2)
 
 base1 <- strip_name(inputnames$fastqfile)
 if (is_paired_end) {
-	base2 <- strip_name(inputnames$matepair_fastqfile)
-}else{
-	base2 <- ""
+    base2 <- strip_name(inputnames$matepair_fastqfile)
+} else {
+    base2 <- ""
 }
 
-# SE fastq	
-outputnames[1,] <- c("accepted.fastq.gz", paste(base1, "_filtered.fq.gz", sep =""))
-outputnames[2,] <- c("rejected.fastq.gz", paste(base1, "_rejected.fq.gz", sep =""))
+# SE fastq
+outputnames[1, ] <- c("accepted.fastq.gz", paste(base1, "_filtered.fq.gz", sep = ""))
+outputnames[2, ] <- c("rejected.fastq.gz", paste(base1, "_rejected.fq.gz", sep = ""))
 # SE fasta
-outputnames[3,] <- c("accepted.fasta.gz", paste(base1, "_filtered.fa.gz", sep =""))
-outputnames[4,] <- c("rejected.fasta.gz", paste(base1, "_rejected.fa.gz", sep =""))
+outputnames[3, ] <- c("accepted.fasta.gz", paste(base1, "_filtered.fa.gz", sep = ""))
+outputnames[4, ] <- c("rejected.fasta.gz", paste(base1, "_rejected.fa.gz", sep = ""))
 # PE fastq
-outputnames[5,] <- c("accepted_1.fastq.gz", paste(base1, "_filtered.fq.gz", sep =""))
-outputnames[6,] <- c("accepted_1_singletons.fastq.gz", paste(base1, "_singletons_filtered.fq.gz", sep =""))
-outputnames[7,] <- c("accepted_2.fastq.gz", paste(base2, "_filtered.fq.gz", sep =""))
-outputnames[8,] <- c("accepted_2_singletons.fastq.gz", paste(base2, "_singletons_filtered.fq.gz", sep =""))
-outputnames[9,] <- c("rejected_1.fastq.gz", paste(base1, "_rejected.fq.gz", sep =""))
-outputnames[10,] <- c("rejected_2.fastq.gz", paste(base2, "_rejected.fq.gz", sep =""))
+outputnames[5, ] <- c("accepted_1.fastq.gz", paste(base1, "_filtered.fq.gz", sep = ""))
+outputnames[6, ] <- c("accepted_1_singletons.fastq.gz", paste(base1, "_singletons_filtered.fq.gz", sep = ""))
+outputnames[7, ] <- c("accepted_2.fastq.gz", paste(base2, "_filtered.fq.gz", sep = ""))
+outputnames[8, ] <- c("accepted_2_singletons.fastq.gz", paste(base2, "_singletons_filtered.fq.gz", sep = ""))
+outputnames[9, ] <- c("rejected_1.fastq.gz", paste(base1, "_rejected.fq.gz", sep = ""))
+outputnames[10, ] <- c("rejected_2.fastq.gz", paste(base2, "_rejected.fq.gz", sep = ""))
 # PE FASTA
-outputnames[11,] <- c("accepted_1.fasta.gz", paste(base1, "_filtered.fa.gz", sep =""))
-outputnames[12,] <- c("accepted_1_singletons.fasta.gz", paste(base1, "_singletons_filtered.fa.gz", sep =""))
-outputnames[13,] <- c("accepted_2.fasta.gz", paste(base2, "_filtered.fa.gz", sep =""))
-outputnames[14,] <- c("accepted_2_singletons.fasta.gz", paste(base2, "_singletons_filtered.fa.gz", sep =""))
-outputnames[15,] <- c("rejected_1.fasta.gz", paste(base1, "_rejected.fa.gz", sep =""))
-outputnames[16,] <- c("rejected_2.fasta.gz", paste(base2, "_rejected.fa.gz", sep =""))
-outputnames[17,] <- c("filter.log", paste(base1, "_filterlog.txt", sep =""))
+outputnames[11, ] <- c("accepted_1.fasta.gz", paste(base1, "_filtered.fa.gz", sep = ""))
+outputnames[12, ] <- c("accepted_1_singletons.fasta.gz", paste(base1, "_singletons_filtered.fa.gz", sep = ""))
+outputnames[13, ] <- c("accepted_2.fasta.gz", paste(base2, "_filtered.fa.gz", sep = ""))
+outputnames[14, ] <- c("accepted_2_singletons.fasta.gz", paste(base2, "_singletons_filtered.fa.gz", sep = ""))
+outputnames[15, ] <- c("rejected_1.fasta.gz", paste(base1, "_rejected.fa.gz", sep = ""))
+outputnames[16, ] <- c("rejected_2.fasta.gz", paste(base2, "_rejected.fa.gz", sep = ""))
+outputnames[17, ] <- c("filter.log", paste(base1, "_filterlog.txt", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

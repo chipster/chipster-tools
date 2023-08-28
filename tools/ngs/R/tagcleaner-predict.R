@@ -15,11 +15,11 @@ tagcleaner.binary <- c(file.path(chipster.tools.path, "tagcleaner", "tagcleaner.
 # options
 # options for input type
 options <- paste("")
-if (input.type == "FASTQ"){
-	options <- paste(options, "-fastq reads")
+if (input.type == "FASTQ") {
+    options <- paste(options, "-fastq reads")
 }
-if (input.type == "FASTA"){
-	options <- paste(options, "-fasta reads")
+if (input.type == "FASTA") {
+    options <- paste(options, "-fasta reads")
 }
 # common options
 options <- paste(options, "-64")
@@ -28,6 +28,6 @@ options <- paste(options, "-predict")
 # command
 command <- paste(tagcleaner.binary, options, "> tag.predict.tsv")
 
-#stop(paste('CHIPSTER-NOTE: ', command))
+# stop(paste('CHIPSTER-NOTE: ', command))
 # run
 system(command)

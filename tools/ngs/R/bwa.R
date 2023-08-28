@@ -1,13 +1,13 @@
-# TOOL bwa.R: "BWA-backtrack for single end reads" (BWA-backtrack aligns reads to genomes with BWA aln algorithm. If more than one FASTQ file is provided, each file is first aligned separately, and the BAM files are then merged. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser. 
+# TOOL bwa.R: "BWA-backtrack for single end reads" (BWA-backtrack aligns reads to genomes with BWA aln algorithm. If more than one FASTQ file is provided, each file is first aligned separately, and the BAM files are then merged. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser.
 # Note that this BWA tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"BWA for single end reads and own genome\".)
-# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC 
-# OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
+# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
+# OUTPUT bwa.bam
+# OUTPUT bwa.bam.bai
 # OUTPUT bwa.log
 # PARAMETER organism: "Genome" TYPE ["FILES genomes/indexes/bwa .fa"] DEFAULT "SYMLINK_TARGET genomes/indexes/bwa/default .fa" (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER quality.format: "Quality value format used" TYPE [solexa1_3: "Illumina GA v1.3-1.5", sanger: Sanger] DEFAULT sanger (Note that this parameter is taken into account only if you chose to apply the mismatch limit to the seed region. Are the quality values in the Sanger format (ASCII characters equal to the Phred quality plus 33\) or in the Illumina Genome Analyzer Pipeline v1.3 or later format (ASCII characters equal to the Phred quality plus 64\)? Please see the manual for details. Corresponds to the command line parameter -I.)
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments are reported per read" TYPE  INTEGER DEFAULT 3 (Maximum number of alignments to report. Corresponds to the command line parameter bwa samse -n )
-# PARAMETER OPTIONAL seed.length: "Length of the seed region" TYPE INTEGER DEFAULT 32 (How many bases of the left, good quality part of the read should be used as the seed region. If the seed length is longer than the reads, the seeding will be disabled.) 
+# PARAMETER OPTIONAL seed.length: "Length of the seed region" TYPE INTEGER DEFAULT 32 (How many bases of the left, good quality part of the read should be used as the seed region. If the seed length is longer than the reads, the seeding will be disabled.)
 # PARAMETER OPTIONAL seed.edit: "Maximum number of differences in the seed region" TYPE INTEGER DEFAULT 2 (Maximum number of differences such as mismatches or indels in the seed region.)
 # PARAMETER OPTIONAL total.edit: "Maximum edit distance for the whole read" TYPE DECIMAL DEFAULT 0.04 ( Maximum edit distance if the value is more than one. If the value is between 1 and 0 then it defines the fraction of missing alignments given 2% uniform base error rate. In the latter case, the maximum edit distance is automatically chosen for different read lengths. Corresponds to the command line parameter -n.)
 # PARAMETER OPTIONAL num.gaps: "Maximum number of gaps" TYPE INTEGER DEFAULT 1 (Maximum number of gap openings for one read. Corresponds to the command line parameter -o)
@@ -30,9 +30,9 @@ source(file.path(chipster.common.path, "bam-utils.R"))
 source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
-	unzipIfGZipFile(input.names[i,1])	
+    unzipIfGZipFile(input.names[i, 1])
 }
 
 # bwa
@@ -44,45 +44,45 @@ command.start <- paste("bash -c '", bwa.binary)
 
 # mode specific parameters
 if (total.edit >= 1) {
-	total.edit <- round(total.edit)
+    total.edit <- round(total.edit)
 }
 
 quality.parameter <- ifelse(quality.format == "solexa1_3", "-I", "")
-mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e", num.extensions, "-d", disallow.gaps, "-i" , disallow.indel , "-l" , seed.length , "-k" , seed.edit , "-O" , gap.opening , "-E" , gap.extension , "-q" , trim.threshold, "-B" , barcode.length , "-M" , mismatch.penalty , "-n" , total.edit , quality.parameter)
+mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e", num.extensions, "-d", disallow.gaps, "-i", disallow.indel, "-l", seed.length, "-k", seed.edit, "-O", gap.opening, "-E", gap.extension, "-q", trim.threshold, "-B", barcode.length, "-M", mismatch.penalty, "-n", total.edit, quality.parameter)
 
 # Run BWA for each input
 for (i in 1:nrow(input.names)) {
-	# command ending
-	sai.file <- paste(c(as.character(i), ".sai"), collapse="")
-	sam.file <- paste(c(as.character(i), ".sam"), collapse="")
-	bam.file <- paste(c(as.character(i), ".bam"), collapse="")
-	command.end <- paste(bwa.genome, input.names[i,1], "1>", sai.file, "2>> bwa.log'")
-	
-	# run bwa alignment
-	bwa.command <- paste(command.start, mode.parameters, command.end)
-	
-	documentCommand(bwa.command)
-	
-	runExternal(bwa.command)
-	
-	# sai to sam conversion
-	samse.parameters <- paste("samse -n", alignment.no )
-	samse.end <- paste(bwa.genome, sai.file, input.names[i,1], ">", sam.file, "2>>bwa.log'" )
-	samse.command <- paste( command.start, samse.parameters , samse.end )
-	runExternal(samse.command)
-	
-	# convert sam to bam
-	runExternal(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
+    # command ending
+    sai.file <- paste(c(as.character(i), ".sai"), collapse = "")
+    sam.file <- paste(c(as.character(i), ".sam"), collapse = "")
+    bam.file <- paste(c(as.character(i), ".bam"), collapse = "")
+    command.end <- paste(bwa.genome, input.names[i, 1], "1>", sai.file, "2>> bwa.log'")
+
+    # run bwa alignment
+    bwa.command <- paste(command.start, mode.parameters, command.end)
+
+    documentCommand(bwa.command)
+
+    runExternal(bwa.command)
+
+    # sai to sam conversion
+    samse.parameters <- paste("samse -n", alignment.no)
+    samse.end <- paste(bwa.genome, sai.file, input.names[i, 1], ">", sam.file, "2>>bwa.log'")
+    samse.command <- paste(command.start, samse.parameters, samse.end)
+    runExternal(samse.command)
+
+    # convert sam to bam
+    runExternal(paste(samtools.binary, "view -bS", sam.file, "-o", bam.file))
 }
 
 # Join bam files
-if (fileOk("2.bam")){
-	# more than one bam exists, so join them
-	runExternal("ls *.bam > bam.list")
-	runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
-}else{
-	# only one bam, so just rename it
-	runExternal("mv 1.bam alignment.bam")
+if (fileOk("2.bam")) {
+    # more than one bam exists, so join them
+    runExternal("ls *.bam > bam.list")
+    runExternal(paste(samtools.binary, "merge -b bam.list alignment.bam"))
+} else {
+    # only one bam, so just rename it
+    runExternal("mv 1.bam alignment.bam")
 }
 
 # Change file named in BAM header to display names
@@ -106,23 +106,23 @@ displayNamesToFile("bwa.log")
 # read input names
 inputnames <- read_input_definitions()
 
-if (fileNotOk("reads002.fq")){
-	# Determine base name
-	basename <- strip_name(inputnames$reads001.fq)
-}else{
-	basename <- "bwa_multi"
+if (fileNotOk("reads002.fq")) {
+    # Determine base name
+    basename <- strip_name(inputnames$reads001.fq)
+} else {
+    basename <- "bwa_multi"
 }
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("bwa.bam", paste(basename, ".bam", sep =""))
-outputnames[2,] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep =""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("bwa.bam", paste(basename, ".bam", sep = ""))
+outputnames[2, ] <- c("bwa.bam.bai", paste(basename, ".bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
 
 # save version information
-bwa.version <- system(paste(bwa.binary," 2>&1 | grep Version"),intern = TRUE)
-documentVersion("BWA",bwa.version)
+bwa.version <- system(paste(bwa.binary, " 2>&1 | grep Version"), intern = TRUE)
+documentVersion("BWA", bwa.version)
 
-samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
-documentVersion("Samtools",samtools.version)
+samtools.version <- system(paste(samtools.binary, "--version | grep samtools"), intern = TRUE)
+documentVersion("Samtools", samtools.version)

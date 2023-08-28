@@ -18,12 +18,12 @@ ps <- rarefy_even_depth(ps)
 
 # Print out object summary
 sink("ps_rarefied.txt")
-	cat("\n\n\n")
-	cat("### Phyloseq object (after rarefying to even depth) ###\n")
-	cat("\n\n\n")
-	print(ps)
-	cat("\n\n\n")
+cat("\n\n\n")
+cat("### Phyloseq object (after rarefying to even depth) ###\n")
+cat("\n\n\n")
+print(ps)
+cat("\n\n\n")
 sink()
 
-# Export phyloseq object as Rda file 
+# Export phyloseq object as Rda file
 save(ps, file = "ps_rarefied.Rda")

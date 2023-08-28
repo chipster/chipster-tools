@@ -23,39 +23,37 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("input.txt")
 
-outfile <- paste("converted.",osformat , sep="" )
+outfile <- paste("converted.", osformat, sep = "")
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("input.txt")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter input.txt")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
 
-if (num.queryseq > 50000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ', num.queryseq ))
+if (num.queryseq > 50000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ", num.queryseq))
 }
 
 # command settings
 ecommand <- paste("seqret")
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
-emboss.binary <- file.path(emboss.path,ecommand)
-if ( offormat == "gff3"){
-	emboss.binary <- paste(emboss.binary, "-feature -offormat gff3")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+emboss.binary <- file.path(emboss.path, ecommand)
+if (offormat == "gff3") {
+    emboss.binary <- paste(emboss.binary, "-feature -offormat gff3")
 }
-command.full <- paste(emboss.binary, "-sequence input.txt -osformat", osformat,"-auto -outseq ", outfile, " 2> log.txt" )
+command.full <- paste(emboss.binary, "-sequence input.txt -osformat", osformat, "-auto -outseq ", outfile, " 2> log.txt")
 system(command.full)
 system("ls -l > log.txt")
-
-

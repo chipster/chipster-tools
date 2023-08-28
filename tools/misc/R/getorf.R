@@ -1,7 +1,7 @@
 # TOOL getorf.R: "Find open reading farmes" (Finds and extracts open reading frames (ORFs\))
-# INPUT sequence: "Input sequence" TYPE GENERIC 
+# INPUT sequence: "Input sequence" TYPE GENERIC
 # OUTPUT OPTIONAL getorf.fasta
-# OUTPUT OPTIONAL getorf.log 
+# OUTPUT OPTIONAL getorf.log
 # PARAMETER OPTIONAL table: "Code to use" TYPE [0: Standard, 1: "Standard (with alternative initiation codons\)", 2: "Vertebrate Mitochondrial", 3: "Yeast Mitochondrial", 4: "Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma", 5: "Invertebrate Mitochondrial", 6: "Ciliate  Macronuclear and Dasycladacean", 9: "Echinoderm Mitochondrial", 10: "Euplotid Nuclear", 11: Bacterial, 12: "Alternative Yeast Nuclear", 13: "Ascidian Mitochondrial", 14: "Flatworm Mitochondrial", 15: "Blepharisma Macronuclear", 16: "Chlorophycean Mitochondrial", 21: "Trematode Mitochondrial", 22: "Scenedesmus obliquus", 23: "Thraustochytrium Mitochondrial"] FROM 1 TO 1 DEFAULT 0 (Code to use)
 # PARAMETER OPTIONAL minsize: "Minimum nucleotide size of ORF to report" TYPE INTEGER DEFAULT 30 (Minimum nucleotide size of ORF to report)
 # PARAMETER OPTIONAL maxsize: "Maximum nucleotide size of ORF to report" TYPE INTEGER DEFAULT 1000000 (Maximum nucleotide size of ORF to report)
@@ -14,33 +14,33 @@
 
 
 # KM 8.11. 2013
-options(scipen=999)
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+options(scipen = 999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-#check sequece file type
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence" )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+# check sequece file type
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence")
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter sequence")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 50000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ', num.queryseq ))
+if (num.queryseq > 50000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ", num.queryseq))
 }
 
 emboss.binary <- file.path(emboss.path, "getorf")
-emboss.parameters <- paste('sequence -auto -outseq getorf.fasta')
+emboss.parameters <- paste("sequence -auto -outseq getorf.fasta")
 
 emboss.parameters <- paste(emboss.parameters, "-table", table)
 emboss.parameters <- paste(emboss.parameters, "-minsize", minsize)
@@ -52,12 +52,12 @@ emboss.parameters <- paste(emboss.parameters, "-reverse", reverse)
 emboss.parameters <- paste(emboss.parameters, "-flanking", flanking)
 
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> getorf.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> getorf.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> getorf.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> getorf.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f getorf.log")
+if (save_log == "no") {
+    system("rm -f getorf.log")
 }

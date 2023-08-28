@@ -5,33 +5,32 @@
 
 # KM 8.11. 2013
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 # KM 8.11. 2013
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-#check sequece file type
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence" )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+# check sequece file type
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence")
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter sequence")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq >300000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 300000 but your file contains ', num.queryseq ))
+if (num.queryseq > 300000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 300000 but your file contains ", num.queryseq))
 }
 
 
 infoseq.binary <- file.path(emboss.path, "infoseq")
-command.full <- paste(infoseq.binary, 'sequence -outfile outfile.infoseq.tsv -nodatabase -nousa -nocolumns -delimiter "\t"' )
+command.full <- paste(infoseq.binary, 'sequence -outfile outfile.infoseq.tsv -nodatabase -nousa -nocolumns -delimiter "\t"')
 system(command.full)
-

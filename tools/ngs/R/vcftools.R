@@ -1,5 +1,5 @@
 # TOOL vcftools.R: "Filter variants with VCFtools" (Filters variants in VCF files. This tool is based on the VCFtools package.)
-# INPUT input.vcf: "VCF file" TYPE GENERIC 
+# INPUT input.vcf: "VCF file" TYPE GENERIC
 # OUTPUT OPTIONAL vcftools.log
 # OUTPUT OPTIONAL filtered.vcf
 # OUTPUT OPTIONAL removed.sites.tsv
@@ -29,41 +29,41 @@ vcftools.io.options <- paste("--vcf input.vcf", "--out vcftools")
 
 # filtering options
 vcftools.filter.options <- paste("")
-if (filter.keepindels == "yes"){
-	vcftools.filter.options <- paste(vcftools.filter.options, "--keep-only-indels")
+if (filter.keepindels == "yes") {
+    vcftools.filter.options <- paste(vcftools.filter.options, "--keep-only-indels")
 }
-if (filter.removeindels == "yes"){
-	vcftools.filter.options <- paste(vcftools.filter.options, "--remove-indels")
+if (filter.removeindels == "yes") {
+    vcftools.filter.options <- paste(vcftools.filter.options, "--remove-indels")
 }
-if (filter.minalleles != "0"){
-	vcftools.filter.options <- paste(vcftools.filter.options, "--min-alleles", filter.minalleles)
+if (filter.minalleles != "0") {
+    vcftools.filter.options <- paste(vcftools.filter.options, "--min-alleles", filter.minalleles)
 }
-if (filter.maxalleles != "0"){
-	vcftools.filter.options <- paste(vcftools.filter.options, "--max-alleles", filter.maxalleles)
+if (filter.maxalleles != "0") {
+    vcftools.filter.options <- paste(vcftools.filter.options, "--max-alleles", filter.maxalleles)
 }
-if (filter.minquality > 0){
-	vcftools.filter.options <- paste(vcftools.filter.options, "--minQ", filter.minquality)
+if (filter.minquality > 0) {
+    vcftools.filter.options <- paste(vcftools.filter.options, "--minQ", filter.minquality)
 }
-if (filter.flag == "yes"){
-	vcftools.filter.options <- paste(vcftools.filter.options, "--remove-filtered-all")
+if (filter.flag == "yes") {
+    vcftools.filter.options <- paste(vcftools.filter.options, "--remove-filtered-all")
 }
 
 # command
 command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--recode")
-# Add INFO sields as requested. Program default is to add none 
-if (output.recodeinfo == "concise"){
-	command <- paste(command, "--recode-INFO INDEL --recode-INFO AC --recode-INFO DP --recode-INFO DP4")
+# Add INFO sields as requested. Program default is to add none
+if (output.recodeinfo == "concise") {
+    command <- paste(command, "--recode-INFO INDEL --recode-INFO AC --recode-INFO DP --recode-INFO DP4")
 }
-if (output.recodeinfo == "all"){
-	command <- paste(command, "--recode-INFO-all")
+if (output.recodeinfo == "all") {
+    command <- paste(command, "--recode-INFO-all")
 }
 command <- paste(command, "2> vcftools.log")
 system(command)
 
 # List removed sites
-if (output.filtered == "yes"){
-	command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--removed-sites", "2>> vcftools.log")
-	system(command)
+if (output.filtered == "yes") {
+    command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--removed-sites", "2>> vcftools.log")
+    system(command)
 }
 
 # rename result files

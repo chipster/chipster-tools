@@ -6,9 +6,9 @@
 
 # AMS 19.06.2013
 
-if (type == "FASTA"){
-	system("cat *.tmp > merged.fasta")
+if (type == "FASTA") {
+    system("cat *.tmp > merged.fasta")
 }
-if (type == "QUAL"){
-	system("cat *.tmp > merged.qual")
+if (type == "QUAL") {
+    system("cat *.tmp > merged.qual")
 }

@@ -1,5 +1,5 @@
-# TOOL fastx-renamer.R: "Rename reads in FASTQ" (Renames read identifiers in a FASTQ file. The original names can be replaced by a running number or by the sequence itself. This tool is based on the Renamer tool of the FASTX package.) 
-# INPUT reads.fastq TYPE GENERIC 
+# TOOL fastx-renamer.R: "Rename reads in FASTQ" (Renames read identifiers in a FASTQ file. The original names can be replaced by a running number or by the sequence itself. This tool is based on the Renamer tool of the FASTX package.)
+# INPUT reads.fastq TYPE GENERIC
 # OUTPUT renamed-reads.fastq
 # PARAMETER rename.type: "Rename read identifiers to" TYPE [COUNT: "Running number", SEQ: "Sequence itself"] DEFAULT COUNT (Should the reads be named with running number or the sequence itself.)
 # PARAMETER quality.format: "Quality value format used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
@@ -20,4 +20,3 @@ command <- paste(binary, "-n", rename.type, quality.scale, "-i reads.fastq -o re
 
 # run
 system(command)
-

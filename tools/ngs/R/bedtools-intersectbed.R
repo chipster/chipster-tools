@@ -1,7 +1,7 @@
 # TOOL bedtools-intersectbed.R: "Intersect BED" (Report overlaps between two feature files such as BED, VCF and GTF. One of the files can also be BAM. Note that when A and B files are compared, the B file is loaded into memory. Therefore to minimize memory usage, one should set the smaller of the two files as the B file. This tool is based on the BEDTools package.)
 # INPUT file.a: "Input file A" TYPE GENERIC
 # INPUT file.b: "Input file B, the smaller file" TYPE GENERIC
-# OUTPUT OPTIONAL intersectbed.bed 
+# OUTPUT OPTIONAL intersectbed.bed
 # OUTPUT OPTIONAL intersectbed.bam
 # OUTPUT OPTIONAL intersectbed.bam.bai
 # OUTPUT OPTIONAL error.txt
@@ -32,56 +32,80 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools
 options <- paste("")
 outputfiletype <- "bed"
 if (abam == "yes") {
-	outputfiletype <- "bam"
-	if (ubam == "yes") {
-		options <- paste(options, "-ubam")		
-	}
-	if (bed == "yes") {
-		outputfiletype <- "bed"
-		options <- paste(options, "-bed")		
-	}
+    outputfiletype <- "bam"
+    if (ubam == "yes") {
+        options <- paste(options, "-ubam")
+    }
+    if (bed == "yes") {
+        outputfiletype <- "bed"
+        options <- paste(options, "-bed")
+    }
 }
-if (wa == "yes") {options <- paste(options,"-wa")}
-if (wb == "yes") {options <- paste(options,"-wb")}
-if (wo == "yes") {options <- paste(options,"-wo")}
-if (wao == "yes") {options <- paste(options,"-wao")}
-if (u == "yes") {options <- paste(options, "-u")}
-if (c == "yes") {options <- paste(options, "-c")}
-if (v == "yes") {options <- paste(options, "-v")}
+if (wa == "yes") {
+    options <- paste(options, "-wa")
+}
+if (wb == "yes") {
+    options <- paste(options, "-wb")
+}
+if (wo == "yes") {
+    options <- paste(options, "-wo")
+}
+if (wao == "yes") {
+    options <- paste(options, "-wao")
+}
+if (u == "yes") {
+    options <- paste(options, "-u")
+}
+if (c == "yes") {
+    options <- paste(options, "-c")
+}
+if (v == "yes") {
+    options <- paste(options, "-v")
+}
 options <- paste(options, "-f", f)
-if (r == "yes") {options <- paste(options, "-r")}
-if (s == "yes") {options <- paste(options, "-s")}
-if (split == "yes") {options <- paste(options, "-split")}
+if (r == "yes") {
+    options <- paste(options, "-r")
+}
+if (s == "yes") {
+    options <- paste(options, "-s")
+}
+if (split == "yes") {
+    options <- paste(options, "-split")
+}
 
 # input files
-if (abam == "yes") {options <- paste(options, "-abam file.a -b file.b")}
-if (abam == "no") {options <- paste(options, "-a file.a -b file.b")}
+if (abam == "yes") {
+    options <- paste(options, "-abam file.a -b file.b")
+}
+if (abam == "no") {
+    options <- paste(options, "-a file.a -b file.b")
+}
 
 # command
 command <- paste(binary, options, "> intersectbed.tmp 2> error.tmp")
 
-#stop(paste('CHIPSTER-NOTE: ', command))
+# stop(paste('CHIPSTER-NOTE: ', command))
 
 # run
 system(command)
 
 # Generate output/error message
 if (file.info("intersectbed.tmp")$size > 0) {
-	if (outputfiletype == "bed"){
-		system("mv intersectbed.tmp intersectbed.bed")
-	}
-	if (outputfiletype == "bam"){
-	system("mv intersectbed.tmp intersectbed.bam")
-	}	
+    if (outputfiletype == "bed") {
+        system("mv intersectbed.tmp intersectbed.bed")
+    }
+    if (outputfiletype == "bam") {
+        system("mv intersectbed.tmp intersectbed.bam")
+    }
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+    system("mv error.tmp error.txt")
+} else {
+    system("echo \"# No results found\" > error.txt")
 }
 
 # Index bam
-if (file.exists("intersectbed.bam")){
-	system(paste(samtools.binary, "index intersectbed.bam > intersectbed.bam.bai"))
+if (file.exists("intersectbed.bam")) {
+    system(paste(samtools.binary, "index intersectbed.bam > intersectbed.bam.bai"))
 }
 
 # Handle output names
@@ -90,12 +114,12 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 # read input names
 inputnames <- read_input_definitions()
 
-basename  <- strip_name(inputnames$file.a)
+basename <- strip_name(inputnames$file.a)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("intersectbed.bam", paste(basename, "_intersect.bam", sep =""))
-outputnames[2,] <- c("intersectbed.bam.bai", paste(basename, "_intersect.bam.bai", sep =""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("intersectbed.bam", paste(basename, "_intersect.bam", sep = ""))
+outputnames[2, ] <- c("intersectbed.bam.bai", paste(basename, "_intersect.bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

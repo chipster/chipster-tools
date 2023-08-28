@@ -21,25 +21,25 @@
 # EK 29.11.2021 Add --dta-cufflinks option
 
 ## Source required functions
-source(file.path(chipster.common.path,"zip-utils.R"))
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"bam-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
 
 # setting up binaries and paths
-hisat.binary <- file.path(chipster.tools.path,"hisat2","hisat2")
-samtools.binary <- file.path(chipster.tools.path,"samtools-1.2","samtools")
+hisat.binary <- file.path(chipster.tools.path, "hisat2", "hisat2")
+samtools.binary <- file.path(chipster.tools.path, "samtools-1.2", "samtools")
 hisat2.index.path <- file.path(chipster.tools.path, "genomes", "indexes", "hisat2")
 
 # Document version numbers
 hisat2.version.command <- paste(hisat.binary, "--version |grep hisat2 | awk '{print $3}'")
-version <- system(hisat2.version.command,intern = TRUE)
-documentVersion("HISAT2",version)
+version <- system(hisat2.version.command, intern = TRUE)
+documentVersion("HISAT2", version)
 samtools.version.command <- paste(samtools.binary, "--version | head -1 | awk '{print $2}'")
-version <- system(samtools.version.command,intern = TRUE)
-documentVersion("Samtools",version)
+version <- system(samtools.version.command, intern = TRUE)
+documentVersion("Samtools", version)
 
 # Get input name
-input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
@@ -49,90 +49,90 @@ if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
   # Case: list files exist
   reads1.list <- make_input_list("reads1.txt")
   reads2.list <- make_input_list("reads2.txt")
-  if (identical(intersect(reads1.list,reads2.list),character(0))) {
-    reads1 <- paste(reads1.list,sep = "",collapse = ",")
-    reads2 <- paste(reads2.list,sep = "",collapse = ",")
+  if (identical(intersect(reads1.list, reads2.list), character(0))) {
+    reads1 <- paste(reads1.list, sep = "", collapse = ",")
+    reads2 <- paste(reads2.list, sep = "", collapse = ",")
   } else {
-    stop(paste('CHIPSTER-NOTE: ',"One or more files is listed in both lists."))
+    stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
   }
 } else if (file.exists("reads002.fq.gz") && !file.exists("reads003.fq.gz")) {
   # Case: no list file, but only two fastq inputs
-  in.sorted <- input.names[order(input.names[,2]),]
-  reads <- grep("reads",in.sorted[,1],value = TRUE)
+  in.sorted <- input.names[order(input.names[, 2]), ]
+  reads <- grep("reads", in.sorted[, 1], value = TRUE)
   reads1 <- reads[1]
   reads2 <- reads[2]
 } else {
   # Case: no list files, more than two fastq inputs
-  stop(paste('CHIPSTER-NOTE: ',"List file is missing. You need to provide a list of read files for both directions."))
+  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
 }
-hisat.parameters <- paste(hisat.parameters,"-1",reads1,"-2",reads2)
+hisat.parameters <- paste(hisat.parameters, "-1", reads1, "-2", reads2)
 # Quality score format
 if (quality.format == "phred64") {
-  hisat.parameters <- paste(hisat.parameters,"--phred64")
+  hisat.parameters <- paste(hisat.parameters, "--phred64")
 } else {
-  hisat.parameters <- paste(hisat.parameters,"--phred33")
+  hisat.parameters <- paste(hisat.parameters, "--phred33")
 }
 # Intron length, defaluts are 20 and 500 000
-hisat.parameters <- paste(hisat.parameters,"--min-intronlen",min.intron.length)
-hisat.parameters <- paste(hisat.parameters,"--max-intronlen",max.intron.length)
+hisat.parameters <- paste(hisat.parameters, "--min-intronlen", min.intron.length)
+hisat.parameters <- paste(hisat.parameters, "--max-intronlen", max.intron.length)
 # Specify strand-specific information: the default is unstranded
 if (rna.strandness == "FR") {
-  hisat.parameters <- paste(hisat.parameters,"--rna-strandness FR")
+  hisat.parameters <- paste(hisat.parameters, "--rna-strandness FR")
 } else if (rna.strandness == "RF") {
-  hisat.parameters <- paste(hisat.parameters,"--rna-strandness RF")
+  hisat.parameters <- paste(hisat.parameters, "--rna-strandness RF")
 }
 # Organism
 # -x declares the basename of the index for reference genome
-hisat.parameters <- paste(hisat.parameters,"-x",organism)
+hisat.parameters <- paste(hisat.parameters, "-x", organism)
 # Known splice sites
 if (file.exists("splicesites.txt")) {
-  hisat.parameters <- paste(hisat.parameters,"--known-splicesite-infile","splicesites.txt")
+  hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
 }
 # How many hits is a read allowed to have
-hisat.parameters <- paste(hisat.parameters,"-k",max.multihits)
+hisat.parameters <- paste(hisat.parameters, "-k", max.multihits)
 # Allow soft-clipping, by default soft-clipping is used
 if (no.softclip == "nosoft") {
-  hisat.parameters <- paste(hisat.parameters,"--no-softclip")
+  hisat.parameters <- paste(hisat.parameters, "--no-softclip")
 }
 # Is longer anchor lengths required
 if (dta == "yesdta") {
-  hisat.parameters <- paste(hisat.parameters,"--dta")
+  hisat.parameters <- paste(hisat.parameters, "--dta")
 }
 
 # Should alignments be trailored for Cufflinks
 if (dta.cufflinks == "yes") {
-	hisat.parameters <- paste(hisat.parameters,"--dta-cufflinks")
+  hisat.parameters <- paste(hisat.parameters, "--dta-cufflinks")
 }
 
 ## Set parameters that are not mutable via Chipster
 # Threads that hisat uses
-hisat.parameters <- paste(hisat.parameters,"-p",chipster.threads.max)
+hisat.parameters <- paste(hisat.parameters, "-p", chipster.threads.max)
 # Suppress SAM records for reads that failed to align
-hisat.parameters <- paste(hisat.parameters,"--no-unal")
+hisat.parameters <- paste(hisat.parameters, "--no-unal")
 
 ## Run HISAT
 # Note a single ' at the beginning, it allows us to use special characters like >
 command <- paste(hisat.binary, "-x", organism)
 
 # Add the parameters
-#command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "view -bS - > hisat.tmp.bam")
-command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
+# command <- paste(command,hisat.parameters, "2> hisat.log |", samtools.binary, "view -bS - > hisat.tmp.bam")
+command <- paste(command, hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
 
 documentCommand(command)
 
-hisat2.index <- paste("HISAT2_INDEXES=",hisat2.index.path, sep="")
+hisat2.index <- paste("HISAT2_INDEXES=", hisat2.index.path, sep = "")
 # Run command
 runExternal(command, hisat2.index)
 
 # Do not return empty BAM files
-if (fileOk("hisat.sorted.bam",minsize = 100)) {
+if (fileOk("hisat.sorted.bam", minsize = 100)) {
   # Rename result files
   system("mv hisat.sorted.bam hisat.bam")
   # Change file names in BAM header to display names
   displayNamesToBAM("hisat.bam")
   # Index BAM (optional)
-  if (bai == "yes"){
-    ystem(paste(samtools.binary,"index hisat.bam > hisat.bam.bai"))
+  if (bai == "yes") {
+    ystem(paste(samtools.binary, "index hisat.bam > hisat.bam.bai"))
   }
 }
 
@@ -145,20 +145,20 @@ displayNamesToFile("hisat.log")
 inputnames <- read_input_definitions()
 
 # Determine base name
-name1 <- unlist(strsplit(reads1,","))
+name1 <- unlist(strsplit(reads1, ","))
 base1 <- strip_name(inputnames[[name1[1]]])
 
-name2 <- unlist(strsplit(reads2,","))
+name2 <- unlist(strsplit(reads2, ","))
 base2 <- strip_name(inputnames[[name2[1]]])
 
-basename <- paired_name(base1,base2)
+basename <- paired_name(base1, base2)
 
 # Make a matrix of output names
-outputnames <- matrix(NA,nrow = 2,ncol = 2)
-outputnames[1,] <- c("hisat.bam",paste(basename,".bam",sep = ""))
-outputnames[2,] <- c("hisat.bam.bai",paste(basename,".bam.bai",sep = ""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("hisat.bam", paste(basename, ".bam", sep = ""))
+outputnames[2, ] <- c("hisat.bam.bai", paste(basename, ".bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
 
-#EOF
+# EOF

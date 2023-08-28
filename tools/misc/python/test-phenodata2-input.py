@@ -5,5 +5,4 @@
 
 import shutil
 
-shutil.copyfile('phenodata2.tsv', 'output.tsv')
-
+shutil.copyfile("phenodata2.tsv", "output.tsv")

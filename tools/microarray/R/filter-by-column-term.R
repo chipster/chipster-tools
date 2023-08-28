@@ -1,6 +1,6 @@
 # TOOL filter-by-column-term.R: "Filter using a column term" (Filters genes based on one column with textual terms, such as gene symbol, gene description or GO term.)
-# INPUT normalized.tsv: normalized.tsv TYPE GENERIC 
-# OUTPUT column-term-filter.tsv: column-term-filter.tsv 
+# INPUT normalized.tsv: normalized.tsv TYPE GENERIC
+# OUTPUT column-term-filter.tsv: column-term-filter.tsv
 # PARAMETER column: "Column" TYPE COLUMN_SEL (Data column to filter by)
 # PARAMETER match.term: "Match term" TYPE STRING DEFAULT empty (String to search for)
 # PARAMETER exact.match: "Exact match" TYPE [yes: yes, no: no] DEFAULT yes (Should only exact matches be retained?)
@@ -13,23 +13,23 @@
 # MK 26.05.2013, ability to remove NA symbols added
 
 # Loads the normalized data
-file <- 'normalized.tsv'
-dat <- read.table(file, header=TRUE, sep='\t', quote='', row.names=1, check.names=FALSE)
+file <- "normalized.tsv"
+dat <- read.table(file, header = TRUE, sep = "\t", quote = "", row.names = 1, check.names = FALSE)
 
-if(match.term == "NA") {
-	dat2 <- dat[!is.na(dat[,column]), ]
+if (match.term == "NA") {
+    dat2 <- dat[!is.na(dat[, column]), ]
 } else {
-	# Only exact matches?
-	if(exact.match=="yes") {
-		match.term<-paste("^", match.term, "$", sep="")
-	}
+    # Only exact matches?
+    if (exact.match == "yes") {
+        match.term <- paste("^", match.term, "$", sep = "")
+    }
 
-	# grep the desired rows
-	dat2 <- dat[grep(match.term, dat[,column]),]
+    # grep the desired rows
+    dat2 <- dat[grep(match.term, dat[, column]), ]
 }
-	
+
 # write output
-options(scipen=10)
-write.table(dat2, 'column-term-filter.tsv', sep='\t', quote=FALSE)
+options(scipen = 10)
+write.table(dat2, "column-term-filter.tsv", sep = "\t", quote = FALSE)
 
 # EOF

@@ -1,5 +1,5 @@
 # TOOL infoalign.R: "Alignment statistics" (Display basic information about a multiple sequence alignment)
-# INPUT OPTIONAL sequence: sequence TYPE GENERIC 
+# INPUT OPTIONAL sequence: sequence TYPE GENERIC
 # OUTPUT alignment_summary.html
 # OUTPUT OPTIONAL infoalign.log
 # PARAMETER OPTIONAL refseq: "The number or the name of the reference sequence" TYPE STRING DEFAULT 0 (If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.)
@@ -23,27 +23,27 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequence")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount sequence -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 300000){
-	stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 300000 but your file contains ", num.queryseq ))
+if (num.queryseq > 300000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 300000 but your file contains ", num.queryseq))
 }
 
 emboss.binary <- file.path(emboss.path, "infoalign")
@@ -66,12 +66,12 @@ emboss.parameters <- paste(emboss.parameters, "-change", change)
 emboss.parameters <- paste(emboss.parameters, "-weight", weight)
 emboss.parameters <- paste(emboss.parameters, "-description", description)
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> infoalign.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> infoalign.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> infoalign.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> infoalign.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f infoalign.log")
+if (save_log == "no") {
+    system("rm -f infoalign.log")
 }

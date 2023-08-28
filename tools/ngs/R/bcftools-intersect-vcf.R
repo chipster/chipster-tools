@@ -36,11 +36,11 @@ system("mv tmp/0003.vcf 0003.vcf")
 source(file.path(chipster.common.path, "tool-utils.R"))
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=4, ncol=2)
-outputnames[1,] <- c("0000.vcf", paste("variantsOnlyInA.vcf"))
-outputnames[2,] <- c("0001.vcf", paste("variantsOnlyInB.vcf"))
-outputnames[3,] <- c("0002.vcf", paste("variantsInA_matchingB.vcf"))
-outputnames[4,] <- c("0003.vcf", paste("variantsInB_matchingA.vcf"))
+outputnames <- matrix(NA, nrow = 4, ncol = 2)
+outputnames[1, ] <- c("0000.vcf", paste("variantsOnlyInA.vcf"))
+outputnames[2, ] <- c("0001.vcf", paste("variantsOnlyInB.vcf"))
+outputnames[3, ] <- c("0002.vcf", paste("variantsInA_matchingB.vcf"))
+outputnames[4, ] <- c("0003.vcf", paste("variantsInB_matchingA.vcf"))
 
 # Write output definitions file
 write_output_definitions(outputnames)

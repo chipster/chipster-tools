@@ -20,58 +20,58 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("input")
 
-if ( nchar(sstring)>50 ){
-stop(paste("CHIPSTER-NOTE:", "Too long search string"))
+if (nchar(sstring) > 50) {
+    stop(paste("CHIPSTER-NOTE:", "Too long search string"))
 }
 
-if ( nchar(rstring)>50 ){
-	stop(paste("CHIPSTER-NOTE:", "Too long replacement string"))
+if (nchar(rstring) > 50) {
+    stop(paste("CHIPSTER-NOTE:", "Too long replacement string"))
 }
 
-if (operation=="select"){
-	command <- paste("grep '",sstring, "' input > output.tmp", sep="")
+if (operation == "select") {
+    command <- paste("grep '", sstring, "' input > output.tmp", sep = "")
 }
 
-if (operation=="exclude"){
-	command <- paste("grep -v '",sstring, "' input > output.tmp", sep="")
+if (operation == "exclude") {
+    command <- paste("grep -v '", sstring, "' input > output.tmp", sep = "")
 }
-if (operation=="replace"){
-	command <- paste('sed -e s/"',sstring, '"/"', rstring, '"/g input > output.tmp', sep="")
+if (operation == "replace") {
+    command <- paste('sed -e s/"', sstring, '"/"', rstring, '"/g input > output.tmp', sep = "")
 }
 
-if (operation=="delete"){
-	command <- paste('tr -d s/"',sstring,'" < input > output.tmp', sep="")
+if (operation == "delete") {
+    command <- paste('tr -d s/"', sstring, '" < input > output.tmp', sep = "")
 }
-if (operation=="pick_rows"){
-	command <- paste("awk '{if ( NR >= ", startrow," ) if ( NR <= ",stoprow, ") print $0}' input > output.tmp", sep="")
+if (operation == "pick_rows") {
+    command <- paste("awk '{if ( NR >= ", startrow, " ) if ( NR <= ", stoprow, ") print $0}' input > output.tmp", sep = "")
 }
 
 echo.command <- paste('echo "', command, '" > file_operation.log')
 system(echo.command)
-command.full <- paste(command,' 2>>file_operation.log ' )
+command.full <- paste(command, " 2>>file_operation.log ")
 system(command.full)
 
 
 
-if ( save_log == "no"){
-	system ("rm -f file_operation.log")
-}else{
-	system ('echo "Number of rows in the input file:" >> file_operation.log  ' )
-	system ("wc -l input >> file_operation.log" )
-	system ('echo "Number of rows in the output file:" >> file_operation.log  ' )
-	system ("wc -l output.tmp >> file_operation.log" )
+if (save_log == "no") {
+    system("rm -f file_operation.log")
+} else {
+    system('echo "Number of rows in the input file:" >> file_operation.log  ')
+    system("wc -l input >> file_operation.log")
+    system('echo "Number of rows in the output file:" >> file_operation.log  ')
+    system("wc -l output.tmp >> file_operation.log")
 }
 
 
-if (fstyle=="txt"){
-	system('mv output.tmp selected.txt')
+if (fstyle == "txt") {
+    system("mv output.tmp selected.txt")
 }
-if (fstyle=="tsv"){
-	system('mv output.tmp selected.tsv')
+if (fstyle == "tsv") {
+    system("mv output.tmp selected.tsv")
 }
-if (fstyle=="bed"){
-	system('mv output.tmp selected.bed')
+if (fstyle == "bed") {
+    system("mv output.tmp selected.bed")
 }
-if (fstyle=="gtf"){
-	system('mv output.tmp selected.gtf')
+if (fstyle == "gtf") {
+    system("mv output.tmp selected.gtf")
 }

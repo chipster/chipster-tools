@@ -1,5 +1,5 @@
 # TOOL showalign.R: "Display a multiple sequence alignment as formatted text" (Display a multiple sequence alignment in pretty format)
-# INPUT OPTIONAL sequence: sequence TYPE GENERIC 
+# INPUT OPTIONAL sequence: sequence TYPE GENERIC
 # OUTPUT OPTIONAL alignment.html
 # OUTPUT OPTIONAL showalign.log
 # PARAMETER OPTIONAL refseq: "The number or the name of the reference sequence" TYPE STRING DEFAULT 0 (If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is always shown in full and is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.)
@@ -20,32 +20,32 @@
 # PARAMETER OPTIONAL gaps: "Use gap characters in consensus" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT Y (If this option is true then gap characters can appear in the consensus. The alternative is 'N' for nucleotide, or 'X' for protein)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
-options(scipen=999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+options(scipen = 999)
 
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequence")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount sequence -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 1000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 1000 but your file contains ', num.queryseq ))
+if (num.queryseq > 1000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 1000 but your file contains ", num.queryseq))
 }
 
 
@@ -59,11 +59,11 @@ emboss.parameters <- paste(emboss.parameters, "-show", show)
 emboss.parameters <- paste(emboss.parameters, "-order", order)
 emboss.parameters <- paste(emboss.parameters, "-similarcase", similarcase)
 emboss.parameters <- paste(emboss.parameters, "-consensus", consensus)
-if (nchar(uppercase) > 0 ) {
-	emboss.parameters <- paste(emboss.parameters, '-uppercase "', uppercase, '"')
+if (nchar(uppercase) > 0) {
+    emboss.parameters <- paste(emboss.parameters, '-uppercase "', uppercase, '"')
 }
-if (nchar(highlight) > 0 ) {
-	emboss.parameters <- paste(emboss.parameters, '-highlight "', highlight,'"')
+if (nchar(highlight) > 0) {
+    emboss.parameters <- paste(emboss.parameters, '-highlight "', highlight, '"')
 }
 emboss.parameters <- paste(emboss.parameters, "-number", number)
 emboss.parameters <- paste(emboss.parameters, "-ruler", ruler)
@@ -74,12 +74,12 @@ emboss.parameters <- paste(emboss.parameters, "-plurality", plurality)
 emboss.parameters <- paste(emboss.parameters, "-identity", identity)
 emboss.parameters <- paste(emboss.parameters, "-gaps", gaps)
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> showalign.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> showalign.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> showalign.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> showalign.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f showalign.log")
+if (save_log == "no") {
+    system("rm -f showalign.log")
 }

@@ -21,29 +21,28 @@ library(ggplot2)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
-if (exists("data.combined") ){
-	seurat_obj <- data.combined
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
 }
 
 # Load the tsv with new cluster names:
-clusternames <- read.table("cluster_names.tsv", sep="\t", header=T, row.names=1)
+clusternames <- read.table("cluster_names.tsv", sep = "\t", header = T, row.names = 1)
 
 # Get the names from the second column:
-new.cluster.ids <- clusternames[,1]
+new.cluster.ids <- clusternames[, 1]
 
 # Some checks:
-if(is.null(seurat_obj@commands$FindClusters)) {
+if (is.null(seurat_obj@commands$FindClusters)) {
   stop("CHIPSTER-NOTE: No cluster information in the Seurat object! Make sure you select an object that has gone through either Clustering or Integrated analysis of multiple samples tool.")
 }
-if(length(new.cluster.ids) != length(levels(seurat_obj)) ) {
-    stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
+if (length(new.cluster.ids) != length(levels(seurat_obj))) {
+  stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
 }
-if(  !identical(row.names(clusternames), levels(seurat_obj)) ) {
-    stop("CHIPSTER-NOTE: The cluster names = numbers in the input table need to be the same as in the Seurat object.")
-
+if (!identical(row.names(clusternames), levels(seurat_obj))) {
+  stop("CHIPSTER-NOTE: The cluster names = numbers in the input table need to be the same as in the Seurat object.")
 }
 
- #new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T", "B", "CD8 T", "FCGR3A+ Mono",  "NK", "DC", "Platelet")
+# new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T", "B", "CD8 T", "FCGR3A+ Mono",  "NK", "DC", "Platelet")
 names(new.cluster.ids) <- levels(seurat_obj)
 seurat_obj <- RenameIdents(seurat_obj, new.cluster.ids)
 

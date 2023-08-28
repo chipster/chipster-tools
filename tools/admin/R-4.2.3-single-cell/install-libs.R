@@ -1,4 +1,3 @@
-
 # CRAN packages and their dependencies
 
 # these are needed to install some packages
@@ -21,15 +20,15 @@ remotes::install_github("renozao/xbioc")
 remotes::install_github("meichendong/SCDC", ref = remotes::github_pull("31"))
 
 # < 1 min
-remotes::install_github('r-lib/systemfonts')
+remotes::install_github("r-lib/systemfonts")
 # requires r-lib/systemfonts
 BiocManager::install("scater")
 
 # < 1 min
-BiocManager::install('multtest')
+BiocManager::install("multtest")
 # requires multtest
 # 3 min
-install.packages('metap')
+install.packages("metap")
 
 # fast to install
 install.packages("dplyr")
@@ -44,7 +43,7 @@ install.packages("ggplot2")
 # > 3 min
 install.packages("umap")
 
-install.packages('tidyr')
+install.packages("tidyr")
 
 install.packages("hdf5r")
 

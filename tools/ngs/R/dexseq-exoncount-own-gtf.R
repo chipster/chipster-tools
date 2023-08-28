@@ -7,7 +7,7 @@
 # PARAMETER stranded: "Was the data produced with a strand-specific protocol" TYPE [yes, no, reverse] DEFAULT no (Select no if your data was not produced with a strand-specific RNA-seq protocol, so that a read is considered overlapping with a feature regardless of whether it is mapped to the same or the opposite strand as the feature. If you select yes, the read has to be mapped to the same strand as the feature.)
 # PARAMETER OPTIONAL mode: "Mode to handle reads overlapping more than one feature" TYPE [union, intersection-strict, intersection-nonempty] DEFAULT union (How to deal with reads that overlap more than one gene or exon?)
 
-# 18.09.2012 TH and EK 
+# 18.09.2012 TH and EK
 # 16.07.2013 EK, BAM sorting changed
 # 23.04.2013 MK, added the info output file and strandedness parameter
 # 01.06.2014 EK, fixed BAM sorting by name, updated to use dexseq-count.py from DEXSeq v1.8.0, added support for BAMs which don't have the chr prefix in chromosome names, moved NH tag production to a separate script
@@ -19,11 +19,11 @@ unzipIfGZipFile("annotation.gtf")
 
 # if BAM contains paired-end data, sort it by read names
 samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
-if(paired == "yes"){
-	system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
-	bam<-"name-sorted.bam"
+if (paired == "yes") {
+    system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
+    bam <- "name-sorted.bam"
 } else {
-	bam<-"alignment.bam"
+    bam <- "alignment.bam"
 }
 
 python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
@@ -44,11 +44,11 @@ system("tail -n 4 exon-counts-out.tsv > exon-counts-info.txt")
 
 # bring in file to R environment for formating
 file <- c("exon-counts.tsv")
-dat <- read.table(file, header=F, sep="\t")
+dat <- read.table(file, header = F, sep = "\t")
 names(dat) <- c("id", "count")
 
 # write result table to output
-write.table(dat, file="exon-counts.tsv", col.names=T, quote=F, sep="\t", row.names=F)
+write.table(dat, file = "exon-counts.tsv", col.names = T, quote = F, sep = "\t", row.names = F)
 
 # Handle output names
 source(file.path(chipster.common.path, "tool-utils.R"))
@@ -57,12 +57,11 @@ source(file.path(chipster.common.path, "tool-utils.R"))
 inputnames <- read_input_definitions()
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("exon-counts.tsv", paste(strip_name(inputnames$alignment.bam), ".tsv", sep =""))
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
+outputnames[1, ] <- c("exon-counts.tsv", paste(strip_name(inputnames$alignment.bam), ".tsv", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
 
 
 # EOF
-

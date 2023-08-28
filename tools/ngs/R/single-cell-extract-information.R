@@ -1,4 +1,4 @@
-# TOOL single-cell-extract-information.R: "Seurat v4 -Extract information from Seurat object" (This tool extracts data from Seurat object.)  
+# TOOL single-cell-extract-information.R: "Seurat v4 -Extract information from Seurat object" (This tool extracts data from Seurat object.)
 # INPUT OPTIONAL seurat_obj.Robj: "Input" TYPE GENERIC (A Seurat object or an RDS file.)
 # OUTPUT OPTIONAL slots.txt
 # OUTPUT OPTIONAL gene_list.tsv
@@ -9,31 +9,30 @@
 # PARAMETER OPTIONAL gene_list: "Print list of the genes" TYPE [yes, no] DEFAULT no
 # PARAMETER OPTIONAL var_genes_list: "Print highly variable genes" TYPE [yes, no] DEFAULT no
 # PARAMETER OPTIONAL commands: "Print commands table" TYPE [yes, no] DEFAULT no
-# PARAMETER OPTIONAL meta_data: "Print metadata stored in the object" TYPE [yes, no] DEFAULT no	
-# PARAMETER OPTIONAL spatial_image: "Print the tissue image stored in the object" TYPE [yes, no] DEFAULT no	
+# PARAMETER OPTIONAL meta_data: "Print metadata stored in the object" TYPE [yes, no] DEFAULT no
+# PARAMETER OPTIONAL spatial_image: "Print the tissue image stored in the object" TYPE [yes, no] DEFAULT no
 # RUNTIME R-4.2.3-single-cell
-# TOOLS_BIN ""  
+# TOOLS_BIN ""
 
 library(dplyr, quietly = TRUE)
 library(Seurat, quietly = TRUE)
 library(gplots)
 library(ggplot2)
 
-source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
 
 # load Seurat object
-if (grepl(".rds",inputnames$seurat_obj.Robj)) {
-	seurat_obj <- readRDS("seurat_obj.Robj")
+if (grepl(".rds", inputnames$seurat_obj.Robj)) {
+    seurat_obj <- readRDS("seurat_obj.Robj")
 } else {
-	load("seurat_obj.Robj")
-	
+    load("seurat_obj.Robj")
 }
 # save integrated seurat object also as seurat_obj
-if (exists("data.combined") ){
-	seurat_obj <- data.combined
+if (exists("data.combined")) {
+    seurat_obj <- data.combined
 }
 
 # Create a text file containing the different data slots in the Seurat object
@@ -63,66 +62,65 @@ print(seurat_obj@tools)
 sink()
 
 # Create a list of the genes and the highly variable features in the object
-if (gene_list== "yes" || var_genes_list == "yes"){
-	obj <- seurat_obj@assays
-	# Object consists of multiple samples that have been integrated
-	if (seurat_obj@active.assay == "integrated") {
-		genes <- obj$integrated@data@Dimnames[1]
-		var_genes <- data.frame(obj$integrated@var.features)
-	# Object contains spatially transcriptomic data
-	} else if (seurat_obj@active.assay == "Spatial"){
-		genes <- obj$Spatial@counts@Dimnames[1]
-		var_genes <- data.frame(obj$Spatial@var.features)
-	# Object has been normalised with SCTransform
-	} else if (seurat_obj@active.assay == "SCT"){
-		genes <- obj$SCT@counts@Dimnames[1]
-		var_genes <- data.frame(obj$SCT@var.features)
-	# object hasn't been normalised or it has been normalised with the global scaling normalisation
-	} else if (seurat_obj@active.assay== "RNA") {
-		genes <- obj$RNA@counts@Dimnames[1]
-		var_genes <- data.frame(obj$RNA@var.features)
-	} else {
-		stop(paste('CHIPSTER-NOTE: ',"Object doesn't contain single-cell RNA-seq or spatially resolved data."))
-	}	
-	# Write out the gene list
-	if (gene_list== "yes") {
-		names(genes)[1] <- "Genes"
-		write.table(genes, file="gene_list.tsv", sep="\t", row.names=T, col.names=T, quote=F)
-	}
-	# Write out the highly variable genes
-	if (var_genes_list == "yes") {
-		names(var_genes)[1] <- "Highly variable genes"
-		write.table(var_genes, file = "var_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-	}
+if (gene_list == "yes" || var_genes_list == "yes") {
+    obj <- seurat_obj@assays
+    # Object consists of multiple samples that have been integrated
+    if (seurat_obj@active.assay == "integrated") {
+        genes <- obj$integrated@data@Dimnames[1]
+        var_genes <- data.frame(obj$integrated@var.features)
+        # Object contains spatially transcriptomic data
+    } else if (seurat_obj@active.assay == "Spatial") {
+        genes <- obj$Spatial@counts@Dimnames[1]
+        var_genes <- data.frame(obj$Spatial@var.features)
+        # Object has been normalised with SCTransform
+    } else if (seurat_obj@active.assay == "SCT") {
+        genes <- obj$SCT@counts@Dimnames[1]
+        var_genes <- data.frame(obj$SCT@var.features)
+        # object hasn't been normalised or it has been normalised with the global scaling normalisation
+    } else if (seurat_obj@active.assay == "RNA") {
+        genes <- obj$RNA@counts@Dimnames[1]
+        var_genes <- data.frame(obj$RNA@var.features)
+    } else {
+        stop(paste("CHIPSTER-NOTE: ", "Object doesn't contain single-cell RNA-seq or spatially resolved data."))
+    }
+    # Write out the gene list
+    if (gene_list == "yes") {
+        names(genes)[1] <- "Genes"
+        write.table(genes, file = "gene_list.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    }
+    # Write out the highly variable genes
+    if (var_genes_list == "yes") {
+        names(var_genes)[1] <- "Highly variable genes"
+        write.table(var_genes, file = "var_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    }
 }
 
-#Write out commands table
+# Write out commands table
 if (commands == "yes") {
-	sink("commands.tsv")
-	print(seurat_obj@commands)
-	sink()
+    sink("commands.tsv")
+    print(seurat_obj@commands)
+    sink()
 }
 
 # Write out metadata data frame
 if (meta_data == "yes") {
-	write.table(as.data.frame(as.matrix(seurat_obj@meta.data)), file = "meta_data.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(as.data.frame(as.matrix(seurat_obj@meta.data)), file = "meta_data.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
 
 # Print the tissue image
 if (spatial_image == "yes") {
-	if(length(seurat_obj@images) != 0) {
-		pdf(file="spatial_image.pdf", width=9, height=9)
-		# print needed because otherwise would only print the last line inside the braces
-		print(SpatialDimPlot(seurat_obj, pt.size.factor = 0))
-		dev.off() # close the pdf
-	} else {
-		stop(paste('CHIPSTER-NOTE: ',"Object doesn't contain any spatial image information."))
-	}
-}	
+    if (length(seurat_obj@images) != 0) {
+        pdf(file = "spatial_image.pdf", width = 9, height = 9)
+        # print needed because otherwise would only print the last line inside the braces
+        print(SpatialDimPlot(seurat_obj, pt.size.factor = 0))
+        dev.off() # close the pdf
+    } else {
+        stop(paste("CHIPSTER-NOTE: ", "Object doesn't contain any spatial image information."))
+    }
+}
 
 
 
 
 
-#EOF
-
+# EOF

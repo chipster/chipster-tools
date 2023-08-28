@@ -12,15 +12,14 @@
 library(DESeq2)
 
 # Load the counts data and extract expression value columns
-dat <- read.table("data.tsv", header=T, sep="\t", row.names=1)
-dat2 <- dat[,grep("chip", names(dat))]
+dat <- read.table("data.tsv", header = T, sep = "\t", row.names = 1)
+dat2 <- dat[, grep("chip", names(dat))]
 
 # Call deseq_transform function:
 source(file.path(chipster.common.path, "deseq-transform.R"))
 transf.counts <- deseq_transform(dat2, method)
 
-write.table(transf.counts, file="transformed_counts.tsv", sep="\t", row.names=T, quote=F)
+write.table(transf.counts, file = "transformed_counts.tsv", sep = "\t", row.names = T, quote = F)
 
 
 # EOF
-	

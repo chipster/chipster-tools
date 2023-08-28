@@ -5,8 +5,8 @@
 
 source(file.path(chipster.common.path, "tool-utils.R"))
 
-bbmap_dir <- paste(chipster.tools.path, "bbmap", sep="/")
-stats_path <- paste(bbmap_dir, "stats.sh", sep="/")
+bbmap_dir <- paste(chipster.tools.path, "bbmap", sep = "/")
+stats_path <- paste(bbmap_dir, "stats.sh", sep = "/")
 
 # run with bash...
 runExternal(paste("bash", "-c", stats_path))

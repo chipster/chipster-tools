@@ -1,10 +1,10 @@
-# TOOL bwasw-with-index-building.R: "BWA-SW for single end reads and own genome" (BWA aligns reads to genomes and transcriptomes. This BWA version uses the BWA-SW algorithm that is designed for long, over 300pb, low-quality reads. Results are sorted and indexed bam files. 
+# TOOL bwasw-with-index-building.R: "BWA-SW for single end reads and own genome" (BWA aligns reads to genomes and transcriptomes. This BWA version uses the BWA-SW algorithm that is designed for long, over 300pb, low-quality reads. Results are sorted and indexed bam files.
 # Note that this BWA tool requires that you have imported the reference genome to Chipster in fasta format. If you would like to align reads against publicly available genomes, please use the tool \"BWA-SW for single end reads\".)
-# INPUT reads.txt: "Reads to align" TYPE GENERIC 
+# INPUT reads.txt: "Reads to align" TYPE GENERIC
 # INPUT genome.txt: "Reference genome" TYPE GENERIC
-# OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
-# OUTPUT bwa.log 
+# OUTPUT bwa.bam
+# OUTPUT bwa.bam.bai
+# OUTPUT bwa.log
 # PARAMETER OPTIONAL match.score: "Score of a match" TYPE INTEGER DEFAULT 1 (Score of a matching base. Corresponds to the command line parameter -a)
 # PARAMETER OPTIONAL gap.opening: "Gap opening penalty " TYPE INTEGER DEFAULT 11 (Gap opening penalty. Corresponds to the command line parameter -q)
 # PARAMETER OPTIONAL gap.extension: "Gap extension penalty " TYPE INTEGER DEFAULT 4 (Gap extension penalty. Corresponds to the command line parameter -r)
@@ -35,37 +35,37 @@ command.start <- paste("bash -c '", bwa.binary)
 # Do indexing
 print("Indexing the genome...")
 runExternal("echo Indexing the genome... > bwa.log")
-check.command <- paste ( bwa.index.binary, "genome.txt| tail -1 ")
-#genome.dir <- system(check.command, intern = TRUE)
-#bwa.genome <- file.path( genome.dir , "genome.txt")
+check.command <- paste(bwa.index.binary, "genome.txt| tail -1 ")
+# genome.dir <- system(check.command, intern = TRUE)
+# bwa.genome <- file.path( genome.dir , "genome.txt")
 bwa.genome <- system(check.command, intern = TRUE)
 
 # algorithm parameters
-mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty , "-q" , gap.opening , "-r" , gap.extension , "-a" , match.score , "-w" , band.width , "-T" , min.score , "-c" , threshold.coeff , "-z" , z.best , "-s" , sa.interval , "-N" , min.support)
+mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty, "-q", gap.opening, "-r", gap.extension, "-a", match.score, "-w", band.width, "-T", min.score, "-c", threshold.coeff, "-z", z.best, "-s", sa.interval, "-N", min.support)
 
 # command ending
-command.end <- paste( bwa.genome , "reads.txt 1> alignment.sai 2>> bwa.log'")
+command.end <- paste(bwa.genome, "reads.txt 1> alignment.sai 2>> bwa.log'")
 
 # run bwa alignment
 runExternal("echo Running the alignment with command: >> bwa.log")
 bwa.command <- paste(command.start, mode.parameters, command.end)
-echo.command <- paste("echo '",bwa.command ,"'  >> bwa.log")
+echo.command <- paste("echo '", bwa.command, "'  >> bwa.log")
 runExternal(echo.command)
-#stop(paste('CHIPSTER-NOTE: ', bwa.command))
+# stop(paste('CHIPSTER-NOTE: ', bwa.command))
 runExternal(bwa.command)
 
 # sai to sam conversion
 runExternal("echo Running sai to sam conversion with command: >> bwa.log")
-samse.parameters <- paste("samse -n", alignment.no )
-samse.end <- paste(bwa.genome, "-f alignment.sam alignment.sai reads.txt >> bwa.log'" )
-samse.command <- paste( command.start, samse.parameters , samse.end )
-echo.command <- paste("echo '",samse.command )
+samse.parameters <- paste("samse -n", alignment.no)
+samse.end <- paste(bwa.genome, "-f alignment.sam alignment.sai reads.txt >> bwa.log'")
+samse.command <- paste(command.start, samse.parameters, samse.end)
+echo.command <- paste("echo '", samse.command)
 runExternal(echo.command)
-echo.command <- paste("echo '",samse.end," >> bwa.log" )
+echo.command <- paste("echo '", samse.end, " >> bwa.log")
 runExternal(echo.command)
 runExternal(samse.command)
 
-		
+
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 

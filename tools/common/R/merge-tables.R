@@ -11,11 +11,11 @@
 source(file.path(chipster.common.path, "tables-utils.R"))
 
 # Read the input names into a table
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 # Call merge_tables function in tables-utils.R :
 merged <- merge_tables(input.names, include.everything)
 
 # Writes out the combined table
-write.table(merged, "combined.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+write.table(merged, "combined.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 # EOF

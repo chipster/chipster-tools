@@ -1,7 +1,7 @@
 # TOOL plot-chrom-pos.R: "Chromosomal position" (Plots the chromosomal positions of genes in the selected list. Currently, this works only for human, mouse and rat data. Before plotting, chips are scaled in order to infer the up- or down-regulation status.)
-# INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS 
-# INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC 
-# OUTPUT chromloc.pdf: chromloc.pdf 
+# INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS
+# INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC
+# OUTPUT chromloc.pdf: chromloc.pdf
 # PARAMETER chip.to.plot: "Column to plot" TYPE COLUMN_SEL DEFAULT EMPTY (Column that contains the expression values. Data is mean centered)
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
@@ -18,71 +18,71 @@ library(geneplotter)
 library(genefilter)
 
 # Renaming variables
-chip<-chip.to.plot
-w<-image.width
-h<-image.height
+chip <- chip.to.plot
+w <- image.width
+h <- image.height
 
 # Loads the normalized data
-file<-c("normalized.tsv")
-dat<-read.table(file, header=T, sep="\t", row.names=1)
+file <- c("normalized.tsv")
+dat <- read.table(file, header = T, sep = "\t", row.names = 1)
 
 # Creating locations of genes
-phenodata<-read.table("phenodata.tsv", header=T, sep="\t")
-if(phenodata$chiptype[1]!="cDNA" | phenodata$chiptype[1]!="Illumina") {
-   # Saves the chiptype into object lib
-   lib<-phenodata$chiptype[1]
-   lib<-as.character(lib)
+phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
+if (phenodata$chiptype[1] != "cDNA" | phenodata$chiptype[1] != "Illumina") {
+    # Saves the chiptype into object lib
+    lib <- phenodata$chiptype[1]
+    lib <- as.character(lib)
 }
 
 # Account for the fact that annotation packages are from version 2.3 of Bioconductor
 # named with an ".db" suffix. Add the suffix when missing to support data files
-# from Chipster 1.3 and earlier. 
+# from Chipster 1.3 and earlier.
 if (length(grep(".db", lib)) == 0 & length(grep("pmcdf", lib)) == 0) {
-        lib <- paste(lib, ".db", sep="")
+    lib <- paste(lib, ".db", sep = "")
 }
 
 # Need a parameter lib that defines the Affymetrix chip type
-chromloc<-buildChromLocation(gsub(".db", "", lib))
+chromloc <- buildChromLocation(gsub(".db", "", lib))
 
 # Separates expression values and flags
-#dat2<-dat[,grep("chip", names(dat))]
+# dat2<-dat[,grep("chip", names(dat))]
 #
 # Scaling the data to the same mean
-#scaled.dat<-genescale(dat2)
+# scaled.dat<-genescale(dat2)
 #
 # Which genes are up- or down-regulated
-#if(chip > ncol(scaled.dat)) {
-#	stop("CHIPSTER-NOTE: You have selected a chip that does not exists")
-#}
-#up<-dat2[which(scaled.dat[,chip]>0),]
-#down<-dat2[which(scaled.dat[,chip]<0),]
+# if(chip > ncol(scaled.dat)) {
+# 	stop("CHIPSTER-NOTE: You have selected a chip that does not exists")
+# }
+# up<-dat2[which(scaled.dat[,chip]>0),]
+# down<-dat2[which(scaled.dat[,chip]<0),]
 
-if(is.numeric(dat[, grep(chip, colnames(dat))]) == FALSE) {
-	stop("CHIPSTER-NOTE: You have selected a column that has no numeric entries")
+if (is.numeric(dat[, grep(chip, colnames(dat))]) == FALSE) {
+    stop("CHIPSTER-NOTE: You have selected a column that has no numeric entries")
 }
 
-#scaled.dat <-dat[,grep(chip, colnames(dat))]
-if(length(grep("chip", chip)) > 0) {
-	dat2 <- dat[,grep("chip", names(dat))]
-	chip <- grep(chip, colnames(dat2))
-	scaled.dat <- genescale(dat2)
-	up <- dat2[which(scaled.dat[, chip] > 0),]
-	down <- dat2[which(scaled.dat[, chip] < 0),]
+# scaled.dat <-dat[,grep(chip, colnames(dat))]
+if (length(grep("chip", chip)) > 0) {
+    dat2 <- dat[, grep("chip", names(dat))]
+    chip <- grep(chip, colnames(dat2))
+    scaled.dat <- genescale(dat2)
+    up <- dat2[which(scaled.dat[, chip] > 0), ]
+    down <- dat2[which(scaled.dat[, chip] < 0), ]
 } else {
-	scaled.dat <- dat[, grep(chip, colnames(dat))]	
-	up <- dat[which(scaled.dat > 0), ]
-	down <- dat[which(scaled.dat < 0), ]
+    scaled.dat <- dat[, grep(chip, colnames(dat))]
+    up <- dat[which(scaled.dat > 0), ]
+    down <- dat[which(scaled.dat < 0), ]
 }
 
 # What chromosomes are there for the species?
-x<-get(paste(gsub(".db", "", lib), "CHR", sep=""))
+x <- get(paste(gsub(".db", "", lib), "CHR", sep = ""))
 mapped_probes <- mappedkeys(x)
 xx <- as.list(x[mapped_probes])
-chr<-unique(unlist(xx))
+chr <- unique(unlist(xx))
 
 # Plotting the chromosomes and genes
-pdf(file="chromloc.pdf", width=w/72, height=h/72)
-cPlot(chromloc, bg="White", fg="LightGrey", useChroms=chr)
+pdf(file = "chromloc.pdf", width = w / 72, height = h / 72)
+cPlot(chromloc, bg = "White", fg = "LightGrey", useChroms = chr)
 cColor(rownames(up), "red", chromloc)
 cColor(rownames(down), "green", chromloc)
 dev.off()

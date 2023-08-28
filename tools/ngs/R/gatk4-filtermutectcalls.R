@@ -22,8 +22,8 @@ command <- paste(gatk.binary, "FilterMutectCalls", "-V input.vcf.gz", "-contamin
 runExternal(command)
 
 # Return error message if no result
-if (fileNotOk("mutect2_filtered.vcf")){
-	system("mv stderr.log gatk_log.txt")
+if (fileNotOk("mutect2_filtered.vcf")) {
+    system("mv stderr.log gatk_log.txt")
 }
 
 # read input names
@@ -32,9 +32,9 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$input.vcf)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("mutect2_filtered.vcf", paste(basename, "_filtered.vcf", sep=""))
-outputnames[2,] <- c("statistics.tsv", paste(basename, "_statistics.tsv", sep=""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("mutect2_filtered.vcf", paste(basename, "_filtered.vcf", sep = ""))
+outputnames[2, ] <- c("statistics.tsv", paste(basename, "_statistics.tsv", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

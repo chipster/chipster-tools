@@ -1,8 +1,8 @@
 # TOOL restrict.R: "Find restriction enzyme cleavage sites" (Report restriction enzyme cleavage sites in a nucleotide sequence)
-# INPUT sequence: "Input sequence" TYPE GENERIC 
-# OUTPUT OPTIONAL restrict.tsv 
-# OUTPUT OPTIONAL restrict.txt 
-# OUTPUT OPTIONAL restrict.log 
+# INPUT sequence: "Input sequence" TYPE GENERIC
+# OUTPUT OPTIONAL restrict.tsv
+# OUTPUT OPTIONAL restrict.txt
+# OUTPUT OPTIONAL restrict.log
 # PARAMETER sitelen: "Minimum recognition site length" TYPE INTEGER FROM 2 TO 20 DEFAULT 4 (This sets the minimum length of the restriction enzyme recognition site. Any enzymes with sites shorter than this will be ignored.)
 # PARAMETER enzymes: "Comma separated enzyme list" TYPE STRING DEFAULT all (the name 'all' reads in all enzyme names from the rebase database. you can specify enzymes by giving their names with commas between then, such as: 'hincii,hinfi,ppii,hindiii'. \ the case of the names is not important. you can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'. \ blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for. \ an example of a file of enzyme names is: \ ! my enzymes \ hincii, ppiii \ ! other enzymes \ hindiii \ hinfi \ ppii)
 # PARAMETER OPTIONAL rformat: "Output format type" TYPE [excel: "Table", table: "Text formatted report", gff: "GFF3 formatted file", tagseq: "Tagseq format", listfile: "EMBOSS list file"] DEFAULT excel (Output format type)
@@ -28,56 +28,56 @@
 source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-options(scipen=999)
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+options(scipen = 999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-#check sequece file type
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence" )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+# check sequece file type
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence")
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter sequence")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 50000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ', num.queryseq ))
+if (num.queryseq > 50000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ", num.queryseq))
 }
 
 
 emboss.binary <- file.path(emboss.path, "restrict")
-emboss.parameters <- paste('sequence -auto -outfile restrict.txt -sitelen', sitelen, '-enzymes', enzymes)
-emboss.parameters <- paste(emboss.parameters, '-rformat', rformat)
-emboss.parameters <- paste(emboss.parameters, '-min', mincuts) 
-emboss.parameters <- paste(emboss.parameters, '-max', maxcuts)
-emboss.parameters <- paste(emboss.parameters, '-solofragment', solofragment )
-emboss.parameters <- paste(emboss.parameters, '-single', single )
-emboss.parameters <- paste(emboss.parameters, '-blunt', blunt )
-emboss.parameters <- paste(emboss.parameters, '-sticky', sticky )
-emboss.parameters <- paste(emboss.parameters, '-ambiguity', ambiguity )
-emboss.parameters <- paste(emboss.parameters, '-plasmid', plasmid )
-emboss.parameters <- paste(emboss.parameters, '-methylation', methylation )
-emboss.parameters <- paste(emboss.parameters, '-commercial', commercial )
-emboss.parameters <- paste(emboss.parameters, '-limit', limit )
-emboss.parameters <- paste(emboss.parameters, '-alphabetic', alphabetic )
-emboss.parameters <- paste(emboss.parameters, '-fragments', fragments )
-emboss.parameters <- paste(emboss.parameters, '-name', name)
+emboss.parameters <- paste("sequence -auto -outfile restrict.txt -sitelen", sitelen, "-enzymes", enzymes)
+emboss.parameters <- paste(emboss.parameters, "-rformat", rformat)
+emboss.parameters <- paste(emboss.parameters, "-min", mincuts)
+emboss.parameters <- paste(emboss.parameters, "-max", maxcuts)
+emboss.parameters <- paste(emboss.parameters, "-solofragment", solofragment)
+emboss.parameters <- paste(emboss.parameters, "-single", single)
+emboss.parameters <- paste(emboss.parameters, "-blunt", blunt)
+emboss.parameters <- paste(emboss.parameters, "-sticky", sticky)
+emboss.parameters <- paste(emboss.parameters, "-ambiguity", ambiguity)
+emboss.parameters <- paste(emboss.parameters, "-plasmid", plasmid)
+emboss.parameters <- paste(emboss.parameters, "-methylation", methylation)
+emboss.parameters <- paste(emboss.parameters, "-commercial", commercial)
+emboss.parameters <- paste(emboss.parameters, "-limit", limit)
+emboss.parameters <- paste(emboss.parameters, "-alphabetic", alphabetic)
+emboss.parameters <- paste(emboss.parameters, "-fragments", fragments)
+emboss.parameters <- paste(emboss.parameters, "-name", name)
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> restrict.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> restrict.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> restrict.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> restrict.log')
 system(echo.command)
 
 system(command.full)
 
 if (rformat == "excel") {
-	system ("mv restrict.txt restrict.tsv")	
+    system("mv restrict.txt restrict.tsv")
 }
-if ( save_log == "no") {
-	system ("rm -f restrict.log")
+if (save_log == "no") {
+    system("rm -f restrict.log")
 }

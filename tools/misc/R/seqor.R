@@ -11,69 +11,68 @@ source(file.path(chipster.common.path, "zip-utils.R"))
 unzipIfGZipFile("sequences1.txt")
 unzipIfGZipFile("sequences2.txt")
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequences1.txt")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequences2.txt")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount sequences1.txt -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 100000){
-	stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 100000 but your file contains ", num.queryseq ))
+if (num.queryseq > 100000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 100000 but your file contains ", num.queryseq))
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount sequences2.txt -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 100000){
-	stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 100000 but your file contains ", num.queryseq ))
+if (num.queryseq > 100000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 100000 but your file contains ", num.queryseq))
 }
 
 
 emboss.binary <- file.path(emboss.path, "listor")
-command.full <- paste(emboss.binary, ' -firstsequences sequences1.txt -secondsequences sequences2.txt -outfile resultlist.txt -operator', operator,'  > log.txt 2>&1' )
+command.full <- paste(emboss.binary, " -firstsequences sequences1.txt -secondsequences sequences2.txt -outfile resultlist.txt -operator", operator, "  > log.txt 2>&1")
 system(command.full)
 
 system("ls -l >> log.txt")
-str.queryseq <- system("cat resultlist.txt | wc -l", intern = TRUE )
+str.queryseq <- system("cat resultlist.txt | wc -l", intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-if (num.queryseq < 1){
-	stop(paste("CHIPSTER-NOTE: Joining the two sequce set with opeator:", operator, "produced an empty sequence set." ))
+if (num.queryseq < 1) {
+    stop(paste("CHIPSTER-NOTE: Joining the two sequce set with opeator:", operator, "produced an empty sequence set."))
 }
 
 emboss.binary <- file.path(emboss.path, "seqret")
-command.full <- paste(emboss.binary, ' @resultlist.txt results.fasta >> log.txt 2>&1' )
+command.full <- paste(emboss.binary, " @resultlist.txt results.fasta >> log.txt 2>&1")
 system(command.full)
 
 
-if ( save_log == "no" ){
-	system("rm -f log.txt")
+if (save_log == "no") {
+    system("rm -f log.txt")
 }
-

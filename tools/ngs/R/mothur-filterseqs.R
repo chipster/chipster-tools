@@ -13,26 +13,26 @@
 # EK 11.05.2020 Zip output fasta
 # ES 1.12.2022 Changed to use new mothur version 1.48
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.align")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-version <- system(paste(binary,"--version"),intern = TRUE)
-documentVersion("Mothur",version)
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+version <- system(paste(binary, "--version"), intern = TRUE)
+documentVersion("Mothur", version)
 
 # batch file 1
 filterseqs.options <- paste("filter.seqs(fasta=a.align, vertical=T, trump=.")
-filterseqs.options <- paste(filterseqs.options,", processors=",chipster.threads.max,")",sep = "")
+filterseqs.options <- paste(filterseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(filterseqs.options)
-write(filterseqs.options,"batch.mth",append = FALSE)
+write(filterseqs.options, "batch.mth", append = FALSE)
 
 # command
-command <- paste(binary,"batch.mth","> log_raw.txt")
+command <- paste(binary, "batch.mth", "> log_raw.txt")
 
 # run
 system(command)
@@ -45,27 +45,27 @@ system("grep -A 4 filtered log_raw.txt > filtered-log.txt")
 # batch file 2
 uniqueseq.options <- paste("unique.seqs(fasta=a.filter.fasta, count=a.count_table)")
 documentCommand(uniqueseq.options)
-write(uniqueseq.options,"batch.mth",append = FALSE)
-command2 <- paste(binary,"batch.mth","> log.txt 2>&1")
+write(uniqueseq.options, "batch.mth", append = FALSE)
+command2 <- paste(binary, "batch.mth", "> log.txt 2>&1")
 system(command2)
 
 ## Post process output
 system("mv a.filter.unique.fasta filtered-unique.fasta")
 
-countseqs.options <- paste("count.seqs(count=a.filter.count_table, compress=f)",sep="") 
+countseqs.options <- paste("count.seqs(count=a.filter.count_table, compress=f)", sep = "")
 documentCommand(countseqs.options)
-write(countseqs.options,"batch.mth",append = FALSE)
-command <- paste(binary,"batch.mth",">> log3.txt")
+write(countseqs.options, "batch.mth", append = FALSE)
+command <- paste(binary, "batch.mth", ">> log3.txt")
 system(command)
 system("mv a.filter.full.count_table filtered-unique.count_table")
 
 # batch file 3
 summaryseq.options <- paste("summary.seqs(fasta=filtered-unique.fasta, count=filtered-unique.count_table")
-summaryseq.options <- paste(summaryseq.options,", processors=",chipster.threads.max,")",sep = "")
+summaryseq.options <- paste(summaryseq.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseq.options)
-write(summaryseq.options,"summary.mth",append = FALSE)
+write(summaryseq.options, "summary.mth", append = FALSE)
 # command 3
-command3 <- paste(binary,"summary.mth","> log_raw.txt")
+command3 <- paste(binary, "summary.mth", "> log_raw.txt")
 
 # run
 system(command3)

@@ -34,28 +34,28 @@ inputnames <- read_input_definitions()
 # binaries
 gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
-java.path <- paste("PATH=", c(file.path(chipster.tools.path,"rtg","jre","bin")),":$PATH",sep="",collapse="")
+java.path <- paste("PATH=", c(file.path(chipster.tools.path, "rtg", "jre", "bin")), ":$PATH", sep = "", collapse = "")
 
 # If user provided fasta we use it, else use internal fasta
-if (organism == "other"){
-	# If user has provided a FASTA, we use it
-	if (file.exists("reference")){
-		unzipIfGZipFile("reference")
-		file.rename("reference", "reference.fasta")		
-	}else{
-		stop(paste('CHIPSTER-NOTE: ', "You need to provide a FASTA file or choose one of the provided reference genomes."))
-	}
-}else{
-	# If not, we use the internal one.
-	internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism,".fa",sep="",collapse=""))
-	# If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
-	if(chr == "chr1"){
-		source(file.path(chipster.common.path, "seq-utils.R"))
-		addChrToFasta(internal.fa, "reference.fasta") 
-	}else{
-		file.copy(internal.fa, "reference.fasta")
-	}
-}	
+if (organism == "other") {
+    # If user has provided a FASTA, we use it
+    if (file.exists("reference")) {
+        unzipIfGZipFile("reference")
+        file.rename("reference", "reference.fasta")
+    } else {
+        stop(paste("CHIPSTER-NOTE: ", "You need to provide a FASTA file or choose one of the provided reference genomes."))
+    }
+} else {
+    # If not, we use the internal one.
+    internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa", sep = "", collapse = ""))
+    # If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
+    if (chr == "chr1") {
+        source(file.path(chipster.common.path, "seq-utils.R"))
+        addChrToFasta(internal.fa, "reference.fasta")
+    } else {
+        file.copy(internal.fa, "reference.fasta")
+    }
+}
 
 
 options <- ""
@@ -70,38 +70,38 @@ options <- paste(options, "-R reference.fasta")
 # BAM file(s)
 system(paste(samtools.binary, "index tumor.bam > tumor.bam.bai"))
 options <- paste(options, "-I tumor.bam", "--tumor", tumor)
-if (fileOk("normal.bam")){
-	system(paste(samtools.binary, "index normal.bam > normal.bam.bai"))
-	options <- paste(options, "-I normal.bam", "--normal", normal)
+if (fileOk("normal.bam")) {
+    system(paste(samtools.binary, "index normal.bam > normal.bam.bai"))
+    options <- paste(options, "-I normal.bam", "--normal", normal)
 }
 # VCF files. These need to bgzip compressed and tabix indexed
-if (fileOk("germline_resource.vcf")){	
-	formatGatkVcf("germline_resource.vcf",paste(chr))
-	options <- paste(options, "--germline-resource germline_resource.vcf.gz")
+if (fileOk("germline_resource.vcf")) {
+    formatGatkVcf("germline_resource.vcf", paste(chr))
+    options <- paste(options, "--germline-resource germline_resource.vcf.gz")
 }
-if (fileOk("normal_panel.vcf")){
-	formatGatkVcf("normal_panel.vcf",paste(chr))
-	options <- paste(options, "--panel-of-normals normal_panel.vcf.gz")
+if (fileOk("normal_panel.vcf")) {
+    formatGatkVcf("normal_panel.vcf", paste(chr))
+    options <- paste(options, "--panel-of-normals normal_panel.vcf.gz")
 }
-if (fileOk("gatk_interval.list")){
-	# Interval list file handling is based on file name, so we need to use the original name
-	interval_list_name <- inputnames$gatk_interval.list
-	system(paste("mv gatk_interval.list", interval_list_name))
-	#unzipIfGZipFile("gatk.interval_list")
-	options <- paste(options, "-L", interval_list_name)
+if (fileOk("gatk_interval.list")) {
+    # Interval list file handling is based on file name, so we need to use the original name
+    interval_list_name <- inputnames$gatk_interval.list
+    system(paste("mv gatk_interval.list", interval_list_name))
+    # unzipIfGZipFile("gatk.interval_list")
+    options <- paste(options, "-L", interval_list_name)
 }
 # Add other options
-if (nchar(gatk.interval) > 0 ){
-	options <- paste(options, "-L", gatk.interval)
-	if (gatk.padding > 0){
-		options <- paste(options, "-ip", gatk.padding)
-	}
+if (nchar(gatk.interval) > 0) {
+    options <- paste(options, "-L", gatk.interval)
+    if (gatk.padding > 0) {
+        options <- paste(options, "-ip", gatk.padding)
+    }
 }
-if (gatk.bamout == "yes"){
-	options <- paste(options, "-bamout mutect2.bam")
+if (gatk.bamout == "yes") {
+    options <- paste(options, "-bamout mutect2.bam")
 }
-if (star == "yes"){
-	options <- paste(options, "--disable-read-filter MappingQualityAvailableReadFilter")
+if (star == "yes") {
+    options <- paste(options, "--disable-read-filter MappingQualityAvailableReadFilter")
 }
 
 
@@ -109,17 +109,17 @@ if (star == "yes"){
 command <- paste(gatk.binary, "Mutect2", "-O mutect2.vcf", options)
 
 # Capture stderr
-#command <- paste(command, "2>> error.txt")
+# command <- paste(command, "2>> error.txt")
 
 # Run command
-system(paste(gatk.binary,"Mutect2", "2> version.tmp"))
-version <- system("grep Version version.tmp",intern = TRUE)
-documentVersion("GATK Mutect2",version)
+system(paste(gatk.binary, "Mutect2", "2> version.tmp"))
+version <- system("grep Version version.tmp", intern = TRUE)
+documentVersion("GATK Mutect2", version)
 documentCommand(command)
 runExternal(command, java.path)
 
 # Log
-#system("mv stdout.tmp gatk_log.txt")
+# system("mv stdout.tmp gatk_log.txt")
 system("cat stdout.tmp")
 system("cat stderr.tmp")
 
@@ -127,10 +127,10 @@ system("cat stderr.tmp")
 basename <- strip_name(inputnames$tumor.bam)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=3, ncol=2)
-outputnames[1,] <- c("mutect2.bam", paste(basename, "_mutect2.bam", sep=""))
-outputnames[2,] <- c("mutect2.vcf", paste(basename, "_mutect2.vcf", sep=""))
-outputnames[3,] <- c("gatk_log.txt", paste(basename, "_mutect2.log", sep=""))
+outputnames <- matrix(NA, nrow = 3, ncol = 2)
+outputnames[1, ] <- c("mutect2.bam", paste(basename, "_mutect2.bam", sep = ""))
+outputnames[2, ] <- c("mutect2.vcf", paste(basename, "_mutect2.vcf", sep = ""))
+outputnames[3, ] <- c("gatk_log.txt", paste(basename, "_mutect2.log", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

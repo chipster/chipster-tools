@@ -1,10 +1,10 @@
 # TOOL norm-illumina-methylumi-new.R: "Illumina - methylumi pipeline NEW" (Illumina methylation assay normalization using lumi methodology. As input, give EITHER simple tab delimited text file with the headers from Beadstudio and a similarly constructed control file, OR just a directly imported FinalReport file.  )
-# INPUT samples.txt: "samples.txt or FinalReport file" TYPE GENERIC 
-# INPUT OPTIONAL controls.txt: controls.txt TYPE GENERIC 
-# OUTPUT normalized.tsv: normalized.tsv 
-# OUTPUT unmethylated.tsv: unmethylated.tsv 
-# OUTPUT methylated.tsv: methylated.tsv 
-# OUTPUT META phenodata.tsv: phenodata.tsv 
+# INPUT samples.txt: "samples.txt or FinalReport file" TYPE GENERIC
+# INPUT OPTIONAL controls.txt: controls.txt TYPE GENERIC
+# OUTPUT normalized.tsv: normalized.tsv
+# OUTPUT unmethylated.tsv: unmethylated.tsv
+# OUTPUT methylated.tsv: methylated.tsv
+# OUTPUT META phenodata.tsv: phenodata.tsv
 # OUTPUT OPTIONAL QC-plot.pdf: QC-plot.pdf
 # PARAMETER chiptype: Chiptype TYPE [FDb.InfiniumMethylation.hg19:FDb.InfiniumMethylation.hg19] DEFAULT FDb.InfiniumMethylation.hg19 (Select the annotation package)
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the QC image)
@@ -28,76 +28,75 @@ library(lumi)
 library(methylumi)
 library(annotate)
 
-if(chiptype=="FDb.InfiniumMethylation.hg19") {
-	chiptype <- "FDb.InfiniumMethylation.hg19"
+if (chiptype == "FDb.InfiniumMethylation.hg19") {
+    chiptype <- "FDb.InfiniumMethylation.hg19"
 }
 
 # Read data in
 samples_file <- c("samples.txt")
-if(file.exists("controls.txt")) {
-	controls_file <- c("controls.txt")
-	dat <- methylumiR(samples_file, qcfile=controls_file)
-}else {
-	dat <- methylumiR(samples_file)
+if (file.exists("controls.txt")) {
+    controls_file <- c("controls.txt")
+    dat <- methylumiR(samples_file, qcfile = controls_file)
+} else {
+    dat <- methylumiR(samples_file)
 }
 
 # normalize:
 avgPval <- colMeans(pvals(dat))
-toKeep <- (avgPval<Pval)
+toKeep <- (avgPval < Pval)
 # pData(mldat)$Gender[9] <- "F"  testidataspesifi homma
-mldat.norm <- normalizeMethyLumiSet(dat[,toKeep])
+mldat.norm <- normalizeMethyLumiSet(dat[, toKeep])
 
 dat4 <- mldat.norm
 
 # QC plots
-pdf(file="QC-plot.pdf", width=image.width/72, height=image.height/72)
-par(mfrow=c(2,2))
-plotColorBias1D(dat, main="Unpreprocessed")
-#plotColorBias1D(dat4, main="Preprocessed")
-plotColorBias1D(mldat.norm, main="Preprocessed")
-boxplotColorBias(dat, main="Unpreprocessed")
+pdf(file = "QC-plot.pdf", width = image.width / 72, height = image.height / 72)
+par(mfrow = c(2, 2))
+plotColorBias1D(dat, main = "Unpreprocessed")
+# plotColorBias1D(dat4, main="Preprocessed")
+plotColorBias1D(mldat.norm, main = "Preprocessed")
+boxplotColorBias(dat, main = "Unpreprocessed")
 # boxplotColorBias(dat4, main="Preprocessed")
-boxplotColorBias(mldat.norm, main="Preprocessed")
-par(las=2)
-barplot(avgPval,ylab="Average P-Value")
+boxplotColorBias(mldat.norm, main = "Preprocessed")
+par(las = 2)
+barplot(avgPval, ylab = "Average P-Value")
 dev.off()
 
 
 # Convert sample names to Chipster style
 # miksi tehty näin monta kertaa??
-dat5<-exprs(dat4)
-sample.names<-colnames(dat5)
-sample.names<-paste("chip.", sample.names, sep="")
-names(dat5)<-sample.names
-colnames(dat5)<-sample.names
+dat5 <- exprs(dat4)
+sample.names <- colnames(dat5)
+sample.names <- paste("chip.", sample.names, sep = "")
+names(dat5) <- sample.names
+colnames(dat5) <- sample.names
 
-dat6<-methylated(dat4)
-sample.names<-colnames(dat6)
-sample.names<-paste("chip.", sample.names, sep="")
-names(dat6)<-sample.names
-colnames(dat6)<-sample.names
+dat6 <- methylated(dat4)
+sample.names <- colnames(dat6)
+sample.names <- paste("chip.", sample.names, sep = "")
+names(dat6) <- sample.names
+colnames(dat6) <- sample.names
 
-dat7<-unmethylated(dat4)
-sample.names<-colnames(dat7)
-sample.names<-paste("chip.", sample.names, sep="")
-names(dat7)<-sample.names
-colnames(dat7)<-sample.names
+dat7 <- unmethylated(dat4)
+sample.names <- colnames(dat7)
+sample.names <- paste("chip.", sample.names, sep = "")
+names(dat7) <- sample.names
+colnames(dat7) <- sample.names
 
 # annotations:
 symbols <- mldat.norm@featureData@data$SYMBOL
 
 # Write out a phenodata
-group<-c(rep("", ncol(dat5)))
-write.table(data.frame(sample=sample.names, chiptype=chiptype, group=group), file="phenodata.tsv", sep="\t", row.names=F, col.names=T, quote=F)
+group <- c(rep("", ncol(dat5)))
+write.table(data.frame(sample = sample.names, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
 
 # Write out expression data
-if(isEmpty(symbols)) {
-	write.table(data.frame(dat5), file="normalized.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-	write.table(data.frame(dat6), file="methylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-	write.table(data.frame(dat7), file="unmethylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
+if (isEmpty(symbols)) {
+    write.table(data.frame(dat5), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(data.frame(dat6), file = "methylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(data.frame(dat7), file = "unmethylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
 } else {
-	write.table(data.frame(symbol=symbols, dat5), file="normalized.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-	write.table(data.frame(symbol=symbols, dat6), file="methylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-	write.table(data.frame(symbol=symbols, dat7), file="unmethylated.tsv", col.names=T, quote=F, sep="\t", row.names=T)
-	
+    write.table(data.frame(symbol = symbols, dat5), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(data.frame(symbol = symbols, dat6), file = "methylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(data.frame(symbol = symbols, dat7), file = "unmethylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
 }

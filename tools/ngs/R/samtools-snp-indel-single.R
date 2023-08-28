@@ -1,5 +1,5 @@
 # TOOL samtools-snp-indel-single.R: "Call SNPs and INDELs with SAMtools" (Calls SNPs and short INDELs for one or more diploid individuals. Alignment records are grouped by sample identifiers in @RG header lines. If sample identifiers are absent, each input file is regarded as one sample. You can provide your own reference sequence in FASTA format or choose one of the provided reference genomes. This tool is based on the SAMtools package.)
-# INPUT alignment{...}.bam: "Sorted BAM files" TYPE BAM 
+# INPUT alignment{...}.bam: "Sorted BAM files" TYPE BAM
 # INPUT OPTIONAL ownref.fa: "Reference sequence FASTA" TYPE GENERIC
 # OUTPUT variants.vcf
 # PARAMETER organism: "Reference sequence" TYPE [other, "FILES genomes/fasta .fa"] DEFAULT other (Reference sequence.)
@@ -36,82 +36,82 @@ vcfutils.binary <- c(file.path(chipster.tools.path, "bcftools", "vcfutils.pl"))
 vcftools.binary <- c(file.path(chipster.tools.path, "vcftools", "bin", "vcftools"))
 
 # If user provided fasta we use it, else use internal fasta
-if (organism == "other"){
-	# If user has provided a FASTA, we use it
-	if (file.exists("ownref.fa")){
-		refseq <- paste("ownref.fa")
-	}else{
-		stop(paste('CHIPSTER-NOTE: ', "You need to provide a FASTA file or choose one of the provided reference genomes."))
-	}
-}else{
-	# If not, we use the internal one.
-	internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism,".fa",sep="",collapse=""))
-	# If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
-	if(chr == "chr1"){
-		source(file.path(chipster.common.path, "seq-utils.R"))
-		addChrToFasta(internal.fa, "internal_chr.fa") 
-		refseq <- paste("internal_chr.fa")
-	}else{
-		refseq <- paste(internal.fa)
-	}
-}	
+if (organism == "other") {
+    # If user has provided a FASTA, we use it
+    if (file.exists("ownref.fa")) {
+        refseq <- paste("ownref.fa")
+    } else {
+        stop(paste("CHIPSTER-NOTE: ", "You need to provide a FASTA file or choose one of the provided reference genomes."))
+    }
+} else {
+    # If not, we use the internal one.
+    internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa", sep = "", collapse = ""))
+    # If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
+    if (chr == "chr1") {
+        source(file.path(chipster.common.path, "seq-utils.R"))
+        addChrToFasta(internal.fa, "internal_chr.fa")
+        refseq <- paste("internal_chr.fa")
+    } else {
+        refseq <- paste(internal.fa)
+    }
+}
 
 # mpileup otions
 mpileup.options <- paste("mpileup -u")
-if (mpileup.r != "all"){
-	mpileup.options <- paste(mpileup.options, "-r", mpileup.r)
+if (mpileup.r != "all") {
+    mpileup.options <- paste(mpileup.options, "-r", mpileup.r)
 }
 if (mpileup.ub == "yes") {
-	mpileup.options <- paste(mpileup.options, "-B")
+    mpileup.options <- paste(mpileup.options, "-B")
 }
 mpileup.options <- paste(mpileup.options, "-C", mpileup.uc)
 mpileup.options <- paste(mpileup.options, "-q", mpileup.q)
 mpileup.options <- paste(mpileup.options, "-Q", mpileup.uq)
 if (mpileup.ud == "yes") {
-	mpileup.options <- paste(mpileup.options, "-t DP")
+    mpileup.options <- paste(mpileup.options, "-t DP")
 }
 # if (mpileup.us == "yes") {
 # 	mpileup.options <- paste(mpileup.options, "-t SP")
 # }
 if (mpileup.dv == "yes") {
-	mpileup.options <- paste(mpileup.options, "-t DV")
+    mpileup.options <- paste(mpileup.options, "-t DV")
 }
 if (mpileup.ui == "yes") {
-	mpileup.options <- paste(mpileup.options, "-I")
+    mpileup.options <- paste(mpileup.options, "-I")
 }
 
 
 # bcftools options
 bcftools.options <- paste("call --variants-only --multiallelic-caller --output-type z")
 
-if (ploidy == "haploid"){
-	system("for n in $( ls *.bam ); do printf \"${n}\t1\n\" >> samplefile.txt; done")
-	bcftools.options <- paste(bcftools.options, "-S samplefile.txt")
+if (ploidy == "haploid") {
+    system("for n in $( ls *.bam ); do printf \"${n}\t1\n\" >> samplefile.txt; done")
+    bcftools.options <- paste(bcftools.options, "-S samplefile.txt")
 }
 
 # vcfutils options
-vcfutils.options <- paste("varFilter", "-d", vcfutils.d,"-D", vcfutils.ud)
+vcfutils.options <- paste("varFilter", "-d", vcfutils.d, "-D", vcfutils.ud)
 
 
 # commands
 command1 <- paste(samtools.binary, mpileup.options, "-f", refseq, "*.bam", "|", bcftools.binary, bcftools.options, "- > var.raw.bcf")
 command2 <- paste(bcftools.binary, "view var.raw.bcf |", vcfutils.binary, vcfutils.options, "> variants.raw.vcf")
 if (vcftools.info.all == "yes") {
-	command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO-all")
-}else{
-	command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
+    command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO-all")
+} else {
+    command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
 }
 
 # run
-#stop(paste('CHIPSTER-NOTE: ', command1))
+# stop(paste('CHIPSTER-NOTE: ', command1))
 system(command1)
 system(command2)
 system(command3)
 system("mv vcftools.recode.vcf variants.vcf")
 
 # Change bam names in VCF to original names
-input.names <- read.table("chipster-inputs.tsv", header=F, sep="\t")
+input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
-	sed.command <- paste("s/", input.names[i,1], "/", input.names[i,2], "/", sep="")
-	system(paste("sed -i", sed.command, "variants.vcf"))
+    sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
+    system(paste("sed -i", sed.command, "variants.vcf"))
 }

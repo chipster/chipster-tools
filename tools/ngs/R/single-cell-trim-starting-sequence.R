@@ -13,7 +13,7 @@
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
 # command start
-command.start <- paste(path.dropseq, "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=summary.txt", sep="")
+command.start <- paste(path.dropseq, "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=summary.txt", sep = "")
 
 # parameters
 command.parameters <- paste("SEQUENCE=", sequence, "MISMATCHES=", mismatches, "NUM_BASES=", num_bases)
@@ -25,4 +25,4 @@ system(command)
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 
-#EOF
+# EOF

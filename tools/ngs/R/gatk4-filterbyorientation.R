@@ -20,21 +20,21 @@ gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 # Run GetPileupSummaries
 command <- paste(gatk.binary, "FilterByOrientationBias", "-O filtered.vcf", "-V input.vcf.gz", "-P metrics_file")
 
-if (nchar(gatk.artifactmodes) > 0 ){
-	#Split into individual entries
-	artifacts <- strsplit(gatk.artifactmodes, ",")[[1]]
-	artifacts <- gsub("to", "/", artifacts)
-	for (i in 1:length(artifacts)){
-		artifactmode <- paste("'", trimws(artifacts[i]), "'", sep="",collapse="")
-		command <- paste(command, "--artifact-modes", artifactmode)
-	}
+if (nchar(gatk.artifactmodes) > 0) {
+    # Split into individual entries
+    artifacts <- strsplit(gatk.artifactmodes, ",")[[1]]
+    artifacts <- gsub("to", "/", artifacts)
+    for (i in 1:length(artifacts)) {
+        artifactmode <- paste("'", trimws(artifacts[i]), "'", sep = "", collapse = "")
+        command <- paste(command, "--artifact-modes", artifactmode)
+    }
 }
 
 runExternal(command)
 
 # Return error message if no result
-if (fileNotOk("filtered.vcf")){
-	system("mv stderr.log gatk_log.txt")
+if (fileNotOk("filtered.vcf")) {
+    system("mv stderr.log gatk_log.txt")
 }
 
 # read input names
@@ -43,9 +43,9 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$input.vcf)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("filtered.vcf", paste(basename, "_filtered_unbiased.vcf", sep=""))
-outputnames[2,] <- c("filtered.vcf.summary", paste(basename, "_filtered_unbiased_summary.tsv", sep=""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("filtered.vcf", paste(basename, "_filtered_unbiased.vcf", sep = ""))
+outputnames[2, ] <- c("filtered.vcf.summary", paste(basename, "_filtered_unbiased_summary.tsv", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

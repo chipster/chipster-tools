@@ -21,19 +21,19 @@ load("seurat_spatial_setup.Robj")
 # Subset: remove potential empties, multiplets and broken cells based on parameters
 seurat_obj <- PercentageFeatureSet(seurat_obj, "^MT-|^mt-|^Mt-", col.name = "percent_mito")
 seurat_obj <- PercentageFeatureSet(seurat_obj, "^Hb.*-", col.name = "percent_hb")
-seurat_obj= seurat_obj[, seurat_obj$percent_mito < mitocutoff & seurat_obj$percent_hb < hbcutoff]
+seurat_obj <- seurat_obj[, seurat_obj$percent_mito < mitocutoff & seurat_obj$percent_hb < hbcutoff]
 
-#filter genes
-#if (genes == "Hb" | genes == "both") {
-#seurat_obj <- seurat_obj[!grepl("^Hb.*-", rownames(seurat_obj)), ]}
-#if (genes == "mt" | genes == "both") {
-#seurat_obj <- seurat_obj[!grepl("^mt-", rownames(seurat_obj)), ]}
+# filter genes
+# if (genes == "Hb" | genes == "both") {
+# seurat_obj <- seurat_obj[!grepl("^Hb.*-", rownames(seurat_obj)), ]}
+# if (genes == "mt" | genes == "both") {
+# seurat_obj <- seurat_obj[!grepl("^mt-", rownames(seurat_obj)), ]}
 
-#Sctransform normalizes the data, detects high-variance features, and stores the data in the SCT assay.
+# Sctransform normalizes the data, detects high-variance features, and stores the data in the SCT assay.
 seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", variable.features.n = num.features, verbose = FALSE)
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_sctransform.Robj")
+save(seurat_obj, file = "seurat_obj_sctransform.Robj")
 
 
 ## EOF

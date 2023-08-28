@@ -1,6 +1,6 @@
 # TOOL picard-sortsam.R: "Sort BAM" (Sort BAM file based on the quaryname.)
 # INPUT aligned.sam: "BAM file" TYPE GENERIC
-# OUTPUT OPTIONAL aligned_sorted.bam     
+# OUTPUT OPTIONAL aligned_sorted.bam
 
 
 # OUTPUT OPTIONAL log.txt

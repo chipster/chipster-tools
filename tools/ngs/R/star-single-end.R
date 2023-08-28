@@ -17,45 +17,45 @@
 # RUNTIME R-4.1.1
 # SLOTS 5
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"bam-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-input.names <- read.table("chipster-inputs.tsv",header = FALSE,sep = "\t")
+input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i,1])
+  unzipIfGZipFile(input.names[i, 1])
 }
 
 # setting up STAR
-star.binary <- c(file.path(chipster.tools.path,"STAR","STAR"))
-path.star.index <- c(file.path(chipster.tools.path,"genomes","indexes","star",organism))
-samtools.binary <- c(file.path(chipster.tools.path,"samtools","bin","samtools"))
-#samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
+star.binary <- c(file.path(chipster.tools.path, "STAR", "STAR"))
+path.star.index <- c(file.path(chipster.tools.path, "genomes", "indexes", "star", organism))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
+# samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # Input fastq names
-reads1 <- paste(grep("reads",input.names[,1],value = TRUE),sep = "",collapse = ",")
+reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")
 
 
 # command
-command <- paste(star.binary,"--genomeDir",path.star.index,"--readFilesIn",reads1,"--outSAMtype BAM SortedByCoordinate","--twopassMode Basic","--runThreadN",chipster.threads.max,"--alignSJoverhangMin 8","--alignSJDBoverhangMin 1","--outSAMstrandField intronMotif","--outFilterType BySJout","--outFilterMultimapNmax",alignments.per.read,"--outFilterMismatchNmax",mismatches.per.pair)
+command <- paste(star.binary, "--genomeDir", path.star.index, "--readFilesIn", reads1, "--outSAMtype BAM SortedByCoordinate", "--twopassMode Basic", "--runThreadN", chipster.threads.max, "--alignSJoverhangMin 8", "--alignSJDBoverhangMin 1", "--outSAMstrandField intronMotif", "--outFilterType BySJout", "--outFilterMultimapNmax", alignments.per.read, "--outFilterMismatchNmax", mismatches.per.pair)
 # Use GTF if provided
 if (fileOk("annotation.gtf")) {
-  command <- paste(command,"--sjdbGTFfile annotation.gtf")
+  command <- paste(command, "--sjdbGTFfile annotation.gtf")
 } else {
-  gtf.path <- c(file.path(chipster.tools.path,"genomes","gtf"))
-  file.list <- list.files(gtf.path,pattern = "\\.gtf$")
-  gtf.file <- grep(organism,file.list,value = TRUE)
-  gtf.path <- c(file.path(gtf.path,gtf.file[1]))
-  command <- paste(command,"--sjdbGTFfile",gtf.path)
+  gtf.path <- c(file.path(chipster.tools.path, "genomes", "gtf"))
+  file.list <- list.files(gtf.path, pattern = "\\.gtf$")
+  gtf.file <- grep(organism, file.list, value = TRUE)
+  gtf.path <- c(file.path(gtf.path, gtf.file[1]))
+  command <- paste(command, "--sjdbGTFfile", gtf.path)
 }
-command <- paste(command,"--alignIntronMin",align.intron.min)
-command <- paste(command,"--alignIntronMax",align.intron.max)
-command <- paste(command,"--alignMatesGapMax",align.mates.gap.max)
-command <- paste(command,"--outFilterMismatchNoverLmax",out.filter.mismatch.nover.lmax)
+command <- paste(command, "--alignIntronMin", align.intron.min)
+command <- paste(command, "--alignIntronMax", align.intron.max)
+command <- paste(command, "--alignMatesGapMax", align.mates.gap.max)
+command <- paste(command, "--outFilterMismatchNoverLmax", out.filter.mismatch.nover.lmax)
 
 # Run STAR
-#system(command)
+# system(command)
 documentCommand(command)
 runExternal(command)
 
@@ -73,7 +73,7 @@ displayNamesToBAM("alignment.bam", samtools.binary)
 
 # index bam
 if (index.file == "index_file") {
-  runExternal(paste(samtools.binary,"index alignment.bam"))
+  runExternal(paste(samtools.binary, "index alignment.bam"))
 }
 
 # Determine base name
@@ -81,16 +81,16 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads001.fq)
 
 # Make a matrix of output names
-outputnames <- matrix(NA,nrow = 2,ncol = 2)
-outputnames[1,] <- c("alignment.bam",paste(basename,".bam",sep = ""))
-outputnames[2,] <- c("alignment.bam.bai",paste(basename,".bam.bai",sep = ""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("alignment.bam", paste(basename, ".bam", sep = ""))
+outputnames[2, ] <- c("alignment.bam.bai", paste(basename, ".bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
 
 # save version information
-star.version <- system(paste(star.binary,"--version"),intern = TRUE)
-documentVersion("STAR",star.version)
+star.version <- system(paste(star.binary, "--version"), intern = TRUE)
+documentVersion("STAR", star.version)
 
-samtools.version <- system(paste(samtools.binary,"--version | grep samtools"),intern = TRUE)
-documentVersion("Samtools",samtools.version)
+samtools.version <- system(paste(samtools.binary, "--version | grep samtools"), intern = TRUE)
+documentVersion("Samtools", samtools.version)

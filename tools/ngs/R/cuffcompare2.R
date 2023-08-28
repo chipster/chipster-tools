@@ -26,29 +26,29 @@ cuffcompare.binary <- c(file.path(chipster.tools.path, "cufflinks2", "cuffcompar
 
 cuffcompare.options <- ""
 
-if (organism == "other"){
-	# If user has provided a GTF, we use it
-	if (file.exists("reference.gtf")){
-		annotation.file <- "reference.gtf"
-	}else{
-		stop(paste('CHIPSTER-NOTE: ', "You need provide a GTF file if you are not using one of the provided ones."))
-	}
-}else{
-	# If not, we use the internal one.
-	internal.gtf <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, ".gtf" ,sep="" ,collapse=""))
-	# If chromosome names in BAM have chr, we make a temporary copy of gtf with chr names, otherwise we use it as is.
-	if(chr == "chr1"){
-		source(file.path(chipster.common.path, "gtf-utils.R"))
-		addChrToGtf(internal.gtf, "internal_chr.gtf") 
-		annotation.file <- paste("internal_chr.gtf")
-	}else{
-		annotation.file <- paste(internal.gtf)
-	}
-}	
-cuffcompare.options <-paste(cuffcompare.options, "-r", annotation.file)
+if (organism == "other") {
+    # If user has provided a GTF, we use it
+    if (file.exists("reference.gtf")) {
+        annotation.file <- "reference.gtf"
+    } else {
+        stop(paste("CHIPSTER-NOTE: ", "You need provide a GTF file if you are not using one of the provided ones."))
+    }
+} else {
+    # If not, we use the internal one.
+    internal.gtf <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, ".gtf", sep = "", collapse = ""))
+    # If chromosome names in BAM have chr, we make a temporary copy of gtf with chr names, otherwise we use it as is.
+    if (chr == "chr1") {
+        source(file.path(chipster.common.path, "gtf-utils.R"))
+        addChrToGtf(internal.gtf, "internal_chr.gtf")
+        annotation.file <- paste("internal_chr.gtf")
+    } else {
+        annotation.file <- paste(internal.gtf)
+    }
+}
+cuffcompare.options <- paste(cuffcompare.options, "-r", annotation.file)
 
-if (r == "yes"){
-	cuffcompare.options <-paste(cuffcompare.options, "-R")
+if (r == "yes") {
+    cuffcompare.options <- paste(cuffcompare.options, "-R")
 }
 
 
