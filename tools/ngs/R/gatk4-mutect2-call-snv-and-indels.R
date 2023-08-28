@@ -50,7 +50,7 @@ if (organism == "other") {
     internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa", sep = "", collapse = ""))
     # If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
     if (chr == "chr1") {
-        source(file.path(chipster.common.path, "seq-utils.R"))
+        source(file.path(chipster.common.lib.path, "seq-utils.R"))
         addChrToFasta(internal.fa, "reference.fasta")
     } else {
         file.copy(internal.fa, "reference.fasta")
