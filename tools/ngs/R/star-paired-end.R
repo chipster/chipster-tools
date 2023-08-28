@@ -20,7 +20,7 @@
 # SLOTS 5
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.lib.path, "bam-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

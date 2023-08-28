@@ -32,7 +32,7 @@
 # Add chr to chromosome names in BAM if necessary. Optional inputs are processed only if present.
 tfile <- "treatment.bam"
 if (chr == "1") {
-    source(file.path(chipster.common.path, "bam-utils.R"))
+    source(file.path(chipster.common.lib.path, "bam-utils.R"))
     addChrToBAM("treatment.bam", "treatment_chr.bam")
     system("mv treatment_chr.bam treatment.bam")
 }

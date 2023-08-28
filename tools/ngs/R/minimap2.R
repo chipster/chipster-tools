@@ -19,7 +19,7 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # read input names
 inputnames <- read_input_definitions()
 
-source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.lib.path, "bam-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 # above step is not needed as minimap 2 does this automatically

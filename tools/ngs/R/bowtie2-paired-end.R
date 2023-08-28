@@ -40,7 +40,7 @@
 # PARAMETER OPTIONAL unaligned.file: "Put unaligned reads to a separate file" TYPE [yes, no] DEFAULT no (Would you like to store unaligned reads to a new fastq file? Note that also multireads will be added to this file, unless you asked them to be put to a separate file.)
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.lib.path, "bam-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it

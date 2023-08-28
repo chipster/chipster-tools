@@ -25,7 +25,7 @@
 ## Source required functions
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "bam-utils.R"))
+source(file.path(chipster.common.lib.path, "bam-utils.R"))
 
 # Prefer fixed representation over exponential
 options(scipen = 10)
