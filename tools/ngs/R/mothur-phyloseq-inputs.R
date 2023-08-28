@@ -1,4 +1,4 @@
-# TOOL mothur-phyloseq-inputs.R: "Generate input files for phyloseq" (This tool generates input files for the R package phyloseq, using the Mothur tools dist.seqs \(for 16S and 18S data\), cluster \(opticlust for 16S and 18S data, and agc for ITS data\), make.shared and classify.otu. As part of input file generation, sequences are clustered into operational taxonomic units \(OTU\) based on a user-defined sequence dissimilarity threshold. Note that sample groups in the phenodata file should be indicated using characters \(numeric labels are currently not supported by downstream analyses\).)
+# TOOL mothur-phyloseq-inputs.R: "Cluster sequences to OTUs and classify them" (This tool generates input files for the R package phyloseq, using the Mothur tools dist.seqs \(for 16S and 18S data\), cluster \(opticlust for 16S and 18S data, and agc for ITS data\), make.shared and classify.otu. As part of input file generation, sequences are clustered into operational taxonomic units \(OTU\) based on a user-defined sequence dissimilarity threshold. Note that sample groups in the phenodata file should be indicated using characters \(numeric labels are currently not supported by downstream analyses\).)
 # INPUT file.fasta: "FASTA file" TYPE GENERIC
 # INPUT picked.count_table: "Mothur count file" TYPE MOTHUR_COUNT
 # INPUT sequences-taxonomy-assignment.txt: "Sequences taxonomy assignment file" TYPE GENERIC
@@ -16,7 +16,7 @@
 # OUTPUT OPTIONAL file.opti_mcc.shared
 # OUTPUT OPTIONAL file.agc.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "16S or 18S", its: "ITS"] DEFAULT other (Indicate if you have ITS data as it is treated differently.)
-# PARAMETER cutoff: "Cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
+# PARAMETER cutoff: "Clustering cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
 # RUNTIME R-4.2.0-phyloseq
 # SLOTS 4
 # STORAGE 2000

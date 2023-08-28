@@ -15,13 +15,14 @@
 	</category>
 	
 	<category name="Preprocessing" color="#e7df70">	
-		<tool>prinseq-filter.R</tool>
-		<tool>fastx-clipper.R</tool>
-		<tool>fastx-quality-filter.R</tool>
 		<!-- <tool>prinseq-trimmer.R</tool>	-->
 		<tool>trimmomatic.R</tool>
 		<tool>trimmomatic-for-iontorrent.R</tool>
+		<tool>cutadapt.R</tool>
 		<tool>fastx-trimmer.R</tool>
+		<tool>prinseq-filter.R</tool>
+		<tool>fastx-clipper.R</tool>
+		<tool>fastx-quality-filter.R</tool>
 		<tool>tagcleaner-trim.R</tool>	
 		<tool>tagcleaner-predict.R</tool>	
 		<tool>tagcleaner-statistics.R</tool>
@@ -281,7 +282,6 @@
 
 	<category name="Microbial amplicon data preprocessing for ASV" color="#a49900">
 		<tool>identify-primers.R</tool>
-		<tool>cutadapt.R</tool>
 		<tool>dada2-filter.R</tool>
 		<tool>dada2-dada.R</tool>
 		<tool>dada2-merge.R</tool>
@@ -321,14 +321,14 @@
 
 	<category name="Microbial amplicon data analyses" color="#a49900">
 		<tool>phyloseq-info.R</tool>
+		<tool>metabarcoding-filter-taxgroup.R</tool>
+		<tool>metabarcoding-filter-individual.R</tool>
+		<tool>metabarcoding-taxon-overview.R</tool>
+		<tool>metabarcoding-additional-prevalence.R</tool>
+		<tool>metabarcoding-prevalence-filter.R</tool>
+		<tool>metabarcoding-single-double.R</tool>
 		<tool>metabarcoding-rarecurve-alpha.R</tool>
 		<tool>metabarcoding-rarefy-even.R</tool>
-		<tool>metabarcoding-taxon-overview.R</tool>
-		<tool>metabarcoding-filter-taxgroup.R</tool>
-		<tool>metabarcoding-filter-individual.R</tool>		
-		<tool>metabarcoding-additional-prevalence.R</tool>		
-		<tool>metabarcoding-single-double.R</tool>
-		<tool>metabarcoding-prevalence-filter.R</tool>
 		<tool>metabarcoding-transform-otu.R</tool>
 	    	<tool>metabarcoding-stacked-barplot.R</tool>
 	    	<tool>metabarcoding-distance-ordination.R</tool>
