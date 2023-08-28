@@ -31,7 +31,7 @@ once <- appears.more.than.once
 no <- no.of.motifs
 
 # Retrieving the sequences. The function is available in common/R-2.12/promoter.utils.
-source(file.path(chipster.common.path, "promoter-utils.R"))
+source(file.path(chipster.common.lib.path, "promoter-utils.R"))
 seqs <- retreive_promoters(species, promoter.size, multiple.promoters, "normalized.tsv", "phenodata.tsv")
 
 # Write sequences on disk

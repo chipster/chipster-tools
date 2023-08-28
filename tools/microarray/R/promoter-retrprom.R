@@ -10,7 +10,7 @@
 # MK 23.09.2013, modified to use R
 
 # Function available in common/R-2.12/promoter.utils. The function returns an object with three vectors (seq, seq.names and nos.names) for sequences, IDs and IDs without sequences
-source(file.path(chipster.common.path, "promoter-utils.R"))
+source(file.path(chipster.common.lib.path, "promoter-utils.R"))
 seqs <- retreive_promoters(species, promoter.size, multiple.promoters, "normalized.tsv", "phenodata.tsv")
 
 # Retrieving the sequences
