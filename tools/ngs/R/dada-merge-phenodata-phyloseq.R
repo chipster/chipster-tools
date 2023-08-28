@@ -7,7 +7,7 @@
 # RUNTIME R-4.2.0-phyloseq
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # Load phyloseq
 library(phyloseq)

@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely to be named as Mock)
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # Load phyloseq
 library(phyloseq)

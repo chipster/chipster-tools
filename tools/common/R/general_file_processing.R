@@ -17,7 +17,7 @@
 # AMS 9.11.2015 Added support for compressed input files
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("input")
 
 if (nchar(sstring) > 50) {

@@ -13,7 +13,7 @@
 # KM 11.11.2014
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.txt")
 unzipIfGZipFile("reads2.txt")
 unzipIfGZipFile("genome.txt")

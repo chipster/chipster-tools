@@ -30,9 +30,9 @@
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Check out if the files are compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fastaq")
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads2.fastaq")
 
 

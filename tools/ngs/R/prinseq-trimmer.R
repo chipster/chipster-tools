@@ -39,9 +39,9 @@
 # AMS 17.2.2014, gzip outputs
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("fastqfile")
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("matepair_fastqfile")
 
 # Check whether input files are fastq

@@ -17,7 +17,7 @@
 
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # binary
 binary <- c(file.path(chipster.tools.path, "python-3.8.11", "bin", "cutadapt"))

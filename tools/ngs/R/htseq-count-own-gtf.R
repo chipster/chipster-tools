@@ -21,7 +21,7 @@
 # 24.3.2021	EK added id.attribute proteinId
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("features.gtf")
 
 # sort bam if the data is paired-end

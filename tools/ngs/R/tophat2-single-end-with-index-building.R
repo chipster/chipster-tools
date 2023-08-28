@@ -34,7 +34,7 @@
 # OUTPUT OPTIONAL tophat2.log
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

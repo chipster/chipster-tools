@@ -4,7 +4,7 @@
 
 # K.M 28.10.2013
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("input.txt")
 
 # pb settings

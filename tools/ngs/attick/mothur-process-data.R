@@ -24,7 +24,7 @@
 # aikaisempi vaihe prepare data ei tee kunnollista phenodata-tiedostoa
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("all.fasta")
 unzipIfGZipFile("all.qual")
 

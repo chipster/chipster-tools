@@ -15,7 +15,7 @@
 # ES 08.2022
 # added slot 2 for unite/ITD databases
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # load library dada2
 library(dada2)

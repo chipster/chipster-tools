@@ -11,8 +11,8 @@
 # AMS 13.10.2014 changed to use seqtk
 
 
-source(file.path(chipster.common.path, "zip-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # binary
 seqtk.binary <- file.path(chipster.tools.path, "seqtk", "seqtk")

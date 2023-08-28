@@ -14,7 +14,7 @@
 options(scipen = 999)
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fastq")
 unzipIfGZipFile("reads2.fastq")
 

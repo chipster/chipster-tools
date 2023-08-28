@@ -19,7 +19,7 @@
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 mview.path <- file.path(chipster.tools.path, "mview", "bin")
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequences")
 
 # check sequece file type

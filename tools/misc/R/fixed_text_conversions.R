@@ -16,7 +16,7 @@ inputnames <- read_input_definitions()
 
 
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
     unzipIfGZipFile(input.names[i, 1])

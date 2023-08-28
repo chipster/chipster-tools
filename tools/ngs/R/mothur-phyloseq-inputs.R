@@ -30,7 +30,7 @@ library(reshape2)
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("file.fasta")
 
 # binary

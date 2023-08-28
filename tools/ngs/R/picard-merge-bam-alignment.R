@@ -56,7 +56,7 @@ if (fileOk("merged.bam", minsize = 100)) {
 ## Annotate/tag reads with gene names:
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("own.gtf")
 
 # command start

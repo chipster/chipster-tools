@@ -14,7 +14,7 @@
 # PARAMETER order: "Order by file name" TYPE [yes, no] DEFAULT yes (Concatenate files in alphabetical order by file name.)
 
 # K.M. 18.4. 2016
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check if files are zipped

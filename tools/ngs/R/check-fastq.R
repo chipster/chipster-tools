@@ -7,7 +7,7 @@
 
 # AMS 2017-03-29
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Prefer fixed representation over exponential

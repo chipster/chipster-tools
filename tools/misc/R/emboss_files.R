@@ -4,7 +4,7 @@
 # PARAMETER OPTIONAL ecommand: "Select task" TYPE [nohtml: "(nohtml\) Remove mark-up e.g. HTML tags from a text file", noreturn: "(noreturn\) Remove carriage return from a text file", nospace: "(nospace\) Remove whitespace from a text file", notab: "(notab\) Replace tabs with spaces in a text file", trimspace: "(trimspace\) Remove extra whitespace from a text file", semicolon: "Remove semicolons (;\) from a text file", dot: "Remove dots (.\) from a text file", slash: "Remove slash characters (\/\) from a text file", at: "Remove at characters (\@\) from a text file", hash: "Remove hash characters (#\) from a text file", sqbrc: "Remove square bracket characters (\[\]\) from a text file", curbrc: "Remove curly bracket characters (\{\}\) from a text file", percent: "Remove percent characters (\%\) from a text file", dollar: "Remove dollar characters (\$\) from a text file", dq: "Remove double quotation characters (\"\) from a text file", sq: "Remove singe quotation characters (\'\) from a text file", vb: "Remove vertical bar (\|\) from a text file", et: "Remove et characters (\&\) from a text file" , gt: "Remove greater-than characters (\>\) from a text file", lt: "Remove less-than characters (\<\) from a text file"] DEFAULT nohtml (Choose operateion to execute)
 
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("input.txt")
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 #

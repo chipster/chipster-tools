@@ -12,7 +12,7 @@
 # OUTPUT log3.txt
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # Binary emboss
 emboss.binary <- c(file.path(chipster.tools.path, "emboss-20.04", "bin", "seqret"))

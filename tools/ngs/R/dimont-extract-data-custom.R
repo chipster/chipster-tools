@@ -17,7 +17,7 @@
 # EK: 10.09.2014 Fixed a bug in the genome part of the command.
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("genome.fa")
 
 tool <- file.path(chipster.tools.path, "dimont", "extract_data_single_chipster.pl")

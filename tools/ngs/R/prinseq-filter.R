@@ -50,9 +50,9 @@
 # PARAMETER OPTIONAL max.qual.score: "Maximum quality score" TYPE INTEGER (Filter sequence with at least one quality score above the given value.)
 
 # Check out if the files are compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("fastqfile")
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("matepair_fastqfile")
 
 # Check whether input files are fastq

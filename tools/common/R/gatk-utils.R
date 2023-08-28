@@ -5,7 +5,7 @@
 # Remember to use correct filenames in GATK commands.
 #
 formatGatkVcf <- function(input.vcf, bam.names) {
-    # source(file.path(chipster.common.path, "zip-utils.R"))
+    # source(file.path(chipster.common.lib.path, "zip-utils.R"))
     tabix.binary <- c(file.path(chipster.tools.path, "tabix", "tabix"))
     bgzip.binary <- c(file.path(chipster.tools.path, "tabix", "bgzip"))
 
@@ -41,7 +41,7 @@ formatGatkVcf <- function(input.vcf, bam.names) {
 # Note that e.g for input file "example.fa" you end up with files "example.fa.fai" and "example.fa.dict".
 #
 formatGatkFasta <- function(fasta) {
-    source(file.path(chipster.common.path, "zip-utils.R"))
+    source(file.path(chipster.common.lib.path, "zip-utils.R"))
     picard.binary <- c(file.path(chipster.tools.path, "picard-tools", "picard.jar"))
     samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
     # Uncompress

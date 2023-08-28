@@ -4,7 +4,7 @@
 # PARAMETER header: "Tables contain a header row" TYPE [yes, no] DEFAULT yes (Do the TSV files contain a header row?)
 # PARAMETER remove.duplicates: "Remove duplicate rows" TYPE [yes, no] DEFAULT no (Remove exact duplicates of rows.)
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 files <- list.files(pattern = "*.tsv", full.names = FALSE, recursive = FALSE)
 for (i in 1:length(files)) {
     unzipIfGZipFile(files[i])

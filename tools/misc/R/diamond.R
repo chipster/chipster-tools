@@ -20,7 +20,7 @@
 use_remote_index <- ("yes")
 keep_index <- ("no")
 index_url <- ("https://diamond.object.pouta.csc.fi")
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 

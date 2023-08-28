@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL uncompressed.fa
 # PARAMETER type: "File type" TYPE [GTF, FASTA] DEFAULT GTF (File type.)
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("input")
 
 if (type == "GTF") {

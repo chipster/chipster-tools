@@ -21,7 +21,7 @@
 # EK 29.11.2021 Add --dta-cufflinks option
 
 ## Source required functions
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.path, "bam-utils.R"))
 

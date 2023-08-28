@@ -38,7 +38,7 @@
 
 options(scipen = 999)
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("inputseq")
 
 # Handle output names

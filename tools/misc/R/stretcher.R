@@ -19,7 +19,7 @@
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 options(scipen = 999)
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("asequence.fa")
 unzipIfGZipFile("bsequence.fa")
 

@@ -148,9 +148,9 @@ system(command)
 
 # STEP 5: Trimmomatic
 # Check out if the files are compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fastaq")
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads2.fastaq")
 
 trim.params <- paste("")

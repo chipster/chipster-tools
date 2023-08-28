@@ -22,7 +22,7 @@
 # AMS 04.07.2014 New genome/gtf/index locations & names
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("annotation.gtf")
 unzipIfGZipFile("genome.fa")
 

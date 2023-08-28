@@ -17,7 +17,7 @@
 # AMS 24.09.2015 Split tool to two tools
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("input.vcf")
 
 # binaries

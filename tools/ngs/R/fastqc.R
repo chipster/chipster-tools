@@ -15,7 +15,7 @@
 
 # FastQC detects gzipped files by file extension so we need to add .gz
 # extension to compressed files.
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 input.file <- "reads"
