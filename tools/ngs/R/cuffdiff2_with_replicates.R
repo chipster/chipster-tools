@@ -122,7 +122,7 @@ if (organism == "other") {
     internal.gtf <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, ".gtf", sep = "", collapse = ""))
     # If chromosome names in BAM have chr, we make a temporary copy of gtf with chr names, otherwise we use it as is.
     if (chr == "chr1") {
-        source(file.path(chipster.common.path, "gtf-utils.R"))
+        source(file.path(chipster.common.lib.path, "gtf-utils.R"))
         addChrToGtf(internal.gtf, "internal_chr.gtf")
         annotation.file <- paste("internal_chr.gtf")
     } else {

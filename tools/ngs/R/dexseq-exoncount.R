@@ -27,7 +27,7 @@ if (paired == "yes") {
 annotation.gtf <- file.path(chipster.tools.path, "genomes", "dexseq", paste(organism, ".DEXSeq.gtf", sep = "", collapse = ""))
 
 if (chr == "chr1") {
-    source(file.path(chipster.common.path, "gtf-utils.R"))
+    source(file.path(chipster.common.lib.path, "gtf-utils.R"))
     addChrToGtf(annotation.gtf, "annotation_chr.gtf")
     gtf <- paste("annotation_chr.gtf")
 }

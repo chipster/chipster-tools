@@ -38,7 +38,7 @@ if (file.exists("reference_file")) {
         internal.bed <- file.path(chipster.tools.path, "genomes", "bed", paste(organism, ".bed", sep = "", collapse = ""))
         # If chromosome names in BAM have chr, we make a temporary copy of BED with chr names, otherwise we use it as is.
         if (chr == "chr1") {
-            source(file.path(chipster.common.path, "gtf-utils.R"))
+            source(file.path(chipster.common.lib.path, "gtf-utils.R"))
             addChrToGtf(internal.bed, "internal_chr.bed")
             bed.file <- paste("internal_chr.bed")
         } else {

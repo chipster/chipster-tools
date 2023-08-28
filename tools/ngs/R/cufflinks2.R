@@ -52,7 +52,7 @@ if (organism == "other") {
     internal.gtf <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, ".gtf", sep = "", collapse = ""))
     # If chromosome names in BAM have chr, we make a temporary copy of gtf with chr names, otherwise we use it as is.
     if (chr == "chr1") {
-        source(file.path(chipster.common.path, "gtf-utils.R"))
+        source(file.path(chipster.common.lib.path, "gtf-utils.R"))
         addChrToGtf(internal.gtf, "internal_chr.gtf")
         annotation.file <- paste("internal_chr.gtf")
     } else {
@@ -108,7 +108,7 @@ command <- paste(cufflinks.binary, cufflinks.options, "-q", "-o tmp", "alignment
 system(command)
 
 # Rename files
-source(file.path(chipster.common.path, "gtf-utils.R"))
+source(file.path(chipster.common.lib.path, "gtf-utils.R"))
 
 if (file.exists("tmp/genes.fpkm_tracking") && file.info("tmp/genes.fpkm_tracking")$size > 0) {
     system("mv tmp/genes.fpkm_tracking genes.fpkm_tracking.tsv")

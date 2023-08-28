@@ -43,7 +43,7 @@ internal.gtf <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism,
 if (chr == "1") {
     annotation.file <- paste(internal.gtf)
 } else {
-    source(file.path(chipster.common.path, "gtf-utils.R"))
+    source(file.path(chipster.common.lib.path, "gtf-utils.R"))
     addChrToGtf(internal.gtf, "internal_chr.gtf")
     annotation.file <- paste("internal_chr.gtf")
 }
