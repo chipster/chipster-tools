@@ -3,12 +3,13 @@
 <head><title></title></head>
 <body>
 
-<h2>Utilities / Extract .tar or .tar.gz file</h2>
+<h2>Extract .tar or .tar.gz file</h2>
 
 <h3>Description</h3>
 
 <p>
-Extract a tar file. The file can be gzip comressed (usually has a file extension .tar.gz or .tgz.)
+Extract a tar file. The file can be gzip comressed (usually has a file extension .tar.gz or .tgz). 
+  Please note that if the tar file is bigger than 100 GB, you should use instead the tool Extract large .tar or .tar.gz file.
 </p>
 
 <h3>Parameters</h3>
@@ -30,7 +31,8 @@ or .html,.log).
 Alternatively you can provide a list of filenames as a text file, one name per line. 
 </p>
 <p>
-To see the contents of a .tar file, you can use use tool "Utilities / List contents of a tar file".
+To see the contents of a .tar file, you can use use tool "Utilities / List contents of a tar file". This 
+  produces a text file. if you want to use this file as base for making a filename list, you can edit it outside of Chipster and import the edited one.
 </p>
 <p>
 This tool is based on Python tarfile module. In addition to .tar.gz files, it can also extract plain tar files or 
