@@ -34,7 +34,7 @@ def main():
         someonly = True
         os.system("tar tf input_file > toc")
         # Remove any * characters as they are treated literally and not as a wildcard.
-        clean_ext = extensions.translate(None, '*')
+        clean_ext = extensions.replace('*', '')
         extension_list = clean_ext.split(',')
         for ext in extension_list:
             os.system("grep -i " + ext +"$ toc >> selected_list")
