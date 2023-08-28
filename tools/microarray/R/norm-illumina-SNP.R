@@ -76,7 +76,7 @@ if (method == "illumina") {
         # if input = Illumina
     } else {
         # overwrite the original function
-        source(file.path(chipster.common.path, "crlmm-utils.R"))
+        source(file.path(chipster.common.lib.path, "crlmm-utils.R"))
         assignInNamespace("getNumberOfSNPs", getNumberOfSNPs.chip, "crlmm")
 
         XY <- readGenCallOutput(file = "chip.txt", cdfName = cdfName, colnames = list("SampleID" = "Sample ID", "SNPID" = "SNP Name", "XRaw" = "X Raw", "YRaw" = "Y Raw"), type = list("SampleID" = "character", "SNPID" = "character", "XRaw" = "integer", "YRaw" = "integer"))
