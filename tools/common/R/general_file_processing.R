@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL selected.gtf
 # OUTPUT OPTIONAL file_operation.log
 # PARAMETER operation: "Operation" TYPE [select: "Select rows with a regular expression", exclude: "Exclude rows with a regular expression", replace: "Replace text", pick_rows: "Select a set of rows from the file" ] DEFAULT replace (Operation to be performed for the selected text or table file)
-# PARAMETER OPTIONAL sstring: "Search string" TYPE STRING (Search expression)
+# PARAMETER OPTIONAL sstring: "Search string" TYPE UNCHECKED_STRING (Search expression)
 # PARAMETER OPTIONAL rstring: "Replacement string" TYPE STRING (Replacement string)
 # PARAMETER OPTIONAL startrow: "First row to select" TYPE INTEGER DEFAULT 1 (Number of the first row to be selected. Note that in table files, the header row is considered as the first row.)
 # PARAMETER OPTIONAL stoprow: "Last row to select" TYPE INTEGER DEFAULT 10000000 (Number of the last row to be selected.)
@@ -15,6 +15,7 @@
 
 # KM 10.4.2015
 # AMS 9.11.2015 Added support for compressed input files
+# EK 30.8.2023 Possibility to force match to the beginning of a string
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
