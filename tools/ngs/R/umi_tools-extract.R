@@ -3,7 +3,6 @@
 # OUTPUT output.fq.gz
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL log: "Produce log file" TYPE [yes,no] DEFAULT no (Produce log file.)
-# IMAGE comp-20.04-r-deps
 # RUNTIME R-4.1.1
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
