@@ -16,11 +16,11 @@ library(dplyr)
 load("seurat_obj_subset1.Robj")
 
 seurat_obj <- subset(seurat_obj, slice1_imagerow > 400 | slice1_imagecol < 150, invert = TRUE)
-#cortex <- subset(cortex, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
-#cortex <- subset(cortex, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
+# cortex <- subset(cortex, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
+# cortex <- subset(cortex, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
 
 # Open the pdf file for plotting
-pdf(file="subset2.pdf", width=13, height=7) 
+pdf(file = "subset2.pdf", width = 13, height = 7)
 
 p1 <- SpatialDimPlot(seurat_obj, crop = TRUE, label = TRUE)
 p2 <- SpatialDimPlot(seurat_obj, crop = FALSE, label = TRUE, pt.size.factor = 1, label.size = 3)
@@ -30,6 +30,6 @@ p1 + p2
 dev.off()
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_subset2.Robj")
+save(seurat_obj, file = "seurat_obj_subset2.Robj")
 
-#EOF
+# EOF

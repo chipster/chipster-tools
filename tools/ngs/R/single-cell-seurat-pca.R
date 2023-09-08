@@ -32,8 +32,8 @@ library(ggplot2)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
-if (exists("data.combined") ){
-	seurat_obj <- data.combined
+if (exists("data.combined")) {
+    seurat_obj <- data.combined
 }
 
 # PCA
@@ -41,35 +41,35 @@ if (exists("data.combined") ){
 seurat_obj <- RunPCA(seurat_obj, features = VariableFeatures(object = seurat_obj), npcs = num.of.pcas)
 
 # PCA genes in txt file
-if (loadings == TRUE){
-	sink("PCAloadings.txt")
-	print(seurat_obj[["pca"]], dims = 1:num.of.pcas, nfeatures = num.of.genes.loadings)
-	sink()
+if (loadings == TRUE) {
+    sink("PCAloadings.txt")
+    print(seurat_obj[["pca"]], dims = 1:num.of.pcas, nfeatures = num.of.genes.loadings)
+    sink()
 }
 
 # PDF plots
-pdf(file="PCAplots.pdf", , width=9, height=12) 
+pdf(file = "PCAplots.pdf", , width = 9, height = 12)
 VizDimLoadings(seurat_obj, dims = 1:2, reduction = "pca") + ggtitle("Top 30 genes associated with PCs 1 & 2")
 DimPlot(seurat_obj, reduction = "pca", group.by = "orig.ident") # orig.ident = otherwise colors based on cell cycle stages
 
 # Need to check the number of cells at this point.
 cells_left <- length(colnames(x = seurat_obj))
 if (cells_left > 500) {
-	DimHeatmap(seurat_obj, dims = 1, cells = 500, balanced = TRUE) #+ ggtitle("Heatmap for PC1")
-	DimHeatmap(seurat_obj, dims = 1:num.of.heatmaps, cells = 500, balanced = TRUE) #+ ggtitle("Heatmaps for N first PCs")
-}else{
-	DimHeatmap(seurat_obj, dims = 1, cells = cells_left, balanced = TRUE) #+ ggtitle("Heatmap for PC1")
-	DimHeatmap(seurat_obj, dims = 1:num.of.heatmaps, cells = cells_left, balanced = TRUE) #+ ggtitle("Heatmaps for N first PCs")
+    DimHeatmap(seurat_obj, dims = 1, cells = 500, balanced = TRUE) #+ ggtitle("Heatmap for PC1")
+    DimHeatmap(seurat_obj, dims = 1:num.of.heatmaps, cells = 500, balanced = TRUE) #+ ggtitle("Heatmaps for N first PCs")
+} else {
+    DimHeatmap(seurat_obj, dims = 1, cells = cells_left, balanced = TRUE) #+ ggtitle("Heatmap for PC1")
+    DimHeatmap(seurat_obj, dims = 1:num.of.heatmaps, cells = cells_left, balanced = TRUE) #+ ggtitle("Heatmaps for N first PCs")
 }
-# fig.height=12,fig.width=9 
+# fig.height=12,fig.width=9
 ElbowPlot(seurat_obj, ndims = num.of.pcas) + ggtitle("Amount of variation in the data explained by each PC")
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign="center", valign="center", cex=2) #, cex=0.8
+textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2) # , cex=0.8
 
 dev.off() # close the pdf
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_pca.Robj")
+save(seurat_obj, file = "seurat_obj_pca.Robj")
 
 ## EOF

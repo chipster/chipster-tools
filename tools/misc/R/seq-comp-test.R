@@ -1,4 +1,4 @@
-# TOOL seq-comp-test.R: "Test data input and output" (Data input output test.) 
+# TOOL seq-comp-test.R: "Test data input and output" (Data input output test.)
 # INPUT input TYPE GENERIC
 # OUTPUT output
 

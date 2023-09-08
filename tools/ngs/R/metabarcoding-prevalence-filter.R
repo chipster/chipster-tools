@@ -13,14 +13,20 @@ library(phyloseq)
 load("ps.Rda")
 
 # Prevalences of each feature (stored as data frame)
-prevdf <- apply(X = otu_table(ps),
-               MARGIN = ifelse(taxa_are_rows(ps), yes = 1, no = 2),
-               FUN = function(x){sum(x > 0)})
+prevdf <- apply(
+    X = otu_table(ps),
+    MARGIN = ifelse(taxa_are_rows(ps), yes = 1, no = 2),
+    FUN = function(x) {
+        sum(x > 0)
+    }
+)
 
 # Add taxonomy and total read counts to data frame
-prevdf <- data.frame(Prevalence = prevdf,
-                    TotalAbundance = taxa_sums(ps),
-                    tax_table(ps))
+prevdf <- data.frame(
+    Prevalence = prevdf,
+    TotalAbundance = taxa_sums(ps),
+    tax_table(ps)
+)
 
 # Filter the data set
 threshold <- threshold / 100
@@ -28,5 +34,5 @@ prevalenceThreshold <- threshold * nsamples(ps)
 keepTaxa <- rownames(prevdf)[(prevdf$Prevalence >= prevalenceThreshold)]
 ps <- prune_taxa(keepTaxa, ps)
 
-# Export phyloseq object as Rda file 
+# Export phyloseq object as Rda file
 save(ps, file = "ps_prevfilter.Rda")

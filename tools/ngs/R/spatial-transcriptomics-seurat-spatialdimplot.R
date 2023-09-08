@@ -5,7 +5,7 @@
 # RUNTIME R-4.2.3-single-cell
 # TOOLS_BIN ""
 
-# 2022-07-28 IH 
+# 2022-07-28 IH
 
 library(Seurat)
 library(ggplot2)
@@ -16,11 +16,11 @@ library(dplyr)
 load("seurat_spatial_obj_pca.Robj")
 
 # Open the pdf file for plotting
-pdf(file="spatialdimplot.pdf", width=13, height=7) 
+pdf(file = "spatialdimplot.pdf", width = 13, height = 7)
 
 # Run SpatialDimPlot with the chosen clusters
 clusters <- trimws(unlist(strsplit(clusters, ",")))
-clusters <- strtoi(clusters, base=0L)
+clusters <- strtoi(clusters, base = 0L)
 SpatialDimPlot(seurat_obj, cells.highlight = CellsByIdentities(seurat_obj, idents = c(clusters)), facet.highlight = TRUE, ncol = 3)
 
 # close the pdf

@@ -40,4 +40,3 @@ if (file.info("closestbed.tmp")$size > 0) {
 } else {
   system("echo \"# No results found\" > error.txt")
 }
-

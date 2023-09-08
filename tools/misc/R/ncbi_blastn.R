@@ -16,7 +16,7 @@
 # PARAMETER OPTIONAL outfmt: "Output format type" TYPE [0: "normal BLAST report with pairwise alignments", 1: "query-anchored alignments showing identities", 2: "query-anchored alignments with no identities", 3: "flat query-anchored, show identities", 4: "flat query-anchored, no identities", 5: "XML Blast output", 6: "tabular", 10: "comma-separated values", 11: "BLAST archive format", 12: "list of unique hit sequence identifiers", 14: "hit regions in fasta format"] DEFAULT 0 (Output format type)
 # PARAMETER OPTIONAL dust: "Filter low complexity regions" TYPE [yes: yes, no: no] DEFAULT yes (Use the DUST program for filtering low complexity regions in the query sequence.)
 # PARAMETER OPTIONAL entrez_query: "Entrez query to limit search" TYPE STRING DEFAULT "none" (You can use Entrez query syntax to search a subset of the selected BLAST database. This can be helpful to limit searches to molecule types, sequence lengths or to exclude organisms.)
-# PARAMETER OPTIONAL query_loc: "Location on the query sequence" TYPE STRING DEFAULT "full length" (Location of the search region in the query sequence, for example: 23-66.) 
+# PARAMETER OPTIONAL query_loc: "Location on the query sequence" TYPE STRING DEFAULT "full length" (Location of the search region in the query sequence, for example: 23-66.)
 # PARAMETER OPTIONAL reward: "Reward for a match" TYPE STRING DEFAULT "default" (Reward for a nucleotide match. The scoring system consists of a reward for a match and a penalty for a mismatch. The absolute reward/penalty ratio should be increased as one looks at more divergent sequences. A ratio of 0.33 (1/-3\) is appropriate for sequences that are about 99% conserved; a ratio of 0.5 (1/-2\) is best for sequences that are 95% conserved; a ratio of about one (1/-1\) is best for sequences that are 75% conserved.)
 # PARAMETER OPTIONAL penalty: "Penalty for a mismatch" TYPE STRING DEFAULT "default" (Penalty for a nucleotide mismatch. The scoring system consists of a reward for a match and a penalty for a mismatch. The absolute reward/penalty ratio should be increased as one looks at more divergent sequences. A ratio of 0.33 (1/-3\) is appropriate for sequences that are about 99% conserved; a ratio of 0.5 (1/-2\) is best for sequences that are 95% conserved; a ratio of about one (1/-1\) is best for sequences that are 75% conserved.)
 # PARAMETER OPTIONAL gapopen: "Gap opening penalty" TYPE STRING DEFAULT "default" (Gap opening penalty ranging from 6 to 25. Note that if you assign this value, you must define also the gap extension penalty.)
@@ -27,197 +27,197 @@
 # EK 18.11.2013 changes to parameter names and descriptions
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("query.fa")
-#unzipIfGZipFile("dbprot.fa")
+# unzipIfGZipFile("dbprot.fa")
 
 # pb settings
 pb.binary <- file.path(chipster.module.path, "/shell/pb_for_chipster.sh")
-#pb.binary <- file.path(chipster.tools.path, "blast", "/ncbi-blast-2.2.29+", "bin", "pb_for_chipster")
+# pb.binary <- file.path(chipster.tools.path, "blast", "/ncbi-blast-2.2.29+", "bin", "pb_for_chipster")
 command.start <- paste(pb.binary, "blastn")
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("query.fa")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter query.fa")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
 
-#In blast command outputformat is used as a string
-#in job control as a number
+# In blast command outputformat is used as a string
+# in job control as a number
 outfmt.string <- outfmt
 outfmt <- as.integer(outfmt)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 10){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 10 but your file contains ', num.queryseq ))
+if (num.queryseq > 10) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 10 but your file contains ", num.queryseq))
 }
 
-#Modify table format
+# Modify table format
 outfmt.is.table <- paste("no")
 
-if (outfmt == 6)  {
-   outfmt.string <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')	
-   outfmt.is.table <- paste("yes")
+if (outfmt == 6) {
+    outfmt.string <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')
+    outfmt.is.table <- paste("yes")
 }
-#These parameters have allways some value
-general.parameters <- paste("-chipster_path /opt/chipster -remote -no_slurm -query query.fa -out blast_results -db", db )
-general.parameters <- paste( general.parameters, "-task", task)
-general.parameters <- paste( general.parameters, "-evalue ", evalue)
-general.parameters <- paste( general.parameters, "-dust" , dust)
-general.parameters <- paste( general.parameters, "-outfmt" , outfmt.string )
-general.parameters <- paste( general.parameters, "-num_threads" , chipster.threads.max )
+# These parameters have allways some value
+general.parameters <- paste("-chipster_path /opt/chipster -remote -no_slurm -query query.fa -out blast_results -db", db)
+general.parameters <- paste(general.parameters, "-task", task)
+general.parameters <- paste(general.parameters, "-evalue ", evalue)
+general.parameters <- paste(general.parameters, "-dust", dust)
+general.parameters <- paste(general.parameters, "-outfmt", outfmt.string)
+general.parameters <- paste(general.parameters, "-num_threads", chipster.threads.max)
 
 optional.parameters <- paste(" ")
 
-if (nchar(entrez_query) > 4 ) {
-	optional.parameters <- paste(optional.parameters, '-entrez_query "', entrez_query, '"')
+if (nchar(entrez_query) > 4) {
+    optional.parameters <- paste(optional.parameters, '-entrez_query "', entrez_query, '"')
 }
 
 
 if (outfmt < 5) {
-	optional.parameters <- paste(optional.parameters, " -html -num_descriptions ", num_hits, "-num_alignments", num_hits )
+    optional.parameters <- paste(optional.parameters, " -html -num_descriptions ", num_hits, "-num_alignments", num_hits)
 }
 
 if (outfmt > 5) {
-	optional.parameters <- paste(optional.parameters, " -max_target_seqs ", num_hits )
+    optional.parameters <- paste(optional.parameters, " -max_target_seqs ", num_hits)
 }
 
-#Check text formatted parameters
-if (nchar(gapopen) > 2 ) {
-	gapopen <- paste("default")
+# Check text formatted parameters
+if (nchar(gapopen) > 2) {
+    gapopen <- paste("default")
 }
-if (nchar(gapopen) < 1 ) {
-	gapopen <- paste("default")
-}
-
-if (nchar(gapextend) > 2 ) {
-	gapextend <- paste("default")
-}
-if (nchar(gapextend) < 1 ) {
-	gapextend <- paste("default")
+if (nchar(gapopen) < 1) {
+    gapopen <- paste("default")
 }
 
-if (nchar(reward) < 1 ) {
-	reward <- paste("default")
+if (nchar(gapextend) > 2) {
+    gapextend <- paste("default")
+}
+if (nchar(gapextend) < 1) {
+    gapextend <- paste("default")
 }
 
-if (nchar(reward) > 2 ) {
-	reward <- paste("default")
+if (nchar(reward) < 1) {
+    reward <- paste("default")
 }
 
-if (nchar(penalty) < 1 ) {
-	penalty <- paste("default")
+if (nchar(reward) > 2) {
+    reward <- paste("default")
 }
 
-if (nchar(penalty) > 2 ) {
-	penalty <- paste("default")
+if (nchar(penalty) < 1) {
+    penalty <- paste("default")
 }
 
-if (nchar(query_loc) < 3 ) {
-	penalty <- paste("full length")
+if (nchar(penalty) > 2) {
+    penalty <- paste("default")
 }
 
-#set up more parameters if applied
-
-if ( gapopen != "default" ) {
-	if ( gapextend == "default" ){
-		stop(paste("If you define gap opening penalty you must also define gap extension pelalty"))
-	}
+if (nchar(query_loc) < 3) {
+    penalty <- paste("full length")
 }
 
-if ( gapextend != "default" ) {
-	if ( gapopen == "default" ){
-		stop(paste("If you define gap opening penalty you must also define gap extension pelalty"))
-	}
+# set up more parameters if applied
+
+if (gapopen != "default") {
+    if (gapextend == "default") {
+        stop(paste("If you define gap opening penalty you must also define gap extension pelalty"))
+    }
 }
 
-if ( gapopen !=  "default"){
-	if ( gapextend != "default" ){
-		optional.parameters <- paste(optional.parameters, " -gapopen ", gapopen, "-gapextend" , gapextend )	
-	}
+if (gapextend != "default") {
+    if (gapopen == "default") {
+        stop(paste("If you define gap opening penalty you must also define gap extension pelalty"))
+    }
+}
+
+if (gapopen != "default") {
+    if (gapextend != "default") {
+        optional.parameters <- paste(optional.parameters, " -gapopen ", gapopen, "-gapextend", gapextend)
+    }
 }
 
 
-if ( query_loc != "full length"){
-	optional.parameters <- paste(optional.parameters, " -query_loc ", query_loc )
+if (query_loc != "full length") {
+    optional.parameters <- paste(optional.parameters, " -query_loc ", query_loc)
 }
 
-if ( reward != "default"){
-	optional.parameters <- paste(optional.parameters, " -reward ", reward )
+if (reward != "default") {
+    optional.parameters <- paste(optional.parameters, " -reward ", reward)
 }
 
-if ( penalty != "default"){
-	optional.parameters <- paste(optional.parameters, " -penalty ", penalty )
+if (penalty != "default") {
+    optional.parameters <- paste(optional.parameters, " -penalty ", penalty)
 }
 command.end <- (paste(" >>", "blast.log 2>&1"))
 
-#run the task
+# run the task
 system("ls -l > blast.log")
 blast.command <- paste(command.start, general.parameters, optional.parameters, command.end)
-echo.command <- paste("echo '", blast.command , "' >> blast.log" )
+echo.command <- paste("echo '", blast.command, "' >> blast.log")
 system(echo.command)
 system(blast.command)
 system("echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 system("ls -l >> blast.log")
-#rename the results
+# rename the results
 if (outfmt < 5) {
-	test.command <- paste("echo renaming as html. outformat is ", outfmt, ">> blast.log")
-	system (test.command)
-	system ("mv blast_results blast_results.html")	
+    test.command <- paste("echo renaming as html. outformat is ", outfmt, ">> blast.log")
+    system(test.command)
+    system("mv blast_results blast_results.html")
 }
 
 if (outfmt == 5) {
-	system ("mv blast_results blast_results.xml")	
+    system("mv blast_results blast_results.xml")
 }
 
 if (outfmt.is.table == "yes") {
-	system ('printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv ')
-	system ("cat blast_results >> blast_results.tsv")	
+    system('printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv ')
+    system("cat blast_results >> blast_results.tsv")
 }
 
 if (outfmt == 7) {
-	system ("mv blast_results blast_results.tsv")	
+    system("mv blast_results blast_results.tsv")
 }
 
 if (outfmt == 8) {
-	system ("mv blast_results blast_results.txt")	
+    system("mv blast_results blast_results.txt")
 }
 
 if (outfmt == 10) {
-	system ("mv blast_results blast_results.csv")	
+    system("mv blast_results blast_results.csv")
 }
 
 if (outfmt == 11) {
-	system ("mv blast_results blast_results.asn1")	
+    system("mv blast_results blast_results.asn1")
 }
 
 if (outfmt == 12) {
-	system ("mv blast_results blast_results.txt")	
+    system("mv blast_results blast_results.txt")
 }
 
 if (outfmt == 13) {
-	system ("mv blast_results blast_results.fasta")	
+    system("mv blast_results blast_results.fasta")
 }
 
 if (outfmt == 14) {
-	system ("mv blast_results blast_results.fasta")	
+    system("mv blast_results blast_results.fasta")
 }
 
-if ( save_log == "no") {
-	system ("rm -f blast.log")
+if (save_log == "no") {
+    system("rm -f blast.log")
 }

@@ -6,25 +6,25 @@
 # AMS 4.6.2013
 # EK 27.6.2013 Changes to description and output
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-version <- system(paste(binary,"--version"),intern = TRUE)
-documentVersion("Mothur",version)
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+version <- system(paste(binary, "--version"), intern = TRUE)
+documentVersion("Mothur", version)
 
 # batch file
-summaryseqs.options <- paste("summary.seqs(fasta=reads.fasta, processors=",chipster.threads.max,")",sep = "")
+summaryseqs.options <- paste("summary.seqs(fasta=reads.fasta, processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)
-write(summaryseqs.options,"batch.mth",append = FALSE)
+write(summaryseqs.options, "batch.mth", append = FALSE)
 
 # command
-command <- paste(binary,"batch.mth","> log_raw.txt")
+command <- paste(binary, "batch.mth", "> log_raw.txt")
 
 # run
 system(command)

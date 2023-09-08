@@ -1,5 +1,5 @@
 # TOOL bbduk-trim.R: "Trim QuantSeq reads using BBDuk" (Given a FASTQ file containing Lexogen QuantSeq reads, removes adapters, polyA read-through, and low quality tails. This tool is based on the BBDuk tool of the BBTools package.)
-# INPUT reads.fq: "FASTQ file" TYPE GENERIC 
+# INPUT reads.fq: "FASTQ file" TYPE GENERIC
 # OUTPUT trimmed.fq.gz
 # OUTPUT OPTIONAL bbduk.log
 # PARAMETER OPTIONAL k: "Kmer length for detecting adapters and polyA" TYPE INTEGER FROM 1 DEFAULT 13 (Contaminants shorter than k will not be found, k must be at least 1.)
@@ -10,33 +10,33 @@
 # PARAMETER OPTIONAL minlength: "Minimum length for reads to be kept after trimming" TYPE INTEGER DEFAULT 20 (Reads shorter than this after trimming will be discarded.)
 # PARAMETER OPTIONAL log: "Produce log file" TYPE [yes,no] DEFAULT no (Produce log file.)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # Uncompress input if compressed
 unzipIfGZipFile("reads.fq")
 
 # File paths
-java.path <- paste("PATH=", c(file.path(chipster.tools.path,"rtg","jre","bin")),":$PATH",sep="",collapse="")
+java.path <- paste("PATH=", c(file.path(chipster.tools.path, "rtg", "jre", "bin")), ":$PATH", sep = "", collapse = "")
 bbduk.binary <- c(file.path(chipster.tools.path, "bbmap", "bbduk.sh"))
 polya.file <- c(file.path(chipster.tools.path, "bbmap", "resources", "polyA.fa.gz"))
 trueseq.file <- c(file.path(chipster.tools.path, "bbmap", "resources", "truseq.fa.gz"))
 
 # Run BBduk
-system(paste(bbduk.binary,"-v 2> version.tmp"))
-version <- system("grep Version version.tmp",intern = TRUE)
-documentVersion("BBDuk",version)
-bbduk.options <- paste("-Xmx154m in=reads.fq ", "out=trimmed.fq ", "ref=", polya.file,",",trueseq.file, " k=",k," ktrim=",ktrim," mink=",mink, " qtrim=",qtrim, " trimq=",trimq," minlength=",minlength,sep="",collapse="")
+system(paste(bbduk.binary, "-v 2> version.tmp"))
+version <- system("grep Version version.tmp", intern = TRUE)
+documentVersion("BBDuk", version)
+bbduk.options <- paste("-Xmx154m in=reads.fq ", "out=trimmed.fq ", "ref=", polya.file, ",", trueseq.file, " k=", k, " ktrim=", ktrim, " mink=", mink, " qtrim=", qtrim, " trimq=", trimq, " minlength=", minlength, sep = "", collapse = "")
 bbduk.command <- paste(bbduk.binary, bbduk.options, "2> raw.log")
 documentCommand(bbduk.command)
-#system(bbduk.command)
+# system(bbduk.command)
 runExternal(bbduk.command, java.path)
 
 # Compress output
 system("gzip trimmed.fq")
 
 # Clean log
-if (log == "yes"){
+if (log == "yes") {
     system("grep -A 5 Input: raw.log > bbduk.log")
 }
 
@@ -45,9 +45,9 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads.fq)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("trimmed.fq.gz", paste(basename, "_trimmed.fq.gz", sep=""))
-outputnames[2,] <- c("bbduk.log", paste(basename, "_bbduk.log", sep=""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("trimmed.fq.gz", paste(basename, "_trimmed.fq.gz", sep = ""))
+outputnames[2, ] <- c("bbduk.log", paste(basename, "_bbduk.log", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

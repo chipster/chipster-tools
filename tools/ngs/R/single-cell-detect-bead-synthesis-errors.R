@@ -11,12 +11,12 @@
 
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
-# command 
-command <- paste(path.dropseq, "/DetectBeadSynthesisErrors I=input.bam O=cleaned.bam OUTPUT_STATS=synthesis_stats.txt SUMMARY=synthesis_stats_summary.txt NUM_BARCODES=",num.barcodes," PRIMER_SEQUENCE=", primer.sequence, " 2>>log.txt", sep="")
+# command
+command <- paste(path.dropseq, "/DetectBeadSynthesisErrors I=input.bam O=cleaned.bam OUTPUT_STATS=synthesis_stats.txt SUMMARY=synthesis_stats_summary.txt NUM_BARCODES=", num.barcodes, " PRIMER_SEQUENCE=", primer.sequence, " 2>>log.txt", sep = "")
 
 # run the tool
 system(command)
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 
-#EOF
+# EOF

@@ -1,18 +1,17 @@
-
 # CRAN packages and their dependencies
-cranPackages = c(
-		"Seurat",
-		"dplyr",
-		"pheatmap",
-		"Matrix",
-		"gplots",
-		"cowplot",
-		"ggplot2",
-		"umap"
+cranPackages <- c(
+    "Seurat",
+    "dplyr",
+    "pheatmap",
+    "Matrix",
+    "gplots",
+    "cowplot",
+    "ggplot2",
+    "umap"
 )
 
 for (package in cranPackages) {
-	install.packages(package=package)	
+    install.packages(package = package)
 }
 
 install.packages("BiocManager")

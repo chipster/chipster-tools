@@ -30,40 +30,40 @@
 # PARAMETER OPTIONAL remove.eukaryota: "Remove taxon Eukaryota" TYPE [yes, no] DEFAULT yes (Remove taxon Eukaryota.)
 # PARAMETER OPTIONAL remove.unknown: "Remove taxon unknown" TYPE [yes, no] DEFAULT yes (Remove taxon unknown.)
 # PARAMETER OPTIONAL remove.other: "Remove other lineages" TYPE STRING DEFAULT empty (List of other lineages to remove. You must use dots \(\".\"\) instead of semicolons \(\";\"\). Use dash \(\"-\"\) to separate taxons. For example: Bacteria.Firmicutes.-Bacteria.Bacteroidetes. )
-# OUTPUT OPTIONAL picked.fasta.gz 
+# OUTPUT OPTIONAL picked.fasta.gz
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-#binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-version <- system(paste(binary,"--version"),intern = TRUE)
-documentVersion("Mothur",version)
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+version <- system(paste(binary, "--version"), intern = TRUE)
+documentVersion("Mothur", version)
 
 if (reference == "own") {
-  if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")){
-    stop('CHIPSTER-NOTE: Provide your own reference and taxonomy files or select the Silva reference.')
+  if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")) {
+    stop("CHIPSTER-NOTE: Provide your own reference and taxonomy files or select the Silva reference.")
   }
   reference.path <- "own_reference.fasta"
   taxonomy.path <- "own_reference.tax"
 } else if (reference == "silva") {
   # Silva v132. Check data path when new tools-bin ready
-  data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference","silva"))
+  data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva"))
   # template.path <- c(file.path(data.path,"silva.nr_v132.align"))
   # taxonomy.path <- c(file.path(data.path,"silva.nr_v132.tax"))
-  template.path <- c(file.path(data.path,"silva.nr_v138_1.align"))
-  taxonomy.path <- c(file.path(data.path,"silva.nr_v138_1.tax"))
+  template.path <- c(file.path(data.path, "silva.nr_v138_1.align"))
+  taxonomy.path <- c(file.path(data.path, "silva.nr_v138_1.tax"))
   # copy to working dir because mothur generates more files to the same directory
   # system(paste("ln -s ",template.path," silva.nr_v132.align"))
   # system(paste("ln -s ",taxonomy.path," silva.nr_v132.tax"))
-  system(paste("ln -s ",template.path," silva.nr_v138_1.align"))
-  system(paste("ln -s ",taxonomy.path," silva.nr_v138_1.tax"))
+  system(paste("ln -s ", template.path, " silva.nr_v138_1.align"))
+  system(paste("ln -s ", taxonomy.path, " silva.nr_v138_1.tax"))
   # template.path <- "silva.nr_v132.align"
   # taxonomy.path <- "silva.nr_v132.tax"
   template.path <- "silva.nr_v138_1.align"
@@ -74,25 +74,25 @@ if (reference == "own") {
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 classifyseqs.options <- paste("classify.seqs(fasta=a.fasta")
 if (file.exists("a.count_table")) {
-  classifyseqs.options <- paste(classifyseqs.options,", count=a.count_table")
+  classifyseqs.options <- paste(classifyseqs.options, ", count=a.count_table")
 }
-classifyseqs.options <- paste(classifyseqs.options,", iters=",iters,", template=",template.path,", taxonomy=",taxonomy.path,", processors=",chipster.threads.max,")",sep = "")
+classifyseqs.options <- paste(classifyseqs.options, ", iters=", iters, ", template=", template.path, ", taxonomy=", taxonomy.path, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(classifyseqs.options)
-write(classifyseqs.options,"batch.mth",append = FALSE)
+write(classifyseqs.options, "batch.mth", append = FALSE)
 # command
-command <- paste(binary,"batch.mth","> log.txt 2>&1")
+command <- paste(binary, "batch.mth", "> log.txt 2>&1")
 
 # run
 system(command)
 
-# Output File Names: 
+# Output File Names:
 # a.silva.wang.taxonomy
 # a.silva.wang.tax.summary
 
 
 ## test
-write("get.current()","batch2.mth",append = FALSE)
-system(paste(binary,"batch2.mth",">> log.txt 2>&1"))
+write("get.current()", "batch2.mth", append = FALSE)
+system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
 
 system("ls -l >> log.txt")
 # Postprocess output
@@ -100,37 +100,37 @@ system("ls -l >> log.txt")
 system("find . -type f -name a.*.taxonomy -exec mv {} sequences-taxonomy-assignment.txt \\;")
 system("find . -type f -name a.*.summary -exec mv {} classification-summary.tsv \\;")
 
-#if (reference == "silva") {
+# if (reference == "silva") {
 #  system("mv a.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
 #  system("mv a.nr_v132.wang.tax.summary classification-summary.tsv")
-#}
+# }
 
 # batch file 2: remove lineage, if the taxons to remove were listed
 # toremove <- ""
 
-#if (remove.chloroplast == "yes") {
+# if (remove.chloroplast == "yes") {
 #  toremove <- paste(toremove,"Chloroplast",sep = "-")
-#}
-#if (remove.mitochondria == "yes") {
+# }
+# if (remove.mitochondria == "yes") {
 #  toremove <- paste(toremove,"Mitochondria",sep = "-")
-#}
-#if (remove.archaea == "yes") {
+# }
+# if (remove.archaea == "yes") {
 #  toremove <- paste(toremove,"Archaea",sep = "-")
-#}
-#if (remove.eukaryota == "yes") {
+# }
+# if (remove.eukaryota == "yes") {
 #  toremove <- paste(toremove,"Eukaryota",sep = "-")
-#}
-#if (remove.unknown == "yes") {
+# }
+# if (remove.unknown == "yes") {
 #  toremove <- paste(toremove,"unknown",sep = "-")
-#}
-#if (remove.other != "empty") {
-  # Change periods to semicolons. Semicolons are not accepted in STRING input.
+# }
+# if (remove.other != "empty") {
+# Change periods to semicolons. Semicolons are not accepted in STRING input.
 #  remove.other <- gsub(".",";",remove.other,fixed = TRUE)
 #  toremove <- paste(toremove,remove.other,sep = "-")
-#}
+# }
 
-#if (toremove != "") {
-  # Remove leading dash
+# if (toremove != "") {
+# Remove leading dash
 #  toremove <- substring(toremove,2)
 #  removelineage.options <- paste("remove.lineage(fasta=a.fasta")
 #  if (file.exists("a.count_table")) {
@@ -140,62 +140,62 @@ system("find . -type f -name a.*.summary -exec mv {} classification-summary.tsv 
 #  documentCommand(removelineage.options)
 #  write(removelineage.options,"batch.mth",append = FALSE)
 
-  # command
+# command
 #  command <- paste(binary,"batch.mth",">> log.txt 2>&1")
 
-  # run
+# run
 #  system(command)
 
-  
-
-  # Rename output files
-  #system("mv a.pick.fasta picked.fasta")
-  #if (file.exists("a.pick.count_table")) {
-  #  system("mv a.pick.count_table picked.count_table")
-  #}
-
-  # batch file 3: classify.seqs again
-
-  # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
-  # classifyseqs.options <- paste("classify.seqs(fasta=picked.fasta")
-  #if (file.exists("picked.count_table")) {
-  #  classifyseqs.options <- paste(classifyseqs.options,", count=picked.count_table")
-  #}
-  #classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters,", template=",template.path,", taxonomy=",taxonomy.path,")",sep = "")
-  #documentCommand(classifyseqs.options)
-  #write(classifyseqs.options,"batch.mth",append = FALSE)
-  # command
-  #command <- paste(binary,"batch.mth",">> log.txt 2>&1")
-  # run
-  #system(command)
-
-  ## test
-  #write("get.current()","batch2.mth",append = FALSE)
-  #system(paste(binary,"batch2.mth",">> log.txt 2>&1"))
 
 
-  # Postprocess output
-  #if (reference == "silva") {
-  #  system("mv picked.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
-  #  system("mv picked.nr_v132.wang.tax.summary classification-summary.tsv")
-  #}
+# Rename output files
+# system("mv a.pick.fasta picked.fasta")
+# if (file.exists("a.pick.count_table")) {
+#  system("mv a.pick.count_table picked.count_table")
+# }
 
-  # batch file 3: summary
-  #summaryseqs.options <- paste("summary.seqs(fasta=picked.fasta, count=picked.count_table)")
-  #documentCommand(summaryseqs.options)
-  #write(summaryseqs.options,"summary.mth",append = FALSE)
+# batch file 3: classify.seqs again
 
-  # command 3
-  #command3 <- paste(binary,"summary.mth","> log_raw.txt")
+# write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
+# classifyseqs.options <- paste("classify.seqs(fasta=picked.fasta")
+# if (file.exists("picked.count_table")) {
+#  classifyseqs.options <- paste(classifyseqs.options,", count=picked.count_table")
+# }
+# classifyseqs.options <- paste(classifyseqs.options,", processors=",chipster.threads.max,", iters=",iters,", template=",template.path,", taxonomy=",taxonomy.path,")",sep = "")
+# documentCommand(classifyseqs.options)
+# write(classifyseqs.options,"batch.mth",append = FALSE)
+# command
+# command <- paste(binary,"batch.mth",">> log.txt 2>&1")
+# run
+# system(command)
 
-  # run
-  #system(command3)
+## test
+# write("get.current()","batch2.mth",append = FALSE)
+# system(paste(binary,"batch2.mth",">> log.txt 2>&1"))
 
-  # zip output fasta
-  #system("gzip picked.fasta")
 
-  # Post process output
-  #system("grep -A 10 Start log_raw.txt > picked-summary2.tsv")
-  # Remove one tab to get the column naming look nice:
-  #system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
-#}
+# Postprocess output
+# if (reference == "silva") {
+#  system("mv picked.nr_v132.wang.taxonomy sequences-taxonomy-assignment.txt")
+#  system("mv picked.nr_v132.wang.tax.summary classification-summary.tsv")
+# }
+
+# batch file 3: summary
+# summaryseqs.options <- paste("summary.seqs(fasta=picked.fasta, count=picked.count_table)")
+# documentCommand(summaryseqs.options)
+# write(summaryseqs.options,"summary.mth",append = FALSE)
+
+# command 3
+# command3 <- paste(binary,"summary.mth","> log_raw.txt")
+
+# run
+# system(command3)
+
+# zip output fasta
+# system("gzip picked.fasta")
+
+# Post process output
+# system("grep -A 10 Start log_raw.txt > picked-summary2.tsv")
+# Remove one tab to get the column naming look nice:
+# system("sed 's/^		/	/' picked-summary2.tsv > picked-summary.tsv")
+# }

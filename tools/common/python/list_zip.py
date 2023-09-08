@@ -6,36 +6,33 @@
 
 import os
 import zipfile
-from tool_utils import *
+import tool_utils
+
 
 def main():
-
-    document_python_version()
-
-    input_name = read_input_definitions()['input_file']
-    input_basename = remove_postfix(input_name, ".zip")
-    output_name = input_basename + '_list.txt'
+    input_name = tool_utils.read_input_definitions()["input_file"]
+    input_basename = tool_utils.remove_postfix(input_name, ".zip")
+    output_name = input_basename + "_list.txt"
 
     with zipfile.ZipFile("input_file", "r") as zip_file:
-        with open('output_file', 'w') as list_file:
+        with open("output_file", "w") as list_file:
             for member in zip_file.infolist():
                 # member.is_dir() after python 3.6
-                if member.filename[-1] == '/':
-                    print('skipping directory: ' + member.filename)
+                if member.filename[-1] == "/":
+                    print("skipping directory: " + member.filename)
                     continue
 
                 # remove paths from dataset names, because those aren't supported in client
 
                 dataset_name = member.filename
-                if (full_paths == 'no'):
+                if full_paths == "no":
                     dataset_name = os.path.basename(dataset_name)
-                
-                list_file.write(dataset_name + '\n')
+
+                list_file.write(dataset_name + "\n")
 
     # set dataset names
-    write_output_definitions({
-        'output_file': output_name
-    })
+    tool_utils.write_output_definitions({"output_file": output_name})
+
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 # TOOL acgh-call-aberrations.R: "Call aberrations from segmented copy number data" (Call copy number aberrations from aCGH log ratios or NGS data.)
 # INPUT segmented.tsv: segmented.tsv TYPE GENE_EXPRS
-# INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC 
+# INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC
 # OUTPUT aberrations.tsv: aberrations.tsv
 # OUTPUT aberration-frequencies.pdf: aberration-frequencies.pdf
 # PARAMETER number.of.copy.number.states: "Number of copy number states" TYPE [3: 3, 4: 4] DEFAULT 3 (Three states means calling loss vs. normal vs. gain, four states calls amplifications separately, and five also homozygous deletions.)
@@ -15,22 +15,26 @@ source(file.path(chipster.common.path, "library-CGHcall.R"))
 
 input <- readData("segmented.tsv")
 phenodata <- readPhenodata("phenodata.tsv")
-cgh <- toCgh(input, level="segmented")
+cgh <- toCgh(input, level = "segmented")
 
 organism <- "human"
-if (genome.build == "other")
+if (genome.build == "other") {
   organism <- "other"
+}
 
 cellularity <- rep(1, ncol(cgh))
-if (column %in% colnames(phenodata))
-  cellularity <- phenodata[,column]
-if (max(cellularity, na.rm=TRUE) > 1)
+if (column %in% colnames(phenodata)) {
+  cellularity <- phenodata[, column]
+}
+if (max(cellularity, na.rm = TRUE) > 1) {
   cellularity <- cellularity / 100
-cellularity[is.na(cellularity)] <- mean(cellularity, na.rm=TRUE)
-if (all(is.na(cellularity)))
+}
+cellularity[is.na(cellularity)] <- mean(cellularity, na.rm = TRUE)
+if (all(is.na(cellularity))) {
   cellularity <- rep(1, ncol(cgh))
+}
 
-cgh.cal <- CGHcall(cgh, nclass=as.integer(number.of.copy.number.states), organism=organism, cellularity=cellularity, build=genome.build, ncpus=4)
+cgh.cal <- CGHcall(cgh, nclass = as.integer(number.of.copy.number.states), organism = organism, cellularity = cellularity, build = genome.build, ncpus = 4)
 cgh <- ExpandCGHcall(cgh.cal, cgh)
 
 output <- fromCgh(cgh)
@@ -38,7 +42,7 @@ output <- addAnnotationColumns(input, output)
 writeData(output, "aberrations.tsv")
 
 # bitmap(file="aberration-frequencies.png", width=image.width/72, height=image.height/72)
-pdf(file="aberration-frequencies.pdf", paper="a4r", width=0, height=0)
+pdf(file = "aberration-frequencies.pdf", paper = "a4r", width = 0, height = 0)
 frequencyPlot(cgh)
 dev.off()
 

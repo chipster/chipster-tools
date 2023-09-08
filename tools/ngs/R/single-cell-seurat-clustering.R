@@ -44,7 +44,7 @@
 # for UMAP:
 library(reticulate)
 Sys.setenv(RETICULATE_PYTHON = paste(chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/python"))
-#use_python("/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+# use_python("/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 library(dplyr)
@@ -71,9 +71,9 @@ seurat_obj <- RunUMAP(seurat_obj, dims = 1:pcs_use)
 
 # Plot tSNE and UMAP
 pdf(file = "clusterPlot.pdf")
-DimPlot(seurat_obj, reduction = "umap", pt.size = point.size, label=add.labels)
-DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size, label=add.labels)
-#TSNEPlot(object = seurat_obj, do.return = T, pt.size = point.size, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
+DimPlot(seurat_obj, reduction = "umap", pt.size = point.size, label = add.labels)
+DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size, label = add.labels)
+# TSNEPlot(object = seurat_obj, do.return = T, pt.size = point.size, plot.title = paste("Number of cells: ", length(colnames(x = seurat_obj))))
 
 # Number of cells in each cluster:
 cell_counts <- table(Idents(seurat_obj), seurat_obj$orig.ident)
@@ -86,16 +86,15 @@ dev.off() # close the pdf
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
 if (output_aver_expr == "T") {
-  if (normalisation.method == "SCT"){
-    aver_expr <- AverageExpression(object = seurat_obj, slot ="data", assay="SCT")
-  } else { 
+  if (normalisation.method == "SCT") {
+    aver_expr <- AverageExpression(object = seurat_obj, slot = "data", assay = "SCT")
+  } else {
     aver_expr <- AverageExpression(object = seurat_obj)
   }
 
   aver_expr_in_clusters <- aver_expr[[1]]
   # Write to table
   write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
-
 }
 
 # Save the Robj for the next tool

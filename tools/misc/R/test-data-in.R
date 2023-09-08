@@ -1,4 +1,4 @@
-# TOOL test-data-in.R: "Test data input" (Data input test.) 
+# TOOL test-data-in.R: "Test data input" (Data input test.)
 # INPUT input TYPE GENERIC
 # OUTPUT data-input-test.txt
 

@@ -1,6 +1,6 @@
 # TOOL samtools-merge.R: "Merge BAM" (Merges sorted BAM files and creates an index for the result file. This tool is based on the SAMtools package.)
-# INPUT alignment{...}.bam: alignment{...}.bam TYPE GENERIC 
-# OUTPUT merged.bam 
+# INPUT alignment{...}.bam: alignment{...}.bam TYPE GENERIC
+# OUTPUT merged.bam
 # OUTPUT merged.bam.bai
 
 # EK 27.10.2011
@@ -16,4 +16,3 @@ system(paste(samtools.binary, "sort merged-not-sorted.bam merged"))
 
 # index bam
 system(paste(samtools.binary, "index merged.bam"))
-

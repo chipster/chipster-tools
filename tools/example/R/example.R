@@ -26,7 +26,7 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 
 # source(file.path(chipster.common.lib.path, "version-utils.R"))
-# documentVersion("R", R.version.string)
+documentVersion("R", R.version.string)
 
 
 

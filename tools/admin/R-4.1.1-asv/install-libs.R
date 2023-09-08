@@ -19,19 +19,17 @@ BiocManager::install("dada2", version = "3.14")
 # wget https://zenodo.org/record/4587955/files/silva_species_assignment_v138.1.fa.gz?download=1
 
 # wget https://zenodo.org/record/4587955/files/SILVA_LICENSE.txt?download=1
- 
+
 # mv 'silva_nr99_v138.1_wSpecies_train_set.fa.gz?download=1' silva_nr99_v138.1_wSpecies_train_set.fa.gz
 
 # gunzip silva_nr99_v138.1_wSpecies_train_set.fa.gz
 
-# mv 'SILVA_LICENSE.txt?download=1'  SILVA_LICENSE.txt  
-   
-# mv 'silva_nr99_v138.1_train_set.fa.gz?download=1' silva_nr99_v138.1_train_set.fa.gz  
- 
+# mv 'SILVA_LICENSE.txt?download=1'  SILVA_LICENSE.txt
+
+# mv 'silva_nr99_v138.1_train_set.fa.gz?download=1' silva_nr99_v138.1_train_set.fa.gz
+
 # gunzip silva_nr99_v138.1_train_set.fa.gz
 
 # mv 'silva_species_assignment_v138.1.fa.gz?download=1' silva_species_assignment_v138.1.fa.gz
- 
+
 # gunzip silva_species_assignment_v138.1.fa.gz
-
-

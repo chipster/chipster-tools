@@ -1,4 +1,4 @@
-# TOOL test-multiple-inputs.py: "Test multiple inputs in Python" (Multiple input output test.) 
+# TOOL test-multiple-inputs.py: "Test multiple inputs in Python" (Multiple input output test.)
 # INPUT input{...} TYPE GENERIC
 # INPUT other TYPE GENERIC
 # OUTPUT output
@@ -6,5 +6,4 @@
 
 import shutil
 
-shutil.copyfile('other', 'output')
-
+shutil.copyfile("other", "output")

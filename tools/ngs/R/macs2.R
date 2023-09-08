@@ -1,6 +1,6 @@
 # TOOL macs2.R: "Find peaks using MACS2" (Detects statistically significantly enriched genomic regions in ChIP-seq data, using a control sample if available. If you have several samples,you need to merge them first to one ChIP file and one control file. BAM files can be merged with the Utilities tool \"Merge BAM\".)
-# INPUT treatment.bam: "Treatment data file" TYPE GENERIC 
-# INPUT OPTIONAL control.bam: "Control data file" TYPE GENERIC 
+# INPUT treatment.bam: "Treatment data file" TYPE GENERIC
+# INPUT OPTIONAL control.bam: "Control data file" TYPE GENERIC
 # OUTPUT macs2-log.txt
 # OUTPUT OPTIONAL macs2-peaks.tsv
 # OUTPUT OPTIONAL macs2-summits.bed
@@ -25,16 +25,16 @@
 # 08.03.2011 MG, Modified to disable wiggle output.
 # 05.04.2014 MK, Polished. Added MACS2
 # 10.07.2014 AMS, Updated genome sizes, added parameter userspecified.size
-# 09.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters, fixed the bug in disabled model building, added the broad option and outputs, polished the script and output      
+# 09.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters, fixed the bug in disabled model building, added the broad option and outputs, polished the script and output
 # 07.10.2014 AMS, Simplified script structure
 # 13.10.2014 EK, Modified to use MACS2.1.0
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # MACS binary
-macs.binary <- file.path(chipster.tools.path,"macs","macs2")
-version <- system(paste(macs.binary,"--version 2>&1| grep macs | tail -1 | cut -d ' ' -f 2"),intern = TRUE)
-documentVersion("MACS2",version)
+macs.binary <- file.path(chipster.tools.path, "macs", "macs2")
+version <- system(paste(macs.binary, "--version 2>&1| grep macs | tail -1 | cut -d ' ' -f 2"), intern = TRUE)
+documentVersion("MACS2", version)
 
 # Options
 
@@ -43,85 +43,85 @@ options <- paste("callpeak -t treatment.bam")
 
 # control data file (optional)
 if (file.exists("control.bam")) {
-  options <- paste(options,"-c control.bam")
+  options <- paste(options, "-c control.bam")
 }
 
 # output file prefix
-options <- paste(options,"-n macs2")
+options <- paste(options, "-n macs2")
 
 # input file format
-options <- paste(options,"-f",file.format)
+options <- paste(options, "-f", file.format)
 
 # mappable genome size
 if (precalculated.size == "user_specified") {
   if (nchar(userspecified.size) < 1) {
-    stop(paste('CHIPSTER-NOTE: ',"You need to provide a value for mappable genome size or select one of the precalculated values."))
+    stop(paste("CHIPSTER-NOTE: ", "You need to provide a value for mappable genome size or select one of the precalculated values."))
   }
   genome.size <- userspecified.size
 } else {
   genome.size <- precalculated.size
 }
-options <- paste(options,"-g",genome.size)
+options <- paste(options, "-g", genome.size)
 
 # q-value cutoff
-options <- paste(options,"-q",q.value.threshold)
+options <- paste(options, "-q", q.value.threshold)
 
 # read length
 if (read.length > 0) {
-  options <- paste(options,"-s",read.length)
+  options <- paste(options, "-s", read.length)
 }
 
 # keep duplicate reads
-options <- paste(options,"--keep-dup",keep.dup)
+options <- paste(options, "--keep-dup", keep.dup)
 
 # build peak model
 if (build.model == "no") {
-  options <- paste(options,"--nomodel")
+  options <- paste(options, "--nomodel")
 } else {
-  options <- paste(options,"--fix-bimodal")
+  options <- paste(options, "--fix-bimodal")
 }
 
 # bandwidth (only applicable to model building)
 if (build.model == "yes") {
-  options <- paste(options,"--bw",bandwidth)
+  options <- paste(options, "--bw", bandwidth)
 }
 
 # extension size
-options <- paste(options,"--extsize",ext.size)
+options <- paste(options, "--extsize", ext.size)
 
 # Set up the m-fold limits
-options <- paste(options,"-m",m.fold.lower,m.fold.upper)
+options <- paste(options, "-m", m.fold.lower, m.fold.upper)
 
 # call broad peaks
 if (broad == "yes") {
-  options <- paste(options,"--broad")
+  options <- paste(options, "--broad")
 }
 
 # common options
-options <- paste(options,"--verbose=2")
+options <- paste(options, "--verbose=2")
 
 # Run macs
-macs.command <- paste(macs.binary,options,"2> macs2-log.txt")
+macs.command <- paste(macs.binary, options, "2> macs2-log.txt")
 # stop(paste('CHIPSTER-NOTE: ', macs.command))
 system(macs.command)
 
 # Read in and parse the results (rename and the p- and q-value columns, sort)
-output <- try(read.table(file = "macs2_peaks.xls",skip = 0,header = TRUE,stringsAsFactors = FALSE))
+output <- try(read.table(file = "macs2_peaks.xls", skip = 0, header = TRUE, stringsAsFactors = FALSE))
 if (class(output) != "try-error") {
   colnames(output)[7] <- "neglog10pvalue"
   colnames(output)[9] <- "neglog10qvalue"
   # output <- output[ order(output[,9], decreasing=TRUE), ]
-  output <- output[order(output$chr,output$start),]
-  write.table(output,file = "macs2-peaks.tsv",sep = "\t",quote = FALSE,row.names = FALSE)
+  output <- output[order(output$chr, output$start), ]
+  write.table(output, file = "macs2-peaks.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 }
 
 # Sort the summit BED
-source(file.path(chipster.common.path,"bed-utils.R"))
-bed <- try(read.table(file = "macs2_summits.bed",skip = 0,sep = "\t"))
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
+bed <- try(read.table(file = "macs2_summits.bed", skip = 0, sep = "\t"))
 if (class(bed) != "try-error") {
-  colnames(bed)[1:2] <- c("chr","start")
+  colnames(bed)[1:2] <- c("chr", "start")
   bed <- sort.bed(bed)
-  write.table(bed,file = "macs2-summits.bed",sep = "\t",row.names = FALSE,col.names = FALSE,quote = FALSE)
+  write.table(bed, file = "macs2-summits.bed", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
 }
 
 # Add BED extension to the narrow peak format file
@@ -136,6 +136,5 @@ if (file.exists("macs2_peaks.broadPeak") && file.info("macs2_peaks.broadPeak")$s
 
 # Source the R code for plotting the MACS model
 if (build.model == "yes") {
-  try(source("macs2_model.r"),silent = TRUE)
+  try(source("macs2_model.r"), silent = TRUE)
 }
-

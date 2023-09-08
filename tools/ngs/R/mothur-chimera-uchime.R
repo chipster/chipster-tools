@@ -27,89 +27,88 @@
 # INPUT OPTIONAL a.names: "Names file" TYPE MOTHUR_NAMES
 # INPUT OPTIONAL a.groups: "Groups file" TYPE MOTHUR_GROUPS
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
 # binary
-#binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-version <- system(paste(binary,"--version"),intern = TRUE)
-documentVersion("Mothur",version)
+# binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
+binary <- c(file.path(chipster.tools.path, "mothur-1.44.3", "mothur"))
+version <- system(paste(binary, "--version"), intern = TRUE)
+documentVersion("Mothur", version)
 
 # old references:
-#data.path <- c(file.path(chipster.tools.path, "mothur-data"))
-#template.path <- c(file.path(data.path, "silva.gold.align"))
+# data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+# template.path <- c(file.path(data.path, "silva.gold.align"))
 
 # start building the command for the Mothur chimera.uchime and chimera.vsearch tools based on the method chosen.
 if (method == "vsearch") {
-  chimera.options <- paste("chimera.vsearch(fasta=a.fasta, processors=",chipster.threads.max,",",sep = "")
+  chimera.options <- paste("chimera.vsearch(fasta=a.fasta, processors=", chipster.threads.max, ",", sep = "")
 }
 if (method == "uchime") {
-  chimera.options <- paste("chimera.uchime(fasta=a.fasta, processors=",chipster.threads.max,",",sep = "")
+  chimera.options <- paste("chimera.uchime(fasta=a.fasta, processors=", chipster.threads.max, ",", sep = "")
 }
 
 if (reference == "bacterial") {
   # bacterial reference in fasta format
-  data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference","silva-gold"))
-  reference.path <- c(file.path(data.path,"silva.gold.ng.fasta"))
-  chimera.options <- paste(chimera.options,"reference=",reference.path,sep = "")
+  data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva-gold"))
+  reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
+  chimera.options <- paste(chimera.options, "reference=", reference.path, sep = "")
 }
 # if (reference=="full"){
 # whole reference
-#	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
-#	reference.path <- c(file.path(data.path, "silva.gold.align")) 
-#	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
-#}
+# 	data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
+# 	reference.path <- c(file.path(data.path, "silva.gold.align"))
+# 	chimera.options <- paste(chimera.options, "reference=", reference.path, sep="")
+# }
 
 # count_table is used only when reference=none. Note that chimera.vsearch doesn't work if you give it both the reference and the count_table.
 if (reference == "none") {
   if (file.exists("a.count_table")) {
-    chimera.options <- paste(chimera.options," count=a.count_table",sep = "")
-  }
-  else {
-    stop('CHIPSTER-NOTE: Note that in order to use the denovo option, you have to give a count table as input!')
+    chimera.options <- paste(chimera.options, " count=a.count_table", sep = "")
+  } else {
+    stop("CHIPSTER-NOTE: Note that in order to use the denovo option, you have to give a count table as input!")
   }
 }
 
 
 # if (file.exists("a.names")){
-#	uchime.options <- paste(uchime.options, " name=a.names", sep=",")
-#}
+# 	uchime.options <- paste(uchime.options, " name=a.names", sep=",")
+# }
 # if (file.exists("a.groups")){
 # 	uchime.options <- paste(uchime.options, " group=a.groups", sep=",")
 # }
 
 if (dereplicate == "false") {
-  chimera.options <- paste(chimera.options,", dereplicate=F",sep = "")
+  chimera.options <- paste(chimera.options, ", dereplicate=F", sep = "")
 }
 if (dereplicate == "true") {
-  chimera.options <- paste(chimera.options,", dereplicate=T",sep = "")
+  chimera.options <- paste(chimera.options, ", dereplicate=T", sep = "")
 }
 
-chimera.options <- paste(chimera.options,")",sep = "")
+chimera.options <- paste(chimera.options, ")", sep = "")
 
-#stop(paste('CHIPSTER-NOTE: ', chimera.options))
+# stop(paste('CHIPSTER-NOTE: ', chimera.options))
 
 # Write batch file
 documentCommand(chimera.options)
-write(chimera.options,"batch.mth",append = FALSE)
+write(chimera.options, "batch.mth", append = FALSE)
 
 # command
-command <- paste(binary,"batch.mth","> log.txt 2>&1")
+command <- paste(binary, "batch.mth", "> log.txt 2>&1")
 # system("ls -l > log.txt")
 # system("cat *.logfile >> log.txt")
 
 # run
 system(command)
 
-#Output File Names: 
-#a.ref.uchime.chimeras
-#a.ref.uchime.accnos
-#a.denovo.uchime.chimeras
-#a.denovo.uchime.accnos
+# Output File Names:
+# a.ref.uchime.chimeras
+# a.ref.uchime.accnos
+# a.denovo.uchime.chimeras
+# a.denovo.uchime.accnos
 
 # rename outputs in a unified way for the subsequent steps
 if (method == "vsearch") {
@@ -134,10 +133,10 @@ if (reference == "none") {
   }
 }
 documentCommand(removeseqs.options)
-write(removeseqs.options,"remove.mth",append = FALSE)
+write(removeseqs.options, "remove.mth", append = FALSE)
 
 # command
-command2 <- paste(binary,"remove.mth","> log2.txt 2>&1")
+command2 <- paste(binary, "remove.mth", "> log2.txt 2>&1")
 
 # run
 system(command2)
@@ -149,13 +148,13 @@ summaryseqs.options <- paste("summary.seqs(fasta=chimeras.removed.fasta")
 
 if (file.exists("a.pick.count_table")) {
   system("mv a.pick.count_table chimeras.removed.count_table")
-  summaryseqs.options <- paste(summaryseqs.options,", count=chimeras.removed.count_table",sep = "")
+  summaryseqs.options <- paste(summaryseqs.options, ", count=chimeras.removed.count_table", sep = "")
 }
-summaryseqs.options <- paste(summaryseqs.options,", processors=",chipster.threads.max,")",sep = "")
+summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)
-write(summaryseqs.options,"summary.mth",append = FALSE)
+write(summaryseqs.options, "summary.mth", append = FALSE)
 # command 3
-command3 <- paste(binary,"summary.mth","> log_raw.txt")
+command3 <- paste(binary, "summary.mth", "> log_raw.txt")
 
 # run
 system(command3)

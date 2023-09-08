@@ -32,30 +32,30 @@
 library(edgeR)
 
 # Loads the count data
-dat <- read.table("data.tsv", header=T, sep="\t", row.names=1)
+dat <- read.table("data.tsv", header = T, sep = "\t", row.names = 1)
 
 # Extracts expression value columns
-annotations <- dat[,-grep("chip", names(dat))]
-dat2 <- dat[,grep("chip", names(dat))]
+annotations <- dat[, -grep("chip", names(dat))]
+dat2 <- dat[, grep("chip", names(dat))]
 
 # Reads the phenodata
-phenodata <- read.table("phenodata.tsv", header=T, sep="\t")
+phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
 
 # Forms the DGElist object
-dge<-DGEList(counts=dat2)
+dge <- DGEList(counts = dat2)
 
-# filter out genes which have less than 5 counts in user-defined number of samples 
+# filter out genes which have less than 5 counts in user-defined number of samples
 if (filter > 0) {
-	keep <- rowSums(dge$counts>5) >= filter
-	dge <- dge[keep,]
-	dge$lib.size <- colSums(dge$counts)
+    keep <- rowSums(dge$counts > 5) >= filter
+    dge <- dge[keep, ]
+    dge$lib.size <- colSums(dge$counts)
 }
 
 # Calculate normalization factors
-if(normalization=="yes") {
-	dge<-calcNormFactors(dge)
+if (normalization == "yes") {
+    dge <- calcNormFactors(dge)
 }
-# For later use: filter out genes which have less than 1 cpm in user-defined number of samples 
+# For later use: filter out genes which have less than 1 cpm in user-defined number of samples
 # if (filter > 0) {
 # 	keep <- rowSums(cpm(dge)>1) >= filter
 # 	dge <- dge[keep,]
@@ -63,115 +63,116 @@ if(normalization=="yes") {
 # }
 
 # Form a model matrix
-formula<-"~"
-if(main.effect1!="EMPTY" & treat.main.effect1.as.factor=="no") {
-	formula<-paste(formula, main.effect1, sep="")
+formula <- "~"
+if (main.effect1 != "EMPTY" & treat.main.effect1.as.factor == "no") {
+    formula <- paste(formula, main.effect1, sep = "")
 }
-if(main.effect1!="EMPTY" & treat.main.effect1.as.factor=="yes") {
-	formula<-paste(formula, "as.factor(", main.effect1, ")", sep="")
-}
-
-if(interactions=="main" & main.effect2!="EMPTY") {
-	formula<-paste(formula, "+", sep="")
-} 
-if(interactions=="all" & main.effect2!="EMPTY") {
-	formula<-paste(formula, "*", sep="")
-} 
-
-if(main.effect2!="EMPTY" & treat.main.effect2.as.factor=="no") {
-	formula<-paste(formula, main.effect2, sep="")
-}
-if(main.effect2!="EMPTY" & treat.main.effect2.as.factor=="yes") {
-	formula<-paste(formula, "as.factor(", main.effect2, ")", sep="")
+if (main.effect1 != "EMPTY" & treat.main.effect1.as.factor == "yes") {
+    formula <- paste(formula, "as.factor(", main.effect1, ")", sep = "")
 }
 
-if(interactions=="main" & main.effect3!="EMPTY") {
-	formula<-paste(formula, "+", sep="")
-} 
-if(interactions=="all" & main.effect3!="EMPTY") {
-	formula<-paste(formula, "*", sep="")
-} 
-
-if(main.effect3!="EMPTY" & treat.main.effect3.as.factor=="no") {
-	formula<-paste(formula, main.effect3, sep="")
+if (interactions == "main" & main.effect2 != "EMPTY") {
+    formula <- paste(formula, "+", sep = "")
 }
-if(main.effect3!="EMPTY" & treat.main.effect3.as.factor=="yes") {
-	formula<-paste(formula, "as.factor(", main.effect3, ")", sep="")
+if (interactions == "all" & main.effect2 != "EMPTY") {
+    formula <- paste(formula, "*", sep = "")
+}
+
+if (main.effect2 != "EMPTY" & treat.main.effect2.as.factor == "no") {
+    formula <- paste(formula, main.effect2, sep = "")
+}
+if (main.effect2 != "EMPTY" & treat.main.effect2.as.factor == "yes") {
+    formula <- paste(formula, "as.factor(", main.effect2, ")", sep = "")
+}
+
+if (interactions == "main" & main.effect3 != "EMPTY") {
+    formula <- paste(formula, "+", sep = "")
+}
+if (interactions == "all" & main.effect3 != "EMPTY") {
+    formula <- paste(formula, "*", sep = "")
+}
+
+if (main.effect3 != "EMPTY" & treat.main.effect3.as.factor == "no") {
+    formula <- paste(formula, main.effect3, sep = "")
+}
+if (main.effect3 != "EMPTY" & treat.main.effect3.as.factor == "yes") {
+    formula <- paste(formula, "as.factor(", main.effect3, ")", sep = "")
 }
 
 # The "nested" case: if there are interactions between and within the subjects (see edgeR userguide chapter 3.5)
-if(main.effect3!="EMPTY" & interactions=="nested") {
-	formula<-paste("~as.factor(", main.effect1,")+as.factor(", main.effect1, "):as.factor(", main.effect2,")+as.factor(", main.effect1, "):as.factor(", main.effect3, ")", sep="")
+if (main.effect3 != "EMPTY" & interactions == "nested") {
+    formula <- paste("~as.factor(", main.effect1, ")+as.factor(", main.effect1, "):as.factor(", main.effect2, ")+as.factor(", main.effect1, "):as.factor(", main.effect3, ")", sep = "")
 
-	# Modify the phenodata column for "subject", create a tmp table for this:
-	tmp <- phenodata[c(main.effect1, main.effect2, main.effect3)]
-	tmp[[main.effect1]]<-factor(tmp[[main.effect1]]) # group main effect 1, (disease group,) "between" comparison
-	tmp[[main.effect2]]<-factor(tmp[[main.effect2]]) # trt main effect 2, (treatment,) the "within" comparison
-	tmp[[main.effect3]]<-factor(tmp[[main.effect3]])  # subj main effect 3, (patient,) pairing
-	
-	splitsubj<-split(tmp[[main.effect3]],tmp[[main.effect1]])
-	splitind<-lapply(splitsubj,FUN=function(ssubj) {as.numeric(factor(ssubj))} )
-	## In the anonymous function, call to factor will drop unused levels, 
-	## and as.numeric returns only the integer codes (so the result is not a factor) to problems in unsplit
-	tmp[[main.effect3]]<-unsplit(splitind,tmp[[main.effect1]])
-	
-	phenodata <- tmp
+    # Modify the phenodata column for "subject", create a tmp table for this:
+    tmp <- phenodata[c(main.effect1, main.effect2, main.effect3)]
+    tmp[[main.effect1]] <- factor(tmp[[main.effect1]]) # group main effect 1, (disease group,) "between" comparison
+    tmp[[main.effect2]] <- factor(tmp[[main.effect2]]) # trt main effect 2, (treatment,) the "within" comparison
+    tmp[[main.effect3]] <- factor(tmp[[main.effect3]]) # subj main effect 3, (patient,) pairing
 
+    splitsubj <- split(tmp[[main.effect3]], tmp[[main.effect1]])
+    splitind <- lapply(splitsubj, FUN = function(ssubj) {
+        as.numeric(factor(ssubj))
+    })
+    ## In the anonymous function, call to factor will drop unused levels,
+    ## and as.numeric returns only the integer codes (so the result is not a factor) to problems in unsplit
+    tmp[[main.effect3]] <- unsplit(splitind, tmp[[main.effect1]])
+
+    phenodata <- tmp
 }
-if(main.effect3=="EMPTY" & interactions=="nested") {
-	stop("CHIPSTER-NOTE: For nested-option, you need to specify all three effects. See manual page for more information!")
+if (main.effect3 == "EMPTY" & interactions == "nested") {
+    stop("CHIPSTER-NOTE: For nested-option, you need to specify all three effects. See manual page for more information!")
 }
 
-design<-with(phenodata, model.matrix(as.formula(formula)))
+design <- with(phenodata, model.matrix(as.formula(formula)))
 # remove zero columns:
-design <- design[, colSums(abs(design),na.rm = TRUE) != 0]
+design <- design[, colSums(abs(design), na.rm = TRUE) != 0]
 
 # Estimate dispersions
-# dge <- estimateDisp(dge, design) # 
+# dge <- estimateDisp(dge, design) #
 dge <- estimateGLMCommonDisp(dge, design)
 dge <- estimateGLMTrendedDisp(dge, design)
 dge <- estimateGLMTagwiseDisp(dge, design)
 
 # Dispersion plot
-pdf(file="dispersion-edger-glm.pdf", width=w/72, height=h/72)
-plotBCV(dge, main="Biological coefficient of variation")
+pdf(file = "dispersion-edger-glm.pdf", width = w / 72, height = h / 72)
+plotBCV(dge, main = "Biological coefficient of variation")
 dev.off()
 
 # Estimate DE genes
 # Switch to using quasi-likelihood (QL) instead of likelihood (LR)
-# fit<-glmFit(dge, design) 
-fit<-glmQLFit(dge, design)
+# fit<-glmFit(dge, design)
+fit <- glmQLFit(dge, design)
 
 # LRT
 # Switch to using quasi-likelihood (QL) instead of likelihood (LR)
 # lrt<-glmLRT(fit, coef=1)
-lrt<-glmQLFTest(fit, coef=1)
-tt<-topTags(lrt, n=nrow(dat2))
-tt<-tt@.Data[[1]]
-colnames(tt)<-paste(colnames(tt), colnames(design)[1], sep="-")
-ttres<-tt[order(rownames(tt)),]
+lrt <- glmQLFTest(fit, coef = 1)
+tt <- topTags(lrt, n = nrow(dat2))
+tt <- tt@.Data[[1]]
+colnames(tt) <- paste(colnames(tt), colnames(design)[1], sep = "-")
+ttres <- tt[order(rownames(tt)), ]
 
-for(i in 2:ncol(design)) {
-	# lrt<-glmLRT(fit, coef=i)
-	lrt<-glmQLFTest(fit, coef=i)
-	tt<-topTags(lrt, n=nrow(dat2))
-	tt<-tt@.Data[[1]]
-	colnames(tt)<-paste(colnames(tt), colnames(design)[i], sep="-")
-	tt<-tt[order(rownames(tt)),]
-	ttres<-cbind(ttres, tt)
+for (i in 2:ncol(design)) {
+    # lrt<-glmLRT(fit, coef=i)
+    lrt <- glmQLFTest(fit, coef = i)
+    tt <- topTags(lrt, n = nrow(dat2))
+    tt <- tt@.Data[[1]]
+    colnames(tt) <- paste(colnames(tt), colnames(design)[i], sep = "-")
+    tt <- tt[order(rownames(tt)), ]
+    ttres <- cbind(ttres, tt)
 }
 
 # Rounding
-ttres2<-signif(ttres,6)
+ttres2 <- signif(ttres, 6)
 
 # Add count columns to the result table
-ttres2<-cbind(ttres2, getCounts(dge))
+ttres2 <- cbind(ttres2, getCounts(dge))
 
-#ttres3<-merge(dat, ttres2, by.x=0, by.y=0)
+# ttres3<-merge(dat, ttres2, by.x=0, by.y=0)
 
-write.table(ttres2, file="edger-glm.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+write.table(ttres2, file = "edger-glm.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 # Print out the design matrix if requested:
-if (print.out.desing.matrix == "yes")  {
-	write.table(design, file="design-matrix.tsv", sep="\t", row.names=T, col.names=T, quote=F)
+if (print.out.desing.matrix == "yes") {
+    write.table(design, file = "design-matrix.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }

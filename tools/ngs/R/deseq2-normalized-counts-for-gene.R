@@ -7,97 +7,91 @@
 # PARAMETER OPTIONAL plot.type: "Plot type" TYPE [scatter,box] DEFAULT scatter
 # PARAMETER OPTIONAL show.names: "Show names in scatter plot" TYPE [yes, no] DEFAULT yes (Show sample names in scatter plot. In more complex cases this may make the scatter plot too cluttered. To plot sample names, you need to determine them in the description column in phenodata file!)
 # PARAMETER OPTIONAL how.many: "How many of the top genes from the input file are plotted" TYPE INTEGER FROM 1 DEFAULT 5 (If you give the genes to plot as an tsv file, this parameter sets the number of genes from the top of the table you wish to plot. Note that the pdf grows very large when you add more plots to it.)
-  
- if (!file.exists("genelist.tsv") && gene.names == ''){
-	stop("CHIPSTER-NOTE: The parameter 'Gene names' was empty. Please enter this criteria before re-running script.")
- }
+
+if (!file.exists("genelist.tsv") && gene.names == "") {
+    stop("CHIPSTER-NOTE: The parameter 'Gene names' was empty. Please enter this criteria before re-running script.")
+}
 
 
-# AMS 21.4.2015 
+# AMS 21.4.2015
 # ML 25.2.2021 Add option to give multiple gene names as input (as a list or tsv file)
 
-if (!file.exists("genelist.tsv") && gene.names == ''){
-	stop("CHIPSTER-NOTE: The parameter 'Gene names' was empty. Please enter this criteria before re-running script.")
- }
+if (!file.exists("genelist.tsv") && gene.names == "") {
+    stop("CHIPSTER-NOTE: The parameter 'Gene names' was empty. Please enter this criteria before re-running script.")
+}
 
 # Loads the libraries
 library(DESeq2)
 library(ggplot2)
 
 # Load the count table and extract expression value columns
-dat <- read.table("data.tsv", header=T, sep="\t", row.names=1)
-dat2 <- dat[,grep("chip", names(dat))]
+dat <- read.table("data.tsv", header = T, sep = "\t", row.names = 1)
+dat2 <- dat[, grep("chip", names(dat))]
 
 # Get the experimental group information from the phenodata
-phenodata <- read.table("phenodata.tsv", header=T, sep="\t")
-condition <- as.character (phenodata[,pmatch("group",colnames(phenodata))])
+phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
+condition <- as.character(phenodata[, pmatch("group", colnames(phenodata))])
 
-# If a tsv file for gene names is given, use that. 
+# If a tsv file for gene names is given, use that.
 
-if (file.exists("genelist.tsv")) { 
-  genelist <- read.table("genelist.tsv", header=T, sep="\t", row.names=1)
-  # Choose first how.many genes or max number of rows of the input table for plotting
-  if (nrow(genelist) < 5 ){ 
-	  how.many <- nrow(genelist)
-	}
-  gene.names.clean <- rownames(genelist)[1:how.many]
-
-}else{ 
-# Otherwise, use the list of genes given as a parameter.
-# Handle the input gene names
-# Split from comma:
-gene.names.split <- strsplit(gene.names, ",")[[1]]
-# remove whitespace:
-gene.names.clean <- gsub("[[:blank:]]", "", gene.names.split)
+if (file.exists("genelist.tsv")) {
+    genelist <- read.table("genelist.tsv", header = T, sep = "\t", row.names = 1)
+    # Choose first how.many genes or max number of rows of the input table for plotting
+    if (nrow(genelist) < 5) {
+        how.many <- nrow(genelist)
+    }
+    gene.names.clean <- rownames(genelist)[1:how.many]
+} else {
+    # Otherwise, use the list of genes given as a parameter.
+    # Handle the input gene names
+    # Split from comma:
+    gene.names.split <- strsplit(gene.names, ",")[[1]]
+    # remove whitespace:
+    gene.names.clean <- gsub("[[:blank:]]", "", gene.names.split)
 }
 
 # Create a DESeqDataSet object
-dds <- DESeqDataSetFromMatrix(countData=dat2, colData=data.frame(condition), design = ~ condition)
+dds <- DESeqDataSetFromMatrix(countData = dat2, colData = data.frame(condition), design = ~condition)
 
 dds <- DESeq(dds)
-#res <- results(dds)
+# res <- results(dds)
 # desc <- phenodata[,7]
 
 # Make plot as pdf
-pdf(file="normalized_counts.pdf")
+pdf(file = "normalized_counts.pdf")
 # One plot per gene:
-for (i in 1:length(gene.names.clean) ) { 
-	gene.name.to.print <- gene.names.clean[i]
-  	d <- plotCounts(dds, gene=gene.name.to.print, intgroup="condition", returnData=TRUE)
-  	if (plot.type == "box"){
-		print(ggplot(d, aes(x=condition, y=count, log="y")) + 
-		geom_boxplot(color="blue") +
-		ylab("normalized counts") +
-		xlab("group") +
-		ggtitle(gene.name.to.print) )
-		}
-	else if (show.names == "yes"){
-		  # Check that there are descriptions in phenodata file that can be used in plotting:
-			if (is.na(pmatch("description", colnames(phenodata)))) { 
-  			stop("CHIPSTER-NOTE: To plot sample names, you need to determine them in the description column in phenodata file!")
-			}else{
-		  	desc <- phenodata[,"description"] 
-			# Plotting:
-   			# Note: as we are using ggplot within a for loop, we need to use "print"! 
-    		print(ggplot(d, aes(x=condition, y=count, log="y")) +
-    		#geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
-    		geom_point(color="blue", size=3, shape=5) +
-    		geom_text(aes(label=desc),hjust=-0.5, vjust=0, color="black", size=4) +
-    		ylab("normalized counts") +
-    		xlab("group") +
-    		ggtitle(gene.name.to.print)	)
-			} 
-  	}else{
-		print(ggplot(d, aes(x=condition, y=count, log="y")) +
-		#geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
-		geom_point(color="blue", size=3, shape=5) +
-		ylab("normalized counts") +
-		xlab("group") +
-		ggtitle(gene.name.to.print) )
-		}
-} 
+for (i in 1:length(gene.names.clean)) {
+    gene.name.to.print <- gene.names.clean[i]
+    d <- plotCounts(dds, gene = gene.name.to.print, intgroup = "condition", returnData = TRUE)
+    if (plot.type == "box") {
+        print(ggplot(d, aes(x = condition, y = count, log = "y")) +
+            geom_boxplot(color = "blue") +
+            ylab("normalized counts") +
+            xlab("group") +
+            ggtitle(gene.name.to.print))
+    } else if (show.names == "yes") {
+        # Check that there are descriptions in phenodata file that can be used in plotting:
+        if (is.na(pmatch("description", colnames(phenodata)))) {
+            stop("CHIPSTER-NOTE: To plot sample names, you need to determine them in the description column in phenodata file!")
+        } else {
+            desc <- phenodata[, "description"]
+            # Plotting:
+            # Note: as we are using ggplot within a for loop, we need to use "print"!
+            print(ggplot(d, aes(x = condition, y = count, log = "y")) +
+                # geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
+                geom_point(color = "blue", size = 3, shape = 5) +
+                geom_text(aes(label = desc), hjust = -0.5, vjust = 0, color = "black", size = 4) +
+                ylab("normalized counts") +
+                xlab("group") +
+                ggtitle(gene.name.to.print))
+        }
+    } else {
+        print(ggplot(d, aes(x = condition, y = count, log = "y")) +
+            # geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
+            geom_point(color = "blue", size = 3, shape = 5) +
+            ylab("normalized counts") +
+            xlab("group") +
+            ggtitle(gene.name.to.print))
+    }
+}
 dev.off()
-  
-
-
-

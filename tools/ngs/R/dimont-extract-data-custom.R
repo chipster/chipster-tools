@@ -11,21 +11,20 @@
 # PARAMETER OPTIONAL has.row.names: "Regions file has row names" TYPE [yes, no] DEFAULT no (BED file has row names in its first column.)
 
 
-#MK: 11.12.2013 Since also row-names are printed, column indexes had to be shifted by one 
-#JG: 30.01.2014 Code for chr=="no" does not work, data extraction script works in either case. Hence, parameter and code removed
-#EK: 03.06.2014 Removed chr parameter that was commented out already
-#EK: 10.09.2014 Fixed a bug in the genome part of the command.
+# MK: 11.12.2013 Since also row-names are printed, column indexes had to be shifted by one
+# JG: 30.01.2014 Code for chr=="no" does not work, data extraction script works in either case. Hence, parameter and code removed
+# EK: 03.06.2014 Removed chr parameter that was commented out already
+# EK: 10.09.2014 Fixed a bug in the genome part of the command.
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("genome.fa")
 
-tool<-file.path(chipster.tools.path,"dimont","extract_data_single_chipster.pl");
-
-if(has.row.names=="yes") {
-	command<-paste("perl",tool,"genome.fa","regions.bed",(chromcol+1),(startcol+1),seccol,(seccoord+1),width,(statcol+1),"extracted.fasta");
+tool <- file.path(chipster.tools.path, "dimont", "extract_data_single_chipster.pl")
+if (has.row.names == "yes") {
+    command <- paste("perl", tool, "genome.fa", "regions.bed", (chromcol + 1), (startcol + 1), seccol, (seccoord + 1), width, (statcol + 1), "extracted.fasta")
 } else {
-	command<-paste("perl",tool,"genome.fa","regions.bed",(chromcol+0),(startcol+0),seccol,(seccoord+0),width,(statcol+0),"extracted.fasta");	
+    command <- paste("perl", tool, "genome.fa", "regions.bed", (chromcol + 0), (startcol + 0), seccol, (seccoord + 0), width, (statcol + 0), "extracted.fasta")
 }
 
 system(command)

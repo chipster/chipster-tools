@@ -12,7 +12,7 @@
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
 # command start
-command.start <- paste(path.dropseq, "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt", sep="")
+command.start <- paste(path.dropseq, "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt", sep = "")
 
 # parameters
 command.parameters <- paste("MISMATCHES=", mismatches, "NUM_BASES=", num_bases)
@@ -24,4 +24,4 @@ system(command)
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 
-#EOF
+# EOF

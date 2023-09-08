@@ -36,7 +36,7 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
-library(ggplot2) 
+library(ggplot2)
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -46,33 +46,34 @@ if (exists("data.combined")) {
 }
 
 # If FindAllMarkers:
-if (find.all.markers == TRUE){
-   markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type,  return.thresh = returnthresh) # only.pos = only.positive, min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup,
-   # markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
+if (find.all.markers == TRUE) {
+  markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, return.thresh = returnthresh) # only.pos = only.positive, min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup,
+  # markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
 
-    if (length(warnings()) > 0) {
-      # or !is.null(warnings())
-      stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
-    }
+  if (length(warnings()) > 0) {
+    # or !is.null(warnings())
+    stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
+  }
   write.table(as.matrix(markers), file = "all_markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
   # Plot top10 genes of each cluster as a heatmap
-  top10 <- markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_log2FC)
+  top10 <- markers %>%
+    group_by(cluster) %>%
+    top_n(n = 10, wt = avg_log2FC)
 
-  plot_heatmap <- DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust=0.5) #+ NoLegend()
+  plot_heatmap <- DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust = 0.5) #+ NoLegend()
   ggplot2::ggsave(filename = "Top10Heatmap.pdf", plot = plot_heatmap)
-
-}else { # Comparing only one cluster to all others or 
-    # Comparing to all other cells (default): 
-    if (cluster2 == "all others") { 
-        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
-    }else { 
-      # comparing to another user determined cluster(s):
-        cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
-        cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
-    }
+} else { # Comparing only one cluster to all others or
+  # Comparing to all other cells (default):
+  if (cluster2 == "all others") {
+    cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
+  } else {
+    # comparing to another user determined cluster(s):
+    cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
+    cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
+  }
   write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
- }
+}
 # Save the Robj for the next tool -not necessary here
 # save(seurat_obj, file = "seurat_obj_markers.Robj")
 

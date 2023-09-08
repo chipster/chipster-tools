@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-chosen-samples.R: "Seurat v4 -Find DE genes between chosen samples" (This tool lists the differentially expressed genes between two user defined conditions or samples or sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.) 
+# TOOL single-cell-seurat-diffexp-chosen-samples.R: "Seurat v4 -Find DE genes between chosen samples" (This tool lists the differentially expressed genes between two user defined conditions or samples or sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
@@ -14,7 +14,7 @@
 # SLOTS 2
 # TOOLS_BIN ""
 
-# 2018-16-05 ML 
+# 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
 # 30.10.2019 ML Add filtering parameters
@@ -46,22 +46,21 @@ Idents(data.combined) <- "celltype.stim"
 samples1.ok <- unlist(strsplit(samples1, ", "))
 samples2.ok <- unlist(strsplit(samples2, ", "))
 # Add the cluster name to the sample names:
-samples1.cluster <- paste(cluster, "_", samples1.ok, sep="")
-samples2.cluster <- paste(cluster, "_", samples2.ok, sep="")
+samples1.cluster <- paste(cluster, "_", samples1.ok, sep = "")
+samples2.cluster <- paste(cluster, "_", samples2.ok, sep = "")
 
 # When SCTransform was used to normalise the data, do a prep step:
-if (normalisation.method == "SCT"){
+if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
   cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
-} else { 
+} else {
   cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
-
 }
 
 
 # Comparison name for the output file:
-comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep="_")
-name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
+name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
 # Write to table
 write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
@@ -70,6 +69,3 @@ write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")
 
 ## EOF
-
-
-

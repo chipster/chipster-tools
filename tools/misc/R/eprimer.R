@@ -1,7 +1,7 @@
 # TOOL eprimer.R: "Design PCR primers and hybridization oligos with Primer3" (Picks PCR primers and hybridization oligos)
-# INPUT sequence: "Input sequence" TYPE GENERIC 
+# INPUT sequence: "Input sequence" TYPE GENERIC
 # OUTPUT OPTIONAL primers.txt
-# OUTPUT OPTIONAL eprimer3.log 
+# OUTPUT OPTIONAL eprimer3.log
 # PARAMETER OPTIONAL primer: "Pick PCR primer(s\)" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT Y (Tell EPrimer3 to pick primer(s\))
 # PARAMETER OPTIONAL task: "Select task" TYPE [1: "Pick PCR primers", 2: "Pick forward primer only", 3: "Pick reverse primer only", 4: "No primers needed"] FROM 1 TO 1 DEFAULT 1 (Tell EPrimer3 what task to perform. Legal values are 1: 'Pick PCR primers', 2: 'Pick forward primer only', 3: 'Pick reverse primer only', 4: 'No primers needed'.)
 # PARAMETER OPTIONAL hybridprobe: "Pick hybridization probe" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (An 'internal oligo' is intended to be used as a hybridization probe (hyb probe\) to detect the PCR product after amplification.)
@@ -61,53 +61,53 @@
 
 
 # KM 8.11. 2013
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
 
-options(scipen=999)
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
-primer3.path <- file.path(chipster.tools.path, "primer3" ,"src")
+options(scipen = 999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+primer3.path <- file.path(chipster.tools.path, "primer3", "src")
 
-#check sequece file type
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence" )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+# check sequece file type
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence")
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter sequence")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 50000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ', num.queryseq ))
+if (num.queryseq > 50000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ", num.queryseq))
 }
 
 emboss.binary <- file.path(emboss.path, "eprimer3")
-emboss.parameters <- paste('sequence -auto -outfile primers.txt')
+emboss.parameters <- paste("sequence -auto -outfile primers.txt")
 emboss.parameters <- paste(emboss.parameters, "-primer", primer)
 emboss.parameters <- paste(emboss.parameters, "-task", task)
 emboss.parameters <- paste(emboss.parameters, "-hybridprobe", hybridprobe)
 emboss.parameters <- paste(emboss.parameters, "-numreturn", numreturn)
-if (nchar(includedregion) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, "-includedregion", includedregion)
+if (nchar(includedregion) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-includedregion", includedregion)
 }
-if (nchar(targetregion) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, "-targetregion", targetregion)
+if (nchar(targetregion) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-targetregion", targetregion)
 }
-if (nchar(excludedregion) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, "-excludedregion", excludedregion)
+if (nchar(excludedregion) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-excludedregion", excludedregion)
 }
-if (nchar(forwardinput) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, "-forwardinput", forwardinput)
+if (nchar(forwardinput) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-forwardinput", forwardinput)
 }
-if (nchar(reverseinput) > 0 ) {
-emboss.parameters <- paste(emboss.parameters, "-reverseinput", reverseinput)
+if (nchar(reverseinput) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-reverseinput", reverseinput)
 }
 emboss.parameters <- paste(emboss.parameters, "-gcclamp", gcclamp)
 emboss.parameters <- paste(emboss.parameters, "-optsize", osize)
@@ -128,11 +128,11 @@ emboss.parameters <- paste(emboss.parameters, "-prange", prange)
 emboss.parameters <- paste(emboss.parameters, "-ptmopt", ptmopt)
 emboss.parameters <- paste(emboss.parameters, "-ptmmin", ptmmin)
 emboss.parameters <- paste(emboss.parameters, "-ptmmax", ptmmax)
-if (nchar(oexcludedregion) > 0 ) {
-  emboss.parameters <- paste(emboss.parameters, "-oexcludedregion", oexcludedregion)
+if (nchar(oexcludedregion) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-oexcludedregion", oexcludedregion)
 }
-if (nchar(oligoinput) > 0 ) {
-  emboss.parameters <- paste(emboss.parameters, "-oligoinput", oligoinput)
+if (nchar(oligoinput) > 0) {
+    emboss.parameters <- paste(emboss.parameters, "-oligoinput", oligoinput)
 }
 emboss.parameters <- paste(emboss.parameters, "-osizeopt", osizeopt)
 emboss.parameters <- paste(emboss.parameters, "-ominsize", ominsize)
@@ -160,13 +160,13 @@ emboss.parameters <- paste(emboss.parameters, "-selfany", selfany)
 emboss.parameters <- paste(emboss.parameters, "-selfend", selfend)
 emboss.parameters <- paste(emboss.parameters, "-maxendstability", maxendstability)
 
-eprimer.setup <- paste("export EMBOSS_PRIMER3_CORE=", primer3.path, "/primer3_core ;" ,sep="")
-command.full <- paste(eprimer.setup, emboss.binary, emboss.parameters, ' >> eprimer3.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> eprimer3.log' )
+eprimer.setup <- paste("export EMBOSS_PRIMER3_CORE=", primer3.path, "/primer3_core ;", sep = "")
+command.full <- paste(eprimer.setup, emboss.binary, emboss.parameters, " >> eprimer3.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> eprimer3.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f eprimer3.log")
+if (save_log == "no") {
+    system("rm -f eprimer3.log")
 }

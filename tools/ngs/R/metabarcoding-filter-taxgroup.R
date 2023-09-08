@@ -23,24 +23,24 @@ load("ps.Rda")
 
 # Group-specific filtering
 
-if (group == "bacteria"){
-# Filter out anything not classified as Bacteria at the domain level
-ps <- subset_taxa(ps, Domain_Kingdom == "Bacteria")
+if (group == "bacteria") {
+    # Filter out anything not classified as Bacteria at the domain level
+    ps <- subset_taxa(ps, Domain_Kingdom == "Bacteria")
 }
 
-if (group == "archaea"){
-# Filter out anything not classified as Archaea at the domain level 
-ps <- subset_taxa(ps, Domain_Kingdom == "Archaea")
+if (group == "archaea") {
+    # Filter out anything not classified as Archaea at the domain level
+    ps <- subset_taxa(ps, Domain_Kingdom == "Archaea")
 }
 
-if (group == "eukaryotes"){
-# Filter out anything not classified as Eukaryota at the domain level
-ps <- subset_taxa(ps, Domain_Kingdom == "Eukaryota")
+if (group == "eukaryotes") {
+    # Filter out anything not classified as Eukaryota at the domain level
+    ps <- subset_taxa(ps, Domain_Kingdom == "Eukaryota")
 }
 
-if (group == "fungi"){
-# Filter out anything not classified as Fungi at the kingdom level
-ps <- subset_taxa(ps, Domain_Kingdom == "Fungi")
+if (group == "fungi") {
+    # Filter out anything not classified as Fungi at the kingdom level
+    ps <- subset_taxa(ps, Domain_Kingdom == "Fungi")
 }
 
 # General steps
@@ -53,99 +53,110 @@ ps <- subset_taxa(ps, !is.na(Phylum) & !Phylum %in% c("", "uncharacterized", "un
 taxonsummary <- table(tax_table(ps)[, "Phylum"], exclude = NULL)
 
 # Prevalences of each feature (stored as data frame)
-prevdf <- apply(X = otu_table(ps),
-               MARGIN = ifelse(taxa_are_rows(ps), yes = 1, no = 2),
-               FUN = function(x){sum(x > 0)})
+prevdf <- apply(
+    X = otu_table(ps),
+    MARGIN = ifelse(taxa_are_rows(ps), yes = 1, no = 2),
+    FUN = function(x) {
+        sum(x > 0)
+    }
+)
 
 # Add taxonomy and total read counts to data frame
-prevdf <- data.frame(Prevalence = prevdf,
-                    TotalAbundance = taxa_sums(ps),
-                    tax_table(ps))
+prevdf <- data.frame(
+    Prevalence = prevdf,
+    TotalAbundance = taxa_sums(ps),
+    tax_table(ps)
+)
 
 # Tabulate average and total prevalences
-prevsummary <- ddply(prevdf, "Phylum", 
-		function(df1){cbind(mean(df1$Prevalence),sum(df1$Prevalence))})
+prevsummary <- ddply(
+    prevdf, "Phylum",
+    function(df1) {
+        cbind(mean(df1$Prevalence), sum(df1$Prevalence))
+    }
+)
 
 # Give the columns better titles
-prevsummary <- dplyr::rename(prevsummary, 
-		Mean.prevalence = 2, Total.prevalence = 3) # Rename cols. 2 and 3
+prevsummary <- dplyr::rename(prevsummary,
+    Mean.prevalence = 2, Total.prevalence = 3
+) # Rename cols. 2 and 3
 
 # Print out results
 
-if (group == "bacteria"){
-sink("ps_bacteria_taxon.txt")
-	cat("\n\n\n")
-	cat("### Summary of phylum frequencies ###\n")
-	cat("### (Following removal of non-bacterial / chloroplast features) ###\n")
-	cat("\n\n\n")
-	print(taxonsummary)
-	cat("\n\n\n")
-	cat("### Phylum-level mean and total prevalences ###\n")
-	cat("\n\n\n")
-	print(prevsummary)
-	cat("\n\n\n")
-sink()
+if (group == "bacteria") {
+    sink("ps_bacteria_taxon.txt")
+    cat("\n\n\n")
+    cat("### Summary of phylum frequencies ###\n")
+    cat("### (Following removal of non-bacterial / chloroplast features) ###\n")
+    cat("\n\n\n")
+    print(taxonsummary)
+    cat("\n\n\n")
+    cat("### Phylum-level mean and total prevalences ###\n")
+    cat("\n\n\n")
+    print(prevsummary)
+    cat("\n\n\n")
+    sink()
 }
 
-if (group == "archaea"){
-	sink("ps_archaea_taxon.txt")
-	cat("\n\n\n")
-	cat("### Summary of phylum frequencies ###\n")
-	cat("### (Following removal of non-archaeal features) ###\n")
-	cat("\n\n\n")
-	print(taxonsummary)
-	cat("\n\n\n")
-	cat("### Phylum-level mean and total prevalences ###\n")
-	cat("\n\n\n")
-	print(prevsummary)
-	cat("\n\n\n")
-sink()
+if (group == "archaea") {
+    sink("ps_archaea_taxon.txt")
+    cat("\n\n\n")
+    cat("### Summary of phylum frequencies ###\n")
+    cat("### (Following removal of non-archaeal features) ###\n")
+    cat("\n\n\n")
+    print(taxonsummary)
+    cat("\n\n\n")
+    cat("### Phylum-level mean and total prevalences ###\n")
+    cat("\n\n\n")
+    print(prevsummary)
+    cat("\n\n\n")
+    sink()
 }
 
-if (group == "eukaryotes"){
-	sink("ps_eukaryota_taxon.txt")
-	cat("\n\n\n")
-	cat("### Summary of phylum frequencies ###\n")
-	cat("### (Following removal of non-eukaryotic features) ###\n")
-	cat("\n\n\n")
-	print(taxonsummary)
-	cat("\n\n\n")
-	cat("### Phylum-level mean and total prevalences ###\n")
-	cat("\n\n\n")
-	print(prevsummary)
-	cat("\n\n\n")
-sink()
+if (group == "eukaryotes") {
+    sink("ps_eukaryota_taxon.txt")
+    cat("\n\n\n")
+    cat("### Summary of phylum frequencies ###\n")
+    cat("### (Following removal of non-eukaryotic features) ###\n")
+    cat("\n\n\n")
+    print(taxonsummary)
+    cat("\n\n\n")
+    cat("### Phylum-level mean and total prevalences ###\n")
+    cat("\n\n\n")
+    print(prevsummary)
+    cat("\n\n\n")
+    sink()
 }
 
-if (group == "fungi"){
-	sink("ps_fungi_taxon.txt")
-	cat("\n\n\n")
-	cat("### Summary of phylum frequencies ###\n")
-	cat("### (Following removal of non-fungal features) ###\n")
-	cat("\n\n\n")
-	print(taxonsummary)
-	cat("\n\n\n")
-	cat("### Phylum-level mean and total prevalences ###\n")
-	cat("\n\n\n")
-	print(prevsummary)
-	cat("\n\n\n")
-sink()
+if (group == "fungi") {
+    sink("ps_fungi_taxon.txt")
+    cat("\n\n\n")
+    cat("### Summary of phylum frequencies ###\n")
+    cat("### (Following removal of non-fungal features) ###\n")
+    cat("\n\n\n")
+    print(taxonsummary)
+    cat("\n\n\n")
+    cat("### Phylum-level mean and total prevalences ###\n")
+    cat("\n\n\n")
+    print(prevsummary)
+    cat("\n\n\n")
+    sink()
 }
 
-# Export phyloseq object as Rda file 
+# Export phyloseq object as Rda file
 
-if (group == "bacteria"){
-	save(ps, file = "ps_bacteria.Rda")
+if (group == "bacteria") {
+    save(ps, file = "ps_bacteria.Rda")
 }
 
-if (group == "archaea"){
-	save(ps, file = "ps_archaea.Rda")
+if (group == "archaea") {
+    save(ps, file = "ps_archaea.Rda")
 }
 
-if (group == "eukaryotes"){
-	save(ps, file = "ps_eukaryota.Rda")
+if (group == "eukaryotes") {
+    save(ps, file = "ps_eukaryota.Rda")
 }
 
-if (group == "fungi"){
-	save(ps, file = "ps_fungi.Rda")
+if (group == "fungi") {
+    save(ps, file = "ps_fungi.Rda")
 }

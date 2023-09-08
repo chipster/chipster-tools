@@ -1,7 +1,7 @@
 # TOOL bedtools-genomecoveragebed.R: "Genome coverage BED" (Compute the coverage of a feature file among a genome. This tool is based on the BEDTools package.)
 # INPUT file.a: "Input file" TYPE GENERIC
 # INPUT file.b: "Genome file" TYPE GENERIC
-# OUTPUT OPTIONAL genomecoveragebed.txt 
+# OUTPUT OPTIONAL genomecoveragebed.txt
 # OUTPUT OPTIONAL error.txt
 # PARAMETER ibam: "Input file is BAM format" TYPE [yes, no] DEFAULT no (The input file is in BAM format. Note: BAM must be sorted by position.)
 # PARAMETER output: "Output type" TYPE [histogram, depth, BedGraph, BedGraph-all] DEFAULT histogram (Set the output type. Depth = the depth at each genome position. BedGraph = depth in BedGraph format. BedGraph-all = BedGraph format with regions with zero coverage also reported.)
@@ -18,17 +18,35 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "genomeCoverageBed
 
 # optional options
 options <- paste("")
-if (output == "depth") {options <- paste(options, "-d")}
-if (output == "BedGraph") {options <- paste(options, "-bg")}
-if (output == "BedGraph-all") {options <- paste(options, "-bga")}
-if (split == "yes") {options <- paste(options, "-split")}
-if (strand == "+") {options <- paste(options, "-strand +")}
-if (strand == "-") {options <- paste(options, "-strand -")}
-if (max == "yes" && output == "histogram"){options <- paste(options, "-max", maxdepth)}
+if (output == "depth") {
+    options <- paste(options, "-d")
+}
+if (output == "BedGraph") {
+    options <- paste(options, "-bg")
+}
+if (output == "BedGraph-all") {
+    options <- paste(options, "-bga")
+}
+if (split == "yes") {
+    options <- paste(options, "-split")
+}
+if (strand == "+") {
+    options <- paste(options, "-strand +")
+}
+if (strand == "-") {
+    options <- paste(options, "-strand -")
+}
+if (max == "yes" && output == "histogram") {
+    options <- paste(options, "-max", maxdepth)
+}
 
 # input files
-if (ibam == "yes") {options <- paste(options, "-ibam file.a -g file.b")}
-if (ibam == "no") {options <- paste(options, "-i file.a -g file.b")}
+if (ibam == "yes") {
+    options <- paste(options, "-ibam file.a -g file.b")
+}
+if (ibam == "no") {
+    options <- paste(options, "-i file.a -g file.b")
+}
 
 # command
 command <- paste(binary, options, " > genomecoveragebed.tmp 2> error.tmp")
@@ -38,9 +56,9 @@ system(command)
 
 # Generate output/error message
 if (file.info("genomecoveragebed.tmp")$size > 0) {
-	system("mv genomecoveragebed.tmp genomecoveragebed.txt")
+    system("mv genomecoveragebed.tmp genomecoveragebed.txt")
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+    system("mv error.tmp error.txt")
+} else {
+    system("echo \"# No results found\" > error.txt")
 }

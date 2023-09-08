@@ -1,4 +1,3 @@
-
 # CRAN packages and their dependencies
 install.packages("Seurat")
 install.packages("dplyr")
@@ -15,10 +14,10 @@ BiocManager::install("MAST")
 BiocManager::install("GEOquery")
 BiocManager::install("scater")
 BiocManager::install("mvoutlier")
-BiocManager::install('multtest')
+BiocManager::install("multtest")
 
 # requires multtest
-install.packages('metap')
+install.packages("metap")
 
 BiocManager::install("celldex")
 BiocManager::install("SingleR")

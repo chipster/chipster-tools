@@ -19,13 +19,13 @@
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
 # FilterBAM:
-command <- paste(path.dropseq, "/FilterBAM TAG_REJECT=XQ INPUT=tagged.bam OUTPUT=unaligned_tagged_filtered.bam  2>> log.txt", sep="")
+command <- paste(path.dropseq, "/FilterBAM TAG_REJECT=XQ INPUT=tagged.bam OUTPUT=unaligned_tagged_filtered.bam  2>> log.txt", sep = "")
 system(command)
 
 
 # TrimStartingSequence:
 # command start
-command.start <- paste(path.dropseq, "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=adapter_trim_summary.txt", sep="")
+command.start <- paste(path.dropseq, "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=adapter_trim_summary.txt", sep = "")
 # parameters
 command.parameters <- paste("SEQUENCE=", sequence, "MISMATCHES=", mismatches, "NUM_BASES=", num_bases)
 # run the tool
@@ -35,7 +35,7 @@ system(command)
 
 # PolyATrimmer:
 # command start
-command.start <- paste(path.dropseq, "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt", sep="")
+command.start <- paste(path.dropseq, "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt", sep = "")
 # parameters
 command.parameters <- paste("MISMATCHES=", mismatches_polyA, "NUM_BASES=", num_bases_polyA)
 # run the tool
@@ -45,4 +45,4 @@ system(command)
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 
-#EOF
+# EOF

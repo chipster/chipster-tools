@@ -10,33 +10,33 @@
 
 # KM 8.11. 2013
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-list_command <- paste("awk '{ print \"dbfetch:" ,db ,":\"$1 }' idlist.txt > idusa.txt" ,sep="" )
-#stop("CHIPSTER-NOTE:",list_command)
+list_command <- paste("awk '{ print \"dbfetch:", db, ":\"$1 }' idlist.txt > idusa.txt", sep = "")
+# stop("CHIPSTER-NOTE:",list_command)
 system(list_command)
 
 emboss.binary <- file.path(emboss.path, "textget")
 
-if ( db == "refseqp" ){
-	emboss.binary <- file.path(emboss.path, "entret")
+if (db == "refseqp") {
+    emboss.binary <- file.path(emboss.path, "entret")
 }
 
-if ( db == "refseqn" ){
-	emboss.binary <- file.path(emboss.path, "entret")
+if (db == "refseqn") {
+    emboss.binary <- file.path(emboss.path, "entret")
 }
 
 
-command.full <- paste(emboss.binary, ' @idusa.txt -outfile data.txt > log.txt 2>&1' )
+command.full <- paste(emboss.binary, " @idusa.txt -outfile data.txt > log.txt 2>&1")
 system(command.full)
 
 system("cat idusa.txt>> log.txt")
 
-file.type <- system("file data.txt", intern = TRUE )
+file.type <- system("file data.txt", intern = TRUE)
 
-if ( file.type == "data.txt: HTML document text"){
-	system("mv data.txt data.html")
+if (file.type == "data.txt: HTML document text") {
+    system("mv data.txt data.html")
 }
-if ( save_log == "no") {
-	system ("rm -f log.txt")
-}	
+if (save_log == "no") {
+    system("rm -f log.txt")
+}

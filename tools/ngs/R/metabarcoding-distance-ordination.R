@@ -28,505 +28,551 @@ library(ggrepel)
 load("ps.Rda")
 
 # Stop if phenodata column 1 is not specified when using db-RDA
-if (orditype == "dbrda" && 
-	cap_variable1 == "EMPTY"){
-	stop("db-RDA phenodata variable 1 not selected - at least one variable is required")
+if (orditype == "dbrda" &&
+    cap_variable1 == "EMPTY") {
+    stop("db-RDA phenodata variable 1 not selected - at least one variable is required")
 }
 
-# nMDS or db-RDA 
-# Also create two further objects for downstream statistics: 
+# nMDS or db-RDA
+# Also create two further objects for downstream statistics:
 # 1) a data frame of the ps object sample data
 # 2) Euclidean or Bray-Curtis distances
 
-if (disttype == "euclidean" && orditype == "nmds"){
-	set.seed(1)
-	ps_ordi <- ordinate(physeq = ps, 
-		method = "NMDS", distance = "euclidean") # ordination
-	ps_df <- data.frame(sample_data(ps)) # data frame
-	set.seed(1)
-	ps_dist <- phyloseq::distance(ps, method = 'euclidean') # distances
+if (disttype == "euclidean" && orditype == "nmds") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "NMDS", distance = "euclidean"
+    ) # ordination
+    ps_df <- data.frame(sample_data(ps)) # data frame
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "euclidean") # distances
 }
 if (disttype == "euclidean" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 == "EMPTY" &&
-		cap_variable3 == "EMPTY" &&
-		cap_variable4 == "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "euclidean",
-				formula = ~ get(cap_variable1))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'euclidean')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 == "EMPTY" &&
+    cap_variable3 == "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "euclidean",
+        formula = ~ get(cap_variable1)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "euclidean")
 }
 if (disttype == "euclidean" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 == "EMPTY" &&
-		cap_variable4 == "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "euclidean",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'euclidean')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 == "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "euclidean",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "euclidean")
 }
 if (disttype == "euclidean" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 != "EMPTY" &&
-		cap_variable4 == "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "euclidean",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2) +
-						get(cap_variable3))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'euclidean')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "euclidean",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "euclidean")
 }
 if (disttype == "euclidean" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 != "EMPTY" &&
-		cap_variable4 != "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "euclidean",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2) +
-						get(cap_variable3) +
-						get(cap_variable4))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'euclidean')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 != "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "euclidean",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3) +
+            get(cap_variable4)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "euclidean")
 }
 if (disttype == "euclidean" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 != "EMPTY" &&
-		cap_variable4 != "EMPTY" &&
-		cap_variable5 != "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "euclidean",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2) +
-						get(cap_variable3) +
-						get(cap_variable4) +
-						get(cap_variable5))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'euclidean')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 != "EMPTY" &&
+    cap_variable5 != "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "euclidean",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3) +
+            get(cap_variable4) +
+            get(cap_variable5)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "euclidean")
 }
-if (disttype == "bray" && orditype == "nmds"){
-	set.seed(1)
-	ps_ordi <- ordinate(physeq = ps, 
-		method = "NMDS", distance = "bray")
-	ps_df <- data.frame(sample_data(ps))
-	set.seed(1)
-	ps_dist <- phyloseq::distance(ps, method = 'bray')
-}
-if (disttype == "bray" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 == "EMPTY" &&
-		cap_variable3 == "EMPTY" &&
-		cap_variable4 == "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "bray",
-				formula = ~ get(cap_variable1))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'bray')
+if (disttype == "bray" && orditype == "nmds") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "NMDS", distance = "bray"
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "bray")
 }
 if (disttype == "bray" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 == "EMPTY" &&
-		cap_variable4 == "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "bray",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'bray')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 == "EMPTY" &&
+    cap_variable3 == "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "bray",
+        formula = ~ get(cap_variable1)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "bray")
 }
 if (disttype == "bray" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 != "EMPTY" &&
-		cap_variable4 == "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "bray",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2) +
-						get(cap_variable3))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'bray')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 == "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "bray",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "bray")
 }
 if (disttype == "bray" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 != "EMPTY" &&
-		cap_variable4 != "EMPTY" &&
-		cap_variable5 == "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "bray",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2) +
-						get(cap_variable3) +
-						get(cap_variable4))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'bray')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "bray",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "bray")
 }
 if (disttype == "bray" && orditype == "dbrda" &&
-		cap_variable1 != "EMPTY" &&
-		cap_variable2 != "EMPTY" &&
-		cap_variable3 != "EMPTY" &&
-		cap_variable4 != "EMPTY" &&
-		cap_variable5 != "EMPTY"){
-			set.seed(1)
-			ps_ordi <- ordinate(physeq = ps, 
-				method = "CAP", distance = "bray",
-				formula = ~ get(cap_variable1) + 
-						get(cap_variable2) +
-						get(cap_variable3) +
-						get(cap_variable4) +
-						get(cap_variable5))
-			ps_df <- data.frame(sample_data(ps))
-			set.seed(1)
-			ps_dist <- phyloseq::distance(ps, method = 'bray')
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 != "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "bray",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3) +
+            get(cap_variable4)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "bray")
+}
+if (disttype == "bray" && orditype == "dbrda" &&
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 != "EMPTY" &&
+    cap_variable5 != "EMPTY") {
+    set.seed(1)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = "bray",
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3) +
+            get(cap_variable4) +
+            get(cap_variable5)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "bray")
 }
 
 # Ordination plots
 
 # Define a colour palette
 # (Using a custom set containing up to 22 colours)
-colours <- c("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77AADD", 
-		"#117777", "#44AAAA", "#77CCCC", "#117744", "#44AA77", "#88CCAA", 
-		"#777711", "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77", 
-		"#771122", "#AA4455", "#DD7788", "#CBD588")
+colours <- c(
+    "#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", "#77AADD",
+    "#117777", "#44AAAA", "#77CCCC", "#117744", "#44AA77", "#88CCAA",
+    "#777711", "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77",
+    "#771122", "#AA4455", "#DD7788", "#CBD588"
+)
 
 if (group_colour != "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				color = group_colour) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("nMDS")
+    group_shape == "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("nMDS")
 }
 if (group_colour == "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("nMDS")
+    group_shape != "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("nMDS")
 }
 if (group_colour != "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi,
-				color = group_colour, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("nMDS")
+    group_shape != "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("nMDS")
 }
 if (group_colour == "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi)+ 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("nMDS")
+    group_shape == "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("nMDS")
 }
 if (group_colour != "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				color = group_colour) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("nMDS")
+    group_shape == "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("nMDS")
 }
 if (group_colour == "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("nMDS")
+    group_shape != "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("nMDS")
 }
 if (group_colour != "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi,
-				color = group_colour, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("nMDS")
+    group_shape != "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("nMDS")
 }
 if (group_colour == "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi)+ 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("nMDS")
+    group_shape == "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("nMDS")
 }
 if (group_colour != "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				color = group_colour) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("db-RDA")
+    group_shape == "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("db-RDA")
 }
 if (group_colour == "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "nmds"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("nMDS")
+    group_shape != "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "nmds") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("nMDS")
 }
 if (group_colour != "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi,
-				color = group_colour, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("db-RDA")
+    group_shape != "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("db-RDA")
 }
 if (group_colour == "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "no" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi)+ 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			ggtitle("db-RDA")
+    group_shape == "EMPTY" &&
+    samplenames == "no" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        ggtitle("db-RDA")
 }
 if (group_colour != "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				color = group_colour) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("db-RDA")
+    group_shape == "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("db-RDA")
 }
 if (group_colour == "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("db-RDA")
+    group_shape != "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("db-RDA")
 }
 if (group_colour != "EMPTY" &&
-		group_shape != "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi,
-				color = group_colour, 
-				shape = group_shape) + 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("db-RDA")
+    group_shape != "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi,
+        color = group_colour,
+        shape = group_shape
+    ) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("db-RDA")
 }
 if (group_colour == "EMPTY" &&
-		group_shape == "EMPTY" &&
-		samplenames == "yes" &&
-		orditype == "dbrda"){
-		ordiplot <- plot_ordination(ps, ps_ordi)+ 
-			theme(aspect.ratio = 1) +
-			geom_point(size = 6.5, alpha = 0.75) +
-			scale_fill_manual(values = colours) +
-			theme(axis.title = element_blank()) +
-			theme(axis.ticks = element_blank()) +
-			theme(axis.text = element_blank()) +
-			theme(legend.title = element_blank()) +
-			theme(legend.position = "bottom") +
-			geom_text_repel(aes(label = get(samplevar)),
-                color = "gray45",
-                min.segment.length = 0, 
-                seed = 42, 
-                box.padding = 0.6,
-                size = 5) +
-			ggtitle("db-RDA")
+    group_shape == "EMPTY" &&
+    samplenames == "yes" &&
+    orditype == "dbrda") {
+    ordiplot <- plot_ordination(ps, ps_ordi) +
+        theme(aspect.ratio = 1) +
+        geom_point(size = 6.5, alpha = 0.75) +
+        scale_fill_manual(values = colours) +
+        theme(axis.title = element_blank()) +
+        theme(axis.ticks = element_blank()) +
+        theme(axis.text = element_blank()) +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom") +
+        geom_text_repel(aes(label = get(samplevar)),
+            color = "gray45",
+            min.segment.length = 0,
+            seed = 42,
+            box.padding = 0.6,
+            size = 5
+        ) +
+        ggtitle("db-RDA")
 }
 
 # Open a report PDF
@@ -539,13 +585,15 @@ dev.off()
 
 # Print out ordination summary
 sink("ps_ordi.txt")
-	cat("\n\n\n")
-	cat("### Ordination summary ###\n")
-	cat("\n\n\n")
-	print(ps_ordi)
-	cat("\n\n\n")
+cat("\n\n\n")
+cat("### Ordination summary ###\n")
+cat("\n\n\n")
+print(ps_ordi)
+cat("\n\n\n")
 sink()
 
 # Export Rda file
-save(list = c("ps_df", "ps_dist"), 
-	file = "ps_dist.Rda")
+save(
+    list = c("ps_df", "ps_dist"),
+    file = "ps_dist.Rda"
+)

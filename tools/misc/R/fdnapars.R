@@ -1,6 +1,6 @@
 # TOOL fdnapars.R: "DNA parsimony algorithm" (DNA parsimony algorithm of the PHYLIP package)
-# INPUT sequence: sequence TYPE GENERIC 
-# OUTPUT OPTIONAL dnapars.out.txt 
+# INPUT sequence: sequence TYPE GENERIC
+# OUTPUT OPTIONAL dnapars.out.txt
 # OUTPUT OPTIONAL dnapars.tree.txt
 # OUTPUT OPTIONAL fdnapars.log
 # PARAMETER OPTIONAL maxtrees: "Number of trees to save" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 10000 (Number of trees to save)
@@ -20,31 +20,31 @@
 # PARAMETER OPTIONAL dotdiff: "Use dot differencing to display results" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT Y (Use dot differencing to display results)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 # KM 8.11. 2013
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequence")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount sequence -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 10000){
-	stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 10000 but your file contains ", num.queryseq ))
+if (num.queryseq > 10000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 10000 but your file contains ", num.queryseq))
 }
 
 emboss.binary <- file.path(emboss.path, "fdnapars")
@@ -68,14 +68,14 @@ emboss.parameters <- paste(emboss.parameters, "-ancseq", ancseq)
 emboss.parameters <- paste(emboss.parameters, "-treeprint", treeprint)
 emboss.parameters <- paste(emboss.parameters, "-dotdiff", dotdiff)
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> fdnapars.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> fdnapars.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> fdnapars.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> fdnapars.log')
 system(echo.command)
 
 system(command.full)
 
 system("ls -l >> fdnapars.log")
 
-if ( save_log == "no") {
-	system ("rm -f fdnapars.log")
+if (save_log == "no") {
+    system("rm -f fdnapars.log")
 }

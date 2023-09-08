@@ -13,22 +13,22 @@
 # EK 28.4.2014
 # EK 23.5.2014 updated Bowtie2 command, added identifier sorting and piping to eXpress
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check out if the fastq files are compressed and if so unzip them
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fq")
 unzipIfGZipFile("reads2.fq")
 unzipIfGZipFile("transcripts.fasta")
 
 # set up Bowtie2 tools and eXpress
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2"))
-version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
-documentVersion("Bowtie",version)
+version <- system(paste(bowtie.binary, "--version | head -1 | cut -d ' ' -f 3"), intern = TRUE)
+documentVersion("Bowtie", version)
 bowtie.build.binary <- c(file.path(chipster.tools.path, "bowtie2", "bowtie2-build"))
 express.binary <- c(file.path(chipster.tools.path, "express", "express"))
-version <- system(paste(express.binary,"2>&1 |head -2 |tail -1 | cut -d ' ' -f 2"),intern = TRUE)
-documentVersion("eXpress",version)
+version <- system(paste(express.binary, "2>&1 |head -2 |tail -1 | cut -d ' ' -f 2"), intern = TRUE)
+documentVersion("eXpress", version)
 
 
 # make Bowtie index for the transcripts
@@ -37,16 +37,16 @@ system(bowtie.build.command)
 
 # collect Bowtie paramters
 bowtie.params <- paste("--rdg 6,5 --rfg 6,5 --score-min L,-.6,-.4 -p", chipster.threads.max, "-k", alignment.no)
-if(phred.scale == "phred64"){
-	bowtie.params <- paste(bowtie.params, "--phred64")
+if (phred.scale == "phred64") {
+    bowtie.params <- paste(bowtie.params, "--phred64")
 }
 
-if (file.exists("reads2.fq")){
-	# Paired end reads
-	command <- paste(bowtie.binary, bowtie.params, "--no-discordant --no-mixed -x transcriptome -1 reads1.fq -2 reads2.fq |", express.binary, "-m", fragmentlength, "-s", fragmentlengthstdev, "transcripts.fasta")
-} else{
-	# Single end reads
-	command <- paste(bowtie.binary, bowtie.params, "-x transcriptome -U reads1.fq |", express.binary, "-m", fragmentlength, "-s", fragmentlengthstdev, "transcripts.fasta")
+if (file.exists("reads2.fq")) {
+    # Paired end reads
+    command <- paste(bowtie.binary, bowtie.params, "--no-discordant --no-mixed -x transcriptome -1 reads1.fq -2 reads2.fq |", express.binary, "-m", fragmentlength, "-s", fragmentlengthstdev, "transcripts.fasta")
+} else {
+    # Single end reads
+    command <- paste(bowtie.binary, bowtie.params, "-x transcriptome -U reads1.fq |", express.binary, "-m", fragmentlength, "-s", fragmentlengthstdev, "transcripts.fasta")
 }
 
 # for testing
@@ -65,10 +65,6 @@ system("head -1 results.xprs > id_sorted")
 system("tail -n +2 results.xprs | sort -k 2,2 >> id_sorted")
 
 # make a second output file containing only the effective counts
-results <- read.table(file="id_sorted", sep="\t", header=T, quote="")
-effcounts <- data.frame(target_id = results$target_id, eff_counts=round(results$eff_counts, digits=0))
-write.table(effcounts, file="effective-counts-express.tsv", sep="\t", row.names=F, quote=F)
-
-
-
-
+results <- read.table(file = "id_sorted", sep = "\t", header = T, quote = "")
+effcounts <- data.frame(target_id = results$target_id, eff_counts = round(results$eff_counts, digits = 0))
+write.table(effcounts, file = "effective-counts-express.tsv", sep = "\t", row.names = F, quote = F)

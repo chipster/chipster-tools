@@ -11,7 +11,7 @@
 # AMS 11.3.2014, gzip fastq outputs
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads.fastq")
 
 # binary
@@ -24,5 +24,3 @@ command <- paste(binary, "-v", "-q", quality, "-p", percentage, quality.scale, "
 # run
 system(command)
 system("gzip *.fastq")
-
-

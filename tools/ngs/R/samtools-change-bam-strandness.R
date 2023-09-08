@@ -6,25 +6,25 @@
 # AMS 2020-01-21
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path,"samtools-0.1.19","samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 
 # Change command
-system(paste(samtools.binary,"view -h alignment.bam | sed s/XS:A:+/XS:A:P/ | sed s/XS:A:-/XS:A:+/ | sed s/XS:A:P/XS:A:-/ |",samtools.binary,"view -bS - > alignment-edited.bam"))
+system(paste(samtools.binary, "view -h alignment.bam | sed s/XS:A:+/XS:A:P/ | sed s/XS:A:-/XS:A:+/ | sed s/XS:A:P/XS:A:-/ |", samtools.binary, "view -bS - > alignment-edited.bam"))
 
 # index bam
-system(paste(samtools.binary,"index alignment-edited.bam"))
+system(paste(samtools.binary, "index alignment-edited.bam"))
 
 # Handle output names
-source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
 base <- strip_name(inputnames$alignment.bam)
 
 # Make a matrix of output names
-outputnames <- matrix(NA,nrow = 2,ncol = 2)
-outputnames[1,] <- c("alignment-edited.bam",paste(base,".edited.bam",sep = ""))
-outputnames[2,] <- c("alignment-edited.bam.bai",paste(base,".edited.bam.bai",sep = ""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("alignment-edited.bam", paste(base, ".edited.bam", sep = ""))
+outputnames[2, ] <- c("alignment-edited.bam.bai", paste(base, ".edited.bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

@@ -12,43 +12,42 @@
 # EK 17.6.2011
 # AMS 11.3.2014, gzip fastq outputs
 
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 
 
 # Binary
 binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastx_trimmer"))
-version <- system(paste(binary,"-h | sed -n 2p"),intern = TRUE)
-documentVersion("fastx_trimmer",version)
+version <- system(paste(binary, "-h | sed -n 2p"), intern = TRUE)
+documentVersion("fastx_trimmer", version)
 
 # Check if input is a tar file
-isTar <- grepl("POSIX tar", system("file input.file", intern=TRUE))
+isTar <- grepl("POSIX tar", system("file input.file", intern = TRUE))
 
-if (isTar){
+if (isTar) {
   # Input is a tar file
   system("mkdir input_folder")
   system("mkdir output_folder")
   system("cd input_folder && tar xf ../input.file")
   system("cd input_folder && gunzip *.gz")
   filenames <- list.files("input_folder")
-  for (f in filenames){
-    input_fastq <- paste("input_folder/",f, sep="")
+  for (f in filenames) {
+    input_fastq <- paste("input_folder/", f, sep = "")
     output_base <- strip_name(f)
-    output_fastq <- paste("output_folder/",output_base, "_trimmed.fq", sep="")
+    output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
 
     # Command
     quality.scale <- ifelse(quality.format == "sanger", "-Q 33", "")
     command <- paste(binary, "-f", first, "-l", last, quality.scale, "-i", input_fastq, "-o", output_fastq)
-    #documentCommand(command)
+    # documentCommand(command)
     system(command)
   }
   # gzip all output FASTQ files
   system("gzip output_folder/*.fq")
   # Make a tar package.
   system("cd output_folder && tar cf ../trimmed.tar *")
-
-}else{
+} else {
   # Input is FASTQ file
 
   # Check out if the file is compressed and if so unzip it
@@ -68,8 +67,8 @@ if (isTar){
   basename <- strip_name(inputnames$input.file)
 
   # Make a matrix of output names
-  outputnames <- matrix(NA,nrow = 1,ncol = 2)
-  outputnames[1,] <- c("trimmed.fq.gz",paste(basename,"_trimmed.fq.gz",sep = ""))
+  outputnames <- matrix(NA, nrow = 1, ncol = 2)
+  outputnames[1, ] <- c("trimmed.fq.gz", paste(basename, "_trimmed.fq.gz", sep = ""))
 
   # Write output definitions file
   write_output_definitions(outputnames)

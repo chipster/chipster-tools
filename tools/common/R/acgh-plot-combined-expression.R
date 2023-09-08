@@ -1,6 +1,6 @@
 # TOOL acgh-plot-combined-expression.R: "Plot copy-number-induced gene expression" (Plot the expression levels of individual genes for a copy number vs. expression comparison. This tool must be run on the output from the tool Test for copy number induced expression changes.)
-# INPUT cn-induced-expression.tsv: cn-induced-expression.tsv TYPE GENE_EXPRS 
-# OUTPUT cn-induced-expression-plot.pdf: cn-induced-expression-plot.pdf 
+# INPUT cn-induced-expression.tsv: cn-induced-expression.tsv TYPE GENE_EXPRS
+# OUTPUT cn-induced-expression-plot.pdf: cn-induced-expression-plot.pdf
 # PARAMETER gene.ids: "Gene IDs" TYPE STRING DEFAULT 1 (The gene.ids of the genes to be plotted, separated by commas. Ranges are also supported (e.g. 1,3,7-10\). Ignored, if field genes is not empty.)
 # PARAMETER genes: "Gene symbols" TYPE STRING DEFAULT empty (Gene symbols or probe names to be plotted, separated by commas. If this field is filled, the gene.ids parameter will be ignored.)
 
@@ -29,13 +29,15 @@ if (genes == "" || genes == "empty") {
 }
 
 # check that we have something to plot
-if (length(to.plot) == 0)
+if (length(to.plot) == 0) {
   stop("CHIPSTER-NOTE: Nothing to plot.")
+}
 
 # plot
-pdf(file="cn-induced-expression-plot.pdf", paper="a4r", width=0, height=0)
-for (gene in to.plot)
-  intCNGEan.plot(gene.id=gene, tuned)
+pdf(file = "cn-induced-expression-plot.pdf", paper = "a4r", width = 0, height = 0)
+for (gene in to.plot) {
+  intCNGEan.plot(gene.id = gene, tuned)
+}
 dev.off()
 
 # EOF

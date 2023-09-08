@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters.R: "Seurat v4 -Identify spatially variable genes based on clusters" (This tool lists the differentially expressed genes between two user defined clusters.) 
+# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters.R: "Seurat v4 -Identify spatially variable genes based on clusters" (This tool lists the differentially expressed genes between two user defined clusters.)
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot.pdf
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
@@ -24,7 +24,7 @@ library(dplyr)
 load("seurat_spatial_obj_pca.Robj")
 
 # kokeillaan:
-seurat_obj = PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
+seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
 
 # Differential expression
@@ -36,13 +36,11 @@ write.table(as.matrix(de_markers), file = "spatially_variable_genes.tsv", sep = 
 
 
 # Open the pdf file for plotting
-pdf(file="Markerplot.pdf", , width=9, height=12) 
+pdf(file = "Markerplot.pdf", , width = 9, height = 12)
 
 # ncol = 3?
 SpatialFeaturePlot(object = seurat_obj, features = rownames(de_markers)[1:3], alpha = c(0.1, 1))
 
 dev.off() # close the pdf
 
-#EOF
-
-
+# EOF

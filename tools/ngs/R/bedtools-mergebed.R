@@ -17,11 +17,19 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "mergeBed"))
 
 # options
 options <- paste("")
-if (s == "yes") {options <- paste(options, "-s")}
-if (n == "yes") {options <- paste(options, "-n")}
+if (s == "yes") {
+    options <- paste(options, "-s")
+}
+if (n == "yes") {
+    options <- paste(options, "-n")
+}
 options <- paste(options, "-d", d)
-if (nms == "yes") {options <- paste(options, "-c 4 -o collapse")}
-if (scores == "yes") {options <- paste(options, "-scores", score.type)}
+if (nms == "yes") {
+    options <- paste(options, "-c 4 -o collapse")
+}
+if (scores == "yes") {
+    options <- paste(options, "-scores", score.type)
+}
 
 # input files
 options <- paste(options, "-i file.a")
@@ -33,9 +41,9 @@ command <- paste(binary, options, "> mergebed.tmp 2> error.tmp")
 system(command)
 
 if (file.info("mergebed.tmp")$size > 0) {
-	system("mv mergebed.tmp mergebed.bed")
+    system("mv mergebed.tmp mergebed.bed")
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+    system("mv error.tmp error.txt")
+} else {
+    system("echo \"# No results found\" > error.txt")
 }

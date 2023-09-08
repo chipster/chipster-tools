@@ -1,9 +1,9 @@
-# TOOL bwasw.R: "BWA-SW for single end reads" (BWA aligns reads to genomes. This BWA version uses the BWA-SW algorithm that is designed for long, over 300pb, low-quality reads. The alignment results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser. 
+# TOOL bwasw.R: "BWA-SW for single end reads" (BWA aligns reads to genomes. This BWA version uses the BWA-SW algorithm that is designed for long, over 300pb, low-quality reads. The alignment results are sorted and indexed bam files, which are ready for viewing in the Chipster genome browser.
 # Note that this BWA tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"BWA-SW for single end reads and own genome\".)
-# INPUT reads.txt: "Reads to align" TYPE GENERIC 
-# OUTPUT bwa.bam 
-# OUTPUT bwa.bam.bai 
-# OUTPUT bwa.log 
+# INPUT reads.txt: "Reads to align" TYPE GENERIC
+# OUTPUT bwa.bam
+# OUTPUT bwa.bam.bai
+# OUTPUT bwa.log
 # PARAMETER genome: "Genome or transcriptome" TYPE [hg19.fa: "Human genome (hg19\)", mm10.fa: "Mouse genome (mm10\)", mm9.fa: "Mouse genome (mm9\)", rn4.fa: "Rat genome (rn4\)", ovis_aries_texel.fa: "Sheep (oar3.1\)" ] DEFAULT hg19.fa (Genome or transcriptome that you would like to align your reads against.)
 # PARAMETER OPTIONAL match.score: "Score of a match" TYPE INTEGER DEFAULT 1 (Score of a matching base. Corresponds to the command line parameter -a)
 # PARAMETER OPTIONAL gap.opening: "Gap opening penalty " TYPE INTEGER DEFAULT 11 (Gap opening penalty. Corresponds to the command line parameter -q)
@@ -23,7 +23,7 @@
 # AMS 11.11.2013 Added thread support
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads.txt")
 
 # bwa
@@ -34,10 +34,10 @@ command.start <- paste("bash -c '", bwa.binary)
 
 
 # algorithm parameters
-mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty , "-q" , gap.opening , "-r" , gap.extension , "-a" , match.score , "-w" , band.width , "-T" , min.score , "-c" , threshold.coeff , "-z" , z.best , "-s" , sa.interval , "-N" , min.support)
+mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty, "-q", gap.opening, "-r", gap.extension, "-a", match.score, "-w", band.width, "-T", min.score, "-c", threshold.coeff, "-z", z.best, "-s", sa.interval, "-N", min.support)
 
 # command ending
-echo.command <- paste("echo '", bwa.binary , mode.parameters, bwa.genome, "reads.txt ' > bwa.log" )
+echo.command <- paste("echo '", bwa.binary, mode.parameters, bwa.genome, "reads.txt ' > bwa.log")
 runExternal(echo.command)
 
 command.end <- paste(bwa.genome, "reads.txt 1> alignment.sai 2>> bwa.log'")
@@ -45,22 +45,22 @@ command.end <- paste(bwa.genome, "reads.txt 1> alignment.sai 2>> bwa.log'")
 # run bwa alignment
 bwa.command <- paste(command.start, mode.parameters, command.end)
 
-#stop(paste('CHIPSTER-NOTE: ', bwa.command))
+# stop(paste('CHIPSTER-NOTE: ', bwa.command))
 runExternal(bwa.command)
 
-#system ("pwd")
-#system ("ls -l >> bwa.log")
+# system ("pwd")
+# system ("ls -l >> bwa.log")
 # sai to sam conversion
-samse.parameters <- paste("samse -n", alignment.no )
-samse.end <- paste(bwa.genome, "alignment.sai reads.txt 1> alignment.sam 2>>bwa.log'" )
-samse.command <- paste( command.start, samse.parameters , samse.end )
+samse.parameters <- paste("samse -n", alignment.no)
+samse.end <- paste(bwa.genome, "alignment.sai reads.txt 1> alignment.sam 2>>bwa.log'")
+samse.command <- paste(command.start, samse.parameters, samse.end)
 
-echo.command <- paste("echo '", bwa.binary , samse.parameters, bwa.genome, "alignment.sai reads.txt ' >> bwa.log" )
+echo.command <- paste("echo '", bwa.binary, samse.parameters, bwa.genome, "alignment.sai reads.txt ' >> bwa.log")
 runExternal(echo.command)
 
 runExternal(samse.command)
 
-		
+
 # samtools binary
 samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 

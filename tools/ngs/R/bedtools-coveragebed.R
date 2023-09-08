@@ -18,14 +18,26 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "coverageBed"))
 
 # optional options
 options <- paste("")
-if (s == "yes") {options <- paste(options, "-s")}
-if (hist == "yes") {options <- paste(options, "-hist")}
-if (d == "yes") {options <- paste(options, "-d")}
-if (split == "yes") {options <- paste(options, "-split")}
+if (s == "yes") {
+    options <- paste(options, "-s")
+}
+if (hist == "yes") {
+    options <- paste(options, "-hist")
+}
+if (d == "yes") {
+    options <- paste(options, "-d")
+}
+if (split == "yes") {
+    options <- paste(options, "-split")
+}
 
 # input files
-if (abam == "yes") {options <- paste(options, "-abam file.a -b file.b")}
-if (abam == "no") {options <- paste(options, "-a file.a -b file.b")}
+if (abam == "yes") {
+    options <- paste(options, "-abam file.a -b file.b")
+}
+if (abam == "no") {
+    options <- paste(options, "-a file.a -b file.b")
+}
 
 # command
 command <- paste(binary, options, "> coveragebed.tmp 2> error.tmp")
@@ -35,9 +47,9 @@ system(command)
 
 # Generate output/error message
 if (file.info("coveragebed.tmp")$size > 0) {
-	system("mv coveragebed.tmp coveragebed.bed")
+    system("mv coveragebed.tmp coveragebed.bed")
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+    system("mv error.tmp error.txt")
+} else {
+    system("echo \"# No results found\" > error.txt")
 }

@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL print.coord: "Add chromosomal coordinates to the count table" TYPE [yes, no] DEFAULT yes (If you select yes, chromosomal coordinates are added to the output file. Given are the minimum and maximum coordinates of features, e.g. exons, associated with a given identifier)
 
 
-# 22.8.2011	TH and EK 
+# 22.8.2011	TH and EK
 # 6.5.2013	MK added chr-location information to the output
 # 21.5.2014	EK updated to use HTSeq 0.6.1
 # 9.4.2015	ML added the geneID options
@@ -21,23 +21,23 @@
 # 24.3.2021	EK added id.attribute proteinId
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("features.gtf")
 
 # sort bam if the data is paired-end
 samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
-if(paired == "yes"){
-	system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
-	bam<-"name-sorted.bam"
+if (paired == "yes") {
+    system(paste(samtools.binary, "sort -n alignment.bam name-sorted"))
+    bam <- "name-sorted.bam"
 } else {
-	bam<-"alignment.bam"
+    bam <- "alignment.bam"
 }
 
 # htseq-count
-if(print.coord == "no") {
-	htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count")
+if (print.coord == "no") {
+    htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count")
 } else {
-	htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count_chr")
+    htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count_chr")
 }
 
 htseq <- paste(htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, "features.gtf > htseq-counts-out.txt")
@@ -51,33 +51,33 @@ system("tail -n 5 htseq-counts-out.txt > htseq-count-info.txt")
 
 # bring in file to R environment for formating
 file <- c("htseq-counts.tsv")
-dat <- read.table(file, header=F, sep="\t")
-if(print.coord == "no") {
-	names(dat) <- c("id", "count")
+dat <- read.table(file, header = F, sep = "\t")
+if (print.coord == "no") {
+    names(dat) <- c("id", "count")
 } else {
-	names(dat) <- c("id", "chr", "start", "end", "len", "strand", "count")
+    names(dat) <- c("id", "chr", "start", "end", "len", "strand", "count")
 }
 
 # write result table to output
-write.table(dat, file="htseq-counts.tsv", col.names=T, quote=F, sep="\t", row.names=F)
+write.table(dat, file = "htseq-counts.tsv", col.names = T, quote = F, sep = "\t", row.names = F)
 
 # Add additional info lines about read totals to output
 file2 <- c("htseq-count-info.txt")
-dat2 <- read.table(file2, header=F, sep="\t")
+dat2 <- read.table(file2, header = F, sep = "\t")
 
 assigned <- sum(dat$count)
 notassigned <- sum(dat2[2])
 total <- assigned + notassigned
 
 line <- paste("\n")
-line <- paste(line, "not_counted\t", notassigned, "\n", sep ="")
-line <- paste(line, "counted\t", assigned, "\n", sep ="")
-line <- paste(line, "total\t", total, "\n", sep ="")
+line <- paste(line, "not_counted\t", notassigned, "\n", sep = "")
+line <- paste(line, "counted\t", assigned, "\n", sep = "")
+line <- paste(line, "total\t", total, "\n", sep = "")
 
-write(line, "htseq-count-info.txt", append=TRUE)
+write(line, "htseq-count-info.txt", append = TRUE)
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
@@ -85,8 +85,8 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$alignment.bam)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("htseq-counts.tsv", paste(basename, ".tsv", sep =""))
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
+outputnames[1, ] <- c("htseq-counts.tsv", paste(basename, ".tsv", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

@@ -12,65 +12,65 @@
 # PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
 
 # KM 23.1. 2014
-#settings
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+# settings
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 # KM 8.11. 2013
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequences")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("sequence")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount -filter sequence")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 50000){
-	stop(paste('CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ', num.queryseq ))
+if (num.queryseq > 50000) {
+    stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ", num.queryseq))
 }
 
-command.path <- file.path(chipster.module.path ,"/shell/protfilter.sh")
+command.path <- file.path(chipster.module.path, "/shell/protfilter.sh")
 protfilter.command <- paste(command.path, "-emboss_path ", emboss.path, " -sequence sequence -outfile filtered_prot.fasta")
-   emboss.parameters <- paste('-casesensitive' ,casesensitive)
-if (nchar(desctext) > 0 ) {
-	emboss.parameters <- paste(emboss.parameters, '-desctext "', desctext, '"')
+emboss.parameters <- paste("-casesensitive", casesensitive)
+if (nchar(desctext) > 0) {
+    emboss.parameters <- paste(emboss.parameters, '-desctext "', desctext, '"')
 }
 
-if (nchar(pattern) > 0 ) {
-	emboss.parameters <- paste(emboss.parameters, '-pattern "', pattern,'"')
+if (nchar(pattern) > 0) {
+    emboss.parameters <- paste(emboss.parameters, '-pattern "', pattern, '"')
 }
 
-if ( maxlength < 100000 ) {
-	emboss.parameters <- paste(emboss.parameters, '-maxlength', maxlength)
+if (maxlength < 100000) {
+    emboss.parameters <- paste(emboss.parameters, "-maxlength", maxlength)
 }
 
-if (minlength > 1 ) {
-	emboss.parameters <- paste(emboss.parameters, '-minlength', minlength)
+if (minlength > 1) {
+    emboss.parameters <- paste(emboss.parameters, "-minlength", minlength)
 }
 
-if (maxmass < 100000 ) { 
-	emboss.parameters <- paste(emboss.parameters, '-maxmass ', maxmass)
+if (maxmass < 100000) {
+    emboss.parameters <- paste(emboss.parameters, "-maxmass ", maxmass)
 }
 
-if (minmass > 1  ) {
-	emboss.parameters <- paste(emboss.parameters, '-minmass ', minmass)
+if (minmass > 1) {
+    emboss.parameters <- paste(emboss.parameters, "-minmass ", minmass)
 }
 
-command.full <- paste(protfilter.command, emboss.parameters, ' >> protfilter.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> protfilter.log' )
+command.full <- paste(protfilter.command, emboss.parameters, " >> protfilter.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> protfilter.log')
 system(echo.command)
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f protfilter.log")
+if (save_log == "no") {
+    system("rm -f protfilter.log")
 }

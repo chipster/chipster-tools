@@ -29,25 +29,25 @@
 library(reshape2)
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path,"tool-utils.R"))
-source(file.path(chipster.common.path,"zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("file.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-version <- system(paste(binary,"--version"),intern = TRUE)
-documentVersion("Mothur",version)
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+version <- system(paste(binary, "--version"), intern = TRUE)
+documentVersion("Mothur", version)
 
 # mothur dist.seqs
 # used for 16S and 18S data only
 
-if (datatype == "other"){ 
+if (datatype == "other") {
     distseqs.options <- paste("dist.seqs(fasta=file.fasta") # dist.seqs produces file.dist
-    distseqs.options <- paste(distseqs.options,", processors=",chipster.threads.max,sep = "")
-    distseqs.options <- paste(distseqs.options,", cutoff=",cutoff,")",sep = "")
+    distseqs.options <- paste(distseqs.options, ", processors=", chipster.threads.max, sep = "")
+    distseqs.options <- paste(distseqs.options, ", cutoff=", cutoff, ")", sep = "")
     documentCommand(distseqs.options)
-    write(distseqs.options,"distseqs.mth",append = FALSE)
-    command <- paste(binary,"distseqs.mth","> log_distseqs.txt")
+    write(distseqs.options, "distseqs.mth", append = FALSE)
+    command <- paste(binary, "distseqs.mth", "> log_distseqs.txt")
     # system(command)
     runExternal(command, checkexit = TRUE)
 }
@@ -57,22 +57,22 @@ if (datatype == "other"){
 # method depends on whether data are ITS or not
 # (ITS contig lengths are not equal, whereas lengths are equal for other data)
 
-if (datatype == "other"){ 
+if (datatype == "other") {
     cluster.options <- paste("cluster(column=file.dist, count=picked.count_table")
-    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "", "seed" = 1)
+    cluster.options <- paste(cluster.options, ", cutoff=", cutoff, ")", sep = "", "seed" = 1)
     documentCommand(cluster.options)
-    write(cluster.options,"cluster.mth",append = FALSE)
-    command <- paste(binary,"cluster.mth","> log_cluster.txt")
+    write(cluster.options, "cluster.mth", append = FALSE)
+    command <- paste(binary, "cluster.mth", "> log_cluster.txt")
     # system(command)
     runExternal(command, checkexit = TRUE)
 }
 
-if (datatype == "its"){
+if (datatype == "its") {
     cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc")
-    cluster.options <- paste(cluster.options,", cutoff=",cutoff,")",sep = "", "seed" = 1)
+    cluster.options <- paste(cluster.options, ", cutoff=", cutoff, ")", sep = "", "seed" = 1)
     documentCommand(cluster.options)
-    write(cluster.options,"cluster.mth",append = FALSE)
-    command <- paste(binary,"cluster.mth","> log_cluster.txt")
+    write(cluster.options, "cluster.mth", append = FALSE)
+    command <- paste(binary, "cluster.mth", "> log_cluster.txt")
     # system(command)
     runExternal(command, checkexit = TRUE)
 }
@@ -80,41 +80,41 @@ if (datatype == "its"){
 # mothur make.shared
 # here commands also differ because different clustering methods (above) produce different output files
 
-if (datatype == "other"){ 
+if (datatype == "other") {
     makeshared.options <- paste("make.shared(list=file.opti_mcc.list, count=picked.count_table")
-    makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
+    makeshared.options <- paste(makeshared.options, ", label=", cutoff, ")", sep = "")
     documentCommand(makeshared.options)
-    write(makeshared.options,"makeshared.mth",append = FALSE)
-    command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
+    write(makeshared.options, "makeshared.mth", append = FALSE)
+    command <- paste(binary, "makeshared.mth", "> log_makeshared.txt")
     system(command)
 }
 
-if (datatype == "its"){
+if (datatype == "its") {
     makeshared.options <- paste("make.shared(list=file.agc.list, count=picked.count_table") # produces file.agc.shared
-    makeshared.options <- paste(makeshared.options,", label=",cutoff,")",sep = "")
+    makeshared.options <- paste(makeshared.options, ", label=", cutoff, ")", sep = "")
     documentCommand(makeshared.options)
-    write(makeshared.options,"makeshared.mth",append = FALSE)
-    command <- paste(binary,"makeshared.mth","> log_makeshared.txt")
+    write(makeshared.options, "makeshared.mth", append = FALSE)
+    command <- paste(binary, "makeshared.mth", "> log_makeshared.txt")
     system(command)
 }
 
 # mothur classify.otu
 
-if (datatype == "other"){ 
+if (datatype == "other") {
     classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
-    classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
+    classifyotu.options <- paste(classifyotu.options, ", label=", cutoff, ")", sep = "")
     documentCommand(classifyotu.options)
-    write(classifyotu.options,"classifyotu.mth",append = FALSE)
-    command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
+    write(classifyotu.options, "classifyotu.mth", append = FALSE)
+    command <- paste(binary, "classifyotu.mth", "> log_classifyotu.txt")
     system(command)
 }
 
-if (datatype == "its"){
+if (datatype == "its") {
     classifyotu.options <- paste("classify.otu(list=file.agc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
-    classifyotu.options <- paste(classifyotu.options,", label=",cutoff,")",sep = "")
+    classifyotu.options <- paste(classifyotu.options, ", label=", cutoff, ")", sep = "")
     documentCommand(classifyotu.options)
-    write(classifyotu.options,"classifyotu.mth",append = FALSE)
-    command <- paste(binary,"classifyotu.mth","> log_classifyotu.txt")
+    write(classifyotu.options, "classifyotu.mth", append = FALSE)
+    command <- paste(binary, "classifyotu.mth", "> log_classifyotu.txt")
     system(command)
 }
 
@@ -122,10 +122,10 @@ if (datatype == "its"){
 # based on mothur-classify-counttable.R
 
 # read the data and tabulate it
-pick <- read.table("picked.count_table",header = T,sep = "\t")
-tax <- read.table("sequences-taxonomy-assignment.txt",header = F,sep = "\t")
-dat <- merge(pick,tax,by.x = "Representative_Sequence",by.y = "V1")
-dat$V2 <- gsub(".[[:digit:]]{1,}.?[[:digit:]]?)","",as.character(dat$V2))
+pick <- read.table("picked.count_table", header = T, sep = "\t")
+tax <- read.table("sequences-taxonomy-assignment.txt", header = F, sep = "\t")
+dat <- merge(pick, tax, by.x = "Representative_Sequence", by.y = "V1")
+dat$V2 <- gsub(".[[:digit:]]{1,}.?[[:digit:]]?)", "", as.character(dat$V2))
 
 # cut taxonomic names
 # based on default assumption of mothur-classify-counttable.R
@@ -138,21 +138,25 @@ data_end <- which(colnames(dat) == "V2") - 1
 names_col <- which(colnames(dat) == "newnames")
 
 # same manipulations here
-dat <- dat[,c(names_col,data_start:data_end)]
+dat <- dat[, c(names_col, data_start:data_end)]
 datm <- melt(dat)
-a <- aggregate(datm$value,list(datm$newnames,datm$variable),function(x) sum(x,na.rm = T))
-b <- dcast(a,Group.2 ~ Group.1)
+a <- aggregate(datm$value, list(datm$newnames, datm$variable), function(x) sum(x, na.rm = T))
+b <- dcast(a, Group.2 ~ Group.1)
 rownames(b) <- b$Group.2
-b <- b[,-1]
+b <- b[, -1]
 
 tab <- b
 
 # write phenodata.tsv
-write.table(data.frame(sample = rownames(tab),
-    chiptype = "NGS",
-    group = rep("",length(rownames(tab)))),
+write.table(
+    data.frame(
+        sample = rownames(tab),
+        chiptype = "NGS",
+        group = rep("", length(rownames(tab)))
+    ),
     "phenodata.tsv",
     col.names = T,
     row.names = F,
     sep = "\t",
-    quote = F)
+    quote = F
+)

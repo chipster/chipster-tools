@@ -1,7 +1,7 @@
 # TOOL fneighbor.R: "Phylogenies from distance matrix by N-J or UPGMA method" (Phylogenies from distance matrix by N-J or UPGMA method)
-# INPUT OPTIONAL datafile: datafile TYPE GENERIC 
-# OUTPUT OPTIONAL neighbor.txt 
-# OUTPUT OPTIONAL treefile.txt 
+# INPUT OPTIONAL datafile: datafile TYPE GENERIC
+# OUTPUT OPTIONAL neighbor.txt
+# OUTPUT OPTIONAL treefile.txt
 # OUTPUT OPTIONAL fneighbor.log
 # PARAMETER OPTIONAL matrixtype: "Type of data matrix" TYPE [s: Square, u: "Upper triangular", l: "Lower triangular"] FROM 1 TO 1 DEFAULT s (Type of data matrix)
 # PARAMETER OPTIONAL treetype: "Neighbor-joining or UPGMA tree" TYPE [n: Neighbor-joining, u: UPGMA] FROM 1 TO 1 DEFAULT n (Neighbor-joining or UPGMA tree)
@@ -14,15 +14,15 @@
 # PARAMETER OPTIONAL treeprint: "Print out tree" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT Y (Print out tree)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("datafile")
 
 
 emboss.binary <- file.path(emboss.path, "fneighbor")
 emboss.parameters <- paste("-auto")
-emboss.parameters <- paste(emboss.parameters, "-datafile datafile" )
+emboss.parameters <- paste(emboss.parameters, "-datafile datafile")
 emboss.parameters <- paste(emboss.parameters, "-outfile neighbor.txt")
 emboss.parameters <- paste(emboss.parameters, "-outtreefile treefile.txt")
 emboss.parameters <- paste(emboss.parameters, "-matrixtype", matrixtype)
@@ -35,12 +35,12 @@ emboss.parameters <- paste(emboss.parameters, "-trout", trout)
 emboss.parameters <- paste(emboss.parameters, "-printdata", printdata)
 emboss.parameters <- paste(emboss.parameters, "-treeprint", treeprint)
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> fneighbor.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> fneighbor.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> fneighbor.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> fneighbor.log')
 system(echo.command)
 
 system(command.full)
 
-if ( save_log == "no") {
-	system ("rm -f fneighbor.log")
+if (save_log == "no") {
+    system("rm -f fneighbor.log")
 }

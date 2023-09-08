@@ -1,5 +1,5 @@
 # TOOL samtools-subset.R: "Make a subset of BAM" (Retrieves alignments for a specified chromosome or a region, taking the mapping quality into account if needed. For retrieving regions within chromosomes, please use the format chr1:1-100. Please note that in addition to BAM file you have to provide an index file for it. You can create the index file using the tool Index BAM. This tool is based on the SAMtools package.)
-# INPUT alignment.bam: "BAM file" TYPE GENERIC 
+# INPUT alignment.bam: "BAM file" TYPE GENERIC
 # INPUT alignment.bai: "Index file .bai" TYPE GENERIC
 # OUTPUT alignment-subset.bam
 # OUTPUT alignment-subset.bam.bai
@@ -18,11 +18,11 @@ system(paste(samtools.binary, "view -b -q", mapping.quality, "-o alignment-subse
 system(paste(samtools.binary, "index alignment-subset.bam"))
 
 
-#test.command <- paste(samtools.binary, "view -b -q", mapping.quality, "-o alignment-subset.bam alignment.bam", region)
-#stop(paste('CHIPSTER-NOTE: ', test.command))
+# test.command <- paste(samtools.binary, "view -b -q", mapping.quality, "-o alignment-subset.bam alignment.bam", region)
+# stop(paste('CHIPSTER-NOTE: ', test.command))
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
@@ -31,12 +31,9 @@ base <- strip_name(inputnames$alignment.bam)
 reg <- gsub(":", "_", region)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=2, ncol=2)
-outputnames[1,] <- c("alignment-subset.bam", paste(base, "_", reg, ".bam", sep =""))
-outputnames[2,] <- c("alignment-subset.bam.bai", paste(base, "_", reg, ".bam.bai", sep =""))
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
+outputnames[1, ] <- c("alignment-subset.bam", paste(base, "_", reg, ".bam", sep = ""))
+outputnames[2, ] <- c("alignment-subset.bam.bai", paste(base, "_", reg, ".bam.bai", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
-
-

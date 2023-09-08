@@ -1,13 +1,13 @@
 # TOOL macs2-new.R: "Find peaks using MACS2" (Detects statistically significantly enriched genomic regions in ChIP-seq data using a control sample. If you have several samples,you need to merge them first to one ChIP file and one control file. BAM files can be merged with the Utilities tool \"Merge BAM\".)
-# INPUT treatment.bam: "Treatment data file" TYPE GENERIC 
-# INPUT OPTIONAL control.bam: "Control data file" TYPE GENERIC 
+# INPUT treatment.bam: "Treatment data file" TYPE GENERIC
+# INPUT OPTIONAL control.bam: "Control data file" TYPE GENERIC
 # OUTPUT macs2-log.txt
-# OUTPUT OPTIONAL macs2-peaks.tsv 
+# OUTPUT OPTIONAL macs2-peaks.tsv
 # OUTPUT OPTIONAL macs2-peaks.bed
 # OUTPUT OPTIONAL macs2-summits.bed
 # OUTPUT OPTIONAL macs2_narrowpeak.bed
 # OUTPUT OPTIONAL macs2_broad_peaks.bed
-# OUTPUT OPTIONAL macs2_model.pdf  
+# OUTPUT OPTIONAL macs2_model.pdf
 # PARAMETER file.format: "Input file format" TYPE [ELAND, BAM, BED] DEFAULT BAM (The format of the input files.)
 # PARAMETER precalculated.size: "Mappable genome size" TYPE [2.7e9: "human hg18 (2.7e9\)", 2.72e9: "human hg19 (2.72e9\)", 1.87e9: "mouse mm9 (1.87e9\)", 1.89e9: "mouse mm10 (1.89e9\)", 2.32e9: "rat rn5 (2.32e9\)", user_specified: "User specified"] DEFAULT 2.72e9 (Mappable genome size. You can use one of the precalculated ones or choose User specified and provide the size in the field below.)
 # PARAMETER OPTIONAL userspecified.size: "User specified mappable genome size" TYPE STRING (You can also use scientific notation, e.g. 1.23e9 . Remember to select User specified as Mappable genome size.)
@@ -26,7 +26,7 @@
 # 08.03.2011 MG, Modified to disable wiggle output.
 # 05.04.2014 MK, Polished. Added MACS2
 # 10.07.2014 AMS, Updated genome sizes, added parameter userspecified.size
-# 09.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters, fixed the bug in disabled model building, added the broad option and outputs, polished the script and output      
+# 09.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters, fixed the bug in disabled model building, added the broad option and outputs, polished the script and output
 # 07.10.2014 AMS, Simplified script structure
 
 # MACS binary
@@ -35,11 +35,11 @@ macs.binary <- file.path(chipster.tools.path, "macs", "macs2")
 # Options
 
 # treatment data file
-options <- paste ("-t treatment.bam")
+options <- paste("-t treatment.bam")
 
 # control data file (optional)
-if (file.exists("control.bam")){
-	options <- paste(options, "-c control.bam")
+if (file.exists("control.bam")) {
+    options <- paste(options, "-c control.bam")
 }
 
 # output file prefix
@@ -50,12 +50,12 @@ options <- paste(options, "-f", file.format)
 
 # mappable genome size
 if (precalculated.size == "user_specified") {
-	if (nchar(userspecified.size) < 1){
-		stop(paste('CHIPSTER-NOTE: ', "You need to provide a value for mappable genome size or select one of the precalculated values."))
-	}
-	genome.size <- userspecified.size
-}else{
-	genome.size <- precalculated.size
+    if (nchar(userspecified.size) < 1) {
+        stop(paste("CHIPSTER-NOTE: ", "You need to provide a value for mappable genome size or select one of the precalculated values."))
+    }
+    genome.size <- userspecified.size
+} else {
+    genome.size <- precalculated.size
 }
 options <- paste(options, "-g", genome.size)
 
@@ -64,7 +64,7 @@ options <- paste(options, "-q", q.value.threshold)
 
 # read length
 if (read.length > 0) {
-	options <- paste(options, "-s", read.length)
+    options <- paste(options, "-s", read.length)
 }
 
 # keep duplicat reads
@@ -72,68 +72,68 @@ options <- paste(options, "--keep-dup", keep.dup)
 
 # build peak model
 if (build.model == "no") {
-	options <- paste(options, "--nomodel")
-} else{
-	options <- paste(options, "--auto-bimodal")
+    options <- paste(options, "--nomodel")
+} else {
+    options <- paste(options, "--auto-bimodal")
 }
 
 # bandwidth (only applicable to model building)
 if (build.model == "yes") {
-	options <- paste(options, "--bw", bandwidth)
-} 
+    options <- paste(options, "--bw", bandwidth)
+}
 
 # shift size
 options <- paste(options, "--shiftsize", shift.size)
 
 # Set up the m-fold limits
-mfold.limits <- paste (as.character(m.fold.lower),",",as.character(m.fold.upper), sep="")
+mfold.limits <- paste(as.character(m.fold.lower), ",", as.character(m.fold.upper), sep = "")
 options <- paste(options, "-m", mfold.limits)
 
 
 # call broad peaks
 if (broad == "yes") {
-	options <- paste(options, "--broad")
-} 
+    options <- paste(options, "--broad")
+}
 
 # common options
 options <- paste(options, "--verbose=2")
 
 # Run macs
 macs.command <- paste(macs.binary, options, "2> macs2-log.txt")
-#stop(paste('CHIPSTER-NOTE: ', macs.command))
+# stop(paste('CHIPSTER-NOTE: ', macs.command))
 system(macs.command)
 
 # Read in and parse the results (rename and the p- and q-value columns, sort)
-output <- read.table(file="macs2_peaks.xls", skip=0, header=TRUE, stringsAsFactors=FALSE)
+output <- read.table(file = "macs2_peaks.xls", skip = 0, header = TRUE, stringsAsFactors = FALSE)
 colnames(output)[7] <- "neglog10pvalue"
 colnames(output)[9] <- "neglog10qvalue"
 # output <- output[ order(output[,9], decreasing=TRUE), ]
-output <- output[order(output$chr, output$start),]
-write.table(output, file="macs2-peaks.tsv", sep="\t", quote=FALSE, row.names=FALSE)
+output <- output[order(output$chr, output$start), ]
+write.table(output, file = "macs2-peaks.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
 # Sort the peaks BED
-source(file.path(chipster.common.path, "bed-utils.R"))
-if (file.exists("macs2_peaks.bed")){
-	bed <- read.table(file="macs2_peaks.bed", skip=0, sep="\t")
-	colnames(bed)[1:2] <- c("chr", "start")
-	bed <- sort.bed(bed)
-	write.table(bed, file="macs2-peaks.bed", sep="\t", row.names=F, col.names=F, quote=F)
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
+if (file.exists("macs2_peaks.bed")) {
+    bed <- read.table(file = "macs2_peaks.bed", skip = 0, sep = "\t")
+    colnames(bed)[1:2] <- c("chr", "start")
+    bed <- sort.bed(bed)
+    write.table(bed, file = "macs2-peaks.bed", sep = "\t", row.names = F, col.names = F, quote = F)
 }
 
 # Sort the summit BED
-source(file.path(chipster.common.path, "bed-utils.R"))
-if (file.exists("macs2_summits.bed")){
-	bed <- read.table(file="macs2_summits.bed", skip=0, sep="\t")
-	colnames(bed)[1:2] <- c("chr", "start")
-	bed <- sort.bed(bed)
-	write.table(bed, file="macs2-summits.bed", sep="\t", row.names=F, col.names=F, quote=F)
+source(file.path(chipster.common.lib.path, "bed-utils.R"))
+if (file.exists("macs2_summits.bed")) {
+    bed <- read.table(file = "macs2_summits.bed", skip = 0, sep = "\t")
+    colnames(bed)[1:2] <- c("chr", "start")
+    bed <- sort.bed(bed)
+    write.table(bed, file = "macs2-summits.bed", sep = "\t", row.names = F, col.names = F, quote = F)
 }
 
 # Add BED extension to the narrow peak format file
-system ("mv macs2_peaks.encodePeak macs2_narrowpeak.bed")
+system("mv macs2_peaks.encodePeak macs2_narrowpeak.bed")
 
 
 # Source the R code for plotting the MACS model
 if (build.model == "yes") {
-	source("macs2_model.r")
+    source("macs2_model.r")
 }

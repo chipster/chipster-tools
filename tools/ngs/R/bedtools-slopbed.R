@@ -18,9 +18,15 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "slopBed"))
 
 # options
 options <- paste("")
-if (pct == "no") {options <- paste(options, "-l", l, "-r", r)}
-if (pct == "yes") {options <- paste(options, "-pct", "-l", lf, "-r", rf)}
-if (s == "yes") {options <- paste(options, "-s")}
+if (pct == "no") {
+    options <- paste(options, "-l", l, "-r", r)
+}
+if (pct == "yes") {
+    options <- paste(options, "-pct", "-l", lf, "-r", rf)
+}
+if (s == "yes") {
+    options <- paste(options, "-s")
+}
 
 # input files
 options <- paste(options, "-i bed.file", "-g gen.file")
@@ -35,9 +41,9 @@ system(command)
 
 # Generate output/error message
 if (file.info("slopbed.tmp")$size > 0) {
-	system("mv slopbed.tmp slopbed.bed")
+    system("mv slopbed.tmp slopbed.bed")
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+    system("mv error.tmp error.txt")
+} else {
+    system("echo \"# No results found\" > error.txt")
 }
