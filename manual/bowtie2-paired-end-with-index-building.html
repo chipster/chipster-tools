@@ -11,31 +11,21 @@
 
     <h3>Description</h3>
 
-    <p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> to align
-        paired-end reads
-        to a reference genome. You need to supply the reads in two or more files containing the paired reads in
-        the same
-        order. You also need to provide 
+    <p>
+        This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> to align
+        paired-end reads to a reference genome. Reads can be in either FASTA or FASTQ format,
+        but all reads files need to be in the same format. You need to provide 
         the reference genome as an input either in a FASTA format or as a tar package with Bowtie index. 
-
     </p>
     <p>
+        To define the files with paired-end reads for each sample, please use the "Define Samples" option.
+        This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
+        such that the alignment tool can be run for multiple samples at the same time. Please see
+        tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+        “Run for Each Sample” Option</a> for more information.
+    </p>
     <p>After running Bowtie2, Chipster converts the alignment file to BAM format, and sorts and indexes it using the <a
             href="http://samtools.sourceforge.net/">SAMtools</a> package.</p>
-
-    <h3>Details</h3>
-    <p><b>If you have more than two reads files PER SAMPLE</b>, you will need to provide a list of filenames of the
-        reads files for
-        each direction (one file for read1 files, and another one for the read2 files) as a text
-        file (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool <strong><a
-                href="/manual/make_namelist.html">Utilities / Make a list of file names</a> </strong>. The file
-        pairs must be ordered identically in both lists. </p>
-    <p>
-        Select BOTH list files (R1files.txt and R2files.txt), ALL reads files for the sample (8 of them in the example below) and the
-        reference FASTA, and
-        assign the list files correctly. When assigning the list files, they are automatically inactivated in the
-        "reads" file list.
-    </p>
 
     <h3>Mapping strategy</h3>
     Bowtie2 can map the reads to the reference either by aligning the reads for they full length (end-to-end read
@@ -216,6 +206,13 @@
         </tr>
     </table>
 
+    <h3>Details</h3>
+    <p>
+        Note that if you have more than two reads files <i>per sample</i> (for example, Illumina NextSeq produces 8
+        FASTQ files per sample), you will need to provide two list files containing the ordered file names in order to assign
+        the reads files to each direction. Please produce the list files using the tool <a
+        href="make_namelist.html">"Utilities / Make a list of file names"</a>. 
+    </p>
 
 
     <h3>Output</h3>
