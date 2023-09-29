@@ -1,5 +1,4 @@
-# TOOL bowtie2-paired-end.R: "Bowtie2 for paired end reads" (Bowtie2 aligns reads to genomes. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser. 
-# Note that this Bowtie2 tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie2 for paired-end reads and own genome\".)
+# TOOL bowtie2-paired-end.R: "Bowtie2 for paired end reads" (Bowtie2 aligns reads to genomes. Results are sorted and indexed BAM files. Note that this Bowtie2 tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie2 for paired-end reads and own genome\".)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC

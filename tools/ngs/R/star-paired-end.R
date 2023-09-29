@@ -1,4 +1,4 @@
-# TOOL star-paired-end.R: "STAR for paired end reads" (Aligns paired end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.)
+# TOOL star-paired-end.R: "STAR for paired end reads" (Aligns paired end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
