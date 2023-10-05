@@ -1,4 +1,4 @@
-# TOOL star-paired-end-storage.R: "STAR for paired end reads and large input data" (Use this tool if you have more than 200 million reads per sample. Aligns paired end RNA-seq reads to a genome. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction \(e.g. 1files.txt and 2files.txt\). You can generate the lists with the tool \"Utilities \\\ Make a list of filenames\". Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.)
+# TOOL star-paired-end-storage.R: "STAR for paired end reads and large input data" (Use this tool if you have more than 200 million reads per sample. Aligns paired end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC

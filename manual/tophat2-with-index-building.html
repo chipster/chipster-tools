@@ -3,7 +3,7 @@
 <head><title></title></head>
 <body>
 
-<h2>Alignment / TopHat2 TopHat2 for paired end reads and own genome</h2>
+<h2>Alignment / TopHat2 for paired end reads and own genome</h2>
 
 <h3>Description</h3>
 
@@ -11,17 +11,13 @@
 Aligns paired end Illumina RNA-seq reads to a genome provided as a FASTA file in order to identify exon-exon splice junctions. 
 </p>
 <p> You need to supply the reads in FASTQ files. The files can be compressed with gzip. 
-Note that if you have more than two FASTQ files <i>per sample</i> (for example, Illumina NextSeq produces 8 FASTQ files per sample), you need to provide also two list files containing the file names in order to assign the 
-FASTQ files to each direction. Please produce the list files using the tool <a href="make_namelist.html">"Utilities / Make a list of file names"</a>.
 </p>
-<p>List files are optional if you provide just two FASTQ files. Chipster will try to assign the files to directions based on file names. 
-This assumes the files are named so that the beginning of the name is identical and the directions are specified with _1 and _2, 
-<i>e.g.</i> Abc123_1, Abc123_2. If your files are named differently, you need to provide list files to make sure the files are assigned 
-correctly.
-</p>
-<p>If you have more than two FASTQ files, you will need to provide a list of filenames of the FASTQ files for each direction as a text 
-file (<i>e.g.</i>1files.txt and 2files.txt). These lists can be generated with the tool <strong>Utilities / Make a list of file names.</strong> The read 
-pairs must be ordered identically in both lists.
+<p>
+    To define the files with paired-end reads for each sample, please use the "Define Samples" option.
+    This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
+    such that the alignment tool can be run for multiple samples at the same time. Please see
+    tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+    “Run for Each Sample” Option</a> for more information.
 </p>
 <p>
 Supplying a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
@@ -67,7 +63,7 @@ analyzed together to produce paired alignments, taking into consideration additi
 factors including fragment length and orientation.
 The expected mean inner distance between mate pairs means the fragment length minus the reads. For example, if your fragment size is 300 bp and read length is 50 bp, the inner distance is 200.
 </p>
-<p><b>If you have more than two FASTQ files</b>, you will need to provide a list of filenames of the FASTQ files for each direction (one file for read1 files, and another one for the read2 files) as a text 
+<p>If you have more than two FASTQ files <i>per sample</i>, you will need to provide a list of filenames of the FASTQ files for each direction (one file for read1 files, and another one for the read2 files) as a text 
 file (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  <strong><a href="/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. The read 
 pairs must be ordered identically in both lists. 
 <br>
@@ -88,7 +84,7 @@ If your RNA-seq data was produced with a stranded/directional protocol, it is im
 Please check that you have assigned the files correctly, as this parameter assumes that Read1 is listed before Read2! You can read more about stranded data <a href="library-type-summary.html">here</a>.
 </p>
 
-<p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package. This way the results are ready to be visualized in the genome browser.</p>
+<p>After running TopHat2, Chipster indexes the BAM file using the <a href="http://samtools.sourceforge.net/">SAMtools</a> package.</p>
 
 
 <h3>Output</h3>
