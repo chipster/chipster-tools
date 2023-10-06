@@ -126,7 +126,7 @@ for (i in grep("baseMean$", colnames(results_table))) {
 rownames(output_table) <- make.names(rep(rownames(results_table), length(grep("baseMean$", colnames(results_table)))), unique = T)
 
 
-# If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
+# If genomic coordinates are present, output a sorted BED file for region matching tools
 if ("chr" %in% colnames(dat)) {
     if (dim(significant_table)[1] > 0) {
         bed_output <- significant_table[, c("chr", "start", "end")]

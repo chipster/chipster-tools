@@ -134,7 +134,7 @@ if (dim(significant_results)[1] == 0) {
 
 
 # If significant results are found, create an output table with the original counts per sample together with the statistical tests results
-# If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
+# If genomic coordinates are present, output a sorted BED file for region matching tools
 if (dim(significant_results)[1] > 0) {
     significant_indices <- rownames(significant_results)
     output_table <- data.frame(dat[significant_indices, ], significant_results)

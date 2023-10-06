@@ -1,4 +1,4 @@
-# TOOL bowtie2.R: "Bowtie2 for single end reads" (Bowtie2 aligns reads to genomes. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser.
+# TOOL bowtie2.R: "Bowtie2 for single end reads" (Bowtie2 aligns reads to genomes. Results are sorted and indexed BAM files.
 # Note that this Bowtie2 tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie2 for single end reads and own genome\".)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # OUTPUT bowtie2.bam

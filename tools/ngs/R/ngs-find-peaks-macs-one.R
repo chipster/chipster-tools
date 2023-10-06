@@ -1,7 +1,7 @@
 # TOOL ngs-find-peaks-macs-one.R: "Find peaks using MACS, treatment only" (Detects statistically significantly enriched genomic regions in ChIP-seq data. The analysis does not use a control sample. If you have several ChIP samples, you need to merge them first to one file. BAM files can be merged with the Utilities tool \"Merge BAM\".)
 # INPUT treatment.bam: "Treatment data file" TYPE GENERIC
 # OUTPUT positive-peaks.tsv: "True enriched peaks"
-# OUTPUT positive-peaks.bed: "True enriched peaks in a format compatible with the Genome Browser"
+# OUTPUT positive-peaks.bed: "True enriched peaks"
 # OUTPUT OPTIONAL model-plot.pdf: "A plot of the fitted peak model"
 # OUTPUT OPTIONAL negative-peaks.tsv: "The false enriched peaks"
 # OUTPUT analysis-log.txt: "Summary of analysis settings and run"

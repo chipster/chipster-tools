@@ -1,4 +1,4 @@
-# TOOL bwa-paired-end.R: "BWA-backtrack for paired end reads" (BWA-backtrack aligns paired end reads to genomes with BWA ALN algorithm. If more than two read files are given, you also need to provide a list of filenames of the FASTQ files for each direction. Results are sorted and indexed BAM files, which are ready for viewing in the Chipster genome browser.
+# TOOL bwa-paired-end.R: "BWA-backtrack for paired end reads" (BWA-backtrack aligns paired end reads to genomes with BWA ALN algorithm. If more than two read files are given, you also need to provide a list of filenames of the FASTQ files for each direction. Results are sorted and indexed BAM files.
 # Note that this BWA tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"BWA for paired-end reads and own genome\".)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC

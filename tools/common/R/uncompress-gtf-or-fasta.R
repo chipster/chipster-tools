@@ -1,4 +1,4 @@
-# TOOL uncompress-gtf-or-fasta.R: "Uncompress a file" (Uncompress a GTF or a FASTA file. Most Chipster tools accept compressed files directly, but e.g. Genome Browser requires uncompressed files.)
+# TOOL uncompress-gtf-or-fasta.R: "Uncompress a file" (Uncompress a GTF or a FASTA file. Most Chipster tools accept compressed files directly, but some require uncompressed files.)
 # INPUT input: "Compressed file" TYPE GENERIC
 # OUTPUT OPTIONAL uncompressed.gtf
 # OUTPUT OPTIONAL uncompressed.fa
