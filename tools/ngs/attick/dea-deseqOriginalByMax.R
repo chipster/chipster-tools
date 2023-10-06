@@ -122,7 +122,7 @@ significant_table <- significant_table[order(significant_table$pval), ]
 # significant_indices <- rownames (significant_table)
 
 # If significant results are found, create an output table with the original counts per sample together with the statistical tests results
-# If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
+# If genomic coordinates are present, output a sorted BED file for region matching tools
 # if (dim(significant_table)[1] > 0) {
 # 	output_table <- data.frame (dat[significant_indices,], significant_table)
 # 	write.table(output_table, file="de-list-deseq.tsv", sep="\t", row.names=T, col.names=T, quote=F)
@@ -150,7 +150,7 @@ if (dim(significant_table)[1] > 0) {
     # write.table(significant_table, file="de-list-deseq.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 }
 
-# If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
+# If genomic coordinates are present, output a sorted BED file for region matching tools
 source(file.path(chipster.common.lib.path, "bed-utils.R"))
 these.colnames <- colnames(dat)
 if ("chr" %in% these.colnames) {

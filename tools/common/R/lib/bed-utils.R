@@ -10,8 +10,6 @@ pad.with.zeroes <- function(str.vector) {
 # Chromosomes that are numeric are compated numerically. Chromosomes that
 # are non-numeric are compared lexically (in their normalised form).
 # Numeric names are always considered smaller than non-numeric.
-# This is the same sorting principle that Chipster genome browser has, hence
-# using this function guarantees that BED files are compatible with it.
 #
 # R does not have flexible sorting functionalities, so we need to resort to a hackish solution.
 # We create alphabetic presentation of the values and use that for sorting.

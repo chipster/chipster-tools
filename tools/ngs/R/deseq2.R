@@ -207,7 +207,7 @@ output_table <- as.data.frame(output_table)
 #  save(output_table, file = "res.Robj")
 
 
-# If genomic coordinates are present, output a sorted BED file for genome browser visualization and region matching tools
+# If genomic coordinates are present, output a sorted BED file for region matching tools
 if (bed == "yes") {
     if ("chr" %in% colnames(dat)) {
         if (dim(sig)[1] > 0) {
