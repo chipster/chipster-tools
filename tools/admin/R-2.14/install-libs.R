@@ -2,7 +2,7 @@
 source("/opt/chipster/comp/modules/admin/R-2.14/smip.R")
 
 ## Install packages, and dependencies, from CRAN
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="locfit")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "locfit")
 
 ## Install packages from Bioconductor
 
@@ -17,7 +17,7 @@ biocLite("RPA")
 
 # hdrcde
 biocLite(c("locfit", "ash", "ks")) # install hdrcde dependencies manually
-smart.install.packages(url.package="http://cran.r-project.org/src/contrib/00Archive/hdrcde/hdrcde_2.15.tar.gz") # install hdrcde manually because correct version is needed for R-2.14
+smart.install.packages(url.package = "http://cran.r-project.org/src/contrib/00Archive/hdrcde/hdrcde_2.15.tar.gz") # install hdrcde manually because correct version is needed for R-2.14
 
 # methylumi packages
 biocLite(c("lumi", "methylumi", "annotate")) # install hdrcde dependencies manually

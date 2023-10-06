@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL dbfetch.log
 # OUTPUT OPTIONAL sra_reads_1.fastq
 # OUTPUT OPTIONAL sra_reads_2.fastq
-# PARAMETER entry_id: "Name or ID of the sequence or database entry" TYPE STRING DEFAULT "entry" (Give the name of the database entry to be retrieved) 
+# PARAMETER entry_id: "Name or ID of the sequence or database entry" TYPE STRING DEFAULT "entry" (Give the name of the database entry to be retrieved)
 # PARAMETER db: "Database" TYPE [uniprotkb: "UniProt", embl: "EMBL", ensemblgene: "Ensembl Gene", ensemblgenomesgene: "Ensembl Genomes Gene", ensemblgenomesranscrip: "Ensembl Genomes Transcript", ensemblranscrip: "Ensembl Transcript", interpro: "InterPro", medline: "MEDLINE", pdb: "PDB", refseqn : "RefSeq nucleoide", refseqp : "RefSeq protein", taxonomy: "Taxonomy", tracearchive: "Trace Archive" ] DEFAULT uniprotkb (Database to be used.)
 
 # KM 8.11. 2013
@@ -22,30 +22,30 @@
 #   system('cat dbfetch2.tmp >> dbfetch.log')
 # #  system('ls -l >> dbfetch.log')
 #   system("mv *RR*_1.fastq sra_reads_1.fastq")
-#   system("mv *RR*_2.fastq sra_reads_2.fastq")  
+#   system("mv *RR*_2.fastq sra_reads_2.fastq")
 # #  system('ls -l >> dbfetch.log')
-# } else {  
-	emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
-	emboss.usa <- paste("dbfetch" ,db ,entry_id ,sep=":" )
-	emboss.binary <- file.path(emboss.path, "textget")
-	
-	if ( db == "refseqp" ){
-		emboss.binary <- file.path(emboss.path, "entret")
-		emboss.usa <- paste("dbfetch" ,db ,entry_id ,sep=":" )
-	}
-	
-	if ( db == "refseqn" ){
-		emboss.binary <- file.path(emboss.path, "entret")
-		emboss.usa <- paste("dbfetch" ,db ,entry_id ,sep=":" )
-	}
+# } else {
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+emboss.usa <- paste("dbfetch", db, entry_id, sep = ":")
+emboss.binary <- file.path(emboss.path, "textget")
 
-  command.full <- paste(emboss.binary, emboss.usa, '-outfile data.txt' )
-  system(command.full)
+if (db == "refseqp") {
+    emboss.binary <- file.path(emboss.path, "entret")
+    emboss.usa <- paste("dbfetch", db, entry_id, sep = ":")
+}
 
-  file.type <- system("file data.txt", intern = TRUE )
+if (db == "refseqn") {
+    emboss.binary <- file.path(emboss.path, "entret")
+    emboss.usa <- paste("dbfetch", db, entry_id, sep = ":")
+}
 
-  if ( file.type == "data.txt: HTML document text"){
-	  system("mv data.txt data.html")
-  }
-	
+command.full <- paste(emboss.binary, emboss.usa, "-outfile data.txt")
+system(command.full)
+
+file.type <- system("file data.txt", intern = TRUE)
+
+if (file.type == "data.txt: HTML document text") {
+    system("mv data.txt data.html")
+}
+
 # }

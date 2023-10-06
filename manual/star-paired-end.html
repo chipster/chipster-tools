@@ -8,9 +8,19 @@
 <h3>Description</h3>
 
 <p>
-Aligns paired end RNA-seq reads using the STAR aligner. If you have just one pair of read files, Chipster sets reads 1 file and reads 2 file based on file names. 
-If you have more pairs of read files for one sample, you need to provide a list of filenames of the FASTQ files for each direction (e.g. 1files.txt and 2files.txt). 
-You can generate the lists with the tool "Utilities/ Make a list of filenames". Alignment results are given in a BAM file, which is automatically indexed and hence ready to be viewed in Chipster genome browser.
+Aligns paired end RNA-seq reads using the STAR aligner. 
+</p>
+
+<p>
+To define the files with paired-end reads for each sample, please use the "Define Samples" option.
+This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
+such that the alignment tool can be run for multiple samples at the same time. Please see
+tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+“Run for Each Sample” Option</a> for more information.
+</p>
+
+<p> 
+Alignment results are given in a BAM file, which is automatically indexed. 
 </p>
 
 <h3>Parameters</h3>
@@ -39,6 +49,12 @@ only if the read maps to no more loci than this value. Otherwise no alignments w
 </p>
 <p>
 Maximum number of mismatches per pair -parameter filters out alignments which contain more mismatches than this number. Use value 999 to switch off this filter.
+</p>
+<p>
+Note that if you have more than two FASTQ files <i>per sample</i> (for example, Illumina NextSeq produces 8
+FASTQ files per sample), you will need to provide two list files containing the ordered file names in order to assign
+the FASTQ files to each direction. Please produce the list files using the tool <a
+href="make_namelist.html">"Utilities / Make a list of file names"</a>.
 </p>
 
 <h3>Output</h3>

@@ -24,21 +24,21 @@ load("ps.Rda")
 # CLR transformation
 
 # Note:
-# CLR transformation in microbiome package applies a pseudocount of min(relative abundance)/2 
+# CLR transformation in microbiome package applies a pseudocount of min(relative abundance)/2
 # to exact zero relative abundance entries in OTU table before taking logs
 
-if (treatment == "clr"){
-	ps <- microbiome::transform(ps, 'clr')
+if (treatment == "clr") {
+    ps <- microbiome::transform(ps, "clr")
 }
 
 # Relative abundance conversion
-if (treatment == "relabund"){
-	ps <- microbiome::transform(ps, 'compositional')
+if (treatment == "relabund") {
+    ps <- microbiome::transform(ps, "compositional")
 }
 
 # Hellinger transformation
-if (treatment == "hellinger"){
-	ps <- microbiome::transform(ps, 'hellinger')
+if (treatment == "hellinger") {
+    ps <- microbiome::transform(ps, "hellinger")
 }
 
 # DESeq2 conversion and variance-stabilizing transformation
@@ -51,41 +51,45 @@ if (treatment == "hellinger"){
 # VST-transformed data assigned to ps (used for analyses other than DESeq2)
 # Data without VST transformation assigned to ps0 (used for DESeq2 analysis)
 
-if (treatment == "deseq2"){
-	# deseq2_formula <- as.formula(paste0("formula(~", group_column1, ")"))
-	deseq2_formula <- as.formula(paste0("~ ", group_column1, collapse = " "))
-	diagdds <- phyloseq_to_deseq2(ps, deseq2_formula)
-	gm_mean <- function(x, na.rm = TRUE){
-		exp(sum(log(x[x > 0]), na.rm = na.rm) / length(x))
-		}
-	geoMeans <- apply(counts(diagdds), 1, gm_mean)
-	diagdds <- estimateSizeFactors(diagdds, geoMeans = geoMeans)
-	diagdisp <- estimateDispersions(diagdds)
-	diagvst <- getVarianceStabilizedData(diagdisp)
-	ps0 <- ps
-	otu_table(ps) <- otu_table(diagvst, taxa_are_rows = TRUE)
+if (treatment == "deseq2") {
+    # deseq2_formula <- as.formula(paste0("formula(~", group_column1, ")"))
+    deseq2_formula <- as.formula(paste0("~ ", group_column1, collapse = " "))
+    diagdds <- phyloseq_to_deseq2(ps, deseq2_formula)
+    gm_mean <- function(x, na.rm = TRUE) {
+        exp(sum(log(x[x > 0]), na.rm = na.rm) / length(x))
+    }
+    geoMeans <- apply(counts(diagdds), 1, gm_mean)
+    diagdds <- estimateSizeFactors(diagdds, geoMeans = geoMeans)
+    diagdisp <- estimateDispersions(diagdds)
+    diagvst <- getVarianceStabilizedData(diagdisp)
+    ps0 <- ps
+    otu_table(ps) <- otu_table(diagvst, taxa_are_rows = TRUE)
 }
 
 # Export CLR-transformed data
-if (treatment == "clr"){
-	save(ps, file = "ps_clr.Rda")
+if (treatment == "clr") {
+    save(ps, file = "ps_clr.Rda")
 }
 
 # Export relative abundance data
-if (treatment == "relabund"){
-	save(ps, file = "ps_relabund.Rda")
+if (treatment == "relabund") {
+    save(ps, file = "ps_relabund.Rda")
 }
 
 # Export Hellinger-transformed data
-if (treatment == "hellinger"){
-	save(ps, file = "ps_hellinger.Rda")
+if (treatment == "hellinger") {
+    save(ps, file = "ps_hellinger.Rda")
 }
 
 # Export VST-transformed phyloseq object;
 # also export data in DESeq2 format (without VST)
-if (treatment == "deseq2"){
-	save(ps, file = "ps_vst.Rda")
-	save(list = c("ps0", 
-		"group_column1", "diagdds"), 
-		file = "deseq2.Rda")
+if (treatment == "deseq2") {
+    save(ps, file = "ps_vst.Rda")
+    save(
+        list = c(
+            "ps0",
+            "group_column1", "diagdds"
+        ),
+        file = "deseq2.Rda"
+    )
 }

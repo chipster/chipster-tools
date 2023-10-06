@@ -6,15 +6,15 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -gt 2 ]; then
   exit 0
 fi
 
-image_repo="docker-registry.rahti.csc.fi/chipster-images/"
-image_pull_policy="Always"
+image_repo="docker-registry.rahti.csc.fi/chipster-images-release/"
+image_pull_policy="IfNotPresent"
 
 if [[ $1 == "--local-image" ]]; then
   image_pull_policy="Never"
   shift
 fi
 
-image=${1:-comp-20.04-r-deps}
+image=${1:-comp-20-04-r-deps}
 name="comp-shell"
 
 if ! kubectl get pod | grep $name | grep Running > /dev/null 2>&1; then

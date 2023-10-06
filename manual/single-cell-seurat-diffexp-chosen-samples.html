@@ -20,8 +20,8 @@
 
     <h3>Parameters</h3>
     <ul>
-        <li>Name of the samples to compare to</li>
         <li>Name of the samples to compare with</li>
+        <li>Name of the samples to compare to</li>
         <li>Name of the cluster [3]</li>
         <li>Return only positive marker genes [TRUE]</li>
         <li>Fold change threshold for differentially expressed genes in log scale [0.25]</li>
@@ -43,7 +43,10 @@
     <p>
         Select the samples or list of samples which you want to compare to each other by typing the sample names
         to the parameter fields. If you are listing multiple samples, use comma as separator: for example,
-        type: "CTRL, CTRL_2" (withouth the hyphens "") in first field and "STIM, STIM_2" in the second.
+        type: "STIM, STIM_2" (withouth the hyphens "") in first field and "CTRL, CTRL_2" in the second.
+        Please note that the first listed samples will be "the first group", and second listed the "second group":
+        In the results table, positive log fold values indicate that the gene is more highly expressed in the first
+        group.
     </p>
 
     <p>
@@ -65,13 +68,15 @@
                     differentially expressed genes just by chance. There are different methods to correct for this,
                     Seurat uses the Bonferroni method. When filtering the table and reporting your results,
                     use this value.</li>
-                <li><b>avg_logFC</b> = average log2 fold change (how much higher or lower the expression of this gene is
-                    in the chosen cluster between the conditions </li>
+                <li><b>avg_logFC</b> = Log fold-chage of the average expression between the two groups.
+                    Positive values indicate that the gene is more highly expressed in the first group. </li>
                 <li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene.
                     Note, that numbering is based on alphabets: earlier in the alphabets -> 1, the other one -> 2.
                     So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in alphabets.
                 </li>
                 <li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene
+                </li>
+                <li><b>aver_expr columns</b> = Average expression of the cells in this cluster in the listed samples.
                 </li>
             </ul>
     </p>

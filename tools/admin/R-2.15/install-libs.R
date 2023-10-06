@@ -1,20 +1,20 @@
 ## Install packages, and dependencies, from CRAN
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="locfit")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "locfit")
 
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="MKmisc")
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="e1071")
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="GeneCycle")
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="fastICA")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "MKmisc")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "e1071")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "GeneCycle")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "fastICA")
 
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", c('flexmix', 'R2HTML', 'snowfall'))
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", c("flexmix", "R2HTML", "snowfall"))
 
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, pkgs="png")
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, pkgs = "png")
 
 
 # zinba and dependencies
-install.packages(repos="http://ftp.sunet.se/pub/lang/CRAN", dependencies=TRUE, c('multicore','doMC','foreach','quantreg','R.utils'))
+install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, c("multicore", "doMC", "foreach", "quantreg", "R.utils"))
 system("wget http://zinba.googlecode.com/files/zinba_2.02.03.tar.gz")
-install.packages("zinba_2.02.03.tar.gz", repos=NULL)
+install.packages("zinba_2.02.03.tar.gz", repos = NULL)
 
 
 ## Install packages from Bioconductor
@@ -64,16 +64,16 @@ biocLite("pd.genomewidesnp.6")
 biocLite("genomewidesnp6Crlmm")
 biocLite("genomewidesnp5Crlmm")
 
-biocLite("human1mduov3bCrlmm")          #Illumina
-biocLite("human1mv1cCrlmm")             #Illumina
-biocLite("human370quadv3cCrlmm")        #Illumina
-biocLite("human370v1cCrlmm")            #Illumina
-biocLite("human550v3bCrlmm")            #Illumina
-biocLite("human610quadv1bCrlmm")        #Illumina
-biocLite("human650v3aCrlmm")            #Illumina
-biocLite("human660quadv1aCrlmm")        #Illumina
-biocLite("humanomni1quadv1bCrlmm")      #Illumina
-biocLite("humanomniexpress12v1bCrlmm")  #Illumina
+biocLite("human1mduov3bCrlmm") # Illumina
+biocLite("human1mv1cCrlmm") # Illumina
+biocLite("human370quadv3cCrlmm") # Illumina
+biocLite("human370v1cCrlmm") # Illumina
+biocLite("human550v3bCrlmm") # Illumina
+biocLite("human610quadv1bCrlmm") # Illumina
+biocLite("human650v3aCrlmm") # Illumina
+biocLite("human660quadv1aCrlmm") # Illumina
+biocLite("humanomni1quadv1bCrlmm") # Illumina
+biocLite("humanomniexpress12v1bCrlmm") # Illumina
 
 biocLite("sva")
 

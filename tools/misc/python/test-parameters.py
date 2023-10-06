@@ -13,17 +13,17 @@
 # deprecated
 # PARAMETER OPTIONAL file: File TYPE INPUT_SEL
 
-with open('output.txt', 'w') as f:
-    f.write('int	' + str(int) + '\n')
-    f.write('dec	' + str(dec) + '\n')
-    f.write('string	' + string + '\n')
-    f.write('enum	' + str(enum) + '\n')
-    f.write('column	' + str(column) + '\n')
-    f.write('metacolumn	' + str(metacolumn) + '\n')
-    f.write('unchecked string: \n')
-    
+with open("output.txt", "w") as f:
+    f.write("int	" + str(int) + "\n")
+    f.write("dec	" + str(dec) + "\n")
+    f.write("string	" + string + "\n")
+    f.write("enum	" + str(enum) + "\n")
+    f.write("column	" + str(column) + "\n")
+    f.write("metacolumn	" + str(metacolumn) + "\n")
+    f.write("unchecked string: \n")
+
     # adapted from https://docs.python.org/3/howto/unicode.html#unicode-properties
     for i, c in enumerate(unchecked):
-        f.write(str(i) + '\t' + '%04x' % ord(c) + '\n')
+        f.write(str(i) + "\t" + "%04x" % ord(c) + "\n")
 
 #    f.write('file	' + str(file) + '\n')

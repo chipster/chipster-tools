@@ -7,7 +7,8 @@ import urllib2
 import json
 import time
 import os
-#from tool_utils import *
+
+# import tool_utils
 
 """
 Should produce the same results with the web interface, when 
@@ -20,14 +21,17 @@ Order may be different, so use this command to check if results are the same:
 diff <(cat web.vep | sort ) <(cat output_file | sort )
 """
 
+
 def get(dict, key):
     if key in dict:
         return str(dict.get(key))
-    return '-'
+    return "-"
+
 
 def append(list, prefix, dict, key):
     if key in dict:
         return list.append(prefix + str(dict.get(key)))
+
 
 def writeToFile(input_region, consequence_type, feature_type, f):
     line_count = 0
@@ -36,67 +40,108 @@ def writeToFile(input_region, consequence_type, feature_type, f):
         return 0
     for conseq in consequences:
         vep_line = []
-        uploaded_variation = '.'
-        location = input_region['seq_region_name'] + ':' + str(input_region['start']) + '-' + str(input_region['end'])
-        allele = get(conseq, 'variant_allele')
-        consequence = ','.join(conseq['consequence_terms'])
-        impact = get(conseq, 'impact')
-        symbol = get(conseq, 'gene_symbol')
-        gene = get(conseq, 'gene_id')
-        feature = get(conseq, 'transcript_id')
-        if 'regulatory_feature_id' in conseq:
-            feature = get(conseq, 'regulatory_feature_id')
-        biotype = get(conseq, 'biotype')
-        exon = get(conseq, 'exon')
-        intron = get(conseq, 'intron')
-        hgvsc = '-'
-        hgvsp = '-'
-        cdna_position = get(conseq, 'cdna_start')
-        cds_position = get(conseq, 'cds_start')
-        protein_position = get(conseq, 'protein_start')
-        amino_acids = get(conseq, 'amino_acids')
-        codons = get(conseq, 'codons')
-    
-        extras = []            
-        append(extras, 'DISTANCE=', conseq, 'distance')
-        append(extras, 'STRAND=', conseq, 'strand')
-        append(extras, 'SYMBOL_SOURCE=', conseq, 'gene_symbol_source')
-        append(extras, 'HGNC_ID=', conseq, 'hgnc_id')
-        if 'sift_prediction' in conseq:
-            extras.append('SIFT=' + conseq['sift_prediction'] + '(' + str(conseq['sift_score']) + ')')
-        if 'polyphen_prediction' in conseq:
-            extras.append('PolyPhen=' + conseq['polyphen_prediction'] + '(' + str(conseq['polyphen_score']) + ')')
+        uploaded_variation = "."
+        location = (
+            input_region["seq_region_name"]
+            + ":"
+            + str(input_region["start"])
+            + "-"
+            + str(input_region["end"])
+        )
+        allele = get(conseq, "variant_allele")
+        consequence = ",".join(conseq["consequence_terms"])
+        impact = get(conseq, "impact")
+        symbol = get(conseq, "gene_symbol")
+        gene = get(conseq, "gene_id")
+        feature = get(conseq, "transcript_id")
+        if "regulatory_feature_id" in conseq:
+            feature = get(conseq, "regulatory_feature_id")
+        biotype = get(conseq, "biotype")
+        exon = get(conseq, "exon")
+        intron = get(conseq, "intron")
+        hgvsc = "-"
+        hgvsp = "-"
+        cdna_position = get(conseq, "cdna_start")
+        cds_position = get(conseq, "cds_start")
+        protein_position = get(conseq, "protein_start")
+        amino_acids = get(conseq, "amino_acids")
+        codons = get(conseq, "codons")
 
-        existing_variation = '-'
+        extras = []
+        append(extras, "DISTANCE=", conseq, "distance")
+        append(extras, "STRAND=", conseq, "strand")
+        append(extras, "SYMBOL_SOURCE=", conseq, "gene_symbol_source")
+        append(extras, "HGNC_ID=", conseq, "hgnc_id")
+        if "sift_prediction" in conseq:
+            extras.append(
+                "SIFT="
+                + conseq["sift_prediction"]
+                + "("
+                + str(conseq["sift_score"])
+                + ")"
+            )
+        if "polyphen_prediction" in conseq:
+            extras.append(
+                "PolyPhen="
+                + conseq["polyphen_prediction"]
+                + "("
+                + str(conseq["polyphen_score"])
+                + ")"
+            )
+
+        existing_variation = "-"
         variants = []
         somatics = []
         phenos = []
-        colocated = input_region.get('colocated_variants')
+        colocated = input_region.get("colocated_variants")
         if colocated:
             for variant in colocated:
-                variants.append(variant['id'])                  
-                append(somatics, '', variant, 'somatic')
-                append(phenos, '', variant, 'phenotype_or_disease')
+                variants.append(variant["id"])
+                append(somatics, "", variant, "somatic")
+                append(phenos, "", variant, "phenotype_or_disease")
             if variants:
-                existing_variation = ','.join(variants)
+                existing_variation = ",".join(variants)
             if somatics:
-                extras.append('SOMATIC=' + ','.join(somatics))
+                extras.append("SOMATIC=" + ",".join(somatics))
             if phenos:
-                extras.append('PHENO=' + 'j'.join(phenos))
+                extras.append("PHENO=" + "j".join(phenos))
 
-        extra = ';'.join(extras)
+        extra = ";".join(extras)
 
-        vep_line = [uploaded_variation, location, allele, consequence, impact, symbol, gene, feature_type, feature, biotype, exon, intron, hgvsc, hgvsp, cdna_position, cds_position, protein_position, amino_acids, codons, existing_variation, extra]
+        vep_line = [
+            uploaded_variation,
+            location,
+            allele,
+            consequence,
+            impact,
+            symbol,
+            gene,
+            feature_type,
+            feature,
+            biotype,
+            exon,
+            intron,
+            hgvsc,
+            hgvsp,
+            cdna_position,
+            cds_position,
+            protein_position,
+            amino_acids,
+            codons,
+            existing_variation,
+            extra,
+        ]
 
-        f.write('\t'.join(vep_line) + '\r\n')
+        f.write("\t".join(vep_line) + "\r\n")
         line_count += 1
     return line_count
+
 
 # parse VCF file and create an array of variants
 def parse_lines(lines):
     variants = []
     for line in lines:
-        if line.startswith('#'):
+        if line.startswith("#"):
             continue
         columns = line.split()
         chrom = columns[0]
@@ -104,61 +149,72 @@ def parse_lines(lines):
         ref = columns[3]
         alt = columns[4]
         end_pos = str(int(pos) + len(ref) - 1)
-        variants.append(chrom + ' ' + pos + ' ' + end_pos + ' ' + ref + ' ' + alt)
+        variants.append(chrom + " " + pos + " " + end_pos + " " + ref + " " + alt)
 
     return variants
 
+
 def query(lines):
-    url = 'http://rest.ensembl.org/vep/homo_sapiens/region?numbers=true'
+    url = "http://rest.ensembl.org/vep/homo_sapiens/region?numbers=true"
 
     variants = parse_lines(lines)
     # input format example: { "variants" : ["21 26960070 rs116645811 G A . . .", "21 26965148 rs1135638 G A . . ." ] }
-    values = {'variants': variants }
-    # convert to json string  
+    values = {"variants": variants}
+    # convert to json string
     data = json.dumps(values)
     # send request
     req = urllib2.Request(url, data)
     req.add_header("Content-type", "application/json")
-    response = urllib2.urlopen(req)    
+    response = urllib2.urlopen(req)
     # parse response json
     return json.loads(response.read())
 
+
 def write(response_data):
     line_count = 0
-    with open('vep.tsv', 'a') as f:
+    with open("vep.tsv", "a") as f:
         # write file header
-        f.write('#Uploaded_variation	Location	Allele	Consequence	IMPACT	SYMBOL	Gene	Feature_type	Feature	BIOTYPE	EXON	INTRON	HGVSc	HGVSp	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	Extra\r\n')
+        f.write(
+            "#Uploaded_variation	Location	Allele	Consequence	IMPACT	SYMBOL	Gene	Feature_type	Feature	BIOTYPE	EXON	INTRON	HGVSc	HGVSp	cDNA_position	CDS_position	Protein_position	Amino_acids	Codons	Existing_variation	Extra\r\n"
+        )
 
         # write consequences of each input region
         for input_region in response_data:
             # there are many types of consequences
-            line_count += writeToFile(input_region, 'transcript_consequences', 'Transcript', f)
-            line_count += writeToFile(input_region, 'intergenic_consequences', '-', f)
-            line_count += writeToFile(input_region, 'motif_feature_consequences', '-', f)
-            line_count += writeToFile(input_region, 'regulatory_feature_consequences', 'RegulatoryFeature', f)
-    print('wrote ' + str(line_count) + ' output lines')
+            line_count += writeToFile(
+                input_region, "transcript_consequences", "Transcript", f
+            )
+            line_count += writeToFile(input_region, "intergenic_consequences", "-", f)
+            line_count += writeToFile(
+                input_region, "motif_feature_consequences", "-", f
+            )
+            line_count += writeToFile(
+                input_region, "regulatory_feature_consequences", "RegulatoryFeature", f
+            )
+    print("wrote " + str(line_count) + " output lines")
+
 
 def main():
-
     # the file may exist from previous runs, when debugging this locally
-    if os.path.exists('vep.tsv'):
-        os.remove('vep.tsv')
-    
+    if os.path.exists("vep.tsv"):
+        os.remove("vep.tsv")
+
     lines = []
-    with open('input_file') as f:
+    with open("input_file") as f:
         for line in f:
             lines.append(line)
             if len(lines) >= 200:
-                print('query ' + str(len(lines)) + ' variants')
+                print("query " + str(len(lines)) + " variants")
                 write(query(lines))
                 lines = []
-                # REST API allows 15 requests per second, so this sleep makes sure 
+                # REST API allows 15 requests per second, so this sleep makes sure
                 # that we can safely run about 30 instances of this tool in parallel without having
                 # to wait for the quota reset (which may take up to an hour).
                 # https://github.com/Ensembl/ensembl-rest/wiki/Rate-Limits
                 time.sleep(2)
-        print('query ' + str(len(lines)) + ' variants')
-        write(query(lines))      
+        print("query " + str(len(lines)) + " variants")
+        write(query(lines))
+
 
 """
 Transform input JSON: 

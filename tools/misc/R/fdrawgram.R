@@ -1,5 +1,5 @@
 # TOOL fdrawgram.R: "Plot a cladogram" (Plots a cladogram- or phenogram-like rooted tree diagram using PHYLIP program drawgam)
-# INPUT OPTIONAL intreefile: intreefile TYPE GENERIC 
+# INPUT OPTIONAL intreefile: intreefile TYPE GENERIC
 # OUTPUT OPTIONAL cladocram.ps
 # OUTPUT OPTIONAL cladocram.pdf
 # OUTPUT OPTIONAL fdrawgram.log
@@ -16,12 +16,12 @@
 # PARAMETER OPTIONAL nodeposition: "Position of interior nodes" TYPE [i: "Intermediate between their immediate descendants", w: "Weighted average of tip positions", c: "Centered among their ultimate descendants", n: "Innermost of immediate descendants", v: "So tree is v shaped"] FROM 1 TO 1 DEFAULT c (Position of interior nodes)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-options(scipen=999)
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+options(scipen = 999)
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 emboss.binary <- file.path(emboss.path, "fdrawgram")
 emboss.parameters <- paste("-auto -plotter l -previewer n")
-emboss.parameters <- paste(emboss.parameters, "-intreefile intreefile" )
+emboss.parameters <- paste(emboss.parameters, "-intreefile intreefile")
 emboss.parameters <- paste(emboss.parameters, "-plotfile cladocram.ps")
 emboss.parameters <- paste(emboss.parameters, "-grows", grows)
 emboss.parameters <- paste(emboss.parameters, "-style", style)
@@ -35,17 +35,17 @@ emboss.parameters <- paste(emboss.parameters, "-nodespace", nodespace)
 emboss.parameters <- paste(emboss.parameters, "-nodeposition", nodeposition)
 
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> fdrawgram.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> fdrawgram.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> fdrawgram.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> fdrawgram.log')
 system(echo.command)
 
-#stop(paste('CHIPSTER-NOTE:  ', command.full ))
+# stop(paste('CHIPSTER-NOTE:  ', command.full ))
 
 system(command.full)
 
 system("ps2pdf cladocram.ps")
 system("ls -l >> fdrawgram.log")
 
-if ( save_log == "no") {
-	system ("rm -f fdrawgram.log")
+if (save_log == "no") {
+    system("rm -f fdrawgram.log")
 }

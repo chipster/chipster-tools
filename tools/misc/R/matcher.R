@@ -1,6 +1,6 @@
 # TOOL matcher.R: "Local pairwise sequence alignment" (Smith-Waterman type local pairwise sequence alignment of two sequences with matcher EMBOSS command)
-# INPUT asequence.fa TYPE GENERIC 
-# INPUT bsequence.fa TYPE GENERIC 
+# INPUT asequence.fa TYPE GENERIC
+# INPUT bsequence.fa TYPE GENERIC
 # OUTPUT OPTIONAL alignment.pair.html
 # OUTPUT OPTIONAL alignment.pair.txt
 # OUTPUT OPTIONAL alignment.fasta
@@ -15,100 +15,100 @@
 # PARAMETER OPTIONAL awidth: "Row length in the alignmnet file" TYPE INTEGER FROM 3 DEFAULT 100 (This parameter defines the row length used in the alinment file)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-options(scipen=999)
+options(scipen = 999)
 # K.M 28.10.2013
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("asequence.fa")
 unzipIfGZipFile("bsequence.fa")
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("asequence.fa")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount asequence.fa -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 1){
-	stop(paste("CHIPSTER-NOTE:Too many query sequences. Maximun is 1 but your file contains ", num.queryseq ))
+if (num.queryseq > 1) {
+    stop(paste("CHIPSTER-NOTE:Too many query sequences. Maximun is 1 but your file contains ", num.queryseq))
 }
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
-#check sequece file type
+# check sequece file type
 inputfile.to.check <- ("bsequence.fa")
-sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check )
-str.filetype <- system(sfcheck.command, intern = TRUE )
+sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+str.filetype <- system(sfcheck.command, intern = TRUE)
 
-if ( str.filetype == "Not an EMBOSS compatible sequence file"){
-	stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
+if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your input file is not a sequence file that is compatible with the tool you try to use")
 }
 
-#count the query sequeces
+# count the query sequeces
 seqcount.exe <- file.path(emboss.path, "seqcount bsequence.fa -filter")
-str.queryseq <- system(seqcount.exe, intern = TRUE )
+str.queryseq <- system(seqcount.exe, intern = TRUE)
 num.queryseq <- as.integer(str.queryseq)
 
-#round(num.queryseq)
+# round(num.queryseq)
 
-if (num.queryseq > 1){
-	stop(paste("CHIPSTER-NOTE:Too many query sequences. Maximun is 1 but your file contains ", num.queryseq ))
+if (num.queryseq > 1) {
+    stop(paste("CHIPSTER-NOTE:Too many query sequences. Maximun is 1 but your file contains ", num.queryseq))
 }
 
 
 
 
 
-outfile <- paste("alignment",aformat ,"txt", sep="." )
+outfile <- paste("alignment", aformat, "txt", sep = ".")
 
-if ( aformat == "fasta"){
-	outfile <- paste("alignment",aformat, sep="." )	
+if (aformat == "fasta") {
+    outfile <- paste("alignment", aformat, sep = ".")
 }
 
-#emboss settings
+# emboss settings
 ecommand <- ("matcher")
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
-emboss.binary <- file.path(emboss.path,ecommand)
-emboss.options <- paste("-asequence asequence.fa -bsequence bsequence.fa -gapopen", gapopen, "-gapextend",  gapextend,"-awidth", awidth, "-aformat", aformat)
-emboss.options <- paste(emboss.options, "-alternatives", alternatives )
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+emboss.binary <- file.path(emboss.path, ecommand)
+emboss.options <- paste("-asequence asequence.fa -bsequence bsequence.fa -gapopen", gapopen, "-gapextend", gapextend, "-awidth", awidth, "-aformat", aformat)
+emboss.options <- paste(emboss.options, "-alternatives", alternatives)
 emboss.options <- paste(emboss.options, "-outfile", outfile, "-auto")
-if ( datafile != "def"){
-	emboss.options <- paste(emboss.options, "-datafile", datafile )	
+if (datafile != "def") {
+    emboss.options <- paste(emboss.options, "-datafile", datafile)
 }
-	
 
-command.full <- paste(emboss.binary, emboss.options, ' >> matcher.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> matcher.log' )
+
+command.full <- paste(emboss.binary, emboss.options, " >> matcher.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> matcher.log')
 system(echo.command)
 
 system(command.full)
-system ("ls -l >>  matcher.log")
+system("ls -l >>  matcher.log")
 
-if ( aformat == "pair"){
-	system("echo '<html>' > alignment.pair.html")
-	system("echo '<body>' >> alignment.pair.html")
-	system("echo '<pre>' >> alignment.pair.html")
-	system("cat alignment.pair.txt >> alignment.pair.html ")
-	system("echo '</pre>' >> alignment.pair.html")
-	system("echo '</body>' >> alignment.pair.html")
-	system("echo '</html>' >> alignment.pair.html")
-	system("rm -f alignment.pair.txt")
+if (aformat == "pair") {
+    system("echo '<html>' > alignment.pair.html")
+    system("echo '<body>' >> alignment.pair.html")
+    system("echo '<pre>' >> alignment.pair.html")
+    system("cat alignment.pair.txt >> alignment.pair.html ")
+    system("echo '</pre>' >> alignment.pair.html")
+    system("echo '</body>' >> alignment.pair.html")
+    system("echo '</html>' >> alignment.pair.html")
+    system("rm -f alignment.pair.txt")
 }
 
 
 
-if ( save_log == "no") {
-	system ("rm -f matcher.log")
+if (save_log == "no") {
+    system("rm -f matcher.log")
 }

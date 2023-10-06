@@ -11,10 +11,8 @@
 # PARAMETER OPTIONAL sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.2.3-single-cell
-# SLOTS 5
+# SLOTS 2
 # TOOLS_BIN ""
-
-
 
 
 
@@ -31,7 +29,8 @@
 # 2023-04-06 LG Remove 5 slots
 # 2023-02-01 ML Return to the original 2 slots
 # 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
-# 2023-07-12 ML Mitogenes with Mt- 
+# 2023-07-12 ML Mitogenes with Mt-
+# 2023-08-28 IH add percent.rb to QC
 
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
@@ -45,11 +44,11 @@ library(Matrix)
 library(gplots)
 
 library(Biobase)
-source(file.path(chipster.common.path, "tool-utils.R"))
-#version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+# version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
 package.version("Seurat")
 version <- package.version("Seurat")
-documentVersion("Seurat",version)
+documentVersion("Seurat", version)
 
 # Replace empty spaces in sample and project name with underscore _ :
 sample_name <- gsub(" ", "_", sample_name)
@@ -62,7 +61,6 @@ if (file.exists("dropseq.tsv")) {
 
   # If using 10X data:
 } else if (file.exists("files.tar")) {
-
   # Read the contents of the tar file into a list
   system("tar tf files.tar > tar.contents 2>> log.txt")
   file.list <- scan("tar.contents", what = "", sep = "\n")
@@ -77,16 +75,16 @@ if (file.exists("dropseq.tsv")) {
   system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
 
   # If the features.tsv, barcodes.tsv and matrix.mtx files are gzipped, open them:
-  if (length(list.files(path ="datadir/", pattern = "*matrix.mtx.gz")) >= 1) {
+  if (length(list.files(path = "datadir/", pattern = "*matrix.mtx.gz")) >= 1) {
     system("cd datadir; gzip -d *matrix.mtx.gz")
   }
-  if (length(list.files(path ="datadir/", pattern = "*features.tsv.gz")) >= 1) {
+  if (length(list.files(path = "datadir/", pattern = "*features.tsv.gz")) >= 1) {
     system("cd datadir; gzip -d *features.tsv.gz")
   }
-   if (length(list.files(path ="datadir/", pattern = "*genes.tsv.gz")) >= 1) {
+  if (length(list.files(path = "datadir/", pattern = "*genes.tsv.gz")) >= 1) {
     system("cd datadir; gzip -d *genes.tsv.gz")
   }
-  if (length(list.files(path ="datadir/", pattern = "*barcodes.tsv.gz")) >= 1) {
+  if (length(list.files(path = "datadir/", pattern = "*barcodes.tsv.gz")) >= 1) {
     system("cd datadir; gzip -d *barcodes.tsv.gz")
   }
 
@@ -104,42 +102,46 @@ if (file.exists("dropseq.tsv")) {
   # Load the data
   dat <- Read10X("datadir/")
 
-# If using HDF5 data:
+  # If using HDF5 data:
 } else if (file.exists("hdf5.h5")) {
   library(hdf5r)
   dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
-
 } else {
   stop(paste("CHIPSTER-NOTE: ", "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
 }
 
 # Initialize the Seurat object
 
-# In case of multiomics data, "dat" object has a list of matrices. 
+# In case of multiomics data, "dat" object has a list of matrices.
 # We need to select the Gene Expression one from there.
 if (class(dat) == "list") {
   seurat_obj <- CreateSeuratObject(counts = dat$`Gene Expression`, min.cells = mincells, project = project.name)
-}else{
+} else {
   seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
-# min.features = 200 => this is done in the next tool.
+  # min.features = 200 => this is done in the next tool.
 }
 
 # For sample detection later on
 seurat_obj@meta.data$stim <- sample_name
-seurat_obj$type <-  sample.group
+seurat_obj$type <- sample.group
 
 # QC
 # % of mito genes (note: they are named either "MT-CO1" or "mt-Co1", have to check both)
 # NOTE: The pattern provided works for human and mouse gene names. You may need to adjust depending on your system of interest
 seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-")
+seurat_obj[["percent.rb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl")
 
 
 # pdf plots
-pdf(file = "QCplots.pdf",, width = 13, height = 7)
+pdf(file = "QCplots.pdf", , width = 13, height = 7)
 
 # Violinplot
-if (sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) {
+if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
+} else if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1)) {
   VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+} else if ((sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
 } else {
   VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 }
@@ -158,5 +160,3 @@ dev.off() # close the pdf
 save(seurat_obj, file = "setup_seurat_obj.Robj")
 
 ## EOF
-
-

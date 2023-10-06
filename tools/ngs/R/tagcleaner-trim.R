@@ -17,10 +17,10 @@
 # AMS 2013.02.18
 # AMS 11.3.2014, gzip fastq outputs
 
-source(file.path(chipster.common.path,"tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads")
 unzipIfGZipFile("qual")
 
@@ -30,38 +30,38 @@ tagcleaner.binary <- c(file.path(chipster.tools.path, "tagcleaner", "tagcleaner.
 # options
 options <- paste("")
 # options for input type
-if (input.type == "FASTQ"){
-	options <- paste(options, "-fastq reads")
+if (input.type == "FASTQ") {
+    options <- paste(options, "-fastq reads")
 }
-if (input.type == "FASTA"){
-	options <- paste(options, "-fasta reads")
-	if (file.exists("qual")){
-		options <- paste(options, "-qual qual")
-	}
+if (input.type == "FASTA") {
+    options <- paste(options, "-fasta reads")
+    if (file.exists("qual")) {
+        options <- paste(options, "-qual qual")
+    }
 }
 # options for parameters
 notags <- TRUE
-if (tag3 != "-"){
-	options <- paste(options, "-tag3", tag3)
-	options <- paste(options, "-mm3", mm3)
-	notags <- FALSE	
+if (tag3 != "-") {
+    options <- paste(options, "-tag3", tag3)
+    options <- paste(options, "-mm3", mm3)
+    notags <- FALSE
 }
-if (tag5 != "-"){
-	options <- paste(options, "-tag5", tag5)
-	options <- paste(options, "-mm5", mm5)
-	notags <- FALSE
+if (tag5 != "-") {
+    options <- paste(options, "-tag5", tag5)
+    options <- paste(options, "-mm5", mm5)
+    notags <- FALSE
 }
-if (notags){
-	stop('CHIPSTER-NOTE: No tag sequence specified. If tags are unknow, you can first use the "Predict primers/adaptors" tool.')
+if (notags) {
+    stop('CHIPSTER-NOTE: No tag sequence specified. If tags are unknow, you can first use the "Predict primers/adaptors" tool.')
 }
-if (trimwithin > 0){
-	if (trimwithin < max(nchar(tag3),nchar(tag5))){
-		stop('CHIPSTER-NOTE: Value for "Allowed variable bases" has to be at least the number of bases in the tag sequence.')
-	}
-	options <- paste(options, "-trim_within", trimwithin)
+if (trimwithin > 0) {
+    if (trimwithin < max(nchar(tag3), nchar(tag5))) {
+        stop('CHIPSTER-NOTE: Value for "Allowed variable bases" has to be at least the number of bases in the tag sequence.')
+    }
+    options <- paste(options, "-trim_within", trimwithin)
 }
-if (split == "yes"){
-	options <- paste(options, "-split", split.mismatch)
+if (split == "yes") {
+    options <- paste(options, "-split", split.mismatch)
 }
 # common options
 options <- paste(options, "-64")
@@ -81,22 +81,21 @@ system("gzip *.qual")
 
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=3, ncol=2)
+outputnames <- matrix(NA, nrow = 3, ncol = 2)
 
 base1 <- strip_name(inputnames$reads)
 
-outputnames[1,] <- c("trimmed.fastq.gz", paste(base1, "_trimmed.fastq.gz", sep =""))
-outputnames[2,] <- c("trimmed.fasta.gz", paste(base1, ".fasta.gz", sep =""))
-outputnames[3,] <- c("trimmed.qual.gz", paste(base1, ".qual.gz", sep =""))
+outputnames[1, ] <- c("trimmed.fastq.gz", paste(base1, "_trimmed.fastq.gz", sep = ""))
+outputnames[2, ] <- c("trimmed.fasta.gz", paste(base1, ".fasta.gz", sep = ""))
+outputnames[3, ] <- c("trimmed.qual.gz", paste(base1, ".qual.gz", sep = ""))
 
 outputnames
 
 # Write output definitions file
 write_output_definitions(outputnames)
-

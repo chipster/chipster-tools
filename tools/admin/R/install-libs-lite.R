@@ -9,5 +9,5 @@ repo.bioc <- "http://www.bioconductor.org"
 # They skip all packages that already have been installed
 source(file(chipster.path, "comp/modules/admin/R-3.0/smip.R"))
 
-smart.install.packages(bioconductor.package="edgeR", mirror=repo.bioc)
-smart.install.packages(bioconductor.package="Heatplus", mirror=repo.bioc)
+smart.install.packages(bioconductor.package = "edgeR", mirror = repo.bioc)
+smart.install.packages(bioconductor.package = "Heatplus", mirror = repo.bioc)

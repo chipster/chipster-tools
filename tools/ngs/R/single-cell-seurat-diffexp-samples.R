@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in multiple samples" (This tool lists the cell type markers that are conserved across the conditions, and the differentially expressed genes between the conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.) 
+# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in multiple samples" (This tool lists the cell type markers that are conserved across the conditions, and the differentially expressed genes between the conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
@@ -20,7 +20,7 @@
 # PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
 
 
-# 2018-16-05 ML 
+# 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
 # 30.10.2019 ML Add filtering parameters
@@ -44,7 +44,7 @@ if (exists("seurat_obj")) {
 }
 
 # When SCTransform was used to normalise the data, do a prep step:
-if (normalisation.method == "SCT"){
+if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
 }
 
@@ -57,8 +57,10 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 # Identify conserved cell type markers
 # (uses package "metap" instead of metaDE since Seurat version 2.3.0)
-cluster.markers <- FindConservedMarkers(data.combined, ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,  
-    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
+cluster.markers <- FindConservedMarkers(data.combined,
+  ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
+  verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved
+)
 
 # Write to table
 write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
@@ -71,53 +73,49 @@ Idents(data.combined) <- "celltype.stim"
 
 lvls <- levels(as.factor(data.combined$stim))
 
-if (length(lvls) < 2) { 
-  	stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
+if (length(lvls) < 2) {
+  stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
 
-# If there are only two samples:
-} else if (length(lvls) == 2) { 
+  # If there are only two samples:
+} else if (length(lvls) == 2) {
   ident1 <- paste(cluster, "_", lvls[1], sep = "")
   ident2 <- paste(cluster, "_", lvls[2], sep = "")
-  if (normalisation.method == "SCT"){
+  if (normalisation.method == "SCT") {
     cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
-  } else { 
+  } else {
     cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
   }
- 
+
 
   # Comparison name for the output file:
-    comparison.name <- paste(lvls[1], "_vs_", lvls[2], sep="")
-    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+  comparison.name <- paste(lvls[1], "_vs_", lvls[2], sep = "")
+  name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
- # Write to table
-    write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+  # Write to table
+  write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
-# If there are more than 2 samples in the data:
-} else { 
-
-  for (i in 1:length(lvls) ) { 
+  # If there are more than 2 samples in the data:
+} else {
+  for (i in 1:length(lvls)) {
     # i:th sample vs all the others (= -i)
     ident1 <- paste(cluster, "_", lvls[i], sep = "")
     ident2 <- paste(cluster, "_", lvls[-i], sep = "")
     # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
-    if (normalisation.method == "SCT"){
+    if (normalisation.method == "SCT") {
       cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
-    } else { 
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+    } else {
+      cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
     }
 
     # Comparison name for the output file:
-    comparison.name <- paste(lvls[i], "vsAllOthers", sep="")
-    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+    comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
+    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
     # Write to table
     write.table(cluster_response, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
-  } 
-} 
+  }
+}
 # Save the Robj for the next tool
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")
 
 ## EOF
-
-
-

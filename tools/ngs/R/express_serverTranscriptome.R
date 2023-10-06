@@ -10,7 +10,7 @@
 
 
 # check out if the fastq files are compressed and if so unzip them
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fq")
 unzipIfGZipFile("reads2.fq")
 
@@ -34,7 +34,7 @@ system("cp transcriptome-alignment.bam alignment.bam")
 express.binary <- c(file.path(chipster.tools.path, "express", "express"))
 
 # add the fasta ending to the transcriptome name (Bowtie2 index has the same basename)
-transcriptome <- paste(transcriptome, ".fasta", sep="")
+transcriptome <- paste(transcriptome, ".fasta", sep = "")
 
 # command
 command <- paste(express.binary, transcriptome, "alignment.bam")
@@ -46,10 +46,6 @@ system(command)
 system("cp results.xprs full-express-output.tsv")
 
 # make a second output file containing only the effective counts
-results <- read.table(file="results.xprs", sep="\t", header=T, quote="")
-effcounts <- data.frame(target_id = results$target_id, eff_counts=round(results$eff_counts, digits=0))
-write.table(effcounts, file="effective-counts-express.tsv", sep="\t", row.names=F, quote=F)
-
-
-
-
+results <- read.table(file = "results.xprs", sep = "\t", header = T, quote = "")
+effcounts <- data.frame(target_id = results$target_id, eff_counts = round(results$eff_counts, digits = 0))
+write.table(effcounts, file = "effective-counts-express.tsv", sep = "\t", row.names = F, quote = F)

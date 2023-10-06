@@ -28,7 +28,7 @@ seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", verbose = FALSE) %>%
     RunPCA(verbose = FALSE)
 
 # Open the pdf file for plotting
-pdf(file="reference_UMAP_plot.pdf", width=13, height=7) 
+pdf(file = "reference_UMAP_plot.pdf", width = 13, height = 7)
 
 # Visualise the reference data
 # the annotation is stored in the 'subclass' column of object metadata
@@ -37,8 +37,10 @@ DimPlot(allen_reference, group.by = "subclass", label = TRUE)
 # Find anchors between a reference and the seurat object
 anchors <- FindTransferAnchors(reference = allen_reference, query = seurat_obj, normalization.method = "SCT")
 
-predictions.assay <- TransferData(anchorset = anchors, refdata = allen_reference$subclass, prediction.assay = TRUE,
-    weight.reduction = seurat_obj[["pca"]], dims = 1:30)
+predictions.assay <- TransferData(
+    anchorset = anchors, refdata = allen_reference$subclass, prediction.assay = TRUE,
+    weight.reduction = seurat_obj[["pca"]], dims = 1:30
+)
 
 # add the predictions to the seurat object as a new assay
 seurat_obj[["predictions"]] <- predictions.assay
@@ -49,6 +51,6 @@ DefaultAssay(seurat_obj) <- "predictions"
 dev.off()
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_integrated.Robj")
+save(seurat_obj, file = "seurat_obj_integrated.Robj")
 
-#EOF
+# EOF

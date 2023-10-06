@@ -19,40 +19,40 @@ load("ps.Rda")
 
 # Global PERMANOVA
 if (pheno2 == "EMPTY" &&
-	pheno3 == "EMPTY"){
-		set.seed(1)
-		ps_adonis <- adonis(ps_dist ~ get(pheno1), data = ps_df)
+    pheno3 == "EMPTY") {
+    set.seed(1)
+    ps_adonis <- adonis(ps_dist ~ get(pheno1), data = ps_df)
 }
 if (pheno2 != "EMPTY" &&
-	pheno3 == "EMPTY" &&
-		type == "main"){
-			set.seed(1)
-			ps_adonis <- adonis(ps_dist ~ get(pheno1) + get(pheno2), data = ps_df)
+    pheno3 == "EMPTY" &&
+    type == "main") {
+    set.seed(1)
+    ps_adonis <- adonis(ps_dist ~ get(pheno1) + get(pheno2), data = ps_df)
 }
 if (pheno2 != "EMPTY" &&
-	pheno3 == "EMPTY" &&
-		type == "all"){
-			set.seed(1)
-			ps_adonis <- adonis(ps_dist ~ get(pheno1) * get(pheno2), data = ps_df)
+    pheno3 == "EMPTY" &&
+    type == "all") {
+    set.seed(1)
+    ps_adonis <- adonis(ps_dist ~ get(pheno1) * get(pheno2), data = ps_df)
 }
 if (pheno2 != "EMPTY" &&
-	pheno3 != "EMPTY" &&
-		type == "main"){
-			set.seed(1)
-			ps_adonis <- adonis(ps_dist ~ get(pheno1) + get(pheno2) + get(pheno3), data = ps_df)
+    pheno3 != "EMPTY" &&
+    type == "main") {
+    set.seed(1)
+    ps_adonis <- adonis(ps_dist ~ get(pheno1) + get(pheno2) + get(pheno3), data = ps_df)
 }
 if (pheno2 != "EMPTY" &&
-	pheno3 != "EMPTY" &&
-		type == "all"){
-			set.seed(1)
-			ps_adonis <- adonis(ps_dist ~ get(pheno1) * get(pheno2) * get(pheno3), data = ps_df)
+    pheno3 != "EMPTY" &&
+    type == "all") {
+    set.seed(1)
+    ps_adonis <- adonis(ps_dist ~ get(pheno1) * get(pheno2) * get(pheno3), data = ps_df)
 }
 
 # Print results table
 sink("global_permanova.txt")
-	cat("\n\n\n")
-	cat("### Global PERMANOVA summary ###\n")
-	cat("\n\n\n")
-	print(ps_adonis)
-	cat("\n\n\n")
+cat("\n\n\n")
+cat("### Global PERMANOVA summary ###\n")
+cat("\n\n\n")
+print(ps_adonis)
+cat("\n\n\n")
 sink()

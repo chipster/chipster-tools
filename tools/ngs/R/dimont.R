@@ -18,38 +18,38 @@
 
 system("perl -n -i -e \'if(/^>/) { print \"\\n$_\"; } else { s/\\n//g && print }\' seqdata.fa")
 
-fasta_file <- scan("seqdata.fa", what="list", sep="\n", blank.lines.skip=F)
-fasta_len  <- sapply(fasta_file, nchar)
-if(min(fasta_len) == 0) {
-	remove_lines <- c(which(fasta_len==0) -1, which(fasta_len==0))
-	remove_lines <- remove_lines[remove_lines>0]
-	fasta_file <- fasta_file[-c(remove_lines)]
+fasta_file <- scan("seqdata.fa", what = "list", sep = "\n", blank.lines.skip = F)
+fasta_len <- sapply(fasta_file, nchar)
+if (min(fasta_len) == 0) {
+    remove_lines <- c(which(fasta_len == 0) - 1, which(fasta_len == 0))
+    remove_lines <- remove_lines[remove_lines > 0]
+    fasta_file <- fasta_file[-c(remove_lines)]
 }
-cat(fasta_file, file="seqdata.fa", sep="\n")
+cat(fasta_file, file = "seqdata.fa", sep = "\n")
 
-tool<-file.path(chipster.tools.path,"dimont","Dimont.jar");
+tool <- file.path(chipster.tools.path, "dimont", "Dimont.jar")
+maxMemoryParameter <- paste("-Xmx", chipster.memory.max, "M", sep = "")
+command <- paste("java -Xms512M ", maxMemoryParameter, " -Djava.awt.headless=true -jar ", tool,
+    " data=seqdata.fa",
+    " infix=dimont",
+    " position=", postag,
+    " value=", valtag,
+    " sd=", std,
+    " weightingFactor=", wf,
+    " starts=", starts,
+    " motifWidth=", motifwidth,
+    " motifOrder=", fgOrder,
+    " bgOrder=", bgOrder,
+    " ess=", ess,
+    " delete=", delete,
+    " threads=1 > dimont.log",
+    sep = "", collapse = ""
+)
 
-maxMemoryParameter<-paste("-Xmx", chipster.memory.max, "M", sep="")
-command<-paste("java -Xms512M ", maxMemoryParameter, " -Djava.awt.headless=true -jar ",tool,
-			   " data=seqdata.fa",
-			   " infix=dimont",
-			   " position=",postag,
-			   " value=",valtag,
-			   " sd=",std,
-			   " weightingFactor=",wf,
-			   " starts=",starts,
-			   " motifWidth=",motifwidth,
-			   " motifOrder=",fgOrder,
-			   " bgOrder=",bgOrder,
-			   " ess=",ess,
-			   " delete=",delete,
-			   " threads=1 > dimont.log",sep="",collapse="");
+system(command)
+files <- list.files(path = ".", pattern = "dimont-predictions.*\\.txt")
 
-system(command);
-
-files<-list.files(path=".",pattern="dimont-predictions.*\\.txt")
-
-for(file in files){
-	nf<-gsub(pattern="\\.txt$",replacement=".tsv",x=file,perl=T)
-	system(command=paste("mv",file,nf))
+for (file in files) {
+    nf <- gsub(pattern = "\\.txt$", replacement = ".tsv", x = file, perl = T)
+    system(command = paste("mv", file, nf))
 }

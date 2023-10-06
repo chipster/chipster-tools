@@ -22,25 +22,25 @@ library(patchwork)
 # Load seurat object (called seurat_obj)
 load("seurat_object.Robj")
 
-#PCA
+# PCA
 seurat_obj <- RunPCA(seurat_obj, assay = "SCT", verbose = FALSE, npcs = num.of.pcas)
 
 # PCA genes in txt file
-if (loadings == TRUE){
-	sink("PCAloadings.txt")
-	print(seurat_obj[["pca"]], dims = 1:num.of.pcas, nfeatures = num.of.genes.loadings)
-	sink()
+if (loadings == TRUE) {
+    sink("PCAloadings.txt")
+    print(seurat_obj[["pca"]], dims = 1:num.of.pcas, nfeatures = num.of.genes.loadings)
+    sink()
 }
 
-#Clusters
+# Clusters
 seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
 seurat_obj <- FindClusters(seurat_obj, verbose = FALSE)
 seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
 
 # Open the pdf file for plotting
-pdf(file="UMAP_plot.pdf", , width=9, height=12) 
+pdf(file = "UMAP_plot.pdf", , width = 9, height = 12)
 
-# visualise the results of the clustering 
+# visualise the results of the clustering
 # Also draw UMAP plot with orig ident (handy when there are multiple samples)
 # DimPlot(seurat_obj, reduction = "umap", group.by = c("ident", "orig.ident"))
 # DimPlot(seurat_obj, reduction = "umap", label = TRUE)
@@ -53,6 +53,6 @@ SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3)
 dev.off()
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_spatial_obj_pca_clust.Robj")
+save(seurat_obj, file = "seurat_spatial_obj_pca_clust.Robj")
 
 ## EOF

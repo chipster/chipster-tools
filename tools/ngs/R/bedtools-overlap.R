@@ -16,7 +16,7 @@ options <- paste("")
 options <- paste(options, "-cols", cols)
 
 # input files
-options <- paste(options,"-i file.a")
+options <- paste(options, "-i file.a")
 
 # command
 command <- paste(binary, options, " > overlap.tmp 2> error.tmp")
@@ -26,9 +26,9 @@ system(command)
 
 # Generate output/error message
 if (file.info("overlap.tmp")$size > 0) {
-	system("mv overlap.tmp overlap.bed")
+    system("mv overlap.tmp overlap.bed")
 } else if (file.info("error.tmp")$size > 0) {
-	system("mv error.tmp error.txt")
-} else{
-	system("echo \"# No results found\" > error.txt")
+    system("mv error.tmp error.txt")
+} else {
+    system("echo \"# No results found\" > error.txt")
 }

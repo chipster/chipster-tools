@@ -17,13 +17,13 @@ library(dplyr)
 load("seurat_spatial_obj_pca.Robj")
 
 clusters <- trimws(unlist(strsplit(clusters, ",")))
-clusters <- strtoi(clusters, base=0L)
+clusters <- strtoi(clusters, base = 0L)
 
-#Subset of chosen clusters
+# Subset of chosen clusters
 seurat_obj <- subset(seurat_obj, idents = c(clusters))
 
 # Open the pdf file for plotting
-pdf(file="subset.pdf", width=13, height=7) 
+pdf(file = "subset.pdf", width = 13, height = 7)
 
 SpatialDimPlot(seurat_obj, crop = FALSE, label = TRUE, pt.size.factor = 1, label.size = 3)
 
@@ -31,6 +31,6 @@ SpatialDimPlot(seurat_obj, crop = FALSE, label = TRUE, pt.size.factor = 1, label
 dev.off()
 
 # Save the Robj for the next tool
-save(seurat_obj, file="seurat_obj_subset.Robj")
+save(seurat_obj, file = "seurat_obj_subset.Robj")
 
 ## EOF

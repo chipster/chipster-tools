@@ -1,5 +1,5 @@
 # TOOL fdrawtree.R: "Plot an unrooted tree" (Plots an unrooted tree diagram)
-# INPUT OPTIONAL intreefile: intreefile TYPE GENERIC 
+# INPUT OPTIONAL intreefile: intreefile TYPE GENERIC
 # OUTPUT OPTIONAL tree.ps
 # OUTPUT OPTIONAL tree.pdf
 # OUTPUT OPTIONAL fdrawtree.log
@@ -14,7 +14,7 @@
 # PARAMETER OPTIONAL treedepth: "Depth of tree as fraction of its breadth" TYPE DECIMAL FROM 0.1 TO 100.0 DEFAULT 0.53 (Depth of tree as fraction of its breadth)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-emboss.path <- file.path(chipster.tools.path, "emboss" ,"bin")
+emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 
 emboss.binary <- file.path(emboss.path, "fdrawtree")
@@ -32,8 +32,8 @@ emboss.parameters <- paste(emboss.parameters, "-bscale", bscale)
 emboss.parameters <- paste(emboss.parameters, "-treedepth", treedepth)
 
 
-command.full <- paste(emboss.binary, emboss.parameters, ' >> fdrawtree.log 2>&1' )
-echo.command <- paste('echo "',command.full, ' "> fdrawtree.log' )
+command.full <- paste(emboss.binary, emboss.parameters, " >> fdrawtree.log 2>&1")
+echo.command <- paste('echo "', command.full, ' "> fdrawtree.log')
 system(echo.command)
 
 system(command.full)
@@ -41,6 +41,6 @@ system(command.full)
 system("ps2pdf tree.ps")
 system("ls -l >> fdrawtree .log")
 
-if ( save_log == "no") {
-	system ("rm -f fdrawtree.log")
+if (save_log == "no") {
+    system("rm -f fdrawtree.log")
 }

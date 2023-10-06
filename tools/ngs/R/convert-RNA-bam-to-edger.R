@@ -17,14 +17,22 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "coverageBed"))
 
 # optional options
 options <- paste("")
-if (s == "yes") {options <- paste(options, "-s")}
+if (s == "yes") {
+    options <- paste(options, "-s")
+}
 # if (hist == "yes") {options <- paste(options, "-hist")}
 # if (d == "yes") {options <- paste(options, "-d")}
-if (split == "yes") {options <- paste(options, "-split")}
+if (split == "yes") {
+    options <- paste(options, "-split")
+}
 
 # input files
-if (abam == "yes") {options <- paste(options, "-abam file.a -b file.b")}
-if (abam == "no") {options <- paste(options, "-a file.a -b file.b")}
+if (abam == "yes") {
+    options <- paste(options, "-abam file.a -b file.b")
+}
+if (abam == "no") {
+    options <- paste(options, "-a file.a -b file.b")
+}
 
 # command
 command <- paste(binary, options, " > coveragebed.tsv")
@@ -34,20 +42,20 @@ system(command)
 
 # bring in file to R environment for formating
 file <- c("coveragebed.tsv")
-dat <- read.table(file, header=F, sep="\t")
-id_list <- paste(dat$V1,dat$V2,dat$V3,dat$V4, sep="_")
-length_list <- dat$V3-dat$V2+1
-results_table <- data.frame	(
-		id=id_list,
-		sequence=dat$V4,
-		chr=dat$V1,
-		start=dat$V2,
-		end=dat$V3,
-		length=length_list,
-		count=dat$V5
+dat <- read.table(file, header = F, sep = "\t")
+id_list <- paste(dat$V1, dat$V2, dat$V3, dat$V4, sep = "_")
+length_list <- dat$V3 - dat$V2 + 1
+results_table <- data.frame(
+    id = id_list,
+    sequence = dat$V4,
+    chr = dat$V1,
+    start = dat$V2,
+    end = dat$V3,
+    length = length_list,
+    count = dat$V5
 )
 
 # write result table to output
-write.table(results_table, file="edgeR-input.tsv", col.names=T, quote=F, sep="\t", row.names=F)
+write.table(results_table, file = "edgeR-input.tsv", col.names = T, quote = F, sep = "\t", row.names = F)
 
 # EOF

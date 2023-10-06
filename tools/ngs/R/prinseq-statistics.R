@@ -8,28 +8,28 @@
 # AMS 17.2.2014, removed table format output, added graph_stats parameter to cl
 
 # check out if the file is compressed and if so unzip it
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("fastqfile")
 
 # binary
-binary.stats <- c(file.path(chipster.tools.path, "prinseq", "prinseq-lite.pl" ))
+binary.stats <- c(file.path(chipster.tools.path, "prinseq", "prinseq-lite.pl"))
 
 # quality encoding check
-#quality.scale <- ifelse(phred64 == "y", "-phred64", "")
+# quality.scale <- ifelse(phred64 == "y", "-phred64", "")
 
 # command to generate result table
-#system('printf "%s\t%s\t%s\n"  Class Feature Value > reads-stats.tsv')
-#if (input.mode == "fq") {
-#	command.stats <- paste("perl", binary.stats, " -fastq fastqfile -out_good null -out_bad null -stats_all >> reads-stats.tsv")
-#}
-#if (input.mode == "fa") {
-#	command.stats <- paste("perl", binary.stats, " -fasta fastqfile -out_good null -out_bad null -stats_all >> reads-stats.tsv")
-#}
+# system('printf "%s\t%s\t%s\n"  Class Feature Value > reads-stats.tsv')
+# if (input.mode == "fq") {
+# 	command.stats <- paste("perl", binary.stats, " -fastq fastqfile -out_good null -out_bad null -stats_all >> reads-stats.tsv")
+# }
+# if (input.mode == "fa") {
+# 	command.stats <- paste("perl", binary.stats, " -fasta fastqfile -out_good null -out_bad null -stats_all >> reads-stats.tsv")
+# }
 #
-#ret <- system(command.stats)
-#if (ret > 0) {
-#	stop('Unsupported input file type, please see tool output for more details.')
-#}
+# ret <- system(command.stats)
+# if (ret > 0) {
+# 	stop('Unsupported input file type, please see tool output for more details.')
+# }
 
 # commands to generate graph file
 if (input.mode == "fq") {
@@ -46,16 +46,16 @@ command.graph <- paste("perl", binary.graph, " -i tmp_graph_file -html_all -o re
 system(command.graph)
 
 # Handle output names
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
 
-basename  <- strip_name(inputnames$fastqfile)
+basename <- strip_name(inputnames$fastqfile)
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("reads-stats.html", paste(basename, "_prinseq.html", sep =""))
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
+outputnames[1, ] <- c("reads-stats.html", paste(basename, "_prinseq.html", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

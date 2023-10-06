@@ -1,5 +1,5 @@
 # TOOL fastx-fastq-to-fasta.R: "Convert FASTQ to FASTA" (Convert FASTQ files to FASTA format. This tool is based on the FASTX package.)
-# INPUT reads.fastq TYPE GENERIC 
+# INPUT reads.fastq TYPE GENERIC
 # OUTPUT reads.fasta.gz
 # OUTPUT OPTIONAL fasta.log
 # PARAMETER OPTIONAL remove.unknowns: "Remove sequences with unknown nucleotides" TYPE [yes, no] DEFAULT no (Remove sequences with unknown nucleotides)
@@ -10,8 +10,8 @@
 # EK 17.6.2011
 # EK 6.4.2021 Gzip fasta, parameter for producing a log file.
 
-source(file.path(chipster.common.path, "tool-utils.R"))
-source(file.path(chipster.common.path, "zip-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.fastq")
@@ -32,7 +32,7 @@ system(command)
 
 # rename log file if it is not needed
 if (log.file == "no") {
-	system("mv fasta.log no.log")
+    system("mv fasta.log no.log")
 }
 
 # zip output fasta
@@ -43,10 +43,10 @@ inputnames <- read_input_definitions()
 basename <- strip_name(inputnames$reads.fastq)
 
 # Make a matrix of output names
-outputnames <- matrix(NA,nrow = 2,ncol = 2)
+outputnames <- matrix(NA, nrow = 2, ncol = 2)
 # outputnames[1,] <- c("reads.fasta",paste(basename,".fasta",sep = ""))
-outputnames[1,] <- c("reads.fasta.gz",paste(basename,".fasta.gz",sep = ""))
-outputnames[2,] <- c("fasta.log",paste(basename,".log",sep = ""))
+outputnames[1, ] <- c("reads.fasta.gz", paste(basename, ".fasta.gz", sep = ""))
+outputnames[2, ] <- c("fasta.log", paste(basename, ".log", sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)

@@ -13,7 +13,7 @@
 # PARAMETER outformat: "Output format" TYPE [fasta: FASTA, gp: "Genbank proteins", gb: "Genbank", log: "Hit count only"] DEFAULT fasta (Ouput format of the data retrieved. As retreving a large amount of sequeces may take long time, if can be useful to first use the hit count only format to quickly check the amount of sequeces to be retrieved. )
 
 
-#To make edirect work:
+# To make edirect work:
 # sudo aptitude install libhttp-parser-perl
 #
 
@@ -22,8 +22,8 @@ import os
 from subprocess import Popen, PIPE
 import xml.etree.ElementTree as ET
 
+
 def main():
-       
     edirect_path = "/opt/chipster/tools/edirect/"
     esearch_path = edirect_path + "esearch"
     efetch_path = edirect_path + "efetch"
@@ -32,7 +32,7 @@ def main():
         outfile = "sequences.fasta"
     else:
         outfile = "sequences.txt"
- 
+
     # each argument must be a separate list item
     query = [esearch_path, "-db", db, "-query"]
 
@@ -45,11 +45,11 @@ def main():
 
     # append query string to the argument list
     query.append(query_str)
-    
+
     # run the query  command
     # save standard output and error streams to variables xml and err
     my_env = os.environ.copy()
-    my_env["EMAIL"] = "chipster@csc.fi" 
+    my_env["EMAIL"] = "chipster@csc.fi"
     esearch_process = Popen(query, stdout=PIPE, stderr=PIPE, env=my_env)
     xml, err = esearch_process.communicate()
     if err:
@@ -57,40 +57,54 @@ def main():
         raise Exception("Error in esearch: " + err)
 
     # parse xml
-    str_hits = ET.fromstring(xml).find("Count").text    
+    str_hits = ET.fromstring(xml).find("Count").text
     num_hits = int(str_hits)
-    
+
     if outformat == "log":
-       raise Exception("CHIPSTER-NOTE: Query: esearch " + " ".join(query) + " will retrieve " + str_hits + " hits ")
-       #logfile="edirect.log"
-       #log = open(logfile, "w")
-       #log_command = [ "echo", "sequence type:", db ]
-       #Popen(log_command, stdout=log, stderr=PIPE)
-       #log_command = [ "echo", "esearch query string:", query_str ]
-       #Popen(log_command, stdout=log, stderr=PIPE)
-       #log_command = [ "echo", "number of hits:", str_hits ]
-       #Popen(log_command, stdout=log, stderr=PIPE)
-       #log.close()
+        raise Exception(
+            "CHIPSTER-NOTE: Query: esearch "
+            + " ".join(query)
+            + " will retrieve "
+            + str_hits
+            + " hits "
+        )
+        # logfile="edirect.log"
+        # log = open(logfile, "w")
+        # log_command = [ "echo", "sequence type:", db ]
+        # Popen(log_command, stdout=log, stderr=PIPE)
+        # log_command = [ "echo", "esearch query string:", query_str ]
+        # Popen(log_command, stdout=log, stderr=PIPE)
+        # log_command = [ "echo", "number of hits:", str_hits ]
+        # Popen(log_command, stdout=log, stderr=PIPE)
+        # log.close()
 
-    if outformat != "log": 
-       if num_hits == 0:
-           raise Exception("CHIPSTER-NOTE: No hits found for query: esearch " + " ".join(query))
-   
-       elif num_hits > 50000:
-           raise Exception("CHIPSTER-NOTE: Query produced more than 50000 hits. Number of hits " + str_hits)
-    
-       # fetch sequences
-       # read standard input from a variable xml and write output to a file, because it may be big
-       with open("hits.txt", "w") as hits:
-           efetch_process = Popen([efetch_path, "-format", outformat], stdout=hits, stdin=PIPE)
-           efetch_process.communicate(input=xml)
+    if outformat != "log":
+        if num_hits == 0:
+            raise Exception(
+                "CHIPSTER-NOTE: No hits found for query: esearch " + " ".join(query)
+            )
 
-       # read the result file, filter it and write to another file
-       with open("hits.txt", "r") as hits, open(outfile, "w") as out:
-           for line in hits:
-               # remove empty lines
-               if line != "\n":                
-                   out.write(line)
+        elif num_hits > 50000:
+            raise Exception(
+                "CHIPSTER-NOTE: Query produced more than 50000 hits. Number of hits "
+                + str_hits
+            )
+
+        # fetch sequences
+        # read standard input from a variable xml and write output to a file, because it may be big
+        with open("hits.txt", "w") as hits:
+            efetch_process = Popen(
+                [efetch_path, "-format", outformat], stdout=hits, stdin=PIPE
+            )
+            efetch_process.communicate(input=xml)
+
+        # read the result file, filter it and write to another file
+        with open("hits.txt", "r") as hits, open(outfile, "w") as out:
+            for line in hits:
+                # remove empty lines
+                if line != "\n":
+                    out.write(line)
+
 
 if __name__ == "__main__":
     main()

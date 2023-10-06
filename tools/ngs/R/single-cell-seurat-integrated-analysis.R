@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # RUNTIME R-4.2.3-single-cell
-# SLOTS 5
+# SLOTS 2
 # TOOLS_BIN ""
 
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
@@ -34,7 +34,7 @@
 # for UMAP:
 library(reticulate)
 Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
-#use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
+# use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 library(gplots)
@@ -63,10 +63,10 @@ data.combined <- FindClusters(data.combined, resolution = res)
 # Visualization
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
 p1 <- DimPlot(data.combined, reduction = reduction.method, group.by = "stim", pt.size = point.size)
-p2 <- DimPlot(data.combined, reduction = reduction.method, pt.size = point.size, label=add.labels)
+p2 <- DimPlot(data.combined, reduction = reduction.method, pt.size = point.size, label = add.labels)
 plot_grid(p1, p2)
 # Show both conditions in separate plots:
-DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label=add.labels)
+DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels)
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
 sums <- colSums(cell_counts)
@@ -79,7 +79,7 @@ dev.off()
 
 ## Average expression table
 ## If requested, return expression for an 'average' single cell in each cluster.
-#if (output_aver_expr == "T") {
+# if (output_aver_expr == "T") {
 #  aver_expr <- AverageExpression(object = data.combined)
 #  aver_expr_in_clusters <- aver_expr[["integrated"]]
 #  # Write to table
@@ -89,23 +89,23 @@ dev.off()
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
 if (output_aver_expr == "T") {
+  aver_expr <- AverageExpression(object = data.combined)
+  if (normalisation.method == "SCT") {
+    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+  } else {
     aver_expr <- AverageExpression(object = data.combined)
-    if (normalisation.method == "SCT"){
-      aver_expr <- AverageExpression(object = data.combined, slot ="data", assay="SCT")
-    } else { 
-      aver_expr <- AverageExpression(object = data.combined)
-    }
+  }
 
-    aver_expr_in_clusters <- aver_expr[[1]]
-    #aver_expr_in_clusters <- aver_expr[["integrated"]]
-    # Write to table
-    write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+  aver_expr_in_clusters <- aver_expr[[1]]
+  # aver_expr_in_clusters <- aver_expr[["integrated"]]
+  # Write to table
+  write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 }
 
 # Normalised data + cluster + sample information table
 # If requested, return a table with cells as rows and cluster + sample information and log-norm expression values for all genes in columns.
 # If you want to use this option, uncomment the following section:
-#if (output_norm_table == "T") {
+# if (output_norm_table == "T") {
 #  norm_data <- GetAssayData(object = data.combined, slot = "data") # log-normalised "corrected" UMI counts
 #  sample <- data.combined@meta.data$stim # sample information
 #  cluster <- Idents(data.combined) # cluster information
@@ -113,13 +113,10 @@ if (output_aver_expr == "T") {
 #  norm_data_table <- cbind.data.frame(sample, cluster, t(as.matrix(norm_data))) # combine into one table
 #  # Write to table
 #  write.table(norm_data_table, file = "log_normalized.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
-#}
+# }
 
 
 # Save the Robj for the next tool
 save(data.combined, file = "seurat_obj_combined_integrated.Robj")
 
 ## EOF
-
-
-

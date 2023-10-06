@@ -23,57 +23,74 @@ load("deseq2.Rda")
 # Using default fitType (parametric)
 
 diagdds <- DESeq(diagdds, fitType = "parametric")
-if (howmany == "two"){ 
-	res <- results(diagdds)
+if (howmany == "two") {
+    res <- results(diagdds)
 }
-if (howmany == "abovetwo"){ 
-	res = results(diagdds, 
-		contrast=c(group_column1, # Phenodata variable (from "Transform OTU..." tool)
-				group1, group2)) # Groups under selected phenodata variable
+if (howmany == "abovetwo") {
+    res <- results(diagdds,
+        contrast = c(
+            group_column1, # Phenodata variable (from "Transform OTU..." tool)
+            group1, group2
+        )
+    ) # Groups under selected phenodata variable
 }
 
 # Tabulate results as data frame including taxonomic classifications with FDR cut-off (0.01)
 # (Taxonomic info is fetched from phyloseq object)
 res <- res[order(res$padj, na.last = NA), ]
-alpha = 0.01
-sigtab = res[(res$padj < alpha), ]
-sigtab = cbind(as(sigtab, "data.frame"), 
-	as(tax_table(ps0)[rownames(sigtab), ], "matrix")) # ps0 = phyloseq object without VST transformation
+alpha <- 0.01
+sigtab <- res[(res$padj < alpha), ]
+sigtab <- cbind(
+    as(sigtab, "data.frame"),
+    as(tax_table(ps0)[rownames(sigtab), ], "matrix")
+) # ps0 = phyloseq object without VST transformation
 
 # Tidier result table for tool output
-sigtab_tidy <- sigtab[, c("baseMean", "log2FoldChange", "lfcSE", "padj", 
-				"Phylum", "Class", "Order", "Family", "Genus")]
+sigtab_tidy <- sigtab[, c(
+    "baseMean", "log2FoldChange", "lfcSE", "padj",
+    "Phylum", "Class", "Order", "Family", "Genus"
+)]
 
 # Differential abundance plot
-sigtab_plot <- subset(sigtab, 
-	yaxtax != "NA", !is.na(yaxtax)) # Filter out NA OTUs at lower taxonomic level
+sigtab_plot <- subset(
+    sigtab,
+    yaxtax != "NA", !is.na(yaxtax)
+) # Filter out NA OTUs at lower taxonomic level
 # Higher-level taxonomic groupings
 x <- tapply(sigtab_plot$log2FoldChange, sigtab_plot[, legtax], function(x) max(x))
 x <- sort(x, TRUE)
-sigtab_plot[, legtax] = factor(as.character(sigtab_plot[, legtax]), levels = names(x))
+sigtab_plot[, legtax] <- factor(as.character(sigtab_plot[, legtax]), levels = names(x))
 # Lower-level taxonomic groupings
 x <- tapply(sigtab_plot$log2FoldChange, sigtab_plot[, yaxtax], function(x) max(x))
 x <- sort(x, TRUE)
-sigtab_plot[, yaxtax] = factor(as.character(sigtab_plot[, yaxtax]), levels = names(x))
+sigtab_plot[, yaxtax] <- factor(as.character(sigtab_plot[, yaxtax]), levels = names(x))
 
 # Open report PDF
 pdf("deseq2_otuplot.pdf", width = 7, height = 5)
 
-ggplot(sigtab_plot,
-	aes(y = get(yaxtax), 
-               x = log2FoldChange, 
-               color = get(legtax))) + 
-			geom_vline(xintercept = 0.0, color = "gray", size = 0.5) +
-			geom_point(size=6) + 
-			theme(axis.text.x = element_text(angle = -90, 
-		                                       hjust = 0, vjust=0.5)) +
-			xlab(expression(Log[2]*" fold change")) + 
-			ylab(yaxtax) +
-			scale_colour_discrete(name = legtax)
+ggplot(
+    sigtab_plot,
+    aes(
+        y = get(yaxtax),
+        x = log2FoldChange,
+        color = get(legtax)
+    )
+) +
+    geom_vline(xintercept = 0.0, color = "gray", size = 0.5) +
+    geom_point(size = 6) +
+    theme(axis.text.x = element_text(
+        angle = -90,
+        hjust = 0, vjust = 0.5
+    )) +
+    xlab(expression(Log[2] * " fold change")) +
+    ylab(yaxtax) +
+    scale_colour_discrete(name = legtax)
 
 # Close report PDF
 dev.off()
 
 # Write DESeq2 result table as TSV
-write.table(sigtab_tidy, file = "deseq2_otutable.tsv", 
-	sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(sigtab_tidy,
+    file = "deseq2_otutable.tsv",
+    sep = "\t", row.names = T, col.names = T, quote = F
+)

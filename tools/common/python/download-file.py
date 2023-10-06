@@ -19,18 +19,18 @@ import time
 check_certs = check_certs_str == "yes"
 
 if not check_certs:
-	print("certificate verification disabled")
+    print("certificate verification disabled")
 
 try:
-	url = urlparse(url_str)
+    url = urlparse(url_str)
 
 except ValueError:
-	raise RuntimeError("CHIPSTER-NOTE: " + "Invalid url: " + url_str)
+    raise RuntimeError("CHIPSTER-NOTE: " + "Invalid url: " + url_str)
 
 allowed_protocols = ["http", "https", "ftp"]
 
 if url.scheme not in allowed_protocols:
-	raise RuntimeError("CHIPSTER-NOTE: " + "Unsupported protocol: " + url.scheme)
+    raise RuntimeError("CHIPSTER-NOTE: " + "Unsupported protocol: " + url.scheme)
 
 # seems to work even if the netloc is IP already
 netloc_ip_str = socket.gethostbyname(url.netloc)
@@ -38,44 +38,55 @@ netloc_ip_str = socket.gethostbyname(url.netloc)
 netloc_ip = ipaddress.ip_address(netloc_ip_str)
 
 # check that the ip address isn't a localhost or private address
-# this check would be more reliable, if we would do the donwload request with the 
+# this check would be more reliable, if we would do the donwload request with the
 # this ip address, but that would break virtual hosts
 if netloc_ip.is_loopback:
-	raise RuntimeError("CHIPSTER-NOTE: " +  "Not allowed to connect to localhost: " + url.netloc)
+    raise RuntimeError(
+        "CHIPSTER-NOTE: " + "Not allowed to connect to localhost: " + url.netloc
+    )
 
 if netloc_ip.is_private:
-	raise RuntimeError("CHIPSTER-NOTE: " +  "Not allowed to connect to private address: " + url.netloc)
+    raise RuntimeError(
+        "CHIPSTER-NOTE: " + "Not allowed to connect to private address: " + url.netloc
+    )
 
 # parse filename
 fragment_removed = url.path.split("#")[0]  # keep to left of first #
 query_string_removed = fragment_removed.split("?")[0]
-filename = query_string_removed[query_string_removed.rfind("/") + 1:]
+filename = query_string_removed[query_string_removed.rfind("/") + 1 :]
 
 if len(filename) == 0:
-	filename = "downloaded_file"
+    filename = "downloaded_file"
 
 if file_extension != "current":
-	filename = filename + "." + file_extension
+    filename = filename + "." + file_extension
 
-#TDOO allow downloads with unknown size
+# TDOO allow downloads with unknown size
 
 response = requests.get(url_str, stream=True, verify=check_certs)
 
 if response.status_code >= 400:
-	status_name = responses[response.status_code]
-	raise RuntimeError("CHIPSTER-NOTE: HTTP error " + str(response.status_code) + " " + status_name + "\n\n" + response.text)
+    status_name = responses[response.status_code]
+    raise RuntimeError(
+        "CHIPSTER-NOTE: HTTP error "
+        + str(response.status_code)
+        + " "
+        + status_name
+        + "\n\n"
+        + response.text
+    )
 
 # print(response.headers.keys())
 
-total_size_in_bytes = int(response.headers.get('Content-Length', -1))
+total_size_in_bytes = int(response.headers.get("Content-Length", -1))
 
 if total_size_in_bytes == -1:
-	print("size information is not available")
+    print("size information is not available")
 
 # Doesn't seem to be very sensitive, at least with ping ~2 ms and speed ~300 MB/s.
-# Less than 10 kiB slows down the download, more than 100 MiB affects 
+# Less than 10 kiB slows down the download, more than 100 MiB affects
 # reporting interval and memory consumption.
-block_size = 1024 * 1024 # 1 MiB
+block_size = 1024 * 1024  # 1 MiB
 
 downloaded_size = 0
 t1 = time.perf_counter()
@@ -88,25 +99,36 @@ report_interval_multiplier = 1.2
 
 print("downloading...")
 
-with open('downloaded_file', 'wb') as file:
-	for data in response.iter_content(block_size):
-		
-		downloaded_size += len(data)		
+with open("downloaded_file", "wb") as file:
+    for data in response.iter_content(block_size):
+        downloaded_size += len(data)
 
-		t2 = time.perf_counter()
-		
-		if t2 - t1 > report_interval:
+        t2 = time.perf_counter()
 
-			report_interval = report_interval * report_interval_multiplier
-			speed = (downloaded_size - last_reported_size) / (t2 - t1)
-			t1 = t2
-			last_reported_size = downloaded_size		
+        if t2 - t1 > report_interval:
+            report_interval = report_interval * report_interval_multiplier
+            speed = (downloaded_size - last_reported_size) / (t2 - t1)
+            t1 = t2
+            last_reported_size = downloaded_size
 
-			print(tool_utils.human_readable(downloaded_size) + " / " + tool_utils.human_readable(total_size_in_bytes) + " \t" + tool_utils.human_readable(speed) + "/s")			
+            print(
+                tool_utils.human_readable(downloaded_size)
+                + " / "
+                + tool_utils.human_readable(total_size_in_bytes)
+                + " \t"
+                + tool_utils.human_readable(speed)
+                + "/s"
+            )
 
-		file.write(data)
+        file.write(data)
 
 if total_size_in_bytes != -1 and downloaded_size != total_size_in_bytes:
-	raise RuntimeError("CHIPSTER-NOTE: " + "Download failed. Downloaded size " + tool_utils.human_readable(downloaded_size) + " does not match size reported by the server " + tool_utils.human_readable(total_size_in_bytes))
+    raise RuntimeError(
+        "CHIPSTER-NOTE: "
+        + "Download failed. Downloaded size "
+        + tool_utils.human_readable(downloaded_size)
+        + " does not match size reported by the server "
+        + tool_utils.human_readable(total_size_in_bytes)
+    )
 
 tool_utils.write_output_definitions({"downloaded_file": filename})

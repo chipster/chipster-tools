@@ -16,30 +16,31 @@
 
 # 2016-10-21 Added replacement code for isNotPrimaryRead (isSecondaryAlignment) to be activated for the script to work in R3.2.3
 
-source(file.path(chipster.common.path, 'library-Chipster.R'))
-source(file.path(chipster.common.path, 'library-QDNAseq.R'))
+source(file.path(chipster.common.path, "library-Chipster.R"))
+source(file.path(chipster.common.path, "library-QDNAseq.R"))
 
-bins <- readRDS(file.path(chipster.tools.path, 'QDNAseq', paste0('QDNAseq.', experiment, '.rds')))
+bins <- readRDS(file.path(chipster.tools.path, "QDNAseq", paste0("QDNAseq.", experiment, ".rds")))
 
 readCounts <- binReadCounts(bins,
-  isPaired=NA,
-  isProperPair=NA,
-  isUnmappedQuery=FALSE,
-  hasUnmappedMate=NA,
-  isMinusStrand=NA,
-  isMateMinusStrand=NA,
-  isFirstMateRead=as.logical(isFirstMateRead),
-  isSecondMateRead=as.logical(isSecondMateRead),
-  isSecondaryAlignment=as.logical(isNotPrimaryRead),
-  #isNotPrimaryRead=as.logical(isNotPrimaryRead),
-  isNotPassingQualityControls=as.logical(isNotPassingQualityControls),
-  isDuplicate=as.logical(isDuplicate),
-  minMapq=minMapq)
+  isPaired = NA,
+  isProperPair = NA,
+  isUnmappedQuery = FALSE,
+  hasUnmappedMate = NA,
+  isMinusStrand = NA,
+  isMateMinusStrand = NA,
+  isFirstMateRead = as.logical(isFirstMateRead),
+  isSecondMateRead = as.logical(isSecondMateRead),
+  isSecondaryAlignment = as.logical(isNotPrimaryRead),
+  # isNotPrimaryRead=as.logical(isNotPrimaryRead),
+  isNotPassingQualityControls = as.logical(isNotPassingQualityControls),
+  isDuplicate = as.logical(isDuplicate),
+  minMapq = minMapq
+)
 
 fData(readCounts)$use <- TRUE
 
 # generate phenodata
-phenodata <- data.frame(sample=paste0(readCounts$name, '.bam'), experiment='QDNAseq', chiptype=experiment, reads=readCounts$total.reads, group='', stringsAsFactors=FALSE)
+phenodata <- data.frame(sample = paste0(readCounts$name, ".bam"), experiment = "QDNAseq", chiptype = experiment, reads = readCounts$total.reads, group = "", stringsAsFactors = FALSE)
 
 # write outputs
 output <- fromQDNAseqReadCounts(readCounts)

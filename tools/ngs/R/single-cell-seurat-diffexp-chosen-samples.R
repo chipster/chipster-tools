@@ -1,10 +1,10 @@
-# TOOL single-cell-seurat-diffexp-chosen-samples.R: "Seurat v4 -Find DE genes between chosen samples" (This tool lists the differentially expressed genes between two user defined conditions or samples or sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.) 
+# TOOL single-cell-seurat-diffexp-chosen-samples.R: "Seurat v4 -Find DE genes between chosen samples" (This tool lists the differentially expressed genes between two user defined conditions or samples or sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
-# PARAMETER samples1: "Name of the samples to compare with" TYPE STRING DEFAULT "CTRL" (Name of the sample or samples of which you want to identify the differentially expressed of.)
-# PARAMETER samples2: "Name of the samples to compare to" TYPE STRING DEFAULT "STIM" (Name of the sample or samples which you want to identify the differentially expressed of.)
+# PARAMETER samples1: "Name of the samples to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample or samples of which you want to identify the differentially expressed of.)
+# PARAMETER samples2: "Name of the samples to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample or samples which you want to identify the differentially expressed of.)
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
@@ -14,7 +14,7 @@
 # SLOTS 2
 # TOOLS_BIN ""
 
-# 2018-16-05 ML 
+# 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
 # 30.10.2019 ML Add filtering parameters
@@ -46,17 +46,32 @@ Idents(data.combined) <- "celltype.stim"
 samples1.ok <- unlist(strsplit(samples1, ", "))
 samples2.ok <- unlist(strsplit(samples2, ", "))
 # Add the cluster name to the sample names:
-samples1.cluster <- paste(cluster, "_", samples1.ok, sep="")
-samples2.cluster <- paste(cluster, "_", samples2.ok, sep="")
+samples1.cluster <- paste(cluster, "_", samples1.ok, sep = "")
+samples2.cluster <- paste(cluster, "_", samples2.ok, sep = "")
 
 # When SCTransform was used to normalise the data, do a prep step:
-if (normalisation.method == "SCT"){
+if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
   cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
-} else { 
+} else {
   cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
-
 }
+
+# Add average expression to the table:
+if (normalisation.method == "SCT") {
+  aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+} else {
+  aver_expr <- AverageExpression(object = data.combined)
+}
+
+aver_expr_in_clusters <- aver_expr[[1]]
+
+# select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), samples1.cluster], digits = 4)
+aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), samples2.cluster], digits = 4)
+
+full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
+
 
 # Add average expression to the table:
   if (normalisation.method == "SCT") {
@@ -76,8 +91,8 @@ if (normalisation.method == "SCT"){
 
 
 # Comparison name for the output file:
-comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep="_")
-name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep="")
+comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
+name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
 # Write to table
 write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
@@ -86,6 +101,3 @@ write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRU
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")
 
 ## EOF
-
-
-

@@ -7,7 +7,7 @@
 # PARAMETER rgpl: "Platform for read group" TYPE [ none: "Not defined",CAPILLARY, DNBSEQ, HELICOS, ILLUMINA, IONTORRENT, LS454, ONT, PACBIO, SOLID] DEFAULT ILLUMINA (Platform\/technology used to produce the read.)
 # PARAMETER rgpu: "Read Group platform unit" TYPE STRING DEFAULT "1" (Read Group platform unit \(e.g., flowcell-barcode.lane for Illumina or slide for SOLiD\).)
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Picard binary
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
@@ -15,19 +15,19 @@ picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 # Picard basic options
 picard.options <- paste("I=input.bam O=output.bam")
 
-#Read group definitions
-picard.options <- paste(picard.options," ","RGID=",rgid,sep="")
-picard.options <- paste(picard.options," ","RGSM=",rgsm,sep="")
-picard.options <- paste(picard.options," ","RGLB=",rglb,sep="")
-picard.options <- paste(picard.options," ","RGPL=",rgpl,sep="")
-picard.options <- paste(picard.options," ","RGPU=",rgpu,sep="")
+# Read group definitions
+picard.options <- paste(picard.options, " ", "RGID=", rgid, sep = "")
+picard.options <- paste(picard.options, " ", "RGSM=", rgsm, sep = "")
+picard.options <- paste(picard.options, " ", "RGLB=", rglb, sep = "")
+picard.options <- paste(picard.options, " ", "RGPL=", rgpl, sep = "")
+picard.options <- paste(picard.options, " ", "RGPU=", rgpu, sep = "")
 
 # Picard command
 picard.command <- paste("java -jar", picard.binary, "AddOrReplaceReadGroups")
 
 # Picard Version
-system(paste(picard.command,"--version 2> version.tmp"))
-version <- system("cat version.tmp",intern = TRUE)
+system(paste(picard.command, "--version 2> version.tmp"))
+version <- system("cat version.tmp", intern = TRUE)
 documentVersion("Picard", version)
 
 # Run command
@@ -40,8 +40,8 @@ inputnames <- read_input_definitions()
 name <- inputnames$input.bam
 
 # Make a matrix of output names
-outputnames <- matrix(NA, nrow=1, ncol=2)
-outputnames[1,] <- c("output.bam", paste(name, sep=""))
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
+outputnames[1, ] <- c("output.bam", paste(name, sep = ""))
 
 # Write output definitions file
 write_output_definitions(outputnames)
