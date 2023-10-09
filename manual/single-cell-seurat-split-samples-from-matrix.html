@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Separate samples </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool can be used to separate a sample from a large .tsv file matrix containing multiple samples.
+        This multi-sample matrix is sometimes the format the data is stored in repositories when publishing an article.
+        In this case, the column names usually contain the sample name before the cell barcode,
+        for example "cauda_1.AAATGGTCAACA". In this case, the sample name, "cauda_1" can thus be
+        used to separate the cells belonging to this particular sample into a separate tsv matrix.
+        In this example case, "cauda_1" is to
+        be typed by the user in the parameter field, exactly the same way it is written in the column names.
+
+
+        </header>
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Sample name to separate into own matrix [My_sample_name]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As an output the tool gives a smaller tsv matrix with only those cells (=columns) with the user
+        defined sample name in the column header. This new tsv table containing only the cells
+        belonging to this particular sample can then be given to the Setup and QC tool as a input:
+        "DGE table in tsv format".
+    </p>
+
+    <p>
+        For more details, please check the <a href="http://satijalab.org/seurat/get_started.html">Seurat
+            tutorials</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>sample_{My_sample_name}.tsv: The tsv expression matrix containing only the cells of the chosen sample. </li>
+    </ul>
+
+
+
+</body>
