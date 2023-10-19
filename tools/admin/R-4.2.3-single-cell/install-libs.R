@@ -59,3 +59,6 @@ BiocManager::install("celldex")
 BiocManager::install("SingleR")
 # 7 min
 BiocManager::install("glmGamPoi")
+
+# 2 min
+install.packages('SoupX')
