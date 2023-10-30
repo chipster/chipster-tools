@@ -63,6 +63,32 @@ if (normalisation.method == "SCT") {
   # DGE_cell_selection <- FindAllMarkers(cell_selection, log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
   DGE_cell_selection <- FindMarkers(cell_selection, ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 }
+ 
+
+
+# Add average expression to the table:
+  if (normalisation.method == "SCT") {
+    aver_expr <- AverageExpression(object = cell_selection, slot = "data", assay = "SCT")
+  } else {
+    aver_expr <- AverageExpression(object = cell_selection)
+  }
+
+  aver_expr_in_clusters <- aver_expr[[1]]
+    
+  # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection),samples1 ], digits = 4)
+  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection),samples2 ], digits = 4)
+  
+  full_table <- cbind(DGE_cell_selection, aver_expr_ident1 , aver_expr_ident2)
+  
+
+# Comparison name for the output file:
+comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
+name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
+
+# Write to table
+write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+
 
 # Plots
 pdf(file = "expressionPlots.pdf")
@@ -81,13 +107,6 @@ VlnPlot(cell_selection, features = as.character(rownames(top5_cell_selection)), 
 VlnPlot(data.combined, features = as.character(rownames(top5_cell_selection)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
 
 dev.off() # close the pdf
-
-# Comparison name for the output file:
-comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
-name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
-
-# Write to table
-write.table(DGE_cell_selection, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 # Save the Robj for the next tool
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")
