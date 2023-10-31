@@ -60,11 +60,11 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
  if (normalisation.method == "SCT") {
     cluster.markers <- FindConservedMarkers(data.combined, assay = "SCT",
       ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-      verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved
+      verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
   } else {
     cluster.markers <- FindConservedMarkers(data.combined,
       ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-      verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved
+      verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
   }
 
 
