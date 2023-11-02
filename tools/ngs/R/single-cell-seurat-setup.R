@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.2.3-single-cell
-# SLOTS 2
+# SLOTS 6
 # TOOLS_BIN ""
 
 
@@ -107,7 +107,7 @@ if (file.exists("dropseq.tsv")) {
   library(hdf5r)
   dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
 } else {
-  stop(paste("CHIPSTER-NOTE: ", "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table. Please check your input file."))
+  stop(paste("CHIPSTER-NOTE: ", "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table OR a 10X h5 file. Please check your input file."))
 }
 
 # Initialize the Seurat object
