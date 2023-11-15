@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # PARAMETER OPTIONAL sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.1-single-cell
 # SLOTS 5
 # TOOLS_BIN ""
 
@@ -31,6 +31,7 @@
 # 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
 # 2023-07-12 ML Mitogenes with Mt-
 # 2023-08-28 IH add percent.rb to QC
+# 2023-10-10 IH Update to Seurat v5
 
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
@@ -42,8 +43,8 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
-
 library(Biobase)
+options(Seurat.object.assay.version = "v5")
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
 package.version("Seurat")
@@ -58,7 +59,8 @@ project.name <- gsub(" ", "_", project.name)
 # If using DropSeq data:
 if (file.exists("dropseq.tsv")) {
   dat <- read.table("dropseq.tsv", header = TRUE, sep = "\t", row.names = 1)
-
+  # Change the dataframe to a matrix
+  dat = Matrix(as.matrix(dat) , sparse=TRUE)
   # If using 10X data:
 } else if (file.exists("files.tar")) {
   # Read the contents of the tar file into a list

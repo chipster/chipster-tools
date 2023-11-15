@@ -9,9 +9,9 @@
 # PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out cells that have lower ribosomal transcript percentage.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.1-single-cell
 # SLOTS 2
-
+# TOOLS_BIN ""
 
 
 # 2020-06-17 ML
@@ -22,6 +22,7 @@
 # 2023-04-06 LG Remove 2 slots - Discrepancy in number of slots added v. removed
 # 2023-02-01 ML Return to the original 2 slots
 # 2023-09-08 IH add ribosomal filtering
+# 2023-10-20 IH Update to Seurat v5
 
 # Source: https://github.com/satijalab/seurat/issues/1679
 
@@ -30,6 +31,7 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -38,7 +40,8 @@ load("seurat_obj.Robj")
 pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 
 # For cell cycle filtering, read in a list of cell cycle markers, from Tirosh et al, 2015
-cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+# /opt/chipster/tools comes from the image, so this is not the chipster.tools.path
+cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell_cycle_genes.txt"))
 # We can segregate this list into markers of G2/M phase and markers of S phase
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]

@@ -13,7 +13,7 @@
 # PARAMETER OPTIONAL test.type: "Which test to use for detecting marker genes" TYPE [wilcox, DESeq2, bimod, roc, t, tobit, poisson, negbinom] DEFAULT wilcox (Seurat currently implements Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, poisson, negbinom and DESeq2. The latter three should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution. Note that DESeq2 is very slow and should be used only for comparisons between two clusters.)
 # PARAMETER OPTIONAL only.positive: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (When this parameter is set to true, only genes with positive log2 fold change are listed in the result file. NOTE, for listing all markers, this is currently set to FALSE regardless what you choose here.)
 # PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.1-single-cell
 # TOOLS_BIN ""
 
 # 13.06.2017 ML
@@ -27,6 +27,7 @@
 # PARAMETER OPTIONAL test.type: "Which test to use for detecting marker genes" TYPE [wilcox, DESeq2, MAST, bimod, roc, t, tobit, poisson, negbinom] DEFAULT wilcox (Seurat currently implements Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, MAST \(GLM-framework that treates cellular detection rate as a covariate\), poisson, negbinom and DESeq2. The latter three should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution. Note that DESeq2 is very slow and should be used only for comparisons between two clusters.)
 # 2023-02-03 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
+# 2023-10-31 IH Update to Seurat 5
 
 # PARAMETER OPTIONAL mincellsfeat: "Minimum number of cells expressing the feature" TYPE INTEGER DEFAULT 3 (Minimum number of cells expressing the feature in at least one of the two groups, currently only used for poisson and negative binomial tests.)
 # PARAMETER OPTIONAL mincellsgroup: "Minimum number of cells" TYPE INTEGER DEFAULT 3 (Minimum number of cells in one of the groups.)
@@ -37,6 +38,7 @@ library(dplyr)
 library(Matrix)
 library(gplots)
 library(ggplot2)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")

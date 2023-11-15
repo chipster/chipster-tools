@@ -11,8 +11,8 @@
 # PARAMETER OPTIONAL totalexpr: "Scaling factor in the normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of transcripts.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 2000 (Number of features to select as top variable features, i.e. how many features returned.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-4.2.3-single-cell
-
+# RUNTIME R-4.3.1-single-cell
+# TOOLS_BIN ""
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -29,12 +29,14 @@
 # 2020-07-02 ML Remove the plot titles, as they started giving errors. Fix the IF structure.
 # 2021-10-04 ML Update to Seurat v4
 # 2023-09-08 IH add ribosomal filtering
+# 2023-10-17 IH Update to Seurat v5
 
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
 library(ggplot2)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -43,7 +45,10 @@ load("seurat_obj.Robj")
 pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 
 # For cell cycle filtering, read in a list of cell cycle markers, from Tirosh et al, 2015
-cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+# /opt/chipster/tools comes from the image, so this is not the chipster.tools.path
+#cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell_cycle_genes.txt"))
+
 # We can segregate this list into markers of G2/M phase and markers of S phase
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]

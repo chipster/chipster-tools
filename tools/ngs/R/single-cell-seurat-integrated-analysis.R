@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 0.5 (Point size for the dimensionality reduction plot.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.1-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
 
@@ -29,18 +29,19 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2922-02-21 EK Increase slots to 2 so that the average expression table is produced also with larger datasets
 # 2022-07-21 ML Tune for SCTransform data
+# 2023-10-25 IH remove python usage and update to Seurat v5
 
 
-# for UMAP:
-library(reticulate)
-Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+# UMAP uses R on default now 
+#library(reticulate)
+#Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
 # use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 library(gplots)
 library(ggplot2)
 require(cowplot)
-
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
 load("combined_seurat_obj.Robj")

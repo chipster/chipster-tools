@@ -1,9 +1,10 @@
 # TOOL single-cell-from-rds-to-seurat-object.R: "Seurat v4 -From RDS file to Seurat object" (This tool converts an RDS file into a Seurat object. The RDS file given as input must contain Seurat object information created with Seurat v4 to be converted into a Seurat object.)
 # INPUT rds_file: "RDS file" TYPE GENERIC 
 # OUTPUT seurat_obj.Robj
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.1-single-cell
 # TOOLS_BIN ""
 
+options(Seurat.object.assay.version = "v5")
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Read input names
