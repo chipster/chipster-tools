@@ -5,7 +5,7 @@ IFS=$'\n\t'
 source $(dirname "$0")/build-env.bash
 
 # wrapper script is going to be written in R
-image="comp-20.04-r-deps"
+image="comp-20-04-r-deps"
 
 # this needs python from tools-bin
 BUNDLE_COLLECTION_VERSION="chipster-4.5.1-rc2-bbduk-umi-statistics"

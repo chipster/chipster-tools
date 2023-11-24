@@ -6,7 +6,7 @@ source $(dirname "$0")/build-env.bash
 
 # we don't need a python image to install python
 # most likely the tool wrappers are going to be written in R and hence this r-deps image will be used to run this python eventually
-image="comp-20.04-r-deps"
+image="comp-20-04-r-deps"
 
 # this installation doesn't need anythin from tools-bin
 BUNDLE_COLLECTION_VERSION=""
