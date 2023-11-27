@@ -42,7 +42,7 @@ filtering is performed on the forward and reverse reads independently, and both 
 <br>Note that this tool discards reads that match against PhiX genome.
 <br>
 <br>
-"Truncate reads at the first instance of a quality score less than or equal" is set by default to 2, which means that the reads
+"Truncate reads after this base quality" is set by default to 2, which means that the reads
 will be truncated at the first nucleotide with a quality score of 2 or less. This behaviour can be turned off by setting it to 0.
 <br>
 <br>
@@ -62,7 +62,7 @@ If too few reads pass the filter, try to change the parameter values for example
 the maximun expected error and/or reducing truncQ (parameter "Truncate reads after this base quality"). 
 <br>
 Remember when choosing the "Truncate reads after this many bases" parameter you must maintain the overlap region for paired end reads after truncation to merge them to contigs later.
-Note that it will also discard sequences which are shorter than the given legnth.
+Note that it will also discard sequences which are shorter than the given length.
 <br>
 <br>
 The minimum lenght parameter can be used when the read lengths are varying and truncating to a given length is not suggested. For example, this is the case with ITS data.
