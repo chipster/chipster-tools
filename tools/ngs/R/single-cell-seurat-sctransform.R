@@ -11,6 +11,7 @@
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 2
+# TOOLS_BIN ""
 
 
 
@@ -38,7 +39,9 @@ load("seurat_obj.Robj")
 pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 
 # For cell cycle filtering, read in a list of cell cycle markers, from Tirosh et al, 2015
-cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+# cell cycle file is in the container image, not in tools-bin /opt/chipster/tools vs. /opt/chipster/tools-bin
+cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell_cycle_genes.txt"))
+# cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
 # We can segregate this list into markers of G2/M phase and markers of S phase
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
