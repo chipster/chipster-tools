@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-pca.R: "Seurat v4 -PCA" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
+# TOOL single-cell-seurat-pca.R: "Seurat v5 -PCA" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_pca.Robj
 # OUTPUT OPTIONAL PCAplots.pdf

@@ -1,6 +1,6 @@
-# TOOL single-cell-seurat-integrated-analysis.R: "Seurat v4 -Integrated analysis of multiple samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for combined Seurat objects that have multiple samples in them.)
-# INPUT combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
-# OUTPUT seurat_obj_combined_integrated.Robj
+# TOOL single-cell-seurat-integrated-analysis-v5.R: "Seurat v5 -Integrated analysis of multiple samples" (This tool performs integrated analysis on the data: clustering and visualisation of the clusters. This tool can be used for combined Seurat objects that have multiple samples in them.)
+# INPUT seurat_obj_integrated.Robj: "Combined Seurat object" TYPE GENERIC
+# OUTPUT seurat_obj_integrated_2.Robj
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
 # OUTPUT OPTIONAL log_normalized.tsv
@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 0.5 (Point size for the dimensionality reduction plot.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.1-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
 
@@ -29,44 +29,48 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2922-02-21 EK Increase slots to 2 so that the average expression table is produced also with larger datasets
 # 2022-07-21 ML Tune for SCTransform data
+# 2023-11-29 IH remove python usage and update to Seurat v5
 
 
-# for UMAP:
-library(reticulate)
-Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
+# UMAP uses R on default now 
+#library(reticulate)
+#Sys.setenv(RETICULATE_PYTHON = "/opt/chipster/tools-bin/miniconda3/envs/chipster_tools/bin/python")
 # use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
 library(gplots)
 library(ggplot2)
 require(cowplot)
-
+options(Seurat.object.assay.version = "v5") 
 
 # Load the R-Seurat-objects (called seurat_obj -that's why we need to rename them here)
-load("combined_seurat_obj.Robj")
-# combined_seurat_obj <- data.combined
+load("seurat_obj_integrated.Robj")
 
 # PCA (moved here from the combination tool)
-data.combined <- RunPCA(data.combined, npcs = num.dims, verbose = FALSE)
+#data.combined <- RunPCA(data.combined, npcs = num.dims, verbose = FALSE)
 
 # t-SNE and UMAP
 # NOTE: let's do both tSNE AND UMAP so that both can be later visualized.
-data.combined <- RunUMAP(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
-data.combined <- RunTSNE(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
+#data.combined <- RunUMAP(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
+#data.combined <- RunTSNE(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Which dimensions to use as input features
 
 # Clustering
 # Computing nearest neighbor graph and SNN
-data.combined <- FindNeighbors(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Dimensions of reduction to use as input
+#data.combined <- FindNeighbors(data.combined, reduction = "pca", dims = 1:num.dims) # dims = Dimensions of reduction to use as input
 # Modularity Optimizer by Ludo Waltman and Nees Jan van Eck -Louvain algorithm
-data.combined <- FindClusters(data.combined, resolution = res)
+#data.combined <- FindClusters(data.combined, resolution = res)
 
 # Visualization
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
-p1 <- DimPlot(data.combined, reduction = reduction.method, group.by = "stim", pt.size = point.size)
-p2 <- DimPlot(data.combined, reduction = reduction.method, pt.size = point.size, label = add.labels)
-plot_grid(p1, p2)
+#p1 <- DimPlot(data.combined, reduction = reduction.method, group.by = "stim", pt.size = point.size)
+#p2 <- DimPlot(data.combined, reduction = reduction.method, pt.size = point.size, label = add.labels)
+p1 <- DimPlot(data.combined  , reduction = "umap.unintegrated", group.by = c("stim", "seurat_clusters"))
+p2 <- DimPlot(data.combined, reduction = "umap", group.by = c("stim", "seurat_annotations"))
+p3 <- DimPlot(data.combined, reduction = "umap", split.by = "stim")
+plot_grid(p1, p2, p3)
+
 # Show both conditions in separate plots:
-DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels)
+#DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels)
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
 sums <- colSums(cell_counts)
@@ -117,6 +121,6 @@ if (output_aver_expr == "T") {
 
 
 # Save the Robj for the next tool
-save(data.combined, file = "seurat_obj_combined_integrated.Robj")
+save(data.combined, file = "seurat_obj_integrated_2.Robj")
 
 ## EOF

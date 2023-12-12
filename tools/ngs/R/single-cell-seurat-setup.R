@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are 3 options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix or a 10X CellRanger hdf5 file as input. If you are planning to combine samples later on, make sure you name them in this tool!)
+# TOOL single-cell-seurat-setup.R: "Seurat v5 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are 3 options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix or a 10X CellRanger hdf5 file as input. If you are planning to combine samples later on, make sure you name them in this tool!)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
 # INPUT OPTIONAL hdf5.h5: "10X CellRanger hdf5 input file" TYPE GENERIC
@@ -11,7 +11,7 @@
 # PARAMETER OPTIONAL sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.3.1-single-cell
-# SLOTS 5
+# SLOTS 2
 # TOOLS_BIN ""
 
 

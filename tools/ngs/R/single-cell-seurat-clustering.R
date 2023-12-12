@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-clustering.R: "Seurat v4 -Clustering" (Clusters cells and performs tSNE and UMAP for visualization purposes.)
+# TOOL single-cell-seurat-clustering.R: "Seurat v5 -Clustering" (Clusters cells and performs tSNE and UMAP for visualization purposes.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL log.txt

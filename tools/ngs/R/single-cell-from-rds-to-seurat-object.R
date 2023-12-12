@@ -1,4 +1,4 @@
-# TOOL single-cell-from-rds-to-seurat-object.R: "Seurat v4 -From RDS file to Seurat object" (This tool converts an RDS file into a Seurat object. The RDS file given as input must contain Seurat object information created with Seurat v4 to be converted into a Seurat object.)
+# TOOL single-cell-from-rds-to-seurat-object.R: "Seurat v5 -From RDS file to Seurat object" (This tool converts an RDS file into a Seurat object. The RDS file given as input must contain Seurat object information created with Seurat v4 to be converted into a Seurat object.)
 # INPUT rds_file: "RDS file" TYPE GENERIC 
 # OUTPUT seurat_obj.Robj
 # RUNTIME R-4.3.1-single-cell

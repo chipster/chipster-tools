@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-gene-plots.R: "Seurat v4 -Visualize genes" (Visualize for example selected cluster marker genes with violin and feature plot.)
+# TOOL single-cell-seurat-gene-plots.R: "Seurat v5 -Visualize genes" (Visualize for example selected cluster marker genes with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # INPUT OPTIONAL genes.txt: "Optional text file of the gene name(s)" TYPE GENERIC (The gene names\(s\) you wish to plot can also be given in the form of a text file, separated by comma. In case the text file is provided, the gene parameter is ignored.)
 # OUTPUT OPTIONAL seurat_obj_2.Robj
