@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 source $(dirname "$0")/build-env.bash
 
-image="comp-20.04-r-deps"
+image="comp-20-04-r-deps"
 BUNDLE_COLLECTION_VERSION=""
 
 function finish {

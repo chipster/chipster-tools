@@ -6,7 +6,7 @@ source $(dirname "$0")/build-env.bash
 
 # we don't need a python image to install python
 # most likely the tool wrappers are going to be written in R and hence this r-deps image will be used to run this python eventually
-image="comp-20.04-r-deps"
+image="comp-20-04-r-deps"
 
 # this installation doesn't need anythin from tools-bin
 BUNDLE_COLLECTION_VERSION=""
@@ -29,6 +29,9 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
   # these are now installed in bundle_binaries2
   rm -rf enabrowsertools enaBrowserTools-1.5.4
+
+  # these are now installed in a container image
+  rm -rf seurat
 
   # make space for the new version
   mv FastQC fastqc-0.11.3

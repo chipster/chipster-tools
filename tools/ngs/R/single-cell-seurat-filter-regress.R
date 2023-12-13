@@ -45,9 +45,9 @@ load("seurat_obj.Robj")
 pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 
 # For cell cycle filtering, read in a list of cell cycle markers, from Tirosh et al, 2015
-# /opt/chipster/tools comes from the image, so this is not the chipster.tools.path
-#cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
+# cell cycle file is in the container image, not in tools-bin /opt/chipster/tools vs. /opt/chipster/tools-bin
 cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell_cycle_genes.txt"))
+# cc.genes <- readLines(con = file.path(chipster.tools.path, "seurat/regev_lab_cell_cycle_genes.txt"))
 
 # We can segregate this list into markers of G2/M phase and markers of S phase
 s.genes <- cc.genes[1:43]

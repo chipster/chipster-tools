@@ -72,7 +72,7 @@ spec:
     spec:
       containers:
       - name: $name
-        image: docker-registry.rahti.csc.fi/chipster-images-beta/$image
+        image: docker-registry.rahti.csc.fi/chipster-images-release/$image
         command: ["sleep"]
         args: ["inf"]
         volumeMounts:
