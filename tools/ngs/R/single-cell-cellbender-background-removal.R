@@ -52,7 +52,8 @@ cellbender, "remove-background",
 "--output", "cellbender_fb_matrix.h5",
 "--epochs", as.character(epoch_num),
 "--learning-rate", as.character(lr),
-"--fpr", as.character(fpr))
+"--fpr", as.character(fpr),
+"--cpu-threads", chipster.threads.max)
 
 command <- paste(command, collapse=" ")
 
