@@ -231,6 +231,7 @@
 		<tool>single-cell-seurat-integrated-analysis.R</tool>
 		<tool>single-cell-seurat-integrated-analysis-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-samples.R</tool>
+		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples.R</tool>
 		<tool>single-cell-seurat-diffexp-sample-groups.R</tool>
 		<tool>single-cell-seurat-split-dot-plot.R</tool>	
