@@ -210,14 +210,34 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single-cell RNA-seq" color="#2196F3">	   	
+	<category name="Single-cell RNA-seq" color="#2196F3">	 
+		<tool>single-cell-seurat-setup-v5.R</tool>  
+		<tool>single-cell-filter-v5.R</tool> 	
+		<tool>single-cell-seurat-merge-samples.R</tool>	
+		<tool>single-cell-seurat-filter-regress-v5.R</tool>
+		<tool>single-cell-seurat-sctransform-v5.R</tool>
+		<tool>single-cell-seurat-pca-v5.R</tool>
+		<tool>single-cell-seurat-clustering-v5.R</tool>
+		<tool>single-cell-seurat-find-markers-v5.R</tool>
+		<tool>single-cell-seurat-gene-plots-v5.R</tool>
+		<tool>single-cell-seurat-featureplot-v5.R</tool>
+		<tool>single-cell-extract-information-v5.R</tool>
+		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
+		<tool>single-cell-seurat-integrate-v5.R</tool>
+		<tool>single-cell-seurat-integrated-analysis-v5.R</tool>
+		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
+		<tool>single-cell-seurat-split-dot-plot-v5.R</tool>	
+		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
+		<tool>single-cell-seurat-subset-v5.R</tool>
+		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
+		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
+		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
+		<tool>single-cell-seurat-part-of-h5-v5.R</tool>
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool>
-		<tool>single-cell-filter-v5.R</tool> 	
-		<tool>single-cell-seurat-merge-samples.R</tool>
 		<tool>single-cell-seurat-filter-regress.R</tool>	
-		<tool>single-cell-seurat-sctransform.R</tool>	
-		<tool>single-cell-seurat-pca.R</tool>	   	
+		<tool>single-cell-seurat-sctransform.R</tool>		
+		<tool>single-cell-seurat-pca.R</tool>	 	  	
 		<tool>single-cell-seurat-clustering.R</tool>	
 		<tool>single-cell-seurat-find-markers.R</tool>
 		<tool>single-cell-seurat-gene-plots.R</tool>
@@ -227,11 +247,8 @@
 		<tool>single-cell-seurat-singler.R</tool>
 		<!-- <tool>single-cell-seurat-CCA.R</tool> --> 
 		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
-		<tool>single-cell-seurat-integrate-v5.R</tool>
 		<tool>single-cell-seurat-integrated-analysis.R</tool>
-		<tool>single-cell-seurat-integrated-analysis-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-samples.R</tool>
-		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples.R</tool>
 		<tool>single-cell-seurat-diffexp-sample-groups.R</tool>
 		<tool>single-cell-seurat-split-dot-plot.R</tool>	

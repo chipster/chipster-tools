@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-gene-plots.R: "Seurat v4 -Visualize genes" (Visualize for example selected cluster marker genes with violin and feature plot.)
+# TOOL single-cell-seurat-gene-plots-v5.R: "Seurat v5 -Visualize genes" (Visualize for example selected cluster marker genes with violin and feature plot.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # INPUT OPTIONAL genes.txt: "Optional text file of the gene name(s)" TYPE GENERIC (The gene names\(s\) you wish to plot can also be given in the form of a text file, separated by comma. In case the text file is provided, the gene parameter is ignored.)
 # OUTPUT OPTIONAL seurat_obj_2.Robj
@@ -13,7 +13,7 @@
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # PARAMETER OPTIONAL output_aver_expr: "For each gene, list the average expression and percentage of cells expressing it in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns two tables: average expression and percentage of cells expressing the user defined genes in each cluster.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
 
@@ -24,10 +24,11 @@
 # 2019-06-13 ML Seurat v3
 # 2020-06-18 ML Add ridge plot
 # 2021-10-04 ML Update to Seurat v4
+# 2023-10-25 IH remove python usage and update to Seurat v5
 
-# for UMAP:
-library(reticulate)
-Sys.setenv(RETICULATE_PYTHON = paste(chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/python"))
+# UMAP uses R on default now
+#library(reticulate)
+#Sys.setenv(RETICULATE_PYTHON = paste(chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/python"))
 # use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 
@@ -36,6 +37,7 @@ library(dplyr)
 library(Matrix)
 library(gplots)
 library(readr)
+options(Seurat.object.assay.version = "v5")
 
 # for the fileOk function
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
