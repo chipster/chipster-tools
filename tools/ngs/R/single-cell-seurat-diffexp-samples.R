@@ -17,6 +17,9 @@
 # TOOLS_BIN ""
 
 
+
+# # RUNTIME R-4.2.3-single-cell = old v4
+# RUNTIME R-4.3.2-single-cell = new v5
 # PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
 
 
@@ -35,6 +38,7 @@
 
 
 library(Seurat)
+# options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-objects
 load("combined_seurat_obj.Robj")
@@ -73,57 +77,63 @@ write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.nam
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
-data.combined$celltype.stim <- paste(Idents(data.combined), data.combined$stim, sep = "_")
+data.combined$celltype.stim <- paste("cluster", Idents(data.combined),"-", data.combined$stim, sep = "")
 data.combined$celltype <- Idents(data.combined)
 Idents(data.combined) <- "celltype.stim"
 
 lvls <- levels(as.factor(data.combined$stim))
 
+# Poista ensin tää if: miks tarvii olla erikseen kahdelle ja useemmalle näytteelle..?
+
 if (length(lvls) < 2) {
   stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
 
-  # If there are only two samples:
-} else if (length(lvls) == 2) {
-  ident1 <- paste(cluster, "_", lvls[1], sep = "")
-  ident2 <- paste(cluster, "_", lvls[2], sep = "")
-  if (normalisation.method == "SCT") {
-    cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
-  } else {
-    cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
-  }
+#   # If there are only two samples:
+# } else if (length(lvls) == 2) {
+#   ident1 <- paste(cluster, "_", lvls[1], sep = "")
+#   ident2 <- paste(cluster, "_", lvls[2], sep = "")
+#   if (normalisation.method == "SCT") {
+#     cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+#   } else {
+#     cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+#   }
 
 
-  # Add average expression to the table:
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-  } else {
-    aver_expr <- AverageExpression(object = data.combined)
-  }
+#   # Add average expression to the table:
+#   if (normalisation.method == "SCT") {
+#     aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+#   } else {
+#     aver_expr <- AverageExpression(object = data.combined)
+#   }
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-  aver_expr_in_clusters[1,1]
+#   aver_expr_in_clusters <- aver_expr[[1]]
+#   aver_expr_in_clusters[1,1]
 
-  # select the wanted columns (based on idents) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), ident1], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), ident2], digits = 4)
+#   # select the wanted columns (based on idents) and rows (DEGs):
 
-  full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
+#   # out of bounds: 
+#   # nimenoomaan tää: aver_expr_in_clusters[row.names(cluster_response), ident1]
+#   # ja sit toimi, kun oli käsin et aver_expr_in_clusters[row.names(cluster_response), "3-control1" ja "3-stim"]
+#   aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), ident1], digits = 4)
+#   aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), ident2], digits = 4)
+
+#   full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
 
 
 
-  # Comparison name for the output file:
-  comparison.name <- paste(lvls[1], "_vs_", lvls[2], sep = "")
-  name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
+#   # Comparison name for the output file:
+#   comparison.name <- paste(lvls[1], "_vs_", lvls[2], sep = "")
+#   name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
-  # Write to table
-  write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+#   # Write to table
+#   write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
   # If there are more than 2 samples in the data:
 } else {
   for (i in 1:length(lvls)) {
     # i:th sample vs all the others (= -i)
-    ident1 <- paste(cluster, "_", lvls[i], sep = "")
-    ident2 <- paste(cluster, "_", lvls[-i], sep = "")
+    ident1 <- paste("cluster", cluster, "-", lvls[i], sep = "")
+    ident2 <- paste("cluster", cluster, "-", lvls[-i], sep = "")
     # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
     if (normalisation.method == "SCT") {
       cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)

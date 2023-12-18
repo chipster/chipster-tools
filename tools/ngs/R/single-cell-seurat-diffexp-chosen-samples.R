@@ -73,23 +73,6 @@ aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), sam
 full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
 
 
-# Add average expression to the table:
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-  } else {
-    aver_expr <- AverageExpression(object = data.combined)
-  }
-  
-  aver_expr_in_clusters <- aver_expr[[1]]
-  
-  # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response),samples1.cluster ], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response),samples2.cluster ], digits = 4)
-  
-  full_table <- cbind(cluster_response, aver_expr_ident1 , aver_expr_ident2)
-  
-
-
 # Comparison name for the output file:
 comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
 name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
