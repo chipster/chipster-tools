@@ -37,10 +37,8 @@ if (exists("data.combined")) {
 
 # Create a text file containing the different data slots in the Seurat object
 sink("slots.txt")
-print(seurat_obj@assays)
-print(Layers(seurat_obj[["RNA"]]))
 print("Assays in the seurat object: ")
-#print(seurat_obj@assays)
+print(seurat_obj@assays)
 print("Active assay in the object: ")
 print(seurat_obj@active.assay)
 print("Active cluster identity in the cluster: ")

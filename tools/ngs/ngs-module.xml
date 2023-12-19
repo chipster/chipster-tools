@@ -224,7 +224,6 @@
 		<tool>single-cell-extract-information-v5.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
 		<tool>single-cell-seurat-integrate-v5.R</tool>
-		<tool>single-cell-seurat-integrated-analysis-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-split-dot-plot-v5.R</tool>	
 		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
