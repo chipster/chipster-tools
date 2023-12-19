@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-chosen-samples.R: "Seurat v4 -Find DE genes between chosen samples" (This tool lists the differentially expressed genes between two user defined conditions or samples or sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
+# TOOL single-cell-seurat-diffexp-chosen-samples-v5.R: "Seurat v5 -Find DE genes between chosen samples" (This tool lists the differentially expressed genes between two user defined conditions or samples or sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
@@ -10,7 +10,7 @@
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
 
@@ -27,6 +27,7 @@
 # 2023-07-11 ML Add 3 slots
 
 library(Seurat)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-objects
 load("combined_seurat_obj.Robj")
@@ -38,7 +39,7 @@ if (exists("seurat_obj")) {
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
-data.combined$celltype.stim <- paste(Idents(data.combined), data.combined$stim, sep = "_")
+data.combined$celltype.stim <- paste("cluster", Idents(data.combined), "-", data.combined$stim, sep = "")
 data.combined$celltype <- Idents(data.combined)
 Idents(data.combined) <- "celltype.stim"
 
@@ -57,10 +58,9 @@ if(sum(is.na(match(samples2.ok, data.combined$stim))) > 0) {
    stop(print(paste("CHIPSTER-NOTE: Check the sample names given as parameter, sample name: '", which_one_missing, "' not found in the Seurat object.")))
 }
 
-
 # Add the cluster name to the sample names:
-samples1.cluster <- paste(cluster, "_", samples1.ok, sep = "")
-samples2.cluster <- paste(cluster, "_", samples2.ok, sep = "")
+samples1.cluster <- paste("cluster", cluster, "-", samples1.ok, sep = "")
+samples2.cluster <- paste("cluster", cluster, "-", samples2.ok, sep = "")
 
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
