@@ -1,17 +1,17 @@
-# TOOL single-cell-seurat-diffexp-sample-groups.R: "Seurat v4 -Find DE genes between sample groups" (This tool lists the differentially expressed genes between user defined sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
+# TOOL single-cell-seurat-diffexp-sample-groups-v5.R: "Seurat v5 -Find DE genes between sample groups" (This tool lists the differentially expressed genes between user defined sample groups for a user defined cluster. This tool can be used for Seurat objects with more than 2 samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
 # OUTPUT OPTIONAL expressionPlots.pdf
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER samples1: "Name of the sample group to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample group of which you want to identify the differentially expressed of.)
-# PARAMETER samples2: "Name of the sample group to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample group which you want to identify the differentially expressed of.)
+# PARAMETER samples2: "Name of the sample group to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample group of which you want to identify the differentially expressed of.)
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
 
@@ -29,6 +29,7 @@
 
 library(Seurat)
 library(dplyr)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-objects
 load("combined_seurat_obj.Robj")
