@@ -8,7 +8,6 @@
 # PARAMETER OPTIONAL anchor.identification.method: "Anchor identification method" TYPE [CCAIntegration:CCA, RPCAIntegration:RPCA] DEFAULT CCAIntegration (Which anchor identification method to use. By default, canonical correlation analysis CCA is used, but user can also decide to use the faster and more conservative reciprocal PCA approach. Check from the manual in which cases this option is recommended.)
 # PARAMETER OPTIONAL CCstocompute: "Number of CCs to use in the neighbor search" TYPE INTEGER DEFAULT 30 (Which dimensions to use from the CCA to specify the neighbor search space. The neighbors are used to determine the anchors for the alignment.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to use in the anchor weighting" TYPE INTEGER DEFAULT 30 (Number of PCs to use in the anchor weighting procedure. The anchors and their weights are used to compute the correction vectors, which allow the datasets to be integrated.)
-# PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
 # PARAMETER OPTIONAL num.dims: "Number of PCs to use " TYPE INTEGER DEFAULT 30 (Number of principal components to use.)
 # PARAMETER OPTIONAL res: "Resolution for granularity" TYPE DECIMAL DEFAULT 0.8 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 return good results for single cell datasets of around 3K cells. For larger data sets, try higher resolution.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation of clusters with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
@@ -19,6 +18,9 @@
 # SLOTS 2
 # TOOLS_BIN ""
 
+# add parameter if needed
+# PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
+
 
 # 2021-12-30 ML
 # 2022-02-17 EK increased slots to 4
@@ -28,7 +30,7 @@
 # 2023-02-03 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
 # 2023-02-01 ML Return to the original 3 slots
-# 2023-11-29 IH Update to Seurat v5
+# 2023-12-15 IH Update to Seurat v5
 
 library(Seurat)
 library(gplots)
@@ -44,10 +46,6 @@ load("seurat_obj_combined.Robj")
 seurat_obj <- FindNeighbors(seurat_obj, dims = 1:CCstocompute, reduction = "pca")
 seurat_obj <- FindClusters(seurat_obj, resolution = res, cluster.name = "unintegrated_clusters")
 seurat_obj <- RunUMAP(seurat_obj, dims = 1:num.dims, reduction = "pca", reduction.name = "umap.unintegrated") # dims = Which dimensions to use as input features
-seurat_obj <- RunTSNE(seurat_obj, dims = 1:num.dims, reduction = "pca", reduction.name = "umap.unintegrated") # dims = Which dimensions to use as input features
-
-#Select features that are repeatedly variable across datasets for integration
-#features <- SelectIntegrationFeatures(object.list = seurat_obj)
 
 # Perform integration:
 # Not needed anymore because of merge
@@ -83,12 +81,15 @@ if (anchor.identification.method == "CCAIntegration") {
 #}
 
 if (normalisation.method == "SCT") {
+  if (length(seurat_obj@assays$SCT) > 0) {
     #seurat.objects.list <- PrepSCTIntegration(object.list = seurat_obj, anchor.features = features)
-    #tsekki tähän et on olemassa
     print(anchor.identification.method)
     print(new.reduction)
     data.combined <- IntegrateLayers(object = seurat_obj, method = anchor.identification.method, normalization.method = "SCT", orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
       verbose = FALSE)
+  } else {
+    stop(paste("CHIPSTER-NOTE: ", "The data you provided hasn't been SCTransformed, please run SCTransform first or choose other parameter value."))
+  }
 } else {
     print(anchor.identification.method)
     print(new.reduction)
@@ -162,11 +163,6 @@ if (output_aver_expr == "T") {
 #  # Write to table
 #  write.table(norm_data_table, file = "log_normalized.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 # }
-
-# Note: Skip ScaleData when using SCTransform
-#if (normalisation.method != "SCT") {
-    #data.combined <- ScaleData(data.combined, verbose = FALSE)
-#}
 
 # Save the Robj for the next tool
 save(data.combined, file = "seurat_obj_integrated.Robj")
