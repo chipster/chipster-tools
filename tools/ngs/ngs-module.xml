@@ -221,6 +221,7 @@
 		<tool>single-cell-seurat-find-markers-v5.R</tool>
 		<tool>single-cell-seurat-gene-plots-v5.R</tool>
 		<tool>single-cell-seurat-featureplot-v5.R</tool>
+		 <tool>single-cell-seurat-singler-v5.R</tool>
 		<tool>single-cell-extract-information-v5.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
 		<tool>single-cell-seurat-integrate-v5.R</tool>
@@ -244,9 +245,9 @@
 		<tool>single-cell-seurat-find-markers.R</tool>
 		<tool>single-cell-seurat-gene-plots.R</tool>
 		<tool>single-cell-seurat-featureplot.R</tool>
+		<tool>single-cell-seurat-singler.R</tool>
 		<tool>single-cell-extract-information.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object.R</tool>
-		<tool>single-cell-seurat-singler.R</tool>
 		<!-- <tool>single-cell-seurat-CCA.R</tool> --> 
 		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
 		<tool>single-cell-seurat-integrated-analysis.R</tool>
