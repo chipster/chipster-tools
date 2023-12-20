@@ -1,5 +1,5 @@
 # TOOL single-cell-seurat-integrate-v5.R: "Seurat v5 -Integrate multiple samples" (This tool integrates multiple samples to match shared cell types and states across dataset. The samples \/R-objects need to be named when created in the Seurat Setup tool.)
-# INPUT OPTIONAL seurat_obj_combined.Robj: "Combined seurat object to integrate" TYPE GENERIC
+# INPUT OPTIONAL seurat_obj_combined.Robj: "Merged Seurat object to integrate" TYPE GENERIC
 # OUTPUT seurat_obj_integrated.Robj
 # OUTPUT OPTIONAL integrated_plot.pdf
 # OUTPUT OPTIONAL aver_expr_in_clusters.tsv
