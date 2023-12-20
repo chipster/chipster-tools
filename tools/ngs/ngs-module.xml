@@ -210,7 +210,7 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single-cell RNA-seq" color="#2196F3">	 
+	<category name="Single-cell RNA-seq" color="#2196F3">
 		<tool>single-cell-seurat-setup-v5.R</tool>  
 		<tool>single-cell-filter-v5.R</tool> 	
 		<tool>single-cell-seurat-merge-samples.R</tool>	
@@ -233,7 +233,8 @@
 		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
 		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
-		<tool>single-cell-seurat-part-of-h5-v5.R</tool>
+		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	  
+		<tool>single-cell-cellbender-background-removal.R</tool> 	
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool>
 		<tool>single-cell-seurat-filter-regress.R</tool>	
