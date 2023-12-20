@@ -109,11 +109,11 @@ data.combined <- RunTSNE(data.combined, dims = 1:num.dims, reduction = new.reduc
 # Visualization
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
 # lisää labeli jos löytyy ggplot? laita samanlail ku enne ollu
-DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("stim", "seurat_clusters"), pt.size = point.size)
-DimPlot(data.combined, reduction = reduction.method, group.by = c("stim", "seurat_clusters"), pt.size = point.size, label = add.labels)
+DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("stim", "seurat_clusters"), pt.size = point.size) + labs(title = "UMAP unintegrated")
+DimPlot(data.combined, reduction = reduction.method, group.by = c("stim", "seurat_clusters"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated")
 #plot_grid(p1, p2)
 # Show both conditions in separate plots:
-DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels)
+DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, samples")
 
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
