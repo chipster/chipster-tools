@@ -10,7 +10,7 @@
 # 2023-08-24 ML
 
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
 # package.version("Seurat")
 # version <- package.version("Seurat")
