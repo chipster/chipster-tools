@@ -6,10 +6,10 @@
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAgenes.txt
-# PARAMETER OPTIONAL project.name: "Project name for plotting" TYPE STRING DEFAULT My_project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
+# PARAMETER project.name: "Project name for plotting" TYPE STRING DEFAULT My_project_name (You can give your project a name. The name will appear on the plots. Do not use underscore _ in the names!)
+# PARAMETER sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
+# PARAMETER sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
-# PARAMETER OPTIONAL sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
-# PARAMETER OPTIONAL sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # RUNTIME R-4.3.2-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
