@@ -11,7 +11,7 @@
 # 2023-12-15 IH
 
 
-source(file.path(chipster.common.path, "tool-utils.R"))
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 options(Seurat.object.assay.version = "v5")
 # version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
 # package.version("Seurat")
