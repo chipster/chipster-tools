@@ -55,7 +55,7 @@ g2m.genes <- cc.genes[44:97]
 # Normalisation
 if (normalisation.method == "SCT") {
     seurat_obj <- SCTransform(seurat_obj, assay = "RNA", new.assay.name = "SCT", vars.to.regress = c("percent.mt"), variable.features.n = num.features, verbose = FALSE)
-    #VariableFeatures(seurat_obj) <- features
+    print(VariableFeatures(seurat_obj))
     #seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = num.features)
     #VariableFeatures(seurat_obj) <- features 
 } else if (normalisation.method == "LogNormalize") {
@@ -71,6 +71,8 @@ if (normalisation.method == "SCT") {
 
 # Open the pdf file for plotting
 pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
+
+print(DefaultAssay(seurat_obj))
 
 # Dispersion plot:
 # Identify the 10 most highly variable genes
@@ -88,14 +90,17 @@ textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", len
 # http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
 
 # Check that there were some S or G2M genes in the list of variable genes:
-if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) < 1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) < 1) {
+if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(seurat_obj)))]) < 1) {
     # stop(paste('CHIPSTER-NOTE: ', "There were not enough cell cycle genes for correction in the list of variable genes."))
     # Write a log file (instead of ending with a Chipster-note, because we want the tool to finish and give the plot, when possible.)
     fileConn <- file("log.txt")
     writeLines(c("There are not enough cell cycle genes for correction in the list of variable genes."), fileConn)
     close(fileConn)
 } else {
-    seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+    # join layers before cell cycle scoring
+    seurat_obj[["joined"]] <- JoinLayers(seurat_obj[["RNA"]])
+    DefaultAssay(seurat_obj) <- "joined"
+    seurat_obj <- CellCycleScoring(seurat_obj,s.features = s.genes,g2m.features = g2m.genes, set.ident = TRUE)
 
     # Visualize in PCA:
     # PCA plot 1: without/before filtering cell cycle effect
@@ -129,6 +134,8 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
     } else {
         DimPlot(seurat_obj) # , plot.title = "PCA on cell cycle genes")
     }
+    # change back to RNA
+    DefaultAssay(seurat_obj) <- "RNA"
 }
 
 dev.off() # close the pdf
