@@ -1,6 +1,6 @@
 # TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge samples" (Merge multiple samples for joined analysis.)
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
-# OUTPUT seurat_obj_combined.Robj
+# OUTPUT seurat_obj_merged.Robj
 # OUTPUT OPTIONAL Dispersion_plot.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
 # OUTPUT OPTIONAL PCAloadings.txt
