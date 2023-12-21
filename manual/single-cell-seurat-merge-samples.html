@@ -7,7 +7,7 @@
 
 <body>
 
-    <h2>Seurat -Merge samples </h2>
+    <h2>Seurat -Merge & normalise, detect variable genes and regress </h2>
 
     <h3>Description</h3>
 
@@ -20,9 +20,6 @@
 
     <h3>Parameters</h3>
     <ul>
-        <li>Filter out cells which have less than this many genes expressed [200]</li>
-        <li>Filter out cells which have more than this many genes expressed [2500]</li>
-        <li>Filter out cells which have higher mitochondrial transcript percentage [5]</li>
         <li>Perform global scaling normalization [yes]</li>
         <li>Number of variable genes to return [2000] </li>
         <li>Scale factor in the log normalization [10000]</li>
@@ -124,8 +121,17 @@
 
     <ul>
 
-        <li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not viewable in
+        <li>seurat_obj_preprocess.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not
+            viewable in
             Chipster. </li>
+        <li>Dispersion.pdf: The variation vs average expression plots (in the second plot, the 10 most highly variable
+            genes are labeled).
+            If you selected to regress out cell cycle differences, PCA plots on cell cycle genes before and after the
+            regression
+            will be added in the end of this pdf. Also lists the number of highly variable genes. </li>
+        <li>PCAplots.pdf: Graphics presenting the principal components. Last plots are meant to aid in the selection of
+            the PCs for the downstream analysis. </li>
+        <li>PCAloadings.txt: If requested, the loadings (=genes responsible) of principal components </li>
     </ul>
 
 
