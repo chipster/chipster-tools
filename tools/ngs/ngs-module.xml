@@ -213,7 +213,6 @@
 	<category name="Single-cell RNA-seq" color="#2196F3">
 		<tool>single-cell-seurat-setup-v5.R</tool>  
 		<tool>single-cell-filter-v5.R</tool> 	
-		<tool>single-cell-seurat-merge-samples.R</tool>	
 		<tool>single-cell-seurat-filter-regress-v5.R</tool>
 		<tool>single-cell-seurat-sctransform-v5.R</tool>
 		<tool>single-cell-seurat-pca-v5.R</tool>
@@ -224,6 +223,7 @@
 		 <tool>single-cell-seurat-singler-v5.R</tool>
 		<tool>single-cell-extract-information-v5.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
+		<tool>single-cell-seurat-merge-samples.R</tool>	
 		<tool>single-cell-seurat-integrate-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples-v5.R</tool>
