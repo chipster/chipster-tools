@@ -47,15 +47,10 @@ cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
-#if (normalisation.method == "SCT") {
-    #features <- SelectIntegrationFeatures(seurat.objects.list)
-    #seurat.objects.list <- lapply(X = seurat.objects.list, FUN = SCTransform)
-#}
-
 # Normalisation
 if (normalisation.method == "SCT") {
     seurat_obj <- SCTransform(seurat_obj, assay = "RNA", new.assay.name = "SCT", vars.to.regress = c("percent.mt"), variable.features.n = num.features, verbose = FALSE)
-    print(VariableFeatures(seurat_obj))
+    #print(VariableFeatures(seurat_obj))
     #seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = num.features)
     #VariableFeatures(seurat_obj) <- features 
 } else if (normalisation.method == "LogNormalize") {
@@ -72,16 +67,16 @@ if (normalisation.method == "SCT") {
 # Open the pdf file for plotting
 pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 
-print(DefaultAssay(seurat_obj))
+#print(DefaultAssay(seurat_obj))
 
 # Dispersion plot:
 # Identify the 10 most highly variable genes
-top10 <- head(VariableFeatures(seurat_obj), 10)
+#top10 <- head(VariableFeatures(seurat_obj), 10)
 # Plot variable features with and without labels
-dim(VariableFeatures(seurat_obj))
-plot1 <- VariableFeaturePlot(seurat_obj)
-plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-CombinePlots(plots = list(plot1, plot2))
+#dim(VariableFeatures(seurat_obj))
+#plot1 <- VariableFeaturePlot(seurat_obj)
+#plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+#CombinePlots(plots = list(plot1, plot2))
 
 textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
 
@@ -97,16 +92,20 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
     writeLines(c("There are not enough cell cycle genes for correction in the list of variable genes."), fileConn)
     close(fileConn)
 } else {
-    # join layers before cell cycle scoring
-    seurat_obj[["joined"]] <- JoinLayers(seurat_obj[["RNA"]])
-    DefaultAssay(seurat_obj) <- "joined"
+    # join layers before cell cycle scoring if global scaling normalization was used
+    if (normalisation.method == "LogNormalize") {
+        seurat_obj[["joined"]] <- JoinLayers(seurat_obj[["RNA"]])
+        DefaultAssay(seurat_obj) <- "joined"
+    }
+    print(Layers(seurat_obj))
+    print(DefaultAssay(seurat_obj))
     seurat_obj <- CellCycleScoring(seurat_obj,s.features = s.genes,g2m.features = g2m.genes, set.ident = TRUE)
 
     # Visualize in PCA:
     # PCA plot 1: without/before filtering cell cycle effect
     seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
     plot1 <- DimPlot(seurat_obj) + ggtitle("PCA on cell cycle genes (no cell cycle regression)") # reduction = pca
-
+    print("jejeje")
     # Cell cycle stage filtering:
     if (filter.cell.cycle != "no") {
         # Remove the cell cycle scores:
@@ -134,10 +133,14 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
     } else {
         DimPlot(seurat_obj) # , plot.title = "PCA on cell cycle genes")
     }
-    # change back to RNA
-    DefaultAssay(seurat_obj) <- "RNA"
+    print(DefaultAssay(seurat_obj))
+    # change back to original assay
+    if (normalisation.method == "LogNormalize") {
+        DefaultAssay(seurat_obj) <- "RNA"
+    } else if (normalisation.method == "SCT") {
+        DefaultAssay(seurat_obj) <- "SCT"
+    }
 }
-
 dev.off() # close the pdf
 
 
