@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>SingleR cluster annotation </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool can be used to annotate clustered scRNAseq data by comparing it to
+        the CellDex annotation datasets.
+
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>CellDex reference to use [Monaco Immune data]</li>
+        <li>Point size in plot [1]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        SingleR is an automatic annotation method for single-cell RNA sequencing (scRNAseq)
+        data (Aran et al. 2019).
+        Given a reference dataset of samples (single-cell or bulk) with known labels,
+        it labels new cells from a test dataset based on similarity to the reference.
+        The CellDex package provides access to several reference datasets
+        (mostly derived from bulk RNA-seq or microarray data) through dedicated retrieval functions.
+        User can select the CellDex package to be used as reference.
+
+        As inputs, give a Seurat object which includes the clustering information. <br>
+
+    </p>
+    <p>
+        Main and fine annotations are done cell by cell, and this data is returned as tsv tables and in the
+        Seurat object (in fields: seurat_obj@meta.data$annotation.main and seurat_obj@meta.data$annotation.fine).
+        The annotation results are also shown in the pdf file as <b>UMAP plots</b>, together with heatmap and violin
+        plots
+        that can be used to estimate the confidence of the annotations. Before the main and fine annotations
+        there's also the UMAP plot colored according the clustering result, and after that the annotations
+        according the clusters.
+    </p>
+    <p>
+        The <b>heatmaps</b> display the scores for all cells across all reference labels: ideally, each cell (=column)
+        has one score that is much higher (=yellow) than the rest. Similar diagnostic can be viewed in the
+        violion plots, where per cell "deltas" are shown. Deltas are the difference between the score for the highest
+        label and the median across all labels for each cell.
+    </p>
+
+    <p>
+        For more details, please check:
+    <ul>
+        <li> <a href="https://bioconductor.org/packages/3.14/bioc/html/SingleR.html"></a>
+            SingleR package documentation</a></li>
+
+        <li> <a href="https://bioconductor.org/packages/3.14/data/experiment/html/celldex.html"></a>
+            CellDex package documentation</a></li>
+
+        <li> <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/SingleR/inst/doc/SingleR.html">
+                Using SingleR to annotate single-cell RNA-seq data vignette</a></li>
+    </ul>
+    </p>
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object including the cell-wise annotations in the metadata
+            field.
+            Not viewable Chipster, but can be exported and examined in R. </li>
+        <li>singleR_annotation_plots.pdf: Plots showing annotation diagnostics </li>
+        <li>annotations_main.tsv: Main level annotations table </li>
+        <li>annotations_fine.tsv: Fine level annotations table </li>
+
+    </ul>
+
+
+
+</body>

@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge samples" (Merge multiple samples for joined analysis.)
+# TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge & normalise, detect variable genes and regress" (This tool merges multiple samples for joined analysis. It then normalizes gene expression values and detects highly variable genes across the cells. Finally, it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to use SCTransform to run the same steps. Moreover, you can also choose to regress out variation due to cell cycle heterogeneity.)
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT seurat_obj_merged.Robj
 # OUTPUT OPTIONAL Dispersion_plot.pdf
@@ -7,7 +7,6 @@
 # PARAMETER OPTIONAL normalisation.method: "Normalization method to perform" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Normalize data with global scaling normalization or SCTransform.)
 # PARAMETER OPTIONAL totalexpr: "Scaling factor in the normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of transcripts.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 2000 (Number of features to select as top variable features, i.e. how many features returned.)
-# PARAMETER OPTIONAL num.of.pcas: "Number of PCs to compute" TYPE INTEGER DEFAULT 30 (How many principal components to compute and store. If you get an error message, try lowering the number. This might happen especially if you have low number of cells in your data.)
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
@@ -100,11 +99,14 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
     print(Layers(seurat_obj))
     print(DefaultAssay(seurat_obj))
     seurat_obj <- CellCycleScoring(seurat_obj,s.features = s.genes,g2m.features = g2m.genes, set.ident = TRUE)
-
+    head(seurat_obj[[]])
     # Visualize in PCA:
     # PCA plot 1: without/before filtering cell cycle effect
     seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
+    print("eka")
+    #Dimplot(seurat_obj)
     plot1 <- DimPlot(seurat_obj) + ggtitle("PCA on cell cycle genes (no cell cycle regression)") # reduction = pca
+    print("toka")
     # Cell cycle stage filtering:
     if (filter.cell.cycle != "no") {
         # Remove the cell cycle scores:
@@ -128,8 +130,9 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
             plot2 <- DimPlot(seurat_obj) + ggtitle("After cell cycle correction (method: G2M / S difference)")
             CombinePlots(plots = list(plot1, plot2))
         }
-        # just plot the 1 PCA plot, if no filtering:
+    # just plot the 1 PCA plot, if no filtering:
     } else {
+        print("kolmas")
         DimPlot(seurat_obj) # , plot.title = "PCA on cell cycle genes")
     }
     print(DefaultAssay(seurat_obj))
@@ -144,6 +147,6 @@ dev.off() # close the pdf
 
 
 # Save the Robj for the next tool
-save(seurat_obj, file = "seurat_obj_combined.Robj")
+save(seurat_obj, file = "seurat_obj_merged.Robj")
 
 ## EOF
