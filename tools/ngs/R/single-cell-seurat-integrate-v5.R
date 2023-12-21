@@ -79,7 +79,7 @@ if (anchor.identification.method == "CCAIntegration") {
     #}
 #} else {
     #ref.sample.numbers <- NULL # if no samples are listed, NULL = all pairwise anchors are found (no reference/s)
-#}
+#} 
 
 if (normalisation.method == "SCT") {
   if (length(seurat_obj@assays$SCT) > 0) {
@@ -110,9 +110,14 @@ data.combined <- RunTSNE(data.combined, dims = 1:num.dims, reduction = new.reduc
 
 # Visualization
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
-DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("stim", "seurat_clusters"), pt.size = point.size) + labs(title = "UMAP unintegrated")
-DimPlot(data.combined, reduction = reduction.method, group.by = c("stim", "seurat_clusters"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated")
-#plot_grid(p1, p2)
+# Unintegrated:
+p1 <- DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("stim"), pt.size = point.size) + labs(title = "UMAP unintegrated, color by sample")
+p2 <- DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("seurat_clusters"), pt.size = point.size) + labs(title = "UMAP unintegrated, color by cluster")
+plot_grid(p1, p2)
+# Integrated:
+p3 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("stim"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by sample")
+p4 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("seurat_clusters"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by cluster")
+plot_grid(p3, p4)
 # Show both conditions in separate plots:
 DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, samples")
 
