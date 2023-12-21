@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Rename clusters</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        With this tool, you can rename the clusters.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Point size in tSNE and UMAP plots [1]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+        With this tool, you can rename the clusters:
+        for example, instead of "0", "1", "2"... give clusters names according the recognised cell markers
+        or cell types, such as "NK", "CD8+ T", "Platelet".
+        For this purpose, you need to create (for example with in Excel, text editor...)
+        a tab separated .tsv file, which has the old cluster names in first column, and the
+        new names in the second column.
+    </p>
+    <p>
+        Like this:
+
+    <table>
+        <tr>
+            <th>Cluster ID</th>
+            <th>Cluster name</th>
+        </tr>
+        <tr>
+            <td>0</td>
+            <td>Naive CD4+ T</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>CD14+ Mono</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Memory CD4+</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>B</td>
+        </tr>
+    </table>
+    <br>
+    </p>
+
+    <p>
+        Note, that you need to give the same old cluster names (0, 1, 2...) in same order
+        as they are in the Seurat R-object. You need to give name to each cluster (you can't have
+        empty cells in the input table).
+    </p>
+
+    <p></p>
+
+    <p>
+        For more details, please check:<br>
+        The <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>seurat_obj_renamed.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. Not
+            viewable in
+            Chipster. </li>
+        <li>clusterPlotRenamed.pdf: Cluster visualization in tSNE and UMAP plots, heatmap showing the expression of top
+            ten marker genes (in
+            terms of fold change) for each cluster. </li>
+    </ul>
+
+
+
+</body>

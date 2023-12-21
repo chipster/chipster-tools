@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Extract only gene expression data from a multiomics h5 object </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        For a given cluster, this tool gives you the differentially expressed genes between the sample groups
+        listed by the user.
+        Sample groups are determined in the Setup tool with the Sample group parameter.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Output file name</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As input, give a multiomics h5 object, from which you want to extract the Gene Expression part only.
+        The output will be a matrix as a .tsv table, that can then be passed on to the Setup tool,
+        or the Separate samples tool.
+    </p>
+
+
+
+
+
+    <p>
+        For more details, please check the <a
+            href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
+            for multiple sample analysis</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>sample_name.tsv files: Matrix with the Gene Expression data from the input h5 object.
+    </ul>
+
+
+
+</body>

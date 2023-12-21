@@ -78,8 +78,8 @@ if (gene_list == "yes" || var_genes_list == "yes") {
         var_genes <- data.frame(obj$SCT@var.features)
         # object hasn't been normalised or it has been normalised with the global scaling normalisation
     } else if (seurat_obj@active.assay == "RNA") {
-        genes <- obj$RNA@counts@Dimnames[1]
-        var_genes <- data.frame(obj$RNA@var.features)
+        genes <- obj$RNA$counts@Dimnames[1]
+        #var_genes <- data.frame(obj$RNA@var.features)
     } else {
         stop(paste("CHIPSTER-NOTE: ", "Object doesn't contain single-cell RNA-seq or spatially resolved data."))
     }

@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge & normalise, detect variable genes and regress" (This tool merges multiple samples for joined analysis. It then normalizes gene expression values and detects highly variable genes across the cells. Finally, it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to use SCTransform to run the same steps. Moreover, you can also choose to regress out variation due to cell cycle heterogeneity.)
+# TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge & normalise, detect variable genes and regress" (This tool merges multiple samples for joined analysis. It then normalizes gene expression values and detects highly variable genes across the cells. After this it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to use SCTransform to run the same steps. Moreover, you can also choose to regress out variation due to cell cycle heterogeneity. Finally, PCA is also run.)
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT seurat_obj_merged.Robj
 # OUTPUT OPTIONAL Dispersion_plot.pdf
@@ -52,7 +52,6 @@ pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 # Normalisation
 if (normalisation.method == "SCT") {
     seurat_obj <- SCTransform(seurat_obj, assay = "RNA", new.assay.name = "SCT", vars.to.regress = c("percent.mt"), variable.features.n = num.features, verbose = FALSE,  ncells = 5000)
-    seurat_obj <- SCTResults(seurat_obj, slot = "feature.attributes")
     # to be added
     # Dispersion plot:
     # Identify the 10 most highly variable genes
