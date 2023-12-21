@@ -105,7 +105,6 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
     # PCA plot 1: without/before filtering cell cycle effect
     seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes))
     plot1 <- DimPlot(seurat_obj) + ggtitle("PCA on cell cycle genes (no cell cycle regression)") # reduction = pca
-    print("jejeje")
     # Cell cycle stage filtering:
     if (filter.cell.cycle != "no") {
         # Remove the cell cycle scores:
