@@ -46,7 +46,7 @@ install.packages("Rfast2")
 install.packages("Matrix")
 # 1 min
 install.packages("umap")
-# 2 min
+# 2 min. This was replaced by Cellbender and shouldn't be installed next time
 install.packages('SoupX')
 
 
