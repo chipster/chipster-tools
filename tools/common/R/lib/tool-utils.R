@@ -180,8 +180,14 @@ isFasta <- function(filename) {
 }
 
 # Returns TRUE if file is in FASTQ format. File needs to be uncompressed.
-isFastq <- function(filename) {
-  emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+isFastq <- function(filename,version=1) {
+  # Choose Emboss version according to runtime
+  if (version == 1){
+    emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+  }else{
+    emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
+  }
+  
   sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
   sfcheck.command <- paste(sfcheck.binary, emboss.path, filename)
   str.filetype <- system(sfcheck.command, intern = TRUE)
