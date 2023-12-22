@@ -159,13 +159,27 @@ def create_links(pathway_name, db):
     encodedPathway = pathway_name.replace(" ", "+")
 
     if db == "Reactome":
-        linked_name = (
-            '<a href="http://www.reactome.org/cgi-bin/search2?DB=gk_current&OPERATOR=ALL&QUERY='
-            + encodedPathway
-            + '&SPECIES=&SUBMIT=Go!">'
-            + pathway_name
-            + "</a>"
-        )
+        # what about yeast?
+        reactome_species = {
+            "human": "Homo+sapiens",
+            "mouse": "Mus+musculus"            
+        }
+
+        if species in reactome_species:
+            # or should we filter only pathways?
+            # https://reactome.org/content/query?q=Metabolism&species=Homo+sapiens&types=Pathway
+
+            linked_name = (
+                '<a href="https://reactome.org/content/query?species=Homo+sapiens&cluster=true&species='
+                + reactome_species[species]
+                + '&q='
+                + encodedPathway
+                + '">'
+                + pathway_name
+                + "</a>"
+            )
+        else:
+            linked_name = pathway_name
 
     elif db == "KEGG":
         pathwayWithoutOrganism = pathway_name[0 : pathway_name.find("-")].strip()
@@ -178,14 +192,11 @@ def create_links(pathway_name, db):
         )
 
     elif db == "PID":
+
         linked_name = (
-            '<a href="http://pid.nci.nih.gov/search/advanced_landing.shtml?'
-            + "what=graphic&svg=&jpg=true&xml=&biopax=&complex_uses=on&family_uses=on&degree=1&molecule=&"
-            + "pathway="
+            '<a href="https://www.ndexbio.org/index.html#/search?searchType=All&searchTermExpansion=false&searchString='
             + encodedPathway
-            + "&macro_process=&source_id=5&evidence_code=NIL&evidence_code=IAE&evidence_code=IC&evidence_code=IDA&"
-            + "evidence_code=IFC&evidence_code=IGI&evidence_code=IMP&evidence_code=IOS&evidence_code=IPI&evidence_code=RCA&"
-            + 'evidence_code=RGE&evidence_code=TAS&output-format=graphic&Submit=Go">'
+            + '">'
             + pathway_name
             + "</a>"
         )
