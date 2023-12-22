@@ -2,6 +2,7 @@
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # INPUT OPTIONAL markers.txt: "Optional text file of the markers to plot" TYPE GENERIC (The names of the marker genes you wish to plot can also be given in the form of a text file, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d. In case the text file is provided, the markers to plot parameter is ignored.)
 # OUTPUT OPTIONAL split_dot_plot.pdf
+# PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
 # PARAMETER OPTIONAL markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
@@ -48,7 +49,12 @@ if (fileOk("markers.txt", 0)) {
   markers.to.plot <- trimws(unlist(strsplit(markers, ",")))
 }
 
-DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+# In case some other type of assay is set:
+if (normalisation.method == "SCT") {
+  DefaultAssay(data.combined) <- "SCT"
+} else {
+  DefaultAssay(data.combined) <- "RNA"
+}
 # Store idents:
 stored_idents <- Idents(data.combined)
 
@@ -119,8 +125,11 @@ if (number.of.samples > 4) {
 
 # FeatureHeatmap(data.combined, features.plot = markers.to.plot, group.by = "stim", pt.size = 0.25, key.position = "top",
 # 		max.exp = 3)
-
-DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+if (normalisation.method == "SCT") {
+  DefaultAssay(data.combined) <- "SCT"
+} else {
+  DefaultAssay(data.combined) <- "RNA"
+}
 Idents(data.combined) <- stored_idents # Return the original idents
 
 ## Comparison violin plot:

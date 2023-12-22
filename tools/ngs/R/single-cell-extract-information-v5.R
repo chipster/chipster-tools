@@ -64,12 +64,12 @@ sink()
 # Create a list of the genes and the highly variable features in the object
 if (gene_list == "yes" || var_genes_list == "yes") {
     obj <- seurat_obj@assays
-    # Object consists of multiple samples that have been integrated
-    if (seurat_obj@active.assay == "integrated") {
-        genes <- obj$integrated@data@Dimnames[1]
-        var_genes <- data.frame(obj$integrated@var.features)
+    # Object consists of multiple samples that have been integrated, in v5 maybe not necessary
+    #if (seurat_obj@active.assay == "integrated") {
+        #genes <- obj$integrated@data@Dimnames[1]
+        #var_genes <- data.frame(obj$integrated@var.features)
         # Object contains spatially transcriptomic data
-    } else if (seurat_obj@active.assay == "Spatial") {
+    if (seurat_obj@active.assay == "Spatial") {
         genes <- obj$Spatial@counts@Dimnames[1]
         var_genes <- data.frame(obj$Spatial@var.features)
         # Object has been normalised with SCTransform
@@ -78,8 +78,8 @@ if (gene_list == "yes" || var_genes_list == "yes") {
         var_genes <- data.frame(obj$SCT@var.features)
         # object hasn't been normalised or it has been normalised with the global scaling normalisation
     } else if (seurat_obj@active.assay == "RNA") {
-        genes <- obj$RNA$counts@Dimnames[1]
-        #var_genes <- data.frame(obj$RNA@var.features)
+        genes <- obj$RNA$counts@Dimnames[1] # in case of multiple sample only first one
+        #var_genes <- data.frame(obj$RNA$meta.data$var.features) # var.features not found in v5?
     } else {
         stop(paste("CHIPSTER-NOTE: ", "Object doesn't contain single-cell RNA-seq or spatially resolved data."))
     }
@@ -90,8 +90,10 @@ if (gene_list == "yes" || var_genes_list == "yes") {
     }
     # Write out the highly variable genes
     if (var_genes_list == "yes") {
-        names(var_genes)[1] <- "Highly variable genes"
-        write.table(var_genes, file = "var_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+        if (seurat_obj@active.assay == "SCT") { # not working for lognorm rn
+            names(var_genes)[1] <- "Highly variable genes"
+            write.table(var_genes, file = "var_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+        }
     }
 }
 

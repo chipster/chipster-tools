@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge & normalise, detect variable genes and regress" (This tool merges multiple samples for joined analysis. It then normalizes gene expression values and detects highly variable genes across the cells. After this it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to use SCTransform to run the same steps. Moreover, you can also choose to regress out variation due to cell cycle heterogeneity. Finally, PCA is also run.)
+# TOOL single-cell-seurat-merge-samples.R: "Seurat v5 -Merge & normalise, detect variable genes, regress and PCA" (This tool merges multiple samples for joined analysis. It then normalizes gene expression values and detects highly variable genes across the cells. After this it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to use SCTransform to run the same steps. Moreover, you can also choose to regress out variation due to cell cycle heterogeneity. Finally, PCA is also run.)
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT seurat_obj_merged.Robj
 # OUTPUT OPTIONAL Dispersion_plot.pdf
@@ -57,7 +57,7 @@ if (normalisation.method == "SCT") {
     # Identify the 10 most highly variable genes
     #top10 <- head(VariableFeatures(seurat_obj), 10)
     # Plot variable features with and without labels
-    #plot1 <- VariableFeaturePlot(seurat_obj)
+    #plot1 <- VariableFeaturePlot(seurat_obj) #assay = "SCT"
     #plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
     #CombinePlots(plots = list(plot1, plot2))
 } else if (normalisation.method == "LogNormalize") {
