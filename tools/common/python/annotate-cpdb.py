@@ -162,7 +162,8 @@ def create_links(pathway_name, db):
         # what about yeast?
         reactome_species = {
             "human": "Homo+sapiens",
-            "mouse": "Mus+musculus"            
+            "mouse": "Mus+musculus",
+            "yeast": "Saccharomyces+cerevisiae"
         }
 
         if species in reactome_species:
@@ -170,7 +171,7 @@ def create_links(pathway_name, db):
             # https://reactome.org/content/query?q=Metabolism&species=Homo+sapiens&types=Pathway
 
             linked_name = (
-                '<a href="https://reactome.org/content/query?species=Homo+sapiens&cluster=true&species='
+                '<a href="https://reactome.org/content/query?species=Homo+sapiens&cluster=true&types=Pathway&species='
                 + reactome_species[species]
                 + '&q='
                 + encodedPathway
@@ -270,6 +271,7 @@ def query_gene_ids(genes, input_type):
     req._accNumbers = genes
 
     response = proxy.mapAccessionNumbers(req)
+
     result = zip(response._accNumber, response._cpdbId)
 
     id_to_gene_dict = dict()
