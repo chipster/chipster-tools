@@ -1,4 +1,4 @@
-# TOOL single-cell-cellbender-background-removal.R: "Seurat v4 -CellBender background removal" (This tool estimates non-empty cells from raw 10x feature-barcode matrices and removes systematic background contamination from the estimated non-empty cells. The raw feature-barcode matrix must be given in hdf5 file format. The output of this tool can be used as input to the "Setup and QC" tool.)
+# TOOL single-cell-cellbender-background-removal.R: "Seurat v4 -Remove background contamination with CellBender" (This tool estimates non-empty cells from raw 10x feature-barcode matrices and removes systematic background contamination from the estimated cells. The raw feature-barcode matrix must be given in hdf5 file format. The output of this tool can be used as input to the "Setup and QC" tool.)
 # INPUT raw_fb_matrix.h5: "Raw 10x feature-barcode matrix in hdf5 format" TYPE GENERIC ()
 # OUTPUT cellbender_fb_matrix_report.html
 # OUTPUT cellbender_fb_matrix_filtered.h5
@@ -6,7 +6,7 @@
 # PARAMETER OPTIONAL cell_num: "Expected number of cells" TYPE STRING DEFAULT "auto" (This is the number of droplets that reasonably surely contain cells. If "auto", CellBender automatically estimates this based on the input dataset. Otherwise, the value should be an integer chosen based on the "UMI curve" plot. )
 # PARAMETER OPTIONAL droplet_num: "Total number of included droplets" TYPE STRING DEFAULT "auto" (This is a number that goes a few thousand barcodes into the "empty droplet plateau" and includes some droplets that are reasonably surely empty. If "auto", CellBender automatically estimates this based on the input dataset. Otherwise, the value should be an integer chosen based on the "UMI curve" plot. Keep in mind that the algorithm takes longer to run with larger values.)
 # PARAMETER OPTIONAL epoch_num: "Number of epochs" TYPE INTEGER DEFAULT 150 (This is the number of complete passes through the entire training dataset when training the neural network in CellBender. Typically, 150 is a good choice. As a rule of thumb, the value should not exceed 300.)
-# PARAMETER OPTIONAL lr: "Learning rate" TYPE DECIMAL DEFAULT 0.0001 (This parameter controls the amount by which the neural network's parameters are updated in the opposite direction of the gradient of the loss function. The default is typically a good choice, but it can be reduced if there are large downward dips of ELBO score in the "Learning curve" plot in parts where it is not monotonically increasing. The value should be between 0 and 1.)
+# PARAMETER OPTIONAL lr: "Learning rate" TYPE DECIMAL DEFAULT 0.0001 (This parameter controls the amount by which the neural network's parameters are updated in the opposite direction of the gradient of the loss function when training the neural network. The default is typically a good choice, but it can be reduced if there are large downward dips in the ELBO score. The value should be between 0 and 1.)
 # PARAMETER OPTIONAL fpr: "Nominal false positive rate" TYPE DECIMAL DEFAULT 0.01 (This controls the trade-off between removing noise and retaining signal. Larger values correspond to removing more noise at the expense of more signal. The value should be between 0 and 1. )
 # RUNTIME R-4.2.3-cellbender
 # SLOTS 2
@@ -91,12 +91,14 @@ if (is.null(h5f$matrix)) {
 if (!file.exists("cellbender_fb_matrix_report.html")) {
   print("This is the .log file output:")
   system("cat cellbender_fb_matrix.log")
-  stop("CHIPSTER-NOTE: CellBender should output an .html file. However, CellBender does not output the .html file which might indicate that something went wrong with the CellBender method.
-  Look at the screen output of this job and look for the .log file output to see possible warnings and error messages.
-  Also, try rerunning the CellBender method again using the same parameters.")
+  stop("CHIPSTER-NOTE: CellBender should output an html file. However, CellBender does not output the html file which might indicate
+  that something went wrong with the CellBender method. Look at the screen output of this job and look for the .log file output that 
+  is shown there to see possible warnings and error messages. Also, try rerunning the CellBender method again using the same parameter
+  values. If this error occurs again after rerunning with the same parameter values, please ensure that your parameter values are 
+  reasonable.")
 } 
 
-h5closeAll() 
+H5Fclose(h5f) 
 
 # EOF
 
