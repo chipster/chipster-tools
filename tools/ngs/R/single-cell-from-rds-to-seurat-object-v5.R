@@ -4,7 +4,6 @@
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
-options(Seurat.object.assay.version = "v5")
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Read input names
