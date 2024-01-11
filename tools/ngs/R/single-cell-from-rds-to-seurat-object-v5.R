@@ -19,7 +19,7 @@ if (grepl(".rds", inputnames$rds_file, ignore.case=TRUE) == FALSE) {
 seurat_obj <- readRDS("rds_file") 
 
 # Check that converted RDS file contains a Seurat object
-if (class(seurat_obj[1]) != "Seurat") {
+if (class(seurat_obj) != "Seurat") {
   stop("CHIPSTER-NOTE: The RDS file does not contain Seurat object information.")
 }
 
