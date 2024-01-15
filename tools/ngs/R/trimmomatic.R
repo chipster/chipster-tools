@@ -21,11 +21,13 @@
 # PARAMETER OPTIONAL minlen: "Minimum length of reads to keep" TYPE INTEGER (Drop the read if it is below a specified length.)
 # PARAMETER OPTIONAL unpaired: "Write unpaired reads in a separate file" TYPE [yes, no] DEFAULT no (When using Trimmomatic for paired reads, some reads might lose their mate. These unpaired reads are not included in the result file, but you can request to get them in a separate file if needed.)
 # PARAMETER OPTIONAL logfile: "Write a log file" TYPE [yes, no] DEFAULT no (Write a log file.)
+# STORAGE 400
 
 # AMS 2014.04.08
 # MK, 2014.12.05, corrected typo: avqual => avgqual. Corrected bug in initialisation of adapter.file parameter
 # AMS 2014.11.27, corrected bug: trimmomatic was always run in SE mode
 # ML, 2015.12.17, added option to use own adapter files
+# EK, 2024.01.15, added storage
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
