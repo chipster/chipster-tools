@@ -181,7 +181,6 @@
 		<tool>import-soft2.R</tool>
 		<tool>import-ArrayExpress.R</tool>
 		<!-- <tool>intersect-lists.R</tool>-->
-		<tool>output_test.R</tool>
 		<tool module="common">join_tsv_files.R</tool>
 		<tool module="common">split_tsv_file.R</tool>
 	</category>
