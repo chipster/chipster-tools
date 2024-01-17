@@ -127,8 +127,6 @@
 		<tool>sleep.py</tool>
 		<tool>sleep.R</tool>
 		<tool>test-note.R</tool>
-		<tool>no-operation.R</tool>
-		<tool>echo.R</tool>
 		<tool>fail.R</tool>
 		<tool>input-output.R</tool>
 		<tool>simple-input-output.R</tool>
