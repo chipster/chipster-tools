@@ -1,7 +1,7 @@
-# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are 3 options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix or a 10X CellRanger hdf5 file as input. If you are planning to combine samples later on, make sure you name them in this tool!)
-# INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
+# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are several options for input files. Check that your input file is correctly assigned under the parameters. If you have 10X filtered feature-barcode matrix files in MEX format, make a tar package containing files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\"\). Alternatively you can give a DGE matrix is tsv format, a 10X filtered feature-barcode matrix in hdf5 format or a CellBender filtered feature-barcode matrix in hdf5 format. If you are planning to combine samples later on, make sure you name them in this tool!)
+# INPUT OPTIONAL files.tar: "tar package of 10X filtered feature-barcode matrix files in MEX format" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
-# INPUT OPTIONAL hdf5.h5: "10X CellRanger hdf5 input file" TYPE GENERIC
+# INPUT OPTIONAL hdf5.h5: "10X or CellBender filtered feature-barcode matrix in  hdf5 format" TYPE GENERIC
 # OUTPUT OPTIONAL setup_seurat_obj.Robj
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
