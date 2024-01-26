@@ -10,7 +10,7 @@
 
 import sys
 import csv
-
+# cannot use tool_utils in python2
 
 def main():
     global input_type, p_value_threshold, species

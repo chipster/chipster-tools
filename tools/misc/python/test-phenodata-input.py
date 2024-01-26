@@ -4,5 +4,6 @@
 # OUTPUT output.tsv
 
 import shutil
+# cannot use tool_utils in python2
 
 shutil.copyfile("phenodata.tsv", "output.tsv")

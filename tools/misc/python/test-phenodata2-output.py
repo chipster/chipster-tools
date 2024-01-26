@@ -2,6 +2,8 @@
 # OUTPUT phenodata2.tsv
 # OUTPUT output.tsv
 
+# cannot use tool_utils in python2
+
 with open("output.tsv", "w") as f:
     f.write("test	output\n")
     f.write("test	output\n")

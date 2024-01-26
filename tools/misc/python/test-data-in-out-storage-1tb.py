@@ -6,6 +6,7 @@
 
 import shutil
 import time
+# cannot use tool_utils in python2
 
 time.sleep(delay)
 shutil.copyfile("input", "output")
