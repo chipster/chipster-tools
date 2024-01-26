@@ -147,9 +147,12 @@ if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@m
 }
 
 # FeatureScatter (v3)
-plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt")
+# Add "Pearson correlation value" to the title to clarify the value FeatureScatter prints as the plot title.
+plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt") 
+  plot1B <- ggdraw(plot1) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
 plot2 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-CombinePlots(plots = list(plot1, plot2))
+  plot2B <- ggdraw(plot2) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
+plot_grid(plot1B, plot2B)
 
 # Number of cells:
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
