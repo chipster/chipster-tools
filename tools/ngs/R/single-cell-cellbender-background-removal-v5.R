@@ -1,4 +1,4 @@
-# TOOL single-cell-cellbender-background-removal-v5.R: "Seurat v4 -Remove background contamination with CellBender" (This tool estimates non-empty cells from raw 10x feature-barcode matrices and removes systematic background contamination from the estimated cells. The raw feature-barcode matrix input must be given in hdf5 file format. The CellBender filtered feature-barcode matrix output of this tool can be used as input to the "Setup and QC" tool.)
+# TOOL single-cell-cellbender-background-removal-v5.R: "Seurat v5 -Remove background contamination with CellBender" (This tool estimates non-empty cells from raw 10x feature-barcode matrices and removes systematic background contamination from the estimated cells. The raw feature-barcode matrix input must be given in hdf5 file format. The CellBender filtered feature-barcode matrix output of this tool can be used as input to the "Setup and QC" tool.)
 # INPUT raw_fb_matrix.h5: "Raw 10x feature-barcode matrix in hdf5 format" TYPE GENERIC ()
 # OUTPUT cellbender_fb_matrix_report.html
 # OUTPUT cellbender_fb_matrix_filtered.h5
