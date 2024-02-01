@@ -3,8 +3,8 @@
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
-# PARAMETER samples1: "Name of the samples to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample or samples of which you want to identify the differentially expressed of.)
-# PARAMETER samples2: "Name of the samples to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample or samples which you want to identify the differentially expressed of.)
+# PARAMETER samples1: "Name of the samples to compare with" TYPE STRING DEFAULT "stim1" (Name of the sample or samples of which you want to identify the differentially expressed of.)
+# PARAMETER samples2: "Name of the samples to compare to" TYPE STRING DEFAULT "control1" (Name of the sample or samples which you want to identify the differentially expressed of.)
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
