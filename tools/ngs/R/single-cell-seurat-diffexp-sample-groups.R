@@ -4,8 +4,8 @@
 # OUTPUT OPTIONAL de-list_{...}.tsv
 # OUTPUT OPTIONAL expressionPlots.pdf
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
-# PARAMETER samples1: "Name of the sample group to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample group of which you want to identify the differentially expressed of.)
-# PARAMETER samples2: "Name of the sample group to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample group which you want to identify the differentially expressed of.)
+# PARAMETER samples1: "Name of the sample group to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample group of which you want to identify the differentially expressed of.)
+# PARAMETER samples2: "Name of the sample group to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample group which you want to identify the differentially expressed of.)
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
@@ -39,6 +39,8 @@ if (exists("seurat_obj")) {
 
 # DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
+# Add: Check that the sample group names are in the data!
+
 
 # Set the identity as clusters:
 sel.clust <- "seurat_clusters"
@@ -55,15 +57,19 @@ cell_selection <- SetIdent(cell_selection, value = "type")
 
 
 # Compute differentiall expression
-# When SCTransform was used to normalise the data, do a prep step:
+
 if (normalisation.method == "SCT") {
+  # When SCTransform was used to normalise the data, do a prep step:
   cell_selection <- PrepSCTFindMarkers(cell_selection)
-  DGE_cell_selection <- FindAllMarkers(cell_selection, assay = "SCT", verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, only.pos = only.positive, return.thresh = pval.cutoff.de, only.pos = only.positive)
+   # Note: assay = "SCT" and recorrect_umi = FALSE
+  DGE_cell_selection <- FindMarkers(cell_selection, assay = "SCT", ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, verbose = FALSE, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+
 } else {
-  # DGE_cell_selection <- FindAllMarkers(cell_selection, log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
-  DGE_cell_selection <- FindMarkers(cell_selection, ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+  DGE_cell_selection <- FindMarkers(cell_selection, assay = "RNA", ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct,  verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 }
- 
+  
+# Filter based on adj-p-val (no return.thresh parameter):
+DGE_cell_selection_filtered <- DGE_cell_selection[DGE_cell_selection$p_val_adj<pval.cutoff.de, ]
 
 
 # Add average expression to the table:
@@ -76,10 +82,10 @@ if (normalisation.method == "SCT") {
   aver_expr_in_clusters <- aver_expr[[1]]
     
   # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection),samples1 ], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection),samples2 ], digits = 4)
+  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered),samples1 ], digits = 4)
+  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered),samples2 ], digits = 4)
   
-  full_table <- cbind(DGE_cell_selection, aver_expr_ident1 , aver_expr_ident2)
+  full_table <- cbind(DGE_cell_selection_filtered, aver_expr_ident1 , aver_expr_ident2)
   
 
 # Comparison name for the output file:
