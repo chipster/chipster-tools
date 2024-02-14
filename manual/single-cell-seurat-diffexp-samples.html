@@ -15,15 +15,15 @@
 		For a given cluster this tool gives you 
 	<ul>
 		<li> the cell type markers that are conserved across all the conditions (conserved_markers.tsv)</li>
-		<li> differentially expressed genes between the conditions (de-list.tsv) </li>
-		<li> OR, in case of more than 2 samples, differentially expressed genes of each sample compared to all the other
-			samples (de-list_samplenameVsAllOthers.tsv) </li>
+		<li> differentially expressed genes of each sample compared to all the other
+			samples (de-list_samplenameVsAllOthers.tsv)</li>
 	</ul>
-	Conditions/samples are determined in the Setup tool with the Sample or Group name parameter.
+	Samples are determined in the Setup tool with the Sample or Group name parameter.
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
+		<li>Normalisation method used previously [Global scaling normalization]</li>
 		<li>Name of the cluster [3]</li>
 		<li>Return only positive marker genes [TRUE]</li>
 		<li>Fold change threshold for conserved markers in log2 scale [0.25]</li>
@@ -31,6 +31,11 @@
 		<li>p-value cutoff for conserved markers [0.05]</li>
 		<li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
 		<li>Minimum number of cells in one of the groups for conserved markers [3]</li>
+		<li>Minimum number of cells in one of the groups for conserved markers [3]</li>
+		<li>Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of
+			cells [0.1]</li>
+		<li>Limit testing for conserved markers to genes which are expressed in at least this fraction of cells [0.1]
+		</li>
 	</ul>
 
 
@@ -54,10 +59,10 @@
 				value. This prefiltering speeds up the analysis
 				and narrows down the result list.
 			</p>
-			<p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the two
-				conditions in the selected cluster. In case of more than 2 samples, there will be as many
-				files as there are samples, named <b>de-list_samplenamevsAllOthers.tsv</b>. The columns in these files
-				include
+			<p>The result tables <b>de-list_samplenamevsAllOthers.tsv</b> contain the genes which are differentially
+				expressed between the two
+				conditions in the selected cluster. The columns in these files
+				include:
 			<ul>
 				<li><b>p_val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
 					likelihood that the gene is in the list just be chance) </li>
@@ -86,8 +91,12 @@
 		This file has as many column groups as there are samples in the data.
 		In addition to the columns listed above, this table contains also the following columns:
 	<ul>
-		<li> max_pval = maximum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
-		<li> min_pval = minimum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
+		<li> max_pval = maximum p-value of the samples</li>
+		<li> minimum_pval = minimum p-value of the samples</li>
+		<li> max.adj.pval = maximum adjusted p-value of the samples (note: this value needs to be < p-value threshold
+				set in the parameters, default:0.05)</li>
+		<li> minimum.adj.pval = minimum adjusted p-value of the samples</li>
+
 	</ul>
 	</p>
 
@@ -101,8 +110,7 @@
 
 	<ul>
 		<li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
-		<li>de-list.tsv: Differentially expressed genes between the conditions </li>
-		<li>OR several de-list_samplenameVsAllOthers.tsv files: Differentially expressed genes between each sample and
+		<li>several de-list_samplenameVsAllOthers.tsv files: Differentially expressed genes between each sample and
 			all other samples</li>
 	</ul>
 
