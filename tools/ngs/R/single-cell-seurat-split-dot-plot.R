@@ -5,6 +5,7 @@
 # PARAMETER OPTIONAL markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
+# PARAMETER OPTIONAL scale.data: "Scale data" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Determine whether data scaled in the split dot plot. By default, the raw expression data is used.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 1
 
@@ -76,7 +77,8 @@ pdf(file = "split_dot_plot.pdf", width = 12, height = 12) # open pdf
 # Check how many samples there are and choose as many colors:
 number.of.samples <- length(levels(as.factor((data.combined$stim))))
 colors.for.samples <- rainbow(number.of.samples)
-DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim") + RotatedAxis()
+
+DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim", scale = as.logical(scale.data)) + RotatedAxis()
 
 
 # Feature plot:
