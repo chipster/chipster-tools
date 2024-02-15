@@ -38,8 +38,12 @@ if (exists("seurat_obj")) {
   data.combined <- seurat_obj
 }
 
-# DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
+if (normalisation.method == "SCT") {
+  # When SCTransform was used to normalise the data, do a prep step:
+  data.combined <- PrepSCTFindMarkers(data.combined)
+}
 
 # Set the identity as clusters:
 sel.clust <- "seurat_clusters"
@@ -55,10 +59,8 @@ cell_selection <- subset(data.combined, cells = colnames(data.combined)[data.com
 cell_selection <- SetIdent(cell_selection, value = "type")
 
 
-# Compute differentiall expression
-# When SCTransform was used to normalise the data, do a prep step:
+# Compute differential expression
 if (normalisation.method == "SCT") {
-  cell_selection <- PrepSCTFindMarkers(cell_selection)
   DGE_cell_selection <- FindAllMarkers(cell_selection, assay = "SCT", verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, only.pos = only.positive, return.thresh = pval.cutoff.de, only.pos = only.positive)
 } else {
   # DGE_cell_selection <- FindAllMarkers(cell_selection, log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
