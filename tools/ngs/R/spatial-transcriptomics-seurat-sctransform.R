@@ -2,7 +2,7 @@
 # INPUT OPTIONAL seurat_spatial_setup.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_sctransform.Robj
 # PARAMETER OPTIONAL mitocutoff: "Filter out spots which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots from regions of damaged tissue. The spots to be kept must have lower percentage of mitochondrial transcripts than this.)
-# PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 (Filter out cells that have lower ribosomal transcript percentage.)
+# PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out cells that have lower ribosomal transcript percentage.)
 # PARAMETER OPTIONAL hbcutoff: "Filter out spots which have higher hemoglobin transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots which have higher percentage of hemoglobin transcripts than this.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # RUNTIME R-4.2.3-single-cell
@@ -21,7 +21,7 @@ library(Seurat)
 load("seurat_spatial_setup.Robj")
 
 # Subset: remove potential empties, multiplets and broken cells based on parameters
-seurat_obj <- seurat_obj[, seurat_obj$percent.mt < mitocutoff & seurat_obj$percent.hb < hbcutoff & seurat_obj$percent.rb > minribo]
+seurat_obj <- seurat_obj[, seurat_obj$percent.mt <= mitocutoff & seurat_obj$percent.hb <= hbcutoff & seurat_obj$percent.rb >= minribo]
 
 # filter genes
 # if (genes == "Hb" | genes == "both") {

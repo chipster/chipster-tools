@@ -3,8 +3,10 @@
 # INPUT OPTIONAL markers.txt: "Optional text file of the markers to plot" TYPE GENERIC (The names of the marker genes you wish to plot can also be given in the form of a text file, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d. In case the text file is provided, the markers to plot parameter is ignored.)
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER OPTIONAL markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
-# PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use.)
-# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
+# PARAMETER OPTIONAL scale.data: "Scale data in split dot plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Determine whether the data is scaled in the split dot plot. By default, the raw expression data is used.)
+# PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA in feature plot" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use in the feature plot.)
+# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression in feature plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing a given feature are getting buried.)
+# PARAMETER OPTIONAL color.scale: "Determine color scale based on all features in feature plot" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scales in the feature plots are based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes. If you wish to compare gene expression between different genes, it is useful to set this parameter to "yes" so that the color scale is the same for all genes.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 1
 
@@ -76,12 +78,13 @@ pdf(file = "split_dot_plot.pdf", width = 12, height = 12) # open pdf
 # Check how many samples there are and choose as many colors:
 number.of.samples <- length(levels(as.factor((data.combined$stim))))
 colors.for.samples <- rainbow(number.of.samples)
-DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim") + RotatedAxis()
+
+DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim", scale = as.logical(scale.data)) + RotatedAxis()
 
 
 # Feature plot:
 # Show in which cluster the genes are active
-FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction = reduction.method, order = as.logical(plotting.order.used))
+FeaturePlot(data.combined, features = markers.to.plot, reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale=color.scale)
 
 # Compare between the treatments:
 # These plots get squeezed when there are many samples, and are at some point very difficult to read.
@@ -93,7 +96,7 @@ sample.names <- levels(as.factor((data.combined$stim)))
 Idents(data.combined) <- "stim"
 
 if (number.of.samples <= 4) {
-  FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used))
+  FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale=color.scale)
 }
 # If there are more than 4 samples, lets split them in multiple pages, using subsetting.
 if (number.of.samples > 4) {
@@ -108,7 +111,7 @@ if (number.of.samples > 4) {
       subset.of.samples <- subset(data.combined, idents = samples.of.this.round)
       Idents(subset.of.samples) <- "stim"
       # Need to save and print the plots for them to actually go to pdf:
-      feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used))
+      feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale=color.scale)
       print(feat.plot)
       i <- i + 4
     }

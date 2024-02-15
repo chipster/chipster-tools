@@ -37,11 +37,12 @@
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 
-
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+library(ggplot2)
+require(cowplot)
 
 library(Biobase)
 source(file.path(chipster.common.lib.path, "tool-utils.R"))

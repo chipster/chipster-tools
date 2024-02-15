@@ -37,8 +37,14 @@ if (exists("seurat_obj")) {
   data.combined <- seurat_obj
 }
 
-# DefaultAssay(data.combined) <- "RNA" # this is very crucial.
+DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
+if (normalisation.method == "SCT") {
+  # When SCTransform was used to normalise the data, do a prep step:
+  data.combined <- PrepSCTFindMarkers(data.combined)
+}
+
+# Add: Check that the sample group names are in the data!
 
 # Set the identity as clusters:
 sel.clust <- "seurat_clusters"
@@ -55,15 +61,17 @@ cell_selection <- SetIdent(cell_selection, value = "type")
 
 
 # Compute differentiall expression
-# When SCTransform was used to normalise the data, do a prep step:
+
 if (normalisation.method == "SCT") {
-  cell_selection <- PrepSCTFindMarkers(cell_selection)
-  DGE_cell_selection <- FindAllMarkers(cell_selection, assay = "SCT", verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, only.pos = only.positive, return.thresh = pval.cutoff.de, only.pos = only.positive)
+  # Note: assay = "SCT" and recorrect_umi = FALSE
+  DGE_cell_selection <- FindMarkers(cell_selection, assay = "SCT", ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, verbose = FALSE, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+
 } else {
-  # DGE_cell_selection <- FindAllMarkers(cell_selection, log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
-  DGE_cell_selection <- FindMarkers(cell_selection, ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, assay = "RNA", verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+  DGE_cell_selection <- FindMarkers(cell_selection, assay = "RNA", ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct,  verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 }
- 
+  
+# Filter based on adj-p-val (no return.thresh parameter):
+DGE_cell_selection_filtered <- DGE_cell_selection[DGE_cell_selection$p_val_adj<pval.cutoff.de, ]
 
 
 # Add average expression to the table:
@@ -76,10 +84,10 @@ if (normalisation.method == "SCT") {
   aver_expr_in_clusters <- aver_expr[[1]]
     
   # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection),samples1 ], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection),samples2 ], digits = 4)
+  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered),samples1 ], digits = 4)
+  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered),samples2 ], digits = 4)
   
-  full_table <- cbind(DGE_cell_selection, aver_expr_ident1 , aver_expr_ident2)
+  full_table <- cbind(DGE_cell_selection_filtered, aver_expr_ident1 , aver_expr_ident2)
   
 
 # Comparison name for the output file:

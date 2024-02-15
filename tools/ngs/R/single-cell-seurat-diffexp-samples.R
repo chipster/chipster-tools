@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.conserved: "Fold change threshold for conserved markers in log2 scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. )
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log2 scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
-# PARAMETER OPTIONAL pval.cutoff.conserved: "p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the p-value of the conserved cluster marker genes: by default, p-values bigger than 0.05 in any sample are filtered out. This is looking at the max_pval column of the results table.)
+# PARAMETER OPTIONAL pval.cutoff.conserved: "Adjusted p-value cutoff for conserved markers" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the p-value of the conserved cluster marker genes: by default, p-values bigger than 0.05 in any sample are filtered out. This is looking at the max_pval column of the results table.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Adjusted p-value cutoff for differentially expressed genes" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL mincellsconserved: "Minimum number of cells in one of the groups for conserved markers" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in a each sample in the cluster in question.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
@@ -47,6 +47,8 @@ if (exists("seurat_obj")) {
   data.combined <- seurat_obj
 }
 
+lvls <- levels(as.factor(data.combined$stim))
+
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
@@ -71,9 +73,19 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
       verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
   }
 
+# filter based on p_val_adj
+# dat2 <- subset(cluster.markers, (CTRL_p_val_adj < pval.cutoff.conserved & STIM_p_val_adj < pval.cutoff.conserved))
+# dat2 <- subset(cluster.markers, (cluster.markers[,5] < pval.cutoff.conserved & cluster.markers[,10] < pval.cutoff.conserved))
+# dat2 <- subset(cluster.markers, cluster.markers[,"max_pval"] < pval.cutoff.conserved)
+install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/") # remove this when the package is installed in tools!
+library("tidyverse")
+p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
+cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
+cluster.markers$minimum.adj.p.val <- apply(p.val.adj.table, 1, min, na.rm=TRUE)
+dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
 
 # Write to table
-write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(dat2, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
@@ -81,45 +93,47 @@ data.combined$celltype.stim <- paste("cluster", Idents(data.combined),"-", data.
 data.combined$celltype <- Idents(data.combined)
 Idents(data.combined) <- "celltype.stim"
 
-lvls <- levels(as.factor(data.combined$stim))
 
 # Check that there are more than 2 samples:
 if (length(lvls) < 2) {
   stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
-
-
 } else {
   for (i in 1:length(lvls)) {
     # i:th sample vs all the others (= -i)
     ident1 <- paste("cluster", cluster, "-", lvls[i], sep = "")
     ident2 <- paste("cluster", cluster, "-", lvls[-i], sep = "")
-    # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
     if (normalisation.method == "SCT") {
-      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+      # Note: assay = "SCT" and recorrect_umi = FALSE
+      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive)
     } else {
-      cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de)
+      cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
     }
 
-  # Add average expression to the table:
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-  } else {
+    # Filter based on adj-p-val (no return.thresh parameter):
+    cluster_response_filtered <- cluster_response[cluster_response$p_val_adj<pval.cutoff.de, ]
+
+
+
+   # Add average expression to the table:
+   if (normalisation.method == "SCT") {
+     aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+   } else {
     aver_expr <- AverageExpression(object = data.combined)
-  }
+   }
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-  aver_expr_in_clusters[1:2,1:2]
+   aver_expr_in_clusters <- aver_expr[[1]]
+   aver_expr_in_clusters[1:2,1:2]
 
-  # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), ident1], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), ident2], digits = 4)
+   # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+   aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered ), ident1], digits = 4)
+   aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered ), ident2], digits = 4)
 
-  full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
+   full_table <- cbind(cluster_response_filtered , aver_expr_ident1, aver_expr_ident2)
 
 
-    # Comparison name for the output file:
-    comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
-    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
+   # Comparison name for the output file:
+   comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
+   name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
     # Write to table
     write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)

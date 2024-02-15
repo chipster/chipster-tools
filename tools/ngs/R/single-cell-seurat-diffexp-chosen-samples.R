@@ -3,8 +3,8 @@
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
-# PARAMETER samples1: "Name of the samples to compare with" TYPE STRING DEFAULT "STIM" (Name of the sample or samples of which you want to identify the differentially expressed of.)
-# PARAMETER samples2: "Name of the samples to compare to" TYPE STRING DEFAULT "CTRL" (Name of the sample or samples which you want to identify the differentially expressed of.)
+# PARAMETER samples1: "Name of the samples to compare with" TYPE STRING DEFAULT "stim1" (Name of the sample or samples of which you want to identify the differentially expressed of.)
+# PARAMETER samples2: "Name of the samples to compare to" TYPE STRING DEFAULT "control1" (Name of the sample or samples which you want to identify the differentially expressed of.)
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.de: "Fold change threshold for differentially expressed genes in log scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
@@ -65,10 +65,14 @@ samples2.cluster <- paste(cluster, "_", samples2.ok, sep = "")
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
-  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+  # Note: assay = "SCT" and recorrect_umi = FALSE
+  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) 
 } else {
   cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
 }
+
+ # Filter based on adj-p-val (no return.thresh parameter):
+  cluster_response_filtered <- cluster_response[cluster_response$p_val_adj<pval.cutoff.de, ]
 
 # Add average expression to the table:
 if (normalisation.method == "SCT") {
@@ -80,10 +84,10 @@ if (normalisation.method == "SCT") {
 aver_expr_in_clusters <- aver_expr[[1]]
 
 # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), samples1.cluster], digits = 4)
-aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), samples2.cluster], digits = 4)
+aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), samples1.cluster], digits = 4)
+aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), samples2.cluster], digits = 4)
 
-full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
+full_table <- cbind(cluster_response_filtered, aver_expr_ident1, aver_expr_ident2)
 
 
 # Comparison name for the output file:
