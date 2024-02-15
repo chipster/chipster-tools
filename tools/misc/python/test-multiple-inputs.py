@@ -5,5 +5,6 @@
 # OUTPUT OPTIONAL missing_output.txt
 
 import shutil
+# cannot use tool_utils in python2
 
 shutil.copyfile("other", "output")

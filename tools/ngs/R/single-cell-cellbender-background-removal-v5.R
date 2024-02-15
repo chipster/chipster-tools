@@ -1,4 +1,4 @@
-# TOOL single-cell-cellbender-background-removal.R: "Seurat v4 -Remove background contamination with CellBender" (This tool estimates non-empty cells from raw 10x feature-barcode matrices and removes systematic background contamination from the estimated cells. The raw feature-barcode matrix input must be given in hdf5 file format. The CellBender filtered feature-barcode matrix output of this tool can be used as input to the "Setup and QC" tool.)
+# TOOL single-cell-cellbender-background-removal-v5.R: "Seurat v5 -Remove background contamination with CellBender" (This tool estimates non-empty cells from raw 10x feature-barcode matrices and removes systematic background contamination from the estimated cells. The raw feature-barcode matrix input must be given in hdf5 file format. The CellBender filtered feature-barcode matrix output of this tool can be used as input to the "Setup and QC" tool.)
 # INPUT raw_fb_matrix.h5: "Raw 10x feature-barcode matrix in hdf5 format" TYPE GENERIC ()
 # OUTPUT cellbender_fb_matrix_report.html
 # OUTPUT cellbender_fb_matrix_filtered.h5
@@ -13,7 +13,7 @@
 
 # The output cellbender_fb_matrix_filtered.h5 of this CellBender tool is formatted 
 # exactly like a 10x Cell Ranger v3 hdf5 file so that it is compatible with 
-# Seurat v4 dataloader Read10X_h5() in the "Seurat v4 -Setup and QC" -tool
+# Seurat v5 dataloader Read10X_h5() in the "Seurat v5 -Setup and QC" -tool
 
 library(rhdf5)
 
@@ -85,7 +85,7 @@ if (!is.null(h5f$metadata)) {
 
 if (is.null(h5f$matrix)) {
   stop("CHIPSTER-NOTE: The CellBender output cellbender_fb_matrix_filtered.h5 does not contain matrix group.
-  Output is not compatible with Seurat v4 dataloader Read10X_h5()")
+  Output is not compatible with Seurat v5 dataloader Read10X_h5()")
 }
 
 if (!file.exists("cellbender_fb_matrix_report.html")) {
@@ -101,8 +101,3 @@ if (!file.exists("cellbender_fb_matrix_report.html")) {
 H5Fclose(h5f) 
 
 # EOF
-
-
-
-
-

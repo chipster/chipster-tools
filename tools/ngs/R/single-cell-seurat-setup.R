@@ -1,7 +1,7 @@
-# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are 3 options for input files, please check that your input file is correctly assigned under the parameters. If you have 10X data, make a tar package containing the files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\" for this\). Alternatively you can give a DGE matrix or a 10X CellRanger hdf5 file as input. If you are planning to combine samples later on, make sure you name them in this tool!)
-# INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
+# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are several options for input files. Check that your input file is correctly assigned under the parameters. If you have 10X filtered feature-barcode matrix files in MEX format, make a tar package containing files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\"\). Alternatively you can give a DGE matrix is tsv format, a 10X filtered feature-barcode matrix in hdf5 format or a CellBender filtered feature-barcode matrix in hdf5 format. If you are planning to combine samples later on, make sure you name them in this tool!)
+# INPUT OPTIONAL files.tar: "tar package of 10X filtered feature-barcode matrix files in MEX format" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
-# INPUT OPTIONAL hdf5.h5: "10X CellRanger hdf5 input file" TYPE GENERIC
+# INPUT OPTIONAL hdf5.h5: "10X or CellBender filtered feature-barcode matrix in  hdf5 format" TYPE GENERIC
 # OUTPUT OPTIONAL setup_seurat_obj.Robj
 # OUTPUT OPTIONAL QCplots.pdf
 # OUTPUT OPTIONAL PCAplots.pdf
@@ -147,9 +147,12 @@ if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@m
 }
 
 # FeatureScatter (v3)
-plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt")
+# Add "Pearson correlation value" to the title to clarify the value FeatureScatter prints as the plot title.
+plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt") 
+  plot1B <- ggdraw(plot1) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
 plot2 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-CombinePlots(plots = list(plot1, plot2))
+  plot2B <- ggdraw(plot2) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
+plot_grid(plot1B, plot2B)
 
 # Number of cells:
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)

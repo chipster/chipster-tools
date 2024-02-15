@@ -1,4 +1,4 @@
-# TOOL test-chipster-note.py: "Test Chipster note" (Test Chipster note.)
+# TOOL test-chipster-note.py: "Test Chipster note in Python" (Test Chipster note.)
 # INPUT input TYPE GENERIC
 # OUTPUT output
 # RUNTIME python3

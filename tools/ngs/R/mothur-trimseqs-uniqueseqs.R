@@ -1,5 +1,5 @@
 # TOOL mothur-trimseqs-uniqueseqs.R: "Trim primers and barcodes and filter reads" (Removes primers and barcodes and filters reads for several criteria, including uniqueness. Note that Mothur does not accept hyphens in sample names, so you need to remove them from the oligos file if you have any. This tool is based on the Mothur tools trim.seqs, unique.seqs and count.seqs.)
-# INPUT reads.fastq: "FASTQ file" TYPE FASTQ
+# INPUT reads: "FASTA or FASTQ file" TYPE GENERIC
 # INPUT reads.oligos: "Oligos" TYPE MOTHUR_OLIGOS
 # OUTPUT trim.unique.fasta
 # OUTPUT trim.unique.count_table
@@ -29,7 +29,7 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-unzipIfGZipFile("reads.fastq")
+unzipIfGZipFile("reads")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
@@ -37,17 +37,22 @@ binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
-# Split FASTQ to FASTA and QUAL
-# batch file
-fastqinfo.options <- paste("fastq.info(fastq=reads.fastq)")
-documentCommand(fastqinfo.options)
-write(fastqinfo.options, "batch.mth", append = FALSE)
+if (isFastq("reads",2)){ 
+  file.rename("reads","reads.fastq")
+  # Split FASTQ to FASTA and QUAL
+  # batch file
+  fastqinfo.options <- paste("fastq.info(fastq=reads.fastq)")
+  documentCommand(fastqinfo.options)
+  write(fastqinfo.options,"batch.mth",append = FALSE)
+  # command
+  command <- paste(binary,"batch.mth","> log_raw.txt")
+  # run
+  system(command)
+}else{
+  file.rename("reads","reads.fasta")
+}
 
-# command
-command <- paste(binary, "batch.mth", "> log_raw.txt")
-
-# run
-system(command)
+system("ls -l")
 
 # Add options
 trimseqs.options <- ""

@@ -8,6 +8,7 @@ import json
 import time
 import os
 
+# cannot use tool_utils in python2
 # import tool_utils
 
 """

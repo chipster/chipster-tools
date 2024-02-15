@@ -67,12 +67,18 @@ if (find.all.markers == TRUE) {
   # Comparing to all other cells (default):
   if (cluster2 == "all others") {
     cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
+    # no return.thresh parameter, need to filter by hand:
+    cluster_markers_filtered <- cluster_markers[cluster_markers$p_val_adj<returnthresh, ]
   } else {
     # comparing to another user determined cluster(s):
     cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
     cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
+    # no return.thresh parameter, need to filter by hand:
+    cluster_markers_filtered <- cluster_markers[cluster_markers$p_val_adj<returnthresh, ]
   }
-  write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+  write.table(as.matrix(cluster_markers_filtered), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+  # write.table(as.matrix(cluster_markers), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+
 }
 # Save the Robj for the next tool -not necessary here
 # save(seurat_obj, file = "seurat_obj_markers.Robj")
