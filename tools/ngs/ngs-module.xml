@@ -224,7 +224,7 @@
 		 <tool>single-cell-seurat-singler-v5.R</tool>
 		<tool>single-cell-extract-information-v5.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
-		<tool>single-cell-seurat-merge-samples.R</tool>	
+		<tool>single-cell-seurat-merge-samples-v5.R</tool>	
 		<tool>single-cell-seurat-integrate-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples-v5.R</tool>
