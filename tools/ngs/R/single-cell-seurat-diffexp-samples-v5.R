@@ -13,7 +13,6 @@
 # PARAMETER OPTIONAL mincellsconserved: "Minimum number of cells in one of the groups for conserved markers" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in a each sample in the cluster in question.)
 # PARAMETER OPTIONAL minpct: "Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # PARAMETER OPTIONAL minpct_conserved: "Limit testing for conserved markers to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in the cluster in question or in all the other cells. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
@@ -60,7 +59,6 @@ if (normalisation.method == "SCT") {
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 # Identify conserved cell type markers
-# (uses package "metap" instead of metaDE since Seurat version 2.3.0)
  if (normalisation.method == "SCT") {
     cluster.markers <- FindConservedMarkers(data.combined, assay = "SCT",
       ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
@@ -71,6 +69,13 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
       verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
   }
 
+# Filter based on p_val_adj
+install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/", quiet = TRUE) # remove this when the package is installed in tools!
+library("tidyverse")
+p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
+cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
+cluster.markers$minimum.adj.p.val <- apply(p.val.adj.table, 1, min, na.rm=TRUE)
+dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
 
 # Write to table
 write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
@@ -94,26 +99,30 @@ if (length(lvls) < 2) {
     ident2 <- paste("cluster", cluster, "-", lvls[-i], sep = "")
     # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
     if (normalisation.method == "SCT") {
-      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+       # Note: assay = "SCT" and recorrect_umi = FALSE
+      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive)
     } else {
-      cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive )
+      cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
     }
 
-  # Add average expression to the table:
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-  } else {
-    aver_expr <- AverageExpression(object = data.combined)
-  }
+    # Filter based on adj-p-val (no return.thresh parameter):
+    cluster_response_filtered <- cluster_response[cluster_response$p_val_adj<pval.cutoff.de, ]
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-  aver_expr_in_clusters[1:2,1:2]
+    # Add average expression to the table:
+    if (normalisation.method == "SCT") {
+      aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+    } else {
+     aver_expr <- AverageExpression(object = data.combined)
+    }
 
-  # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), ident1], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), ident2], digits = 4)
+    aver_expr_in_clusters <- aver_expr[[1]]
+    aver_expr_in_clusters[1:2,1:2]
 
-  full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
+    # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+    aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident1], digits = 4)
+    aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident2], digits = 4)
+
+    full_table <- cbind(cluster_response_filtered, aver_expr_ident1, aver_expr_ident2)
 
 
     # Comparison name for the output file:

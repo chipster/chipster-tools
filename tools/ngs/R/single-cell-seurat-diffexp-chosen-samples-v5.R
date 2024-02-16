@@ -65,10 +65,14 @@ samples2.cluster <- paste("cluster", cluster, "-", samples2.ok, sep = "")
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
-  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+  # Note: assay = "SCT" and recorrect_umi = FALSE
+  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) 
 } else {
   cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
 }
+
+ # Filter based on adj-p-val (no return.thresh parameter):
+  cluster_response_filtered <- cluster_response[cluster_response$p_val_adj<pval.cutoff.de, ]
 
 # Add average expression to the table:
 if (normalisation.method == "SCT") {
@@ -80,10 +84,10 @@ if (normalisation.method == "SCT") {
 aver_expr_in_clusters <- aver_expr[[1]]
 
 # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response), samples1.cluster], digits = 4)
-aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response), samples2.cluster], digits = 4)
+aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), samples1.cluster], digits = 4)
+aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), samples2.cluster], digits = 4)
 
-full_table <- cbind(cluster_response, aver_expr_ident1, aver_expr_ident2)
+full_table <- cbind(cluster_response_filtered, aver_expr_ident1, aver_expr_ident2)
 
 
 # Comparison name for the output file:
