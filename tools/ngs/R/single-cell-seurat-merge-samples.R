@@ -56,13 +56,14 @@ if (normalisation.method == "SCT") {
     seurat_obj <- SCTransform(seurat_obj, assay = "RNA", new.assay.name = "SCT", vars.to.regress = c("percent.mt"), variable.features.n = num.features, verbose = FALSE,  ncells = 5000)
     # to be added
     # Dispersion plot:
-    # Identify the 10 most highly variable genes
+    # Not plotted for SCT. There are as many models as there are samples, and VariableFeaturePlot doesn't seem to support this currently.
+    # Commented out.
+    ## Identify the 10 most highly variable genes
     #top10 <- head(VariableFeatures(seurat_obj), 10)
-    # Plot variable features with and without labels
+    ## Plot variable features with and without labels
     #plot1 <- VariableFeaturePlot(seurat_obj) #assay = "SCT"
     #plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
-    ##CombinePlots(plots = list(plot1, plot2))
-    # plot_grid(plot1, plot2)
+    #plot_grid(plot1, plot2)
 } else if (normalisation.method == "LogNormalize") {
     seurat_obj <- NormalizeData(object = seurat_obj, normalization.method = "LogNormalize", scale.factor = totalexpr, verbose = FALSE)
     # Detection of variable genes across the single cells
@@ -191,4 +192,4 @@ dev.off() # close the pdf
 # Save the Robj for the next tool
 save(seurat_obj, file = "seurat_obj_merged.Robj")
 
-## EOF
+# EOF
