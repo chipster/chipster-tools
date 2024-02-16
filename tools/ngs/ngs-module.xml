@@ -213,7 +213,7 @@
 	<category name="Single-cell RNA-seq" color="#2196F3">
 		<tool>single-cell-cellbender-background-removal-v5.R</tool> 
 		<tool>single-cell-seurat-setup-v5.R</tool>  
-		<tool>single-cell-filter-v5.R</tool> 	
+		<tool>single-cell-seurat-filter-v5.R</tool> 	
 		<tool>single-cell-seurat-filter-regress-v5.R</tool>
 		<tool>single-cell-seurat-sctransform-v5.R</tool>
 		<tool>single-cell-seurat-pca-v5.R</tool>
