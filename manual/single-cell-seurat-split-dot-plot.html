@@ -19,13 +19,17 @@
 	<h3>Parameters</h3>
 	<ul>
 		<li>Markers to plot [CD3D, CREM, HSPH1, SELL, GIMAP5]</li>
+		<li>Scale data in split dot plot [no]</li>
+		<li>Visualisation with tSNE, UMAP or PCA in feature plot [UMAP] </li>
+		<li>Plotting order of cells based on expression in feature plot [no]</li>
+		<li>Determine color scale based on all features in feature plot [no]</li>
 	</ul>
 
 
 	<h3>Details</h3>
 
 	<p>
-		As inputs, give a combined Seurat object. <br>
+		As input, give a combined Seurat object. <br>
 	</p>
 
 	<p>
@@ -36,16 +40,20 @@
 	</p>
 
 	<p>
-		The "SplitDotPlotGG" can be useful for viewing conserved cell type markers across conditions,
+		The "split dot plot" can be useful for viewing conserved cell type markers across conditions,
 		showing both the expression level and the percentage of cells in a cluster expressing any given gene.
 		The <b>size of the dot</b> encodes the percentage of cells within a class (=cluster),
 		while the <b>color</b> encodes the AverageExpression level of 'expressing' cells (stronger color, more
-		experssion).
+		experssion). By default, the raw expression data is used but the user can choose to use scaled data by 
+		setting the parameter value for "plotting order of cells based on expression in feature plot" to "yes".
 	</p>
 
 	<p>
-		Another useful way to visualize the changes in gene expression is with the FeatureHeatmap function.
-		This will display FeaturePlots of the list of given genes, split by the condition.
+		Another useful way to visualize changes in gene expression is with "feature plots" that are also visualized 
+		by splitting them by conditions. By default, the color scale in the feature plots are determined for each 
+		gene individually and may differ between genes. If you wish to compare gene expression between different genes, 
+		it is useful to set the parameter "determine color scale based on all features in feature plot" to "yes" so
+		that the color scale is the same for all of the visualized genes.
 	</p>
 
 	<p>
