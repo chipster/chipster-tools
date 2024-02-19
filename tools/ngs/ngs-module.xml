@@ -210,7 +210,7 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single-cell RNA-seq" color="#2196F3">
+<category name="Single-cell RNA-seq (Seurat v5, new)" color="#2196F3">
 		<tool>single-cell-cellbender-background-removal-v5.R</tool> 
 		<tool>single-cell-seurat-setup-v5.R</tool>  
 		<tool>single-cell-seurat-filter-v5.R</tool> 	
@@ -235,7 +235,22 @@
 		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
 		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
-		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	  
+		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	  	
+		<!-- Dropseq tools: --> 
+		<tool>single-cell-preprocessing.R</tool>
+		<tool>picard-merge-bam-alignment.R</tool>	
+		<tool>single-cell-bam-tag-histogram.R</tool>	  	
+		<tool>single-cell-digital-expression.R</tool>
+		<!--<tool>picard-fastqtosam.R</tool> --> 
+		<!--<tool>single-cell-TagBam.R</tool> --> 
+		<!--<tool>single-cell-FilterBam.R</tool> --> 
+		<!--<tool>picard-samtofastq.R</tool> --> 		
+	    	<!--<tool>picard-sortsam.R</tool>	--> 
+		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
+		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
+	</category>
+
+	<category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
 		<tool>single-cell-cellbender-background-removal.R</tool> 	
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool>
