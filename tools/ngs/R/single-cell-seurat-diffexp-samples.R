@@ -7,7 +7,7 @@
 # PARAMETER cluster: "Name of the cluster" TYPE STRING DEFAULT 3 (Name of the cluster of which you want to identify the differentially expressed of. By default, the clusters are named with numbers starting from 0.)
 # PARAMETER OPTIONAL only.positive: "Return only positive marker genes" TYPE [FALSE, TRUE] DEFAULT TRUE (Tool only returns positive markers as default. Change the parameter here if you want to also include the negative markers.)
 # PARAMETER OPTIONAL logFC.conserved: "Conserved markers: Fold change in log2 scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis. )
-# PARAMETER OPTIONAL pval.cutoff.conserved: "Conserved markers: Adjusted p-value cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the conserved cluster marker genes: by default, adjusted p-values bigger than 0.05 in any sample are filtered out.)
+# PARAMETER OPTIONAL pval.cutoff.conserved: "Conserved markers: p-value cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the p-value of the conserved cluster marker genes: by default, p-values bigger than 0.05 in any sample are filtered out.)
 # PARAMETER OPTIONAL minpct_conserved: "Conserved markers: Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in the cluster in question or in all the other cells. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
 # PARAMETER OPTIONAL mincellsconserved: "Conserved markers: Minimum number of cells in one of the groups" TYPE INTEGER DEFAULT 3 (How many cells at least there needs to be in each sample in the cluster in question.)
 # PARAMETER OPTIONAL logFC.de: "Differentially expressed genes: Fold change in log2 scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
@@ -76,13 +76,14 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 # filter based on p_val_adj
 # dat2 <- subset(cluster.markers, (CTRL_p_val_adj < pval.cutoff.conserved & STIM_p_val_adj < pval.cutoff.conserved))
 # dat2 <- subset(cluster.markers, (cluster.markers[,5] < pval.cutoff.conserved & cluster.markers[,10] < pval.cutoff.conserved))
-# dat2 <- subset(cluster.markers, cluster.markers[,"max_pval"] < pval.cutoff.conserved)
-install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/") # remove this when the package is installed in tools!
-library("tidyverse")
-p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
-cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
-cluster.markers$minimum.adj.p.val <- apply(p.val.adj.table, 1, min, na.rm=TRUE)
-dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
+ dat2 <- subset(cluster.markers, cluster.markers[,"max_pval"] < pval.cutoff.conserved)
+
+# install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/") # remove this when the package is installed in tools!
+# library("tidyverse")
+# p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
+# cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
+# cluster.markers$minimum.adj.p.val <- apply(p.val.adj.table, 1, min, na.rm=TRUE)
+# dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
 
 # Write to table
 write.table(dat2, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
