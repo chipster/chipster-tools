@@ -47,14 +47,17 @@ if (exists("data.combined")) {
 
 # If FindAllMarkers:
 if (find.all.markers == TRUE) {
-  markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, return.thresh = returnthresh) # only.pos = only.positive, min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup,
-  # markers <- FindAllMarkers(seurat_obj, min.pct = 0.1, logfc.threshold = 0.25, test.use = "wilcox", only.pos = TRUE)
+  markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, return.thresh = returnthresh, only.pos = as.logical(only.positive)) # min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup,
 
   if (length(warnings()) > 0) {
     # or !is.null(warnings())
     stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
   }
-  write.table(as.matrix(markers), file = "all_markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+
+  # Filter based on adj-p-val (return.thresh parameter looks at the p_val column, not p_val_adj):
+  markers_filtered <- markers[markers$p_val_adj<returnthresh, ]
+
+  write.table(as.matrix(markers_filtered), file = "all_markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
   # Plot top10 genes of each cluster as a heatmap
   top10 <- markers %>%

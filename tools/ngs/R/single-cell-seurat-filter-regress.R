@@ -30,6 +30,7 @@
 # 2020-07-02 ML Remove the plot titles, as they started giving errors. Fix the IF structure.
 # 2021-10-04 ML Update to Seurat v4
 # 2023-09-08 IH add ribosomal filtering
+# 2023-02-16 ML Add QC plotting
 
 library(Seurat)
 library(dplyr)
@@ -125,6 +126,23 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
         DimPlot(seurat_obj) # , plot.title = "PCA on cell cycle genes")
     }
 }
+
+# Re-do the QC plots from the setup tool, for comparison:
+
+# Switch back to orig.ident from cell cycle scores:
+Idents(object = seurat_obj) <- "orig.ident"
+
+# Violinplot
+if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
+} else if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1)) {
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+} else if ((sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
+} else {
+  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+}
+
 
 dev.off() # close the pdf
 
