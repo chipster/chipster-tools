@@ -204,7 +204,8 @@
 		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
 		<tool>miRNA_RNA-seq_integration.R</tool>
 		<tool>ngs-correlation-analysis-mirna.R</tool>
-		<tool>ngs-up-down-analysis-mirna.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool>ngs-up-down-analysis-mirna.R</tool> -->
 		<tool>ngs-extract-target-gene-expression.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
@@ -406,7 +407,8 @@
 		<tool module="common">cna-fuse-regions-manually.R</tool>
 		<tool module="common">acgh-convert-from-probes-to-genes.R</tool>
 		<tool module="common">acgh-pathways-go.R</tool>
-		<tool module="common">acgh-match-probes.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool module="common">acgh-match-probes.R</tool> -->
 		<tool module="common">acgh-plot-combined-profile.R</tool>
 		<tool module="common">acgh-expression-test.R</tool>	
 		<tool module="common">acgh-plot-combined-expression.R</tool>
