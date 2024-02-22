@@ -92,6 +92,10 @@ install.packages("tidyr")
 
 install.packages("hdf5r")
 
+# more efficient implementation of the Wilcoxon Rank Sum Test for e.g. single-cell-seurat-diffexp-samples.R
+# now apparent installed as dependecy, but install explicitly next time
+# BiocManager::install('limma')
+
 
 
 
