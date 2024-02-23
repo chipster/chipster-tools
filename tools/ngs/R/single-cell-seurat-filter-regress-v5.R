@@ -1,19 +1,14 @@
-# TOOL single-cell-seurat-filter-regress.R: "Seurat v4 -Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values and detects highly variable genes across the cells. Finally, it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)
+# TOOL single-cell-seurat-filter-regress-v5.R: "Seurat v5 -Normalize, regress and detect variable genes" (This tool normalizes gene expression values and detects highly variable genes across the cells. Finally, it scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_preprocess.Robj
 # OUTPUT OPTIONAL Dispersion_plot.pdf
 # OUTPUT OPTIONAL log.txt
-# PARAMETER OPTIONAL mingenes: "Filter out cells which have less than this many genes expressed" TYPE INTEGER DEFAULT 200 (Filter out empties. The cells to be kept must express at least this number of genes.)
-# PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have more than this many genes expressed" TYPE INTEGER DEFAULT 2500 (Filter out multiplets. The cells to be kept must express less than this number of genes.)
-# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out dead cells. The cells to be kept must have lower percentage of mitochondrial transcripts than this if needed in your data.)
-# PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out cells that have lower ribosomal transcript percentage.)
 # PARAMETER OPTIONAL lognorm: "Perform global scaling normalization" TYPE [T:yes, F:no] DEFAULT T (For raw data, select yes.)
 # PARAMETER OPTIONAL totalexpr: "Scaling factor in the normalization" TYPE INTEGER DEFAULT 10000 (Scale each cell to this total number of transcripts.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 2000 (Number of features to select as top variable features, i.e. how many features returned.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
-
 
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
@@ -30,13 +25,14 @@
 # 2020-07-02 ML Remove the plot titles, as they started giving errors. Fix the IF structure.
 # 2021-10-04 ML Update to Seurat v4
 # 2023-09-08 IH add ribosomal filtering
-# 2023-02-16 ML Add QC plotting
+# 2023-10-17 IH Update to Seurat v5
 
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
 library(ggplot2)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -53,8 +49,9 @@ cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
+# move to the filter cells tool
 # Subset: remove potential empties, multiplets and broken cells based on parameters.
-seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff & percent.rb >= minribo)
+#seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff & percent.rb >= minribo)
 
 # Normalisation, scaling & finding variables genes:
 
@@ -126,23 +123,6 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
         DimPlot(seurat_obj) # , plot.title = "PCA on cell cycle genes")
     }
 }
-
-# Re-do the QC plots from the setup tool, for comparison:
-
-# Switch back to orig.ident from cell cycle scores:
-Idents(object = seurat_obj) <- "orig.ident"
-
-# Violinplot
-if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
-} else if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-} else if ((sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
-} else {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
-}
-
 
 dev.off() # close the pdf
 

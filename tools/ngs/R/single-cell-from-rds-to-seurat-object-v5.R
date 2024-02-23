@@ -1,7 +1,7 @@
-# TOOL single-cell-from-rds-to-seurat-object.R: "Seurat v4 -From RDS file to Seurat object" (This tool converts an RDS file into a Seurat object. The RDS file given as input must contain Seurat object information created with Seurat v4 to be converted into a Seurat object.)
+# TOOL single-cell-from-rds-to-seurat-object-v5.R: "Seurat v5 -From RDS file to Seurat object" (This tool converts an RDS file into a Seurat object. The RDS file given as input must contain Seurat object information created with Seurat v5 to be converted into a Seurat object.)
 # INPUT rds_file: "RDS file" TYPE GENERIC 
 # OUTPUT seurat_obj.Robj
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
@@ -23,11 +23,12 @@ if (class(seurat_obj) != "Seurat") {
 }
 
 # Check that Seurat object was created with Seurat v4
-if (as.integer(substr(seurat_obj@version,1,1)) != 4) {
-  stop("CHIPSTER-NOTE: The RDS file does not contain Seurat object information created with Seurat v4. The given RDS file was created with Seurat version ", as.integer(substr(seurat_obj@version,1,1)), ".")
+if (as.integer(substr(seurat_obj@version,1,1)) != 5) {
+  stop("CHIPSTER-NOTE: The RDS file does not contain Seurat object information created with Seurat v5. The given RDS file was created with Seurat version ", as.integer(substr(seurat_obj@version,1,1)), ".")
 }
 
 # Save the Seurat object for the next tool
 save(seurat_obj, file = "seurat_obj.Robj")
 
 # EOF
+

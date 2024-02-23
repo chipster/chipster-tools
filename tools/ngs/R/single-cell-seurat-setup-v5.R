@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-setup.R: "Seurat v4 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are several options for input files. Check that your input file is correctly assigned under the parameters. If you have 10X filtered feature-barcode matrix files in MEX format, make a tar package containing files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\"\). Alternatively you can give a DGE matrix is tsv format, a 10X filtered feature-barcode matrix in hdf5 format or a CellBender filtered feature-barcode matrix in hdf5 format. If you are planning to combine samples later on, make sure you name them in this tool!)
+# TOOL single-cell-seurat-setup-v5.R: "Seurat v5 -Setup and QC" (Setup the Seurat object, make quality control plots and filter out genes. There are several options for input files. Check that your input file is correctly assigned under the parameters. If you have 10X filtered feature-barcode matrix files in MEX format, make a tar package containing files genes.tsv, barcodes.tsv and matrix.mtx \(you can use the tool \"Utilities - Make a tar package\"\). Alternatively you can give a DGE matrix is tsv format, a 10X filtered feature-barcode matrix in hdf5 format or a CellBender filtered feature-barcode matrix in hdf5 format. If you are planning to combine samples later on, make sure you name them in this tool!)
 # INPUT OPTIONAL files.tar: "tar package of 10X filtered feature-barcode matrix files in MEX format" TYPE GENERIC
 # INPUT OPTIONAL dropseq.tsv: "DGE table in tsv format" TYPE GENERIC
 # INPUT OPTIONAL hdf5.h5: "10X or CellBender filtered feature-barcode matrix in  hdf5 format" TYPE GENERIC
@@ -10,8 +10,8 @@
 # PARAMETER sample_name: "Sample name" TYPE STRING DEFAULT control1 (Type the sample name or identifier here. For example control1, cancer3a. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
-# RUNTIME R-4.2.3-single-cell
-# SLOTS 5
+# RUNTIME R-4.3.2-single-cell
+# SLOTS 2
 # TOOLS_BIN ""
 
 
@@ -31,20 +31,20 @@
 # 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
 # 2023-07-12 ML Mitogenes with Mt-
 # 2023-08-28 IH add percent.rb to QC
+# 2023-10-10 IH Update to Seurat v5
 
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
 # PARAMETER OPTIONAL mingenes: "Keep cells which express at least this many genes" TYPE INTEGER DEFAULT 200 (The cells need to have expressed at least this many genes.)
 
+
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
-library(ggplot2)
-require(cowplot)
-
 library(Biobase)
+options(Seurat.object.assay.version = "v5")
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
 package.version("Seurat")
@@ -59,7 +59,8 @@ project.name <- gsub(" ", "_", project.name)
 # If using DropSeq data:
 if (file.exists("dropseq.tsv")) {
   dat <- read.table("dropseq.tsv", header = TRUE, sep = "\t", row.names = 1)
-
+  # Change the dataframe to a matrix
+  dat = Matrix(as.matrix(dat) , sparse=TRUE)
   # If using 10X data:
 } else if (file.exists("files.tar")) {
   # Read the contents of the tar file into a list
@@ -148,12 +149,9 @@ if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@m
 }
 
 # FeatureScatter (v3)
-# Add "Pearson correlation value" to the title to clarify the value FeatureScatter prints as the plot title.
-plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt") 
-  plot1B <- ggdraw(plot1) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
+plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt")
 plot2 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-  plot2B <- ggdraw(plot2) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
-plot_grid(plot1B, plot2B)
+CombinePlots(plots = list(plot1, plot2))
 
 # Number of cells:
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
@@ -164,3 +162,4 @@ dev.off() # close the pdf
 save(seurat_obj, file = "setup_seurat_obj.Robj")
 
 ## EOF
+

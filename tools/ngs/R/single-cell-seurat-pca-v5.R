@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-pca.R: "Seurat v4 -PCA" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
+# TOOL single-cell-seurat-pca-v5.R: "Seurat v5 -PCA" (Principal component analysis on the highly variable genes across the single cells. The plots from this tool help you to estimate the number of principal components to be used in the clustering step.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_pca.Robj
 # OUTPUT OPTIONAL PCAplots.pdf
@@ -7,7 +7,7 @@
 # PARAMETER OPTIONAL num.of.heatmaps: "Number of principal components to plot as heatmaps" TYPE INTEGER DEFAULT 12 (How many principal components to plot as heatmaps.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
 # OUTPUT OPTIONAL log.txt
@@ -22,12 +22,14 @@
 # 2022-10-03 EK increase the default number of PCs to 50 as in Seurat
 # 2023-02-09 LG Add 5 slots
 # 2023-04-06 LG Remove 5 slots
+# 2023-10-20 IH Seurat v5
 
 library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
 library(ggplot2)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")

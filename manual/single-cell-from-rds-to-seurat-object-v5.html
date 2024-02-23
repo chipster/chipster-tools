@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+	<head>
+		<title>Seurat v5 -From RDS file to Seurat object</title>
+	</head>
+
+	<body>
+
+		<h2>Seurat v5 -From RDS file to Seurat object</h2>
+
+		<h3>Description</h3>
+
+			<p>
+				This tool converts an RDS file into a Seurat object.
+			</p>
+			
+			<p>
+				The RDS file given as input must contain Seurat object information created with Seurat version 5 
+				to be converted into a Seurat object. 
+			</p>
+				
+			<p>
+				This tool is useful in situations where single-cell RNA-seq data has been previously analyzed with
+				Seurat v5 and then saved as an RDS file. By converting the RDS file back into a Seurat object with
+				this tool, the analysis can be continued in Chipster.
+			</p>
+
+		<h3>Details</h3>
+
+			<p>
+				Note that the single-cell RNA-seq tools in Chipster assume that you have analyzed your data 
+				similarly as how it is done in Chipster. Therefore, you might need some meta data in your 
+				Seurat object in order to continue the analysis in Chipster. You can use the 
+				<a href="https://chipster.rahtiapp.fi/manual/single-cell-extract-information.html">Seurat v5 
+				-Extract information from Seurat object</a> tool to see what meta data has been stored in your 
+				Seurat object. Assuming that you have necessary meta data, you can continue your analysis using 
+                other single-cell RNA-seq tools.
+			</p>
+
+		<h3>Output</h3>
+
+			<ul>
+				<li>seurat_obj.Robj: The Seurat R-object to pass to the next Seurat tool.  </li>
+			</ul>
+
+	</body>
+
+</html>
+

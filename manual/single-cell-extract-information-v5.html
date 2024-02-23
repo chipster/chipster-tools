@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title>Seurat v5 -Extract information from Seurat object</title>
+</head>
+
+<body>
+
+    <h2>Seurat v5 -Extract information from Seurat object</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        With this tool you can extract information from Seurat object. The tool will produce a text file
+        containing an overall view to the contents of the object. You can also choose to produce
+        <li>a table of the genes in the object</li>
+        <li>a table of the highly variable genes in the object </li>
+        <li>a text file of the R commands that have been run to the object </li>
+        <li>a table of the metadata data frame</li>
+        <li>the tissue image stored in the object (in case you have spatial transcriptomics data)</li>
+    </p>
+
+    <h3>Details</h3>
+    <p></p>
+    The single-cell RNA-seq or spatially variable transcriptomics data is stored in the Seurat object in specific data
+    slots.
+    With this tool, you can easily access and extract information from the chosen slots.
+    </p>
+    <p>
+        As input, you can give a Seurat R-object (Robj) or an RDS file containing scRNA-seq data or spatial
+        transcriptomics data.
+    </p>
+
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>slots.txt: Text file containing information of the different slots in the Seurat object </li>
+        <li>gene.tsv: Table containig the genes in the active assay of the object </li>
+        <li>var_genes.tsv: Table containig the highly variable in the active assay of the object</li>
+        <li>commands.tsv: Table containing the R commands that have been run to the object</li>
+        <li>meta_data.tsv: Table of the meta.data data frame in the Seurat object</li>
+        <li>spatial_image.pdf: Pdf file containing the tissue image stored in the Seurat object</li>

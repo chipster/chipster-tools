@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Filter cells </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool filters out cells (potential empties, multiplets and broken cells).
+    </p>
+
+    <h3>Parameters</h3>
+    <p>
+    <ul>
+        <li>Filter out cells which have less than this many genes expressed [200]</li>
+        <li>Filter out cells which have more than this many genes expressed [2500]</li>
+        <li>Filter out cells which have higher mitochondrial transcript percentage [5]</li>
+    </ul>
+    </p>
+
+
+    <h3>Details</h3>
+
+    <p>
+        <b>Filtering</b> is performed in order to remove empties, multiplets and broken cells.
+        You can use the QC-plots.pdf from the <b>Seurat- Setup and QC</b> tool to estimate the the upper limit for
+        the number of expressed genes per cell and mitochondrial transcript percentage.
+    </p>
+
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj_preprocess.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
+			but you can view the contents of the object using the <i>Extract information from Seurat object</i> tool.</li>
+    </ul>
+
+
+
+</body>

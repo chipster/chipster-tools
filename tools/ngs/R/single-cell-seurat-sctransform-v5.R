@@ -1,18 +1,13 @@
-# TOOL single-cell-seurat-sctransform.R: "Seurat v4 -SCTransform: Filter cells, normalize, regress and detect variable genes" (This tool filters out dead cells, empties and doublets. It then normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)
+# TOOL single-cell-seurat-sctransform-v5.R: "Seurat v5 -SCTransform: Normalize, regress and detect variable genes" (This tool normalizes gene expression values using the SCTransform method, detects highly variable genes, scales the data and regresses out unwanted variation based on the number of UMIs and mitochondrial transcript percentage. You can also choose to regress out variation due to cell cycle heterogeneity.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_sctransform.Robj
 # OUTPUT OPTIONAL Dispersion_plot.pdf
 # OUTPUT OPTIONAL log.txt
-# PARAMETER OPTIONAL mingenes: "Filter out cells which have less than this many genes expressed" TYPE INTEGER DEFAULT 200 (Filter out empties. The cells to be kept must express at least this number of genes.)
-# PARAMETER OPTIONAL genecountcutoff: "Filter out cells which have more than this many genes expressed" TYPE INTEGER DEFAULT 2500 (Filter out multiplets. The cells to be kept must express less than this number of genes.)
-# PARAMETER OPTIONAL mitocutoff: "Filter out cells which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 5 (Filter out dead cells. The cells to be kept must have lower percentage of mitochondrial transcripts than this.)
-# PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out cells that have lower ribosomal transcript percentage.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # SLOTS 2
 # TOOLS_BIN ""
-
 
 
 # 2020-06-17 ML
@@ -23,6 +18,7 @@
 # 2023-04-06 LG Remove 2 slots - Discrepancy in number of slots added v. removed
 # 2023-02-01 ML Return to the original 2 slots
 # 2023-09-08 IH add ribosomal filtering
+# 2023-10-20 IH Update to Seurat v5
 
 # Source: https://github.com/satijalab/seurat/issues/1679
 
@@ -31,6 +27,7 @@ library(Seurat)
 library(dplyr)
 library(Matrix)
 library(gplots)
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
@@ -46,8 +43,8 @@ cc.genes <- readLines(con = file.path("/opt/chipster/tools/seurat/regev_lab_cell
 s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
-# Subset: remove potential empties, multiplets and broken cells based on parameters.
-seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff & percent.rb >= minribo)
+# Move to the filter cells tool
+#seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff & percent.rb >= minribo)
 
 # SCTransform:
 # Note that this single command replaces NormalizeData, ScaleData, and FindVariableFeatures.

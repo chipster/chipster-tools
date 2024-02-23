@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-diffexp-samples.R: "Seurat v4 -Find conserved cluster markers and DE genes in multiple samples" (This tool lists the cell type markers that are conserved across the conditions, and the differentially expressed genes between the conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.)
+# TOOL single-cell-seurat-diffexp-samples-v5.R: "Seurat v5 -Find conserved cluster markers and DE genes in multiple samples" (This tool lists the cell type markers that are conserved across the conditions, and the differentially expressed genes between the conditions for a user defined cluster. In case of more than 2 samples, each sample is compared to all the other samples. This tool can be used for Seurat objects with 2 or more samples in them.)
 # INPUT OPTIONAL combined_seurat_obj.Robj: "Combined Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL de-list.tsv
 # OUTPUT OPTIONAL de-list_{...}.tsv
@@ -13,14 +13,8 @@
 # PARAMETER OPTIONAL logFC.de: "Differentially expressed genes: Fold change in log2 scale" TYPE DECIMAL FROM 0 TO 5 DEFAULT 0.25 (Genes with an average fold change smaller than this are not included in the analysis.)
 # PARAMETER OPTIONAL pval.cutoff.de: "Differentially expressed genes: Adjusted p-value cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Cutoff for the adjusted p-value of the DE genes: by default, adjusted p-values bigger than 0.05 are filtered out.)
 # PARAMETER OPTIONAL minpct: "Differentially expressed genes: Limit testing to genes which are expressed in at least this fraction of cells" TYPE DECIMAL DEFAULT 0.1 (Test only genes which are detected in at least this fraction of cells in either of two samples being compared in the cluster of question. Meant to speed up testing by leaving out genes that are very infrequently expressed.)
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
-
-
-
-# # RUNTIME R-4.2.3-single-cell = old v4
-# RUNTIME R-4.3.2-single-cell = new v5
-# PARAMETER OPTIONAL returnthresh: "p-value threshold" TYPE DECIMAL DEFAULT 0.01 (Only return markers that have a p-value < return.thresh, or a power > return.thresh, if the test is ROC)
 
 
 # 2018-16-05 ML
@@ -38,7 +32,7 @@
 
 
 library(Seurat)
-# options(Seurat.object.assay.version = "v5")
+options(Seurat.object.assay.version = "v5")
 
 # Load the R-Seurat-objects
 load("combined_seurat_obj.Robj")
@@ -46,8 +40,6 @@ load("combined_seurat_obj.Robj")
 if (exists("seurat_obj")) {
   data.combined <- seurat_obj
 }
-
-lvls <- levels(as.factor(data.combined$stim))
 
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
@@ -62,7 +54,6 @@ if (normalisation.method == "SCT") {
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 # Identify conserved cell type markers
-# (uses package "metap" instead of metaDE since Seurat version 2.3.0)
  if (normalisation.method == "SCT") {
     cluster.markers <- FindConservedMarkers(data.combined, assay = "SCT",
       ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
@@ -78,7 +69,8 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 # dat2 <- subset(cluster.markers, (cluster.markers[,5] < pval.cutoff.conserved & cluster.markers[,10] < pval.cutoff.conserved))
  dat2 <- subset(cluster.markers, cluster.markers[,"max_pval"] < pval.cutoff.conserved)
 
-# install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/") # remove this when the package is installed in tools!
+# # Filter based on p_val_adj
+# install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/", quiet = TRUE) # remove this when the package is installed in tools!
 # library("tidyverse")
 # p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
 # cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
@@ -86,7 +78,7 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 # dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
 
 # Write to table
-write.table(dat2, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
@@ -94,17 +86,20 @@ data.combined$celltype.stim <- paste("cluster", Idents(data.combined),"-", data.
 data.combined$celltype <- Idents(data.combined)
 Idents(data.combined) <- "celltype.stim"
 
+lvls <- levels(as.factor(data.combined$stim))
 
 # Check that there are more than 2 samples:
 if (length(lvls) < 2) {
   stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
+
 } else {
   for (i in 1:length(lvls)) {
     # i:th sample vs all the others (= -i)
     ident1 <- paste("cluster", cluster, "-", lvls[i], sep = "")
     ident2 <- paste("cluster", cluster, "-", lvls[-i], sep = "")
+    # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
     if (normalisation.method == "SCT") {
-      # Note: assay = "SCT" and recorrect_umi = FALSE
+       # Note: assay = "SCT" and recorrect_umi = FALSE
       cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive)
     } else {
       cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
@@ -113,28 +108,26 @@ if (length(lvls) < 2) {
     # Filter based on adj-p-val (no return.thresh parameter):
     cluster_response_filtered <- cluster_response[cluster_response$p_val_adj<pval.cutoff.de, ]
 
+    # Add average expression to the table:
+    if (normalisation.method == "SCT") {
+      aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+    } else {
+     aver_expr <- AverageExpression(object = data.combined)
+    }
+
+    aver_expr_in_clusters <- aver_expr[[1]]
+    aver_expr_in_clusters[1:2,1:2]
+
+    # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+    aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident1], digits = 4)
+    aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident2], digits = 4)
+
+    full_table <- cbind(cluster_response_filtered, aver_expr_ident1, aver_expr_ident2)
 
 
-   # Add average expression to the table:
-   if (normalisation.method == "SCT") {
-     aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-   } else {
-    aver_expr <- AverageExpression(object = data.combined)
-   }
-
-   aver_expr_in_clusters <- aver_expr[[1]]
-   aver_expr_in_clusters[1:2,1:2]
-
-   # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-   aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered ), ident1], digits = 4)
-   aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered ), ident2], digits = 4)
-
-   full_table <- cbind(cluster_response_filtered , aver_expr_ident1, aver_expr_ident2)
-
-
-   # Comparison name for the output file:
-   comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
-   name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
+    # Comparison name for the output file:
+    comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
+    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
 
     # Write to table
     write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)

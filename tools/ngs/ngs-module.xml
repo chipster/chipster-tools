@@ -204,29 +204,70 @@
 		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
 		<tool>miRNA_RNA-seq_integration.R</tool>
 		<tool>ngs-correlation-analysis-mirna.R</tool>
-		<tool>ngs-up-down-analysis-mirna.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool>ngs-up-down-analysis-mirna.R</tool> -->
 		<tool>ngs-extract-target-gene-expression.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-	<category name="Single-cell RNA-seq" color="#2196F3">	  
+<category name="Single-cell RNA-seq (Seurat v5, new)" color="#2196F3">
+		<tool>single-cell-cellbender-background-removal-v5.R</tool> 
+		<tool>single-cell-seurat-setup-v5.R</tool>  
+		<tool>single-cell-seurat-filter-v5.R</tool> 	
+		<tool>single-cell-seurat-filter-regress-v5.R</tool>
+		<tool>single-cell-seurat-sctransform-v5.R</tool>
+		<tool>single-cell-seurat-pca-v5.R</tool>
+		<tool>single-cell-seurat-clustering-v5.R</tool>
+		<tool>single-cell-seurat-find-markers-v5.R</tool>
+		<tool>single-cell-seurat-gene-plots-v5.R</tool>
+		<tool>single-cell-seurat-featureplot-v5.R</tool>
+		 <tool>single-cell-seurat-singler-v5.R</tool>
+		<tool>single-cell-extract-information-v5.R</tool>
+		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
+		<tool>single-cell-seurat-merge-samples-v5.R</tool>	
+		<tool>single-cell-seurat-integrate-v5.R</tool>
+		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
+		<tool>single-cell-seurat-diffexp-chosen-samples-v5.R</tool>
+		<tool>single-cell-seurat-diffexp-sample-groups-v5.R</tool>
+		<tool>single-cell-seurat-split-dot-plot-v5.R</tool>	
+		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
+		<tool>single-cell-seurat-subset-v5.R</tool>
+		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
+		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
+		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
+		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	  	
+		<!-- Dropseq tools: --> 
+		<tool>single-cell-preprocessing.R</tool>
+		<tool>picard-merge-bam-alignment.R</tool>	
+		<tool>single-cell-bam-tag-histogram.R</tool>	  	
+		<tool>single-cell-digital-expression.R</tool>
+		<!--<tool>picard-fastqtosam.R</tool> --> 
+		<!--<tool>single-cell-TagBam.R</tool> --> 
+		<!--<tool>single-cell-FilterBam.R</tool> --> 
+		<!--<tool>picard-samtofastq.R</tool> --> 		
+	    	<!--<tool>picard-sortsam.R</tool>	--> 
+		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
+		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
+	</category>
+
+	<category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
 		<tool>single-cell-cellbender-background-removal.R</tool> 	
 		<tool>single-cell-seurat-setup.R</tool>	   
-		<tool>single-cell-scater-QC.R</tool> 	
+		<tool>single-cell-scater-QC.R</tool>
 		<tool>single-cell-seurat-filter-regress.R</tool>	
-		<tool>single-cell-seurat-sctransform.R</tool>	
-		<tool>single-cell-seurat-pca.R</tool>	   	
+		<tool>single-cell-seurat-sctransform.R</tool>		
+		<tool>single-cell-seurat-pca.R</tool>	 	  	
 		<tool>single-cell-seurat-clustering.R</tool>	
 		<tool>single-cell-seurat-find-markers.R</tool>
 		<tool>single-cell-seurat-gene-plots.R</tool>
 		<tool>single-cell-seurat-featureplot.R</tool>
+		<tool>single-cell-seurat-singler.R</tool>
 		<tool>single-cell-extract-information.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object.R</tool>
-		<tool>single-cell-seurat-singler.R</tool>
 		<!-- <tool>single-cell-seurat-CCA.R</tool> --> 
 		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
-		<tool>single-cell-seurat-integrated-analysis.R</tool>	
+		<tool>single-cell-seurat-integrated-analysis.R</tool>
 		<tool>single-cell-seurat-diffexp-samples.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples.R</tool>
 		<tool>single-cell-seurat-diffexp-sample-groups.R</tool>
@@ -366,7 +407,8 @@
 		<tool module="common">cna-fuse-regions-manually.R</tool>
 		<tool module="common">acgh-convert-from-probes-to-genes.R</tool>
 		<tool module="common">acgh-pathways-go.R</tool>
-		<tool module="common">acgh-match-probes.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool module="common">acgh-match-probes.R</tool> -->
 		<tool module="common">acgh-plot-combined-profile.R</tool>
 		<tool module="common">acgh-expression-test.R</tool>	
 		<tool module="common">acgh-plot-combined-expression.R</tool>
