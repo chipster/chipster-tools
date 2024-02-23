@@ -3,6 +3,7 @@
 # OUTPUT filtered_contigs.tar
 # OUTPUT summary.tsv
 # PARAMETER maxee: "Discard sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 DEFAULT 1 (Decimal number to discard bad quality sequences. Decimal from 0 -, Default 1.)
+# PARAMETER qmax: "Maximum quality score accepted when reading FASTQ files" TYPE INTEGER FROM 0 DEFAULT 41 (Specify the maximum quality score accepted when reading FASTQ files.The default is 41, which is usual for recent Sanger/Illumina 1.8+ files.)
 
 # ES 21.7.2021
 # ES  11.8.2022
@@ -54,7 +55,7 @@ for (file in filenames) {
     output_fastq <- paste0("output_folder/", sample.names[x])
     x <- x + 1
     # make the fastq_filter command
-    command <- paste(binary, "--fastq_filter", file, "--fastq_maxee", maxee, "--fastqout", output_fastq, ">>summary_test.txt 2>&1")
+    command <- paste(binary, "--fastq_filter", file, "--fastq_maxee", maxee, "--fastq_qmax", qmax, "--fastqout", output_fastq, ">>summary_test.txt 2>&1")
     # run command
     runExternal(command)
     documentCommand(command)
