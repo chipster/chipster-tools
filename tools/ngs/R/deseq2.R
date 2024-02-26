@@ -8,6 +8,8 @@
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
 # PARAMETER OPTIONAL ad_factor: "Column describing additional experimental factor" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing an additional experimental factor. If given, p-values in the output table are from a likelihood ratio test of a model including the experimental groups and experimental factor, vs a model which only includes the experimental factor.)
 # PARAMETER OPTIONAL p.value.cutoff: "Cutoff for the adjusted P-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for Benjamini-Hochberg adjusted p-value. Note that the developers of DESeq2 use 0.1 as a default cut-off.)
+# PARAMETER OPTIONAL round_pvals: "Round p-values to this many digits" TYPE INTEGER DEFAULT 4 (Round p-values and adjusted p-values to this many digits.)
+# PARAMETER OPTIONAL round_others: "Round other values to this many digits" TYPE INTEGER DEFAULT 2 (Round other computed values to this many digits.)
 # PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
 # PARAMETER OPTIONAL size.factor.estimation.type: "Method for estimating size factors" TYPE [ratio:"ratio", poscounts:"poscounts"] DEFAULT ratio (Which size estimation method to use. Default option "ratio" uses the standard median ratio method introduced in DESeq. "poscounts" offers alternative estimator, which can be used even when all genes contain a sample with a zero.)
 # RUNTIME R-4.2.0-phyloseq
@@ -32,6 +34,7 @@
 # ML+SS 08.05.2018, comparison possible also when >9 groups
 # ML 10.5.2022, Move to R-3.6.1 and DESeq 1.26.0, add the size factor estimation type parameter to cope with cases when all genes contain a sample with a zero.
 # ML 02.02.2023, Add the LFC shrink (this was previously inside DESeq function)
+# ML 26.02.2024, Add rounding parameters
 
 # column <-"group"
 # ad_factor<-"EMPTY"
@@ -109,8 +112,10 @@ if (length(unique(groups)) == 2) {
     if (dim(sig)[1] > 0) {
         ndat <- ncol(dat)
         nmax <- ncol(sig)
-        write.table(cbind(sig[, 1:ndat], round(sig[, (ndat + 1):(nmax - 2)], digits = 2), format(sig[, (nmax - 1):nmax], digits = 4, scientific = T)), file = "de-list-deseq2.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+        write.table(cbind(sig[, 1:ndat], round(sig[, (ndat + 1):(nmax - 2)], digits = round_pvals), format(sig[, (nmax - 1):nmax], digits = round_others, scientific = T)), file = "de-list-deseq2.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
     }
+
+    # write.table(sig, file = "output_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 
     # More than 2 groups:
@@ -181,8 +186,8 @@ if (length(unique(groups)) == 2) {
             skip <- ndat + (i - 1) * npairdat # how many columns to skip
             round2 <- skip + 1:(npairdat - 2) # everything except the last two columns (p-value & padj), beginning after skipped cols
             round4 <- skip + (npairdat - 1):npairdat # the last two columns (p-value & padj), beginning after skipped cols
-            rounded_sig[, round2] <- round(rounded_sig[, round2], digits = 2) # round to 2 digits everything except p-value & padj
-            rounded_sig[, round4] <- format(rounded_sig[, round4], digits = 4, scientific = T) # round to 4 digits p-value & padj
+            rounded_sig[, round2] <- round(rounded_sig[, round2], digits = round_others) # round to 2 digits everything except p-value & padj
+            rounded_sig[, round4] <- format(rounded_sig[, round4], digits = round_pvals, scientific = T) # round to 4 digits p-value & padj
         }
         write.table(rounded_sig, file = "de-list-deseq2.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
     }
