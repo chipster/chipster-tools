@@ -5,7 +5,6 @@
 # OUTPUT OPTIONAL summary.txt
 # OUTPUT OPTIONAL deseq2_report.pdf
 # OUTPUT OPTIONAL de-list-deseq2.bed
-# OUTPUT OPTIONAL output_table.tsv
 # PARAMETER column: "Column describing groups" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column describing the groups to test.)
 # PARAMETER OPTIONAL ad_factor: "Column describing additional experimental factor" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column describing an additional experimental factor. If given, p-values in the output table are from a likelihood ratio test of a model including the experimental groups and experimental factor, vs a model which only includes the experimental factor.)
 # PARAMETER OPTIONAL p.value.cutoff: "Cutoff for the adjusted P-value" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (The cutoff for Benjamini-Hochberg adjusted p-value. Note that the developers of DESeq2 use 0.1 as a default cut-off.)
@@ -116,7 +115,7 @@ if (length(unique(groups)) == 2) {
         write.table(cbind(sig[, 1:ndat], round(sig[, (ndat + 1):(nmax - 2)], digits = round_pvals), format(sig[, (nmax - 1):nmax], digits = round_others, scientific = T)), file = "de-list-deseq2.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
     }
 
-    write.table(sig, file = "output_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    # write.table(sig, file = "output_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 
     # More than 2 groups:
