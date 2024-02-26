@@ -69,7 +69,8 @@
 		<tool>ordination-nmds.R</tool>
 		<tool>estimate-samplesize.R</tool>
 		<tool>sample-size-with-bh.R</tool>
-		<tool>up-down-analysis-mirna.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool>up-down-analysis-mirna.R</tool> -->
 	</category>
 	
 	<category name="Clustering" color="#d53833">
@@ -129,7 +130,8 @@
 		<tool module="common">cna-fuse-regions-manually.R</tool>
 		<tool module="common">acgh-convert-from-probes-to-genes.R</tool>
 		<tool module="common">acgh-pathways-go.R</tool>
-		<tool module="common">acgh-match-probes.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool module="common">acgh-match-probes.R</tool> -->
 		<tool module="common">acgh-plot-combined-profile.R</tool>
 		<tool module="common">acgh-expression-test.R</tool>	
 		<tool module="common">acgh-plot-combined-expression.R</tool>
@@ -159,7 +161,8 @@
 		<tool>delete-columns.R</tool>
 		<tool>delete-and-subtract-columns.R</tool>
 		<tool module="common">merge-tables.R</tool>
-		<tool>merge-datasets.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool>merge-datasets.R</tool> -->
 		<tool>merge-pheno-and-data.R</tool>
 		<tool>extract-genes-from-clustering.R</tool>
 		<tool>extract-genes-from-go.R</tool>
