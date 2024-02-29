@@ -89,6 +89,8 @@ install.packages("hdf5r")
 # something installed this already
 BiocManager::install('limma')
 
+# 2024-02-29: latest version 1.2.0 fails in spatial-transcriptomics-seurat-sctransform-v5.R with "Error: useNames = NA is defunct. Instead, specify either useNames = TRUE or useNames = FALSE."
+remotes::install_version("matrixStats", version="1.1.0", repos = "https://ftp.acc.umu.se/mirror/CRAN/")
 
 
 
