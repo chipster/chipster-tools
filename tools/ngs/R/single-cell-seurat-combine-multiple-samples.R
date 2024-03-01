@@ -10,7 +10,7 @@
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 3
 # TOOLS_BIN ""
-
+ 
 
 # 2021-12-30 ML
 # 2022-02-17 EK increased slots to 4
@@ -20,6 +20,7 @@
 # 2023-02-03 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
 # 2023-02-01 ML Return to the original 3 slots
+# 2023-03-01 ML Fix SCT + RPCA 
 
 
 
@@ -43,6 +44,7 @@ seurat.objects.list <- as.list(mget(objects(pattern = "seurat_obj_")))
 # save(seurat.objects.list, file="seurat_obj_list.Robj")
 
 # Select features that are repeatedly variable across datasets for integration
+# nfeatures = 3000 for SCT, 2000 for LogNormalise (default)
 features <- SelectIntegrationFeatures(object.list = seurat.objects.list)
 
 
@@ -54,11 +56,18 @@ if (normalisation.method == "SCT") {
 }
 
 # When using RPCA, need to run PCA on each dataset using these features:
+# Reference: https://satijalab.org/seurat/archive/v4.3/integration_rpca
 if (anchor.identification.method == "rpca") {
-    seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
-        x <- ScaleData(x, features = features, verbose = FALSE)
-        x <- RunPCA(x, features = features, verbose = FALSE)
-    })
+       if (normalisation.method == "LogNormalize") {
+            seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
+            x <- ScaleData(x, features = features, verbose = FALSE)
+            x <- RunPCA(x, features = features, verbose = FALSE)
+            })
+       }  
+       else if (normalisation.method == "SCT") {
+            seurat.objects.list <- lapply(X = seurat.objects.list, FUN = RunPCA, features = features)
+       } 
+   
 }
 
 # When using only the user listed samples as references:
