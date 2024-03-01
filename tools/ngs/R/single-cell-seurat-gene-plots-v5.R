@@ -8,10 +8,11 @@
 # OUTPUT OPTIONAL percentage_of_cells_expressing.tsv
 # PARAMETER OPTIONAL biomarker: "Gene name\(s\)" TYPE STRING DEFAULT "MS4A1, LYZ" (Name\(s\) of the biomarker gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing, Global scaling normalization \(default, NormalizeData function used\) or SCTransform.)
-# PARAMETER OPTIONAL point.size: "Point size in cluster plot" TYPE DECIMAL DEFAULT 1 (Point size for tSNE and UMAP plots.)
-# PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
-# PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
-# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
+# PARAMETER OPTIONAL reduction.method: "Feature plot visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
+# PARAMETER OPTIONAL point.size: "Point size in feature plot" TYPE DECIMAL DEFAULT 1 (Point size in the UMAP, tSNE or PCA feature plot.)
+# PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in feature plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster numbers on top of clusters in the feature plot.)
+# PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression in feature plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression in the feature plot. Can be useful to turn this on if cells expressing given feature are getting buried.)
+# PARAMETER OPTIONAL color.scale: "Determine color scale based on all features in feature plot" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale in the feature plot is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes. If you wish to compare gene expression between different genes, it is useful to set this parameter to "yes" so that the color scale is the same for all genes.)
 # PARAMETER OPTIONAL output_aver_expr: "For each gene, list the average expression and percentage of cells expressing it in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns two tables: average expression and percentage of cells expressing the user defined genes in each cluster.)
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
@@ -89,7 +90,7 @@ pdf(file = "biomarker_plot.pdf", width = 12, height = 12)
 VlnPlot(seurat_obj, features = biomarker)
 
 # Feature plot:
-FeaturePlot(seurat_obj, features = biomarker, pt.size = point.size, reduction = reduction.method, label = add.labels, order = as.logical(plotting.order.used))
+FeaturePlot(seurat_obj, features = biomarker, pt.size = point.size, reduction = reduction.method, label = add.labels, order = as.logical(plotting.order.used), keep.scale=color.scale)
 
 # Ridge plot:
 RidgePlot(seurat_obj, features = biomarker, ncol = 2)

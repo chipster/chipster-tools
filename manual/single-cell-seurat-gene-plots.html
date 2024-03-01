@@ -8,19 +8,21 @@
 <h3>Description</h3>
 
 <p>
-With this tool user can visualize selected genes with violin, UMAP and ridge plot. As input the user gives the Seurat R-object
+With this tool user can visualize selected genes with violin, feature (UMAP, tSNE or PCA) and ridge plot. As input the user gives the Seurat R-object
 (.Robj) and the name of the gene of interest (for example MS4A1, LYZ, PF4...). The gene name(s) can also be given in the form of a text file to the input field.
 <br>Note: If you list multiple gene names, use comma (,) as separator.
 </p>
  
  <h3>Parameters</h3>
 <ul>
-	<li>Gene name</li>
-	<li>Point size in cluster plot [1]</li>
+	<li>Gene name(s) [MS4A1, LYZ]</li>
+	<li>Normalization method used previously [Global scaling normalization]</li>
+	<li>Feature plot visualization with tSNE, UMAP or PCA [UMAP]</li>
+	<li>Point size in feature plot [1]</li>
 	<li>Add labels on top of clusters in plot (yes, no) [no]</li>
-	<li>Visualisation with tSNE, UMAP or PCA [UMAP]</li>
 	<li>Plotting order of cells based on expression (yes, no) [no]</li>
-	<li>Give a list of average expression and percentage of cells expressing in each cluster (yes, no) [no]</li>
+	<li>Determine color scale based on all features in feature plot (yes, no) [no]</li>
+	<li>For each gene, list the average expression and percentage of cells expressing it in each cluster(yes, no) [no]</li>
 </ul>
 
 <h3>Details</h3>
@@ -31,7 +33,7 @@ The color coding of the clusters helps to see in which clusters the marker gene 
 Good marker genes will show strongly in a single cluster.  
 </p>
 <p>
-<b>The UMAP plot</b> is useful for viewing the expression of the selected marker gene in the context of all the cells and helps validating the specificity of the marker or 
+<b>The feature plot</b> is useful for viewing the expression of the selected marker gene in the context of all the cells and helps validating the specificity of the marker or 
 the quality of the clustering. It can be useful to plot the cells in the order based on expression, if the cells expressing given gene are getting buried.
 </p>
 <p>

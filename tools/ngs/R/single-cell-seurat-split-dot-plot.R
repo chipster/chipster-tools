@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL split_dot_plot.pdf
 # PARAMETER OPTIONAL markers: "Markers to plot" TYPE STRING DEFAULT "CD3D, CREM, HSPH1, SELL, GIMAP5" (Name of the marker genes you wish to plot, separated by comma. Please note that the gene names here are case sensitive, so check from your gene lists how the names are typed, e.g. CD3D vs Cd3d.)
 # PARAMETER OPTIONAL scale.data: "Scale data in split dot plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Determine whether the data is scaled in the split dot plot. By default, the raw expression data is used.)
-# PARAMETER OPTIONAL reduction.method: "Visualisation with tSNE, UMAP or PCA in feature plot" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use in the feature plot.)
+# PARAMETER OPTIONAL reduction.method: "Feature plot visualization with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction to use in the feature plot.)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression in feature plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing a given feature are getting buried.)
 # PARAMETER OPTIONAL color.scale: "Determine color scale based on all features in feature plot" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scales in the feature plots are based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes. If you wish to compare gene expression between different genes, it is useful to set this parameter to "yes" so that the color scale is the same for all genes.)
 # RUNTIME R-4.2.3-single-cell

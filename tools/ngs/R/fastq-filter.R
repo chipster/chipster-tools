@@ -3,7 +3,7 @@
 # OUTPUT filtered_contigs.tar
 # OUTPUT summary.tsv
 # PARAMETER maxee: "Discard sequences with more than the specified number of expected errors" TYPE DECIMAL FROM 0 DEFAULT 1 (Decimal number to discard bad quality sequences. Decimal from 0 -, Default 1.)
-# PARAMETER qmax: "Maximum quality score accepted when reading FASTQ files" TYPE INTEGER FROM 0 DEFAULT 41 (Specify the maximum quality score accepted when reading FASTQ files.The default is 41, which is usual for recent Sanger/Illumina 1.8+ files.)
+# PARAMETER qmax: "Maximum quality score accepted when reading FASTQ files" TYPE INTEGER FROM 0 DEFAULT 50 (Specify the maximum quality score accepted when reading FASTQ files. For recent Sanger/Illumina 1.8+ files value 41 is usual. For Nanopore data it can be higher.)
 
 # ES 21.7.2021
 # ES  11.8.2022
