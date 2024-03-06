@@ -20,7 +20,7 @@ options(Seurat.object.assay.version = "v5")
 load("seurat_obj.Robj")
 
 # Subset: remove potential empties, multiplets and broken cells based on parameters.
-seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff & percent.rb >= minribo)
+seurat_obj <- subset(seurat_obj, subset = nFeature_RNA >= mingenes & nFeature_RNA <= genecountcutoff & percent.mt <= mitocutoff & percent.rb >= minribo)
 
 
 # Re-do the QC plots from the setup tool, for comparison:
