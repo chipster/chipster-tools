@@ -64,21 +64,15 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
       verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved)
   }
 
-# filter based on p_val_adj
-# dat2 <- subset(cluster.markers, (CTRL_p_val_adj < pval.cutoff.conserved & STIM_p_val_adj < pval.cutoff.conserved))
-# dat2 <- subset(cluster.markers, (cluster.markers[,5] < pval.cutoff.conserved & cluster.markers[,10] < pval.cutoff.conserved))
- dat2 <- subset(cluster.markers, cluster.markers[,"max_pval"] < pval.cutoff.conserved)
-
 # # Filter based on p_val_adj
-# install.packages("tidyverse", repos = "https://ftp.acc.umu.se/mirror/CRAN/", quiet = TRUE) # remove this when the package is installed in tools!
-# library("tidyverse")
-# p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
-# cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
-# cluster.markers$minimum.adj.p.val <- apply(p.val.adj.table, 1, min, na.rm=TRUE)
-# dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
+library("tidyverse")
+p.val.adj.table <- select(cluster.markers, ends_with("p_val_adj"))
+cluster.markers$max.adj.p.val <- apply(p.val.adj.table, 1, max, na.rm=TRUE)
+cluster.markers$minimum.adj.p.val <- apply(p.val.adj.table, 1, min, na.rm=TRUE)
+dat2 <- subset(cluster.markers, cluster.markers[,"max.adj.p.val"] < pval.cutoff.conserved)
 
 # Write to table
-write.table(cluster.markers, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(dat2, file = "conserved_markers.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
 
 # Differentially expressed genes across conditions for the cluster (defined by the user, for example cluster 3 -> "3")
