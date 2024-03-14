@@ -12,25 +12,34 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool integrates the spatial data with scRNA-seq data to predict the proportion of different cell types in the Visium spots.
+		This tool integrates the spatial data with scRNA-seq data to predict the proportion of different cell types in
+		the Visium spots.
 	</p>
 
 	<h3>Details</h3>
 
 	<p>
-		This tool enables the prediction of the underlying composition of cell types present in each of the Visium spot spatial voxels. 
-		It applies 'anchor'-based integration to enable the probabilistic transfer of annotations from the scRNA-seq reference to the query set.
+		This tool enables the prediction of the underlying composition of cell types present in each of the Visium spot
+		spatial voxels.
+		It applies 'anchor'-based integration to enable the probabilistic transfer of annotations from the scRNA-seq
+		reference to the query set.
 	</p>
 
 	<p>
-		Please provide both the Seurat object and the reference scRNA-seq dataset as inputs. 
-		The reference dataset should contain all the expected cell types, ideally from the exact same tissue. Moreover, the cell type annotations should be found in the subclass column in the metadata slot of the reference object.
+		Please provide both the Seurat object and the reference scRNA-seq dataset as inputs.
+		The reference dataset should contain all the expected cell types, ideally from the exact same tissue.
+		The reference dataset should be a Seurat object stored as .rds file.
+		Moreover, the cell type annotations should be found in the "subclass" column in the metadata slot of the
+		reference object (seurat_obj@meta.data$subclass),
+		and the gene IDs used should be the same as in the actual data (gene symbols, Ensembl IDs etc).
 	</p>
 	</p>
-		You can also use the tool "Extract information from Seurat object" to check whether your reference data is in the right format. 
+	You can also use the tool "Extract information from Seurat object" to check whether your reference data is in the
+	right format.
 	</p>
 	<p>
-		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat tutorials
+		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat
+			tutorials
 			for integration with scRNA-seq data</a>.
 	</p>
 
@@ -38,7 +47,8 @@
 
 	<ul>
 
-		<li>seurat_obj_integrated.Robj: This is the Seurat R-object to pass to the next Seurat tool, or to import into R. However, this is not viewable in
+		<li>seurat_obj_integrated.Robj: This is the Seurat R-object to pass to the next Seurat tool, or to import into
+			R. However, this is not viewable in
 			Chipster. </li>
 		<li>reference_UMAP_plot.pdf: This is the UMAP plot showing the reference data and annotations. </li>
 	</ul>
