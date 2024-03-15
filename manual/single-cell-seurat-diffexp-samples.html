@@ -26,23 +26,21 @@
 		<li>Normalisation method used previously [Global scaling normalization]</li>
 		<li>Name of the cluster [3]</li>
 		<li>Return only positive marker genes [TRUE]</li>
-		<li>Fold change threshold for conserved markers in log2 scale [0.25]</li>
-		<li>Fold change threshold for differentially expressed genes in log2 scale [0.25]</li>
-		<li>Adjusted p-value cutoff for conserved markers [0.05]</li>
-		<li>Adjusted p-value cutoff for differentially expressed genes [0.05]</li>
-		<li>Minimum number of cells in one of the groups for conserved markers [3]</li>
-		<li>Minimum number of cells in one of the groups for conserved markers [3]</li>
-		<li>Limit testing for differentially expressed genes to genes which are expressed in at least this fraction of
-			cells [0.1]</li>
-		<li>Limit testing for conserved markers to genes which are expressed in at least this fraction of cells [0.1]
-		</li>
+		<li>Conserved markers: Fold change in log2 scale [0.25]</li>
+		<li>Conserved markers: Adjusted p-value cutoff [0.05]</li>
+		<li>Conserved markers: Limit testing to genes which are expressed in at least this fraction of cells [0.1]</li>
+		<li>Conserved markers: Minimum number of cells in one of the groups [3]</li>
+		<li>Differentially expressed genes: Fold change in log2 scale [0.25]</li>
+		<li>Differentially expressed genes: Adjusted p-value cutoff [0.05]</li>
+		<li>Differentially expressed genes: Limit testing to genes which are expressed in at least this fraction of cells [0.1]</li>
+
 	</ul>
 
 
 	<h3>Details</h3>
 
 	<p>
-		As inputs, give the combined Seurat object. <br>
+		As input, give the combined Seurat object. <br>
 	</p>
 
 	<p>
@@ -73,14 +71,14 @@
 					use this value.</li>
 				<li><b>avg_logFC</b> = Log fold-chage of the average expression between the two groups.
 					Positive values indicate that the gene is more highly expressed in the first group. First group =
-					first in the alphabets. </li>
+					first in the alphabet. </li>
 				<li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene.
-					Note, that numbering is based on alphabets: earlier in the alphabets -> 1, the other one -> 2.
-					So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in alphabets.
+					Note that numbering is based on alphabet: earlier in the alphabets -> 1, the other one -> 2.
+					So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in alphabet.
 				</li>
 				<li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene
 				</li>
-				<li><b>aver_expr columns</b> = Average expression of the cells in this cluster in the listed samples.
+				<li><b>aver_expr columns</b> = Average expression of the gene in cells in this cluster in the listed samples.
 				</li>
 			</ul>
 	</p>
