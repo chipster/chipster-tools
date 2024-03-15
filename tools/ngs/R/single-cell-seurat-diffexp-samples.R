@@ -35,6 +35,7 @@
 # 2023-02-10 LG Add 2 slots
 # 2023-04-03 ML Add parameters so that it is possible to print out all the genes + simplify code
 # 2023-04-06 LG Remove 5 slots - Discrepancy in number of slots added v. removed
+# 2024-03-14 ML p-value filter uses adjusted p-values
 
 
 library(Seurat)
