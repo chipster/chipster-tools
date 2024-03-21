@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v5 -Filter spots </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool filters out bad quality spots based on mitochondrial, ribosomal and hemoglobin transcript percentage.
+    </p>
+
+    <h3>Parameters</h3>
+    <p>
+    <ul>
+        <li>Filter out spots which have higher mitochondrial transcript percentage [20]</li>
+        <li>Filter out spots which have lower ribosomal transcript percentage [0]</li>
+        <li>Filter out spots which have higher hemoglobin transcript percentage [20]</li>
+    </ul>
+    </p>
+
+
+    <h3>Details</h3>
+
+    <p>
+        The tool filters out spots with damaged cells based on mitochondrial, ribosomal and hemoglobin transcript percentage.
+    </p>
+    <p>
+        As input, you can give the Seurat object from the tool <i>Seurat v5 -Setup and QC</i>. You can also use the QC-plots.pdf 
+        from the <i>Seurat v5 -Setup and QC</i> tool to estimate the parameters for this filtering step.
+    </p>
+    <p> In multiple sample analysis, the filtered Seurat objects can be combined after this step using the tool
+        <i>Seurat v5 -Combine multiple samples, normalization, PCA, clustering and visualization</i>".
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+
+        <li>seurat_obj_filtered.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. You cannot 
+            open this file in Chipster but you can view the contents of the object using the 
+            <i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
+    </ul>
+
+
+
+</body>

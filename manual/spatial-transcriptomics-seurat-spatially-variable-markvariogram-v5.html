@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Identify spatially variable genes without pre-annotation</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		This tool searches for genes that exhibit spatial patterning. It does not use any pre-annotation (cluster) information. If you would like to use cluster information, you may use this tool <i> Seurat v5 -Identify spatially variable genes based on clusters</i>. 
+    </p>
+	
+
+	<h3>Details</h3>
+
+	<p>
+        This tool identifies and selects features exhibiting spatial patterning by using the moransi or markvariogram method. 
+		Markvariogram models spatial transcriptomics data as a mark point process and computes a 'variogram', which identifies genes whose expression level is dependent on their spatial location. 
+		Specifically, this process calculates gamma(r) values measuring the dependence between two spots that are a certain “r” distance apart. These values are only computed for variable genes (where variation is calculated independently of spatial location).
+		The expression levels of the top 6 features are displayed in the SpatialFeaturePlot.
+
+    </p>
+
+	<p>
+		As input, you can provide the Seurat object after clustering. </i>
+	</p>
+
+	<p>
+		For more details, please check the<a
+			href="https://satijalab.org/seurat/articles/spatial_vignette.html"> Seurat tutorial</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+		<li>Markerplot2.pdf</li>
+
+	</ul>
+
+
+
+</body>

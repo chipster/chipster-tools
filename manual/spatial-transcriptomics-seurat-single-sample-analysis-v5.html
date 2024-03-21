@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Normalization, PCA, clustering, and visualization </h2>
+
+	<h3>Description</h3>
+
+	<p>
+		This tool first normalizes data with SCTransform and detects highly variable genes. Then, this tool performs principal component analysis
+		(PCA) on the highly variable genes detected by SCTransform. It then clusters the spots with a graph-based clustering approach and visualizes
+		the clustering results using UMAP and SpatialDimPlot.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Number of variable genes to return in SCTransform [3000]</li>
+		<li>Number of PCs to compute [50]</li>
+		<li>Print loadings in a file [no]</li>
+		<li>Number of genes to list in the loadings file [5]</li>
+		<li>Dimensions of reduction to use as input [30]</li>
+		<li>Resolution for granularity for clustering [0.8]</li>
+
+	</ul>
+
+
+	<h3>Details</h3>
+
+	<p> This tool first normalizes the gene expression values using the SCTransform normalization method which is
+		explained in single-cell tool <i> Seurat v5 -SCTransform: Normalize, regress and detect variable genes</i>.
+	 	Genes which are highly variable across the cells are detected using the Pearson residuals computed in this 
+		normalization step. The highly variable genes are used for downstream analysis. </p>
+
+	<p> This tool then performs PCA which is explained in the single-cell tool <i> Seurat v5 -PCA</i>. This tool then
+		uses a graph-based approach to cluster the spots, and this clustering approach is explained in the single-cell tool
+		<i> Seurat v5 -Clustering</i>. The clustering results are then visualized using UMAP and SpatialDimPlot.
+	 </p>
+
+	<p>
+		This tool produces the following cluster plots:
+		<ul>
+			<li>Dimplot, shows the results of the dimensional reduction on a 2D scatterplot where each point is a spot positioned based on the spot embeddings determined by UMAP.
+			</li>
+			<li>SpatialDimPlot, shows the resulting clusters overlaid on the tissue image.</li>
+		</ul>
+	</p>
+
+	<p>
+		You can also use the tool to output a *.txt file. This file will list the top genes (default = 5) associated with high or low loadings for the first 5 PCs in the PCAloadings.txt file.
+	</p>
+
+	<p>
+		If you have few spots in your data, you may get an error message. Try lowering the number of
+		PCs to compute.
+	</p>
+
+	<p>
+		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+
+		<li>seurat_obj_pca_clust.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
+			You cannot open this file in Chipster but you can view the contents of the object using the 
+			<i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
+		<li>UMAP_plot.pdf: This contains the UMAP and SpatialDimPlot. </li>
+		<li>PCAloadings.txt: If selected, the loadings (=genes responsible) of PCs.</li>
+	</ul>
+
+
+
+</body>
