@@ -56,7 +56,7 @@ seurat_obj <- objects_combined
 print(seurat_obj)
 
 # Split datasets and process first without integration
-seurat_obj[["Spatial"]] <- split(seurat_obj[["Spatial"]], f = seurat_obj$orig.ident)
+#seurat_obj[["Spatial"]] <- split(seurat_obj[["Spatial"]], f = seurat_obj$orig.ident)
 
 # SCTransform normalizes the data, detects high-variance features, and stores the data in the SCT assay
 seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", variable.features.n = num.features, verbose = FALSE)
