@@ -7,8 +7,8 @@
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to compute" TYPE INTEGER DEFAULT 50 (Number of PCs to compute in PCA.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
-# PARAMETER OPTIONAL dims.reduction: "Dimensions of reduction to use as input" TYPE INTEGER DEFAULT 30 (Number of dimensions of reduction to use for clustering and UMAP. If integration is used, this is also the number of dimensions of reduction to use for integration.)
-# PARAMETER OPTIONAL res: "Resolution for granularity for clustering" TYPE DECIMAL DEFAULT 0.8 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters. Values between 0.6-1.2 typically return good results for datasets of around 3K cells. For larger data sets, try higher resolution.)
+# PARAMETER OPTIONAL dims.reduction: "Dimensions of reduction to use as input" TYPE INTEGER DEFAULT 30 (Number of dimensions of reduction to use for clustering and UMAP.)
+# PARAMETER OPTIONAL res: "Resolution for granularity for clustering" TYPE DECIMAL DEFAULT 0.8 (Resolution parameter that sets the granularity of the clustering. Increased values lead to greater number of clusters.)
 # RUNTIME R-4.2.3-seurat5
 # TOOLS_BIN ""
 
