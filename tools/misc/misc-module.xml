@@ -131,6 +131,7 @@
 		<tool>verify-tools-bin.py</tool>
 		<tool>test-r-in-container.R</tool>
 		<tool>test-r-in-container-without-tools-bin.R</tool>
+		<tool>silly-demotool.R</tool>	
 	</category>
 
 	<category name="Genomes" color="#83010b">
