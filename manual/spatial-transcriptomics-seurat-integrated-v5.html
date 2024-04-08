@@ -7,7 +7,7 @@
 
 <body>
 
-	<h2>Seurat v4 -Integration with scRNA-seq data</h2>
+	<h2>Seurat v5 -Integration with scRNA-seq data</h2>
 
 	<h3>Description</h3>
 
@@ -20,9 +20,8 @@
 
 	<p>
 		This tool enables the prediction of the underlying composition of cell types present in each of the Visium spot
-		spatial voxels.
-		It applies 'anchor'-based integration to enable the probabilistic transfer of annotations from the scRNA-seq
-		reference to the query set.
+		spatial voxels. It applies 'anchor'-based integration to enable the probabilistic transfer of annotations from the
+		scRNA-seq reference to the query set.
 	</p>
 
 	<p>
@@ -30,26 +29,24 @@
 		The reference dataset should contain all the expected cell types, ideally from the exact same tissue.
 		The reference dataset should be a Seurat object stored as .rds file.
 		Moreover, the cell type annotations should be found in the "subclass" column in the metadata slot of the
-		reference object (seurat_obj@meta.data$subclass),
-		and the gene IDs used should be the same as in the actual data (gene symbols, Ensembl IDs etc).
+		reference object (seurat_obj@meta.data$subclass), and the gene IDs used should be the same as in the actual data
+		 (gene symbols, Ensembl IDs etc).
 	</p>
 	</p>
-	You can also use the tool "Extract information from Seurat object" to check whether your reference data is in the
+	You can also use the tool <i>Seurat v5 -Extract information from Seurat object</i> to check whether your reference data is in the
 	right format.
 	</p>
 	<p>
-		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat
-			tutorials
-			for integration with scRNA-seq data</a>.
+		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat tutorial</a>.
 	</p>
 
 	<h3>Output</h3>
 
 	<ul>
 
-		<li>seurat_obj_integrated.Robj: This is the Seurat R-object to pass to the next Seurat tool, or to import into
-			R. However, this is not viewable in
-			Chipster. </li>
+		<li>seurat_obj_integrated.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
+			You cannot open this file in Chipster but you can view the contents of the object using the 
+			<i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
 		<li>reference_UMAP_plot.pdf: This is the UMAP plot showing the reference data and annotations. </li>
 	</ul>
 

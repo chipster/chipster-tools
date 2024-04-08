@@ -1,16 +1,22 @@
-# TOOL spatial-transcriptomics-seurat-integrated.R: "Seurat v4 -Integration with scRNA-seq data" (Integrate spatial data with scRNA-seq reference to predict the proportion of different celltypes in the Visium spots.)
+# TOOL spatial-transcriptomics-seurat-integrated-v5.R: "Seurat v5 -Integration with scRNA-seq data" (Integrate spatial data with scRNA-seq reference to predict the proportion of different celltypes in the Visium spots.)
 # INPUT seurat_obj_subset.Robj: "Seurat object" TYPE GENERIC
-# INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration as a Seurat object in .rds format.)
+# INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration.)
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # OUTPUT OPTIONAL reference_UMAP_plot.pdf
-# RUNTIME R-4.2.3-single-cell
+# RUNTIME R-4.2.3-seurat5
 # SLOTS 5
 # TOOLS_BIN ""
+
+# 2024-03-21 EP Update to Seurat v5
 
 library(Seurat)
 library(ggplot2)
 library(patchwork)
 library(dplyr)
+library(Biobase)
+
+print(package.version("Seurat"))
+documentVersion("Seurat", package.version("Seurat"))
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj_subset.Robj")
@@ -18,7 +24,7 @@ load("seurat_obj_subset.Robj")
 # Load the reference dataset
 allen_reference <- readRDS("sc_reference")
 
-# normalise the scRNA-seq reference
+# Normalise the scRNA-seq reference
 allen_reference <- SCTransform(allen_reference, ncells = 3000, verbose = FALSE) %>%
     RunPCA(verbose = FALSE) %>%
     RunUMAP(dims = 1:30)
@@ -42,12 +48,12 @@ predictions.assay <- TransferData(
     weight.reduction = seurat_obj[["pca"]], dims = 1:30
 )
 
-# add the predictions to the seurat object as a new assay
+# Add the predictions to the seurat object as a new assay
 seurat_obj[["predictions"]] <- predictions.assay
 
 DefaultAssay(seurat_obj) <- "predictions"
 
-# close the pdf
+# Close the pdf
 dev.off()
 
 # Save the Robj for the next tool

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Visualize cell types after integration with scRNA-seq data</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		This tool visualizes the results after <i>Seurat v5 -Integration with scRNA-seq data</i>. This tool
+		plots the chosen genes with SpatialFeaturePlot. It also identifies and visualizes the top expressed spatially variable genes that are computed using the
+		moransi or markvariogram method.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Genes to plot ["L2/3 IT, L4"]</li>
+		<li>Method to use [moransi]</li>
+		<li>Numbers of features to plot [4]</li>
+	
+	</ul>
+
+
+	<h3>Details</h3>
+
+	<p>
+		The spatially variable genes are computed similarly as in the tool <i>Seurat v5 -Identify spatially variable genes without pre-annotation</i> 
+		except with prediction scores as the “marks” rather than gene expression. These features are then visualized in the SpatialPlot.
+	</p>
+
+	<p>
+		As the input, please provide the Seurat object generated using the tool <i>Seurat v5 -Integration with scRNA-seq data</i>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+
+		<li>integration_plot.pdf </li>
+	</ul>
+
+
+
+</body>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v5 -Identify spatially variable genes based on clusters</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        Find differentially expressed genes (DEGs) between two clusters and visualize spatially variable genes.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>First cluster [1]</li>
+        <li>Second cluster [2]</li>
+        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.01]</li>
+        <li>Limit testing to genes which show at least this fold difference [0.1]</li>
+        <li>Test for differential expression [wilcox]</li>
+        <li>Report only positive marker genes [FALSE]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As an input, you can provide the Seurat object after clustering.
+    <p>
+        Select the clusters in which you would like to identify spatially variable genes. As an example, differential expression is performed between clusters 1 and 2.
+        The first cluster is used as the identity class to define markers and the second cluster is used as the identity class for comparison.
+    </p>
+    <p>
+        Select the test used for differential expression. Options for this are the Wilcoxon Rank Sum Test (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST. 
+    </p>
+    <p>
+        The FindMarkers() function finds DEGs between clusters. This function has a parameter for min.pct, or genes found in a minimum percentage of spots in the two clusters, where the default is set to 0.01.
+        The function also includes the logfc.threshold parameter, which is a threshold where genes need to be at least a certain X-fold difference between the two groups of spots; the default is set to 0.1.
+    </p>
+    
+    <h3>Output</h3>
+
+    <ul>
+        <li>Markerplot.pdf
+    </ul>
+
+
+
+</body>

@@ -98,5 +98,9 @@ install.packages("hdf5r")
 
 
 
+install.packages("devtools")
+# apt install git
+devtools::install_github("cellgeni/schard")
 
+install.packages("ggrepel")
 

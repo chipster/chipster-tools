@@ -80,6 +80,8 @@ if (gene_list == "yes" || var_genes_list == "yes") {
     } else if (seurat_obj@active.assay == "RNA") {
         genes <- obj$RNA$counts@Dimnames[1] # in case of multiple sample only first one
         #var_genes <- data.frame(obj$RNA$meta.data$var.features) # var.features not found in v5?
+    } else if (seurat_obj@active.assay == "predictions") {
+        stop(paste("CHIPSTER-NOTE: ", "Object contains single-cell data integration predictions. Cannot print list of genes or list of highly variable genes."))
     } else {
         stop(paste("CHIPSTER-NOTE: ", "Object doesn't contain single-cell RNA-seq or spatially resolved data."))
     }

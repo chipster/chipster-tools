@@ -6,6 +6,7 @@
 # PARAMETER OPTIONAL hbcutoff: "Filter out spots which have higher hemoglobin transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots which have higher percentage of hemoglobin transcripts than this.)
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # RUNTIME R-4.2.3-single-cell
+# SLOTS 2
 # TOOLS_BIN ""
 
 
@@ -14,6 +15,7 @@
 # 2022-07-19 IH
 # 2023-07-12 IH Mitogenes with Mt- and MT- (copied from ML)
 # 2023-09-08 IH add ribosomal filtering
+# 2024-03-06 ML add slots (1->2)
 
 library(Seurat)
 
