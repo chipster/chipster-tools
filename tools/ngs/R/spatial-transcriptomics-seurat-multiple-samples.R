@@ -37,17 +37,22 @@ if (method == "merge") {
     }
     # Set default assay and variable features for merged Seurat object
     DefaultAssay(objects_combined) <- "SCT"
-    for (object in seurat_objects) {
-        variables_list <- VariableFeatures(object)
+
+    variables_list <- c(VariableFeatures(seurat_objects[[1]]), VariableFeatures(seurat_objects[[2]]))
+
+    if (length(seurat_objects) >= 3) {
+        for (i in 3:length(seurat_objects)) {
+            variables_list <- append(variables_list, VariableFeatures(seurat_objects[[i]]))
+        }
     }
-    VariableFeatures(objects_combined) <- (c(variables_list))
+    VariableFeatures(objects_combined) <- variables_list
 }
 
 # Integration:
 # Code from https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Spatial_transcriptomics
 if (method == "integration") {
     # need to set maxSize for PrepSCTIntegration to work
-    options(future.globals.maxSize = 3000 * 1024^2) # set allowed size to 3K MiB
+    options(future.globals.maxSize = 2000 * 1024^2) # set allowed size to 3K MiB
 
     # Select features that are repeatedly variable across datasets for integration
     features <- SelectIntegrationFeatures(seurat_objects, nfeatures = 3000, verbose = FALSE)
@@ -56,7 +61,6 @@ if (method == "integration") {
         object.list = seurat_objects, anchor.features = features,
         verbose = FALSE
     )
-
     # Identify anchors
     int.anchors <- FindIntegrationAnchors(
         object.list = seurat_objects, normalization.method = "SCT",
@@ -67,14 +71,7 @@ if (method == "integration") {
         anchorset = int.anchors, normalization.method = "SCT",
         verbose = FALSE
     )
-
-    # Set default assay and variable features for merged Seurat object
-    DefaultAssay(objects_combined) <- "SCT"
-    for (object in seurat_objects) {
-        variables_list <- VariableFeatures(object)
-    }
-    VariableFeatures(objects_combined) <- (c(variables_list))
-
+    
     # remove objects and memory
     rm(int.anchors, seurat_objects)
     gc()

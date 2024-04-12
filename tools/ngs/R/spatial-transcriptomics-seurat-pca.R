@@ -23,7 +23,7 @@ library(patchwork)
 load("seurat_object.Robj")
 
 # PCA
-seurat_obj <- RunPCA(seurat_obj, assay = "SCT", verbose = FALSE, npcs = num.of.pcas)
+seurat_obj <- RunPCA(seurat_obj, verbose = FALSE, npcs = num.of.pcas)
 
 # PCA genes in txt file
 if (loadings == TRUE) {
@@ -32,10 +32,10 @@ if (loadings == TRUE) {
     sink()
 }
 
-# Clusters
-seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
+# Clusters reduction = "pca",
+seurat_obj <- FindNeighbors(seurat_obj, dims = 1:num.of.pcas)
 seurat_obj <- FindClusters(seurat_obj, verbose = FALSE)
-seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:num.of.pcas)
+seurat_obj <- RunUMAP(seurat_obj, dims = 1:num.of.pcas)
 
 # Open the pdf file for plotting
 pdf(file = "UMAP_plot.pdf", , width = 9, height = 12)
