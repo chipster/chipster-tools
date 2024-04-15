@@ -25,9 +25,10 @@ load("seurat_spatial_obj_pca.Robj")
 library(future)
 plan("multisession", workers = as.integer(chipster.threads.max))
 
+print(seurat_obj)
 
 # Find spatially variable features using markvariogram
-seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = VariableFeatures(seurat_obj)[1:1000], selection.method = method.to.use)
+seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, features = VariableFeatures(seurat_obj)[1:1000], selection.method = method.to.use)
 
 plan("default") # return to normal
 
