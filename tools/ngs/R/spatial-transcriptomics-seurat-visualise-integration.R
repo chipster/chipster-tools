@@ -20,14 +20,11 @@ load("seurat_obj_integrated.Robj")
 
 genes <- trimws(unlist(strsplit(genes, ",")))
 
-print(seurat_obj)
-
 # Identify spatially variable features with the cell type prediction scores calculated in the integration
 seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj,
     assay = "predictions", selection.method = method.to.use,
     features = rownames(seurat_obj), r.metric = 5, slot = "data"
 )
-print(seurat_obj)
 
 top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), number.of.top.features)
 
