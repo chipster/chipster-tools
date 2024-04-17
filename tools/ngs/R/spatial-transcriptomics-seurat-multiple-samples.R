@@ -2,6 +2,7 @@
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_multiple.Robj
 # PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the samples.)
+# PARAMETER OPTIONAL integration_feat_num: "Number of integration features" TYPE INTEGER DEFAULT 2000 (If integration is used, choose the number of features used to integrate data sets.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 3
 # TOOLS_BIN ""
@@ -55,7 +56,7 @@ if (method == "integration") {
     options(future.globals.maxSize = 2000 * 1024^2) # set allowed size to 3K MiB
 
     # Select features that are repeatedly variable across datasets for integration
-    features <- SelectIntegrationFeatures(seurat_objects, nfeatures = 3000, verbose = FALSE)
+    features <- SelectIntegrationFeatures(seurat_objects, nfeatures = integration_feat_num, verbose = FALSE)
     # run PrepSCTIntegration to compute the sctransform residuals for all genes in the datasets
     seurat_objects <- PrepSCTIntegration(
         object.list = seurat_objects, anchor.features = features,
