@@ -2,6 +2,7 @@
 # INPUT samples{...}.Robj: "Samples to combine" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_multiple.Robj
 # PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the samples.)
+# PARAMETER OPTIONAL integration_feat_num: "Number of integration features" TYPE INTEGER DEFAULT 2000 (If integration is used, choose the number of features used to integrate data sets.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 3
 # TOOLS_BIN ""
@@ -37,26 +38,30 @@ if (method == "merge") {
     }
     # Set default assay and variable features for merged Seurat object
     DefaultAssay(objects_combined) <- "SCT"
-    for (object in seurat_objects) {
-        variables_list <- VariableFeatures(object)
+
+    variables_list <- c(VariableFeatures(seurat_objects[[1]]), VariableFeatures(seurat_objects[[2]]))
+
+    if (length(seurat_objects) >= 3) {
+        for (i in 3:length(seurat_objects)) {
+            variables_list <- append(variables_list, VariableFeatures(seurat_objects[[i]]))
+        }
     }
-    VariableFeatures(objects_combined) <- (c(variables_list))
+    VariableFeatures(objects_combined) <- variables_list
 }
 
 # Integration:
 # Code from https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Spatial_transcriptomics
 if (method == "integration") {
     # need to set maxSize for PrepSCTIntegration to work
-    options(future.globals.maxSize = 3000 * 1024^2) # set allowed size to 3K MiB
+    options(future.globals.maxSize = 2000 * 1024^2) # set allowed size to 3K MiB
 
     # Select features that are repeatedly variable across datasets for integration
-    features <- SelectIntegrationFeatures(seurat_objects, nfeatures = 3000, verbose = FALSE)
+    features <- SelectIntegrationFeatures(seurat_objects, nfeatures = integration_feat_num, verbose = FALSE)
     # run PrepSCTIntegration to compute the sctransform residuals for all genes in the datasets
     seurat_objects <- PrepSCTIntegration(
         object.list = seurat_objects, anchor.features = features,
         verbose = FALSE
     )
-
     # Identify anchors
     int.anchors <- FindIntegrationAnchors(
         object.list = seurat_objects, normalization.method = "SCT",
@@ -67,14 +72,7 @@ if (method == "integration") {
         anchorset = int.anchors, normalization.method = "SCT",
         verbose = FALSE
     )
-
-    # Set default assay and variable features for merged Seurat object
-    DefaultAssay(objects_combined) <- "SCT"
-    for (object in seurat_objects) {
-        variables_list <- VariableFeatures(object)
-    }
-    VariableFeatures(objects_combined) <- (c(variables_list))
-
+    
     # remove objects and memory
     rm(int.anchors, seurat_objects)
     gc()
