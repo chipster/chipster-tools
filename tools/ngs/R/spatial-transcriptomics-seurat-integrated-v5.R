@@ -29,10 +29,6 @@ allen_reference <- SCTransform(allen_reference, ncells = 3000, verbose = FALSE) 
     RunPCA(verbose = FALSE) %>%
     RunUMAP(dims = 1:30)
 
-# After subsetting, we renormalize the subsetted spatial data
-seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", verbose = FALSE) %>%
-    RunPCA(verbose = FALSE)
-
 # Open the pdf file for plotting
 pdf(file = "reference_UMAP_plot.pdf", width = 13, height = 7)
 

@@ -3,6 +3,7 @@
 # OUTPUT OPTIONAL seurat_obj_multiple.Robj
 # OUTPUT OPTIONAL merged_plot.pdf
 # OUTPUT OPTIONAL integrated_plot.pdf
+# OUTPUT OPTIONAL PCAloadings.txt
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return in SCTransform" TYPE INTEGER DEFAULT 3000 (Number of features to select as top variable features, i.e. how many features returned. For SCTransform, the recommended default is 3000.)
 # PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (User can choose to merge or integrate the samples.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to compute" TYPE INTEGER DEFAULT 50 (Number of PCs to compute in PCA.)
@@ -44,36 +45,63 @@ if (length(seurat_objects) < 2) {
     stop(paste("CHIPSTER-NOTE: ", "It seems you don't have multiple samples. Please check your input files."))
 }
 
-# Merge multiple slices
-if (length(seurat_objects) == 2) {
-    objects_combined <- merge(seurat_objects[[1]], seurat_objects[[2]])
-} else {
-    objects_combined <- merge(seurat_objects[[1]], y = c(seurat_objects[c(2, (length(seurat_objects)))]))
-}
-
-# Rename combined Robj
-seurat_obj <- objects_combined
-print(seurat_obj)
-
-# Split datasets and process first without integration
-#seurat_obj[["Spatial"]] <- split(seurat_obj[["Spatial"]], f = seurat_obj$orig.ident)
-
-# SCTransform normalizes the data, detects high-variance features, and stores the data in the SCT assay
-seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", variable.features.n = num.features, verbose = FALSE)
-
-seurat_obj <- RunPCA(seurat_obj, assay = "SCT", npcs = PCstocompute, verbose = FALSE)
-
-# PCA genes in txt file
-if (loadings == TRUE) {
-    sink("PCAloadings.txt")
-    print(seurat_obj[["pca"]], dims = 1:PCstocompute, nfeatures = num.of.genes.loadings)
-    sink()
-}
-
 if (method == "merge") {
+    # Merging follows spatial analysis vignette (https://satijalab.org/seurat/articles/spatial_vignette.html#10x-visium)
+    # where seurat objects are first individually normalized using SCTransform before merging objects 
+
+    # SCTransform
+    sctransformed_obj_1 <- SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+    sctransformed_obj_2 <- SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+    sctransformed_objects <- c(sctransformed_obj_1, sctransformed_obj_2)
+
+    if (length(seurat_objects) >= 3) {
+       for (i in 3:length(seurat_objects)) {
+            sctransformed_seurat_obj <- SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+            sctransformed_objects <- append(sctransformed_objects, sctransformed_seurat_obj)
+        }
+    }
+    
+    # Merge multiple slices
+    if (length(seurat_objects) == 2) {
+        seurat_obj <- merge(sctransformed_objects[[1]], sctransformed_objects[[2]])
+    } else {
+        seurat_obj <- merge(sctransformed_objects[[1]], y = c(sctransformed_objects[c(2, (length(sctransformed_objects)))]))
+    }
+
+    #Set default assay and variable features for merged Seurat object
+    DefaultAssay(seurat_obj) <- "SCT"
+
+    variables_list <- c(VariableFeatures(sctransformed_objects[[1]]), VariableFeatures(sctransformed_objects[[2]]))
+
+    if (length(sctransformed_objects) >= 3) {
+        for (i in 3:length(sctransformed_objects)) {
+            print(variables_list)
+            variables_list <- append(variables_list, VariableFeatures(sctransformed_objects[[i]]))
+        }
+    }
+    # Before selecting list of variable features, remove features that are not is scale.data.
+    # This is done because without it there will be a 'subsrict out of bounds' error in FindSpatiallyVariableFeatures()
+    # as features that are not in both objects are not scaled. This should be taken into account such that the list 
+    # of variable features only contain features that are in both objects 
+    # More information in issues  https://github.com/satijalab/seurat/issues/3041 and https://github.com/satijalab/seurat/issues/4611
+    new_variables_list <- intersect(variables_list,rownames(seurat_obj[['SCT']]$scale.data)) 
+
+    # Select variable features
+    VariableFeatures(seurat_obj) <- new_variables_list
+
+    # PCA
+    seurat_obj <- RunPCA(seurat_obj, npcs = PCstocompute, assay = "SCT", verbose = FALSE)
+
+    # PCA genes in txt file
+    if (loadings == TRUE) {
+        sink("PCAloadings.txt")
+        print(seurat_obj[["pca"]], dims = 1:PCstocompute, nfeatures = num.of.genes.loadings)
+        sink()
+    }
+
     seurat_obj <- FindNeighbors(seurat_obj, dims = 1:dims.reduction, verbose=FALSE)
     seurat_obj <- FindClusters(seurat_obj, resolution = res, verbose = FALSE)
-    seurat_obj <- RunUMAP(seurat_obj, dims = 1:dims.reduction, verbose = FALSE)
+    seurat_obj <- RunUMAP(seurat_obj, dims = 1:dims.reduction,  verbose=FALSE)
     
     # Visualization
     pdf(file = "merged_plot.pdf", , width = 9, height = 12)
@@ -86,13 +114,50 @@ if (method == "merge") {
 }
 
 if (method == "integration") {
+    # Integration follows single-cell analysis vignette (https://satijalab.org/seurat/articles/integration_introduction)
+    # where seurat objects are first merged and then individually normalized using SCTransform by using different sample
+    # layers stored in the object. Seurat object needs to be split by the samples before SCTransform so that SCTransform
+    # is run for each sample individually. However, splitting the object as shown in the vignette is not needed after merging 
+    # multiple unnormalized Seurat objects because objects are already split by their sample (=orig.ident) after merge
+
+    # Merge multiple slices
+    if (length(seurat_objects) == 2) {
+        seurat_obj <- merge(seurat_objects[[1]], seurat_objects[[2]])
+    } else {
+        seurat_obj <- merge(seurat_objects[[1]], y = c(seurat_objects[c(2, (length(seurat_objects)))]))
+    }
+
+    # SCTransform (no need to split object before SCTransform)
+    seurat_obj <- SCTransform(seurat_obj, variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+
+    # There is an issue with running SCTransform for a merged object as explained by StepahieHowe in issue 
+    # https://github.com/satijalab/seurat/issues/8235. This solution does not solve issues with
+    # FindSpatiallyVariableFeatures() but it allows to perform integration with scRNA-seq data without
+    # any errors. FindSpatiallyVariableFeatures() must still be run for each object individually because
+    # otherwise it will result in please provide the same number of observations as spatial locations' error
+    # as explained by tingchiafelix
+    for (i in length(seurat_objects)) {
+        slot(object = seurat_obj@assays$SCT@SCTModel.list[[i]], name="umi.assay")<-"Spatial"
+    }
+
+    # You can use this to check that all "umi.assay" slots are called "Spatial"
+    print(SCTResults(object=seurat_obj, slot="umi.assay"))
+
+    seurat_obj <- RunPCA(seurat_obj, npcs = PCstocompute, assay = "SCT", verbose = FALSE)
+
+    # PCA genes in txt file
+    if (loadings == TRUE) {
+        sink("PCAloadings.txt")
+        print(seurat_obj[["pca"]], dims = 1:PCstocompute, nfeatures = num.of.genes.loadings)
+        sink()
+    }
 
     # Name of new reduction
     new.reduction = "integrated.cca"
 
-    # Integration
-    seurat_obj <- IntegrateLayers(object = seurat_obj, method = "CCAIntegration", normalization.method = "SCT",
-    orig.reduction = "pca", new.reduction = new.reduction, dims = 1:dims.reduction , assay = "SCT", verbose = FALSE)
+    # Integration 
+    seurat_obj <- IntegrateLayers(object = seurat_obj, method = "CCAIntegration", normalization.method = "SCT", new.reduction = new.reduction,
+    dims = 1:dims.reduction, assay = "SCT", verbose = FALSE)
 
     seurat_obj <- FindNeighbors(seurat_obj, reduction = new.reduction, dims = 1:dims.reduction, verbose = FALSE)
     seurat_obj <- FindClusters(seurat_obj, resolution = res, verbose = FALSE)

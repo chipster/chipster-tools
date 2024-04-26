@@ -28,7 +28,7 @@ documentVersion("Seurat", package.version("Seurat"))
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_spatial_obj_pca.Robj")
 
-#seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
+seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
 # Differential expression
 de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
