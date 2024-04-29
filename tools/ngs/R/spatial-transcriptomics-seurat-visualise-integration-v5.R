@@ -71,9 +71,9 @@ if (multi_analysis) {
     pdf(file = "integration_plot.pdf", width = 13, height = 7)
 
     # Visualise chosen features
-    SpatialFeaturePlot(seurat_obj, features = c(genes), pt.size.factor = 1.6, ncol = 2, crop = TRUE)
+    print(SpatialFeaturePlot(seurat_obj, features = c(genes), pt.size.factor = 1.6, ncol = 2, crop = TRUE))
     # Visualise spatially variable features
-    SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
+    print(SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2))
 
     # Close the pdf
     dev.off()
