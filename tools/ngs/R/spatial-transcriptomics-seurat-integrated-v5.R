@@ -3,6 +3,7 @@
 # INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration.)
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # OUTPUT OPTIONAL reference_UMAP_plot.pdf
+# PARAMETER OPTIONAL num.cells: "Number of subsampling cells in SCTransform when normalizing reference dataset" TYPE INTEGER DEFAULT 5000 (Setting this value to a smaller number speeds up the computation but might result in loss of performance.)
 # RUNTIME R-4.2.3-seurat5
 # SLOTS 5
 # TOOLS_BIN ""
@@ -25,7 +26,7 @@ load("seurat_obj_subset.Robj")
 allen_reference <- readRDS("sc_reference")
 
 # Normalise the scRNA-seq reference
-allen_reference <- SCTransform(allen_reference, ncells = 3000, verbose = FALSE) %>%
+allen_reference <- SCTransform(allen_reference, ncells = num.cells, verbose = FALSE) %>%
     RunPCA(verbose = FALSE) %>%
     RunUMAP(dims = 1:30)
 
