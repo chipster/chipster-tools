@@ -46,7 +46,7 @@ if (multi_analysis) {
   pdf(file = "Markerplot2.pdf", width = 9, height = 12)
 
   for (i in 1:length(experiment.slices)) {
-    seurat_obj <- FindSpatiallyVariableFeatures(experiment.slices[[i]], features = VariableFeatures(experiment.slices[[i]])[1:1000], selection.method = method.to.use)
+    seurat_obj <- FindSpatiallyVariableFeatures(experiment.slices[[i]], features = VariableFeatures(experiment.slices[[i]]), selection.method = method.to.use)
     # Visualise the identified top features
     top.features <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
     print(SpatialFeaturePlot(seurat_obj, features = top.features, ncol = 3, alpha = c(0.1, 1)))
@@ -62,7 +62,7 @@ if (multi_analysis) {
 
 } else {
   # Find spatially variable features using markvariogram
-  seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = VariableFeatures(seurat_obj)[1:1000], selection.method = method.to.use)
+  seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = VariableFeatures(seurat_obj), selection.method = method.to.use)
 
   plan("default") # return to normal
 

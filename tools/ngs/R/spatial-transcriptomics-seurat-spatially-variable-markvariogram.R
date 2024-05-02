@@ -26,7 +26,7 @@ library(future)
 plan("multisession", workers = as.integer(chipster.threads.max))
 
 # Find spatially variable features using markvariogram
-seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = VariableFeatures(seurat_obj)[1:1000], selection.method = method.to.use)
+seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = VariableFeatures(seurat_obj), selection.method = method.to.use)
 
 plan("default") # return to normal
 
