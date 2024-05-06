@@ -10,19 +10,29 @@
     <h2>HISAT2 for paired-end reads and own genome</h2>
 
     <h3>Description</h3>
-    <p>This tool aligns Illumina paired end RNA-seq read to a genome provided either as a FASTA format sequence or as a
-        tar package with a HISAT2 index.
-        <p> You need to supply the reads in FASTQ files. The files can be compressed with gzip.
+        <p>
+            This tool uses HISAT2 to align paired-end reads to a provided reference genome .You need to supply the
+            paired-end reads in FASTQ format. The files can be compressed with gzip. You also need to provide the reference 
+            genome as input either in FASTA format or as a tar package with a HISAT2 index. If you would like to align reads 
+            against publicly available reference genomes supplied by Chipster, please use the tool
+            <i>HISAT2 for paired-end reads</i>.
         </p>
         <p>
-            To define the files with paired-end reads for each sample, please use the "Define Samples" option.
-            This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
-            such that the alignment tool can be run for multiple samples at the same time. Please see
-            tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+            If you use a reference genome in FASTA format as input, the tool will output a .tar file with the HISAT2 index.
+            If you would like to run the tool again for other samples of paired-end reads using the same reference genome, 
+            you should use the .tar file as the reference input instead of the reference in FASTA format as this saves the 
+            time needed to generate the index.
+        </p>
+        <p>
+            If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+            alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+            "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+            "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+            Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
             “Run for Each Sample” Option</a> for more information.
         </p>
 
-        <h3>Parameters</h3>
+     <h3>Parameters</h3>
         <ul>
             <li>RNA-strandness (unstranded, FR, RF) [unstranded]</li>
             <li>How many hits is a read allowed to have (1-1000000) [5]</li>
@@ -33,7 +43,7 @@
             <li>Are long anchors required (yes, no) [no]</li>
         </ul>
 
-        <h3>Details</h3>
+     <h3>Details</h3>
         <p>
             HISAT2 (hierarchical indexing for spliced alignment of transcripts) is a highly efficient system for
             aligning reads from RNA sequencing experiments.
@@ -65,9 +75,9 @@
             and memory usage.
         </p>
         <p>
-            If you use a FASTA format genome, the tool will produce a .tar file with the HISAT2 indexes. If you run the
-            tool again with the same genome, you should use the .tar file as the genome input, as this saves the time
-            needed to generate the indexes.
+            If you use a FASTA format reference genome as input to the tool, the tool will produce a .tar file with the 
+            HISAT2 index. If you would like to run the alignment for other samples using the same reference genome, you 
+            can use this .tar file as the reference genome input instead of the reference genome in FASTA format. 
         </p>
         <p>
             After running HISAT2, Chipster indexes the BAM file using the <a
