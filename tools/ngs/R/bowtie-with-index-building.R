@@ -1,7 +1,4 @@
-# TOOL bowtie-with-index-building.R: "Bowtie for single end reads and own genome" (Bowtie aligns reads to genome, transcriptome, miRNAs, etc. There are two modes: mismatches are considered either throughout the read, or only in the user-defined left part of the read. In the latter case also quality values are taken into account.
-# Results are sorted and indexed bam files.
-# This tool allows you align reads against your own sequences, which you have to supply in fasta format.
-# If you would like to align reads against public genomes supplied by Chipster, please use the tool \"Bowtie for single end reads\".)
+# TOOL bowtie-with-index-building.R: "Bowtie for single end reads and own genome" (This tool uses Bowtie to align single-end reads to a provided reference genome. You need to supply the single-end reads in FASTQ format. You also need to provide the reference genome as input in FASTA format.)
 # INPUT reads.txt: "Reads to align" TYPE GENERIC
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
 # OUTPUT bowtie.bam
