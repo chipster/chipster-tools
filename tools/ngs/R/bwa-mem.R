@@ -1,5 +1,4 @@
-# TOOL bwa-mem.R: "BWA MEM for single or paired end reads" (Aligns reads to genomes using the BWA MEM algorithm. If just one read file is given, then a single end analysis is run. If two read files are given, then mapping is done in paired end mode. If more than two read files are given, you also need to provide a list of filenames of the FASTQ files for each direction. Results are sorted and indexed BAM files.
-# Note that this BWA tool uses publicly available genomes. If you would like to align reads against your own reference genome, please use the tool \"BWA MEM for single or paired end data with own genome\".)
+# TOOL bwa-mem.R: "BWA MEM for single or paired end reads" (This tool uses BWA MEM to align single-end or paired-end reads to a publicly available reference genome. You need to supply the single end or paired-end reads in FASTQ format. If you provide one reads file as input, single-end alignment is performed. If you provide paired-end reads files as input, paired-end alignment is performed.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC

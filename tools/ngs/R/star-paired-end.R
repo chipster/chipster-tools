@@ -1,4 +1,4 @@
-# TOOL star-paired-end.R: "STAR for paired end reads" (Aligns paired end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed.)
+# TOOL star-paired-end.R: "STAR for paired end reads" (This tool uses STAR to align paired-end reads to a publicly available reference genome. You need to supply the paired-end reads in FASTQ format.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
