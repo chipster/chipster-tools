@@ -1,5 +1,4 @@
-# TOOL bowtie.R: "Bowtie for single end reads" (Bowtie aligns reads to genome, transcriptome, known miRNAs, etc. There are two modes: mismatches are considered either throughout the read, or only in the user-defined left part of the read. In the latter case also quality values are taken into account. Results are sorted and indexed bam files.
-# Note that this Bowtie tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie for single end reads and own genome\".)
+# TOOL bowtie.R: "Bowtie for single end reads" (This tool uses Bowtie to align single-end reads to a publicly available reference genome. You need to supply the single-end reads in FASTQ format.)
 # INPUT reads.txt: "Reads to align" TYPE GENERIC
 # OUTPUT bowtie.bam
 # OUTPUT bowtie.bam.bai

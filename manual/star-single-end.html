@@ -8,7 +8,20 @@
 <h3>Description</h3>
 
 <p>
-Aligns single end RNA-seq reads using the STAR aligner. Alignment results are given in a BAM file, which is automatically indexed.
+    This tool uses STAR to align single-end reads to a publicly available reference genome. You need to supply the
+    single-end reads in FASTQ format. The files can be compressed with gzip. 
+</p>
+<p> Note that this tool uses publicly available reference genomes. If you would like us to add new reference 
+    genomes to Chipster, please contact us. 
+</p>
+<p>
+    If you have multiple samples of single-end reads, you can use the "Run for Each Sample" option to run multiple 
+    single-end alignment jobs at the same time. To define the files with single-end reads for each sample, please 
+    use the "Define Samples" option. This option allows to define the multiple different samples of single-end reads
+    and enables the "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the 
+    same time. This option is similar to the option for paired-end alignment as explained in the tutorial video
+     <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable “Run for Each Sample” Option</a>, 
+    but you need to select the "Single end" option in "Define Samples".
 </p>
 
 <h3>Parameters</h3>

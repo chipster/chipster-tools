@@ -1,4 +1,4 @@
-# TOOL star-single-end.R: "STAR for single end reads" (Aligns single end RNA-seq reads to a genome. Alignment results are given in a BAM file, which is automatically indexed. )
+# TOOL star-single-end.R: "STAR for single end reads" (This tool uses STAR to align single-end reads to a publicly available reference genome. You need to supply the single-end reads in FASTQ format.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL annotation.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL alignment.bam

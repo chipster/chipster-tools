@@ -1,4 +1,4 @@
-# TOOL hisat2.R: "HISAT2 for single end reads" (Aligns single end RNA-seq reads to a reference genome.)
+# TOOL hisat2.R: "HISAT2 for single end reads" (This tool uses HISAT2 to align single-end reads to a publicly available reference genome. You need to supply the single-end reads in FASTQ format.)
 # INPUT reads{...}.fq.gz: "Reads to align" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.bam.bai
