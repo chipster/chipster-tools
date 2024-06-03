@@ -1,5 +1,4 @@
-# TOOL bowtie2.R: "Bowtie2 for single end reads" (Bowtie2 aligns reads to genomes. Results are sorted and indexed BAM files.
-# Note that this Bowtie2 tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie2 for single end reads and own genome\".)
+# TOOL bowtie2.R: "Bowtie2 for single end reads" (This tool uses Bowtie2 to align single-end reads to a publicly available reference genome. Single-end reads can either be in FASTA or FASTQ format.)
 # INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
 # OUTPUT bowtie2.bam
 # OUTPUT bowtie2.log

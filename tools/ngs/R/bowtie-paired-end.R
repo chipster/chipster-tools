@@ -1,6 +1,4 @@
-# TOOL bowtie-paired-end.R: "Bowtie for paired end reads" (Bowtie aligns reads to genomes or transcriptomes. There are two modes: mismatches are considered either throughout the read, or only in the user-defined left part of the read. In the latter case also quality values are taken into account.
-# Results are sorted and indexed bam files.
-# Note that this Bowtie tool uses publicly available genomes. If you would like to align reads against your own datasets, please use the tool \"Bowtie for paired-end reads and own genome\".)
+# TOOL bowtie-paired-end.R: "Bowtie for paired end reads" (This tool uses Bowtie to align paired-end reads to a publicly available reference genome. You need to supply the paired-end reads in FASTQ format.)
 # INPUT reads1.fq: "No 1 mate reads" TYPE GENERIC
 # INPUT reads2.fq: "No 2 mate reads" TYPE GENERIC
 # OUTPUT bowtie.bam

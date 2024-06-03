@@ -1,4 +1,4 @@
-# TOOL bowtie2-with-index-building.R: "Bowtie2 for single end reads and own genome" (Bowtie2 aligns reads to genomes or transcriptomes. Results are sorted and indexed bam files.)
+# TOOL bowtie2-with-index-building.R: "Bowtie2 for single end reads and own genome" (This tool uses Bowtie2 to align single-end reads to a provided reference genome. Single-end reads can either be in FASTA or FASTQ format. You also need to provide the reference genome as input either in FASTA format or as a tar package with a Bowtie2 index.)
 # INPUT reads{...}.fq: "Reads to align" TYPE FASTQ
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
 # OUTPUT OPTIONAL bowtie2.bam

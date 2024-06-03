@@ -26,30 +26,22 @@ load("seurat_object.Robj")
 # Open the pdf file for plotting
 pdf(file = "Feature_plot.pdf", width = 13, height = 7)
 
-# Gene expression visualization
+# Requested genes
 genes <- trimws(unlist(strsplit(genes, ",")))
 
-# Sanity check: are all of the requested genes available in the data (one missing allowed)
+# Genes in Seurat object
 all.genes <- rownames(x = seurat_obj)
-match(genes, all.genes)
 
-# If more than one of the genes is not in the list, print error message:
-if (sum(is.na((match(genes, all.genes)))) > 1) {
-  not.found <- (genes[is.na(match(genes, all.genes)) == TRUE])
-  not.found <- paste(not.found, collapse = ",")
-  stop(paste("CHIPSTER-NOTE: ", "The genes you requested were not found in this dataset:", not.found))
-}
+# Find case insensitive matches between requested genes and genes in Seurat object
+matches <- (unlist(lapply(genes, function(g) grep(paste0("^", g, "$"), all.genes, ignore.case = TRUE, value = TRUE))))
 
-# Continue even if one gene is missing
-if (!all(!is.na(match(genes, all.genes)))) {
-  not.found <- genes[is.na(match(genes, all.genes)) == TRUE]
-  print(paste("Continuing the visualization without the one gene not found: ", not.found))
-  genes <- genes[!is.na(match(genes, all.genes))]
+# If none of the requested genes are in the Seurat object
+if (identical(matches, character(0))) {
+  stop(paste("CHIPSTER-NOTE: ", "None of the genes you requested were not found in the Seurat object."))
 }
 
 # Spatial feature plot:
-SpatialFeaturePlot(seurat_obj, features = genes, pt.size.factor = point.size, alpha = c(min_transparency, max_transparency))
-
+SpatialFeaturePlot(seurat_obj, features = matches, pt.size.factor = point.size, alpha = c(min_transparency, max_transparency)
 # Close the pdf
 dev.off()
 

@@ -14,8 +14,8 @@
     <p>
         With this tool you can extract information from Seurat object. The tool will produce a text file
         containing an overall view to the contents of the object. You can also choose to produce
-        <li>a table of the genes in the object</li>
-        <li>a table of the highly variable genes in the object </li>
+        <li>a table of the genes in the active assay of the object</li>
+        <li>a table of the highly variable genes in the active assay of the object </li>
         <li>a text file of the R commands that have been run to the object </li>
         <li>a table of the metadata data frame</li>
         <li>the tissue image stored in the object (in case you have spatial transcriptomics data)</li>
@@ -25,7 +25,7 @@
     <p></p>
     The single-cell RNA-seq or spatially variable transcriptomics data is stored in the Seurat object in specific data
     slots.
-    With this tool, you can easily access and extract information from the chosen slots.
+    With this tool, you can easily access and extract information from the chosen seurat object.
     </p>
     <p>
         As input, you can give a Seurat R-object (Robj) or an RDS file containing scRNA-seq data or spatial

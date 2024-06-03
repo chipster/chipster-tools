@@ -14,7 +14,18 @@
 	<p>
 		This tool searches for genes that exhibit spatial patterning. It does not use any pre-annotation (cluster) information. If you would like to use cluster information, you may use this tool <i> Seurat v5 -Identify spatially variable genes based on clusters</i>. 
     </p>
-	
+
+	<p>
+		If you performed multiple sample analysis i.e. if your samples have been merged or integrated into one single seurat object, select 'yes' as the value for parameter 'Multiple sample analysis'.
+		However, this tool will still identify spatially variable genes for each sample individually.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+			<li>Methods to use [moransi]</li>
+			<li>Number of features to plot[6]</li>
+			<li>Multiple sample analysis [no]</li>
+	</ul>
 
 	<h3>Details</h3>
 
@@ -22,7 +33,7 @@
         This tool identifies and selects features exhibiting spatial patterning by using the moransi or markvariogram method. 
 		Markvariogram models spatial transcriptomics data as a mark point process and computes a 'variogram', which identifies genes whose expression level is dependent on their spatial location. 
 		Specifically, this process calculates gamma(r) values measuring the dependence between two spots that are a certain “r” distance apart. These values are only computed for variable genes (where variation is calculated independently of spatial location).
-		The expression levels of the top 6 features are displayed in the SpatialFeaturePlot.
+		The expression levels of the top features are displayed in the SpatialFeaturePlot.
 
     </p>
 

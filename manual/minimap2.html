@@ -7,8 +7,15 @@
 
 <h3>Description</h3>
 
+<p> This tool uses Minimap2 to align long DNA and mRNA sequences to a large reference database. If just one input file is given,
+    the tool assumes that it contains the reads to be aligned and that the reference genome is selected with the Genome 
+    parameter. If two input files are given, the second one is assumed to contain the reference genome. You need to supply the input 
+    reads files in FASTQ or FASTA format. You also need to provide the reference genome as input in FASTA format. Results are sorted 
+    and indexed BAM files. 
+</p>
+
 <p>
-Minimap2 is a fast general-purpose alignment program to map DNA and long mRNA sequences against a large reference database.  It can be used for:
+Minimap2 is a fast general-purpose alignment program that can be used for:
 <ul>
 <li>mapping of accurate short reads (preferably longer that 100 bases)</li>
 <li>mapping 1kb genomic reads at error  rate 15% (e.g. PacBio or Oxford Nanopore genomic reads)</li>
@@ -59,9 +66,6 @@ are optimal for a specific analysis task. The predefined task types include:
 
 As there is no obvious default analysis for Minimap2, the task type does not have 
 any default value. Instead this value must be defined by the user for each Minimap2 task.
-
- 
-
 
 <h3>Output</h3>
 

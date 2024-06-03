@@ -12,12 +12,15 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool filters out anatomical regions based on clusters to focus on a subset of data. The subsetted object is then visualised using SpatialDimPlot.
+		This tool filters out anatomical regions based on clusters to focus on a subset of data. After subsetting the data, the data must be renormalized using
+		SCTransform and PCA must be run again. The subsetted object is then visualised using SpatialDimPlot. 
 	</p>
 
 	<h3>Parameters</h3>
 	<ul>
 		<li>Subset of clusters [1,2,3,4,5]</li>
+		<li>Number of variable genes to return in SCTransform [3000]</li>
+		<li>Number of PCs to compute in PCA [50]</li>
 		
 	</ul>
 

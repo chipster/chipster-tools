@@ -11,12 +11,28 @@
 
     <h3>Description</h3>
 
-    <p>This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> to align
-        single-end reads
-        to a reference genome. You need to supply the reads in one or more FASTQ files. You also need to provide 
-        the reference genome as an input either in a FASTA format or as a tar package with Bowtie index.
+    <p>
+        This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> to align
+        single-end reads to a provided reference genome. Single-end reads can either be in FASTA or FASTQ format.
+        You also need to provide the reference genome as input either in FASTA format or as a tar package with a 
+        Bowtie2 index. If you would like to align reads against publicly available reference genomes supplied by
+        Chipster, please use the tool <i>Bowtie2 for single-end reads</i>.
     </p>
     <p>
+        If you use a reference genome in FASTA format as input, the tool will output a .tar file with the Bowtie2 index.
+        If you would like to run the tool again for other samples of single-end reads using the same reference genome, 
+        you should use the .tar file as the reference input instead of the reference in FASTA format as this saves the 
+        time needed to generate the index.
+    </p>
+    <p>
+        If you have multiple samples of single-end reads, you can use the "Run for Each Sample" option to run multiple 
+        single-end alignment jobs at the same time. To define the files with single-end reads for each sample, please 
+        use the "Define Samples" option. This option allows to define the multiple different samples of single-end reads
+        and enables the "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the 
+        same time. This option is similar to the option for paired-end alignment as explained in the tutorial video
+         <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable “Run for Each Sample” Option</a>, 
+        but you need to select the "Single end" option in "Define Samples".
+    </p>
     <p>After running Bowtie2, Chipster converts the alignment file to BAM format, and sorts and indexes it using the <a
             href="http://samtools.sourceforge.net/">SAMtools</a> package.</p>
 

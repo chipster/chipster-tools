@@ -1,9 +1,10 @@
 # TOOL spatial-transcriptomics-seurat-visualise-integration-v5.R: "Seurat v5 -Visualize cell types after integration with scRNA-seq data" (Visualize the underlying composition of cell types in each spatial spot.)
 # INPUT seurat_obj_integrated.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integration_plot.pdf
-# PARAMETER OPTIONAL genes: "Features to plot" TYPE UNCHECKED_STRING DEFAULT "L2/3 IT, L4" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
+# PARAMETER OPTIONAL genes: "Features to plot" TYPE UNCHECKED_STRING DEFAULT "L2/3 IT" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # PARAMETER OPTIONAL method.to.use: "Method to use" TYPE [markvariogram: markvariogram, moransi: moransi] DEFAULT moransi (Method to use. Markvariogram takes longer to run, Morans I is faster.)
 # PARAMETER OPTIONAL number.of.top.features: "Number of features to plot" TYPE INTEGER DEFAULT 4 (How many top features to plot.)
+# PARAMETER OPTIONAL multi_analysis: "Multiple sample analysis" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (If you performed multiple sample analysis i.e. if your samples have been merged/integrated into one single seurat object, select 'yes'. However, this tool will still visualize cell types after integration for each sample separately.)
 # RUNTIME R-4.2.3-seurat5
 # TOOLS_BIN ""
 
@@ -25,23 +26,57 @@ load("seurat_obj_integrated.Robj")
 DefaultAssay(seurat_obj) <- "predictions"
 
 genes <- trimws(unlist(strsplit(genes, ",")))
-#nfeatures=6 as parameter in FindSpatiallyVariableFeatures()??
-# Identify spatially variable features with the cell type prediction scores calculated in the integration
-seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj,
-    assay = "predictions", selection.method = method.to.use,
-    features = rownames(seurat_obj), r.metric = 5, slot = "data", 
-)
-top.clusters <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
 
-# Open the pdf file for plotting
-pdf(file = "integration_plot.pdf", width = 13, height = 7)
+if (multi_analysis) {
+    # Split obejct and analyze find spatially variable features separately 
+    # Samples are analyzed seperately because of error 'please provide the same number of observations as spatial locations'
+    # in FindSpatiallyVariableFeatures() that is similar as explained by tingchiafelix in issue 
+    # https://github.com/satijalab/seurat/issues/4611 as well as issue raised in 
+    # https://github.com/satijalab/seurat/issues/8754
+    experiment.slices <- SplitObject(seurat_obj, split.by = "orig.ident")
+    # Remove extra images
+    experiment.slices <- lapply(experiment.slices, function(sce) {
+    sce@images[names(sce@images) != sce$orig.ident[1]] = NULL
+    sce
+    })
 
-# Visualise chosen features
-SpatialFeaturePlot(seurat_obj, features = c(genes), pt.size.factor = 1.6, ncol = 2, crop = TRUE)
-# Visualise spatially variable features
-SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
+    # Open the pdf file for plotting
+    pdf(file = "integration_plot.pdf", width = 13, height = 7)
 
-# close the pdf
-dev.off()
+  for (i in 1:length(experiment.slices)) {
+    seurat_obj <- FindSpatiallyVariableFeatures(experiment.slices[[i]], 
+        assay = "predictions", selection.method = method.to.use, 
+        features = rownames(experiment.slices[[i]]), r.metric=5, slot = "data")
+
+    top.clusters <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
+
+    # Visualise chosen features
+    print(SpatialFeaturePlot(seurat_obj, features = c(genes), pt.size.factor = 1.6, ncol = 2, crop = TRUE))
+    # Visualise spatially variable features
+    print(SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2))
+  }
+
+    # Close the pdf
+    dev.off()
+
+} else {
+    # Identify spatially variable features with the cell type prediction scores calculated in the integration
+    seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj,
+        assay = "predictions", selection.method = method.to.use,
+        features = rownames(seurat_obj), r.metric = 5, slot = "data", 
+    )
+    top.clusters <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
+
+    # Open the pdf file for plotting
+    pdf(file = "integration_plot.pdf", width = 13, height = 7)
+
+    # Visualise chosen features
+    print(SpatialFeaturePlot(seurat_obj, features = c(genes), pt.size.factor = 1.6, ncol = 2, crop = TRUE))
+    # Visualise spatially variable features
+    print(SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2))
+
+    # Close the pdf
+    dev.off()
+}
 
 # EOF

@@ -1,4 +1,4 @@
-# TOOL bowtie2-paired-end-with-index-building.R: "Bowtie2 for paired end reads and own genome" (Bowtie2 aligns reads to genomes or transcriptomes. Results are sorted and indexed bam files.)
+# TOOL bowtie2-paired-end-with-index-building.R: "Bowtie2 for paired end reads and own genome" (This tool uses Bowtie2 to align paired-end reads to a provided reference genome. Paired-end reads can either be in FASTA or FASTQ format, but both reads files need to be in the same format. You also need to provide the reference genome as input either in FASTA format or as a tar package with a Bowtie2 index.)
 # INPUT reads{...}.fq: "Reads" TYPE FASTQ
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
