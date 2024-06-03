@@ -12,6 +12,7 @@
 # IS 18.3.2013, modified to be able to handle any matrices (chip, flag, ...) and annotation columns present in the data.
 # MK 30.4.2013, added the ability to deal with NGS count tables
 # IS 6.1.2014, making less sensitive about phenodata columnn names
+# ML 3.6.2024, fix bug when sample name ends with ending line
 
 # Loads the data file
 file <- c("normalized.tsv")
@@ -42,7 +43,7 @@ if (max(extract) > 1) {
 # identify different matrices (chip, flag, ...) present in the data
 x <- colnames(dat)
 suffix <- sub("^chip\\.", "", x[grep("^chip\\.", x)[1]]) # pick up the name of the first experiment
-matrices <- sub(suffix, "", x[grep(paste("\\.", suffix, sep = ""), x)]) # remove the suffix and find all columns having the name
+matrices <- sub(suffix, "", x[grep(paste("\\.", suffix,  "$", sep = ""), x)]) # remove the suffix and find all columns having the name. $ needed in cases when name of the first sample ends with line ending.
 annotations <- 1:length(x)
 for (m in matrices) {
   annotations <- setdiff(annotations, grep(m, x))
