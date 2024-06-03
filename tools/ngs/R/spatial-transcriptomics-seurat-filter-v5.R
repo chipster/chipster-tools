@@ -1,9 +1,9 @@
 # TOOL spatial-transcriptomics-seurat-filter-v5.R: "Seurat v5 -Filter spots" (This tool filters out spots based on mitochondrial, ribosomal and hemoglobin transcript percentage.)
 # INPUT OPTIONAL seurat_spatial_setup.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_filtered.Robj
-# PARAMETER OPTIONAL mitocutoff: "Filter out spots which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots from regions of damaged tissue. The spots to be kept must have lower percentage of mitochondrial transcripts than this.)
-# PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out cells that have lower ribosomal transcript percentage.)
-# PARAMETER OPTIONAL hbcutoff: "Filter out spots which have higher hemoglobin transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots which have higher percentage of hemoglobin transcripts than this.)
+# PARAMETER OPTIONAL mitocutoff: "Filter out spots which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots that have higher percentage of mitochondrial transcripts than this.)
+# PARAMETER OPTIONAL minribo: "Filter out cells which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out spots that have lower ribosomal transcript percentage than this.)
+# PARAMETER OPTIONAL hbcutoff: "Filter out spots which have higher hemoglobin transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots that have higher percentage of hemoglobin transcripts than this.)
 # RUNTIME R-4.2.3-seurat5
 # TOOLS_BIN ""
 

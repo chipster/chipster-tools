@@ -7,15 +7,19 @@
 
 <body>
 
-	<h2>Seurat v5 -Normalization, PCA, clustering, and visualization </h2>
+	<h2>Seurat v5 -Normalization and PCA </h2>
 
 	<h3>Description</h3>
 
 	<p>
-		This tool first normalizes data with SCTransform and detects highly variable genes. Then, this tool performs principal component analysis
-		(PCA) on the highly variable genes detected by SCTransform. It then clusters the spots with a graph-based clustering approach and visualizes
-		the clustering results using UMAP and SpatialDimPlot.
+		This tool first normalizes data with SCTransform and detects highly variable genes. Then, this tool performs principal component 
+		analysis (PCA) on the highly variable genes detected by SCTransform. 
 	</p>
+	<p>
+        As input, you can give one Seurat object after the <i>Seurat v5 -Filter spots</i> step. As an alternative, you can use this tool 
+		tool renormalize and compute PCA again for a Seurat object that has been subsetted using the <i>Seurat v5 -Subset out anatomical
+		regions based on cluster</i> tool.
+    </p>
 
 	<h3>Parameters</h3>
 	<ul>
@@ -23,55 +27,59 @@
 		<li>Number of PCs to compute [50]</li>
 		<li>Print loadings in a file [no]</li>
 		<li>Number of genes to list in the loadings file [5]</li>
-		<li>Dimensions of reduction to use as input [30]</li>
-		<li>Resolution for granularity for clustering [0.8]</li>
-
 	</ul>
 
 
 	<h3>Details</h3>
 
-	<p> This tool first normalizes the gene expression values using the SCTransform normalization method which is
-		explained in single-cell tool <i> Seurat v5 -SCTransform: Normalize, regress and detect variable genes</i>.
-	 	Genes which are highly variable across the cells are detected using the Pearson residuals computed in this 
-		normalization step. The highly variable genes are used for downstream analysis. </p>
+	<p> 
+		This tool first normalizes the gene expression values using the SCTransform normalization method which uses Pearson residuals 
+		from regularized negative binomial regression, where sequencing depth is utilized as a covariate in a generalized 
+		linear model (GLM). The parameters for the model are estimated by pooling information across genes that are expressed at 
+		similar levels. This should remove the technical variation but preserve the biological heterogeneity, and avoid over-fitting 
+		the model to the data. SCTransform also detects genes which are highly variable across the spots using the Pearson residuals 
+		computed in this normalization step. Only the highly variable genes are returned and used for downstream analyses. 
+	</p>
 
-	<p> This tool then performs PCA which is explained in the single-cell tool <i> Seurat v5 -PCA</i>. This tool then
-		uses a graph-based approach to cluster the spots, and this clustering approach is explained in the single-cell tool
-		<i> Seurat v5 -Clustering</i>. The clustering results are then visualized using UMAP and SpatialDimPlot.
-	 </p>
-
+	<p> 
+		After normalization, this tool performs Principal Component Analysis (PCA) using the detected highly variable genes. PCA is used 
+		to reduce the dimensionality of the data set (number of genes), while preserving as much variance as possible. When running 
+		PCA, you can specify the number of principal components (PCs) to compute where each PC essentially represents a 'metagene'. These
+		components or 'metagenes' are new variables that are linear combinations of the original genes, ordered by the amount of variance 
+		they capture from the data. This means that the first principal component (PC1) captures the maximun possible variance in the data 
+		set, PC2 the second most and so on. By selecting fewer components, you can reduce the dimensionality of the data set. This makes 
+		the data easier to analyze and visualize, while still retaining the most important information. By default, 50 PCs are computed. 
+		It is important to note that selecting too few PCs may oversimplify the data, while selecting too many PCs may retain unnecessary 
+		noise.
+	</p>
 	<p>
-		This tool produces the following cluster plots:
+		This tool also outputs a *.txt file if the parameter "Print loadings in a file" is set to "yes". This file will list the top genes 
+		(default = 5) associated with each PC that have the largest (positive or negative) PCA loadings for each PC. PCA loadings represent
+		the weights or coefficients of the original genes in the linear combination corresponding to each PC. Thus, PCA loadings show how 
+		much each original gene contributes to each PC component or 'metagene'. 
+	</p>
+	<p>
+		Finally, the tool produces PCA plots which can help the user explore the primary sources of heterogeneity in the dataset, and to decide
+		how many principal components to include for downstream analyses: 
 		<ul>
-			<li>Dimplot, shows the results of the dimensional reduction on a 2D scatterplot where each point is a spot positioned based on the spot embeddings determined by UMAP.
-			</li>
-			<li>SpatialDimPlot, shows the resulting clusters overlaid on the tissue image.</li>
+			<li>Elbow plot: shows a ranking of PCs by the amount of variation explained by each PC component. It can be used to determine
+				the primary sources of heterogeneity in the data and for selecting a cutoff of how many PCs to include for downstream analyses. </li>
+			<li>PCA loadings plots: show the PCA loadings for top genes associated with the first two principal components. They can be used 
+				to see which genes have the highest weights or loadings for each PC component. </li>
 		</ul>
 	</p>
-
 	<p>
-		You can also use the tool to output a *.txt file. This file will list the top genes (default = 5) associated with high or low loadings for the first 5 PCs in the PCAloadings.txt file.
-	</p>
-
-	<p>
-		If you have few spots in your data, you may get an error message. Try lowering the number of
-		PCs to compute.
-	</p>
-
-	<p>
-		For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+		For more details on the spatial transcriptomics analysis pipeline, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
 	</p>
 
 	<h3>Output</h3>
-
 	<ul>
 
-		<li>seurat_obj_pca_clust.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
+		<li>seurat_obj_pca.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
 			You cannot open this file in Chipster but you can view the contents of the object using the 
 			<i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
-		<li>UMAP_plot.pdf: This contains the UMAP and SpatialDimPlot. </li>
-		<li>PCAloadings.txt: If selected, the loadings (=genes responsible) of PCs.</li>
+		<li>PCAloadings.txt: If selected, this contains the top genes with largest (positive or negative) PCA loadings for each PCA component.</li>
+		<li>PCAplots.pdf: This contains the elbow and PCA loadings plots. </li>
 	</ul>
 
 
