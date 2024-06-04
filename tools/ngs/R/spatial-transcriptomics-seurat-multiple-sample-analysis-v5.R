@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL PCAplots.pdf
 # PARAMETER OPTIONAL num.features: "Number of variable genes to return in SCTransform" TYPE INTEGER DEFAULT 3000 (Number of variable genes to return in SCTransform.)
 # PARAMETER OPTIONAL method: "Combining method" TYPE [merge: Merge, integration: Integration] DEFAULT merge (Choose whether to merge or integrate the samples.)
-# PARAMETER OPTIONAL number_of_var_feats: "Number of variable genes in combined object " TYPE INTEGER DEFAULT 3000 (Number of variable genes in merged/integrated object. If integration is used, this is also the number of genes used for integration. This value should be less than or equal to the number of variable genes returned in SCTransform. This tool selects a list of highest variable genes across all data sets based on the user selected number. PCA is only run on these variable genes. In case this number of variable genes is set too high, there may not be as many variable genes across all data sets. The tool will still run, but a log file will be produced to inform the user.)
+# PARAMETER OPTIONAL number_of_var_feats: "Number of variable genes in combined object " TYPE INTEGER DEFAULT 3000 (Number of variable genes in merged/integrated object. If integration is used, this is also the number of genes used for integration. This value should be less than or equal to the number of variable genes returned in SCTransform. This tool selects a list of highest variable genes across all data sets based on the user selected number. PCA is only run on these variable genes. In case this number of variable genes is set too high, there may not be as many variable genes across all data sets after SCTransform. The tool will still run, but a log file will be produced to inform the user.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to compute" TYPE INTEGER DEFAULT 50 (Number of PCs to compute in PCA. If integration is used, this is also the number of PCs used for integration.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings in a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (Number of genes to list in the loadings txt file.)
@@ -101,9 +101,9 @@ if (method == "merge") {
         sink("logfile.txt")
         warning_message <- paste("
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, you can try
-        to select a higher number of returned variable genes in SCTransform to see if the number of deemed
-        variable genes across all data sets increases. You can also run the tool again with less 
+        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, 
+        you can try to select a higher number of returned variable genes in SCTransform to see if the number
+        of deemed variable genes across all data sets increases. You can also run the tool again with less 
         than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
         cat(warning_message)
 
@@ -185,9 +185,9 @@ if (method == "integration") {
         sink("logfile.txt")
         warning_message <- paste("
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, you can try
-        to select a higher number of returned variable genes in SCTransform to see if the number of deemed
-        variable genes across all data sets increases. You can also run the tool again with less 
+        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, 
+        you can try to select a higher number of returned variable genes in SCTransform to see if the number
+        of deemed variable genes across all data sets increases. You can also run the tool again with less 
         than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
         cat(warning_message)
         # Close the log file
