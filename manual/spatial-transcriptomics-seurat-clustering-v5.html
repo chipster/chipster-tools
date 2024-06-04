@@ -7,7 +7,7 @@
 
 <body>
 
-	<h2>Seurat v5 -Normalization, PCA, clustering, and visualization </h2>
+	<h2>Seurat v5 -Clustering </h2>
 
 	<h3>Description</h3>
 
@@ -29,11 +29,11 @@
 	<p>	
 		Spots are clustered using the low dimensional space computed in the previous step either with PCA or CCA integration. The user can also reduce
 		the dimensionality of the space for clustering by selecting a lower number for the "Dimensions of reduction to use" parameter. For example, if 
-		only PCA was computed in the previous step with 50 PCs, the user can select 50 or less PCs or 'metagenes' to determine the space in which 
-		clustering is performed. The user can use the visualizations produced in the previous step to help in selecting the dimensionality of the space.
+		PCA was computed in the previous step with 50 PCs, the user can select 50 or less PCs or 'metagenes' to determine the space in which 
+		clustering is performed. The user can use the visualizations produced in the previous step to help select the dimensionality of the space.
 	</p>
 	<p> 
-		Graph-based clustering is performed by calculating k-nearest neighbors, constructing a shared nearest neighbor (SNN) graph and optimzing the 
+		Graph-based clustering is performed by calculating k-nearest neighbors, constructing a shared nearest neighbor (SNN) graph and optimizing the 
 		modularity function to determine the clusters. First, a k-neareast neighbors graph is constructed using the Euclidean distance in the PCA space. 
 		Then, the edge weights between any two spots are refined based on the shared overlap in their local neighborhoods (Jaccards distance). Then, the
 		graph is cut into clusters using the Louvain algorithm which optimizes the standard modularity function. The parameter "Resolution for granularity

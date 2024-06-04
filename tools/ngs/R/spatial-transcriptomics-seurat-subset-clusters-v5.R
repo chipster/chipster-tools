@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-subset-clusters-v5.R: "Seurat v5 -Subset out anatomical regions based on clusters" (This tool subsets out anatomical regions based on clusters and visualizes the subsetted clusters on top of the tissue histology.)
+# TOOL spatial-transcriptomics-seurat-subset-clusters-v5.R: "Seurat v5 -Subset out anatomical regions based on clusters" (This tool subsets out anatomical regions based on clusters and visualizes the subsetted clusters on top of the tissue image.)
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # OUTPUT OPTIONAL subset.pdf

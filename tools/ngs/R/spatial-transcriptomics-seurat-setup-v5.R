@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-setup-v5.R: "Seurat v5 -Setup and QC" (This tool sets up a Seurat object for spatial transcriptomics data analyses.)
+# TOOL spatial-transcriptomics-seurat-setup-v5.R: "Seurat v5 -Setup and QC" (This tool sets up a Seurat object for spatial transcriptomics data.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf

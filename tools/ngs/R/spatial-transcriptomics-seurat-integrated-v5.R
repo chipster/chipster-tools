@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-integrated-v5.R: "Seurat v5 -Integration with scRNA-seq data" (This tool integrates spatial data with scRNA-seq reference data to predict the proportion of different celltypes in the Visium spots.)
+# TOOL spatial-transcriptomics-seurat-integrated-v5.R: "Seurat v5 -Integration with scRNA-seq data" (This tool integrates spatial data with scRNA-seq reference data to predict the proportion of different celltypes in the spatial spots.)
 # INPUT seurat_obj_subset.Robj: "Seurat object" TYPE GENERIC
 # INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration.)
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj

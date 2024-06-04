@@ -1,11 +1,11 @@
-# TOOL spatial-transcriptomics-seurat-visualise-integration-v5.R: "Seurat v5 -Visualize cell types after integration with scRNA-seq data" (This tool visualizes the underlying composition of cell types in each spatial spot after integration with scRNA-seq reference data.)
+# TOOL spatial-transcriptomics-seurat-visualise-integration-v5.R: "Seurat v5 -Visualize cell types after integration with scRNA-seq data" (This tool visualizes the predicted underlying composition of cell types in each spatial spot after integration with scRNA-seq reference data.)
 # INPUT seurat_obj_integrated.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL integration_plot.pdf
 # PARAMETER OPTIONAL genes: "Cell types to plot" TYPE UNCHECKED_STRING DEFAULT "L2/3 IT" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # PARAMETER OPTIONAL method.to.use: "Method to use" TYPE [markvariogram: markvariogram, moransi: moransi] DEFAULT moransi (Method to use. Markvariogram takes longer to run, Morans I is faster.)
 # PARAMETER OPTIONAL number.of.top.features: "Number of top spatially variable cell types to plot" TYPE INTEGER DEFAULT 4 (How many top spatially variable cell types to plot.)
-# PARAMETER OPTIONAL color.scale: "Determine color scale based on all cell types" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all cell types or individual cell types. By default, the color scale is determined for each cell type individually and may differ between cells. If you wish to compare multiple cell types, it is useful to set this parameter to "yes" so that the color scale is the same for all cell types.)
-# PARAMETER OPTIONAL multi_analysis: "Multiple sample analysis" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (If you performed multiple sample analysis i.e. if your samples have been merged/integrated into one single seurat object, select 'yes'. However, this tool will still visualize cell types after integration for each sample separately.)
+# PARAMETER OPTIONAL color.scale: "Determine color scale based on all cell types" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all cell types or individual cell types. By default, the color scale is determined for each cell type individually and may differ between cells.)
+# PARAMETER OPTIONAL multi_analysis: "Multiple sample analysis" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (If you performed multiple sample analysis i.e. if your samples have been merged/integrated into one single seurat object, select 'yes'. This tool will visualize cell types after integration for each sample separately.)
 # RUNTIME R-4.2.3-seurat5
 # TOOLS_BIN ""
 

@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL seurat_spatial_obj_pca.Robj
 # OUTPUT OPTIONAL PCAloadings.txt
 # OUTPUT OPTIONAL PCAplots.pdf
-# PARAMETER OPTIONAL num.features: "Number of variable genes to return in SCTransform" TYPE INTEGER DEFAULT 3000 (Number of highest variable genes to return in SCTransform. For SCTransform, the recommended default is 3000.)
+# PARAMETER OPTIONAL num.features: "Number of variable genes to return in SCTransform" TYPE INTEGER DEFAULT 3000 (Number of highest variable genes to return in SCTransform.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to compute" TYPE INTEGER DEFAULT 50 (Number of PCs to compute in PCA.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings in a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
