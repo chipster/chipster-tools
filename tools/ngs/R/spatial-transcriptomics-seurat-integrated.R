@@ -30,7 +30,7 @@ allen_reference <- SCTransform(allen_reference, ncells = num.cells, verbose = FA
 pdf(file = "reference_UMAP_plot.pdf", width = 13, height = 7)
 
 # Visualise the reference data
-# the annotation is stored in the 'subclass' column of object metadata
+# The annotation is stored in the 'subclass' column of object metadata
 DimPlot(allen_reference, group.by = "subclass", label = TRUE)
 
 # Find anchors between a reference and the seurat object

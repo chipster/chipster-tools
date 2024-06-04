@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Normalization, PCA, clustering, and visualization </h2>
+
+	<h3>Description</h3>
+
+	<p>
+        This tool performs clustering for a single sample after the <i>"Seurat v5 -Normalization and PCA" step</i> or for multiple samples that
+		have been combined into one Seurat object using the tool <i>"Seurat v5 -Combine multiple samples, normalization and PCA"</i>. This tool
+		clusters the spots with a graph-based clustering approach and visualizes the clustering results.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Dimensions of reduction to use [50]</li>
+		<li>Resolution for granularity [0.8]</li>
+
+	</ul>
+
+	<h3>Details</h3>
+
+	<p>	
+		Spots are clustered using the low dimensional space computed in the previous step either with PCA or CCA integration. The user can also reduce
+		the dimensionality of the space for clustering by selecting a lower number for the "Dimensions of reduction to use" parameter. For example, if 
+		only PCA was computed in the previous step with 50 PCs, the user can select 50 or less PCs or 'metagenes' to determine the space in which 
+		clustering is performed. The user can use the visualizations produced in the previous step to help in selecting the dimensionality of the space.
+	</p>
+	<p> 
+		Graph-based clustering is performed by calculating k-nearest neighbors, constructing a shared nearest neighbor (SNN) graph and optimzing the 
+		modularity function to determine the clusters. First, a k-neareast neighbors graph is constructed using the Euclidean distance in the PCA space. 
+		Then, the edge weights between any two spots are refined based on the shared overlap in their local neighborhoods (Jaccards distance). Then, the
+		graph is cut into clusters using the Louvain algorithm which optimizes the standard modularity function. The parameter "Resolution for granularity
+		for clustering" sets the granularity, with increased values leading to more clusters. 
+	</p>
+	<p>
+		In order to visualize the clusters, a new non-linear dimensionality reduction is performed on the clustered space using UMAP.
+	</p>
+	<p>
+		Finally, the tool produces two cluster plots that are colored by the clusters:
+		<ul>
+			<li>UMAP: shows the clustering results on a 2D scatterplot where each point is a spot positioned
+				based on the spot embeddings determined by UMAP.</li>
+			<li>Spatial clustering plot: shows the resulting clusters overlaid on the tissue image.</li>
+		</ul>
+	</p>
+
+	<p>
+		For more details on the spatial transcriptomics analysis pipeline, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+
+		<li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
+			You cannot open this file in Chipster but you can view the contents of the object using the 
+			<i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
+		<li>clustering_plots.pdf: This contains the UMAP and spatial clustering plot. </li>
+	</ul>
+
+
+</body>

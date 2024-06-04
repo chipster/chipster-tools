@@ -12,8 +12,11 @@
     <h3>Description</h3>
 
     <p>
-        Find differentially expressed genes (DEGs) between two clusters and visualize spatially variable genes.
+        This tool finds differentially expressed genes (DEGs) between two clusters and visualizes them on top of the tissue histology.
     </p>
+    <p>
+        As an input, you can provide the Seurat object after the <i>"Seurat v5 -Clustering"</i> step.
+    <p>
 
     <h3>Parameters</h3>
     <ul>
@@ -23,31 +26,41 @@
         <li>Limit testing to genes which show at least this fold difference [0.1]</li>
         <li>Test for differential expression [wilcox]</li>
         <li>Report only positive marker genes [FALSE]</li>
+        <li>Determine color scale based on all genes [no]</li>
     </ul>
 
 
     <h3>Details</h3>
 
     <p>
-        As an input, you can provide the Seurat object after clustering.
-    <p>
-        Select the clusters in which you would like to identify spatially variable genes. As an example, differential expression is performed between clusters 1 and 2.
-        The first cluster is used as the identity class to define markers and the second cluster is used as the identity class for comparison.
+        The user can select the clusters where differentially expressed genes would like to be identified. The tool identifies positive 
+        and negative marker genes for the clusters of interest, determined by the user. You can choose to return only positive marker 
+        genes by selecting "TRUE" as the parameter value for "Report only positive marker genes". You can also select the test used for
+        differential expression testing using the parameter "Test for differential expression" from two options: Wilcoxon Rank Sum Test
+        (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST. 
     </p>
     <p>
-        Select the test used for differential expression. Options for this are the Wilcoxon Rank Sum Test (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST. 
+        The user can also filter out genes prior to statistical testing by requiring that a gene has to be expressed in at least a certain 
+        fraction of spots in either of the two clusters using the parameter "Limit testing to genes which are expressed in at least this
+        fraction of spots". You can also filter out genes whose log2 fold change between the two clusters is less than a given value using
+        the parameter "Limit testing to genes which show at least this fold difference". Both of these parameters can be set to 0, but
+        with a significant increase in computation time since this will test a large number of genes that are unlikely to be highly 
+        expressed.
     </p>
     <p>
-        The FindMarkers() function finds DEGs between clusters. This function has a parameter for min.pct, or genes found in a minimum percentage of spots in the two clusters, where the default is set to 0.01.
-        The function also includes the logfc.threshold parameter, which is a threshold where genes need to be at least a certain X-fold difference between the two groups of spots; the default is set to 0.1.
+        This tool finally visualizes and lists the discovered DEGs between clusters. By default, the color scale is determined for each
+        gene individually and may differ between genes. If you wish to compare expression between different genes, it may be useful to
+        set the parameter value for "Determine color scale based on all genes" to "yes" so that the color scale is the same for all genes.
     </p>
+    <p>
+		For more details on the spatial transcriptomics analysis pipeline, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+	</p>
     
     <h3>Output</h3>
 
     <ul>
-        <li>Markerplot.pdf
+        <li>Markerplot.pdf</li>
+        <li>spatially_variable_genes.tsv</li>
     </ul>
-
-
 
 </body>
