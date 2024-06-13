@@ -33,14 +33,14 @@
 	<h3>Details</h3>
 
 	<p>
-        This tool identifies and selects genes exhibiting spatial patterning by using the Moran's I ("moransi") or Markvariogram ("markvariogram") method. The Markvariogram method
+        This tool identifies and selects genes exhibiting spatial patterning by using the Moran's I ("moransi") or Mark Variogram ("markvariogram") method. The Mark Variogram method
 		models spatial transcriptomics data as a mark point process and computes a 'variogram', which identifies genes whose expression level is dependent on their spatial location. 
 		Specifically, this process calculates gamma(r) values measuring the dependence between two spots that are a certain “r” distance apart. The Moran's I method measures spatial
 		autocorrelation that explains how much nearby locations resemble each other in terms of gene expression. It computes the Moran's I autocorrelation coefficient using the gene
 		expression values, the spatial weights matrix that defines the spatial relationships among locations, and the mean of the gene expression values.
 	</p>
 		
-		By default, spatially variable genes are only computed from the highest variable genes, where variation is calculated independently of spatial location. You can choose to
+		By default, spatially variable genes are only computed using the highest variable genes, where variation is calculated independently of spatial location. You can choose to
 		speed up the computation by selecting a lower number for the parameter "Number of variable genes to use". However, lowering this number too much may result in loss of 
 		performace.
     </p>
