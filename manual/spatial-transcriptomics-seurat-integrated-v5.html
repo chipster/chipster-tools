@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Integration with scRNA-seq data</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		This tool integrates spatial data with a scRNA-seq reference data set to predict the proportion of different cell 
+		types in the Visium spots.
+	</p>
+	<h3>Parameters</h3>
+    <ul>
+        <li>Number of variable genes to return in SCTransform [3000]</li>
+		<li>Number of subsampling cells in SCTransform [5000]</li>
+		<li>Number of PCs to compute [50]</li>
+		<li>Dimensions of reduction to use [30]</li>
+    </ul>
+
+	<h3>Details</h3>
+
+	<p>
+		This tool enables the prediction of the underlying composition of cell types present in each of the Visium spot
+		spatial voxels. It applies anchor-based integration to enable the probabilistic transfer of annotations from the
+		scRNA-seq reference to the query set.
+	</p>
+	<p> This tool first normalizes the reference data set using SCTransform. You can choose the number of variable genes
+		returned in SCTransform using the parameter "Number of variable genes to return in SCTransform", and you can choose 
+		a smaller number of cells in learning the noise model in SCTransform for the reference data using the "Number of 
+		subsampling cells in SCTransform when normalizing reference dataset" parameter.
+	</p>
+	<p> This tool also performs PCA for the reference data and runs UMAP to visualize the reference data before applying the
+		anchor-based integration. You can choose the number of PCs computed using the "Number of PCs to compute" parameter, 
+		and you can choose the number of dimensions of reduction used for running UMAP using the "Dimensions of reduction to
+		 use" parameter.
+	</p>
+	<p>
+		Please provide both the Seurat object and the reference scRNA-seq data set as input. Note that the reference data
+		should contain all the expected cell types, ideally from the exact same tissue. The reference data should be a 
+		Seurat object stored as an .rds file. Moreover, the cell type annotations should be found in the "subclass" column
+		in the metadata slot of the reference object (seurat_obj@meta.data$subclass), and the gene IDs used should be the
+		same as in the actual data (gene symbols, Ensembl IDs etc). You can also use the tool <i>Seurat v5 -Extract 
+		information from Seurat object</i> to check whether your reference data is in the right format.
+	</p>
+    <p>
+		For more details on the spatial transcriptomics analysis pipeline, please check the
+		 <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+		<li>seurat_obj_integrated.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
+			You cannot open this file in Chipster but you can view the contents of the object using the 
+			<i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
+		<li>reference_UMAP_plot.pdf: UMAP plot showing the reference data and annotations. </li>
+	</ul>
+
+</body>

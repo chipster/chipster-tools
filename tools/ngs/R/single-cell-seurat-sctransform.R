@@ -47,7 +47,7 @@ s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
 # Subset: remove potential empties, multiplets and broken cells based on parameters.
-seurat_obj <- subset(seurat_obj, subset = nFeature_RNA > mingenes & nFeature_RNA < genecountcutoff & percent.mt < mitocutoff & percent.rb >= minribo)
+seurat_obj <- subset(seurat_obj, subset = nFeature_RNA >= mingenes & nFeature_RNA <= genecountcutoff & percent.mt <= mitocutoff & percent.rb >= minribo)
 
 # SCTransform:
 # Note that this single command replaces NormalizeData, ScaleData, and FindVariableFeatures.

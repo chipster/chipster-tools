@@ -1,11 +1,14 @@
 # TOOL spatial-transcriptomics-seurat-integrated.R: "Seurat v4 -Integration with scRNA-seq data" (Integrate spatial data with scRNA-seq reference to predict the proportion of different celltypes in the Visium spots.)
 # INPUT seurat_obj_subset.Robj: "Seurat object" TYPE GENERIC
-# INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration.)
+# INPUT sc_reference: "Reference scRNA-seq dataset" TYPE GENERIC (Reference single-cell RNA dataset for integration as a Seurat object in .rds format.)
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # OUTPUT OPTIONAL reference_UMAP_plot.pdf
+# PARAMETER OPTIONAL num.cells: "Number of subsampling cells in SCTransform when normalizing reference dataset" TYPE INTEGER DEFAULT 5000 (Setting this value to a smaller number speeds up the computation but might result in loss of performance.)
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 5
 # TOOLS_BIN ""
+
+# 2024-04-24 EP Remove renormalization of subsetted seurat object and add it to the subsetting tool
 
 library(Seurat)
 library(ggplot2)
@@ -19,19 +22,15 @@ load("seurat_obj_subset.Robj")
 allen_reference <- readRDS("sc_reference")
 
 # normalise the scRNA-seq reference
-allen_reference <- SCTransform(allen_reference, ncells = 3000, verbose = FALSE) %>%
+allen_reference <- SCTransform(allen_reference, ncells = num.cells, verbose = FALSE) %>%
     RunPCA(verbose = FALSE) %>%
     RunUMAP(dims = 1:30)
-
-# After subsetting, we renormalize the subsetted spatial data
-seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", verbose = FALSE) %>%
-    RunPCA(verbose = FALSE)
 
 # Open the pdf file for plotting
 pdf(file = "reference_UMAP_plot.pdf", width = 13, height = 7)
 
 # Visualise the reference data
-# the annotation is stored in the 'subclass' column of object metadata
+# The annotation is stored in the 'subclass' column of object metadata
 DimPlot(allen_reference, group.by = "subclass", label = TRUE)
 
 # Find anchors between a reference and the seurat object

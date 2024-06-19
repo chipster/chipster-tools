@@ -62,3 +62,9 @@ BiocManager::install("glmGamPoi")
 
 # 2 min. This was replaced by Cellbender and shouldn't be installed next time
 install.packages('SoupX')
+
+install.packages("devtools")
+# apt install git
+devtools::install_github("cellgeni/schard")
+
+install.packages("ggrepel")

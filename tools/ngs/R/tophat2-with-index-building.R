@@ -1,4 +1,4 @@
-# TOOL tophat2-with-index-building.R: "TopHat2 for paired end reads and own genome" (Aligns paired end RNA-seq reads to a genome. Note that if you have stranded data, you need to set the \"Library type\" parameter accordingly. Alignment results are given in a BAM file, which is automatically indexed.)
+# TOOL tophat2-with-index-building.R: "TopHat2 for paired end reads and own genome" (This tool uses TopHat2 to align paired-end reads to a provided reference genome to identify exon-exon splice junctions. You need to supply the paired-end reads in FASTQ format. You also need to provide the reference genome in FASTA format. )
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC

@@ -13,15 +13,24 @@
 
     <p>
         This tool uses <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> to align
-        paired-end reads to a reference genome. Reads can be in either FASTA or FASTQ format,
-        but all reads files need to be in the same format. You need to provide 
-        the reference genome as an input either in a FASTA format or as a tar package with Bowtie index. 
+        paired-end reads to a provided reference genome. Paired-end reads can either be in FASTA or FASTQ format,
+        but both reads files need to be in the same format. You also need to provide the reference genome 
+        as input either in FASTA format or as a tar package with a Bowtie2 index. If you would like to align reads 
+        against publicly available reference genomes supplied by Chipster, please use the tool
+        <i>Bowtie2 for paired-end reads</i>.
     </p>
     <p>
-        To define the files with paired-end reads for each sample, please use the "Define Samples" option.
-        This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
-        such that the alignment tool can be run for multiple samples at the same time. Please see
-        tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+        If you use a reference genome in FASTA format as input, the tool will output a .tar file with the Bowtie2 index.
+        If you would like to run the tool again for other samples of paired-end reads using the same reference genome, 
+        you should use the .tar file as the reference input instead of the reference in FASTA format as this saves the 
+        time needed to generate the index.
+    </p>
+    <p>
+        If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+        alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+        "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+        "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+        Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
         “Run for Each Sample” Option</a> for more information.
     </p>
     <p>After running Bowtie2, Chipster converts the alignment file to BAM format, and sorts and indexes it using the <a
@@ -217,13 +226,14 @@
 
     <h3>Output</h3>
 
-    <p>This tool returns the alignment in BAM format and an index file for it (.bai). It also produces a log file,
+    <p> This tool returns the alignment in BAM format and an index file for it (.bai). It also produces a log file,
         which allows you to see what percentage of the reads align with the selected parameter settings. Optionally also
         fastq files are produced for the unaligned reads, or reads that align discordantly.
     </p>
     <p>
-        If you use a FASTA format genome, the tool will produce a .tar file with the Bowtie2 indexes.
-        If you run the tool again with the same genome, you should use the .tar file as the genome input, as this saves the time needed to generate the indexes.
+        If you use a FASTA format reference genome as input to the tool, the tool will produce a .tar file with the 
+        Bowtie2 index. If you would like to run the alignment for other samples using the same reference genome, you 
+        can use this .tar file as the reference genome input instead of the reference genome in FASTA format. 
     </p>
 
 

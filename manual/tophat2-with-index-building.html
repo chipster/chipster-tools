@@ -8,19 +8,20 @@
 <h3>Description</h3>
 
 <p>
-Aligns paired end Illumina RNA-seq reads to a genome provided as a FASTA file in order to identify exon-exon splice junctions. 
-</p>
-<p> You need to supply the reads in FASTQ files. The files can be compressed with gzip. 
+    This tool uses TopHat2 to align paired-end reads to a provided reference genome to identify exon-exon splice 
+    junctions. You need to supply the paired-end reads in FASTQ format. The files can be compressed with gzip. 
+    You also need to provide the reference genome in FASTA format. 
 </p>
 <p>
-    To define the files with paired-end reads for each sample, please use the "Define Samples" option.
-    This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
-    such that the alignment tool can be run for multiple samples at the same time. Please see
-    tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+    If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+    alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+    "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+    "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+    Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
     “Run for Each Sample” Option</a> for more information.
 </p>
 <p>
-Supplying a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
+    Also, supplying a GTF file containing known gene and exon locations is recommended, because it improves the alignment process. 
 <p>
 
 <h3>Parameters</h3> 
@@ -63,7 +64,7 @@ analyzed together to produce paired alignments, taking into consideration additi
 factors including fragment length and orientation.
 The expected mean inner distance between mate pairs means the fragment length minus the reads. For example, if your fragment size is 300 bp and read length is 50 bp, the inner distance is 200.
 </p>
-<p>If you have more than two FASTQ files <i>per sample</i>, you will need to provide a list of filenames of the FASTQ files for each direction (one file for read1 files, and another one for the read2 files) as a text 
+<p>Note that if you have more than two FASTQ files <i>per sample</i>, you will need to provide a list of filenames of the FASTQ files for each direction (one file for read1 files, and another one for the read2 files) as a text 
 file (<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  <strong><a href="/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. The read 
 pairs must be ordered identically in both lists. 
 <br>

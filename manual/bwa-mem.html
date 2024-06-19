@@ -7,8 +7,27 @@
 
 <h3>Description</h3>
 
-<p>This tool aligns single end reads or paired-end reads to selected reference genome using the BWA MEM algorithm.
-The reads have to be supplied in FASTQ format.
+<p>
+    This tool uses BWA MEM to align single-end or paired-end reads to a publicly available reference genome. You need 
+    to supply the single end or paired-end reads in FASTQ format. If you provide one reads file as input, single-end
+    alignment is performed. If you provide paired-end reads files as input, paired-end alignment is performed. 
+</p>
+<p> 
+    Note that this tool uses publicly available reference genomes. If you would like us to add new reference 
+    genomes to Chipster, please contact us. If you would like to align reads against your own datasets, 
+    please use the tool <i>BWA MEM for single or paired end reads and own genome</i>.
+</p>
+<p>
+    If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+    alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+    "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+    "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+    Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+    “Run for Each Sample” Option</a> for more information. 
+</p>
+<p>
+    If you have multiple samples of single-end reads, you can select all of the single-end reads files and use
+    the "Run Tool for For Each File" to run multiple alignment jobs at the same time.
 </p>
 
 <h3>Parameters</h3>
@@ -49,16 +68,14 @@ If you provide two FASTQ files, the tool will by default perform a paired-end al
 R1 and R2 reads correctly by file name. 
 <p>
 
-<p><b>If you have more than two FASTQ files</b> (or wish to perform single-end alignment for two files), you will 
-need to provide a list of filenames of the FASTQ files; one list for single-end alignment, and two for 
-paired-end alignment (one file for R1 files, and another one for the R2 files) as a text file 
-(<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  
-<strong><a href="/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. 
-The read pairs must be ordered identically in both lists. 
-</p>
 <p>
-To run, select the list file/files (R1files.txt and R2files.txt) and ALL FASTQ files, and assign the list files correctly. 
-When assigning the list files, they are automatically inactivated in the "Reads" file list.
+    Note that if you have more than one single-end reads file or more than two paired-end reads files <i>per sample</i> 
+    (for example, Illumina NextSeq produces 8 FASTQ files per sample), you will need to provide an ordered list of filenames of the
+    FASTQ files; one list for single-end alignment, and two for paired-end alignment (one file for R1 files, and another 
+    one for the R2 files) as a text file (<i>e.g.</i>R1files.txt and R2files.txt). Please produce the list files using the tool <a
+    href="make_namelist.html">"Utilities / Make a list of file names"</a>. To run, select the list file/files (R1files.txt and R2files.txt) 
+    and ALL FASTQ files, and assign the list files correctly. When assigning the list files, they are automatically inactivated in the
+    "Reads" file list.
 </p>
 
 <h3>Output</h3>

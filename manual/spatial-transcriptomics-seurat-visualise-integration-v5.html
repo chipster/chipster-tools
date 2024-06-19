@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Visualize cell types after integration with scRNA-seq data</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		This tool visualizes the results after <i>Seurat v5 -Integration with scRNA-seq data</i>. This tool visualizes the predicted 
+		compositions of selected cell types in each of the spatial spots. It also identifies and visualizes predicted cell types whose 
+		location is spatially restricted. These spatially variable cell types are computed using the same Moran's I or Markvariogram method as 
+		used in the tool "Seurat v5 -Identify spatially variable genes without pre-annotation".
+	</p>
+	<p>
+		As the input, please provide the Seurat object generated using the tool <i>Seurat v5 -Integration with scRNA-seq data</i>.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Cell types to plot ["L2/3 IT"]</li>
+		<li>Method to use [moransi]</li>
+		<li>Number of top spatially variable cell types to plot [4]</li>
+		<li>Determine color scale based on all cell types [no]</li>
+		<li>Multiple sample analysis [no]</li>
+	
+	</ul>
+
+	<h3>Details</h3>
+
+	<p>
+		The user can select for which cell types the tool visualizes the predicted cell type compositions using the parameter "Cell types to 
+		plot". The spatially variable cell types are computed similarly as in the tool <i>Seurat v5 -Identify spatially variable genes without
+		pre-annotation</i> except with prediction scores as the “marks” rather than gene expression values. You can choose between Moran's I 
+		(moransi) and Markvariogram (markvariogram) methods for computing these spatially variable cell types using the parameter "Method to
+		use". You can also choose the number of spatially variable cell types visualized using the "Number of top spatially variable cell 
+		types to plot" parameter. 
+	</p>
+	<p>
+		The user can also determine  whether the color scale is based on all cell types or individual cell types. By default, the color scale
+		is determined for each cell type individually and may differ between cells. If you wish to compare multiple cell types, it is useful
+		to set this parameter to "yes" so that the color scale is the same for all cell types.
+	</p>
+	<p>
+		Note that if you performed multiple sample analysis i.e. if your samples have been merged or integrated into one single seurat object,
+		select 'yes' as the value for parameter 'Multiple sample analysis'. However, this tool will still identify and visualize spatially 
+		variable cell types for each sample individually.
+	</p>
+
+    <p>
+		For more details on the spatial transcriptomics analysis pipeline, please check the 
+		<a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+		<li>integration_plot.pdf </li>
+	</ul>
+
+
+
+</body>

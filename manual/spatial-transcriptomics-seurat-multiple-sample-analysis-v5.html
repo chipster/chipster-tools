@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v5 -Combine multiple samples, normalization and PCA</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool can be used to combine multiple Seurat objects and perform normalization and PCA for multiple samples at the
+        same time. This tool first normalizes each sample with SCTransform and detects highly variable genes. Then, the normalized
+        samples are combined by merging the samples. After combining the samples, the variable genes for the combined Seurat object
+        need to be selected again as all of the selected variable genes need to be present in all of the samples. Then, PCA is
+        performed on the merged object with the selected variable genes. Finally, if the user selects integration as the combining 
+        method, samples are integrated using CCA as the anchor identification method.
+    </p>
+    <p>
+        As input, you can give two or more Seurat objects after the <i>"Seurat v5 -Filter spots"</i> step. 
+    </p>
+
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Number of variable genes to return in SCTransform [3000]</li>
+        <li>Combining method [merge]</li>
+        <li>Number of variable genes in combined object [3000]</li>
+        <li>Number of PCs to compute [50]</li>
+        <li>Print loadings in a file [no]</li>
+        <li>Number of genes to list in the loadings file [5]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+	<p> 
+		This tool first normalizes the gene expression values using the SCTransform normalization method which uses Pearson residuals 
+		from regularized negative binomial regression, where sequencing depth is utilized as a covariate in a generalized 
+		linear model (GLM). The parameters for the model are estimated by pooling information across genes that are expressed at 
+		similar levels. This should remove the technical variation but preserve the biological heterogeneity, and avoid over-fitting 
+		the model to the data. SCTransform also detects genes which are highly variable across spots using the Pearson residuals 
+		computed in this normalization step. Only the highly variable genes are returned and used for downstream analyses. 
+	</p>
+
+    <p> 
+        Then, the tool combines the normalized Seurat objects into one Seurat object by merging the objects together. The 
+        variable genes for the combined object need to be selected again as all of the selected variable genes need to be present in all
+        of the samples. This is done by selecting the features that are most highly variable across all data sets. The user can define 
+        the number of highly variable genes selected using the "Number of variable genes in combined object" parameter. Note, however, that 
+        there may not always be as many variable genes deemed variable across all data sets as the user has selected. If this happens, 
+        the tool will still run, and a log file will be produced to inform the user. You may also run the tool again using a lower
+        number of variable features or you may try to increase the number of variable features returned in SCTransfrom using the 
+        "Number of variable genes to return in SCTransform" parameter.
+    </p>
+
+    <p> 
+        Then, this tool performs Principal Component Analysis (PCA) on the merged Seurat object with the selected variable genes. PCA 
+        is used to reduce the dimensionality of the data set (number of genes), while preserving as much variance as possible. When running
+        PCA, you can specify the number of principal components (PCs) to compute where each PC essentially represents a 'metagene'. These
+		components or 'metagenes' are new variables that are linear combinations of the original genes, ordered by the amount of variance 
+		they capture from the data. This means that the first principal component (PC1) captures the maximun possible variance in the data 
+		set, PC2 the second most and so on. By selecting fewer components, you can reduce the dimensionality of the data set. This makes 
+		the data easier to analyze and visualize, while still retaining the most important information. By default, 50 PCs are computed. 
+		It is important to note that selecting too few PCs may oversimplify the data, while selecting too many PCs may retain unnecessary 
+		noise.
+	</p>
+    <p>
+		This tool also outputs a *.txt file if the parameter "Print loadings in a file" is set to "yes". This file will list the top genes 
+		(default = 5) associated with each PC that have the largest (positive or negative) PCA loadings for each PC. PCA loadings represent
+		the weights or coefficients of the original genes in the linear combination corresponding to each PC. Thus, PCA loadings show how 
+		much each original gene contributes to each PC component or 'metagene'. 
+	</p>
+    <p>
+        If "integration" is selected as the "Combining method", integration is also performed after PCA. The integration method uses 
+        canonical correlation analysis (CCA) to identify common sources of variation across data sets. After this, it identifies
+        anchors, generates scores (=weights) for these anchors, and then uses the anchors to integrate the data sets. The integration 
+        method can be used when strong batch effects are present in the data. However, CCA-based integration may also lead to 
+        overcorrection, especially when a large proportion of spots are non-overlapping across data sets.
+    </p> 
+    <p>
+		Finally, the tool produces PCA plots which can help the user explore the primary sources of heterogeneity in the dataset, and to decide
+		how many principal components to include for other downstream analyses: 
+		<ul>
+			<li>Elbow plot: shows a ranking of PCs by the amount of variation explained by each PC component. It can be used to determine
+				the primary sources of heterogeneity in the data and for selecting a cutoff of how many PCs to include for downstream analyses. </li>
+			<li>PCA loadings plots: show the PCA loadings for top genes associated with the first two principal components. They can be used 
+				to see which genes have the highest weights or loadings for each PC component. </li>
+		</ul>
+	</p>
+	<p>
+		For more details on the spatial transcriptomics analysis pipeline, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html#dimensionality-reduction-clustering-and-visualization-1">Seurat tutorial</a>.
+	</p>
+
+    <h3>Output</h3>
+	<ul>
+		<li>seurat_obj_multiple.Robj: The Seurat R-object to pass to the next Seurat tool, or to import into R. 
+			You cannot open this file in Chipster but you can view the contents of the object using the 
+			<i>Seurat v5 -Extract information from Seurat object </i> tool. </li>
+		<li>PCAloadings.txt: If selected, this contains the top genes with largest (positive or negative) PCA loadings for each PCA component.</li>
+		<li>PCAplots.pdf: This contains the elbow and PCA loadings plots. </li>
+        <li>logfile.txt: This logfile is produced, if PCA has been run with less than the number of variable genes selected by the user. </li>
+	</ul>
+
+</body>

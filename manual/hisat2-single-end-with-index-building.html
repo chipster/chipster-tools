@@ -10,9 +10,27 @@
     <h2>HISAT2 for single end reads with own genome</h2>
 
     <h3>Description</h3>
-    <p>This tool aligns Illumina single end RNA-seq reads to a genome provided either as a FASTA format sequence or as a
-        tar package with a HISAT2 index.
-        You need to supply the reads in one or more FASTQ files.
+
+    <p>
+        This tool uses HISAT2 to align single-end reads to a provided reference genome. You need to supply the single-end 
+        reads in FASTQ format. The files can be compressed with gzip. You also need to provide the reference genome as 
+        input either in FASTA format or as a tar package with a HISAT2 index. If you would like to align reads against 
+        publicly available reference genomes supplied by Chipster, please use the tool <i>HISAT2 for single-end reads</i>.
+    </p>
+    <p>
+        If you use a reference genome in FASTA format as input, the tool will output a .tar file with the HISAT2 index.
+        If you would like to run the tool again for other samples of single-end reads using the same reference genome, 
+        you should use the .tar file as the reference input instead of the reference in FASTA format as this saves the 
+        time needed to generate the index.
+    </p>
+    <p>
+        If you have multiple samples of single-end reads, you can use the "Run for Each Sample" option to run multiple 
+        single-end alignment jobs at the same time. To define the files with single-end reads for each sample, please 
+        use the "Define Samples" option. This option allows to define the multiple different samples of single-end reads
+        and enables the "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the 
+        same time. This option is similar to the option for paired-end alignment as explained in the tutorial video
+         <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable “Run for Each Sample” Option</a>, 
+        but you need to select the "Single end" option in "Define Samples".
     </p>
 
     <h3>Parameters</h3>

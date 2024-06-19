@@ -7,10 +7,32 @@
 
 <h3>Description</h3>
 
-<p>This tool aligns single end reads or paired-end reads to the reference genome sequence given by the user.  
-The reads have to be supplied in fastq format. If two input files is selected, one of the file is used as a reference genome and the another one
-is used as the reads file for single-end alignment.
-If three input files are defined, then paired end analysis is performed.
+<p>
+    This tool uses BWA MEM to align single-end or paired-end reads to a provided reference genome. You need to supply 
+    the single end or paired-end reads in FASTQ format. If you provide one reads file as input, single-end alignment
+    is performed. If you provide paired-end reads files as input, paired-end alignment is performed. You also need
+    to provide the reference genome as input either in FASTA format or as a tar package with a BWA MEM index. If 
+    you would like to align reads against publicly available reference genomes supplied by Chipster, please use 
+    the tool <i>BWA MEM for single or paired-end reads</i>.
+</p>
+<p>
+    If you use a reference genome in FASTA format as input, the tool will output a .tar file with the BWA MEM index.
+    If you would like to run the tool again for other samples of single-end or paired-end reads using the same 
+    reference genome, you should use the .tar file as the reference input instead of the reference in FASTA format
+    as this saves the time needed to generate the index.
+</p>
+<p>
+    If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+    alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+    "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+    "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+    Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+    “Run for Each Sample” Option</a> for more information. 
+</p>
+<p> 
+    If you have multiple samples of single-end reads, you
+    can also use the same "Define Samples" option to enable the "Run for Each Sample" option, but you need to select 
+    the option "Single end" in "Define Samples".
 </p>
 
 <h3>Parameters</h3>
@@ -49,17 +71,13 @@ file/file pair separately, and finally merge the resulting BAM files.
 If you provide two FASTQ files, the tool will by default perform a paired-end alignment with them. It will try assign 
 R1 and R2 reads correctly by file name. 
 <p>
-
-<p><b>If you have more than two FASTQ files</b> (or wish to perform single-end alignment for two files), you will 
-need to provide a list of filenames of the FASTQ files; one list for single-end alignment, and two for 
-paired-end alignment (one file for R1 files, and another one for the R2 files) as a text file 
-(<i>e.g.</i>R1files.txt and R2files.txt). These lists can be generated with the tool  
-<strong><a href="/manual/make_namelist.html" >Utilities / Make a list of file names</a> </strong>. 
-The read pairs must be ordered identically in both lists. 
-</p>
-<p>
-To run, Select the list file/files (R1files.txt and R2files.txt) and ALL FASTQ files, and assign the list files correctly. 
-When assigning the list files, they are automatically inactivated in the "reads" file list.
+    Note that if you have more than one single-end reads file or more than two paired-end reads files <i>per sample</i> 
+    (for example, Illumina NextSeq produces 8 FASTQ files per sample), you will need to provide an ordered list of filenames of the
+    FASTQ files; one list for single-end alignment, and two for paired-end alignment (one file for R1 files, and another 
+    one for the R2 files) as a text file (<i>e.g.</i>R1files.txt and R2files.txt). Please produce the list files using the tool <a
+    href="make_namelist.html">"Utilities / Make a list of file names"</a>. To run, select the list file/files (R1files.txt and R2files.txt) 
+    and ALL FASTQ files, and assign the list files correctly. When assigning the list files, they are automatically inactivated in the
+    "Reads" file list.
 </p>
 
 <h3>Output</h3>
