@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-spatialdimplot-v5.R: "Seurat v5 -Visualize clusters" (Visualize each cluster separately in a SpatialDimPlot.)
+# TOOL spatial-transcriptomics-seurat-spatialdimplot-v5.R: "Seurat v5 -Visualize clusters" (This tool visualizes selected clusters separately on top of the tissue image.)
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL spatialdimplot.pdf
 # PARAMETER OPTIONAL clusters: "Clusters to plot" TYPE STRING DEFAULT "2, 1" (You can which clusters to plot. If you list multiple clusters, use comma \(,\) as separator.)

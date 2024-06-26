@@ -1,4 +1,4 @@
-# TOOL hisat2-paired-end-with-index-building.R: "HISAT2 for paired end reads and own genome" (Aligns paired end RNA-seq reads to a user-supplied genome. You need to supply the genome in either as a FASTA format sequence or as a tar package with a HISAT2 index.)
+# TOOL hisat2-paired-end-with-index-building.R: "HISAT2 for paired end reads and own genome" (This tool uses HISAT2 to align paired-end reads to a provided reference genome. You need to supply the paired-end reads in FASTQ format. You also need to provide the reference genome as input either in FASTA format or as a tar package with a HISAT2 index.)
 # INPUT reads{...}.fq.gz: "Reads to align" TYPE GENERIC
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC

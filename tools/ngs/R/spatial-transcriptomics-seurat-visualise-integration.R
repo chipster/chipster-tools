@@ -25,6 +25,7 @@ seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj,
     assay = "predictions", selection.method = method.to.use,
     features = rownames(seurat_obj), r.metric = 5, slot = "data"
 )
+
 top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), number.of.top.features)
 
 # Open the pdf file for plotting
@@ -32,8 +33,11 @@ pdf(file = "integration_plot.pdf", width = 13, height = 7)
 
 # Visualise chosen features
 SpatialFeaturePlot(seurat_obj, features = c(genes), pt.size.factor = 1.6, ncol = 2, crop = TRUE)
+
 # Visualise spatially variable features
-SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
+for (i in 1:length(Images(seurat_obj))) {
+    print(SpatialPlot(object = seurat_obj, features = top.clusters, images = Images(seurat_obj)[i]), ncol = 2)
+}
 
 # close the pdf
 dev.off()

@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-v5.R: "Seurat v5 -Identify spatially variable genes based on clusters" (This tool lists the differentially expressed genes between two user defined clusters and visualizes spatially variable genes between these clusters.)
+# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-v5.R: "Seurat v5 -Identify spatially variable genes based on clusters" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
 # INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot.pdf
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
@@ -8,6 +8,8 @@
 # PARAMETER OPTIONAL logfc_threshold: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only_pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (By default, this tool lists all markers. When this parameter is set to TRUE, only genes with positive log2 fold change are listed in the result file.)
+# PARAMETER OPTIONAL no_of_feats: "Number of spatially variable genes to visualize" TYPE INTEGER DEFAULT 3 (Choose the number of highest variable genes to visualize.)
+# PARAMETER OPTIONAL color.scale: "Determine color scale based on all genes" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes.)
 # RUNTIME R-4.2.3-seurat5
 # TOOLS_BIN ""
 
@@ -28,7 +30,7 @@ documentVersion("Seurat", package.version("Seurat"))
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_spatial_obj_pca.Robj")
 
-#seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
+seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
 # Differential expression
 de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
@@ -40,8 +42,8 @@ write.table(as.matrix(de_markers), file = "spatially_variable_genes.tsv", sep = 
 
 # Open the pdf file for plotting
 pdf(file = "Markerplot.pdf", , width = 9, height = 12)
-
-SpatialFeaturePlot(object = seurat_obj, features = rownames(de_markers)[1:3], alpha = c(0.1, 1), ncol = 3)
+#, ncol = 3
+SpatialFeaturePlot(object = seurat_obj, features = rownames(de_markers)[1:no_of_feats], keep.scale = color.scale, alpha = c(0.1, 1))
 
 dev.off() # close the pdf
 

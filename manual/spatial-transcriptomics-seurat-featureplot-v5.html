@@ -8,12 +8,15 @@
 <h3>Description</h3>
 
 <p>
-With this tool, the user can visualize selected genes using a Spatial feature plot. As input, the user can provide the Seurat R-object
-(.Robj) and the name of the gene(s) of interest (e.g., Hpca, Ttr).
+    With this tool, the user can visualize selected genes using a spatial feature plot. As input, the user can provide the Seurat object
+    (.Robj) and the name of the gene(s) of interest (e.g., Hpca, Ttr). For listing multiple gene names, a comma (,) should be used as a 
+    separator.
 </p>
  
-<p>Please note that genes given as input are case-sensitive so they should be given as input exactly as they are named in the Seurat object. If you list multiple gene names, use a comma (,) as a separator.
-    You can use the <i> Seurat v5 -Extract information from Seurat object </i>tool to see the genes in your Seurat object.
+<p> 
+    Please note that genes given as input should be given exactly as they are named in the Seurat object. The tool will only visualize 
+    genes that are found in the Seurat object. You can use the <i> Seurat v5 -Extract information from Seurat object </i>tool to see 
+    the genes in your Seurat object.
 </p>
 
  <h3>Parameters</h3>
@@ -22,18 +25,24 @@ With this tool, the user can visualize selected genes using a Spatial feature pl
         <li>Point size [1.6]</li>
         <li>Minimum transparency of the points [1]</li>
         <li>Maximum transparency of the points [1]</li>
+        <li>Determine color scale based on all genes [no]</li>
 </ul>
 
  <h3>Details</h3>
  
 <p>
-Spatial feature plot shows molecular data overlaid on top of the histological tissue.
-Highly expressed marker genes will be clearly displayed in the histological image.  
+    Spatial feature plot shows molecular data overlaid on top of the tissue image. Highly expressed marker genes will be clearly displayed 
+    in the image.  
 </p>
 
+<P> 
+    Note that you can select whether the color scale is based on all genes or individual genes. By default, the color scale is determined 
+    for each gene individually and may differ between genes. If you wish to compare gene expression between different genes, it is useful
+    to set this parameter to "yes" so that the color scale is the same for all genes.
+</P>
 
 <p>
-For more details, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat tutorial</a>.
+    For more details on the spatial transcriptomics analysis pipeline, please check the <a href="https://satijalab.org/seurat/articles/spatial_vignette.html">Seurat tutorial</a>.
 </p>    
 
 <h3>Output</h3>

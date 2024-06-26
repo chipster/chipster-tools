@@ -1,7 +1,8 @@
-# TOOL umi_tools-extract.R: "Extract UMIs from QuantSeq reads" (Given a Lexogen QuantSeq FASTQ file, this tool removes the TATA spacer and extracts the 6-base UMI and adds it to the read name. This tool is based on the UMI-tools extract.)
+# TOOL umi_tools-extract.R: "Extract UMIs from QuantSeq reads" (Given a Lexogen QuantSeq FASTQ file, this tool removes the TATA spacer and extracts the 6-base or 12-base UMI and adds it to the read name. This tool is based on the UMI-tools extract.)
 # INPUT reads.fq.gz: "Reads" TYPE GENERIC
 # OUTPUT output.fq.gz
 # OUTPUT OPTIONAL log.txt
+# PARAMETER umi_length: "UMI length" TYPE [6, 12] DEFAULT 6 (Length of UMI to extract.)
 # PARAMETER OPTIONAL log: "Produce log file" TYPE [yes,no] DEFAULT no (Produce log file.)
 # RUNTIME R-4.1.1
 
@@ -14,7 +15,11 @@ Sys.setenv(PATH = venv_path, VIRTUAL_ENV = venv_root)
 
 version <- system("umi_tools --version | cut -d : -f 2-", intern = TRUE)
 documentVersion("UMI-tools", version)
-umi.command <- paste("umi_tools extract --extract-method=regex --bc-pattern \"(?P<umi_1>.{6})(?P<discard_1>TATA).*\" -L log.t.txt -I reads.fq.gz -S output.fq.gz")
+if (umi_length == "6"){
+  umi.command <- paste("umi_tools extract --extract-method=regex --bc-pattern \"(?P<umi_1>.{6})(?P<discard_1>TATA).*\" -L log.t.txt -I reads.fq.gz -S output.fq.gz")
+else{
+  umi.command <- paste("umi_tools extract --extract-method=regex --bc-pattern \"(?P<umi_1>.{12})(?P<discard_1>TATA).*\" -L log.t.txt -I reads.fq.gz -S output.fq.gz")
+}
 documentCommand(umi.command)
 runExternal(umi.command)
 

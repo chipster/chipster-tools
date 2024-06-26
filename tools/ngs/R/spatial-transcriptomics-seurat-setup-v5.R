@@ -1,8 +1,8 @@
-# TOOL spatial-transcriptomics-seurat-setup-v5.R: "Seurat v5 -Setup and QC" (Setup the Seurat object for spatial data.)
+# TOOL spatial-transcriptomics-seurat-setup-v5.R: "Seurat v5 -Setup and QC" (This tool sets up a Seurat object for spatial transcriptomics data.)
 # INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf
-# PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample in multisample analysis. Make sure the samples are named differently if you have multiple samples.)
+# PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
 # RUNTIME R-4.2.3-seurat5
 # SLOTS 2
 # TOOLS_BIN ""

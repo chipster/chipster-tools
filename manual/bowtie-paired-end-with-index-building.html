@@ -7,9 +7,20 @@
 
 <h3>Description</h3>
 
-<p>This tool aligns paired-end reads against your own genomes or transcriptomes, which you have to supply in fasta format. 
-You need to supply the reads in two fastq files containing the reads in the same order.
-If you would like to align reads against publicly available reference genomes supplied by Chipster, please use the tool "Bowtie for paired-end reads".
+<p>
+    This tool uses Bowtie to align paired-end reads to a provided reference genome. You need to supply the paired-end reads
+    as two FASTQ files containing the reads in the same order. You also need to provide the reference genome as input in
+    FASTA format. If you would like to align reads against publicly available reference genomes supplied by Chipster, please
+    use the tool <i>Bowtie for paired-end reads</i>.
+</p>
+<p>
+    If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+    alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+    "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+    "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+    Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+    “Run for Each Sample” Option</a> for more information.
+</p>
 
 <h3>Parameters</h3>
 

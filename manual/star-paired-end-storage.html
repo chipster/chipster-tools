@@ -8,20 +8,24 @@
 <h3>Description</h3>
 
 <p>
-Aligns paired end RNA-seq reads using the STAR aligner. 
-Use this tool if you have more than 200 million reads per sample.
+    This tool uses STAR to align large paired-end reads to a publicly available reference genome. You need
+    to supply the paired-end reads in FASTQ format. The files can be compressed with gzip. Use this
+    tool if you have more than 200 million reads per sample.
 </p>
-
-<p>
-To define the files with paired-end reads for each sample, please use the "Define Samples" option.
-This option allows to define paired-end reads for multiple samples and enables the "Run for Each Sample" option 
-such that the alignment tool can be run for multiple samples at the same time. Please see
-tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
-“Run for Each Sample” Option</a> for more information.
-</p>
-
 <p> 
-Alignment results are given in a BAM file, which is automatically indexed. 
+    Note that this tool uses publicly available reference genomes. If you would like us to add new reference 
+    genomes to Chipster, please contact us. 
+</p>
+<p>
+    If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+    alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
+    "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
+    "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
+    Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+    “Run for Each Sample” Option</a> for more information.
+</p>
+<p> 
+    Alignment results are given in a BAM file, which is automatically indexed. 
 </p>
 
 <h3>Parameters</h3>
