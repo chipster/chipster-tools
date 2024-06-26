@@ -230,13 +230,15 @@
 		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-sample-groups-v5.R</tool>
+		<tool>single-cell-seurat-diffexp-pseudobulk-v5.R</tool>
 		<tool>single-cell-seurat-split-dot-plot-v5.R</tool>	
 		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
 		<tool>single-cell-seurat-subset-v5.R</tool>
 		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
 		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
-		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	  	
+		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	
+		<!-- <tool>single-cell-seurat-h5ad2seurat-v5.R</tool>  	--> 
 		<!-- Dropseq tools: --> 
 		<tool>single-cell-preprocessing.R</tool>
 		<tool>picard-merge-bam-alignment.R</tool>	

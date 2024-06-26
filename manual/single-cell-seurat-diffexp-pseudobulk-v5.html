@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat -Find DE genes between sample groups, pseudobulk </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        For a given cluster this tool gives you 
+    <ul>
+        <li> differentially expressed genes between the conditions (de-list.tsv) </li>
+        <li> several quality control plots (expresssionPlots.pdf) </li>
+    </ul>
+    Conditions/samples are determined in the Setup tool with the Sample and Group name parameters.
+    Unlike the other differential expression tools, this one will <b>aggregate </b> the single cells within
+    one sample as one avarege expression value for each gene, allowing for "pseudobulk" analysis.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Normalisation method used previously [Global scaling normalization]</li>
+        <li>Name of the sample group to compare with [STIM]</li>
+        <li>Name of the sample group to compare to [CTRL]</li>
+        <li>Name of the cluster [3]</li>
+        <li>Which test to use for detecting marker genes [wilcox]</li>
+        <li>Return only positive marker genes [TRUE]</li>
+        <li>Fold change in log2 scale [0.25]</li>
+        <li>Adjusted p-value cutoff [0.05]</li>
+        <li>Limit testing to genes which are expressed in at least this fraction of cells [0.1]</li>
+        <li>How to handle DESeq2 NA values those? [remove]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+        As inputs, give the combined Seurat object. <br>
+    </p>
+
+    <p>
+        Select the cluster you want to inspect by setting its name in the parameter field. As an example, the parameter
+        is set to cluster "3". Type the names of the sample groups. As an example, the parameters are set to "CTRL" (for
+        control)
+        and "STIM" (for stimulated). Use the sample group names you set in the Setup tool.
+    </p>
+
+    <p>
+        You can filter the differentially expressed genes using the parameters. By
+        default, only genes with
+        adjusted p-value < 0.05 are listed in the result table and only positive markers are kept. Note that Seurat
+            adjusts p-values using the rather conserved Bonferroni method for multiple testing correction. </p>
+            <p>You can choose to include in the analysis only genes whose average fold change is higher than a selected
+                value. This prefiltering speeds up the analysis
+                and narrows down the result list.
+            </p>
+            <p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the
+                selected two
+                sample groups in the selected cluster. The columns in the result file
+                include:
+            <ul>
+                <li><b>p_val</b> = p-values for the differentially expressed genes (larger the p-value -> higher the
+                    likelihood that the gene is in the list just be chance) </li>
+                <li><b>p_val_adj</b> = adjusted p-value. This value is corrected for multiple testing:
+                    when we test thousands of genes, we can get some statistically significantly
+                    differentially expressed genes just by chance. There are different methods to correct for this,
+                    Seurat uses the Bonferroni method. When filtering the table and reporting your results,
+                    use this value.</li>
+                <li><b>avg_logFC</b> = Log fold-chage of the average expression between the two groups.
+                    Positive values indicate that the gene is more highly expressed in the first group. First group =
+                    first in the alphabets. </li>
+                <li><b>pct.1</b> = what percentage of the cells in the condition 1 show some expression for this gene.
+                    Note, that numbering is based on alphabets: earlier in the alphabets -> 1, the other one -> 2.
+                    So for example, "CTRL" -> 1 and "STIM" -> 2, since C is before S in alphabets.
+                </li>
+                <li><b>pct.2</b> = what percentage of the cells in the condition 2 show some expression for this gene
+                </li>
+                <li><b>aver_expr columns</b> = Average expression of the cells in this cluster in the given sample
+                    groups.
+                </li>
+            </ul>
+    </p>
+
+    <p>
+        In case of <b>DESeq2</b>, the FindMarkers function can give NAs as p-values to some "outlier" genes. <a
+            href="https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#pvaluesNA">Read
+            more about
+            DESEq2 NA p-values.</a> You can choose either to remove those genes from the result table, or to replace
+        NAs with 0s (in which case they will show up as differentially expressed -be cautious here.)
+        The removed/replaced rows are printed as a separate table, pseudobulk_markers_NAs.tsv.
+    </p>
+
+
+
+    <p>
+        For more details, please check the <a
+            href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorial
+            for multiple sample analysis</a> and
+        <a href="https://satijalab.org/seurat/articles/parsebio_sketch_integration">Seurat tutorial
+            for sketch integration containing the pseudobulk analysis step</a>.
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>de-list.tsv: Differentially expressed genes between the conditions </li>
+        <li>expresssionPlots.pdf: Several plots showing some top differentially expressed genes </li>
+        <li>pseudobulk_markers_NAs.tsv: In case of DESeq2 testing, if there were some genes with NA values, those are
+            given as a separate table to notify the user. </li>
+    </ul>
+
+
+
+</body>
