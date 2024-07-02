@@ -1,192 +1,212 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="en">
 
-	<head>
-		<title>Remove background contamination with CellBender</title>
-	</head>
+<head>
+	<title>Remove background contamination with CellBender</title>
+</head>
 
-	<body>
+<body>
 
-		<h2>Remove background contamination with CellBender</h2>
+	<h2>Remove background contamination with CellBender</h2>
 
-		<h3>Description</h3>
+	<h3>Description</h3>
 
-			<p>
-				This tool removes background contamination from 10x Cell Ranger's unfiltered (raw) 
-				<a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices">
-				feature-barcode matrices</a> using a software package called CellBender. The background contamination may originate 
-				from leakage of cell-free ambient RNA and barcode swapping during droplet-based sequencing. In addition, CellBender
-				uses a different approach to estimate non-empty cells compared to 10x Cell Ranger's cell calling algorithm that 
-				returns the 10x filtered feature-barcode matrix.
-			</p>
+	<p>
+		This tool removes background contamination from 10x Cell Ranger's unfiltered (raw)
+		<a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/output/matrices">
+			feature-barcode matrices</a> using a software package called CellBender. The background contamination may
+		originate
+		from leakage of cell-free ambient RNA and barcode swapping during droplet-based sequencing. In addition,
+		CellBender
+		uses a different approach to estimate non-empty cells compared to 10x Cell Ranger's cell calling algorithm that
+		returns the 10x filtered feature-barcode matrix.
+	</p>
 
-			<p>
-				The raw 10x feature-barcode matrix must be given as input to this tool in hdf5 file format (.h5). This tool
-				returns a CellBender filtered feature-barcode matrix of estimated non-empty cells where systematic background 
-				contamination has been removed. This cellbender_fb_matrix_filtered.h5 can be used as input to the tool
-				<a href="https://chipster.rahtiapp.fi/manual/single-cell-seurat-setup.html">Seurat v4 - Setup and QC</a> instead
-				of the 10x Cell Ranger's filtered feature-barcode matrix.
-			</p>
+	<p>
+		The raw 10x feature-barcode matrix must be given as input to this tool in hdf5 file format (.h5). This tool
+		returns a CellBender filtered feature-barcode matrix of estimated non-empty cells where systematic background
+		contamination has been removed. This cellbender_fb_matrix_filtered.h5 can be used as input to the tool
+		<a href="https://chipster.2.rahtiapp.fi/manual/single-cell-seurat-setup.html">Seurat v4 - Setup and QC</a>
+		instead
+		of the 10x Cell Ranger's filtered feature-barcode matrix.
+	</p>
 
-			<p>
-				You should run this tool using the default parameter values first. You can then use the report and log files generated 
-				by CellBender to check if any alterations to the default values are needed. The report file (.html) contains information 
-				about the estimation of non-empty cells and background removal. It issues warnings and makes suggestions if there are 
-				any aspects that look anomalous. The log file (.log) contains some information about the CellBender run.
-			</p>
+	<p>
+		You should run this tool using the default parameter values first. You can then use the report and log files
+		generated
+		by CellBender to check if any alterations to the default values are needed. The report file (.html) contains
+		information
+		about the estimation of non-empty cells and background removal. It issues warnings and makes suggestions if
+		there are
+		any aspects that look anomalous. The log file (.log) contains some information about the CellBender run.
+	</p>
 
-			<p>
-				Please see the <a href="https://www.youtube.com/watch?v=pONLZdya_v0">CellBender tutorial video</a> for additional
-				instructions on how to use this tool.
-			</p>
+	<p>
+		Please see the <a href="https://www.youtube.com/watch?v=pONLZdya_v0">CellBender tutorial video</a> for
+		additional
+		instructions on how to use this tool.
+	</p>
 
-		<h3>Parameters</h3>
+	<h3>Parameters</h3>
 
-			<p>
-			<ul>
-				<li>Expected number of non-empty cells [auto]</li>
-				<li>Total number of included droplets [auto]</li>
-				<li>Number of epochs [150]</li>
-				<li>Learning rate [0.0001] </li>
-				<li>Nominal false positive rate [0.01]</li>
-			</ul>
-			</p>
+	<p>
+	<ul>
+		<li>Expected number of non-empty cells [auto]</li>
+		<li>Total number of included droplets [auto]</li>
+		<li>Number of epochs [150]</li>
+		<li>Learning rate [0.0001] </li>
+		<li>Nominal false positive rate [0.01]</li>
+	</ul>
+	</p>
 
-		<h3>Details</h3>
+	<h3>Details</h3>
 
-			<p> 
-				This section briefly explains the CellBender method <a href="https://www.nature.com/articles/s41592-023-01943-7">
-				Stephen J Fleming, Mark D Chaffin, Alessandro Arduini, Amer-Denis Akkad, Eric Banks, John C Marioni,
-				Anthony A Phillipakis, Patrick T Ellinor, and Mehrtash Babadi. Unsupervised removal of systematic background
-				noise from droplet-based single-cell experiments using CellBender. Nature Methods, 2023.</a>. For more details,
-				the user is referred to the publication and the <a href="https://cellbender.readthedocs.io/en/latest/">
-				CellBender documentation</a>.
-			</p>
+	<p>
+		This section briefly explains the CellBender method <a
+			href="https://www.nature.com/articles/s41592-023-01943-7">
+			Stephen J Fleming, Mark D Chaffin, Alessandro Arduini, Amer-Denis Akkad, Eric Banks, John C Marioni,
+			Anthony A Phillipakis, Patrick T Ellinor, and Mehrtash Babadi. Unsupervised removal of systematic background
+			noise from droplet-based single-cell experiments using CellBender. Nature Methods, 2023.</a>. For more
+		details,
+		the user is referred to the publication and the <a href="https://cellbender.readthedocs.io/en/latest/">
+			CellBender documentation</a>.
+	</p>
 
-			<p>
-				A high level of systematic background noise in estimated non-empty cells can be a potential source of batch 
-				effects and spurious differential gene expression. CellBender estimates non-empty cells from raw 10x 
-				feature-barcode matrices and removes systematic background contamination from the estimated non-empty cells.
-			</p>
-			
-			<p>
-				CellBender relies on removing systematic background contamination that can be summarized into two
-				main categories: cell-free ambient RNA (physically encapsulated exogenous molecules) and barcode swapping 
-				(misassignment). Cell-free ambient RNA refer to mRNAs that were physically present in a droplet when it was
-				formed. This cell-free ambient RNA in a droplet can originate from for example cell death or lysis. The 
-				barcode swapping type of background contamination refers to mRNAs that were physically not present in a droplet 
-				when it was formed, but were later assigned to it due to barcode swapping events or sequencing errors. 
-			</p>
+	<p>
+		A high level of systematic background noise in estimated non-empty cells can be a potential source of batch
+		effects and spurious differential gene expression. CellBender estimates non-empty cells from raw 10x
+		feature-barcode matrices and removes systematic background contamination from the estimated non-empty cells.
+	</p>
 
-			<p>
-				The two different types of contamination sources could lead to two different types of background profiles which
-				is taken into account by CellBender. If the source of contamination is cell-free ambient RNA, each droplet 
-				should contain a small sample of this ambient RNA background profile. If the source of contamination is related
-				to barcode swapping, the swapping mechanisms occur at random, and it would be expected that the swapping 
-				background profile would be exactly the average of all of the RNA sequenced in the experiment.
-			</p>
-				
-			<p>
-				The general idea of the CellBender method is to build a probabilistic model of noise-contaminated scRNA data 
-				consisting of the contamination UMI counts and the true biological cell UMI counts. The background noise UMI 
-				counts for each cell are drawn from a Poisson distribution where the noise rate originates from the two 
-				different contamination types: cell-free ambient RNA and barcode swapping types. The true UMI counts for each 
-				cell are modeled as a negative binomial distribution where the rate depends on several parameters including 
-				a prior on true gene expression rate. CellBender uses a neural network to learn a droplet-specific latent 
-				variable that determines this flexible prior for gene expression rate. The CellBender model is fitted using 
-				a stochastic variational inference technique and additional encoding neural networks are leveraged to amortize
-				the approximate inference of latent variables. Thus, the CellBender model resembles a variational autoencoder
-				inside a structured probabilistic model of noise-contaminated scRNA-seq data. 
-			</p>
+	<p>
+		CellBender relies on removing systematic background contamination that can be summarized into two
+		main categories: cell-free ambient RNA (physically encapsulated exogenous molecules) and barcode swapping
+		(misassignment). Cell-free ambient RNA refer to mRNAs that were physically present in a droplet when it was
+		formed. This cell-free ambient RNA in a droplet can originate from for example cell death or lysis. The
+		barcode swapping type of background contamination refers to mRNAs that were physically not present in a droplet
+		when it was formed, but were later assigned to it due to barcode swapping events or sequencing errors.
+	</p>
 
-			<p>
-				This CellBender tool returns the feature-barcode matrix of estimated non-empty cells where contamination has 
-				been removed. The learned latent space from the neural network acts as a prior that determines the Bayesian 
-				posterior distribution of noise counts together with observed data. The posterior distribution of noise counts
-				are reduced to integer point estimates of noise counts using a constrained estimator that is formally equivalent
-				to the multiple-choice knapsack problem that is exactly solvable with mild assumptions using a coordinate ascent
-				algorithm. The feature-barcode matrix of estimated non-empty cells is obtained by subtracting the likely 
-				noise-counts from observed counts. The trade-off between removing noise and retaining signal is controlled by 
-				the "nominal false positive rate" parameter that imposes an upper bound on the amount of falsely removed signal
-				counts. 
-			</p>
+	<p>
+		The two different types of contamination sources could lead to two different types of background profiles which
+		is taken into account by CellBender. If the source of contamination is cell-free ambient RNA, each droplet
+		should contain a small sample of this ambient RNA background profile. If the source of contamination is related
+		to barcode swapping, the swapping mechanisms occur at random, and it would be expected that the swapping
+		background profile would be exactly the average of all of the RNA sequenced in the experiment.
+	</p>
 
-			<p>
-				CellBender uses initial values for <b>"expected number of cells"</b> and <b>"total number of included droplets"</b>. 
-				By default, CellBender automatically chooses reasonable values for these parameters based on the user's dataset so 
-				alterations to the defaults are not needed unless they do not seem reasonable. The user can check the automatically 
-				estimated values for these parameters from the log file in which the "Using x probable cell barcodes, plus an additional
-				y barcodes" line will give the automatically estimated parameters where x corresponds to the number of estimated 
-				cells and x+y corresponds to the total number of included droplets. The user should look at the "UMI curve" plot
-				to see if these values seem reasonable. The expected number of cells should include all droplets that reasonably 
-				surely contain cells, i.e. the cells that are on the very left of the "UMI curve" plot. The total number of 
-				droplets should include a number that goes a few thousand barcodes into the "empty droplet plateau" and include
-				some droplets that are reasonably surely empty. Note that the higher the number of total droplets included, the 
-				longer the CellBender method takes to run. More information on these parameters can be found from the
-				<a href="https://www.10xgenomics.com/resources/analysis-guides/background-removal-guidance-for-single-cell-gene-expression-datasets-using-third-party-tools">  
-				10x CellBender guidance.</a>
-			</p>
+	<p>
+		The general idea of the CellBender method is to build a probabilistic model of noise-contaminated scRNA data
+		consisting of the contamination UMI counts and the true biological cell UMI counts. The background noise UMI
+		counts for each cell are drawn from a Poisson distribution where the noise rate originates from the two
+		different contamination types: cell-free ambient RNA and barcode swapping types. The true UMI counts for each
+		cell are modeled as a negative binomial distribution where the rate depends on several parameters including
+		a prior on true gene expression rate. CellBender uses a neural network to learn a droplet-specific latent
+		variable that determines this flexible prior for gene expression rate. The CellBender model is fitted using
+		a stochastic variational inference technique and additional encoding neural networks are leveraged to amortize
+		the approximate inference of latent variables. Thus, the CellBender model resembles a variational autoencoder
+		inside a structured probabilistic model of noise-contaminated scRNA-seq data.
+	</p>
 
-			<p>
-				The <b>"number of epochs"</b> is a hyperparameter used in the training of the neural network, and it refers to the 
-				number of complete passes through the entire training dataset when training the neural network in CellBender. The 
-				algorithm iteratively updates the parameters of the neural network in an attempt to maximize the Evidence Lower
-				Bound (ELBO) that is a lower bound on the log-likelihood of the observed data given the model parameters. Each 
-				epoch consists of multiple iterations with different batches (collection of samples) of training data, and 
-				monitoring the ELBO score at each epoch can be used to assess model training and convergence. Ideally, the ELBO 
-				should increase as training epochs increase after which it should converge at some high plateu. Typically 150 
-				epochs is a good starting choice, but the user can look for the "Learning curve" plot in the automated report file
-				to see if it suggests a better option for the number of epochs. If the ELBO has not appeared to converge at some 
-				high plateu, it is recommended to use more epochs. However, as a rule of thumb, the number of epochs should not
-				exceed 300.
-			</p>
-			
-			<p>
-				The <b>"learning rate"</b> parameter refers to another hyperparameter when training the neural network in CellBender.
-				It determines the size of steps taken during the optimization process when training the neural network using 
-				stochastic gradient descent. It controls the amount by which the model's parameters are updated in the opposite
-				direction of the gradient of the loss function (negative ELBO). It is suggested to use the default value, but the
-				user can check the "Learning curve" plot in the report file and look for large downward dips of the ELBO score 
-				where it is not monotonically increasing. If there are large dips, the user can try to reduce the learning rate
-				by a factor of two.
-			</p>
+	<p>
+		This CellBender tool returns the feature-barcode matrix of estimated non-empty cells where contamination has
+		been removed. The learned latent space from the neural network acts as a prior that determines the Bayesian
+		posterior distribution of noise counts together with observed data. The posterior distribution of noise counts
+		are reduced to integer point estimates of noise counts using a constrained estimator that is formally equivalent
+		to the multiple-choice knapsack problem that is exactly solvable with mild assumptions using a coordinate ascent
+		algorithm. The feature-barcode matrix of estimated non-empty cells is obtained by subtracting the likely
+		noise-counts from observed counts. The trade-off between removing noise and retaining signal is controlled by
+		the "nominal false positive rate" parameter that imposes an upper bound on the amount of falsely removed signal
+		counts.
+	</p>
 
-			<p>
-				As mentioned above, the trade-off between removing noise and retaining signal can be controlled with the
-				<b>"nominal false positive rate"</b> parameter. The default value (0.01) is a fairly conservative choice. Larger 
-				values correspond to removing more noise at the expense of more signal.
-			</p>
+	<p>
+		CellBender uses initial values for <b>"expected number of cells"</b> and <b>"total number of included
+			droplets"</b>.
+		By default, CellBender automatically chooses reasonable values for these parameters based on the user's dataset
+		so
+		alterations to the defaults are not needed unless they do not seem reasonable. The user can check the
+		automatically
+		estimated values for these parameters from the log file in which the "Using x probable cell barcodes, plus an
+		additional
+		y barcodes" line will give the automatically estimated parameters where x corresponds to the number of estimated
+		cells and x+y corresponds to the total number of included droplets. The user should look at the "UMI curve" plot
+		to see if these values seem reasonable. The expected number of cells should include all droplets that reasonably
+		surely contain cells, i.e. the cells that are on the very left of the "UMI curve" plot. The total number of
+		droplets should include a number that goes a few thousand barcodes into the "empty droplet plateau" and include
+		some droplets that are reasonably surely empty. Note that the higher the number of total droplets included, the
+		longer the CellBender method takes to run. More information on these parameters can be found from the
+		<a
+			href="https://www.10xgenomics.com/resources/analysis-guides/background-removal-guidance-for-single-cell-gene-expression-datasets-using-third-party-tools">
+			10x CellBender guidance.</a>
+	</p>
 
-			<p>
-				For more information on making changes to the parameter values, see
-				<a href="https://cellbender.readthedocs.io/en/latest/usage/index.html" > recommended best practices.  </a>
-			</p>
+	<p>
+		The <b>"number of epochs"</b> is a hyperparameter used in the training of the neural network, and it refers to
+		the
+		number of complete passes through the entire training dataset when training the neural network in CellBender.
+		The
+		algorithm iteratively updates the parameters of the neural network in an attempt to maximize the Evidence Lower
+		Bound (ELBO) that is a lower bound on the log-likelihood of the observed data given the model parameters. Each
+		epoch consists of multiple iterations with different batches (collection of samples) of training data, and
+		monitoring the ELBO score at each epoch can be used to assess model training and convergence. Ideally, the ELBO
+		should increase as training epochs increase after which it should converge at some high plateu. Typically 150
+		epochs is a good starting choice, but the user can look for the "Learning curve" plot in the automated report
+		file
+		to see if it suggests a better option for the number of epochs. If the ELBO has not appeared to converge at some
+		high plateu, it is recommended to use more epochs. However, as a rule of thumb, the number of epochs should not
+		exceed 300.
+	</p>
 
-		<h3>Output</h3>
+	<p>
+		The <b>"learning rate"</b> parameter refers to another hyperparameter when training the neural network in
+		CellBender.
+		It determines the size of steps taken during the optimization process when training the neural network using
+		stochastic gradient descent. It controls the amount by which the model's parameters are updated in the opposite
+		direction of the gradient of the loss function (negative ELBO). It is suggested to use the default value, but
+		the
+		user can check the "Learning curve" plot in the report file and look for large downward dips of the ELBO score
+		where it is not monotonically increasing. If there are large dips, the user can try to reduce the learning rate
+		by a factor of two.
+	</p>
 
-			<ul>
-				<li>cellbender_fb_matrix_filtered.h5: This hdf5 file contains estimated non-empty cells where background
-					contamination
-					has been removed. This file can be passed on to the "Seurat v4 - Setup and QC" tool </li>
-				<li>cellbender_fb_matrix_report.html: This report file contains information of the CellBender background removal
-					and estimation of non-empty cells. It issues warnings and makes suggestions if there are any aspects that
-					look anomalous.
-				</li>
-				<li>cellbender_fb_matrix.log: This log file for the run contains information of the CellBender background removal and 
-					estimation of non-empty cells. 
-				</li>
-			</ul>
+	<p>
+		As mentioned above, the trade-off between removing noise and retaining signal can be controlled with the
+		<b>"nominal false positive rate"</b> parameter. The default value (0.01) is a fairly conservative choice. Larger
+		values correspond to removing more noise at the expense of more signal.
+	</p>
 
-		<h3>Reference</h3>
+	<p>
+		For more information on making changes to the parameter values, see
+		<a href="https://cellbender.readthedocs.io/en/latest/usage/index.html"> recommended best practices. </a>
+	</p>
 
-			<p> 
-				This tool is based on the <a href="https://cellbender.readthedocs.io/en/latest/"> CellBender package</a>.
-				Please cite the following article: <a href="https://www.nature.com/articles/s41592-023-01943-7">
-				Stephen J Fleming, Mark D Chaffin, Alessandro Arduini, Amer-Denis Akkad, Eric Banks, John C Marioni,
-				Anthony A Phillipakis, Patrick T Ellinor, and Mehrtash Babadi. Unsupervised removal of systematic background
-				noise from droplet-based single-cell experiments using CellBender. Nature Methods, 2023.</a>.
-			</p>
+	<h3>Output</h3>
 
-	</body>
+	<ul>
+		<li>cellbender_fb_matrix_filtered.h5: This hdf5 file contains estimated non-empty cells where background
+			contamination
+			has been removed. This file can be passed on to the "Seurat v4 - Setup and QC" tool </li>
+		<li>cellbender_fb_matrix_report.html: This report file contains information of the CellBender background removal
+			and estimation of non-empty cells. It issues warnings and makes suggestions if there are any aspects that
+			look anomalous.
+		</li>
+		<li>cellbender_fb_matrix.log: This log file for the run contains information of the CellBender background
+			removal and
+			estimation of non-empty cells.
+		</li>
+	</ul>
+
+	<h3>Reference</h3>
+
+	<p>
+		This tool is based on the <a href="https://cellbender.readthedocs.io/en/latest/"> CellBender package</a>.
+		Please cite the following article: <a href="https://www.nature.com/articles/s41592-023-01943-7">
+			Stephen J Fleming, Mark D Chaffin, Alessandro Arduini, Amer-Denis Akkad, Eric Banks, John C Marioni,
+			Anthony A Phillipakis, Patrick T Ellinor, and Mehrtash Babadi. Unsupervised removal of systematic background
+			noise from droplet-based single-cell experiments using CellBender. Nature Methods, 2023.</a>.
+	</p>
+
+</body>
 
 </html>
