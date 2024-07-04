@@ -1,362 +1,573 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html lang="en">
-<head>
-<title>Chipster manual</title>
 
-<style type="text/css">
-div.header-item {
-	margin-top: 2ex;
-	font-weight: bold;
-}
-</style>
+<head>
+	<title>Chipster manual</title>
+
+	<style type="text/css">
+		div.header-item {
+			margin-top: 2ex;
+			font-weight: bold;
+		}
+	</style>
 
 </head>
+
 <body>
 
-	
-<h2>Version update 24.1.2020: What is new in Chipster 3.16.3</h2>
- 	
-		<b>Summary:</b> This is a patch due to a bug in the RNA-seq aligner HISAT2. The strandedness parameter of the HISAT2 tools was reversed, which caused the XS tags in the BAM file to be the wrong way round (+ instead of -, and vica versa). 
-		The XS tags are used by the older tools Cufflinks and Cuffdiff when they assemble transcripts and count reads per genes/transcripts. Note that counting reads per genes by HTSeq is not affected by XS tags, 
-		because it uses its own method for strandedness information. For those people who would like to rerun their Cufflinks/Cuffdiff analysis, we have made a conversion tool <a href="samtools-change-bam-strandness.html">Reverse XS tags in BAM</a>
-		which you can run on the old HISAT2 BAM files (this is faster than running the aligner again).
-		 
-		<p><b>NOTE:</b> We strongly encourage you to try the new <a href="https://chipster.rahtiapp.fi/home">Chipster Web app</a>, which will replace the Java based Chipster later this year. The Web app does not require Java (many universities do not provide Java anymore because Oracle's Java license policy changed). 
-		Users from Finnish universities can access the Chipster Web app with their HAKA (university) account. Note that the analysis session format is different, so your sessions are not automatically transferred. However, we made a conversion system which allows you to upload old sessions from your laptop to the new Chipster.</p>
-	
+
+	<h2>Version update 24.1.2020: What is new in Chipster 3.16.3</h2>
+
+	<b>Summary:</b> This is a patch due to a bug in the RNA-seq aligner HISAT2. The strandedness parameter of the HISAT2
+	tools was reversed, which caused the XS tags in the BAM file to be the wrong way round (+ instead of -, and vica
+	versa).
+	The XS tags are used by the older tools Cufflinks and Cuffdiff when they assemble transcripts and count reads per
+	genes/transcripts. Note that counting reads per genes by HTSeq is not affected by XS tags,
+	because it uses its own method for strandedness information. For those people who would like to rerun their
+	Cufflinks/Cuffdiff analysis, we have made a conversion tool <a href="samtools-change-bam-strandness.html">Reverse XS
+		tags in BAM</a>
+	which you can run on the old HISAT2 BAM files (this is faster than running the aligner again).
+
+	<p><b>NOTE:</b> We strongly encourage you to try the new <a href="https://chipster.2.rahtiapp.fi/home">Chipster Web
+			app</a>, which will replace the Java based Chipster later this year. The Web app does not require Java (many
+		universities do not provide Java anymore because Oracle's Java license policy changed).
+		Users from Finnish universities can access the Chipster Web app with their HAKA (university) account. Note that
+		the analysis session format is different, so your sessions are not automatically transferred. However, we made a
+		conversion system which allows you to upload old sessions from your laptop to the new Chipster.</p>
+
 	<ul>
-		<li><div class=header-item>New analysis tools</div>	
-			<ul> 
-				<li><a href="samtools-change-bam-strandness.html">RNA-seq / Reverse XS tags in BAM</a> reverses the strandedness tags in BAM file.</li>			
-				<!--<li><a href=".html"> / </a> . -->				
-			</ul> 
-		</li>
-		
-		<li><div class=header-item>Improvements to analysis tools</div>		
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="hisat2.html">Alignment / HISAT2 for single end reads</a>: Strandedness parameter updated to use the options R and F.</li>			
-				<li><a href="hisat2-single-end-with-index-building.html">Alignment / HISAT2 for single end reads and own genome</a>: Strandedness parameter updated to use the options R and F.</li>
-				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 for paired end reads</a>:  Strandedness parameter updated to use the options RF and FR.</li>
-				<li><a href="hisat2-paired-end-with-index-building.html">Alignment / HISAT2 for paired end reads and own genome</a>: Strandedness parameter updated to use the options RF and FR.</li>
-				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a>: Output file now lists strandedness parameter values R, F, RF and FR for HISAT2.</li>							
-			</ul> 
-		</li>		
+				<li><a href="samtools-change-bam-strandness.html">RNA-seq / Reverse XS tags in BAM</a> reverses the
+					strandedness tags in BAM file.</li>
+				<!--<li><a href=".html"> / </a> . -->
+			</ul>
+		</li>
+
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
+			<ul>
+				<li><a href="hisat2.html">Alignment / HISAT2 for single end reads</a>: Strandedness parameter updated to
+					use the options R and F.</li>
+				<li><a href="hisat2-single-end-with-index-building.html">Alignment / HISAT2 for single end reads and own
+						genome</a>: Strandedness parameter updated to use the options R and F.</li>
+				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 for paired end reads</a>: Strandedness parameter
+					updated to use the options RF and FR.</li>
+				<li><a href="hisat2-paired-end-with-index-building.html">Alignment / HISAT2 for paired end reads and own
+						genome</a>: Strandedness parameter updated to use the options RF and FR.</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and
+						inner distance estimation using RseQC</a>: Output file now lists strandedness parameter values
+					R, F, RF and FR for HISAT2.</li>
+			</ul>
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 8.10.2019: What is new in Chipster 3.16</h2>
- 	
-		<b>Summary:</b> This version brings major improvements to single cell RNA-seq data analysis, because the single cell analysis tools have been updated to Seurat v3 and R3.6.1. 
-		<p>We would also like to encourage you to try our new <a href="https://chipster.rahtiapp.fi/home">web interface to Chipster</a>, which does not require Java (many universities do not provide Java anymore because Oracle's Java license policy changed). 
-		Users from Finnish universities can access the web based Chipster with their HAKA (university) account. 
-		Note that the analysis session format is different, so your sessions are not automatically transferred. However, we made a conversion system which allows you to upload old sessions from your laptop to the new Chipster.</p>
-		<!--  The example xxx demonstrates how these tools can be used.-->
+	<h2>Version update 8.10.2019: What is new in Chipster 3.16</h2>
 
-	
+	<b>Summary:</b> This version brings major improvements to single cell RNA-seq data analysis, because the single cell
+	analysis tools have been updated to Seurat v3 and R3.6.1.
+	<p>We would also like to encourage you to try our new <a href="https://chipster.2.rahtiapp.fi/home">web interface to
+			Chipster</a>, which does not require Java (many universities do not provide Java anymore because Oracle's
+		Java license policy changed).
+		Users from Finnish universities can access the web based Chipster with their HAKA (university) account.
+		Note that the analysis session format is different, so your sessions are not automatically transferred. However,
+		we made a conversion system which allows you to upload old sessions from your laptop to the new Chipster.</p>
+	<!--  The example xxx demonstrates how these tools can be used.-->
+
+
 	<ul>
-		<li><div class=header-item>New analysis tools</div>	
-			<ul> 
-				<li><a href="single-cell-seurat-extract-cluster.html">Single cell RNA-seq / Seurat v3 BETA -Extract cells in a cluster</a> retrieves cells for a given cluster.</li>
-				<li><a href="heatmap-for-rnaseq.html">RNA-seq / Heatmap for RNA-seq results</a> performs VST transformation and produces a heatmap.</li>			
-				<!--<li><a href=".html"> / </a> . -->				
-			</ul> 
-		</li>
-		
-		<li><div class=header-item>Improvements to analysis tools</div>		
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="single-cell-seurat-filter-regress-v3.html">Single cell RNA-seq / Seurat v3 -Filter cells, normalize, regress and detect variable genes</a> detects highly variable genes using VST (variance stabilizing transformation).</li>			
-				<li><a href="single-cell-seurat-pca-v3.html">Single cell RNA-seq / Seurat v3 -PCA</a> allows you to specify how many PCs to plot.</li>				
-				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat v3 -Clustering and detection of cluster marker genes</a> produces now a UMAP plot in addition to tSNE, and returns only positive markers.</li>
-				<li><a href="single-cell-seurat-gene-plots-v3.html">Single cell RNA-seq / Seurat v3 -Visualize genes</a> produces a UMAP plot.</li>
-				<li><a href="single-cell-seurat-featureplot-v3.html">Single cell RNA-seq / Seurat v3 -Visualise features in UMAP plot</a> allows to color a UMAP plot based on gene expression or QC data such as the mitochondrial transcript percentage.</li>
-				<li><a href="single-cell-seurat-CCA-v3.html">Single cell RNA-seq / Seurat -Combine two samples</a> combines samples using a new approach: It performs CCA and L2 normalization to bring the samples in shared spaces, and then looks for mutual nearest neighbors.
-				These anchors are scored based on neighborhood in the PC space, and correction vectors are calculated based on anchors and scores.</li>
-				<li><a href="single-cell-seurat-integrated-analysis-v3.html">Single cell RNA-seq / Seurat v3 -Integrated analysis of two samples</a> has an option to use UMAP plot to visualize clusters.</li>
-				<li><a href="single-cell-seurat-diffexp-samples-v3.html">Single cell RNA-seq / Seurat v3 - Find conserved cluster markers and DE genes in two samples</a> returns only positive markers.</li>
-				<li><a href="single-cell-seurat-split-dot-plot-v3.html">Single cell RNA-seq / Seurat v3 -Visualize genes with cell type specific responses in two samples</a> produces UMAP and violin plots.</li>
-				<li><a href="enafetch.html">Utilities / Retrieve datasets from ENA database</a> can now handle paired end data.</li>	
-				<li><a href="infoseq.html">Misc / Sequence utilities / Display basic information about sequences</a> can now handle up to 300 000 sequences.</li>				
-			</ul> 
-		</li>		
+				<li><a href="single-cell-seurat-extract-cluster.html">Single cell RNA-seq / Seurat v3 BETA -Extract
+						cells in a cluster</a> retrieves cells for a given cluster.</li>
+				<li><a href="heatmap-for-rnaseq.html">RNA-seq / Heatmap for RNA-seq results</a> performs VST
+					transformation and produces a heatmap.</li>
+				<!--<li><a href=".html"> / </a> . -->
+			</ul>
+		</li>
+
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
+			<ul>
+				<li><a href="single-cell-seurat-filter-regress-v3.html">Single cell RNA-seq / Seurat v3 -Filter cells,
+						normalize, regress and detect variable genes</a> detects highly variable genes using VST
+					(variance stabilizing transformation).</li>
+				<li><a href="single-cell-seurat-pca-v3.html">Single cell RNA-seq / Seurat v3 -PCA</a> allows you to
+					specify how many PCs to plot.</li>
+				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat v3 -Clustering and
+						detection of cluster marker genes</a> produces now a UMAP plot in addition to tSNE, and returns
+					only positive markers.</li>
+				<li><a href="single-cell-seurat-gene-plots-v3.html">Single cell RNA-seq / Seurat v3 -Visualize genes</a>
+					produces a UMAP plot.</li>
+				<li><a href="single-cell-seurat-featureplot-v3.html">Single cell RNA-seq / Seurat v3 -Visualise features
+						in UMAP plot</a> allows to color a UMAP plot based on gene expression or QC data such as the
+					mitochondrial transcript percentage.</li>
+				<li><a href="single-cell-seurat-CCA-v3.html">Single cell RNA-seq / Seurat -Combine two samples</a>
+					combines samples using a new approach: It performs CCA and L2 normalization to bring the samples in
+					shared spaces, and then looks for mutual nearest neighbors.
+					These anchors are scored based on neighborhood in the PC space, and correction vectors are
+					calculated based on anchors and scores.</li>
+				<li><a href="single-cell-seurat-integrated-analysis-v3.html">Single cell RNA-seq / Seurat v3 -Integrated
+						analysis of two samples</a> has an option to use UMAP plot to visualize clusters.</li>
+				<li><a href="single-cell-seurat-diffexp-samples-v3.html">Single cell RNA-seq / Seurat v3 - Find
+						conserved cluster markers and DE genes in two samples</a> returns only positive markers.</li>
+				<li><a href="single-cell-seurat-split-dot-plot-v3.html">Single cell RNA-seq / Seurat v3 -Visualize genes
+						with cell type specific responses in two samples</a> produces UMAP and violin plots.</li>
+				<li><a href="enafetch.html">Utilities / Retrieve datasets from ENA database</a> can now handle paired
+					end data.</li>
+				<li><a href="infoseq.html">Misc / Sequence utilities / Display basic information about sequences</a> can
+					now handle up to 300 000 sequences.</li>
+			</ul>
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 9.4.2019: What is new in Chipster 3.15</h2>
- 	<p>
-		<b>Summary:</b> This version contains new tools for calling somatic variants (SNPs and INDELs) using the GATK4 Mutect2 pipeline. It also has tools for retrieving data from Illumina BaseSpace and ENA. Many  
-		single cell RNA-seq data analysis tools have been improved. All the reference genomes have been updated to Ensembl v95, 
-		and genome indexes for new organisms have been added in the STAR and HISAT2 aligners.   
+	<h2>Version update 9.4.2019: What is new in Chipster 3.15</h2>
+	<p>
+		<b>Summary:</b> This version contains new tools for calling somatic variants (SNPs and INDELs) using the GATK4
+		Mutect2 pipeline. It also has tools for retrieving data from Illumina BaseSpace and ENA. Many
+		single cell RNA-seq data analysis tools have been improved. All the reference genomes have been updated to
+		Ensembl v95,
+		and genome indexes for new organisms have been added in the STAR and HISAT2 aligners.
 		<!--  The example xxx demonstrates how these tools can be used.-->
 	</p>
-	
-	<ul>
-		<li><div class=header-item>New analysis tools</div>	
-			<ul>
-				<li><a href="gatk4-mutect2-call-snv-and-indels.html">Variants / GATK4 -Call somatic SNVs and INDELs with Mutect2</a> calls somatic short variants via local assembly of haplotypes.</li>			
-				<li><a href="gatk4-createsomaticpanelofnormals.html">Variants / GATK4 -Create Somatic Panel of Normals</a> creates a panel of normals (PoN) containing germline and artifactual variant sites. Mutect2 then uses the PoN to filter variants at the site-level.</li>
-				<li><a href="gatk4-getpileupsummaries.html">Variants / GATK4 -Tabulate pileup metrics for inferring contamination</a> summarizes counts of reads that support reference, alternate and other alleles for given sites.</li>
-				<li><a href="gatk4-estimate-contamination.html">Variants / GATK4 -Estimate contamination</a> calculates the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries. The resulting contamination table is used with FilterMutectCalls.</li>				
-				<li><a href="gatk4-filtermutectcalls.html">Variants / GATK4 -Filter Mutect2 calls</a> filters somatic variants in a Mutect2 VCF callset.</li>
-				<li><a href="gatk4-collectsequencingartifactmetrics.html">Variants / GATK4 -Generate sequencing artifact metrics for filtering by orientation bias</a> quantifies substitution errors caused by mismatched base pairings during various stages of sample / library prep.</li>
-				<li><a href="gatk4-filterbyorientation.html">Variants / GATK4 -Filter Mutect2 calls by orientation bias</a> filters Mutect2 somatic variants for sequence context-dependent artifacts, e.g. OxoG or FFPE deamination.</li>
- 				<li><a href="single-cell-seurat-featureplot.html">Single cell RNA-seq / Seurat -Visualise features in tSNE plot</a> colors cells on a tSNE dimensional reduction plot according to a feature, i.e. gene expression, PC scores, number of genes detected, etc.</li>				
-				<li><a href="basespace.html">Data retrieval / Retrieve data from Illumina BaseSpace</a> This tool requires that you have an access token for the bs client program. Please see the manual for how to obtain it.</li>
-				<li><a href="enafetch.html">Data retrieval / Retrieve datasets from ENA</a> retrieves data from the ENA database based on the entry ID or name.</li>
-				<li><a href="share_via_object_storage.html">Utilities / Share a file</a> generates a public url for a file using the Object Storage service of Chipster so that you can share individual result files.</li>
-				<li><a href="diamond.html">Sequence similarity search / DIAMOND protein sequence similarity search</a>, faster than BLAST.</li>			
-				<!--<li><a href=".html"> / </a> . -->				
-			</ul> 
-		</li>
-		
 
-		<li><div class=header-item>Improvements to analysis tools</div>		
+	<ul>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a> tags reads with gene names so a separate tagging tool is not needed any more.</li>
-				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> indicates the number of cells.</li>
-				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat -Clustering</a> reports the number of cells in each cluster, produces a heatmap, and has a parameter for regulating the point size in tSNE plots.</li>
-				<li><a href="single-cell-seurat-CCA.html">Single cell RNA-seq / Seurat -Combine two samples and perform CCA</a> has parameters for the number of CCs to compute and visualize.</li>
-				<li><a href="single-cell-seurat-integrated-analysis.html">Single cell RNA-seq / Seurat -Integrated analysis of two samples</a> reports the number of cells in each cluster and has a parameter for regulating the point size in tSNE plots.</li>																				
-				<li><a href="mothur-classifyseqs.html">16S rRNA sequencing / Classify sequences to taxonomic units</a> allows you to tick boxes in order to remove lineages.</li>
-				<li><a href="mothur-classify-counttable.html">16S rRNA sequencing / Produce count table and phenodata</a> uses now a fixed seed for rarefaction in order to give consistant results. Species with zero counts are not reported.</li>
+				<li><a href="gatk4-mutect2-call-snv-and-indels.html">Variants / GATK4 -Call somatic SNVs and INDELs with
+						Mutect2</a> calls somatic short variants via local assembly of haplotypes.</li>
+				<li><a href="gatk4-createsomaticpanelofnormals.html">Variants / GATK4 -Create Somatic Panel of
+						Normals</a> creates a panel of normals (PoN) containing germline and artifactual variant sites.
+					Mutect2 then uses the PoN to filter variants at the site-level.</li>
+				<li><a href="gatk4-getpileupsummaries.html">Variants / GATK4 -Tabulate pileup metrics for inferring
+						contamination</a> summarizes counts of reads that support reference, alternate and other alleles
+					for given sites.</li>
+				<li><a href="gatk4-estimate-contamination.html">Variants / GATK4 -Estimate contamination</a> calculates
+					the fraction of reads coming from cross-sample contamination, given results from GetPileupSummaries.
+					The resulting contamination table is used with FilterMutectCalls.</li>
+				<li><a href="gatk4-filtermutectcalls.html">Variants / GATK4 -Filter Mutect2 calls</a> filters somatic
+					variants in a Mutect2 VCF callset.</li>
+				<li><a href="gatk4-collectsequencingartifactmetrics.html">Variants / GATK4 -Generate sequencing artifact
+						metrics for filtering by orientation bias</a> quantifies substitution errors caused by
+					mismatched base pairings during various stages of sample / library prep.</li>
+				<li><a href="gatk4-filterbyorientation.html">Variants / GATK4 -Filter Mutect2 calls by orientation
+						bias</a> filters Mutect2 somatic variants for sequence context-dependent artifacts, e.g. OxoG or
+					FFPE deamination.</li>
+				<li><a href="single-cell-seurat-featureplot.html">Single cell RNA-seq / Seurat -Visualise features in
+						tSNE plot</a> colors cells on a tSNE dimensional reduction plot according to a feature, i.e.
+					gene expression, PC scores, number of genes detected, etc.</li>
+				<li><a href="basespace.html">Data retrieval / Retrieve data from Illumina BaseSpace</a> This tool
+					requires that you have an access token for the bs client program. Please see the manual for how to
+					obtain it.</li>
+				<li><a href="enafetch.html">Data retrieval / Retrieve datasets from ENA</a> retrieves data from the ENA
+					database based on the entry ID or name.</li>
+				<li><a href="share_via_object_storage.html">Utilities / Share a file</a> generates a public url for a
+					file using the Object Storage service of Chipster so that you can share individual result files.
+				</li>
+				<li><a href="diamond.html">Sequence similarity search / DIAMOND protein sequence similarity search</a>,
+					faster than BLAST.</li>
+				<!--<li><a href=".html"> / </a> . -->
+			</ul>
+		</li>
+
+
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
+			<ul>
+				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a>
+					tags reads with gene names so a separate tagging tool is not needed any more.</li>
+				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> indicates the
+					number of cells.</li>
+				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat -Clustering</a> reports
+					the number of cells in each cluster, produces a heatmap, and has a parameter for regulating the
+					point size in tSNE plots.</li>
+				<li><a href="single-cell-seurat-CCA.html">Single cell RNA-seq / Seurat -Combine two samples and perform
+						CCA</a> has parameters for the number of CCs to compute and visualize.</li>
+				<li><a href="single-cell-seurat-integrated-analysis.html">Single cell RNA-seq / Seurat -Integrated
+						analysis of two samples</a> reports the number of cells in each cluster and has a parameter for
+					regulating the point size in tSNE plots.</li>
+				<li><a href="mothur-classifyseqs.html">16S rRNA sequencing / Classify sequences to taxonomic units</a>
+					allows you to tick boxes in order to remove lineages.</li>
+				<li><a href="mothur-classify-counttable.html">16S rRNA sequencing / Produce count table and
+						phenodata</a> uses now a fixed seed for rarefaction in order to give consistant results. Species
+					with zero counts are not reported.</li>
 				<li>HISAT2 aligners have reference genome index for rat.</li>
 				<li>STAR aligners have reference genome indexes for rat and mouse.</li>
 				<li>Bowtie, Bowtie2 and BWA aligners have miRBase reference indexes for human, mouse and rat.</li>
-			</ul> 
+			</ul>
 		</li>
-		<li><div class=header-item>Updates to reference data</div>
+		<li>
+			<div class=header-item>Updates to reference data</div>
 			<ul>
 				<li>All reference genomes have been updated to Ensembl v95.</li>
 				<li>VirusDetect database has been updated to v227.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to user interface</div>		
+		<li>
+			<div class=header-item>Improvements to user interface</div>
 			<ul>
-				<li>Import tool allows you to copy the same function (Use Import tool or Import directly) to all files.</li>
-			</ul>		
+				<li>Import tool allows you to copy the same function (Use Import tool or Import directly) to all files.
+				</li>
+			</ul>
 	</ul>
 	<hr />
 
-<h2>Version update 13.9.2018: What is new in Chipster 3.14</h2>
- 	<p>
-		<b>Summary:</b> This version contains major improvements in the community analysis tools for amplicon sequencing data (16S rRNA), and it also makes quality control easier for multisample datasets.  
+	<h2>Version update 13.9.2018: What is new in Chipster 3.14</h2>
+	<p>
+		<b>Summary:</b> This version contains major improvements in the community analysis tools for amplicon sequencing
+		data (16S rRNA), and it also makes quality control easier for multisample datasets.
 		The example session NGS_16S_rRNA_community_analysis_MiSeqData demonstrates how these tools can be used.
 	</p>
-	
+
 	<ul>
-		<li><div class=header-item>New analysis tools</div>	
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="fastqc_multiqc.html">Quality control / Read quality with MultiQC for many FASTQ files</a> Given a Tar package of FASTQ files, this tools runs FastQC for all of them and combines the results in one report using the MultiQC tool.
-				Note that you can package your FASTQ files in a Tar package using the tool Utilities / Make a Tar package.</li>
-				<li><a href="multiqc.html">Quality control / Combine reports using MultiQC</a>. Allows you to combine several quality reports in one using MultiQC. This tool takes currently mqc files produced by FastQC as input, support for other tools will be added. 
-				<li><a href="fixed_text_conversions.html">16S rRNA sequencing / Convert contig names to Mothur format</a> Combining paired end MiSeq reads to contigs using CLC Genomics Workbench produces contig names, which can be converted to Mothur format with this tool.</li>
-			</ul> 
-		</li>	 
-		<li><div class=header-item>Improvements to analysis tools</div>		
+				<li><a href="fastqc_multiqc.html">Quality control / Read quality with MultiQC for many FASTQ files</a>
+					Given a Tar package of FASTQ files, this tools runs FastQC for all of them and combines the results
+					in one report using the MultiQC tool.
+					Note that you can package your FASTQ files in a Tar package using the tool Utilities / Make a Tar
+					package.</li>
+				<li><a href="multiqc.html">Quality control / Combine reports using MultiQC</a>. Allows you to combine
+					several quality reports in one using MultiQC. This tool takes currently mqc files produced by FastQC
+					as input, support for other tools will be added.
+				<li><a href="fixed_text_conversions.html">16S rRNA sequencing / Convert contig names to Mothur
+						format</a> Combining paired end MiSeq reads to contigs using CLC Genomics Workbench produces
+					contig names, which can be converted to Mothur format with this tool.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
 			<ul>
-				<li><a href="mothur-classify-counttable.html">16S rRNA sequencing / Produce count table and phenodata</a> has been improved in many ways:
+				<li><a href="mothur-classify-counttable.html">16S rRNA sequencing / Produce count table and
+						phenodata</a> has been improved in many ways:
 					<ul>
-						<li>This tool used to count only unique sequences, now it uses Mothur's count_table file to count all sequences. 
-						If you have used to this tool after running the tool Extract unique sequences, <i>we strongly recommend that you do your analysis again</i>.</li>
-						<li>Additional output file counttable_transposed.tsv has been added. This file is suitable for the RNA-seq tools DESeq2 and edgeR in Chipster, 
-						allowing you to use their <a href="https://www.researchgate.net/publication/261372248_Waste_Not_Want_Not_Why_Rarefying_Microbiome_Data_Is_Inadmissible">recommended normalization methods for microbiome data</a>. Note that you can also use it for the tool Quality control / PCA and heatmap of samples with DESeq2.</li>
-						<li>New parameter Rarefy counts. Produces a countable where total sequence counts for each sample are equal and the same as in the smallest sample.</li>
-						<li>New parameter Produce binary table instead of counts. Produces a countable where detected species are marked with 1 and undetected with 0, instead of the actual sequence counts. This kind of counttable is typically used for co-occurance studies.</li>
+						<li>This tool used to count only unique sequences, now it uses Mothur's count_table file to
+							count all sequences.
+							If you have used to this tool after running the tool Extract unique sequences, <i>we
+								strongly recommend that you do your analysis again</i>.</li>
+						<li>Additional output file counttable_transposed.tsv has been added. This file is suitable for
+							the RNA-seq tools DESeq2 and edgeR in Chipster,
+							allowing you to use their <a
+								href="https://www.researchgate.net/publication/261372248_Waste_Not_Want_Not_Why_Rarefying_Microbiome_Data_Is_Inadmissible">recommended
+								normalization methods for microbiome data</a>. Note that you can also use it for the
+							tool Quality control / PCA and heatmap of samples with DESeq2.</li>
+						<li>New parameter Rarefy counts. Produces a countable where total sequence counts for each
+							sample are equal and the same as in the smallest sample.</li>
+						<li>New parameter Produce binary table instead of counts. Produces a countable where detected
+							species are marked with 1 and undetected with 0, instead of the actual sequence counts. This
+							kind of counttable is typically used for co-occurance studies.</li>
 					</ul>
 				</li>
-				<li><a href="mothur-alignseqs.html">16S rRNA sequencing / Align sequences to reference</a> The number of processors to be used has been increased. Silva reference database has been updated to v132 and the option to use bacterial subset has been removed. 
-				<!--  The default values of the Start and End parameters have been set for the V4 region of the 16S rRNA gene.--></li>
-				<li><a href="mothur-classifyseqs.html">16S rRNA sequencing / Classify sequences to taxonomic units</a> The number of processors to be used has been increased. Silva reference database has been updated to v132 and the option to use bacterial subset has been removed.</li>
-				<li><a href="fastqc.html">Quality control / Read quality with FastQC</a> Contains new parameter Create input for MultiQC.
-			</ul> 
+				<li><a href="mothur-alignseqs.html">16S rRNA sequencing / Align sequences to reference</a> The number of
+					processors to be used has been increased. Silva reference database has been updated to v132 and the
+					option to use bacterial subset has been removed.
+					<!--  The default values of the Start and End parameters have been set for the V4 region of the 16S rRNA gene.-->
+				</li>
+				<li><a href="mothur-classifyseqs.html">16S rRNA sequencing / Classify sequences to taxonomic units</a>
+					The number of processors to be used has been increased. Silva reference database has been updated to
+					v132 and the option to use bacterial subset has been removed.</li>
+				<li><a href="fastqc.html">Quality control / Read quality with FastQC</a> Contains new parameter Create
+					input for MultiQC.
+			</ul>
 		</li>
-		<li><div class=header-item>Updates to reference data and analysis packages</div>
+		<li>
+			<div class=header-item>Updates to reference data and analysis packages</div>
 			<ul>
 				<li>Silva database has been updated to v132.</li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 13.6.2018: What is new in Chipster 3.13</h2>
- 	<p>
-		<b>Summary:</b> This version contains reference data updates and new tools for single cell RNA-seq data analysis and alignment of long reads (e.g. PacBio or Oxford Nanopore). 
-		The single cell tools allow for example the identification of common cell types across conditions and comparison of the different conditions. 
-		The example session NGS_single_cell_RNAseq_Seurat_integrated_analysis demonstrates how these tools can be used and it follows the original <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorial</a>.
+	<h2>Version update 13.6.2018: What is new in Chipster 3.13</h2>
+	<p>
+		<b>Summary:</b> This version contains reference data updates and new tools for single cell RNA-seq data analysis
+		and alignment of long reads (e.g. PacBio or Oxford Nanopore).
+		The single cell tools allow for example the identification of common cell types across conditions and comparison
+		of the different conditions.
+		The example session NGS_single_cell_RNAseq_Seurat_integrated_analysis demonstrates how these tools can be used
+		and it follows the original <a href="https://satijalab.org/seurat/immune_alignment.html">Seurat tutorial</a>.
 	</p>
-	
+
 	<ul>
-		<li><div class=header-item>New analysis tools</div>		
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="minimap2.html">Alignment / Minimap2 for mapping reads to genomes</a> Aligns long (e.g. PacBio or Oxford Nanopore) reads to genome. You can also give your own reference genome is fasta format.</li>
-				<li><a href="single-cell-seurat-CCA.html">Single cell RNA-seq / Seurat - Combine two samples and perform CCA</a> Combines Seurat objects of two samples for integrated analysis and performs CCA.</li>
-				<li><a href="single-cell-seurat-integrated-analysis.html">Single cell RNA-seq / Seurat - Integrated analysis of two samples</a> Aligns the CCA subspaces and performs integrated analysis on the data.</li>
-				<li><a href="single-cell-seurat-diffexp-samples.html">Single cell RNA-seq / Seurat - Find conserved cluster markers and DE genes in two samples</a> Lists the cell type markers that are conserved across the two conditions, and the differentially expressed genes between the two conditions for a user defined cluster.</li>
-				<li><a href="single-cell-seurat-split-dot-plot.html">Single cell RNA-seq / Seurat - Visualize genes with cell type specific responses in two samples</a> Plots user defined markers/genes across the conditions.</li>
-			</ul> 
-		</li>	 
-		<li><div class=header-item>Improvements to analysis tools</div>		
-			<ul>
-				<li><a href="single-cell-seurat-filter-regress.html">Single cell RNA-seq / Seurat -Filtering, regression and detection of variable genes</a> You can now regress out cell cycle differences.</li>
-				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> Improved handling of tar package of 10X Genomics output files.</li>
-				<li>BWA aligners with own genome output now the genome index as a tar file and allow you to use it as input in subsequent alignment runs to save time.</li>
-			</ul> 
+				<li><a href="minimap2.html">Alignment / Minimap2 for mapping reads to genomes</a> Aligns long (e.g.
+					PacBio or Oxford Nanopore) reads to genome. You can also give your own reference genome is fasta
+					format.</li>
+				<li><a href="single-cell-seurat-CCA.html">Single cell RNA-seq / Seurat - Combine two samples and perform
+						CCA</a> Combines Seurat objects of two samples for integrated analysis and performs CCA.</li>
+				<li><a href="single-cell-seurat-integrated-analysis.html">Single cell RNA-seq / Seurat - Integrated
+						analysis of two samples</a> Aligns the CCA subspaces and performs integrated analysis on the
+					data.</li>
+				<li><a href="single-cell-seurat-diffexp-samples.html">Single cell RNA-seq / Seurat - Find conserved
+						cluster markers and DE genes in two samples</a> Lists the cell type markers that are conserved
+					across the two conditions, and the differentially expressed genes between the two conditions for a
+					user defined cluster.</li>
+				<li><a href="single-cell-seurat-split-dot-plot.html">Single cell RNA-seq / Seurat - Visualize genes with
+						cell type specific responses in two samples</a> Plots user defined markers/genes across the
+					conditions.</li>
+			</ul>
 		</li>
-		<li><div class=header-item>Updates to reference genomes and analysis packages</div>
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
+			<ul>
+				<li><a href="single-cell-seurat-filter-regress.html">Single cell RNA-seq / Seurat -Filtering, regression
+						and detection of variable genes</a> You can now regress out cell cycle differences.</li>
+				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> Improved
+					handling of tar package of 10X Genomics output files.</li>
+				<li>BWA aligners with own genome output now the genome index as a tar file and allow you to use it as
+					input in subsequent alignment runs to save time.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Updates to reference genomes and analysis packages</div>
 			<ul>
 				<li>Reference genomes have been updated to Ensembl v92.</li>
 				<li>miRBase has been updated to v22.</li>
 				<li>All Seurat-based tools for single cell RNA-seq have been updated to Seurat v2.3 and R v3.4.3.</li>
 				<li>TagCleaner has been updated to v0.16.</li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 25.10.2017: What is new in Chipster 3.12</h2>
- 	<p>
-		<b>Summary:</b> The tool categories "Single cell RNA-seq" and "16S rRNA sequencing" have undergone a major overhaul with new tools and improvements based on the feedback kindly provided by 
-		the Chipster user community in Finland. You can now analyze DropSeq and Chromium 
-		10X single cell RNA-seq data from raw reads to clustering and marker gene detection based on the <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">DropSeq</a> and 
-		<a href="http://satijalab.org/seurat/">Seurat</a> packages. Chipster v3.12 contains also the HISAT2 and STAR aligners for RNA-seq data, which will eventually replace TopHat2. 
+	<h2>Version update 25.10.2017: What is new in Chipster 3.12</h2>
+	<p>
+		<b>Summary:</b> The tool categories "Single cell RNA-seq" and "16S rRNA sequencing" have undergone a major
+		overhaul with new tools and improvements based on the feedback kindly provided by
+		the Chipster user community in Finland. You can now analyze DropSeq and Chromium
+		10X single cell RNA-seq data from raw reads to clustering and marker gene detection based on the <a
+			href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">DropSeq</a>
+		and
+		<a href="http://satijalab.org/seurat/">Seurat</a> packages. Chipster v3.12 contains also the HISAT2 and STAR
+		aligners for RNA-seq data, which will eventually replace TopHat2.
 	</p>
-	
+
 	<ul>
-		<li><div class=header-item>New analysis tools</div>		
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 for paired end reads</a> Aligns RNA-seq reads to human and mouse genomes, but you can also give your own reference genome is fasta format. The same tool is available also for single end reads.</li>
-				<li><a href="star-paired-end.html">Alignment / STAR for paired end reads and human genome</a> Aligns RNA-seq reads to human genome hg38 using the STAR 2-pass method. The same tool is available also for single end reads. Currently only the human genome is offered as a reference due to the size of STAR indeces.</li>				
-				<li><a href="single-cell-preprocessing.html">Single cell RNA-seq / Preprocessing DropSeq FASTQ files</a> Tags the reads with the cellular and molecular barcodes, removes reads where the cell or molecular barcode has low quality bases, 
-				trims adapters and polyA tails.</li>
-				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a> Adds the cell and molecular barcode and other tags that were lost during the alignment to the aligned BAM file.</li>
-				<li><a href="single-cell-tag-read-with-gene-exon.html">Single cell RNA-seq / Tag reads with gene names</a> Adds a BAM tag GE to reads when a read overlaps an exon of a gene.</li>
-				<li><a href="single-cell-bam-tag-histogram.html">Single cell RNA-seq / Estimate number of usable cells</a> Extracts the number of reads per cell barcode and draws a cumulative distribution plot.</li>
-				<li><a href="single-cell-digital-expression.html">Single cell RNA-seq / Create digital gene expression matrix</a> Identifies and corrects bead synthesis errors and extracts digital gene expression values from a BAM file.</li>				
-				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> Constructs a Seurat object from either .tar package of 10X Genomics output files or DGE table from DropSeq.</li>
-				<li><a href="single-cell-seurat-filter-regress.html">Single cell RNA-seq / Seurat -Filtering, regression and detection of variable genes</a> Filters cells, regresses out uninteresting sources of variation, and detects highly variable genes which are needed for PCA.</li>
-				<li><a href="single-cell-seurat-pca.html">Single cell RNA-seq / Seurat -PCA</a> Principal component analysis using highly variable genes.</li>
-				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat -Clustering</a> Clusters cells, does non-linear dimensional reduction tSNE for visualization, and finds marker genes for the clusters.</li>
-				<li><a href="single-cell-seurat-gene-plot.html">Single cell RNA-seq / Seurat -Visualize biomarkers</a> Visualizes selected marker genes with violin and feature plots.</li>
-				<li><a href="mothur-fastqinfo.html">16s rRNA sequencing / Split FASTQ file to FASTA and QUAL files</a> Given a FASTQ file, produces a FASTA file and QUAL file using the Mothur tool fastq.info.</li>
-				<li><a href="mothur-classify-counttable.html">16s rRNA sequencing / Produce count table and phenodata</a> Generates a count table and a phenodata file, which you can use to assign samples to different experimental groups.</li>				
-				<li><a href="check-fastq.html">Quality control / Check FASTQ file for errors</a> Performs validity checks for a FASTQ file to spot some common problems.</li>
-				<li><a href="merge-fastq.html">Utilities / Merge FASTQ</a> Merges FASTQ files, optionally in alphabetical order.</li>
-				<li><a href="list_tar_contents.html">Utilities / List contents of a tar file</a> List the contents of a tar package.</li>
+				<li><a href="hisat2-paired-end.html">Alignment / HISAT2 for paired end reads</a> Aligns RNA-seq reads to
+					human and mouse genomes, but you can also give your own reference genome is fasta format. The same
+					tool is available also for single end reads.</li>
+				<li><a href="star-paired-end.html">Alignment / STAR for paired end reads and human genome</a> Aligns
+					RNA-seq reads to human genome hg38 using the STAR 2-pass method. The same tool is available also for
+					single end reads. Currently only the human genome is offered as a reference due to the size of STAR
+					indeces.</li>
+				<li><a href="single-cell-preprocessing.html">Single cell RNA-seq / Preprocessing DropSeq FASTQ files</a>
+					Tags the reads with the cellular and molecular barcodes, removes reads where the cell or molecular
+					barcode has low quality bases,
+					trims adapters and polyA tails.</li>
+				<li><a href="picard-merge-bam-alignment.html">Single cell RNA-seq / Merge aligned and unaligned BAM</a>
+					Adds the cell and molecular barcode and other tags that were lost during the alignment to the
+					aligned BAM file.</li>
+				<li><a href="single-cell-tag-read-with-gene-exon.html">Single cell RNA-seq / Tag reads with gene
+						names</a> Adds a BAM tag GE to reads when a read overlaps an exon of a gene.</li>
+				<li><a href="single-cell-bam-tag-histogram.html">Single cell RNA-seq / Estimate number of usable
+						cells</a> Extracts the number of reads per cell barcode and draws a cumulative distribution
+					plot.</li>
+				<li><a href="single-cell-digital-expression.html">Single cell RNA-seq / Create digital gene expression
+						matrix</a> Identifies and corrects bead synthesis errors and extracts digital gene expression
+					values from a BAM file.</li>
+				<li><a href="single-cell-seurat-setup.html">Single cell RNA-seq / Seurat -Setup and QC</a> Constructs a
+					Seurat object from either .tar package of 10X Genomics output files or DGE table from DropSeq.</li>
+				<li><a href="single-cell-seurat-filter-regress.html">Single cell RNA-seq / Seurat -Filtering, regression
+						and detection of variable genes</a> Filters cells, regresses out uninteresting sources of
+					variation, and detects highly variable genes which are needed for PCA.</li>
+				<li><a href="single-cell-seurat-pca.html">Single cell RNA-seq / Seurat -PCA</a> Principal component
+					analysis using highly variable genes.</li>
+				<li><a href="single-cell-seurat-clustering.html">Single cell RNA-seq / Seurat -Clustering</a> Clusters
+					cells, does non-linear dimensional reduction tSNE for visualization, and finds marker genes for the
+					clusters.</li>
+				<li><a href="single-cell-seurat-gene-plot.html">Single cell RNA-seq / Seurat -Visualize biomarkers</a>
+					Visualizes selected marker genes with violin and feature plots.</li>
+				<li><a href="mothur-fastqinfo.html">16s rRNA sequencing / Split FASTQ file to FASTA and QUAL files</a>
+					Given a FASTQ file, produces a FASTA file and QUAL file using the Mothur tool fastq.info.</li>
+				<li><a href="mothur-classify-counttable.html">16s rRNA sequencing / Produce count table and
+						phenodata</a> Generates a count table and a phenodata file, which you can use to assign samples
+					to different experimental groups.</li>
+				<li><a href="check-fastq.html">Quality control / Check FASTQ file for errors</a> Performs validity
+					checks for a FASTQ file to spot some common problems.</li>
+				<li><a href="merge-fastq.html">Utilities / Merge FASTQ</a> Merges FASTQ files, optionally in
+					alphabetical order.</li>
+				<li><a href="list_tar_contents.html">Utilities / List contents of a tar file</a> List the contents of a
+					tar package.</li>
 				<li><a href="gzip.html">Utilities / Compress a file with gzip</a> Compresses a file with gzip.</li>
-				<li><a href="row_count.html">Utilities / Row count</a> Counts how many lines there are in a txt or tsv file.</li>
-			</ul> 
-		</li>	 
-		<li><div class=header-item>Improvements to analysis tools</div>		
-			<ul>
-				<li>Most of the tools in the 16s rRNA sequencing category have been modified in order to work with paired end MiSeq data according to the Mothur MiSeq SOP.</li>
-				<li>BWA aligners can now take several FASTQ files as input. For paired end reads you need to provide file name lists for read1 files and read2 files.</li>
-				<li><a href="extract_gzip_tar.html">Utilities / Extract .tar or .tar.gz file</a> You can now extract only selected files from a tar package.</li>
-				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> Output files are named based on sample names.</li>
-			</ul> 
+				<li><a href="row_count.html">Utilities / Row count</a> Counts how many lines there are in a txt or tsv
+					file.</li>
+			</ul>
 		</li>
-		<li><div class=header-item>Updates to reference genomes and analysis packages</div>
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
+			<ul>
+				<li>Most of the tools in the 16s rRNA sequencing category have been modified in order to work with
+					paired end MiSeq data according to the Mothur MiSeq SOP.</li>
+				<li>BWA aligners can now take several FASTQ files as input. For paired end reads you need to provide
+					file name lists for read1 files and read2 files.</li>
+				<li><a href="extract_gzip_tar.html">Utilities / Extract .tar or .tar.gz file</a> You can now extract
+					only selected files from a tar package.</li>
+				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> Output files are named based on sample
+					names.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Updates to reference genomes and analysis packages</div>
 			<ul>
 				<li>Reference data has been updated to Ensembl v90.</li>
 				<li>VirusDetect has been updated to v1.7 and its database has been updated v220.</li>
 			</ul>
 		</li>
-			<li><div class=header-item>Improvements to user interface</div>		
+		<li>
+			<div class=header-item>Improvements to user interface</div>
 			<ul>
-				<li>Spreadsheet visualization: In addition to the number of rows also the number of columns is indicated.</li>
+				<li>Spreadsheet visualization: In addition to the number of rows also the number of columns is
+					indicated.</li>
 				<li>3D scatter plot visualization: Group 2 is colored in red instead of green.</li>
-			</ul>		
+			</ul>
 	</ul>
 	<hr />
 
 
-<h2>Version update 19.12.2016: What is new in Chipster 3.11</h2>
+	<h2>Version update 19.12.2016: What is new in Chipster 3.11</h2>
 
- 	<p>
-		<b>Summary:</b> This version contains a new tool category Single cell RNA-seq, and it also contains some updates and improvements to existing tools.  
+	<p>
+		<b>Summary:</b> This version contains a new tool category Single cell RNA-seq, and it also contains some updates
+		and improvements to existing tools.
 	</p>
-	<ul><li><div class=header-item>New tool category single cell RNA-seq (BETA) and new example session NGS_single_cell_BETA</div>
+	<ul>
+		<li>
+			<div class=header-item>New tool category single cell RNA-seq (BETA) and new example session
+				NGS_single_cell_BETA</div>
 			<ul>
-				<li>10 new tools for analyzing single cell RNA-seq data and a corresponding example session have been added. These tools are based on the Picard and <a href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">Drop-seq</a> packages, and they allow you to perform the required preprocessing steps, quantitate expression, and produce diagnostic plots.
-				Please note that these tools are still under development, so we might make changes to them or even combine several tools at a later stage. Should you have any wishes or comments regarding tools for single cell RNA-seq data, please feel free to contact us.</li>
-			</ul> 
-		</li>		
-		<li><div class=header-item>Improvements and updates to analysis tools</div>
+				<li>10 new tools for analyzing single cell RNA-seq data and a corresponding example session have been
+					added. These tools are based on the Picard and <a
+						href="http://mccarrolllab.com/wp-content/uploads/2016/03/Drop-seqAlignmentCookbookv1.2Jan2016.pdf">Drop-seq</a>
+					packages, and they allow you to perform the required preprocessing steps, quantitate expression, and
+					produce diagnostic plots.
+					Please note that these tools are still under development, so we might make changes to them or even
+					combine several tools at a later stage. Should you have any wishes or comments regarding tools for
+					single cell RNA-seq data, please feel free to contact us.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements and updates to analysis tools</div>
 			<ul>
-				<li>The following tools have been updated to new version: NCBI BLAST (v2.2.29), Entrez Direct (v5.8), and SRAtoolkit (v2.4.2)</li>
-				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a>: Recommendation for TopHat and HTSeq parameters has been added to the report.</li>
+				<li>The following tools have been updated to new version: NCBI BLAST (v2.2.29), Entrez Direct (v5.8),
+					and SRAtoolkit (v2.4.2)</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and
+						inner distance estimation using RseQC</a>: Recommendation for TopHat and HTSeq parameters has
+					been added to the report.</li>
 				<li>RNA-seq / HTSeq tools: The file htseq-count-info.txt now includes a sum of counted alignments.</li>
 			</ul>
 		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 22.11.2016: What is new in Chipster 3.10</h2>
- 	<p>
-		<b>Summary:</b> All the reference genomes and many analysis packages have been updated. This version contains also new and improved functionality for RNA-seq data. 
-		In particular, stranded RNA-seq data is now better supported and there is also a <a href="library-type-summary.html">manual page for stranded RNA-seq data</a>.
+	<h2>Version update 22.11.2016: What is new in Chipster 3.10</h2>
+	<p>
+		<b>Summary:</b> All the reference genomes and many analysis packages have been updated. This version contains
+		also new and improved functionality for RNA-seq data.
+		In particular, stranded RNA-seq data is now better supported and there is also a <a
+			href="library-type-summary.html">manual page for stranded RNA-seq data</a>.
 	</p>
 	<ul>
-		<li><div class=header-item>Updates to reference genomes and analysis packages</div>
+		<li>
+			<div class=header-item>Updates to reference genomes and analysis packages</div>
 			<ul>
 				<li>Reference data has been updated to Ensembl v86.</li>
-				<li>R-based analysis tools have been migrated to R3.2.3 and some copy number aberration tools have been migrated to R3.3.2.</li>
-				<li>The following command line tools have been updated: Bowtie2 2.2.9, Cufflinks 2.2.1, MACS2 2.1.1.20160309, Mothur 1.36.1, Picard 2.6.0, RSeQC 2.6.4, Tophat 2.1.1</li>
+				<li>R-based analysis tools have been migrated to R3.2.3 and some copy number aberration tools have been
+					migrated to R3.3.2.</li>
+				<li>The following command line tools have been updated: Bowtie2 2.2.9, Cufflinks 2.2.1, MACS2
+					2.1.1.20160309, Mothur 1.36.1, Picard 2.6.0, RSeQC 2.6.4, Tophat 2.1.1</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New NGS analysis tools</div>		
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
-				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> pipeline detects viruses using siRNA data.</li>
-				<li><a href="virusdetect-with-index-building.html">Small RNA-seq / VirusDetect with own host genome</a>, as above but with a user-supplied host genome.</li>
-				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and inner distance estimation using RseQC</a> detects the type of strand-specific sequencing used and the inner distance between paired reads.</li>
-				<li><a href="cuffdiff2_with_replicates.html">RNA-seq / Differential expression using Cuffdiff with replicates</a> allows you to assign several BAM files to each experimental group using filename lists.</li>
-				<li><a href="make_namelist.html">Utilities / Make a list of file names</a> makes file name lists used by Cuffdiff and TopHat tools.</li>				
-				<li><a href="mothur-screenseqs.html">Metagenomics / Screen sequences with Mothur</a> filters reads for selected criteria.</li>
-				<li><a href="make_tar.html">Utilities / Make a tar package</a> makes a package of selected files allowing easier export from Chipster.</li>
-				<li><a href="concatenate.html">Utilities / Concatenate files</a> allows you to combine for example FASTQ files one after the other.</li>
-			</ul> 
-		</li>	 
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
-			<ul>
-				<li>RNA-seq / Merge transcript assemblies with Cuffmerge: Reference GTF and fasta files are now available. The problem with duplicate identifiers has been solved.</li>
-				<li>RNA-seq / Differential expression using Cuffdiff: Library type and labels parameter have been added. The direction of fold change calculation has been reversed.</li>
-				<li>RNA-seq / Assemble transcripts using Cufflinks: GTF sorting has been added.</li>
-				<li>RNA-seq / Count aligned reads per genes with HTSeq: Information about the different strandedness options has been added.</li>
-				<li>RNA-seq / Differential expression using DESeq2: Plots and rounding of result columns has been improved for cases when there are more than two experimental groups.</li>
-				<li>Alignment / TopHat tools: You can give several FASTQ files per sample as input. For paired end reads you need to make a list of filenames first.</li>
-				<li>Quality control / RNA-seq quality metrics with RseQC: BED files are now available in Chipster.</li>	
-				<li>Variants / Filter variants: Option to keep all INFO fields has been added. INDELs are added by the default in the output.</li>
-			</ul> 
+				<li><a href="virusdetect.html">Small RNA-seq / VirusDetect</a> pipeline detects viruses using siRNA
+					data.</li>
+				<li><a href="virusdetect-with-index-building.html">Small RNA-seq / VirusDetect with own host genome</a>,
+					as above but with a user-supplied host genome.</li>
+				<li><a href="rseqc_infer_rnaseq_experiment.html">Quality control / RNA-seq strandedness inference and
+						inner distance estimation using RseQC</a> detects the type of strand-specific sequencing used
+					and the inner distance between paired reads.</li>
+				<li><a href="cuffdiff2_with_replicates.html">RNA-seq / Differential expression using Cuffdiff with
+						replicates</a> allows you to assign several BAM files to each experimental group using filename
+					lists.</li>
+				<li><a href="make_namelist.html">Utilities / Make a list of file names</a> makes file name lists used by
+					Cuffdiff and TopHat tools.</li>
+				<li><a href="mothur-screenseqs.html">Metagenomics / Screen sequences with Mothur</a> filters reads for
+					selected criteria.</li>
+				<li><a href="make_tar.html">Utilities / Make a tar package</a> makes a package of selected files
+					allowing easier export from Chipster.</li>
+				<li><a href="concatenate.html">Utilities / Concatenate files</a> allows you to combine for example FASTQ
+					files one after the other.</li>
+			</ul>
 		</li>
-				<li><div class=header-item>Improvements to microarray analysis tools</div>		
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
+			<ul>
+				<li>RNA-seq / Merge transcript assemblies with Cuffmerge: Reference GTF and fasta files are now
+					available. The problem with duplicate identifiers has been solved.</li>
+				<li>RNA-seq / Differential expression using Cuffdiff: Library type and labels parameter have been added.
+					The direction of fold change calculation has been reversed.</li>
+				<li>RNA-seq / Assemble transcripts using Cufflinks: GTF sorting has been added.</li>
+				<li>RNA-seq / Count aligned reads per genes with HTSeq: Information about the different strandedness
+					options has been added.</li>
+				<li>RNA-seq / Differential expression using DESeq2: Plots and rounding of result columns has been
+					improved for cases when there are more than two experimental groups.</li>
+				<li>Alignment / TopHat tools: You can give several FASTQ files per sample as input. For paired end reads
+					you need to make a list of filenames first.</li>
+				<li>Quality control / RNA-seq quality metrics with RseQC: BED files are now available in Chipster.</li>
+				<li>Variants / Filter variants: Option to keep all INFO fields has been added. INDELs are added by the
+					default in the output.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
 				<li>Statistics / Linear modeling: The output has been simplified and the manual has been clarified.</li>
-				<li>Statistics / Two group test: The direction of fold change produced by the RankProd method has been reverted.</li>
-				<li>Normalization / Illumina - methylumi pipeline: The ability to analyze Illumina 450k arrays has been removed because the new Bioconductor version doesn't support it.</li>
-			</ul> 
-				<li><div class=header-item>For admins and developers</div>		
+				<li>Statistics / Two group test: The direction of fold change produced by the RankProd method has been
+					reverted.</li>
+				<li>Normalization / Illumina - methylumi pipeline: The ability to analyze Illumina 450k arrays has been
+					removed because the new Bioconductor version doesn't support it.</li>
+			</ul>
+		<li>
+			<div class=header-item>For admins and developers</div>
 			<ul>
 				<li>Chipster now uses Ubuntu v16.04.</li>
 				<li>Database performance for cloud sessions has been improved.</li>
 				<li>All R-based tools are now in folder R. Runtimes.xml has been simplified.</li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 23.5.2016: What is new in Chipster 3.9.0</h2>
+	<h2>Version update 23.5.2016: What is new in Chipster 3.9.0</h2>
 
- 	<p>
-		<b>Summary:</b>This version mainly contains internal changes to the way how tool scripts are distributed on the server side.  
+	<p>
+		<b>Summary:</b>This version mainly contains internal changes to the way how tool scripts are distributed on the
+		server side.
 	</p>
 	<ul>
-		<li><div class=header-item>Changes</div>
+		<li>
+			<div class=header-item>Changes</div>
 			<ul>
 				<li>Chipster client application now requires Java 1.8 or later</li>
 				<li>Tool scripts are moved from computing services to a centralised toolbox service</li>
 			</ul>
-		</li>		
-		<li><div class=header-item>Improvements to analysis tools</div>
+		</li>
+		<li>
+			<div class=header-item>Improvements to analysis tools</div>
 			<ul>
 				<li><a href="merge-tables.html">Merge tables</a> now accepts multiple inputs</li>
 			</ul>
@@ -366,15 +577,17 @@ div.header-item {
 
 
 
-<h2>Version update 4.5.2016: What is new in Chipster 3.8.1</h2>
+	<h2>Version update 4.5.2016: What is new in Chipster 3.8.1</h2>
 
- 	<p>
-		<b>Summary:</b> This version contains a bug fix for the tool Differential expression using DESeq2. 
+	<p>
+		<b>Summary:</b> This version contains a bug fix for the tool Differential expression using DESeq2.
 	</p>
 	<ul>
-		<li><div class=header-item>Bug fixes</div>
+		<li>
+			<div class=header-item>Bug fixes</div>
 			<ul>
-				<li><a href="deseq2.html">RNA-seq / miRNA-seq / Differential expression using DESeq2</a> fix comparison direction when there are more than 2 groups</li>
+				<li><a href="deseq2.html">RNA-seq / miRNA-seq / Differential expression using DESeq2</a> fix comparison
+					direction when there are more than 2 groups</li>
 			</ul>
 		</li>
 	</ul>
@@ -386,215 +599,299 @@ div.header-item {
 
 
 
-<h2>Version update 22.3.2016: What is new in Chipster 3.8</h2>
+	<h2>Version update 22.3.2016: What is new in Chipster 3.8</h2>
 
- 	<p>
-		<b>Summary:</b> This version contains improvements to several analysis tools. 
+	<p>
+		<b>Summary:</b> This version contains improvements to several analysis tools.
 	</p>
 	<ul>
-		<li><div class=header-item>General improvements</div>
+		<li>
+			<div class=header-item>General improvements</div>
 			<ul>
 				<li>Each result file contains information about the Chipster version that produced it.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New NGS analysis tools</div>		
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
-				<li><a href="deseq2-transform.html">RNA-seq / Transform read counts</a> transforms read counts for visualization purposes using the DESeq2 package.</li>
-			</ul> 
-		</li>	 
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
-			<ul>
-				<li>TopHat tools: If user sets the parameter "Number of mismatches allowed in final alignment" to a value higher than 2, Chipster automatically sets the internal parameter --read-edit-dist parameter to the same value.</li>
-				<li>Mothur tools: The summary tables show properly when visualized as spreadsheets.</li>
-				<li><a href="samtools-snp-indel-single.html">Variants / Call SNPs and short INDELs</a> now has a parameter "Ploidy".</li>
-				<li><a href="select_columns.html">Utilities / Table converter</a> now allows you to define ranges of columns.</li>
-			</ul> 
+				<li><a href="deseq2-transform.html">RNA-seq / Transform read counts</a> transforms read counts for
+					visualization purposes using the DESeq2 package.</li>
+			</ul>
 		</li>
-				<li><div class=header-item>Improvements to microarray analysis tools</div>		
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
 			<ul>
-				<li><a href="plot-corrgram.html">Visualization / Correlogram</a> now allows you to choose png output instead of pdf.</li>
-				<li><a href="combine-probes-to-genes.html">Utilities / Combine probes to genes</a>: the option to produce identifiers has been removed, as it produced confusing results.</li>
-			</ul> 
-		</li>		
+				<li>TopHat tools: If user sets the parameter "Number of mismatches allowed in final alignment" to a
+					value higher than 2, Chipster automatically sets the internal parameter --read-edit-dist parameter
+					to the same value.</li>
+				<li>Mothur tools: The summary tables show properly when visualized as spreadsheets.</li>
+				<li><a href="samtools-snp-indel-single.html">Variants / Call SNPs and short INDELs</a> now has a
+					parameter "Ploidy".</li>
+				<li><a href="select_columns.html">Utilities / Table converter</a> now allows you to define ranges of
+					columns.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to microarray analysis tools</div>
+			<ul>
+				<li><a href="plot-corrgram.html">Visualization / Correlogram</a> now allows you to choose png output
+					instead of pdf.</li>
+				<li><a href="combine-probes-to-genes.html">Utilities / Combine probes to genes</a>: the option to
+					produce identifiers has been removed, as it produced confusing results.</li>
+			</ul>
+		</li>
 	</ul>
 	<hr />
 
 
-<h2>Version update 14.1.2016: What is new in Chipster 3.7</h2>
+	<h2>Version update 14.1.2016: What is new in Chipster 3.7</h2>
 
- 	<p>
-		<b>Summary:</b> This version enables users to save analysis sessions on the server side. 
-		Please note that this cloud session functionality is still at a beta version stage, meaning that it might have unexpected problems. Therefore we strongly advice you to save an extra copy of your session also locally. 
+	<p>
+		<b>Summary:</b> This version enables users to save analysis sessions on the server side.
+		Please note that this cloud session functionality is still at a beta version stage, meaning that it might have
+		unexpected problems. Therefore we strongly advice you to save an extra copy of your session also locally.
 	</p>
 	<ul>
-		<li><div class=header-item>Technical improvements</div>
+		<li>
+			<div class=header-item>Technical improvements</div>
 			<ul>
-				<li>You can now store analysis sessions on the server. Use the File menu in the upper panel to save, open and manage cloud sessions.</li>
+				<li>You can now store analysis sessions on the server. Use the File menu in the upper panel to save,
+					open and manage cloud sessions.</li>
 			</ul>
-		</li>	 
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+		</li>
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
 			<ul>
-				<li>Reference genomes and GTFs have been updated to Ensembl version 83. Rice genome has been added and Yersinia tuberculosis genome has been changed to Yersinia pseudotuberculosis IP32953 GCA_000834295.</li>
-				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a> now allows visualizing two factors simultaneously in the PCA plot using shapes in addition to colors.</li>
-				<li><a href="trimmomatic.html">Preprocessing / Trim reads with Trimmomatic</a> now accepts an input file containing user's own adapter sequences.</li>
-				<li><a href="vcftools.html">Variants / Filter variants</a> now preserves the AC and DP4 fields in the INFO column of a VCF file when filtering.</li>
-				</ul>
-		</li>		
+				<li>Reference genomes and GTFs have been updated to Ensembl version 83. Rice genome has been added and
+					Yersinia tuberculosis genome has been changed to Yersinia pseudotuberculosis IP32953 GCA_000834295.
+				</li>
+				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a> now
+					allows visualizing two factors simultaneously in the PCA plot using shapes in addition to colors.
+				</li>
+				<li><a href="trimmomatic.html">Preprocessing / Trim reads with Trimmomatic</a> now accepts an input file
+					containing user's own adapter sequences.</li>
+				<li><a href="vcftools.html">Variants / Filter variants</a> now preserves the AC and DP4 fields in the
+					INFO column of a VCF file when filtering.</li>
+			</ul>
+		</li>
 	</ul>
 	<hr />
 
 
-<h2>Version update 2.10.2015: What is new in Chipster 3.6</h2>
+	<h2>Version update 2.10.2015: What is new in Chipster 3.6</h2>
 
- 	<p>
-		<b>Summary:</b> Many NGS tools have been updated to new versions, and reference genomes have been updated to Ensembl version 81. New NGS tools have been added. 
-		The job manager component of Chipster server has been re-written in Java in order to get rid of random messaging errors, which caused problems for example when starting the Chipster client software.
+	<p>
+		<b>Summary:</b> Many NGS tools have been updated to new versions, and reference genomes have been updated to
+		Ensembl version 81. New NGS tools have been added.
+		The job manager component of Chipster server has been re-written in Java in order to get rid of random messaging
+		errors, which caused problems for example when starting the Chipster client software.
 	</p>
-	<ul>	 
-		<li><div class=header-item>New analysis tools</div>
+	<ul>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
-				<li><a href="picard-collectmultiplemetrics.html">Quality control / Collect multiple metrics from BAM</a> calculates several quality metrics for BAM using the Picard toolkit.</li>
-				<li><a href="picard-markduplicates.html">Utilities / Mark duplicates in BAM</a> Flags duplicates using the Picard toolkit.</li>
-				<li><a href="samtools-alignment-statistics.html">Utilities / Count alignment statistics for BAM</a> counts statistics for alignments using the SAMtools flagstat command.</li>
-				<li><a href="bcftools-intersect-vcf.html">Variants / Intersect VCF files</a> produces 4 VCF files containing variant sites common and unique to each input file.</li>
-				<li><a href="vep.html">Variants / Ensembl variant effect predictor</a> determines the effect of variants on genes, transcripts, and protein sequence, as well as regulatory regions. It uses the Ensembl VEP service running at the EBI.</li>
-				<li><a href="vcftools-reports.html">Variants / Calculate statistics on VCF file</a> calculates allele frequency and count, LD measure, p-value for HWE, and SNP density.</li>
+				<li><a href="picard-collectmultiplemetrics.html">Quality control / Collect multiple metrics from BAM</a>
+					calculates several quality metrics for BAM using the Picard toolkit.</li>
+				<li><a href="picard-markduplicates.html">Utilities / Mark duplicates in BAM</a> Flags duplicates using
+					the Picard toolkit.</li>
+				<li><a href="samtools-alignment-statistics.html">Utilities / Count alignment statistics for BAM</a>
+					counts statistics for alignments using the SAMtools flagstat command.</li>
+				<li><a href="bcftools-intersect-vcf.html">Variants / Intersect VCF files</a> produces 4 VCF files
+					containing variant sites common and unique to each input file.</li>
+				<li><a href="vep.html">Variants / Ensembl variant effect predictor</a> determines the effect of variants
+					on genes, transcripts, and protein sequence, as well as regulatory regions. It uses the Ensembl VEP
+					service running at the EBI.</li>
+				<li><a href="vcftools-reports.html">Variants / Calculate statistics on VCF file</a> calculates allele
+					frequency and count, LD measure, p-value for HWE, and SNP density.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
 			<ul>
-				<li>Several tools have been updated: BEDtools 2.25.0, BWA 0.7.12, FastQC 0.11.3, Picard 1.138, Samtools/bcftools 1.2, Trimmomatic 0.33 and VCFtools 0.1.13. edgeR based tools have been updated to R3.2.0.</li>
-				<li>Reference genomes and GTFs have been updated to Ensembl version 81. Potato genome has been added.</li>
-				<li><a href="bwa-mem.html">Alignment / BWA MEM</a> has new parameters and the previous tools for SE and PE reads have been combined into one.</li>
-				<li><a href="ensemblfetch.html">Utilities / Retrieve data for a given organism in Ensembl</a> can bring now GTFs in addition to sequences.</li>
-				<li><a href="general_file_processing.html">Utilities / Modify text</a>. Output options for BED and GTF files have been added to enable chromosome naming conversions.</li>
-				<li><a href="samtools-snp-indel-single.html">Variants / Call SNPs and short INDELs</a> uses now the multiallele caller and allows you to control the output fields in VCF. The original sample names are shown in the VCF file.</li>
-				<li><a href="samtools-snp-indel-single.html">Variants / Annotate variants</a> supports now hg38 and provides PolyPhen predictions for variants with rsIDs.
-				<li><a href="ngs-dea-edger-RNA.html">RNA-seq / Differential expression using edgeR</a> uses now the estimateDisp function to estimate dispersions.</li>
-<!--  			<li><a href="ngs-dea-edger-RNA.html">RNA-seq / Differential expression using edgeR</a> and <a href="edgeR-multivariate.html">Differential expression using edgeR for multivariate experiments</a> uses now the estimateDisp function to estimate dispersions.</li>-->
+				<li>Several tools have been updated: BEDtools 2.25.0, BWA 0.7.12, FastQC 0.11.3, Picard 1.138,
+					Samtools/bcftools 1.2, Trimmomatic 0.33 and VCFtools 0.1.13. edgeR based tools have been updated to
+					R3.2.0.</li>
+				<li>Reference genomes and GTFs have been updated to Ensembl version 81. Potato genome has been added.
+				</li>
+				<li><a href="bwa-mem.html">Alignment / BWA MEM</a> has new parameters and the previous tools for SE and
+					PE reads have been combined into one.</li>
+				<li><a href="ensemblfetch.html">Utilities / Retrieve data for a given organism in Ensembl</a> can bring
+					now GTFs in addition to sequences.</li>
+				<li><a href="general_file_processing.html">Utilities / Modify text</a>. Output options for BED and GTF
+					files have been added to enable chromosome naming conversions.</li>
+				<li><a href="samtools-snp-indel-single.html">Variants / Call SNPs and short INDELs</a> uses now the
+					multiallele caller and allows you to control the output fields in VCF. The original sample names are
+					shown in the VCF file.</li>
+				<li><a href="samtools-snp-indel-single.html">Variants / Annotate variants</a> supports now hg38 and
+					provides PolyPhen predictions for variants with rsIDs.
+				<li><a href="ngs-dea-edger-RNA.html">RNA-seq / Differential expression using edgeR</a> uses now the
+					estimateDisp function to estimate dispersions.</li>
+				<!--  			<li><a href="ngs-dea-edger-RNA.html">RNA-seq / Differential expression using edgeR</a> and <a href="edgeR-multivariate.html">Differential expression using edgeR for multivariate experiments</a> uses now the estimateDisp function to estimate dispersions.</li>-->
 			</ul>
 		</li>
-		<li><div class=header-item>New sequence analysis tools in Misc</div>
+		<li>
+			<div class=header-item>New sequence analysis tools in Misc</div>
 			<ul>
-				<li><a href="cdhit.html">Sequence utilities / Remove redundant sequences</a> clusters the given sequences and creates a non-redundant sequence set using the CDhit tool.</li>
-				<li><a href="mview.html">Sequence alignment / Display sequence alignment or BLAST report as HTML page</a> produces colored HTML alignments using the Mview tool.</li>
+				<li><a href="cdhit.html">Sequence utilities / Remove redundant sequences</a> clusters the given
+					sequences and creates a non-redundant sequence set using the CDhit tool.</li>
+				<li><a href="mview.html">Sequence alignment / Display sequence alignment or BLAST report as HTML
+						page</a> produces colored HTML alignments using the Mview tool.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to the user interface</div>
+		<li>
+			<div class=header-item>Improvements to the user interface</div>
 			<ul>
 				<li>Interactive 3D scatterplots and PCA plots can be saved as png images.</li>
 				<li>Interactive Volcano plot is available for edgeR and DESeq2 results.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Technical improvements</div>
+		<li>
+			<div class=header-item>Technical improvements</div>
 			<ul>
-				<li>The job manager component of Chipster server has been re-written in Java in order to get rid of random messaging errors, which caused problems for example when starting the Chipster client software.</li>
+				<li>The job manager component of Chipster server has been re-written in Java in order to get rid of
+					random messaging errors, which caused problems for example when starting the Chipster client
+					software.</li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 10.7.2015: What is new in Chipster 3.5</h2>
-
- 	<p>
-		<b>Summary:</b> Result files from several NGS analysis tools are automatically named according to the original sample name, saving you the hassle of renaming files. Data can be imported directly to Chipster server from a url. 
-	</p>
-	<ul>
-		<li><div class=header-item>Improvements to the user interface</div>
-			<ul>
-				<li>Genome browser allows viewing strand-specific coverage for stranded RNA-seq data based on the XS tag in BAM files.</li>
-			</ul>
-		</li>	 
-		<li><div class=header-item>New NGS analysis tools</div>
-			<ul>
-				<li><a href="deseq2-normalized-counts-for-gene.html">Utilities / Plot normalized counts for a gene</a>. Plots normalized counts for a gene in a group-wise manner using the DESeq2 Bioconductor package.</li>
-				<li><a href="DownloadFile.html">Utilities / Download file from a url to server</a>. Allows you to move data and annotation information from a url directly to Chipster server for analysis.</li>
-				<li><a href="gunzip.html">Utilities / Extract .gz file</a>. Extracts gzipped files. Note that fastq and fasta files don't need to be unzipped for analysis.</li>
-				<li><a href="extract_gzip_tar.html">Utilities / Extract .tar.gz file</a>. Extracts tarred and gzipped files. Note that fastq and fasta files don't need to be unzipped for analysis.</li>
-			</ul>
-		</li>
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
-			<ul>
-				<li>Result files produced by PRINSEQ, Tophat, Bowtie2, BWA, Samtools and HTSeq have the original sample name.</li>
-				<li>DESeq2-based tools have been migrated to R3.2.0.</li>
-				<li><a href="select_columns.html">Variants / Annotate variants</a> has been migrated to R3.2.0.</li>
-				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a> allows adding sample names to the PCA plot.</li>
-			</ul>
-		</li>
-		<li><div class=header-item>Improvements to microarray analysis tools</div>
-			<ul>
-				<li><a href="norm-illumina-backgroundcorr.html">Normalization / Illumina with normexp background correction</a> accepts now also TargetIDs.</li>
-			</ul>
-		</li>		
-	</ul>
-	<hr />
-
-<h2>Version update 20.4.2015: What is new in Chipster 3.4</h2>
-
-  
-	<ul>
-		<li><div class=header-item>New analysis tools</div>
-			<ul>
-				<li><a href="general_file_processing.html">Utilities / Modify text</a>. This tool can be used to modify txt and tsv files. For example, you can replace text or extract rows containing a given text.</li>
-				<li><a href="norm-illumina-backgroundcorr.html">Normalization / Illumina with normexp background correction</a>. This tool allows you to use the control probe information and 
-				perform background correction using the limma Bioconductor package.</li>
-			</ul>
-		</li>
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
-			<ul>
-				<li>All genomes and GTF files have been updated to Ensembl 79. Medicago truncatula and Populus trichocarpa genomes have been added.</li>
-				<li>RNA-seq tools edgeR, DESeq, DESeq2 and RseQC now produce a pdf file, which combines all the plots that were previously in individual files. This improves the clarity of the workflow view.</li>
-				<li><a href="edgeR-multivariate.html">RNA-seq / Differential expression using edgeR for multivariate experiments</a> has a new interaction option called nested, which allows you to do comparisons both between and within subjects.</li>
-				<li><a href="htseq-count-own-gtf.html">RNA-seq / Count aligned reads per genes with HTSeq using own GTF</a> now accepts also GTF files, where the tag for gene identifier is ID or GeneID.</li>
-				<li><a href="select_columns.html">Utilities / Table converter</a> accepts now also tables with rownames (meaning that the first column does not have a title).</li>
-			</ul>
-		</li>
-		<li><div class=header-item>Improvements to microarray analysis tools</div>
-			<ul>
-				<li><a href="norm-illumina.html">Normalization / Illumina</a> now allows you to add the original Illumina annotations to the data, in addition to the ones provided by Bioconductor.</li>
-			</ul>
-		</li>		
-	</ul>
-	<hr />
-
-<h2>Version update 12.3.2015: What is new in Chipster 3.3</h2>
+	<h2>Version update 10.7.2015: What is new in Chipster 3.5</h2>
 
 	<p>
-		<b>Summary:</b> This version brings a major improvement as you can close Chipster while an analysis job is running, and return to the same session later when the results are ready.
+		<b>Summary:</b> Result files from several NGS analysis tools are automatically named according to the original
+		sample name, saving you the hassle of renaming files. Data can be imported directly to Chipster server from a
+		url.
 	</p>
-  
 	<ul>
-		<li><div class=header-item>Improvements to the user interface</div>
+		<li>
+			<div class=header-item>Improvements to the user interface</div>
+			<ul>
+				<li>Genome browser allows viewing strand-specific coverage for stranded RNA-seq data based on the XS tag
+					in BAM files.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
+			<ul>
+				<li><a href="deseq2-normalized-counts-for-gene.html">Utilities / Plot normalized counts for a gene</a>.
+					Plots normalized counts for a gene in a group-wise manner using the DESeq2 Bioconductor package.
+				</li>
+				<li><a href="DownloadFile.html">Utilities / Download file from a url to server</a>. Allows you to move
+					data and annotation information from a url directly to Chipster server for analysis.</li>
+				<li><a href="gunzip.html">Utilities / Extract .gz file</a>. Extracts gzipped files. Note that fastq and
+					fasta files don't need to be unzipped for analysis.</li>
+				<li><a href="extract_gzip_tar.html">Utilities / Extract .tar.gz file</a>. Extracts tarred and gzipped
+					files. Note that fastq and fasta files don't need to be unzipped for analysis.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
+			<ul>
+				<li>Result files produced by PRINSEQ, Tophat, Bowtie2, BWA, Samtools and HTSeq have the original sample
+					name.</li>
+				<li>DESeq2-based tools have been migrated to R3.2.0.</li>
+				<li><a href="select_columns.html">Variants / Annotate variants</a> has been migrated to R3.2.0.</li>
+				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a>
+					allows adding sample names to the PCA plot.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to microarray analysis tools</div>
+			<ul>
+				<li><a href="norm-illumina-backgroundcorr.html">Normalization / Illumina with normexp background
+						correction</a> accepts now also TargetIDs.</li>
+			</ul>
+		</li>
+	</ul>
+	<hr />
+
+	<h2>Version update 20.4.2015: What is new in Chipster 3.4</h2>
+
+
+	<ul>
+		<li>
+			<div class=header-item>New analysis tools</div>
+			<ul>
+				<li><a href="general_file_processing.html">Utilities / Modify text</a>. This tool can be used to modify
+					txt and tsv files. For example, you can replace text or extract rows containing a given text.</li>
+				<li><a href="norm-illumina-backgroundcorr.html">Normalization / Illumina with normexp background
+						correction</a>. This tool allows you to use the control probe information and
+					perform background correction using the limma Bioconductor package.</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
+			<ul>
+				<li>All genomes and GTF files have been updated to Ensembl 79. Medicago truncatula and Populus
+					trichocarpa genomes have been added.</li>
+				<li>RNA-seq tools edgeR, DESeq, DESeq2 and RseQC now produce a pdf file, which combines all the plots
+					that were previously in individual files. This improves the clarity of the workflow view.</li>
+				<li><a href="edgeR-multivariate.html">RNA-seq / Differential expression using edgeR for multivariate
+						experiments</a> has a new interaction option called nested, which allows you to do comparisons
+					both between and within subjects.</li>
+				<li><a href="htseq-count-own-gtf.html">RNA-seq / Count aligned reads per genes with HTSeq using own
+						GTF</a> now accepts also GTF files, where the tag for gene identifier is ID or GeneID.</li>
+				<li><a href="select_columns.html">Utilities / Table converter</a> accepts now also tables with rownames
+					(meaning that the first column does not have a title).</li>
+			</ul>
+		</li>
+		<li>
+			<div class=header-item>Improvements to microarray analysis tools</div>
+			<ul>
+				<li><a href="norm-illumina.html">Normalization / Illumina</a> now allows you to add the original
+					Illumina annotations to the data, in addition to the ones provided by Bioconductor.</li>
+			</ul>
+		</li>
+	</ul>
+	<hr />
+
+	<h2>Version update 12.3.2015: What is new in Chipster 3.3</h2>
+
+	<p>
+		<b>Summary:</b> This version brings a major improvement as you can close Chipster while an analysis job is
+		running, and return to the same session later when the results are ready.
+	</p>
+
+	<ul>
+		<li>
+			<div class=header-item>Improvements to the user interface</div>
 			<ul>
 				<li>You don't need to keep the Chipster client open when running long jobs.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="annotate-ensembl-ids.html">Utilities / Annotate Ensembl identifiers</a>.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
 			<ul>
-				<li><a href="ngs-dea-edger-RNA.html">Differential expression using edgeR</a> does not give an error when there are no differentially expressed genes.</li>
+				<li><a href="ngs-dea-edger-RNA.html">Differential expression using edgeR</a> does not give an error when
+					there are no differentially expressed genes.</li>
 				<li>Input fasta and GTF files can be zipped.</li>
 				<li>edgeR tools: Result columns are better described in the manual.</li>
 				<li><a href="import-ngs.html">Manual page for NGS data import</a> has been added.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to microarray analysis tools</div>
+		<li>
+			<div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
-				<li>Linear modeling tools: Phenodata column names which share a word are allowed thanks to Oliver Heil, DKFZ.</li>
+				<li>Linear modeling tools: Phenodata column names which share a word are allowed thanks to Oliver Heil,
+					DKFZ.</li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 9.2.2015: What is new in Chipster 3.2</h2>
-  
+	<h2>Version update 9.2.2015: What is new in Chipster 3.2</h2>
+
 	<ul>
 
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="srafetch.html">Utilities / Retrieve FASTQ files from SRA database</a>.</li>
 				<li><a href="srabamfetch.html">Utilities / Retrieve BAM files from SRA database</a>.</li>
@@ -602,124 +899,178 @@ div.header-item {
 				<li><a href="deseq2-pca-heatmap.html">Quality control / PCA and heatmap of samples with DESeq2</a>.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to NGS analysis tools</div>		
+		<li>
+			<div class=header-item>Improvements to NGS analysis tools</div>
 			<ul>
 				<li>All genomes and GTF files have been updated to Ensembl 78. Cat genome has been added.</li>
-				<li>miRBase21 mature miRNA sequences for human, rat and mouse have been added to Bowtie and BWA aligners.</li>
-				<li><a href="deseq2.html">DESeq2</a> has been updated to R3.1.2. Textual summary has been added, the MA plot has been updated, and the dispersion fitting parameter has been removed.</li>
-				<li>Tophat2 tools: A parameter for library type has been added. The parameter for concordant pairs has been removed due to a bug in Tophat itself. Insertion and deletion BED files have been removed from the output.</li>
-				<li>The <a href="MEDIPS.html">MeDIP-seq tool</a> now accepts also mouse and rat data in addition to human.</li>
-				<li><a href="fastqc.html">Read quality with FastQC</a>: The output figures have been combined to one pdf file.</li>
-				<li><a href="trimmomatic.html">Trim reads with Trimmomatic</a>: The problem with missing output file for paired end runs has been fixed.</li>
+				<li>miRBase21 mature miRNA sequences for human, rat and mouse have been added to Bowtie and BWA
+					aligners.</li>
+				<li><a href="deseq2.html">DESeq2</a> has been updated to R3.1.2. Textual summary has been added, the MA
+					plot has been updated, and the dispersion fitting parameter has been removed.</li>
+				<li>Tophat2 tools: A parameter for library type has been added. The parameter for concordant pairs has
+					been removed due to a bug in Tophat itself. Insertion and deletion BED files have been removed from
+					the output.</li>
+				<li>The <a href="MEDIPS.html">MeDIP-seq tool</a> now accepts also mouse and rat data in addition to
+					human.</li>
+				<li><a href="fastqc.html">Read quality with FastQC</a>: The output figures have been combined to one pdf
+					file.</li>
+				<li><a href="trimmomatic.html">Trim reads with Trimmomatic</a>: The problem with missing output file for
+					paired end runs has been fixed.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to microarray analysis tools</div>
+		<li>
+			<div class=header-item>Improvements to microarray analysis tools</div>
 			<ul>
-				<li><a href="cluster-hierarchical.html">Hierarchical clustering</a>: The dummy image when no bootstrapping is performed has been removed.</li>
-				<li><a href="plot-volcano-data-exists.html">Volcano plot from existing results</a>: The bug with missing negative fold changes has been fixed thanks to Oliver Heil, DKFZ.</li>
+				<li><a href="cluster-hierarchical.html">Hierarchical clustering</a>: The dummy image when no
+					bootstrapping is performed has been removed.</li>
+				<li><a href="plot-volcano-data-exists.html">Volcano plot from existing results</a>: The bug with missing
+					negative fold changes has been fixed thanks to Oliver Heil, DKFZ.</li>
 				<li><a href="srafetch.html">Affymetrix normalization</a>: Support for Focus arrays has been added.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New miscellaneous tools</div>
+		<li>
+			<div class=header-item>New miscellaneous tools</div>
 			<ul>
 				<li><a href="edirect_fetch.html">Data retrieval / Retrieve sequences from NCBI</a>.</li>
 				<li><a href="sort_and_select_columns.html">Utilities / Sort table by column value</a>.</li>
 			</ul>
-		<li><div class=header-item>Improvements to the user interface</div>
+		<li>
+			<div class=header-item>Improvements to the user interface</div>
 			<ul>
 				<li>The problem in using a Mac mouse with the Genome browser has been fixed.</li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 6.11.2014: What is new in Chipster 3.1</h2>
+	<h2>Version update 6.11.2014: What is new in Chipster 3.1</h2>
 
 	<p>
-		<b>Summary:</b> This version contains important improvements to the user interface, file transfers, and reference data. 
+		<b>Summary:</b> This version contains important improvements to the user interface, file transfers, and
+		reference data.
 	</p>
-  
+
 	<ul>
-		<li><div class=header-item>Improvements to the user interface</div>
+		<li>
+			<div class=header-item>Improvements to the user interface</div>
 			<ul>
-				<li>Workflow layout is saved so that when you open a session, the files appear in the same positions where you placed them before.</li>
+				<li>Workflow layout is saved so that when you open a session, the files appear in the same positions
+					where you placed them before.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="a5-miseq.html">Utilities / A5 assembly pipeline for microbial genomes</a></li>
-				<li><a href="macs2.html">ChIP-seq and DNase-seq / Find peaks using MACS2</a>: MACS2 has been made to separate tool and updated to use MACS v2.1.0. Parameters for extension size and broad peak calling have been added.</li>
+				<li><a href="macs2.html">ChIP-seq and DNase-seq / Find peaks using MACS2</a>: MACS2 has been made to
+					separate tool and updated to use MACS v2.1.0. Parameters for extension size and broad peak calling
+					have been added.</li>
 				<li><a href="cna-count-aberrations.html">CNA-seq / Count the number of aberrations per sample</a>
 				<li><a href="cna-correlate.html">CNA-seq / Plot correlations of called copy number data</a>
 				<li><a href="cna-fuse-regions-by-column.html">CNA-seq / Fuse regions by column value</a>
 				<li><a href="cna-fuse-regions-manually.html">CNA-seq / Fuse regions manually</a>
-			
+
 			</ul>
 		</li>
-		<li><div class=header-item>Changes to NGS analysis tools</div>		
+		<li>
+			<div class=header-item>Changes to NGS analysis tools</div>
 			<ul>
-				<li>All genomes and GTF files have been updated to Ensembl 77. This includes the new human genome assembly, GRCh38.</li>
+				<li>All genomes and GTF files have been updated to Ensembl 77. This includes the new human genome
+					assembly, GRCh38.</li>
 				<li>BWA-based alignment tools have been updated to version 0.7.10.</li>
-				<li><a href="ngs-find-peaks-fseq.html">ChIP-seq and DNase-seq / Find peaks using F-seq</a>: Mappability parameter has been added.</li>
-				<li>The <a href="MEDIPS.html">MeDIP-seq tool</a>has been made available again after updating the MEDIPS package to R3.</li>
+				<li><a href="ngs-find-peaks-fseq.html">ChIP-seq and DNase-seq / Find peaks using F-seq</a>: Mappability
+					parameter has been added.</li>
+				<li>The <a href="MEDIPS.html">MeDIP-seq tool</a>has been made available again after updating the MEDIPS
+					package to R3.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Technical improvements</div>
+		<li>
+			<div class=header-item>Technical improvements</div>
 			<ul>
-				<li>SSL support is extended to payload of file transfers, so that not only file metadata (name, ownership, etc.) is transmitted encrypted,
-				but also the content of the file is encrypted. When enabled, payload encryption will have some impact on performance. 
-				For more information please see the <a href="https://github.com/chipster/chipster/wiki/TechnicalManual#secure-communications">technical manual</a> </li>
+				<li>SSL support is extended to payload of file transfers, so that not only file metadata (name,
+					ownership, etc.) is transmitted encrypted,
+					but also the content of the file is encrypted. When enabled, payload encryption will have some
+					impact on performance.
+					For more information please see the <a
+						href="https://github.com/chipster/chipster/wiki/TechnicalManual#secure-communications">technical
+						manual</a> </li>
 			</ul>
-		</li>		
+		</li>
 	</ul>
 	<hr />
 
-<h2>Version update 13.8.2014: What is new in Chipster 3.0</h2>
+	<h2>Version update 13.8.2014: What is new in Chipster 3.0</h2>
 
 	<p>
-		<b>Summary:</b> This is a major update which contains improvements to the user interface functionality and looks. 
-		All the NGS analysis tools except variant annotation have been updated to use R3.0.2. 
-		Several new NGS analysis tools have been added, and many existing tools have been updated and improved. 
-		The virtual machine has been updated to use Ubuntu 12.04. 
+		<b>Summary:</b> This is a major update which contains improvements to the user interface functionality and
+		looks.
+		All the NGS analysis tools except variant annotation have been updated to use R3.0.2.
+		Several new NGS analysis tools have been added, and many existing tools have been updated and improved.
+		The virtual machine has been updated to use Ubuntu 12.04.
 	</p>
 
 	<ul>
-		<li><div class=header-item>Improvements to the user interface</div>
+		<li>
+			<div class=header-item>Improvements to the user interface</div>
 			<ul>
-				<li>Information on the selected data set is now shown in the visualization panel, which also includes shortcuts to the visualizations and the possibility to rename the file and add notes to it.</li>
-				<li>"Batch mode" of running analysis tools: You can launch several identical analysis jobs at the same time, if the analysis tool requires only one input file: Select the files, set the parameters, and click on the "Run for each" button.</li>
-				<li>"Batch mode" of running workflows: You can launch a workflow on several input files at the same time: Select the files and "Workflow / Run for each".</li>
-				<li><a href="genomeBrowser.html#owngenome">Possibility to visualize user-supplied genomes in the genome browser has been added.</a></li>
+				<li>Information on the selected data set is now shown in the visualization panel, which also includes
+					shortcuts to the visualizations and the possibility to rename the file and add notes to it.</li>
+				<li>"Batch mode" of running analysis tools: You can launch several identical analysis jobs at the same
+					time, if the analysis tool requires only one input file: Select the files, set the parameters, and
+					click on the "Run for each" button.</li>
+				<li>"Batch mode" of running workflows: You can launch a workflow on several input files at the same
+					time: Select the files and "Workflow / Run for each".</li>
+				<li><a href="genomeBrowser.html#owngenome">Possibility to visualize user-supplied genomes in the genome
+						browser has been added.</a></li>
 			</ul>
 		</li>
 
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
-				<li><a href="deseq2.html">RNA-seq / Differential expression using DESeq2</a>: Differential expression analysis using the DESeq2 Bioconductor package.</li>
-				<li><a href="express.html">RNA-seq / Count reads per transcripts using eXpress</a>: Quantitates expression at transcript level.</li>
-				<li><a href="dexseq-exoncount-own-gtf.html">RNA-seq / Count aligned reads per exons for DEXSeq using own GTF</a>: Counts reads per non-overlapping exonic regions using a user-supplied GTF file.</li>
-				<li><a href="trimmomatic.html">Preprocessing / Trim reads with Trimmomatic</a>: Performs a variety of read trimming tasks.</li>
-				<li><a href="tophat2-with-index-building.html">Alignment / TopHat2 for paired end reads and own genome</a>: Aligns paired end reads to user-supplied reference genome.</li>
-				<li><a href="tophat2-single-end-with-index-building.html">Alignment / TopHat2 for single end reads and own genome</a>: Aligns single end reads to user-supplied reference genome.</li>
-				<li><a href="unique-alignments-from-bam.html"> Utilities / Retrieve unique alignments from BAM</a>: Retrieves unique alignments from BAM files.</li>
+				<li><a href="deseq2.html">RNA-seq / Differential expression using DESeq2</a>: Differential expression
+					analysis using the DESeq2 Bioconductor package.</li>
+				<li><a href="express.html">RNA-seq / Count reads per transcripts using eXpress</a>: Quantitates
+					expression at transcript level.</li>
+				<li><a href="dexseq-exoncount-own-gtf.html">RNA-seq / Count aligned reads per exons for DEXSeq using own
+						GTF</a>: Counts reads per non-overlapping exonic regions using a user-supplied GTF file.</li>
+				<li><a href="trimmomatic.html">Preprocessing / Trim reads with Trimmomatic</a>: Performs a variety of
+					read trimming tasks.</li>
+				<li><a href="tophat2-with-index-building.html">Alignment / TopHat2 for paired end reads and own
+						genome</a>: Aligns paired end reads to user-supplied reference genome.</li>
+				<li><a href="tophat2-single-end-with-index-building.html">Alignment / TopHat2 for single end reads and
+						own genome</a>: Aligns single end reads to user-supplied reference genome.</li>
+				<li><a href="unique-alignments-from-bam.html"> Utilities / Retrieve unique alignments from BAM</a>:
+					Retrieves unique alignments from BAM files.</li>
 			</ul>
 		</li>
 
-		<li><div class=header-item>Changes to NGS analysis tools</div>		
+		<li>
+			<div class=header-item>Changes to NGS analysis tools</div>
 			<ul>
-				<li><a href="dea-deseq.html">RNA-seq / Differential expression using DESeq</a>: GLM support have been added, so you can now analyze experiments containing a second experimental factor like pairing.</li>
-				<li><a href="dexseq-exoncount.html">RNA-seq / Count aligned reads per exons for DEXSeq</a>: Reference organisms have been updated and new ones added. Parameters for strandedness and counting mode are included, as well as support for different chromosome naming schemes.</li>
-				<li><a href="tophat2.html">Alignment / TopHat2 for paired end reads</a>: New parameters to exclude discordant and mixed alignments have been added.</li>
-				<li><a href="rseqc.html">Quality control / RNA-seq quality metrics with RseQC</a>: Possibility to plot inner distance distribution has been added.</li>
-				<li><a href="pathways-ngs-hyperg-go.html">ChIP-seq and FAIRE-seq / GO enrichment for list of genes</a>: The tool can now analyze mouse, rat, fruitfly and arabidopsis data in addition to human, and it accepts Ensembl identifiers in addition to EntrezGene ones.</li>
-				<li><a href="ngs-find-peaks-macs-two.html">ChIP-seq and FAIRE-seq / Find peaks using MACS</a>: The effective genome sizes have been updated and a possibility to provide a user-defined effective genome size has been added. 
-				MACS has been updated to v1.4.2 and v2.0 can be chosen with a parameter.</li>
+				<li><a href="dea-deseq.html">RNA-seq / Differential expression using DESeq</a>: GLM support have been
+					added, so you can now analyze experiments containing a second experimental factor like pairing.</li>
+				<li><a href="dexseq-exoncount.html">RNA-seq / Count aligned reads per exons for DEXSeq</a>: Reference
+					organisms have been updated and new ones added. Parameters for strandedness and counting mode are
+					included, as well as support for different chromosome naming schemes.</li>
+				<li><a href="tophat2.html">Alignment / TopHat2 for paired end reads</a>: New parameters to exclude
+					discordant and mixed alignments have been added.</li>
+				<li><a href="rseqc.html">Quality control / RNA-seq quality metrics with RseQC</a>: Possibility to plot
+					inner distance distribution has been added.</li>
+				<li><a href="pathways-ngs-hyperg-go.html">ChIP-seq and FAIRE-seq / GO enrichment for list of genes</a>:
+					The tool can now analyze mouse, rat, fruitfly and arabidopsis data in addition to human, and it
+					accepts Ensembl identifiers in addition to EntrezGene ones.</li>
+				<li><a href="ngs-find-peaks-macs-two.html">ChIP-seq and FAIRE-seq / Find peaks using MACS</a>: The
+					effective genome sizes have been updated and a possibility to provide a user-defined effective
+					genome size has been added.
+					MACS has been updated to v1.4.2 and v2.0 can be chosen with a parameter.</li>
 				<li>All GTF files have been updated to Ensembl 75.</li>
 				<li>HTSeq has been updated to version 0.6.1.</li>
-				<li>The MeDIP-seq tool category has been temporarily removed for updating.</li>	
+				<li>The MeDIP-seq tool category has been temporarily removed for updating.</li>
 			</ul>
-		</li>	
-		<li><div class=header-item>Updates to microarray analysis tools</div>		
+		</li>
+		<li>
+			<div class=header-item>Updates to microarray analysis tools</div>
 			<ul>
 				<li><a href="ordination-pca.html">Statistics / PCA</a>: Component loadings are reported.</li>
 			</ul>
@@ -737,7 +1088,8 @@ div.header-item {
 	<p>Small bug fix update.</p>
 
 	<ul>
-		<li><div class=header-item>Changes</div>
+		<li>
+			<div class=header-item>Changes</div>
 			<ul>
 				<li>Fix Generate phenodata tool</li>
 			</ul> <br>
@@ -751,12 +1103,16 @@ div.header-item {
 
 	<ul>
 
-		<li><div class=header-item>Changes</div>
+		<li>
+			<div class=header-item>Changes</div>
 			<ul>
-				<li>Schizosaccharomyces pombe genome (ASM294v2.22) has been added to TopHat2, Bowtie2, Bowtie, Cufflinks, Cuffcompare and Cuffdiff tools.</li>
+				<li>Schizosaccharomyces pombe genome (ASM294v2.22) has been added to TopHat2, Bowtie2, Bowtie,
+					Cufflinks, Cuffcompare and Cuffdiff tools.</li>
 				<li>Chipster's pdf viewer now works also on computers which have OpenJDK Java.</li>
-				<li>A bug that prevented the use of gzipped files on single machine Chipster server installations has been fixed.</li>
-				<li>Chipster server automatically rejects analysis tools which have identical names for input and output files.</li>
+				<li>A bug that prevented the use of gzipped files on single machine Chipster server installations has
+					been fixed.</li>
+				<li>Chipster server automatically rejects analysis tools which have identical names for input and output
+					files.</li>
 			</ul> <br>
 	</ul>
 	<hr>
@@ -764,84 +1120,132 @@ div.header-item {
 	<h2>Version update 7.4.2014: What is new in Chipster 2.11</h2>
 
 	<p>
-		This is a major update which combines v2.10 and v2.11. It provides 62 new analysis tools, the majority of which are in the brand new sequence analysis module. 
-		New tools have been added also in the NGS module, including the Dimont motif finding tools kindly contributed by Jan Grau (Martin Luther University Halle-Wittenberg).
-		Microarray analysis tools have been migrated to use R3.0.2 and the Brainarray custom CDFs version 18, 
-		and some NGS command line tools have been updated to new versions. Many existing tools and visualizations have been improved. 
+		This is a major update which combines v2.10 and v2.11. It provides 62 new analysis tools, the majority of which
+		are in the brand new sequence analysis module.
+		New tools have been added also in the NGS module, including the Dimont motif finding tools kindly contributed by
+		Jan Grau (Martin Luther University Halle-Wittenberg).
+		Microarray analysis tools have been migrated to use R3.0.2 and the Brainarray custom CDFs version 18,
+		and some NGS command line tools have been updated to new versions. Many existing tools and visualizations have
+		been improved.
 		The Chipster client can now be launched with more memory if needed for visualization.
 	</p>
 
 	<ul>
-		<li><div class=header-item>New sequence analysis module "Misc"</div>
-			<ul>This new module contains 54 analysis tools from the EMBOSS, BLAST, MAFFT and PHYLIP packages in the following categories:
+		<li>
+			<div class=header-item>New sequence analysis module "Misc"</div>
+			<ul>This new module contains 54 analysis tools from the EMBOSS, BLAST, MAFFT and PHYLIP packages in the
+				following categories:
 				<li><u>Data retrieval</u> contains tools for fetching sequences from databases.</li>
 				<li><u>BLAST</u> contains NCBI BLASTs and organism specific BLASTs using Ensembl.</li>
-				<li><u>Sequence alignment</u> contains pairwise and multiple sequence alignment tools such as MAFFT.</li>
-				<li><u>Nucleotide sequence analysis</u> contains tools for primer design, restriction mapping, finding open reading frames, etc.</li>
+				<li><u>Sequence alignment</u> contains pairwise and multiple sequence alignment tools such as MAFFT.
+				</li>
+				<li><u>Nucleotide sequence analysis</u> contains tools for primer design, restriction mapping, finding
+					open reading frames, etc.</li>
 				<li><u>Protein sequence analysis</u> contains pattern finding tools.</li>
 				<li><u>Sequence utilities</u> contains various utility tools from the EMBOSS package.</li>
 				<li><u>Phylogeny</u> contains PHYLIP tools.</li>
 				<li><u>Other tools</u> contains for example a tool for retrieving specified columns from a table.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to visualizations</div>
+		<li>
+			<div class=header-item>Improvements to visualizations</div>
 			<ul>
-				<li>You can create subsets of VCF, GTF and BED files in the spreadsheet view. As for TSV files, select the rows, right-click and select "Create dataset".</li>
+				<li>You can create subsets of VCF, GTF and BED files in the spreadsheet view. As for TSV files, select
+					the rows, right-click and select "Create dataset".</li>
 				<li>Spreadsheet view shows now the first 10,000 rows (instead of 2000).</li>
-				<li>Genome browser copes better with high read piles. The maximum read track height has been set to 1000 reads (note that if you set "Coverage scale = automatic", you can check the actual height in the coverage track). 
-				You can also launch the Chipster client with more memory (3 GB or 6 GB) to improve viewing.</li>
+				<li>Genome browser copes better with high read piles. The maximum read track height has been set to 1000
+					reads (note that if you set "Coverage scale = automatic", you can check the actual height in the
+					coverage track).
+					You can also launch the Chipster client with more memory (3 GB or 6 GB) to improve viewing.</li>
 				<li>Phenodata editor doesn't allow spaces in column names and changes them to underscores.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
-				<li><a href="dimontdata.html">ChIP-seq / Dimont sequence extractor</a>: Extracts genomic regions in the annotated FastA format required by Dimont.</li>
-				<li><a href="dimont-extract-data-custom.html">ChIP-seq / Dimont sequence extractor using own genome</a>: Extracts genomic regions from user's own fasta files.</li>
-				<li><a href="dimont.html">ChIP-seq / Find motifs with Dimont</a>: De novo motif discovery with Dimont.</li>
-				<li><a href="dimont-predictor.html">ChIP-seq / DimontPredictor</a>: Search sequences for matches with a motif discovered by Dimont.</li>
-				<li><a href="rseqc.html">Quality control / RNA-seq BAM quality metrics with RseQC</a>: Provides splice junction annotation, 
-				statistics for genomic features, coverage uniformity plot, and saturation plots for genes and splice junctions.</li>
-				<li><a href="cuffcompare2.html">RNA-seq / Compare assembly to reference using Cuffcompare</a>: Compares assembly GTF to reference GTF.</li>
-				<li><a href="select_columns.html">Utilities / Table converter</a>: Extracts and renames table columns.</li>
+				<li><a href="dimontdata.html">ChIP-seq / Dimont sequence extractor</a>: Extracts genomic regions in the
+					annotated FastA format required by Dimont.</li>
+				<li><a href="dimont-extract-data-custom.html">ChIP-seq / Dimont sequence extractor using own genome</a>:
+					Extracts genomic regions from user's own fasta files.</li>
+				<li><a href="dimont.html">ChIP-seq / Find motifs with Dimont</a>: De novo motif discovery with Dimont.
+				</li>
+				<li><a href="dimont-predictor.html">ChIP-seq / DimontPredictor</a>: Search sequences for matches with a
+					motif discovered by Dimont.</li>
+				<li><a href="rseqc.html">Quality control / RNA-seq BAM quality metrics with RseQC</a>: Provides splice
+					junction annotation,
+					statistics for genomic features, coverage uniformity plot, and saturation plots for genes and splice
+					junctions.</li>
+				<li><a href="cuffcompare2.html">RNA-seq / Compare assembly to reference using Cuffcompare</a>: Compares
+					assembly GTF to reference GTF.</li>
+				<li><a href="select_columns.html">Utilities / Table converter</a>: Extracts and renames table columns.
+				</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Updates to NGS analysis tools</div>		
+		<li>
+			<div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
-				<li><b>The tool category Filtering has been renamed to Preprocessing</b> and it contains tools for trimming and filtering reads. Tool package names have been added for clarity, as the next release will contain also Trimmomatic tools.
-				Tools for filtering data tables have been moved to the Utilities category.</li>
-				<li><a href="tophat2.html">Alignment / Align reads with TopHat2</a>: Human transcriptome index has been added in order to make the first alignment step faster.</li>
-				<li><a href="cufflinks2.html">RNA-seq / Assemble trancripts using Cufflinks</a>: GTF sorting and the possibility to perform RABT and have been added.</li>
-				<li><a href="cna-call-aberrations.html">CNA-seq / Call aberrations from segmented copy number data</a>: If cellularities (proportion of tumor cells in the samples) are known, it is now possible to correct for it by choosing the phenodata column containing the values.</li>	
-				<li><a href="acgh-cluster.html">CNA-seq / Cluster called copy number data</a>: Possible to skip clustering and plot a heatmap in the original sample order.</li>
-				<li><a href="acgh-convert-from-probes-to-genes.html">CNA-seq / Detect genes from called copy number data</a>: Now uses gene list from Bioconductor instead of CanGEM.</li>
+				<li><b>The tool category Filtering has been renamed to Preprocessing</b> and it contains tools for
+					trimming and filtering reads. Tool package names have been added for clarity, as the next release
+					will contain also Trimmomatic tools.
+					Tools for filtering data tables have been moved to the Utilities category.</li>
+				<li><a href="tophat2.html">Alignment / Align reads with TopHat2</a>: Human transcriptome index has been
+					added in order to make the first alignment step faster.</li>
+				<li><a href="cufflinks2.html">RNA-seq / Assemble trancripts using Cufflinks</a>: GTF sorting and the
+					possibility to perform RABT and have been added.</li>
+				<li><a href="cna-call-aberrations.html">CNA-seq / Call aberrations from segmented copy number data</a>:
+					If cellularities (proportion of tumor cells in the samples) are known, it is now possible to correct
+					for it by choosing the phenodata column containing the values.</li>
+				<li><a href="acgh-cluster.html">CNA-seq / Cluster called copy number data</a>: Possible to skip
+					clustering and plot a heatmap in the original sample order.</li>
+				<li><a href="acgh-convert-from-probes-to-genes.html">CNA-seq / Detect genes from called copy number
+						data</a>: Now uses gene list from Bioconductor instead of CanGEM.</li>
 				<li>CNA-seq tools now use a new preprocessing method, QDNAseq, for BAM files.</li>
-				<li>PRINSEQ tools for read filtering and trimming use PRINSEQ's own paired end support and, in order to make the output files smaller, they do not fill the quality header lines.</li> 
+				<li>PRINSEQ tools for read filtering and trimming use PRINSEQ's own paired end support and, in order to
+					make the output files smaller, they do not fill the quality header lines.</li>
 				<li>TopHat2 has been updated to version 2.0.10.</li>
 				<li>PRINSEQ has been updated to version 0.20.4.</li>
 				<li>DEXSeq read counting uses updated Python scripts.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Updates to microarray data analysis tools</div>
+		<li>
+			<div class=header-item>Updates to microarray data analysis tools</div>
 			<ul>
-				<li><a href="norm-affy-gene.html">Normalization / Affymetrix gene arrays</a>: Normalization to genes uses now custom CDFs. Support for the following arrays has been added: PrimeView, Drosophila 1.1, Caenorhabditis elegans, Canis familiaris, Oryza sativa (rice - ricegene1.1st), 
-				Human Transcriptome Array (HTA 2.0).</li>
-			    <li><a href="norm-affy-exon.html">Normalization / Affymetrix exon arrays</a>: Support for Human Transcriptome Array (HTA 2.0) has been added. Normalization to genes uses now custom CDFs.</li>
-				<li><a href="norm-illumina-SNP.html">Normalization / Illumina SNP arrays</a>: Support has been added for many chiptypes and GEO format.</li>
-				<li><a href="qc-affy-rle-nuse.html">Quality control / Affymetrix - using RLE and NUSE</a>: Support for Affymetrix gene and exon arrays has been added.</li>
-				<li><a href="norm-illumina-methylumi.html">Normalization / Illumina methylumi</a>: Three new parameters have been added to cope better with atypical columns, like those found in GEO.</li>
-				<li><a href="stats-two-groups.html">Statistics / Two group test</a>: The RankProd method has been added.</li>
-				<li><a href="stats-several-groups.html">Statistics / Several group test</a>: Phenodata groups are forced to be considered as factors.</li>
-				<li><a href="stats-timeseries.html">Statistics / Time series</a>: P-value correction has been added to the time series function.</li>
-				<li><a href="plot-chrom-pos.html">Visualization / Chromosomal position</a>: You can choose to visualize fold change values instead of expression values.</li>		
-				<li><a href="pathways-mirna-hyperg-go.html">Pathways / GO enrichment for miRNA targets</a>: miRNA targets for mouse miRNAs are retrieved from the TargetScan database.</li>
-				<li><a href="acgh-call-aberrations.html">Copy number aberrations / Call aberrations from segmented copy number data</a>: If cellularities (proportion of tumor cells in the samples) are known, it is now possible to correct for it by choosing the phenodata column containing the values.</li>
-				<li><a href="acgh-cluster.html">Copy number aberrations / Cluster called copy number data</a>: Possible to skip clustering and plot a heatmap in the original sample order.</li>
-				<li><a href="acgh-convert-from-probes-to-genes.html">Copy number aberrations / Detect genes from called copy number data</a>: Now uses gene list from Bioconductor instead of CanGEM.</li>
+				<li><a href="norm-affy-gene.html">Normalization / Affymetrix gene arrays</a>: Normalization to genes
+					uses now custom CDFs. Support for the following arrays has been added: PrimeView, Drosophila 1.1,
+					Caenorhabditis elegans, Canis familiaris, Oryza sativa (rice - ricegene1.1st),
+					Human Transcriptome Array (HTA 2.0).</li>
+				<li><a href="norm-affy-exon.html">Normalization / Affymetrix exon arrays</a>: Support for Human
+					Transcriptome Array (HTA 2.0) has been added. Normalization to genes uses now custom CDFs.</li>
+				<li><a href="norm-illumina-SNP.html">Normalization / Illumina SNP arrays</a>: Support has been added for
+					many chiptypes and GEO format.</li>
+				<li><a href="qc-affy-rle-nuse.html">Quality control / Affymetrix - using RLE and NUSE</a>: Support for
+					Affymetrix gene and exon arrays has been added.</li>
+				<li><a href="norm-illumina-methylumi.html">Normalization / Illumina methylumi</a>: Three new parameters
+					have been added to cope better with atypical columns, like those found in GEO.</li>
+				<li><a href="stats-two-groups.html">Statistics / Two group test</a>: The RankProd method has been added.
+				</li>
+				<li><a href="stats-several-groups.html">Statistics / Several group test</a>: Phenodata groups are forced
+					to be considered as factors.</li>
+				<li><a href="stats-timeseries.html">Statistics / Time series</a>: P-value correction has been added to
+					the time series function.</li>
+				<li><a href="plot-chrom-pos.html">Visualization / Chromosomal position</a>: You can choose to visualize
+					fold change values instead of expression values.</li>
+				<li><a href="pathways-mirna-hyperg-go.html">Pathways / GO enrichment for miRNA targets</a>: miRNA
+					targets for mouse miRNAs are retrieved from the TargetScan database.</li>
+				<li><a href="acgh-call-aberrations.html">Copy number aberrations / Call aberrations from segmented copy
+						number data</a>: If cellularities (proportion of tumor cells in the samples) are known, it is
+					now possible to correct for it by choosing the phenodata column containing the values.</li>
+				<li><a href="acgh-cluster.html">Copy number aberrations / Cluster called copy number data</a>: Possible
+					to skip clustering and plot a heatmap in the original sample order.</li>
+				<li><a href="acgh-convert-from-probes-to-genes.html">Copy number aberrations / Detect genes from called
+						copy number data</a>: Now uses gene list from Bioconductor instead of CanGEM.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Removed analysis tools</div>
+		<li>
+			<div class=header-item>Removed analysis tools</div>
 			<ul>
-				<li>Several PRINSEQ tools have been combined to tools "Filter reads for several criteria with PRINSEQ" and "Trim reads for several criteria with PRINSEQ" for more efficient analysis.</li>
+				<li>Several PRINSEQ tools have been combined to tools "Filter reads for several criteria with PRINSEQ"
+					and "Trim reads for several criteria with PRINSEQ" for more efficient analysis.</li>
 			</ul>
 		</li>
 	</ul>
@@ -859,7 +1263,8 @@ div.header-item {
 	</p>
 
 	<ul>
-		<li><div class=header-item>Improvements to Chipster analysis tool development</div>
+		<li>
+			<div class=header-item>Improvements to Chipster analysis tool development</div>
 			<ul>
 				<li>Web based <a href="http://chipster.csc.fi/tool-editor">Tool editor</a> for making it
 					easier to write Chipster tool headers. In this first version, use copy/paste to get headers in
@@ -874,7 +1279,8 @@ div.header-item {
 					provides shorter run times for analysis tools.</li>
 			</ul>
 		</li>
-		<li><div class="header-item">Improvements to genome browser</div>
+		<li>
+			<div class="header-item">Improvements to genome browser</div>
 			<ul>
 				<li>You can select features in visualized BED, VCF and tsv files by clicking on them.
 					Information about the selected feature is shown in the side panel.</li>
@@ -883,18 +1289,21 @@ div.header-item {
 				<li>Show all reads -functionality is now track-specific.</li>
 				<li>Resolved the bug that prevented genome browser visualization with a tsv file.</li>
 			</ul>
-		<li><div class=header-item>Improvements to other visualizations</div>
+		<li>
+			<div class=header-item>Improvements to other visualizations</div>
 			<ul>
 				<li>The chiptype column can now be edited in the Phenodata editor.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="bedtools-fastafrombed.html">Utilities / FASTA from BED</a>: Extracts sequences
 					from a FASTA file for each of the intervals defined in a BED file.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Updates to NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
 				<li>BWA, Tophat2, Tophat, Bowtie2, Bowtie, Cufflinks, Cuffmerge and Cuffdiff tools: The
 					number of threads has been increased so the tools run faster.</li>
@@ -902,7 +1311,8 @@ div.header-item {
 						using edgeR for multivariate experiments</a>: Raw counts are added to the output, allowing
 					visualization of expression profiles etc.</li>
 				<li><a href="ngs-dea-edger-RNA.html">RNA-seq and miRNA-seq / Differential expression
-						using edgeR</a>: Tagwise dispersion is calculated using trended dispersion in order to cope better
+						using edgeR</a>: Tagwise dispersion is calculated using trended dispersion in order to cope
+					better
 					with outliers.</li>
 				<li><a href="fastqc.html">Quality control / Read quality with FastQC</a>: BAM files
 					accepted as input.</li>
@@ -916,7 +1326,8 @@ div.header-item {
 				<li>edgeR-based tools have been updated to version 3.4.0.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>New microarray analysis tools</div>
+		<li>
+			<div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li><a href="plot-annoheatmap.html">Visualization / Annotated heatmap</a>: Generates
 					visually advanced heatmaps with sample information such as experimental group or other
@@ -926,7 +1337,8 @@ div.header-item {
 					Integrates expression and phenodata tables to a single output file that can be opened in Excel.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Improvements to microarray data analysis tools</div>
+		<li>
+			<div class=header-item>Improvements to microarray data analysis tools</div>
 			<ul>
 				<li><a href="annotate-cpdb.html">Pathways / Hypergeometric test for ConsensusPathDB</a>:
 					Support for mouse and yeast data has been added. The genes contributing to the significant
@@ -943,11 +1355,13 @@ div.header-item {
 					parameter for accepting change points has been added.</li>
 			</ul>
 		</li>
-		<li><div class=header-item>Removed analysis tools</div>
+		<li>
+			<div class=header-item>Removed analysis tools</div>
 			<ul>
 				<li>Pathways / IntAct and Reactome tools have been removed as EBI has discontinued the
 					programmatic access that these tools used.</li>
-			</ul></li>
+			</ul>
+		</li>
 	</ul>
 	<hr />
 
@@ -958,14 +1372,17 @@ div.header-item {
 		experienced.</p>
 
 	<ul>
-		<li><div class=header-item>General</div>
+		<li>
+			<div class=header-item>General</div>
 			<ul>
 				<li>This version requires Java 1.7. If you experience problems when launching Chipster,
 					please check your Java version.</li>
 				<li>A bug causing occasional issues when importing files in Windows has been fixed.</li>
-			</ul></li>
+			</ul>
+		</li>
 
-		<li><div class=header-item>Improvements to genome browser</div>
+		<li>
+			<div class=header-item>Improvements to genome browser</div>
 			<ul>
 				<li>Visualization of copy number data: Losses and gains are shown as red and blue boxes,
 					respectively. Frequencies and log ratios are shown as line graph.</li>
@@ -977,9 +1394,11 @@ div.header-item {
 				<li>Problems in faulty BAM files are tolerated (e.g. alignment extends past the end of a
 					chromosome)</li>
 				<li>Mitochondrial chromosome names M and MT are recognized as identical</li>
-			</ul></li>
+			</ul>
+		</li>
 
-		<li><div class=header-item>Improvements to other visualizations</div>
+		<li>
+			<div class=header-item>Improvements to other visualizations</div>
 			<ul>
 				<li>Interactive 3D scatter plot has more intuitive color scale and options to change the
 					shape of the data points and the background color (new default is white).</li>
@@ -987,9 +1406,11 @@ div.header-item {
 					scheme.</li>
 				<li>BAM viewer is more tolerant to problems (e.g. alignment extends past the end of a
 					chromosome).</li>
-			</ul></li>
+			</ul>
+		</li>
 
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="miRNA_RNA-seq_integration.html">miRNA-seq / Correlate miRNA-seq and
 						RNA-seq data</a>. Detects miRNA target genes whose expression correlates with miRNA expression,
@@ -997,9 +1418,11 @@ div.header-item {
 				<li><a href="mothur-analyses.html">Metagenomics / Statistical analysis for marker gene
 						studies</a>. Compares the diversity or abundance between groups using several ANOVA-type of
 					analyses. Makes also an RDA ordination plot and rank abundance and rarefaction curves.</li>
-			</ul></li>
+			</ul>
+		</li>
 
-		<li><div class=header-item>Updates to NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
 				<li><a href="DEXseq.html">RNA-seq / DEXSeq</a>. Dispersion plot, MA-plot and a visualization
 					of genes which contain differentially expressed exons have been added.</li>
@@ -1009,8 +1432,9 @@ div.header-item {
 				<li><a href="ngs-filter-annotations.html">Filtering / Filter table by column term</a>.
 					Supports now also tables which have rownames (= the first column doesn't have a title).</li>
 				<li>Bowtie2 has been updated to version 2.1.0.</li>
-			</ul> 
-		<li><div class=header-item>New microarray analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li><a href="http://chipster.csc.fi/manual/delete-and-subtract-columns.html">Utilities
 						/ Delete and subtract columns</a>. Deletes the specified column or columns from the data and
@@ -1026,7 +1450,8 @@ div.header-item {
 		rRNA data.</p>
 
 	<ul>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="mothur-summaryseqs.html">Metagenomics / Summarize sequences with Mothur</a>.
 					Provides summary information on unaligned or aligned sequences.</li>
@@ -1044,27 +1469,31 @@ div.header-item {
 				<li><a href="mothur-chimera-uchime.html">Metagenomics / Remove chimeric sequences with
 						Mothur</a>. Removes chimeric sequences.</li>
 				<li><a href="mothur-classifyseqs.html">Metagenomics / Classify sequences to taxonomic
-						units with Mothur</a>. Given a fasta file of aligned 16S rRNA sequences, assigns them to taxonomic
+						units with Mothur</a>. Given a fasta file of aligned 16S rRNA sequences, assigns them to
+					taxonomic
 					units (~ species).</li>
 				<li><a href="mothur-sffinfo.html">Metagenomics / Extract sequences from SFF file</a>.
 					Helper tool to extract FASTA and QUAL files from a SFF file.</li>
 				<li><a href="merge-fasta-qual.html">Metagenomics / Merge FASTA or QUAL files</a>. Helper
 					tool to merge FASTA files or QUAL files together.</li>
-			</ul> 
-		<li><div class=header-item>Updates to NGS analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
 				<li>Dog genome CanFam3 has been updated to Bowtie, Bowtie2 and BWA scripts.</li>
 				<li>Cufflinks tools have been updated to v2.1.1
-			</ul> 
-		<li><div class=header-item>New microarray analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li><a href="norm-combat.html">Normalization / ComBat - batch normalisation</a>. Enables
 					simultaneous adjustment of multiple batch effects.</li>
 				<li><a href="stat-linear-modelling-designmat.html">Statistics / Linear modelling using
 						user-defined design matrix</a>. Advanced tool for applying your own design-matrices in limma
 					analyses.</li>
-			</ul> 
-		<li><div class=header-item>Updates to microarray analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>Updates to microarray analysis tools</div>
 			<ul>
 				<li><a href="norm-illumina.html">Normalization / Illumina</a>. Detection p-value thresholds
 					have been updated in the parameter "Produce flags". <b>If you have used Illumina flag
@@ -1073,7 +1502,8 @@ div.header-item {
 					chip-class specific confusion matrices in addition to the class-prediction type of confusion
 					matrices.</li>
 				<li>Pearson correlation calculation with different Bioconductor functions in tools <u>Visualization
-						/ Dendrogram, Visualization / Heatmap, and Statistics / Time series</u> has been kindly unified by
+						/ Dendrogram, Visualization / Heatmap, and Statistics / Time series</u> has been kindly unified
+					by
 					Oliver Heil, DKFZ.
 			</ul>
 	</ul>
@@ -1082,11 +1512,12 @@ div.header-item {
 	<h2>Version update 27.5.2013: What is new in Chipster 2.6</h2>
 
 	<p>Chipster 2.6 contains important updates to microarray and NGS analysis tools and some new
-	NGS tools.</p>
+		NGS tools.</p>
 
 	<ul>
 
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="extract-samples-from-dataset.html">Utilities / Extract samples from
 						dataset</a>. Makes a subset of count table for user defined samples.</li>
@@ -1094,7 +1525,8 @@ div.header-item {
 					Allows you to analyze external count tables in Chipster by edgeR and DESeq. Converts the table
 					to Chipster format and produces a phenodata file for it.</li>
 			</ul> <br>
-		<li><div class=header-item>Updates to NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
 				<li><a href="ngs-dea-edger-RNA.html">RNA-seq and miRNA-seq / Differential expression
 						using edgeR</a>. Added filtering option and dispersion plot, made BED output optional, removed
@@ -1102,23 +1534,27 @@ div.header-item {
 				<li><a href="dea-deseq.html.html">RNA-seq and miRNA-seq / Differential expression using
 						DESeq</a>. Made BED output optional. Updated to R2.15.1-Bioconductor 2.11.</li>
 				<li><a href="edgeR-multivariate.html">RNA-seq / Differential expression using edgeR for
-						multivariate experiments</a>. Added filtering option and dispersion plot, fixed common dispersion
+						multivariate experiments</a>. Added filtering option and dispersion plot, fixed common
+					dispersion
 					method. Updated to R2.15.1-Bioconductor 2.11.</li>
 				<li><a href="htseq-count.html">RNA-seq / Count aligned reads per genes with HTSeq</a>.
 					Added possibility to include genomic location data to count table, which allows edgeR and DESeq
 					to produce BED files. Added possibility to use BAM files with GTF files with different
 					chromosome naming (e.g. chr1 vs 1).</li>
 				<li><a href="htseq-count.html">RNA-seq / Count aligned reads per genes with HTSeq using
-						own GTF</a>. Added possibility to include genomic location data to count table, which allows edgeR
+						own GTF</a>. Added possibility to include genomic location data to count table, which allows
+					edgeR
 					and DESeq to produce BED files.</li>
 				<li><a href="ngs-create-experiment.html">Utilities / Define NGS experiment</a>. Added a
 					possibility to leave out genomic location columns and to choose the column containing counts.</li>
-			</ul> 
-		<li><div class=header-item>Genome browser improvements</div>
+			</ul>
+		<li>
+			<div class=header-item>Genome browser improvements</div>
 			<ul>
 				<li>Drosophila melanogaster genome (BDGP5.70) has been added.</li>
-			</ul> 
-		<li><div class=header-item>Updates to microarray analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>Updates to microarray analysis tools</div>
 			<ul>
 				<li><a href="norm-affy-gene.html">Normalization / Affymetrix gene arrays</a>. Support added
 					for human v2.0 arrays, mouse and rat v2.1 arrays, and zebrafish and arabidopsis v1.1 arrays.</li>
@@ -1136,21 +1572,24 @@ div.header-item {
 	<h2>Version update 11.4.2013: What is new in Chipster 2.5</h2>
 
 	<p>Chipster 2.5 contains a lot of new analysis and visualization functionality for NGS data
-	and improvements to some microarray analysis tools. The new NGS data analysis tools include the
-	TagCleaner package, F-seq peak detection software, and a large number of CNA-seq analysis tools
-	kindly contributed by Ilari Scheinin (VU University Medical Center Amsterdam).</p>
+		and improvements to some microarray analysis tools. The new NGS data analysis tools include the
+		TagCleaner package, F-seq peak detection software, and a large number of CNA-seq analysis tools
+		kindly contributed by Ilari Scheinin (VU University Medical Center Amsterdam).</p>
 
 	<ul>
 
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="ngs-find-peaks-fseq.html">ChIP-seq and FAIRE-seq / Find broad peaks using
-						F-seq</a>. Searches for statistically significantly enriched broad peaks, such as regions of open
+						F-seq</a>. Searches for statistically significantly enriched broad peaks, such as regions of
+					open
 					chromatin.</li>
 				<li><a href="tagcleaner-predict.html">Utilities / Predict primers/adaptors (TagCleaner)</a>.
 					Predicts adaptor sequences in reads.</li>
 				<li><a href="tagcleaner-statistics.html">Utilities / Statistics for primers/adaptors
-						(TagCleaner)</a>. Calculates the number of adaptor sequences found allowing for different numbers
+						(TagCleaner)</a>. Calculates the number of adaptor sequences found allowing for different
+					numbers
 					of mismatches.</li>
 				<li><a href="tagcleaner-trim.html">Utilities / Trim primers/adaptors (TagCleaner)</a>.
 					Trims adaptors allowing for mismatches.</li>
@@ -1180,7 +1619,8 @@ div.header-item {
 				<li><a href="acgh-plot-survival.html">CNA-seq / Plot survival curves for called copy
 						number data</a>. Plot Kaplan-Meier survival curves for called copy number data.</li>
 				<li><a href="acgh-convert-from-probes-to-genes.html">CNA-seq / Detect genes from called
-						copy number data</a>. Converts data from bin-based to gene-based using chromosomal locations.</li>
+						copy number data</a>. Converts data from bin-based to gene-based using chromosomal locations.
+				</li>
 				<li><a href="acgh-pathways-go.html">CNA-seq / GO enrichment for called gene copy
 						numbers</a>. Hypergeometric test for enrichment of GO terms in frequently aberrated genes.</li>
 				<li><a href="acgh-match-probes.html">CNA-seq / Match copy number and expression
@@ -1189,7 +1629,8 @@ div.header-item {
 						number and expression</a>. Plots profiles of two priorly matched data sets of copy number and
 					expression.</li>
 				<li><a href="acgh-expression-test.html">CNA-seq / Test for copy number induced
-						expression changes</a>. Nonparametric testing for changes in expression induced by a change in DNA
+						expression changes</a>. Nonparametric testing for changes in expression induced by a change in
+					DNA
 					copy number.</li>
 				<li><a href="acgh-plot-combined-expression.html">CNA-seq / Plot copy number induced
 						gene expression</a>. Plots the expression level of individual genes for a copy number vs.
@@ -1198,13 +1639,15 @@ div.header-item {
 					band information using chromosome names and start/end base pair positions.</li>
 				<li><a href="acgh-count-overlapping-cnvs.html">CNA-seq / Count overlapping CNVs</a>. Counts
 					overlapping CNVs from the database of genomic variants.</li>
-			</ul> 
-		<li><div class=header-item>Updates to NGS analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>Updates to NGS analysis tools</div>
 			<ul>
 				<li>Rat genome rn5 (Rnor_5.0) has been added to all aligners.</li>
 				<li>miRBase19 for human, mouse and rat have been added to Bowtie and Bowtie2</li>
-			</ul> 
-		<li><div class=header-item>Genome browser improvements</div>
+			</ul>
+		<li>
+			<div class=header-item>Genome browser improvements</div>
 			<ul>
 				<li>Support for GTF files: You can view GTF features in the browser as a separate track.
 					You can also use a GTF file for rapidly navigating through a list of variants in the browser:
@@ -1220,17 +1663,20 @@ div.header-item {
 				<li>Coverage track shows SNP locations also when the viewing of reads is disabled.</li>
 				<li>A bug in showing human MT reverse strand annotations has been fixed.</li>
 
-			</ul> 
-		<li><div class=header-item>New microarray analysis tools</div>
+			</ul>
+		<li>
+			<div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li><a href="acgh-fetch-probe-positions-from-geo.html">Copy number aberrations / Fetch
 						probe positions from GEO</a>. Fetches microarray probe positions from the GEO database.</li>
 				<li><a href="acgh-normalize.html">Copy number aberrations / Normalize copy number data</a>.
 					Normalizes copy number data before segementation.</li>
 				<li><a href="acgh-plot-frequencies.html">Copy number aberrations / Plot copy number
-						aberration frequencies</a>. Makes a frequency plot of copy number aberrations in each group.</li>
-			</ul> 
-		<li><div class=header-item>Updates and bug fixes to microarray analysis tools</div>
+						aberration frequencies</a>. Makes a frequency plot of copy number aberrations in each group.
+				</li>
+			</ul>
+		<li>
+			<div class=header-item>Updates and bug fixes to microarray analysis tools</div>
 			<ul>
 				<li><u> Utilities / Merge tables</u>. Changed to cope better with descriptions incling
 					line-feeds, quotes and other unusual characters.</li>
@@ -1245,15 +1691,17 @@ div.header-item {
 	<h2>Version update 4.2.2013: What is new in Chipster 2.4</h2>
 
 	<p>Chipster 2.4 contains changes to the user interface and analysis functionality. New
-	genomes have been added to several analysis tools and to the genome browser.</p>
+		genomes have been added to several analysis tools and to the genome browser.</p>
 
 	<ul>
-		<li><div class=header-item>Changes to the user interface</div>
+		<li>
+			<div class=header-item>Changes to the user interface</div>
 			<ul>
 				<li><u>Contact support option</u> has been added to the Help menu. This provides an easy
 					way for the users on CSC's Chipster server to send their analysis sessions for problem solving.</li>
 			</ul>
-		<li><div class=header-item>Genome browser improvements</div>
+		<li>
+			<div class=header-item>Genome browser improvements</div>
 			<ul>
 				<li>Annotations and user data have been divided into separate panels and a scrollbar has
 					been added.</li>
@@ -1262,7 +1710,8 @@ div.header-item {
 					coding-variants.tsv) has been added. If you detach the file and click on the value in the
 					START-column, genome browser moves to that location.</li>
 			</ul>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="cufflinks2.html">RNA-seq / Assemble reads into transcripts using Cufflinks</a>.</li>
 				<li><a href="cuffmerge2.html">RNA-seq / Merge transcript assemblies using Cuffmerge</a>.</li>
@@ -1270,7 +1719,8 @@ div.header-item {
 			</ul>
 			<p>These tools are based on Cufflinks 2.0.2. The previous Cufflinks tool has been renamed
 				"Differential expression using Cufflinks v1.0.3".</p>
-		<li><div class=header-item>Updates and bug fixes to NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updates and bug fixes to NGS analysis tools</div>
 			<ul>
 				<li><u>Variants / Call SNPs and short INDELs</u>. Reference genomes for pig, chicken and
 					cow have been added.</li>
@@ -1283,7 +1733,8 @@ div.header-item {
 				<li><u>Alignment / BWA-SW for single end reads</u>. This analysis tool has been removed due
 					to a bug in BWA itself.</li>
 			</ul>
-		<li><div class=header-item>Updates to microarray analysis tools</div>
+		<li>
+			<div class=header-item>Updates to microarray analysis tools</div>
 			<ul>
 				<li><u>Normalization / Agilent miRNA</u>: This analysis tool has been reintroduced.
 			</ul>
@@ -1293,13 +1744,14 @@ div.header-item {
 	<h2>Version update 13.11.2012: What is new in Chipster 2.3</h2>
 
 	<p>Chipster 2.3 contains changes to the user interface and analysis functionality. NGS
-	alignment tool Bowtie2 has been added, and changes have been made to existing alignment tools.
-	Sheep genome oar3.1 has been added to alignment tools and genome browser. Support for some Agilent
-	and Illumina microarrays has been added.</p>
+		alignment tool Bowtie2 has been added, and changes have been made to existing alignment tools.
+		Sheep genome oar3.1 has been added to alignment tools and genome browser. Support for some Agilent
+		and Illumina microarrays has been added.</p>
 
 
 	<ul>
-		<li><div class=header-item>Changes to the user interface</div>
+		<li>
+			<div class=header-item>Changes to the user interface</div>
 			<ul>
 				<li><u>Naming of datasets in the workflow panel</u>. The "boxes" indicating files are now
 					named with the extension of the file name. As before, the box is colored according to the tool
@@ -1307,7 +1759,8 @@ div.header-item {
 					hope that this change makes selecting files easier in NGS result sets, which typically contain
 					several file types. Please let us know what you think.</li>
 			</ul>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="bowtie2.html">Alignment / Bowtie2 for single end reads</a>.</li>
 				<li><a href="bowtie2-paired-end.html">Alignment / Bowtie2 for paired end reads</a>.</li>
@@ -1316,12 +1769,14 @@ div.header-item {
 				<li><a href="bowtie2-paired-end-with-index-building.html">Alignment / Bowtie2 for
 						paired end reads and own genome</a>.</li>
 			</ul>
-		<li><div class=header-item>New microarray analysis tools</div>
+		<li>
+			<div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li><a href="norm-illumina-methylumi.html">Normalization / Methylumi</a>. Supports both
 					Illumina 27k and 450k arrays.</li>
 			</ul>
-		<li><div class=header-item>Updates and bug fixes to NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updates and bug fixes to NGS analysis tools</div>
 			<ul>
 				<li><u>Sheep genome oar3.1 has been added to all alignment tools</u>: Bowtie1, Bowtie2,
 					TopHat, TopHat2, BWA.
@@ -1332,7 +1787,8 @@ div.header-item {
 				<li><u>Utilities / Filter reads for adaptors, length and Ns (FastX Clipper)</u>. New
 					parameters have been added.</li>
 			</ul>
-		<li><div class=header-item>Updates to microarray analysis tools</div>
+		<li>
+			<div class=header-item>Updates to microarray analysis tools</div>
 			<ul>
 				<li><u>Normalization / Agilent 1-color, Agilent 2-color</u>: Support has been added for
 					Agilent Fruit fly and Human G4851A arrays.
@@ -1343,13 +1799,15 @@ div.header-item {
 	<h2>Version update 27.9.2012: What is new in Chipster 2.2.0</h2>
 
 	<p>Chipster 2.2.0 contains a new tool category Variants with tools for analyzing VCF files.
-	Visualization of these files is supported already (see the 12.9.2012 release notes). There are also
-	new tools for RNA-seq analysis, and many tools have been updated to use Ensembl v68 annotations.
-	The full list of NGS analysis tools is available
-	<a href="tools-ngs.html">here</a>.</p>
+		Visualization of these files is supported already (see the 12.9.2012 release notes). There are also
+		new tools for RNA-seq analysis, and many tools have been updated to use Ensembl v68 annotations.
+		The full list of NGS analysis tools is available
+		<a href="tools-ngs.html">here</a>.
+	</p>
 
 	<ul>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="dexseq-exoncount.html">RNA-seq / Map aligned reads to exons for DEXSeq</a>.
 					This tool counts the reads that fall into each non-overlapping exonic part.</li>
@@ -1366,7 +1824,8 @@ div.header-item {
 				<li><a href="tophat2-single-end.html">Alignment / TopHat2 for single end reads</a>. As
 					above.</li>
 			</ul>
-		<li><div class=header-item>Updated NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updated NGS analysis tools</div>
 			<ul>
 				<li><u>RNA-seq / Differential expression with Cufflinks</u>. Added mouse genome mm10,
 					updated GTFs to Ensembl 68. Note that Cufflinks version is still 1.0.3, but we are working on
@@ -1382,11 +1841,13 @@ div.header-item {
 	<h2>Version update 12.9.2012: What is new in Chipster 2.1.0</h2>
 
 	<p>Chipster 2.1.0 contains major improvements in the genome browser and important new NGS
-	data analysis functionality (see below). The full list of NGS analysis tools is available
-	<a href="tools-ngs.html">here</a>.</p>
+		data analysis functionality (see below). The full list of NGS analysis tools is available
+		<a href="tools-ngs.html">here</a>.
+	</p>
 
 	<ul>
-		<li><div class=header-item>Genome browser improvements</div>
+		<li>
+			<div class=header-item>Genome browser improvements</div>
 			<ul>
 				<li>Several new genomes added.</li>
 				<li>Support for VCF files: You can view variant positions in the browser as a separate
@@ -1397,7 +1858,8 @@ div.header-item {
 				<li>Improved visualization of automatically calculated coverage.</li>
 				<li>Links to Ensembl and UCSC genome browser.</li>
 			</ul>
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><u>RNA-seq / Differential expression using edgeR for multivariate experiments</u>. This
 					tool complements the existing edgeR by allowing you to analyze data from more complex
@@ -1405,7 +1867,8 @@ div.header-item {
 				<li><u>Utilities / Annotate variants</u>. This R/Bioconductor-based tool allows you to
 					annotate human variants in a VCF file.</li>
 			</ul>
-		<li><div class=header-item>Updated NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updated NGS analysis tools</div>
 			<ul>
 				<li>PRINSEQ QC, filtering and trimming tools have been updated to use PRINSEQ version
 					0.19.3, which makes them run faster.</li>
@@ -1420,13 +1883,15 @@ div.header-item {
 	<h2>Version update 6.7.2012: What is new in Chipster 2.0.2</h2>
 
 	<p>Chipster 2.0.2 contains new analysis tools for variant calling (SAMtools) and quality
-	control, trimming and filtering of reads (PRINSEQ). The full list of NGS analysis tools is
-	available
-	<a href="tools-ngs.html">here</a>.</p>
+		control, trimming and filtering of reads (PRINSEQ). The full list of NGS analysis tools is
+		available
+		<a href="tools-ngs.html">here</a>.
+	</p>
 
 	<ul>
 
-		<li><div class=header-item>New NGS analysis tools</div>
+		<li>
+			<div class=header-item>New NGS analysis tools</div>
 			<ul>
 				<li><a href="samtools-snp-indel-single.htmll">Call SNPs and short INDELs from one
 						diploid individual </a></li>
@@ -1442,19 +1907,22 @@ div.header-item {
 				<li><a href="prinseq-AT-trimmer.html">Trim reads for poly-A/T tails (PRINSEQ) </a></li>
 				<li><a href="prinseq-trimmer.html">Trim reads for several criteria (PRINSEQ) </a></li>
 			</ul>
-		<li><div class=header-item>Updated NGS analysis tools</div>
+		<li>
+			<div class=header-item>Updated NGS analysis tools</div>
 			<ul>
 				<li>All aligners: Unzipping has been added, so you can give zipped FASTQ as input.</li>
 				<li>Bowtie: Genomes for Dog (UCSC canFam2) and Gasterosteus aculeatus (BROADS1.67) have
 					been added.</li>
 				<li>TopHat: Parameter for the standard deviation of inner distance has been added.</li>
 			</ul>
-		<li><div class=header-item>New microarray analysis tools</div>
+		<li>
+			<div class=header-item>New microarray analysis tools</div>
 			<ul>
 				<li>Annotation / Add genomic location to data. Adds chr, start and end location to the
 					data.</li>
 			</ul>
-		<li><div class=header-item>Updated microarray analysis tools</div>
+		<li>
+			<div class=header-item>Updated microarray analysis tools</div>
 			<ul>
 				<li>Pathways / Hypergeometric test for GO. If the data was normalized using custom chiptype
 					(altCDF) for chips hgu133a or hgu133a2, the same mapping is used in testing.</li>
@@ -1465,13 +1933,14 @@ div.header-item {
 	<h2>Version update 24.1.2012: What is new in Chipster 2.0</h2>
 
 	<p>Chipster 2.0 contains a comprehensive collection of analysis tools for next generation
-	sequencing (NGS) data. Visualization options now include a built-in genome browser, allowing you to
-	view reads and results in their genomic context. Importantly, also the analysis session handling
-	has been improved.</p>
+		sequencing (NGS) data. Visualization options now include a built-in genome browser, allowing you to
+		view reads and results in their genomic context. Importantly, also the analysis session handling
+		has been improved.</p>
 
 	<ul>
 
-		<li><div class=header-item>NGS functionality</div>.
+		<li>
+			<div class=header-item>NGS functionality</div>.
 			<p>
 				The following analysis packages and several R-based tools are now available under the NGS tab in
 				the Analysis tool panel. For more information about the individual tools, please see the <a
@@ -1489,7 +1958,8 @@ div.header-item {
 				<li><b>CNA-seq</b>: Count and plot copy number profile, compare to reference.
 				<li><b>MeDIP-seq</b>: MEDIPS.
 			</ul>
-		<li><div class=header-item>Built-in genome browser</div>
+		<li>
+			<div class=header-item>Built-in genome browser</div>
 			<ul>
 				<li>Allows you to view reads and results in their genomic context using Ensembl
 					annotations.
@@ -1497,7 +1967,8 @@ div.header-item {
 				<li>Calculates coverage automatically.
 			</ul>
 			<p></p>
-		<li><div class=header-item>Improved analysis session handling</div>
+		<li>
+			<div class=header-item>Improved analysis session handling</div>
 			<ul>
 				<li>Analysis sessions are automatically saved on the background, so if your session stops
 					unexpectedly, you can always retrieve your data from the server.
@@ -1524,14 +1995,17 @@ div.header-item {
 
 	<ul>
 
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li><a href="extract-target-gene-expression.html">Utilities / Extract data for miRNA
-						targets</a>. This tool extracts gene expression data from a gene expression data set, based on the
+						targets</a>. This tool extracts gene expression data from a gene expression data set, based on
+					the
 					result list from one of the miRNA to gene expression correlation tools.
 			</ul>
 			<p></p>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li><a href="search-queryword.html">Utilities / Search by gene name</a>: A new parameter to
 					control whether to perform exact matching for the query term has been added.</li>
@@ -1540,23 +2014,25 @@ div.header-item {
 					and whether to output the results in linear or base 2 logarithmic scale.</li>
 			</ul>
 			<p></p>
-		<li><div class=header-item>Obsolete analysis tools</div>
+		<li>
+			<div class=header-item>Obsolete analysis tools</div>
 			<ul>
 				<li><a href="extract-genes-from-clustering.html">Utilities / Extract genes from
-						clustering</a>: This tool has been dropped since its functionality is now provided in the tool <a
-					href="filter-by-column-value.html">Preprocessing / Filter using a column value</a>.</li>
+						clustering</a>: This tool has been dropped since its functionality is now provided in the tool
+					<a href="filter-by-column-value.html">Preprocessing / Filter using a column value</a>.</li>
 				<li><a href="extract-genes-from-stattest.html">Utilities / Extract genes using a
 						p-value </a>: This tool has been dropped since its functionality is now provided in the tool <a
-					href="filter-by-column-value.html">Preprocessing / Filter using a column value</a>.</li>
+						href="filter-by-column-value.html">Preprocessing / Filter using a column value</a>.</li>
 				<li><a href="filter-by-column.html">Utilities / Filter by column</a>: This tool has been
 					dropped since its functionality is now provided in the tool <a
-					href="filter-by-column-value.html">Preprocessing / Filter using a column value</a>.</li>
+						href="filter-by-column-value.html">Preprocessing / Filter using a column value</a>.</li>
 				<li><a href="merge-tables.html">Utilities / Merge tables </a>: This tool has been dropped
 					since its functionality is now provided in the tool <a href="merge-datasets.html">Utilities
 						/ Merge datasets</a>.</li>
 			</ul>
 			<p></p>
-		<li><div class=header-item>Visualization changes</div>
+		<li>
+			<div class=header-item>Visualization changes</div>
 			<ul>
 				<li>All tools that generate static graphical visualizations have been modified to yield
 					output in PDF format, allowing for high-quality and scalable plots.
@@ -1569,7 +2045,8 @@ div.header-item {
 	<h2>Version update 7.12.2010: What is new in Chipster 1.4.6</h2>
 
 	<ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li><a href="extract-genes-from-kegg.html">Utilities / Extract genes from KEGG pathway</a>.
 					This tool can be used to retrieve the genes that map to a pathway determined significant by
@@ -1577,7 +2054,8 @@ div.header-item {
 					is a similar tool also for GO analysis results (Utilities / Extract genes from GO term)
 			</ul>
 			<p></p>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li><a href="cluster-hierarchical.html">Clustering / Hierarchical</a>: The maximum number
 					of genes/samples to be clustered is increased to 20 000.</li>
@@ -1603,7 +2081,8 @@ div.header-item {
 	functional.
 
 	<ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li><a href="smooth-acgh.html">aCGH / Smooth waves from normalized aCGH data</a>
 				<li><a href="calculate-aberration-frequencies.html">aCGH / Calculate aberration
@@ -1620,7 +2099,8 @@ div.header-item {
 				<li><a href="extract-genes-from-go.html">Utilities / Extract genes from GO term</a>
 			</ul>
 			<p></p>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li><a href="pathways-hypergeometric-go.html">Pathways / Hypergeometric test for GO</a>:
 					Now includes parameters for p-value adjustment method, GO category type (BP, MF, CC), minimum
@@ -1648,7 +2128,8 @@ div.header-item {
 					that it generates a new phenodata file, enabling downstream analysis of the averaged data.</li>
 				<li><a href="extract-samples-from-dataset.html">Utilities / Extract samples from
 						dataset</a>: Modified to include annotations and to exclude samples with no class assigned.</li>
-			</ul></li>
+			</ul>
+		</li>
 	</ul>
 	<hr>
 
@@ -1661,7 +2142,8 @@ div.header-item {
 	<h2>Version update 9.4.2010: What is new in Chipster 1.4.3</h2>
 
 	<ul>
-		<li><div class=header-item>New analysis tools</div> <br>This release completes the miRNA
+		<li>
+			<div class=header-item>New analysis tools</div> <br>This release completes the miRNA
 			analysis functionality in Chipster and also includes a whole new set of tools for aCGH data. The
 			aCGH functionality, kindly contributed by Ilari Scheinin (University of Helsinki) also allows to
 			integrate aCGH data with expression data.
@@ -1676,7 +2158,7 @@ div.header-item {
 				<li>aCGH tools: This category is labelled as beta testing because there might still be some
 					changes to the tool names and the manual pages are not yet available. To read more please see
 					recent course <a href="http://chipster.csc.fi/manual/aCGH_slides.pdf">slides</a>. The <a
-					href="http://www.cangem.org/">CanGEM</a> database is used for data import, and probe position
+						href="http://www.cangem.org/">CanGEM</a> database is used for data import, and probe position
 					and cytoband information. Note that for analyzing your own aCGH data, you can normalize it with
 					the Normalize / cDNA tool and then fetch the probe positions from CanGEM to allow the
 					subsequent analysis. The following tools are available:
@@ -1691,7 +2173,7 @@ div.header-item {
 						<li>Fetch probe positions from CanGEM
 						<li>Add cytogenetic bands
 						<li>Count overlapping CNVs: Compares the found CNVs to the <a
-							href="http://projects.tcag.ca/variation/">Database of Genomic variants</a>
+								href="http://projects.tcag.ca/variation/">Database of Genomic variants</a>
 						<li>Sample size calculations with an adapted BH method
 					</ul>
 				<li><a href="filter-by-column-value">Preprocessing / Filter using a column value</a>:
@@ -1708,7 +2190,8 @@ div.header-item {
 					intersection, or union, between two or three data tables that share one or more columns with
 					common identifiers.
 			</ul>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li>Normalization / Agilent: Flags can be handled in normalization and subsequently used in
 					analysis.
@@ -1717,7 +2200,8 @@ div.header-item {
 				<li>Utilities / Combine probes to genes: Gene symbols and descriptions are kept in the
 					result file.
 			</ul>
-		<li><div class=header-item>Changes to visualizations</div>
+		<li>
+			<div class=header-item>Changes to visualizations</div>
 			<ul>
 				<li>Venn diagram: Possibility to combine datasets using the gene symbol column, instead of
 					the identifier column. This allows you to intersect gene lists from different array platforms</li>
@@ -1732,20 +2216,23 @@ div.header-item {
 	<h2>Version update 11.2.2010: What is new in Chipster 1.4.2</h2>
 
 	<ul>
-		<li><div class=header-item>New functionality</div>
+		<li>
+			<div class=header-item>New functionality</div>
 			<ul>
 				<li>Ready-made analysis workflows for miRNA and proteomics data. They can be started from
 					the top panel menu Workflow/ Run from Chipster repository. More information about the content
 					of the workflows is available <a href="http://chipster.csc.fi/manual/workflows.html#ready">here</a>
 				<li>Statistics / Correlate miRNA with target expression. <a
-					href="http://chipster.csc.fi/manual/correlate-mirna.html">Read more...</a>.
+						href="http://chipster.csc.fi/manual/correlate-mirna.html">Read more...</a>.
 				</li>
 			</ul>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li>Clustering / KNN classification: Improved validation of classifiers with a test set.
 			</ul>
-		<li><div class=header-item>Changes to visualizations</div>
+		<li>
+			<div class=header-item>Changes to visualizations</div>
 			<ul>
 				<li>Hierarchical clustering: Color scheme has been changed to blue-red in order to cater
 					for color blind users. If you prefer the old green-red scheme, please note that the colors can
@@ -1764,19 +2251,21 @@ div.header-item {
 	<h2>Version update 20.1.2010: What is new in Chipster 1.4.1</h2>
 
 	<ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li>Pathways / GO enrichment for miRNA targets. <a
-					href="http://chipster.csc.fi/manual/pathways-hyperg-mirna-go.html">Read more...</a>
+						href="http://chipster.csc.fi/manual/pathways-hyperg-mirna-go.html">Read more...</a>
 				<li>Pathways / KEGG enrichment for miRNA targets. <a
-					href="http://chipster.csc.fi/manual/pathways-hyperg-mirna-kegg.html">Read more...</a>
+						href="http://chipster.csc.fi/manual/pathways-hyperg-mirna-kegg.html">Read more...</a>
 				<li>Utilities / Import from ArrayExpress. This tool imports Affymetrix raw data directly
 					from ArrayExpress and normalizes it using the RMA algorithm.
 				<li>Quality control / Affymetrix exon arrays - using RLE and NUSE
 				<li>Normalization / Normalize to chip average
 				<li>Normalization / Normalize to gene average
 			</ul>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li>Pathways / Association to Reactome pathways. Support for UniProt identifiers added to
 					enable analysis of proteomics data.
@@ -1797,7 +2286,8 @@ div.header-item {
 					p-values are always calculated for interactions if they are taken into account in the model.
 				<li>Fixes to promoter analysis tools so that they cope better with R2.9.</li>
 			</ul>
-		<li><div class=header-item>Visualization news:</div>
+		<li>
+			<div class=header-item>Visualization news:</div>
 			<ul>
 				<li>3D scatter plot for PCA: Samples can be colored based on phenodata columns which
 					contain text (in addition to numbers).
@@ -1809,30 +2299,32 @@ div.header-item {
 	<h2>Version update 11.11.2009: What is new in Chipster 1.4.0</h2>
 
 	<ul>
-		<li><div class=header-item>New R/Bioconductor version, updated annotation packages</div> <br>
+		<li>
+			<div class=header-item>New R/Bioconductor version, updated annotation packages</div> <br>
 			All the analysis tool scripts have been updated to use R 2.9. Consequently the annotation and
 			pathway tools have been updated to use annotation packages in the .db -format. The following
 			versions of the annotation packages are currently in use:
 			<ul>
 				<li><a href="http://www.bioconductor.org/packages/2.4/data/annotation/">Bioconductor
 						2.4</a>
-				<li><a
-					href="http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/12.0.0/entrezg.asp">BrainArray
+				<li><a href="http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/12.0.0/entrezg.asp">BrainArray
 						v12 entrezg</a>
 				<li><a href="http://xmap.picr.man.ac.uk/download/index#ohsdb">X:map exon cdfs v1.1</a>
 			</ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li>Pathways / Hypergeometric test for ConsensusPathDB. <a
-					href="http://chipster.csc.fi/manual/pathways-hypergeometric-cpdb.html">Read more...</a>
+						href="http://chipster.csc.fi/manual/pathways-hypergeometric-cpdb.html">Read more...</a>
 				<li>Pathways / Association to Reactome pathways. <a
-					href="http://chipster.csc.fi/manual/pathways-reactome.html">Read more...</a>
+						href="http://chipster.csc.fi/manual/pathways-reactome.html">Read more...</a>
 				<li>Pathways / Protein interactions from IntAct. <a
-					href="http://chipster.csc.fi/manual/pathways-intact.html">Read more...</a>
-				<li>Normalization / Agilent miRNA. <a
-					href="http://chipster.csc.fi/manual/norm-agilent-mirna.html">Read more...</a>
+						href="http://chipster.csc.fi/manual/pathways-intact.html">Read more...</a>
+				<li>Normalization / Agilent miRNA. <a href="http://chipster.csc.fi/manual/norm-agilent-mirna.html">Read
+						more...</a>
 			</ul>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li>Normalization / Affymetrix exon arrays: Gene symbol and description columns are added,
 					when the data is normalized at gene level. Larger data sets can be analyzed as the
@@ -1842,7 +2334,8 @@ div.header-item {
 				<li>Normalization / Process prenormalized: Additional annotation columns are retained in
 					the data.
 			</ul>
-		<li><div class=header-item>Visualization news:</div>
+		<li>
+			<div class=header-item>Visualization news:</div>
 			<ul>
 				<li>3D scatter plot for PCA: After running principal component analysis (PCA) for samples
 					as a quality control, this visualization allows to color the data points according to
@@ -1859,18 +2352,21 @@ div.header-item {
 	<h2>Version update 17.7.2009: What is new in Chipster 1.3.0</h2>
 
 	<ul>
-		<li><div class=header-item>Support for new chip types</div>
+		<li>
+			<div class=header-item>Support for new chip types</div>
 			<ul>
 				<li>Affymetrix Human, Mouse and Rat Gene 1.0 ST arrays. These arrays can be normalized and
 					annotated (see below). Of the Affymetrix quality control tools only the RLE - NUSE tool is
 					currently suitable for them.
 			</ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li>Normalization / Affymetrix gene arrays
 				<li>Annotation / Affymetrix gene ST genelist
 			</ul>
-		<li><div class=header-item>Visualization news:</div>
+		<li>
+			<div class=header-item>Visualization news:</div>
 			<ul>
 				<li>Hierarchical / heatmap:
 					<ul>
@@ -1892,7 +2388,8 @@ div.header-item {
 	<h2>Version update 27.3.2009: What is new in Chipster 1.2.4</h2>
 
 	<ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li>Statistics/ Ordination-ca: Performs a detrended correspondence analysis. This
 					ordination method can be used for example in quality control and time series analysis.
@@ -1922,13 +2419,15 @@ div.header-item {
 					data table. For example, one can first run the Calculate descriptive statistics -tool, sort
 					genes based on the standard deviation column, and then extract the 50 top-most genes.
 			</ul>
-		<li><div class=header-item>Support for new chip types</div>
+		<li>
+			<div class=header-item>Support for new chip types</div>
 			<ul>
 				<li>Illumina Human HT-12 (when importing these files to Chipster with the Import tool,
 					select the PROBE_ID column as an identifier)
 				<li>(Agilent miRNA arrays, see the annotation tool described above)
 			</ul>
-		<li><div class=header-item>Solved problems</div>
+		<li>
+			<div class=header-item>Solved problems</div>
 			<ul>
 				<li>In some institutions Chipster started normally but no tools could be used (empty error
 					message). This was caused by a proxy server restricting network traffic. This problem has now
@@ -1956,7 +2455,8 @@ div.header-item {
 	<h2>Version update 8.1.2009: What is new in Chipster 1.2.2</h2>
 
 	<ul>
-		<li><div class=header-item>New analysis tools</div>
+		<li>
+			<div class=header-item>New analysis tools</div>
 			<ul>
 				<li>Statistics/ Adjust P-values: Adjusts raw p-values in the selected column for multiple
 					testing using a specified method.
@@ -1975,7 +2475,8 @@ div.header-item {
 					After running this tool, only expression values and gene symbols are retained in the data, all
 					other columns and information are lost.
 			</ul>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li>Preprocessing/ Filter by CV: The genes whose CV is bigger than the median CV are kept.
 
@@ -1992,7 +2493,7 @@ div.header-item {
 
 
 
-				
+
 				<li>Normalization/ Illumina: The normalization method parameter has been renamed to
 					"normalize.chips".
 				<li>Normalization/ Illumina -lumi pipeline: The normalization method parameter has been
@@ -2006,7 +2507,8 @@ div.header-item {
 				<li>Promoter analysis/ Retrieve promoters: Filtering added so that if there are several
 					probe sets for the same transcript (RefSeq id), the promoter sequence is retrieved only once.
 			</ul>
-		<li><div class=header-item>Visualization news:</div>
+		<li>
+			<div class=header-item>Visualization news:</div>
 			<ul>
 				<li>Venn diagram: Gene symbols added to the gene list in the "selected" tab, better merging
 					in data set creation
@@ -2026,7 +2528,7 @@ div.header-item {
 
 
 
-				
+
 				<li>Phenodata editor: Possibility to copy the contents of one cell to many cells
 			</ul>
 	</ul>
@@ -2036,11 +2538,13 @@ div.header-item {
 	<h2>Version update 11.11.2008: What is new in Chipster 1.2.1</h2>
 
 	<ul>
-		<li><div class=header-item>New functionality and visualization:</div>
+		<li>
+			<div class=header-item>New functionality and visualization:</div>
 			<ul>
 				<li>Interactive volcano plot
 			</ul>
-		<li><div class=header-item>Changes to analysis tools</div>
+		<li>
+			<div class=header-item>Changes to analysis tools</div>
 			<ul>
 				<li>Statistics/ Linear modelling: More descriptive parameter names. Phenodata column names
 					are added to the result files for clarity. P-values and fold changes are given also as separate
@@ -2060,7 +2564,8 @@ div.header-item {
 				<li>Normalization/ Agilent 1-color: The normalization method parameter has been renamed to
 					"normalize.chips".
 			</ul>
-		<li><div class=header-item>Annotation support for new chip types:</div>
+		<li>
+			<div class=header-item>Annotation support for new chip types:</div>
 			<ul>
 				<li>Illumina Human V3
 				<li>Illumina Mouse V2
@@ -2074,10 +2579,12 @@ div.header-item {
 	<h2>Version update 13.10.2008: What is new in Chipster 1.2.0</h2>
 
 	<ul>
-		<li><div class=header-item>
+		<li>
+			<div class=header-item>
 				<a href="#tools">New analysis tools</a>
 			</div>
-		<li><div class=header-item>
+		<li>
+			<div class=header-item>
 				<a href="#visualizations">Visualization news:</a>
 			</div>
 			<ul>
@@ -2101,7 +2608,7 @@ div.header-item {
 				<li>Improved Workflow view: automatic sizing, better layout
 				<li>The limit of concurrent analysis jobs per user is increased from 5 to 10
 				<li>For a complete list if changes, please see the <a
-					href="http://chipster.csc.fi/release_notes.shtml">release notes</a>.
+						href="http://chipster.csc.fi/release_notes.shtml">release notes</a>.
 			</ul>
 	</ul>
 
@@ -2165,7 +2672,7 @@ div.header-item {
 
 
 
-		
+
 		<li><b>Expression profiles are colored according to the expression level</b>
 		<li><b>Annotations for data points selected in images is more comprehensive and not
 				limited to Affymetrix data</b>. The Annotate button in the Selected-tab of 2D/3D scatter plots and
@@ -2183,7 +2690,7 @@ div.header-item {
 		<li><b>Agilent rhesus monkey</b>
 		<li><b>Note that even if your array is not listed in <a href="supported-chips.html">supported
 					chip types</a>, you can still analyze it with Chipster
-		</b>. For other Illumina and Agilent arrays (such as miRNA arrays) simply choose "empty" as a chiptype
+			</b>. For other Illumina and Agilent arrays (such as miRNA arrays) simply choose "empty" as a chiptype
 			during normalization, and Chipster will automatically calculate a mean of all probes which have
 			the same identifier. The only exception is Affymetrix chips, because they require the CDF and
 			probe packages for the summarization to work.
@@ -2231,4 +2738,5 @@ div.header-item {
 	</ul>
 
 </body>
+
 </html>

@@ -22,6 +22,7 @@
                 <li> <a href="#RNA">RNA-seq</a></li>
                 <li> <a href="#miRNA">Small RNA-seq</a></li>
                 <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
+                <li> <a href="#spatial">Spatially resolved transcriptomics</a></li>
                 <li> <a href="#ChIP">ChIP- and DNase-seq</a></li>
                 <li> <a href="#micropreproc">Microbial amplicon data preprocessing</a></li>
                 <li> <a href="#microanalysis">Microbial amplicon data analyses</a></li>
@@ -230,29 +231,47 @@
                 <br>
                 <br>
                 <b><a name="singlecell">Single-cell RNA-seq</a></b>
-                <li><a href="single-cell-seurat-setup.html">Seurat -Setup and QC</a></li>
-                <li><a href="single-cell-scater-QC.html">Scater - QC</a></li>
-                <li><a href="single-cell-seurat-filter-regress.html">Seurat -Filter, normalize, regress and detect
-                                variable genes</a></li>
-                <li><a href="single-cell-seurat-sctransform.html">Seurat v3 -SCTransform: Filter, normalize, regress and
-                                detect variable genes</a></li>
-                <li><a href="single-cell-seurat-pca.html">Seurat -PCA</a></li>
-                <li><a href="single-cell-seurat-clustering.html">Seurat -Clustering and detection of cluster marker
+                <li><a href="single-cell-cellbender-background-removal-v5.html">Seurat - Remove background contamination
+                                with CellBender</a></li>
+                <li><a href="single-cell-seurat-setup-v5.html">Seurat -Setup and QC</a></li>
+                <!-- <li><a href="single-cell-scater-QC.html">Scater - QC</a></li>-->
+                <li><a href="single-cell-seurat-filter-v5.html">Seurat -Filter cells</a></li>
+                <li><a href="single-cell-seurat-filter-regress-v5.html">Seurat -Normalize, regress and detect variable
                                 genes</a></li>
-                <li><a href="single-cell-seurat-find-markers.html">Seurat -Find differentially expressed genes between
+                <li><a href="single-cell-seurat-sctransform-v5.html">Seurat -SCTransform: Filter, normalize, regress and
+                                detect variable genes</a></li>
+                <li><a href="single-cell-seurat-pca-v5.html">Seurat -PCA</a></li>
+                <li><a href="single-cell-seurat-clustering-v5.html">Seurat -Clustering and detection of cluster marker
+                                genes</a></li>
+                <li><a href="single-cell-seurat-find-markers-v5.html">Seurat -Find differentially expressed genes
+                                between
                                 clusters</a></li>
-                <li><a href="single-cell-seurat-gene-plots.html">Seurat -Visualize biomarker(s)</a></li>
-                <li><a href="single-cell-seurat-featureplot.html">Seurat -Visualise features in UMAP plot </a></li>
-                <li><a href="single-cell-seurat-CCA.html">Seurat -Combine two samples</a></li>
-                <li><a href="single-cell-seurat-integrated-analysis.html">Seurat -Integrated analysis of two samples</a>
+                <li><a href="single-cell-seurat-gene-plots-v5.html">Seurat -Visualize biomarker(s)</a></li>
+                <li><a href="single-cell-seurat-featureplot-v5.html">Seurat -Visualise features in UMAP plot </a></li>
+                <li><a href="single-cell-seurat-singler-v5.html">SingleR cluster annotation -v5</a></li>
+                <li><a href="single-cell-extract-information-v5.html">Seurat -Extract information from Seurat object</a>
                 </li>
-                <li><a href="single-cell-seurat-diffexp-samples.html">Seurat -Find conserved cluster markers and DE
-                                genes in two samples</a></li>
-                <li><a href="single-cell-seurat-split-dot-plot.html">Seurat -Visualize genes with cell type specific
-                                responses in two samples</a></li>
-                <li><a href="single-cell-seurat-extract-cluster.html">Seurat -Extract cells in a cluster</a></li>
-                <li><a href="single-cell-seurat-subset.html">Seurat -Subset Seurat objects based on gene expression</a>
+                <li><a href="single-cell-from-rds-to-seurat-object-v5.html">Seurat -From RDS file to Seurat object</a>
                 </li>
+                <li><a href="single-cell-seurat-merge-samples-v5.html">Seurat -Merge & normalise, detect variable genes,
+                                regress and PCA</a></li>
+                <li><a href="single-cell-seurat-integrate-v5.html">Seurat -Integrate multiple samples</a>/li>
+                <li><a href="single-cell-seurat-diffexp-samples-v5.html">Seurat -Find conserved cluster markers and DE
+                                genes in multiple samples</a></li>
+                <li><a href="single-cell-seurat-diffexp-chosen-samples-v5.html">Seurat -Find DE genes between chosen
+                                samples</a>/li>
+                <li><a href="single-cell-seurat-diffexp-sample-groups-v5.html">Seurat -Find DE genes between sample
+                                groups</a>/li>
+                <li><a href="single-cell-seurat-diffexp-pseudobulk-v5.html">Seurat -Find DE genes between sample groups,
+                                pseudobulk</a>/li>
+                <li><a href="single-cell-seurat-split-dot-plot-v5.html">Seurat -Visualize genes with cell type specific
+                                responses in multiple samples</a></li>
+                <li><a href="single-cell-seurat-extract-cluster-v5.html">Seurat -Extract cells in a cluster</a></li>
+                <li><a href="single-cell-seurat-subset-v5.html">Seurat -Subset Seurat objects based on gene
+                                expression</a></li>
+                <li><a href="single-cell-seurat-rename-clusters-v5.html">Seurat -Rename clusters</a></li>
+                <li><a href="single-cell-seurat-modify-clusters-v5.html">Seurat -Remove clusters</a></li>
+                <li><a href="single-cell-seurat-split-samples-from-matrix-v5.html">Seurat -Separate samples</a></li>
                 <!-- DropSeq tools:-->
                 <li><a href="single-cell-preprocessing.html">Preprocessing of DropSeq FASTQ files</a></li>
                 <!-- <li><a href="picard-fastqtosam.html">FASTQ to BAM</a></li> -->
@@ -266,6 +285,32 @@
                 <!-- <li><a href="single-cell-detect-bead-synthesis-erros.html">Detect bead synthesis errors</a></li> -->
                 <li><a href="single-cell-digital-expression.html">Create digital gene expression matrix</a></li>
                 <!--<li><a href="single-cell-bam-tag-histogram.html">BAM tag histogram</a></li>-->
+                <br>
+                <br>
+                <b><a name="spatial">Spatially resolved transcriptomics</a></b>
+                <li><a href="spatial-transcriptomics-seurat-setup-v5.html">Seurat -Setup and QC</a></li>
+                <li><a href="spatial-transcriptomics-seurat-filter-v5.html">Seurat -Filter spots</a></li>
+                <li><a href="spatial-transcriptomics-seurat-top-expressed-genes-v5.html">Seurat -Identify top expressed
+                                genes</a></li>
+                <li><a href="spatial-transcriptomics-seurat-single-sample-analysis-v5.html">Seurat -Normalisation and
+                                PCA</a></li>
+                <li><a href="spatial-transcriptomics-seurat-multiple-sample-analysis-v5.html">Seurat -Combine multiple
+                                samples, normalization and PCA</a></li>
+                <li><a href="spatial-transcriptomics-seurat-clustering-v5.html">Seurat -Clustering</a></li>
+                <li><a href="spatial-transcriptomics-seurat-featureplot-v5">Seurat -Visualize gene expression</a></li>
+                <li><a href="spatial-transcriptomics-seurat-spatialdimplot-v5">Seurat -Visualise clusters </a></li>
+                <li><a href="spatial-transcriptomics-seurat-diffexp-chosen-clusters-v5.html">Seurat -Identify spatially
+                                variable genes based on clusters</a></li>
+                <li><a href="spatial-transcriptomics-seurat-spatially-variable-markvariogram-v5.html">Seurat -Identify
+                                spatially variable genes without pre-annotation</a></li>
+                <li><a href="spatial-transcriptomics-seurat-subset-clusters-v5.html">Seurat -Subset out anatomical
+                                regions based on clusters</a></li>
+                <li><a href="spatial-transcriptomics-seurat-integrated-v5.R">Seurat -Integration with scRNA-seq data</a>
+                </li>
+                <li><a href="spatial-transcriptomics-seurat-visualise-integration-v5.html">Seurat -Visualize cell types
+                                after integration with scRNA-seq data</a></li>
+                <li><a href="single-cell-extract-information-v5.html">Seurat -Extract information from Seurat object</a>
+                </li>
                 <br>
                 <br>
                 <b><a name="ChIP">ChIP- and DNase-seq</a></b>
