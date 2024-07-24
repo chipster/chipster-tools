@@ -17,7 +17,8 @@
 		href="http://www.bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf">edgeR
 		user guide</a>, see chapter 3.2.2).
 	This tool takes as input the counts table and a phenodata file, where the sample groups are described.
-	You can generate these files using the <a href="https://chipster.csc.fi/manual/ngs-create-experiment.html"> Define
+	You can generate these files using the <a href="https://chipster.2.rahtiapp.fi/manual/ngs-create-experiment.html">
+		Define
 		NGS experiment</a> tool.
 	We recommend marking the <i>control</i> group with 0 and the other group with 1 in the phenodata column
 	(by default, this is the <i>group</i> column): the group with the smaller
@@ -25,7 +26,7 @@
 	This means that in the results table, positive fold changes are upregulated and negative downregulated
 	genes compared to the control group.
 	For more complex comparisons, or multifactor experiments, you can use the
-	<a href="https://chipster.csc.fi/manual/edgeR-multivariate.html">Differential expression using edgeR for
+	<a href="https://chipster.2.rahtiapp.fi/manual/edgeR-multivariate.html">Differential expression using edgeR for
 		multivariate experiments tool</a>,
 	which uses generalized linear models -based statistical methods ("glm edgeR", see the edgeR user guide for more
 	information).
@@ -100,7 +101,8 @@
 			<li>FDR = adjusted p-value</li>
 		</ul>
 		</li>
-		<li>de-list-edger.bed (optional): If you data contained genomic coordinates, the result table is also given as a BED file. The score column contains log2 fold change values.</li>
+		<li>de-list-edger.bed (optional): If you data contained genomic coordinates, the result table is also given as a
+			BED file. The score column contains log2 fold change values.</li>
 		<li>edgeR_report.pdf: A PDF file containing:
 			<ul>
 				<li>ma-plot-edger.pdf: MA plot where significantly differentially expressed features are highlighted.

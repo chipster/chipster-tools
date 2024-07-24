@@ -34,7 +34,7 @@
 	<p>This tool takes as input a table of raw counts from the different samples. The count file has to be associated
 		with a phenodata file describing the experimental factors.
 		You can generate these files using the
-		<a href="https://chipster.csc.fi/manual/ngs-create-experiment.html"> Define NGS experiment</a>
+		<a href="https://chipster.2.rahtiapp.fi/manual/ngs-create-experiment.html"> Define NGS experiment</a>
 		tool, which combines count files for different samples to one table and creates a phenodata file for it.
 		We recommend marking the <i>control</i> group with 0 and the other groups with 1,2,3... in the phenodata
 		columns.
@@ -72,7 +72,7 @@
 		Please notice that in the results table you will have all the comparisons between the different effects defined
 		in the parameters -section.
 		You can filter the table for example based on the adjusted p-values (FDR-columns) using the tool
-		<a href="https://chipster.csc.fi/manual/ngs-filter-results-column.html">Utilities /
+		<a href="https://chipster.2.rahtiapp.fi/manual/ngs-filter-results-column.html">Utilities /
 			Filter table by column value</a> .
 	</p>
 
@@ -110,7 +110,8 @@
 	</p>
 	<p>
 		Which effects should I include in the model? You can estimate this from looking at the PCA plot
-		(try the tool <a href="https://chipster.csc.fi/manual/deseq2-pca-heatmap.html">PCA and heatmap of samples with
+		(try the tool <a href="https://chipster.2.rahtiapp.fi/manual/deseq2-pca-heatmap.html">PCA and heatmap of samples
+			with
 			DESeq2</a>).
 		If you can see some of the effects there, it is advisable to add them to the model.
 		Adding the batch effects to the model corrects for them, and your comparison of the actual groups of
@@ -203,7 +204,8 @@
 
 	<p> More information about the functions can be found also in the
 		<a href="http://www.bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf">
-			EdgeR Users Guide</a></p>
+			EdgeR Users Guide</a>
+	</p>
 </body>
 
 </html>
