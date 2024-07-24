@@ -48,7 +48,9 @@ seurat_obj <- FindNeighbors(seurat_obj, dims = 1:CCstocompute, reduction = "pca"
 seurat_obj <- FindClusters(seurat_obj, resolution = res, cluster.name = "unintegrated_clusters")
 seurat_obj <- RunUMAP(seurat_obj, dims = 1:num.dims, reduction = "pca", reduction.name = "umap.unintegrated") # dims = Which dimensions to use as input features
 
+
 # Perform integration:
+
 # Not needed anymore because of merge
 # When using RPCA, need to run PCA on each dataset using these features:
 #if (anchor.identification.method == "rpca") {
@@ -91,14 +93,16 @@ if (normalisation.method == "SCT") {
   } else {
     stop(paste("CHIPSTER-NOTE: ", "The data you provided hasn't been SCTransformed, please run SCTransform first or choose other parameter value."))
   }
-} else {
+} else { # LogNormalize:"Global scaling normalization
     print(anchor.identification.method)
     print(new.reduction)
     data.combined <- IntegrateLayers(object = seurat_obj, method = anchor.identification.method, orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
       verbose = FALSE)
+    # Only needed when LogNormalized data?
+    data.combined[["RNA"]] <- JoinLayers(data.combined[["RNA"]])
+    print(data.combined)
 }
-data.combined[["RNA"]] <- JoinLayers(data.combined[["RNA"]])
-print(data.combined)
+
 
 data.combined <- FindNeighbors(data.combined, reduction = new.reduction, dims = 1:CCstocompute)
 data.combined <- FindClusters(data.combined, resolution = res)
@@ -108,12 +112,15 @@ data.combined <- FindClusters(data.combined, resolution = res)
 data.combined <- RunUMAP(data.combined, dims = 1:num.dims, reduction = new.reduction) # dims = Which dimensions to use as input features
 data.combined <- RunTSNE(data.combined, dims = 1:num.dims, reduction = new.reduction) # dims = Which dimensions to use as input features
 
+
 # Visualization
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
+
 # Unintegrated:
-p1 <- DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("stim"), pt.size = point.size) + labs(title = "UMAP unintegrated, color by sample")
-p2 <- DimPlot(data.combined, reduction = "umap.unintegrated", group.by = c("seurat_clusters"), pt.size = point.size) + labs(title = "UMAP unintegrated, color by cluster")
+p1 <- DimPlot(seurat_obj, reduction = "umap.unintegrated", group.by = c("stim"), pt.size = point.size, label = add.labels) + labs(title = "UMAP unintegrated, color by sample")
+p2 <- DimPlot(seurat_obj, reduction = "umap.unintegrated", group.by = c("unintegrated_clusters"), pt.size = point.size, label = add.labels) + labs(title = "UMAP unintegrated, color by cluster")
 plot_grid(p1, p2)
+
 # Integrated:
 p3 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("stim"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by sample")
 p4 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("seurat_clusters"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by cluster")
