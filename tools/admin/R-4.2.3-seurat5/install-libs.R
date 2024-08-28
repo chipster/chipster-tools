@@ -98,5 +98,7 @@ devtools::install_github("cellgeni/schard")
 
 install.packages("ggrepel")
 
+install.packages("tidyverse")
+
 
 
