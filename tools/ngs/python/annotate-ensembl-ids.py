@@ -105,7 +105,8 @@ except ValueError:
 max_ids_per_query = 1000
 
 # limit how many request are allowed in one job to avoid Rest API rate limits
-max_chunks = 100
+# max_chunks = 100 # increased to 300 to allow customer to run with bigger inputs
+max_chunks = 300
 
 row_chunks = chunks(rows, max_ids_per_query)
 
