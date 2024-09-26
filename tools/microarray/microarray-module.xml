@@ -160,6 +160,7 @@
 		<tool>filter-by-column-value.R</tool>
 		<tool>delete-columns.R</tool>
 		<tool>delete-and-subtract-columns.R</tool>
+		<tool module="common">select_columns.R</tool>
 		<tool module="common">merge-tables.R</tool>
 		<!-- hidden until multiple phenodatas are supported -->
 		<!-- <tool>merge-datasets.R</tool> -->
