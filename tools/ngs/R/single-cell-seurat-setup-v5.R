@@ -11,7 +11,7 @@
 # PARAMETER sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # RUNTIME R-4.3.2-single-cell
-# SLOTS 2
+# SLOTS 5
 # TOOLS_BIN ""
 
 
@@ -32,6 +32,7 @@
 # 2023-07-12 ML Mitogenes with Mt-
 # 2023-08-28 IH add percent.rb to QC
 # 2023-10-10 IH Update to Seurat v5
+# 2023-02-01 ML Slots from 2 -> 5
 
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
@@ -60,7 +61,7 @@ project.name <- gsub(" ", "_", project.name)
 if (file.exists("dropseq.tsv")) {
   dat <- read.table("dropseq.tsv", header = TRUE, sep = "\t", row.names = 1)
   # Change the dataframe to a matrix
-  dat = Matrix(as.matrix(dat) , sparse=TRUE)
+  dat <- Matrix(as.matrix(dat), sparse = TRUE)
   # If using 10X data:
 } else if (file.exists("files.tar")) {
   # Read the contents of the tar file into a list
@@ -162,4 +163,3 @@ dev.off() # close the pdf
 save(seurat_obj, file = "setup_seurat_obj.Robj")
 
 ## EOF
-
