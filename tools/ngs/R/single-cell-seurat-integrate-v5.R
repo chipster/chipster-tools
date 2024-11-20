@@ -15,7 +15,7 @@
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of the cluster in UMAP and tSNE plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an 'average' single cell in each cluster.)
 # RUNTIME R-4.3.2-single-cell
-# SLOTS 2
+# SLOTS 5
 # TOOLS_BIN ""
 
 # add parameter if needed
@@ -31,6 +31,7 @@
 # 2023-04-06 LG Remove 5 slots
 # 2023-02-01 ML Return to the original 3 slots
 # 2023-12-15 IH Update to Seurat v5
+# 2024-11-20 ML Increase slots to 5 temporarily
 
 library(Seurat)
 library(gplots)
@@ -53,54 +54,58 @@ seurat_obj <- RunUMAP(seurat_obj, dims = 1:num.dims, reduction = "pca", reductio
 
 # Not needed anymore because of merge
 # When using RPCA, need to run PCA on each dataset using these features:
-#if (anchor.identification.method == "rpca") {
-    #seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
-        #x <- ScaleData(x, features = features, verbose = FALSE)
-        #x <- RunPCA(x, features = features, verbose = FALSE)
-    #})
-#}
+# if (anchor.identification.method == "rpca") {
+# seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
+# x <- ScaleData(x, features = features, verbose = FALSE)
+# x <- RunPCA(x, features = features, verbose = FALSE)
+# })
+# }
 
 if (anchor.identification.method == "CCAIntegration") {
-  new.reduction = "integrated.cca"
+  new.reduction <- "integrated.cca"
 } else if (anchor.identification.method == "RPCAIntegration") {
-  new.reduction = "integrated.rpca"
+  new.reduction <- "integrated.rpca"
 }
 
 # When using only the user listed samples as references:
 # add later if needed
-#if (ref.sample.names != "No references selected") {
-    #ref.samples.name.list <- unlist(strsplit(ref.sample.names, ", "))
-    # Go through the samples = R-objects in the list to see which ones are the reference samples.
-    #ref.sample.numbers <- vector()
-    #for (i in 1:length(seurat.objects.list)) {
-        # Check, if the (first) sample name i:th sample is one of the names listed by user (=if there are any TRUEs)
-        #if (any(seurat.objects.list[[i]]@meta.data$stim[1] == ref.samples.name.list)) {
-            # if TRUE, save the i
-            #ref.sample.numbers <- append(ref.sample.numbers, i)
-        #}
-    #}
-#} else {
-    #ref.sample.numbers <- NULL # if no samples are listed, NULL = all pairwise anchors are found (no reference/s)
-#} 
+# if (ref.sample.names != "No references selected") {
+# ref.samples.name.list <- unlist(strsplit(ref.sample.names, ", "))
+# Go through the samples = R-objects in the list to see which ones are the reference samples.
+# ref.sample.numbers <- vector()
+# for (i in 1:length(seurat.objects.list)) {
+# Check, if the (first) sample name i:th sample is one of the names listed by user (=if there are any TRUEs)
+# if (any(seurat.objects.list[[i]]@meta.data$stim[1] == ref.samples.name.list)) {
+# if TRUE, save the i
+# ref.sample.numbers <- append(ref.sample.numbers, i)
+# }
+# }
+# } else {
+# ref.sample.numbers <- NULL # if no samples are listed, NULL = all pairwise anchors are found (no reference/s)
+# }
 
 if (normalisation.method == "SCT") {
   if (length(seurat_obj@assays$SCT) > 0) {
-    #seurat.objects.list <- PrepSCTIntegration(object.list = seurat_obj, anchor.features = features)
+    # seurat.objects.list <- PrepSCTIntegration(object.list = seurat_obj, anchor.features = features)
     print(anchor.identification.method)
     print(new.reduction)
-    data.combined <- IntegrateLayers(object = seurat_obj, method = anchor.identification.method, normalization.method = "SCT", orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
-      verbose = FALSE)
+    data.combined <- IntegrateLayers(
+      object = seurat_obj, method = anchor.identification.method, normalization.method = "SCT", orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
+      verbose = FALSE
+    )
   } else {
     stop(paste("CHIPSTER-NOTE: ", "The data you provided hasn't been SCTransformed, please run SCTransform first or choose other parameter value."))
   }
 } else { # LogNormalize:"Global scaling normalization
-    print(anchor.identification.method)
-    print(new.reduction)
-    data.combined <- IntegrateLayers(object = seurat_obj, method = anchor.identification.method, orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
-      verbose = FALSE)
-    # Only needed when LogNormalized data?
-    data.combined[["RNA"]] <- JoinLayers(data.combined[["RNA"]])
-    print(data.combined)
+  print(anchor.identification.method)
+  print(new.reduction)
+  data.combined <- IntegrateLayers(
+    object = seurat_obj, method = anchor.identification.method, orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
+    verbose = FALSE
+  )
+  # Only needed when LogNormalized data?
+  data.combined[["RNA"]] <- JoinLayers(data.combined[["RNA"]])
+  print(data.combined)
 }
 
 
