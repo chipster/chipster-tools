@@ -11,7 +11,7 @@
 # PARAMETER sample.group: "Sample group" TYPE STRING DEFAULT CTRL (Type the sample name or identifier here. For example CTRL, STIM, TREAT. Do not use underscore _ in the names! Fill this field if you are combining samples later.)
 # PARAMETER OPTIONAL mincells: "Keep genes which are expressed in at least this many cells" TYPE INTEGER DEFAULT 3 (The genes need to be expressed in at least this many cells.)
 # RUNTIME R-4.3.2-single-cell
-# SLOTS 5
+# SLOTS 10
 # TOOLS_BIN ""
 
 
