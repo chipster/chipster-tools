@@ -2,8 +2,8 @@
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL QCplots_{...}.pdf
 # OUTPUT OPTIONAL seurat_obj_{...}.Robj
-# RUNTIME R-4.2.3-seurat5
-# SLOTS 2
+# RUNTIME R-4.3.2-single-cell
+# SLOTS 5
 # TOOLS_BIN ""
 
 # 2024-11-25 ML
