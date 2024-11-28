@@ -239,6 +239,7 @@
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
 		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	
 		<tool>single-cell-seurat-separate-samples-from-sobject.R</tool>	
+		<tool>single-cell-seurat-rename-sample-v5.R</tool>
 		<!-- <tool>single-cell-seurat-h5ad2seurat-v5.R</tool>  	--> 
 		<!-- Dropseq tools: --> 
 		<tool>single-cell-preprocessing.R</tool>
