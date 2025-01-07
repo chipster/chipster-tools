@@ -5,7 +5,7 @@
 
 system("cp input output")
 
-print("Sleeping now")
+print("Sleeping")
 
 for (i in 1:delay) {
     print(paste("Sleeping ", i))
