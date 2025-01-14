@@ -177,7 +177,7 @@
 		<tool>ngs-dea-edger-RNA.R</tool>
 		<tool>edgeR-multivariate.R</tool>
 		<tool>heatmap-for-rnaseq.R</tool>
-		<tool module="common">annotate-cpdb.py</tool>
+		<!-- <tool module="common">annotate-cpdb.py</tool> -->
 		<tool>pathways-ngs-hyperg-go.R</tool>
 		<tool>deseq2-transform.R</tool>
 		<tool>deseq2-normalized-counts-for-gene.R</tool>
