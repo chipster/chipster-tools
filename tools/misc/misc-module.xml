@@ -127,6 +127,7 @@
 		<tool>fail.R</tool>
 		<tool>sort_gtf.R</tool>
 		<tool module="ngs">hisat2-paired-end-storage.R</tool>
+		<tool module="ngs">hisat2-paired-end-with-index-building-storage.R</tool>
 		<tool module="ngs">hisat2-paired-end-test.R</tool>
 		<tool>verify-tools-bin.py</tool>
 		<tool>test-r-in-container.R</tool>
