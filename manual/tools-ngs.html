@@ -24,7 +24,8 @@
                 <li> <a href="#singlecell">Single-cell RNA-seq</a></li>
                 <li> <a href="#spatial">Spatially resolved transcriptomics</a></li>
                 <li> <a href="#ChIP">ChIP- and DNase-seq</a></li>
-                <li> <a href="#micropreproc">Microbial amplicon data preprocessing</a></li>
+                <li> <a href="#micropreproc">Microbial amplicon data preprocessing for OTU</a></li>
+                <li> <a href="#micropreproc-asv">Microbial amplicon data preprocessing for ASV</a></li>
                 <li> <a href="#microanalysis">Microbial amplicon data analyses</a></li>
                 <li> <a href="#CNA">CNA-seq</a></li>
         </ol>
@@ -231,44 +232,29 @@
                 <br>
                 <br>
                 <b><a name="singlecell">Single-cell RNA-seq</a></b>
-                <li><a href="single-cell-cellbender-background-removal-v5.html">Seurat - Remove background contamination
-                                with CellBender</a></li>
+                <li><a href="single-cell-cellbender-background-removal-v5.html">Seurat - Remove background contamination with CellBender</a></li>
                 <li><a href="single-cell-seurat-setup-v5.html">Seurat -Setup and QC</a></li>
                 <!-- <li><a href="single-cell-scater-QC.html">Scater - QC</a></li>-->
                 <li><a href="single-cell-seurat-filter-v5.html">Seurat -Filter cells</a></li>
-                <li><a href="single-cell-seurat-filter-regress-v5.html">Seurat -Normalize, regress and detect variable
-                                genes</a></li>
-                <li><a href="single-cell-seurat-sctransform-v5.html">Seurat -SCTransform: Filter, normalize, regress and
-                                detect variable genes</a></li>
+                <li><a href="single-cell-seurat-filter-regress-v5.html">Seurat -Normalize, regress and detect variable genes</a></li>
+                <li><a href="single-cell-seurat-sctransform-v5.html">Seurat -SCTransform: Filter, normalize, regress and detect variable genes</a></li>
                 <li><a href="single-cell-seurat-pca-v5.html">Seurat -PCA</a></li>
-                <li><a href="single-cell-seurat-clustering-v5.html">Seurat -Clustering and detection of cluster marker
-                                genes</a></li>
-                <li><a href="single-cell-seurat-find-markers-v5.html">Seurat -Find differentially expressed genes
-                                between
-                                clusters</a></li>
+                <li><a href="single-cell-seurat-clustering-v5.html">Seurat -Clustering and detection of cluster marker genes</a></li>
+                <li><a href="single-cell-seurat-find-markers-v5.html">Seurat -Find differentially expressed genes between clusters</a></li>
                 <li><a href="single-cell-seurat-gene-plots-v5.html">Seurat -Visualize biomarker(s)</a></li>
                 <li><a href="single-cell-seurat-featureplot-v5.html">Seurat -Visualise features in UMAP plot </a></li>
                 <li><a href="single-cell-seurat-singler-v5.html">SingleR cluster annotation -v5</a></li>
-                <li><a href="single-cell-extract-information-v5.html">Seurat -Extract information from Seurat object</a>
-                </li>
-                <li><a href="single-cell-from-rds-to-seurat-object-v5.html">Seurat -From RDS file to Seurat object</a>
-                </li>
-                <li><a href="single-cell-seurat-merge-samples-v5.html">Seurat -Merge & normalise, detect variable genes,
-                                regress and PCA</a></li>
-                <li><a href="single-cell-seurat-integrate-v5.html">Seurat -Integrate multiple samples</a>/li>
-                <li><a href="single-cell-seurat-diffexp-samples-v5.html">Seurat -Find conserved cluster markers and DE
-                                genes in multiple samples</a></li>
-                <li><a href="single-cell-seurat-diffexp-chosen-samples-v5.html">Seurat -Find DE genes between chosen
-                                samples</a>/li>
-                <li><a href="single-cell-seurat-diffexp-sample-groups-v5.html">Seurat -Find DE genes between sample
-                                groups</a>/li>
-                <li><a href="single-cell-seurat-diffexp-pseudobulk-v5.html">Seurat -Find DE genes between sample groups,
-                                pseudobulk</a>/li>
-                <li><a href="single-cell-seurat-split-dot-plot-v5.html">Seurat -Visualize genes with cell type specific
-                                responses in multiple samples</a></li>
+                <li><a href="single-cell-extract-information-v5.html">Seurat -Extract information from Seurat object</a></li>
+                <li><a href="single-cell-from-rds-to-seurat-object-v5.html">Seurat -From RDS file to Seurat object</a></li>
+                <li><a href="single-cell-seurat-merge-samples-v5.html">Seurat -Merge & normalise, detect variable genes, regress and PCA</a></li>
+                <li><a href="single-cell-seurat-integrate-v5.html">Seurat -Integrate multiple samples</a></li>
+                <li><a href="single-cell-seurat-diffexp-samples-v5.html">Seurat -Find conserved cluster markers and DE genes in multiple samples</a></li>
+                <li><a href="single-cell-seurat-diffexp-chosen-samples-v5.html">Seurat -Find DE genes between chosen samples</a></li>
+                <li><a href="single-cell-seurat-diffexp-sample-groups-v5.html">Seurat -Find DE genes between sample groups</a></li>
+                <li><a href="single-cell-seurat-diffexp-pseudobulk-v5.html">Seurat -Find DE genes between sample groups, pseudobulk</a></li>
+                <li><a href="single-cell-seurat-split-dot-plot-v5.html">Seurat -Visualize genes with cell type specific responses in multiple samples</a></li>
                 <li><a href="single-cell-seurat-extract-cluster-v5.html">Seurat -Extract cells in a cluster</a></li>
-                <li><a href="single-cell-seurat-subset-v5.html">Seurat -Subset Seurat objects based on gene
-                                expression</a></li>
+                <li><a href="single-cell-seurat-subset-v5.html">Seurat -Subset Seurat objects based on gene expression</a></li>
                 <li><a href="single-cell-seurat-rename-clusters-v5.html">Seurat -Rename clusters</a></li>
                 <li><a href="single-cell-seurat-modify-clusters-v5.html">Seurat -Remove clusters</a></li>
                 <li><a href="single-cell-seurat-split-samples-from-matrix-v5.html">Seurat -Separate samples</a></li>
@@ -328,7 +314,7 @@
                 <li> <a href="dimont-predictor.html">DimontPredictor</a></li>
                 <br>
                 <br>
-                <b><a name="micropreproc">Microbial amplicon data preprocessing</a></b>
+                <b><a name="micropreproc">Microbial amplicon data preprocessing for OTU</a></b>
                 <li><a href="mothur-trimseqs-uniqueseqs.html">Trim primers and barcodes and filter reads</a></li>
                 <li><a href="mothur-makegroup.html">Combine FASTQ or FASTA files and make a group file</a></li>
                 <li><a href="mothur-makecontigs.html">Combine paired reads to contigs</a></li>
@@ -340,10 +326,8 @@
                 <li><a href="mothur-filterseqs.html">Filter sequence alignment</a></li>
                 <li><a href="mothur-precluster.html">Precluster aligned sequences</a></li>
                 <li><a href="mothur-chimera-uchime.html">Remove chimeric sequences</a></li>
-                <li><a href="mothur-classifyseqs.html">Classify 16S or 18S sequences to taxonomic units using Silva</a>
-                </li>
-                <li><a href="mothur-classifyseqs-its.html">Classify ITS sequences to taxonomic units using UNITE</a>
-                </li>
+                <li><a href="mothur-classifyseqs.html">Classify 16S or 18S sequences to taxonomic units using Silva</a></li>
+                <li><a href="mothur-classifyseqs-its.html">Classify ITS sequences to taxonomic units using UNITE</a></li>
                 <!--<li><a href="mothur-classify-counttable.html">Produce count table and phenodata</li> -->
                 <!-- <li><a href="mothur-analyses.html">Statistical analysis for marker gene studies</a></li> -->
                 <li><a href="mothur-seq-error.html">Asses error rates</a></li>
@@ -352,6 +336,17 @@
                 <li><a href="mothur-fastqinfo.html">Split FASTQ file to FASTA and QUAL files</a></li>
                 <li><a href="merge-fasta-qual.html">Merge FASTA or QUAL files</a></li>
                 <li><a href="fixed_text_conversions.html">Convert contig names to Mothur format</a></li>
+                <br>
+                <br>
+                <b><a name="micropreproc-asv">Microbial amplicon data preprocessing for ASV</a></b>
+                <li><a href="identify-primers.html">Identify primers and the correct orientation</a></li>
+                <li><a href="dada2-filter.html">Filter and trim sequences with DADA</a></li>
+                <li><a href="dada2-dada.html">Sample inference</a></li>
+                <li><a href="dada2-merge.html">Combine paired reads to contigs with DADA2</a></li>
+                <li><a href="dada2-sqtab-chimera.html">Make an ASV table and remove chimera</a>s</li>
+                <li><a href="dada2-assign-taxonomy.html">Assign taxonomy</a></li>
+                <li><a href="dada-make-phyloseq-object.html">Make a phyloseq object</a></li>
+                <li><a href="dada-merge-phenodata-phyloseq.html">Merge phenodata to the phyloseq object</a></li>
                 <br>
                 <br>
                 <b><a name="microanalysis">Microbial amplicon data analyses</a></b>
