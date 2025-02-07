@@ -1,8 +1,8 @@
 # TOOL bwa-mem-with-index-building.R: "BWA MEM for single or paired end reads and own genome" (This tool uses BWA MEM to align single-end or paired-end reads to a provided reference genome. You need to supply the single end or paired-end reads in FASTQ format. If you provide one reads file as input, single-end alignment is performed. If you provide paired-end reads files as input, paired-end alignment is performed. You also need to provide the reference genome as input either in FASTA format or as a tar package with a BWA MEM index.)
-# INPUT reads{...}.fq: "Reads" TYPE FASTQ
+# INPUT reads{...}.fq: "Reads" TYPE GENERIC
 # INPUT OPTIONAL genome.txt: "Reference genome" TYPE GENERIC
-# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE TEXT_STRICT
-# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE TEXT_STRICT
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # OUTPUT bwa.bam
 # OUTPUT bwa.log
 # OUTPUT OPTIONAL bwa.bam.bai

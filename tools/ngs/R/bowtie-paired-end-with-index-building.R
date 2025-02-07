@@ -1,6 +1,6 @@
 # TOOL bowtie-paired-end-with-index-building.R: "Bowtie for paired end reads and own genome" (This tool uses Bowtie to align paired-end reads to a provided reference genome. You need to supply the paired-end reads as two FASTQ files containing the reads in the same order. You also need to provide the reference genome as input in FASTA format.)
-# INPUT reads1.fq: "No 1 mate reads" TYPE FASTQ
-# INPUT reads2.fq: "No 2 mate reads" TYPE FASTQ
+# INPUT reads1.fq: "No 1 mate reads" TYPE GENERIC
+# INPUT reads2.fq: "No 2 mate reads" TYPE GENERIC
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
 # OUTPUT bowtie.bam
 # OUTPUT bowtie.bam.bai

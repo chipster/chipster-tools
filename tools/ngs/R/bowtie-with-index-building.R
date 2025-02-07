@@ -1,5 +1,5 @@
 # TOOL bowtie-with-index-building.R: "Bowtie for single end reads and own genome" (This tool uses Bowtie to align single-end reads to a provided reference genome. You need to supply the single-end reads in FASTQ format. You also need to provide the reference genome as input in FASTA format.)
-# INPUT reads.txt: "Reads to align" TYPE FASTQ
+# INPUT reads.txt: "Reads to align" TYPE GENERIC
 # INPUT genome.txt: "Genome to align against" TYPE GENERIC
 # OUTPUT bowtie.bam
 # OUTPUT bowtie.bam.bai
