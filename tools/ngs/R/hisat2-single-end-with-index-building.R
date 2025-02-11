@@ -1,5 +1,5 @@
 # TOOL hisat2-single-end-with-index-building.R: "HISAT2 for single end reads and own genome" (This tool uses HISAT2 to align single-end reads to a provided reference genome. You need to supply the single-end reads in FASTQ format. You also need to provide the reference genome as input either in FASTA format or as a tar package with a HISAT2 index.)
-# INPUT reads{...}.fq.gz: "Reads to align" TYPE GENERIC
+# INPUT reads{...}.fq.gz: "Reads to align" TYPE FASTQ
 # INPUT OPTIONAL genome.txt: "Genome to align against \(fasta or HISAT2 index tar\)" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.bam.bai
