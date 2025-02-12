@@ -136,6 +136,7 @@
 		<tool>hisat2-paired-end.R</tool>		
 		<tool>hisat2-single-end-with-index-building.R</tool>		
 		<tool>hisat2-paired-end-with-index-building.R</tool>
+		<tool>hisat2-paired-end-with-index-building-large-memory.R</tool>
 		<tool>star-single-end.R</tool>
 		<tool>star-paired-end.R</tool>	
 		<tool>star-paired-end-storage.R</tool>
