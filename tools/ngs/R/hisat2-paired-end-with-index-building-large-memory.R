@@ -1,4 +1,4 @@
-# TOOL hisat2-paired-end-with-index-building.R: "HISAT2 for paired end reads and own genome" (This tool uses HISAT2 to align paired-end reads to a provided reference genome. You need to supply the paired-end reads in FASTQ format. You also need to provide the reference genome as input either in FASTA format or as a tar package with a HISAT2 index.)
+# TOOL hisat2-paired-end-with-index-building-large-memory.R: "HISAT2 for paired end reads and own genome, with large memory" (This tool uses HISAT2 to align paired-end reads to a provided reference genome. You need to supply the paired-end reads in FASTQ format. You also need to provide the reference genome as input either in FASTA format or as a tar package with a HISAT2 index.)
 # INPUT reads{...}.fq.gz: "Reads to align" TYPE FASTQ
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE TEXT_STRICT
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE TEXT_STRICT
@@ -16,7 +16,7 @@
 # PARAMETER OPTIONAL dta: "Require long anchor lengths for subsequent assembly" TYPE [nodta: "Don't require", yesdta: "Require"] DEFAULT nodta (With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.)
 # PARAMETER OPTIONAL bai: "Index BAM" TYPE [yes, no] DEFAULT no (Index BAM file.)
 # RUNTIME R-4.1.1
-# SLOTS 2
+# SLOTS 6
 
 # AO 30.5.2017 First version
 # EK 18.10.2017 Polishing
