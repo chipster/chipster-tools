@@ -16,7 +16,7 @@
 # PARAMETER OPTIONAL dta: "Require long anchor lengths for subsequent assembly" TYPE [nodta: "Don't require", yesdta: "Require"] DEFAULT nodta (With this option, HISAT2 requires longer anchor lengths for de novo discovery of splice sites. This leads to fewer alignments with short-anchors, which helps transcript assemblers improve significantly in computation and memory usage.)
 # PARAMETER OPTIONAL bai: "Index BAM" TYPE [yes, no] DEFAULT no (Index BAM file.)
 # RUNTIME R-4.1.1
-# SLOTS 2
+# SLOTS 4
 
 # AO 30.5.2017 First version
 # EK 18.10.2017 Polishing
