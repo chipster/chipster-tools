@@ -58,10 +58,10 @@ if (fileOk("genome.txt")) {
     # Untar. Folders are flattened
     runExternal("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
     # Check index base name
-    if (file.exists(Sys.glob("*.1.ht2"))) {
+    if (length(Sys.glob("*.1.ht2")) != 0) {
       f <- list.files(getwd(), pattern = "\\.1.ht2$")
       hisat2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
-    } else if (file.exists(Sys.glob("*.1.ht2l"))) {
+    } else if (length(Sys.glob("*.1.ht2l")) != 0) {
       f <- list.files(getwd(), pattern = "\\.1.ht2l$")
       hisat2.genome <- substr(f[1], 1, nchar(f[1]) - 7)
     } else {
