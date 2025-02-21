@@ -153,6 +153,11 @@
 		<tool>bwa-with-index-building.R</tool>
 		<tool>bwa-paired-end-with-index-building.R</tool>-->
 		<tool>minimap2.R</tool>
+		<tool>index-bowtie-tar.py</tool>
+		<tool>index-bowtie2-tar.py</tool>
+		<tool>index-bwa-tar.py</tool>
+		<tool>index-hisat2-tar.py</tool>
+		<tool>index-tophat2-tar.py</tool>
 	</category>
 	
 	<category name="Variants" color="#80a3b7">

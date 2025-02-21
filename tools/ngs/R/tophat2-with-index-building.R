@@ -67,13 +67,51 @@ path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))
 path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
 set.path <- paste(sep = "", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 
-# Do indexing
-print("Indexing the genome...")
-runExternal("echo Indexing the genome... > bowtie2.log")
-check.command <- paste(bowtie2.index.binary, "genome.txt| tail -1 ")
-genome.dir <- system(check.command, intern = TRUE)
-bowtie2.genome <- file.path(genome.dir, "genome.txt")
-bowtie2.genome <- dirname(bowtie2.genome)
+genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE)
+print(paste("Host genome file type", genome.filetype))
+
+# case 1. Ready calculated indexes in tar format
+if (genome.filetype == "tar") {
+  print("Extracting tar formatted gemome index file")
+  runExternal("tar xf genome.txt")
+  # Check index base name
+  if (length(Sys.glob("*.1.bt2")) != 0) {
+    f <- list.files(getwd(), pattern = "\\.1.bt2$")
+    tophat2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
+  } else {
+    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid TopHat2 index.")
+  }
+
+  runExternal("ls -l")
+  # case 2. Fasta file
+} else {
+  # Do indexing
+  # check sequence file type
+  emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
+  options(scipen = 999)
+  inputfile.to.check <- ("genome.txt")
+  sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+  str.filetype <- system(sfcheck.command, intern = TRUE)
+
+  if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
+  }
+
+  # Do indexing
+  print("Indexing the genome...")
+  runExternal("echo Indexing the genome... > bowtie2.log")
+  check.command <- paste(bowtie2.index.binary, "genome.txt| tail -1 ")
+  genome.dir <- system(check.command, intern = TRUE)
+  tophat2.genome <- file.path(genome.dir, "genome.txt")
+  tophat2.genome <- dirname(tophat2.genome)
+
+  runExternal("ls -l")
+}
+print(paste("Internal genome name:", tophat2.genome))
+
+
+
 
 # command start
 command.start <- paste("bash -c '", set.path, tophat.binary)
@@ -132,7 +170,7 @@ if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
 }
 
 # command ending
-command.end <- paste(bowtie2.genome, reads1, reads2, "2>> tophat.log'")
+command.end <- paste(tophat2.genome, reads1, reads2, "2>> tophat.log'")
 
 # run tophat
 command <- paste(command.start, command.parameters, command.end)

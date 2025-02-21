@@ -1,8 +1,7 @@
-# TOOL index-bowtie2.py: "Create Bowtie2 index without tar package" ()
-# INPUT input.fa TYPE GENERIC
-# OUTPUT output{...}
+# TOOL index-bowtie-tar.py: "Create Bowtie index" ()
+# INPUT input.fa TYPE FASTA
+# OUTPUT output.tar
 # RUNTIME python3
-# SLOTS 2
 
 import tool_utils
 import subprocess
@@ -12,20 +11,21 @@ import os
 
 def main():
     input_fa = "input.fa"
-    bowtie2_path = chipster_tools_path + "/bowtie2"
-    bowtie2_build = chipster_tools_path + "/bowtie2/bowtie2-build"
-    bowtie2_inspect = chipster_tools_path + "/bowtie2/bowtie2-inspect"
+
+    bowtie_build = chipster_tools_path + "/bowtie/bowtie-build"
+    bowtie_inspect = chipster_tools_path + "/bowtie/bowtie-inspect"
 
     session_input_fa = tool_utils.read_input_definitions()[input_fa]
     fasta_basename = tool_utils.remove_postfix(session_input_fa, ".fa")
 
+    # our bowtie is too old for --threads
     run_process(
-        [bowtie2_build, "--threads", chipster_threads_max, input_fa, fasta_basename]
+        [bowtie_build, "--threads", chipster_threads_max, input_fa, fasta_basename]
     )
 
     print("inspect index")
     inspect_output = "inspect_output.txt"
-    run_bash(bowtie2_inspect + " -n " + fasta_basename + " > " + inspect_output)
+    run_bash(bowtie_inspect + " -n " + fasta_basename + " > " + inspect_output)
 
     fasta_chr = 0
     index_chr = 0
@@ -43,31 +43,36 @@ def main():
 
     if fasta_chr != index_chr:
         raise RuntimeError(
-            "bowtie2 indexing of genome "
+            "bowtie indexing of genome "
             + fasta_basename
             + " failed. Chromosomes in fasta: "
-            + str(fasta_chr)
+            + fasta_chr
             + ", chromosomes in index: "
-            + str(index_chr)
+            + index_chr
         )
 
     run_process(["ls", "-lah"])
 
-    # rename index files to fixed output names and define real names for the client
+    # create tar package
 
-    output_names = {}
+    index_files = []
 
-    # bowtie2 index files
     for file in os.listdir("."):
-        if file.endswith(".bt2"):
-            output_name = file.replace(fasta_basename, "output") + str(
-                len(output_names)
-            )
-            os.rename(file, output_name)
-            # output_names[output_name] = "bowtie2/" + file
-            output_names[output_name] = file
+        # .ebwt or .ebwtl
+        if ".ebwt" in file:
+            index_files.append(file)
+            
+    run_process(["tar", "-cf", "output.tar"] + index_files)
 
-    tool_utils.write_output_definitions(output_names)
+    tool_utils.write_output_definitions({
+        "output.tar": fasta_basename + ".tar"
+    })
+    
+    # save version information
+    version = subprocess.check_output([bowtie_build, "--version"])
+    version_number = str(version).split("\\n")[0].split(" ")[2]
+    
+    version_utils.document_version("Bowtie", version_number)
 
 
 def run_bash(cmd: str):
