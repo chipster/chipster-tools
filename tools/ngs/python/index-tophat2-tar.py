@@ -1,6 +1,6 @@
 # TOOL index-tophat2-tar.py: "Create TopHat2 index" ()
 # INPUT input.fa TYPE FASTA
-# INPUT input.gtf TYPE GTF
+# INPUT OPTIONAL input.gtf TYPE GTF
 # OUTPUT output.tar
 # RUNTIME python
 # SLOTS 2
@@ -10,6 +10,7 @@
 import tool_utils_python2 as tool_utils
 import subprocess
 import os
+import os.path
 
 def main():
     input_fa = "input.fa"
@@ -25,24 +26,43 @@ def main():
     env["PATH"] = env['PATH'] + ":" + bowtie2_path
 
     session_input_fa = tool_utils.read_input_definitions()[input_fa]
-    session_input_gtf = tool_utils.read_input_definitions()[input_gtf]
-    fasta_basename = tool_utils.remove_postfix(session_input_fa, ".fa")    
-    gtf_basename = tool_utils.remove_postfix(session_input_gtf, ".gtf")
-
-    run_process(
-        [bowtie2_build, "--threads", chipster_threads_max, input_fa, gtf_basename]
-    )
+    fasta_basename = tool_utils.remove_postfix(session_input_fa, ".fa")        
     
-    # tophat2 will generate the fasta from index if it doesn't find it
-    run_process(["ln", "-s", input_fa, gtf_basename + ".fa"])
-        
+    if os.path.exists(input_gtf):
+        session_input_gtf = tool_utils.read_input_definitions()[input_gtf]
+        genome_basename = tool_utils.remove_postfix(session_input_gtf, ".gtf")
+    else: 
+        genome_basename = fasta_basename
+
+    print("creating bowtie2 index")
+    os.mkdir("bowtie2")
+    
+    bowtie2_cmd = [bowtie2_build, "--threads", chipster_threads_max, input_fa, "bowtie2/" + genome_basename]
+    # make output less verbose be removing all indented lines (also from stderr)
     run_process(
-        [tophat2, "-G", input_gtf, "--transcriptome-index", gtf_basename, gtf_basename], env
+        ["bash", "-c", " ".join(bowtie2_cmd) + " 2>&1 | grep -v '^  '"]
     )
+          
+    # tophat2 will generate the fasta from index if it doesn't find it
+    run_process(["ln", "-s", "../" + input_fa, "bowtie2/" + genome_basename + ".fa"])
+    
+    run_process(["ls", "-lah", "bowtie2"])
+        
+    # Tophat2 index can be created only with a gtf file. 
+    # If it was not given, return the plain bowtie2 index
+    if os.path.exists(input_gtf):
+        # bowtie2 directory will be the tar root, so that plain bowtie2 index is compatible with bowtie2 tools
+        # let's store tophat2 index under it in its own directory
+        os.mkdir("bowtie2/tophat2")
+        run_process(
+            [tophat2, "-G", input_gtf, "--transcriptome-index", "bowtie2/tophat2/" + genome_basename, "bowtie2/" + genome_basename], env
+        )
+    
+    run_process(["ls", "-lah"])
     
     print("inspect bowtie2 index")
     inspect_output = "inspect_output.txt"
-    run_bash(bowtie2_inspect + " -n " + gtf_basename + " > " + inspect_output)
+    run_bash(bowtie2_inspect + " -n " + "bowtie2/" + genome_basename + " > " + inspect_output)
 
     fasta_chr = 0
     index_chr = 0
@@ -68,25 +88,32 @@ def main():
             + str(index_chr)
         )
 
-    run_process(["ls", "-lah"])
-    
-    run_process(["ls", "-lah", gtf_basename])
-
     # create tar package
 
     index_files = []
+    
+    run_process(["ls", "-lah", "bowtie2"])
+    
+    # collect files of bowtie2 index
+    for file in os.listdir("bowtie2"):
+        if file.endswith(".bt2"):
+            index_files.append(file)
 
-    # tophat2 index files
-    for file in os.listdir(gtf_basename):
-        new_name = file.replace("input", gtf_basename)
-        os.rename(gtf_basename + "/" + file, gtf_basename + "/" + new_name)
-        # without directory, becaue tar will run in that directory
-        index_files.append(new_name)
+    if os.path.exists(input_gtf):
+        
+        run_process(["ls", "-lah", "bowtie2/tophat2"])
+        
+        # tophat2 index files
+        for file in os.listdir("bowtie2/tophat2"):
+            new_name = file.replace("input", genome_basename)
+            os.rename("bowtie2/tophat2/" + file, "bowtie2/tophat2/" + new_name)
+            # without the "bowtie2" directory, because tar will run there
+            index_files.append("tophat2/" + new_name)
             
-    run_process(["tar", "-cf", "../output.tar"] + index_files, cwd=gtf_basename)
+    run_process(["tar", "-cf", "../output.tar"] + index_files, cwd="bowtie2")
 
     tool_utils.write_output_definitions({
-        "output.tar": fasta_basename + ".tar"
+        "output.tar": genome_basename + ".tar"
     })
     
     # save version information
