@@ -1,4 +1,4 @@
-# TOOL index-hisat2-tar.py: "Create Hisat2 index" ()
+# TOOL index-hisat2-tar.py: "Create HISAT2 index" ()
 # INPUT input.fa TYPE FASTA
 # INPUT OPTIONAL input.gtf TYPE GTF
 # OUTPUT output.tar

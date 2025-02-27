@@ -1,4 +1,4 @@
-# TOOL index-hisat2.py: "Create Hisat2 index without tar package" ()
+# TOOL index-hisat2.py: "Create HISAT2 index without tar package" ()
 # INPUT input.fa TYPE GENERIC
 # INPUT input.gtf TYPE GENERIC
 # OUTPUT output{...}
