@@ -1,15 +1,13 @@
-# TOOL tophat2-single-end-with-index-building.R: "TopHat2 for single end reads and own genome"  (This tool uses TopHat2 to align single-end reads to a provided reference genome to identify exon-exon splice junctions. You need to supply the single-end reads in FASTQ format. You also need to provide the reference genome as input in FASTA format.)
+# TOOL tophat2-single-end-with-index-building.R: "TopHat2 for single end reads and own genome"  (This tool uses TopHat2 to align single-end reads to a provided reference genome to identify exon-exon splice junctions. You need to supply the single-end reads in FASTQ format. You also need to provide TopHat2 index for your reference genome in TAR format. )
 # INPUT reads{...}.fq: "Reads" TYPE FASTQ
-# INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
-# INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
+# INPUT OPTIONAL genome.tar: "TopHat2 index of the genome to align against" TYPE TAR
 # OUTPUT OPTIONAL tophat.bam
 # OUTPUT OPTIONAL tophat.bam.bai
 # OUTPUT OPTIONAL junctions.bed
 # OUTPUT OPTIONAL tophat-summary.txt
-# OUTPUT OPTIONAL tophat2.log
 # OUTPUT OPTIONAL logs.tar
 # PARAMETER library.type: "Library type" TYPE [fr-unstranded: fr-unstranded, fr-firststrand: fr-firststrand, fr-secondstrand: fr-secondstrand] DEFAULT fr-unstranded (Which library type to use. For directional\/strand specific library prepartion methods, choose fr-firststrand or fr-secondstrand depending on the preparation method: if the first read \(read1\) maps to the opposite, non-coding strand, choose fr-firststrand. If the first read maps to the coding strand, choose fr-secondstrand. For example for Illumina TruSeq Stranded sample prep, choose fr-firstsrand.)
-# PARAMETER OPTIONAL no.novel.juncs: "When GTF file is used, ignore novel junctions" TYPE [yes, no] DEFAULT no (Only look for reads across junctions indicated in the supplied GTF file.)
+# PARAMETER OPTIONAL no.novel.juncs: ""When transcriptome index is included in the index package, ignore novel junctions" TYPE [yes, no] DEFAULT no (Only look for reads across junctions indicated in the supplied transcriptome index.)
 # PARAMETER OPTIONAL quality.format: "Base quality encoding used" TYPE [sanger: "Sanger - Phred+33", phred64: "Phred+64"] DEFAULT sanger (Quality encoding used in the fastq file.)
 # PARAMETER OPTIONAL max.multihits: "How many hits is a read allowed to have" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 20 (Instructs TopHat to allow up to this many alignments to the reference for a given read.)
 # PARAMETER OPTIONAL mismatches: "Number of mismatches allowed in final alignment" TYPE INTEGER FROM 0 TO 5 DEFAULT 2 (Final read alignments having more than this many mismatches are discarded.)
@@ -31,7 +29,6 @@
 # ML 15.01.2015 Added the library-type parameter
 # AMS 29.01.2015 Removed optional outputs deletions.bed and insertions.bed
 
-# OUTPUT OPTIONAL tophat2.log
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
@@ -62,46 +59,31 @@ set.path <- paste(sep = "", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE)
 print(paste("Host genome file type", genome.filetype))
 
-# case 1. Ready calculated indexes in tar format
-if (genome.filetype == "tar") {
-  print("Extracting tar formatted gemome index file")
-  runExternal("tar xf genome.txt")
-  # Check index base name
-  if (length(Sys.glob("*.1.bt2")) != 0) {
+print("Extracting tar formatted gemome index file")
+runExternal("tar xf genome.tar")
+
+# Check bowtie2 index base name
+if (length(Sys.glob("*.1.bt2")) != 0) {
     f <- list.files(getwd(), pattern = "\\.1.bt2$")
-    tophat2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
-  } else {
-    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid TopHat2 index.")
-  }
-
-  runExternal("ls -l")
-  # case 2. Fasta file
+    bowtie2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
 } else {
-  # Do indexing
-  # check sequence file type
-  emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
-  options(scipen = 999)
-  inputfile.to.check <- ("genome.txt")
-  sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
-  str.filetype <- system(sfcheck.command, intern = TRUE)
-
-  if (str.filetype == "Not an EMBOSS compatible sequence file") {
-    stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
-  }
-
-  # Do indexing
-  print("Indexing the genome...")
-  runExternal("echo Indexing the genome... > bowtie2.log")
-  check.command <- paste(bowtie2.index.binary, "genome.txt| tail -1 ")
-  genome.dir <- system(check.command, intern = TRUE)
-  tophat2.genome <- file.path(genome.dir, "genome.txt")
-  tophat2.genome <- dirname(tophat2.genome)
-
-  runExternal("ls -l")
+    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid TopHat2 index.")
 }
-print(paste("Internal genome name:", tophat2.genome))
 
+# Check optional tophat2 index base name
+if (length(Sys.glob("tophat2/*.1.bt2")) != 0) {
+    f <- list.files(file.path(getwd(), "tophat2"), pattern = "\\.1.bt2$")
+    tophat2.genome <- file.path("tophat2", substr(f[1], 1, nchar(f[1]) - 6))
+    print(paste("TopHat2 genome name:", tophat2.genome))
+} else {
+    print("The .tar package does not contain TopHat2 transcriptome index.")
+    tophat2.genome <- NULL
+}
+
+
+runExternal("ls -lah")
+
+print(paste("Bowtie2 genome name:", bowtie2.genome))
 
 # command start
 command.start <- paste("bash -c '", set.path, tophat.binary)
@@ -117,29 +99,22 @@ if (quality.format == "phred64") {
     command.parameters <- paste(command.parameters, "--phred64-quals")
 }
 
-# optional GTF command, if a GTF file has been provided by user
-if (file.exists("genes.gtf")) {
+# optional transriptome index
+if (!is.null(tophat2.genome)) {
+    command.parameters <- paste(command.parameters, "--transcriptome-index", tophat2.genome)
     if (no.novel.juncs == "yes") {
-        command.parameters <- paste(command.parameters, "-G", "genes.gtf", "--no-novel-juncs")
-    } else {
-        command.parameters <- paste(command.parameters, "-G", "genes.gtf")
+        command.parameters <- paste(command.parameters, "--no-novel-juncs")
     }
 }
-
 
 # Input fastq names
 reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")
 
 # command ending
-command.end <- paste(tophat2.genome, reads1, "2>> tophat.log'")
+command.end <- paste(bowtie2.genome, reads1, "2>&1'")
 
 # run tophat
 command <- paste(command.start, command.parameters, command.end)
-
-echo.command <- paste("echo '", command, "' 2>> tophat.log ")
-runExternal(echo.command)
-runExternal("echo >> tophat.log")
-# stop(paste('CHIPSTER-NOTE: ', command))
 
 documentCommand(command)
 
@@ -200,11 +175,6 @@ if (file.exists("deletions.u.bed")) {
 # If no BAM file is produced, return the whole logs folder as a tar package
 if (fileNotOk("tophat.bam")) {
     runExternal("tar cf logs.tar tophat_out/logs/*")
-}
-
-if (!(file.exists("tophat-summary.txt"))) {
-    # system("mv tophat_out/logs/tophat.log tophat2.log")
-    runExternal("mv tophat.log tophat2.log")
 }
 
 # Handle output names

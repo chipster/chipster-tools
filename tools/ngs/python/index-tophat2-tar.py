@@ -1,4 +1,4 @@
-# TOOL index-tophat2-tar.py: "Create TopHat2 index" ()
+# TOOL index-tophat2-tar.py: "Create TopHat2 index" (Create an index package for the TopHat2 aligner. )
 # INPUT input.fa TYPE FASTA
 # INPUT OPTIONAL input.gtf TYPE GTF
 # OUTPUT output.tar
@@ -45,8 +45,6 @@ def main():
           
     # tophat2 will generate the fasta from index if it doesn't find it
     run_process(["ln", "-s", "../" + input_fa, "bowtie2/" + genome_basename + ".fa"])
-    
-    run_process(["ls", "-lah", "bowtie2"])
         
     # Tophat2 index can be created only with a gtf file. 
     # If it was not given, return the plain bowtie2 index
@@ -57,8 +55,6 @@ def main():
         run_process(
             [tophat2, "-G", input_gtf, "--transcriptome-index", "bowtie2/tophat2/" + genome_basename, "bowtie2/" + genome_basename], env
         )
-    
-    run_process(["ls", "-lah"])
     
     print("inspect bowtie2 index")
     inspect_output = "inspect_output.txt"
@@ -92,11 +88,12 @@ def main():
 
     index_files = []
     
-    run_process(["ls", "-lah", "bowtie2"])
+    #run_process(["ls", "-lah"])'
+    #run_process(["ls", "-lah", "bowtie2"])
     
     # collect files of bowtie2 index
     for file in os.listdir("bowtie2"):
-        if file.endswith(".bt2"):
+        if file.endswith(".bt2") or file.endswith(".fa"):
             index_files.append(file)
 
     if os.path.exists(input_gtf):
@@ -110,7 +107,8 @@ def main():
             # without the "bowtie2" directory, because tar will run there
             index_files.append("tophat2/" + new_name)
             
-    run_process(["tar", "-cf", "../output.tar"] + index_files, cwd="bowtie2")
+    # use option --dereference to add the fasta contents instead of only symlink
+    run_process(["tar", "--dereference", "-cf", "../output.tar"] + index_files, cwd="bowtie2")
 
     tool_utils.write_output_definitions({
         "output.tar": genome_basename + ".tar"
