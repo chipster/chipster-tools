@@ -5,11 +5,11 @@
 # OUTPUT OPTIONAL dna_sequences.fasta
 # OUTPUT OPTIONAL dna_sequences.tsv
 # OUTPUT OPTIONAL sample_information.tsv
-# PARAMETER otu: "Do you want to extract the OTU table" TYPE [yes,no] DEFAULT no
-# PARAMETER taxa: "Do you want to extract the taxonomy table" TYPE [yes,no] DEFAULT no
-# PARAMETER fasta: "Do you want to extract the full DNA sequences stored in FASTA" TYPE [yes,no] DEFAULT no
-# PARAMETER ref: "Do you want to extract the full DNA sequences stored to refseq" TYPE [yes,no] DEFAULT no
-# PARAMETER sample: "Do you want to extract the sample information" TYPE [yes,no] DEFAULT no
+# PARAMETER otu: "Extract OTU table" TYPE [yes,no] DEFAULT no
+# PARAMETER taxa: "Extract taxonomy table" TYPE [yes,no] DEFAULT no
+# PARAMETER fasta: "Extract DNA sequences in FASTA" TYPE [yes,no] DEFAULT no
+# PARAMETER ref: "Extract DNA sequences as tabular data" TYPE [yes,no] DEFAULT no
+# PARAMETER sample: "Extract sample information" TYPE [yes,no] DEFAULT no
 # RUNTIME R-4.2.0-phyloseq
 
 

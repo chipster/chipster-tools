@@ -12,7 +12,8 @@ With this tool you can extract information from the Phyloseq object:
 <ul>
     <li>OTU or ASV table</li>
     <li>taxonomy table</li>
-    <li>Dna sequences stored to refseq in the Phyloseq object</li>
+    <li>Dna sequences stored to refseq in the Phyloseq object in FASTA</li>
+    <li>Dna sequences stored to refseq in the Phyloseq object as tabular data</li>
     <li>Sample information which is the Phenodata information</li>
 </ul>
  
@@ -20,10 +21,11 @@ With this tool you can extract information from the Phyloseq object:
 
 <h3>Parameters</h3>
 <ul>
-    <li>Do you want to extract the OTU table? (yes, no) [no]</li>
-    <li>Do you want to extract the taxonomy table? (yes, no) [no]</li>
-    <li>Do you want to extract the DNA sequences stored to refseq? (yes, no) [no]</li>
-    <li>Do you want to extract the sample infomartion? (yes, no) [no]</li>
+    <li>Extract OTU table? (yes, no) [no]</li>
+    <li>Extract taxonomy table? (yes, no) [no]</li>
+    <li>Extract DNA sequences in FASTA? (yes, no) [no]</li>
+    <li>Extract DNA sequences as tabular data? (yes, no) [no]</li>
+    <li>Extract sample information? (yes, no) [no]</li>
 
 </ul>
 
@@ -37,8 +39,9 @@ from the summary .txt file produced when the object was created.
 With this tool, one option is to get the full DNA sequences which were stored into the refseq() slot when the Phyloseq object was 
 created from the ASV table. The full DNA sequences were changed to shorter strings in order to get the visualization looks nicer.
 In the refseq() slot is stored the information of which full DNA sequence correspond to ASV1, ASV2 and etc.
-<br> This information can be usefull if you want to for example 
-merge the found ASVs with other datasets or index into reference databases.
+<br> This information can be useful if you want to for example merge the found ASVs with other datasets or index into reference 
+    databases. The sequences can be saved either in FASTA format or as tabular data (.tsv file).
+    
 <br>
 <br>
 This tool can be used also to investigate how the Phenodata table, in other words the sample information merged to the 
@@ -51,7 +54,8 @@ The analysis output consists of the following:
 <ul>
     <li>otu_table.tsv: OTU table from the Phyloseq object </li>
     <li>taxonomy_table.tsv: Taxonomy table from the Phyloseq object.</li>
-    <li>dna_sequences.tsv: Full DNA sequences of the ASVs stored to the refseq() of the Phyloseq object</li>
+    <li>dna_sequences.fasta: Full DNA sequences of the ASVs stored to the refseq() of the Phyloseq object in FASTA format</li>
+    <li>dna_sequences.tsv: Full DNA sequences of the ASVs stored to the refseq() of the Phyloseq object as tabular data</li>
     <li>sample_information.tsv: The same tsv file as the phenodata table containing the sample information of the Phyloseq object</li>
 </ul>
 </p>
