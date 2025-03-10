@@ -14,8 +14,8 @@
 # PARAMETER OPTIONAL triml: "The number of nucleotides to remove from start of each read" TYPE INTEGER FROM 0 DEFAULT 0 (The number of nucleotides to remove from the start of each read. If both truncLen and trimLeft are provided, filtered reads will have length truncLen - trimLeft.)
 # PARAMETER OPTIONAL minlen: "Remove reads which are shorter than this" TYPE INTEGER FROM 0 DEFAULT 0 (Removes reads which are shorter than the specified value. Min length is enforced after all other trimming and truncation. This parameter is especially usefull when truncLen parameter is not used for example with ITS data.)
 # RUNTIME R-4.1.1-asv
+# SLOTS 5
 
-# SLOTS 2
 # ES 15.07.2022
 # OUTPUT OPTIONAL summary.txt
 
