@@ -1,4 +1,4 @@
-# TOOL make_zip.py: "Make a zip packge" (Create a zip package)
+# TOOL make_zip.py: "Make a zip package" (Create a zip package)
 # INPUT input_file{...}: "Files to add" TYPE GENERIC (Files to add to the package.)
 # OUTPUT package.zip: "Zip package"
 # PARAMETER OPTIONAL compression: "Compression" TYPE [yes: Yes, no: No] DEFAULT no (Compressed package is smaller, but is slower to create and extract.)
