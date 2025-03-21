@@ -136,8 +136,10 @@ Idents(data.combined) <- stored_idents # Return the original idents
 
 ## Comparison violin plot:
 data.combined$celltype <- Idents(data.combined)
-plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", pt.size = 0, combine = FALSE)
-#CombinePlots(plots = plots, ncol = 1)
+#plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", pt.size = 0, combine = FALSE)
+plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", pt.size = 0, combine = FALSE, split.plot = TRUE)
+CombinePlots(plots = plots, ncol = 1)
+
 
 ## Ridge plot:
 RidgePlot(data.combined, features = markers.to.plot, ncol = 2)
