@@ -99,7 +99,7 @@
 		<tool>stat-geneset.R</tool>
 		<tool module="common">pathways-mirna-hyperg-go.R</tool> 
 		<tool module="common">pathways-mirna-hyperg-kegg.R</tool> 
-		<tool module="common">annotate-cpdb.py</tool>
+		<!-- <tool module="common">annotate-cpdb.py</tool> -->
 	</category>
 
 	<category name="Promoter analysis" color="#629a9b">

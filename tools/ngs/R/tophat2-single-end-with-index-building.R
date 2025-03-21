@@ -1,5 +1,5 @@
 # TOOL tophat2-single-end-with-index-building.R: "TopHat2 for single end reads and own genome"  (This tool uses TopHat2 to align single-end reads to a provided reference genome to identify exon-exon splice junctions. You need to supply the single-end reads in FASTQ format. You also need to provide the reference genome as input in FASTA format.)
-# INPUT reads{...}.fq: "Reads" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads" TYPE FASTQ
 # INPUT OPTIONAL genome.txt: "Genome to align against" TYPE GENERIC
 # INPUT OPTIONAL genes.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL tophat.bam
