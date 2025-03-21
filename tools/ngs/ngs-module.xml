@@ -89,6 +89,7 @@
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
 		<tool module="common">extract_gzip_tar_storage.py</tool>
+		<tool module="common">make_zip.py</tool>
 		<tool module="common">extract_zip.py</tool>
 		<tool module="common">gunzip.py</tool>
 		<tool module="common">make_tar.R</tool>
@@ -136,6 +137,7 @@
 		<tool>hisat2-paired-end.R</tool>		
 		<tool>hisat2-single-end-with-index-building.R</tool>		
 		<tool>hisat2-paired-end-with-index-building.R</tool>
+		<tool>hisat2-paired-end-with-index-building-large-memory.R</tool>
 		<tool>star-single-end.R</tool>
 		<tool>star-paired-end.R</tool>	
 		<tool>star-paired-end-storage.R</tool>
@@ -177,7 +179,7 @@
 		<tool>ngs-dea-edger-RNA.R</tool>
 		<tool>edgeR-multivariate.R</tool>
 		<tool>heatmap-for-rnaseq.R</tool>
-		<tool module="common">annotate-cpdb.py</tool>
+		<!-- <tool module="common">annotate-cpdb.py</tool> -->
 		<tool>pathways-ngs-hyperg-go.R</tool>
 		<tool>deseq2-transform.R</tool>
 		<tool>deseq2-normalized-counts-for-gene.R</tool>

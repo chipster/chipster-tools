@@ -6,7 +6,7 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ $# -gt 4 ]; then
   exit 0
 fi
 
-image_repo="docker-registry.rahti.csc.fi/chipster-images-release/"
+image_repo="image-registry.apps.2.rahti.csc.fi/chipster-images/"
 image_pull_policy="IfNotPresent"
 
 # --local-image
