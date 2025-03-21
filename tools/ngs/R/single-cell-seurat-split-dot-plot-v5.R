@@ -25,8 +25,8 @@
 # 		"HBB", "TSPAN13", "IL3RA", "IGJ")
 
 # for UMAP:
-#library(reticulate)
-#Sys.setenv(RETICULATE_PYTHON = paste(chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/python"))
+# library(reticulate)
+# Sys.setenv(RETICULATE_PYTHON = paste(chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/python"))
 # use_python("/opt/chipster/tools/miniconda3/envs/chipster_tools/bin/python")
 
 library(Seurat)
@@ -91,7 +91,7 @@ DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.sample
 
 # Feature plot:
 # Show in which cluster the genes are active
-FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale=color.scale)
+FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale = color.scale)
 
 # Compare between the treatments:
 # These plots get squeezed when there are many samples, and are at some point very difficult to read.
@@ -103,7 +103,7 @@ sample.names <- levels(as.factor((data.combined$stim)))
 Idents(data.combined) <- "stim"
 
 if (number.of.samples <= 4) {
-  FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale=color.scale)
+  FeaturePlot(data.combined, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale = color.scale)
 }
 # If there are more than 4 samples, lets split them in multiple pages, using subsetting.
 if (number.of.samples > 4) {
@@ -118,7 +118,7 @@ if (number.of.samples > 4) {
       subset.of.samples <- subset(data.combined, idents = samples.of.this.round)
       Idents(subset.of.samples) <- "stim"
       # Need to save and print the plots for them to actually go to pdf:
-      feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale=color.scale)
+      feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale = color.scale)
       print(feat.plot)
       i <- i + 4
     }
@@ -136,8 +136,9 @@ Idents(data.combined) <- stored_idents # Return the original idents
 
 ## Comparison violin plot:
 data.combined$celltype <- Idents(data.combined)
-plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", pt.size = 0, combine = FALSE)
-#CombinePlots(plots = plots, ncol = 1)
+# plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", pt.size = 0, combine = FALSE)
+plots <- VlnPlot(data.combined, features = markers.to.plot, split.by = "stim", group.by = "celltype", pt.size = 0, combine = FALSE, split.plot = TRUE)
+CombinePlots(plots = plots, ncol = 1)
 
 ## Ridge plot:
 RidgePlot(data.combined, features = markers.to.plot, ncol = 2)
