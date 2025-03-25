@@ -6,6 +6,9 @@
 # OUTPUT ps_summary.txt
 # RUNTIME R-4.2.0-phyloseq
 
+# seems to work in this tools, but check other phyloseq tools
+# RUNTIME R-4.4.3-phyloseq
+
 
 # ES 18.8.2022
 # RUNTIME R-4.1.1-asv  no need for dada2
