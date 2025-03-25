@@ -14,6 +14,7 @@ install.packages("vegan")
 install.packages("plyr")
 install.packages("ggpubr")
 
+# 10 min?
 BiocManager::install("microbiome")
 BiocManager::install("DESeq2")
 
