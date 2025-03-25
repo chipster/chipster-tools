@@ -7,7 +7,8 @@
 # PARAMETER minoverlap: "The minimum length of the overlap required for merging the forward and reverse reads" TYPE INTEGER FROM 0 DEFAULT 12 (By default the overlap area should be at least 12 base pairs long.)
 # PARAMETER maxmismatch: "The maximum number of mismatches allowed in the overlap region" TYPE INTEGER FROM 0 DEFAULT 0 (By default no mismatches are allowed in the overlap region.)
 # PARAMETER trimoverhang: "Should the overhangs in the alignment be trimmed off?" TYPE [Yes, No] DEFAULT No (Should the overhangs be removed, when the reverse read extend past the start of the forward read and vice versa.)
-# RUNTIME R-4.1.1-asv
+# RUNTIME R-4.4.3-asv
+# TOOLS_BIN ""
 
 # ES 11.08.2022
 # ES 21.12.2022 added parameter trimOverhang
