@@ -7,9 +7,11 @@
 # PARAMETER OPTIONAL reference: "Reference" TYPE [bacterial: "16S rRNA Silva gold bacteria", none: "none, de novo"] DEFAULT bacterial (You can use the 16S rRNA Silva gold bacterial set as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. Note that if you choose none, you have to give a count table as input.)
 # PARAMETER OPTIONAL method: "Method" TYPE [vsearch, uchime] DEFAULT vsearch (Chimera detection method to use. Note that VSEARCH is much faster than the UCHIME method.)
 # PARAMETER OPTIONAL dereplicate: "Dereplicate" TYPE [false, true] DEFAULT false (De novo chimera detection uses the more abundant sequences from the same sample to check the query sequence. When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false.)
+# RUNTIME R-4.4.3-mothur
 
-# RUNTIME R-4.1.1
 # Not working with the new mothur version and vsreach version 2.17.1 when using the silva reference file.
+
+
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL log2.txt
 
@@ -33,9 +35,9 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
-# binary
-# binary <- c(file.path(chipster.tools.path,"mothur","mothur"))
-binary <- c(file.path(chipster.tools.path, "mothur-1.44.3", "mothur"))
+# mothur 1.48.2 is installed in container image in /opt/chipster/tools
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+#binary <- c(file.path(chipster.tools.path, "mothur-1.44.3", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
@@ -52,7 +54,6 @@ if (method == "uchime") {
 }
 
 if (reference == "bacterial") {
-  # bacterial reference in fasta format
   data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva-gold"))
   reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
   chimera.options <- paste(chimera.options, "reference=", reference.path, sep = "")
@@ -97,12 +98,15 @@ documentCommand(chimera.options)
 write(chimera.options, "batch.mth", append = FALSE)
 
 # command
-command <- paste(binary, "batch.mth", "> log.txt 2>&1")
+command <- paste(binary, "batch.mth", " 2>&1")
 # system("ls -l > log.txt")
 # system("cat *.logfile >> log.txt")
 
 # run
 system(command)
+
+system("ls -lah")
+system("head a.fasta")
 
 # Output File Names:
 # a.ref.uchime.chimeras
