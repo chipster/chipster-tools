@@ -5,8 +5,8 @@
 # OUTPUT summary.txt
 # OUTPUT sequence_table_nochim.tsv
 # PARAMETER method1: "Method to identify chimeras" TYPE [consensus, pooled] DEFAULT consensus (Identification by consensus across samples or identification from pooled sequences)
-# RUNTIME R-4.1.1-asv
-
+# RUNTIME R-4.4.3-asv
+# TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
