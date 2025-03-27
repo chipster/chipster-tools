@@ -1,4 +1,4 @@
-# TOOL index-dexseq.py: "Create DEXSeq index" ()
+# TOOL index-dexseq.py: "Create DEXSeq index without tar package" ()
 # INPUT input.gtf TYPE GENERIC
 # OUTPUT output.gtf
 # RUNTIME python3

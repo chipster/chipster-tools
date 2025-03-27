@@ -10,7 +10,7 @@
 <p>
     This tool uses TopHat2 to align single-end reads to a provided reference genome to identify exon-exon splice 
     junctions. You need to supply the single-end reads in FASTQ format. The files can be compressed with gzip.
-    You also need to provide the reference genome as input in FASTA format. 
+    You also need to provide the TopHat2 index for your reference genome in TAR format. 
 </p>
 <p>
     If you have multiple samples of single-end reads, you can use the "Run for Each Sample" option to run multiple 
@@ -45,7 +45,7 @@
 <h3>Details</h3>
 
 <p>TopHat2 maps Illumina RNA-Seq reads to a genome in order to identify exon-exon splice junctions. The alignment process consists of several steps. 
-If annotation is available as a GTF file, TopHat will extract the transcript sequences and use Bowtie2 to align reads to this virtual transcriptome first. 
+If annotation was available as a GTF file, when the index was created, TopHat will extract the transcript sequences and use Bowtie2 to align reads to this virtual transcriptome first. 
 Only the reads that do not fully map to the transcriptome will then be mapped on the genome. 
 The reads that still remain unmapped are split into shorter segments, which are then aligned to the genome. Segment mappings are used to find potential splice sites. 
 Sequences flanking a splice site are concatenated, and unmapped segments are mapped to them. Segment alignments are then stitched together to form whole read alignments. 
@@ -81,7 +81,6 @@ This tool returns the following files:
 <li>junctions.bed: Each junction consists of two connected BED blocks, where each block is as long as the maximal overhang of any read spanning the junction. 
 The score is the number of alignments spanning the junction.</li>
 </ul>
-In cases where Tophat2 for some reason fails, file tophat2.log is returned instead.
 <p>
  
 

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Create TopHat2 index</h2>
+
+    <h3>Description</h3>
+
+    <p>This tool creates an index package for the TopHat2 aligner. 
+    </p>
+
+    <h3>Parameters</h3>
+    <p>
+        None
+    </p>
+
+    <h3>Input</h3>
+    <p>
+        <ul>
+            <li>input.fa: reference genome fasta file</li>
+            <li>input.gtf: optional reference genome gtf file</li>
+        </ul>
+
+        <p>
+            TopHat2 uses Bowtie2 index, which is created from the provided FASTA file. The original FASTA file is included into the 
+            index package, so that TopHat2 doesn't have to reconstruct it from the index in the alignment tool.
+        </p>
+
+        <p>
+            Supplying a GTF file containing known gene and exon locations is recommended, because it improves the alignment 
+            process. In this case a separate transcriptome index for TopHat2 is created and included in the package too.
+        <p>
+    </p>
+
+    <h3>Output</h3>
+    <p>
+        This tool produces TAR package that can be given to tools "TopHat2 for single end reads and own genome" or "TopHat2 for paired end reads and own genome".
+    </p>
+
+    <h3>Reference</h3>
+    <p>This tool is based on the <a href="http://tophat.cbcb.umd.edu/">TopHat</a> package. Please cite the following article:</p>
+Kim D, Petrtea G, Trapnell C, et al. <a href="http://genomebiology.com/2013/14/4/R36/abstract">TopHat2: accurate alignments of transcriptomes in the presence of insertions, deletions and gene fusions.</a>  Genome Biology (2013) 14: R36. 
+</p>
+
+
+</body>

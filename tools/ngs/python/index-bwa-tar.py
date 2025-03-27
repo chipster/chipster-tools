@@ -1,6 +1,6 @@
-# TOOL index-bwa.py: "Create BWA index without tar package" ()
-# INPUT input.fa TYPE GENERIC
-# OUTPUT output{...}
+# TOOL index-bwa-tar.py: "Create BWA index" ()
+# INPUT input.fa TYPE FASTA
+# OUTPUT output.tar
 # RUNTIME python3
 
 import tool_utils
@@ -40,19 +40,26 @@ def main():
 
     run_process(["ls", "-lah"])
 
-    # rename index files to fixed output names and define real names for the client
+    # create tar package
 
-    output_names = {}
+    index_files = []
 
     for fe in index_file_extensions:
         index_file = fasta_basename + fe
-        output_name = index_file.replace(fasta_basename, "output") + str(
-            len(output_names)
-        )
-        os.rename(index_file, output_name)
-        output_names[output_name] = index_file
+        index_files.append(index_file)
+            
+    run_process(["tar", "-cf", "output.tar"] + index_files)
 
-    tool_utils.write_output_definitions(output_names)
+    tool_utils.write_output_definitions({
+        "output.tar": fasta_basename + ".tar"
+    })
+    
+    # save version information
+    # bwa prints version to stderr when arguments are not given, but also uses exit code 1
+    version = subprocess.check_output([bwa + " 2>&1 || true"], shell=True)
+    version_number = str(version).split("\\n")[2].split(" ")[1]
+    
+    version_utils.document_version("BWA", version_number)
 
 
 def run_bash(cmd: str):
