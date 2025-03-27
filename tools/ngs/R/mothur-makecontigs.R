@@ -6,8 +6,7 @@
 # OUTPUT contigs.count_table
 # OUTPUT contig.numbers.txt
 # OUTPUT samples.fastqs.txt
-# RUNTIME R-4.4.3-mothur
-# TOOLS_BIN ""
+# RUNTIME R-4.1.1
 
 # ML 02.03.2016
 # AMS 16.03.2017: Changed to use single tar file as input
@@ -21,8 +20,10 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.tar")
 
-# mothur 1.48.2 is installed in container image in /opt/chipster/tools
-binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+# binary
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+data.path <- c(file.path(chipster.tools.path, "mothur-data"))
+template.path <- c(file.path(data.path, "silva.bacteria.fasta"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 

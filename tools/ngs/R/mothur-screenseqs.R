@@ -14,8 +14,7 @@
 # PARAMETER OPTIONAL end: "Alignment end position" TYPE INTEGER (Remove sequences which end before this position)
 # PARAMETER OPTIONAL optimize: "Optimize by"  TYPE [empty, minlength, start, end] DEFAULT empty  (Optimize according to minlength, start or end position. Please note that if you use this option, you can't determine the same criteria above! Fill in the optimization criteria below as well.)
 # PARAMETER OPTIONAL criteria: "Optimization criteria"  TYPE INTEGER FROM 0 TO 100  (Optimization criteria. For example 85 means that Mothur will optimize the cutoff for the above chosen quality so that 85% of the sequences are kept.)
-# RUNTIME R-4.4.3-mothur
-# TOOLS_BIN ""
+# RUNTIME R-4.1.1
 
 # ML 03.03.2016
 # ML 17.3.2017 Clarify inputs and outputs
@@ -37,8 +36,8 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-# mothur 1.48.2 is installed in container image in /opt/chipster/tools
-binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 
 documentVersion("Mothur", version)

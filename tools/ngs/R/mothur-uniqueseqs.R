@@ -4,8 +4,7 @@
 # OUTPUT unique.fasta.gz
 # OUTPUT unique.summary.tsv
 # OUTPUT unique.count_table
-# RUNTIME R-4.4.3-mothur
-# TOOLS_BIN ""
+# RUNTIME R-4.1.1
 
 # OUTPUT OPTIONAL log.txt
 
@@ -23,8 +22,9 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
-# mothur 1.48.2 is installed in container image in /opt/chipster/tools
-binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+# binary
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 

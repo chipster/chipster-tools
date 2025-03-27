@@ -7,9 +7,8 @@
 # OUTPUT preclustered-summary.tsv
 # OUTPUT OPTIONAL preclustered.count_table
 # PARAMETER OPTIONAL diffs: "Number of differences allowed" TYPE INTEGER FROM 0 TO 20 DEFAULT 1 (Number of differences allowed for every 100 bases. 1 for every 100 bp sequence is recommended.)
-# RUNTIME R-4.4.3-mothur
+# RUNTIME R-4.1.1
 # SLOTS 4
-# TOOLS_BIN ""
 
 # EK 18.06.2013
 # EK 06.05.2020 Type for input count_table changed
@@ -25,8 +24,9 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
-# mothur 1.48.2 is installed in container image in /opt/chipster/tools
-binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+# binary
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 

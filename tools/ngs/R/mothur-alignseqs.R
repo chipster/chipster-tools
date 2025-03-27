@@ -5,10 +5,10 @@
 # OUTPUT aligned.fasta.gz
 # OUTPUT aligned-summary.tsv
 # OUTPUT custom.reference.summary.tsv
-# PARAMETER OPTIONAL reference: "Reference" TYPE [silva_v138_2: "silva.nr_v138.2", own: "own reference in fasta format"] DEFAULT silva_v138_2 (Reference sequence alignment to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own: "own reference in fasta format"] DEFAULT silva (Reference sequence alignment to use.)
 # PARAMETER OPTIONAL start: "Start" TYPE INTEGER (Start point of your region of interest)
 # PARAMETER OPTIONAL end: "End" TYPE INTEGER (End point of your region of interest)
-# RUNTIME R-4.4.3-mothur
+# RUNTIME R-4.1.1
 # SLOTS 2
 
 # EK 05.06.2013
@@ -29,8 +29,9 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("reads.fasta")
 
-# mothur 1.48.2 is installed in container image in /opt/chipster/tools
-binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+# binary
+binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
@@ -44,9 +45,9 @@ documentVersion("Mothur", version)
 
 # new whole references:
 # data.path <- c(file.path(chipster.tools.path,"mothur-silva-reference", "mothur-silva-reference-whole"))
-data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "v138.2"))
+data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva"))
 # template.path <- c(file.path(data.path,"silva.nr_v132.align"))
-template.path <- c(file.path(data.path, "silva.nr_v138_2.align"))
+template.path <- c(file.path(data.path, "silva.nr_v138_1.align"))
 # }
 
 # create a symlink, because otherwise the modified reference will go to the reference folder
