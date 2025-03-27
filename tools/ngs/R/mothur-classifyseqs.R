@@ -5,9 +5,9 @@
 # INPUT OPTIONAL own_reference.tax: "Reference taxonomy file" TYPE GENERIC
 # OUTPUT sequences-taxonomy-assignment.txt
 # OUTPUT classification-summary.tsv
-# PARAMETER OPTIONAL reference: "Reference" TYPE [silva: "silva.nr_v138.1", own:"own reference"] DEFAULT silva (Reference to use.)
+# PARAMETER OPTIONAL reference: "Reference" TYPE [silva_138_2: "silva.nr_v138.2", own:"own reference"] DEFAULT silva_138_2 (Reference to use.)
 # PARAMETER OPTIONAL iters: "Number of iterations" TYPE INTEGER FROM 10 TO 1000 DEFAULT 100 (How many iterations to do when calculating the bootstrap confidence score for your taxonomy.)
-# RUNTIME R-4.1.1
+# RUNTIME R-4.4.3-mothur
 
 # EK 18.06.2013
 # JTT 28.8.2013 count table and phenodata added
@@ -40,9 +40,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 unzipIfGZipFile("a.fasta")
 
-# binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
@@ -52,22 +50,22 @@ if (reference == "own") {
   }
   reference.path <- "own_reference.fasta"
   taxonomy.path <- "own_reference.tax"
-} else if (reference == "silva") {
-  # Silva v132. Check data path when new tools-bin ready
-  data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva"))
+} else if (reference == "silva_138_2") {
+  # Silva in tools-bin, in path /opt/chipster/tools-bin
+  data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "v138.2"))
   # template.path <- c(file.path(data.path,"silva.nr_v132.align"))
   # taxonomy.path <- c(file.path(data.path,"silva.nr_v132.tax"))
-  template.path <- c(file.path(data.path, "silva.nr_v138_1.align"))
-  taxonomy.path <- c(file.path(data.path, "silva.nr_v138_1.tax"))
+  template.path <- c(file.path(data.path, "silva.nr_v138_2.align"))
+  taxonomy.path <- c(file.path(data.path, "silva.nr_v138_2.tax"))
   # copy to working dir because mothur generates more files to the same directory
   # system(paste("ln -s ",template.path," silva.nr_v132.align"))
   # system(paste("ln -s ",taxonomy.path," silva.nr_v132.tax"))
-  system(paste("ln -s ", template.path, " silva.nr_v138_1.align"))
-  system(paste("ln -s ", taxonomy.path, " silva.nr_v138_1.tax"))
+  system(paste("ln -s ", template.path, " silva.nr_v138_2.align"))
+  system(paste("ln -s ", taxonomy.path, " silva.nr_v138_2.tax"))
   # template.path <- "silva.nr_v132.align"
   # taxonomy.path <- "silva.nr_v132.tax"
-  template.path <- "silva.nr_v138_1.align"
-  taxonomy.path <- "silva.nr_v138_1.tax"
+  template.path <- "silva.nr_v138_2.align"
+  taxonomy.path <- "silva.nr_v138_2.tax"
 }
 
 # batch file
@@ -92,9 +90,10 @@ system(command)
 
 ## test
 write("get.current()", "batch2.mth", append = FALSE)
-system(paste(binary, "batch2.mth", ">> log.txt 2>&1"))
+system(paste(binary, "batch2.mth", " 2>&1"))
 
-system("ls -l >> log.txt")
+system("ls -l")
+
 # Postprocess output
 # Postprocess output
 system("find . -type f -name a.*.taxonomy -exec mv {} sequences-taxonomy-assignment.txt \\;")
