@@ -13,9 +13,8 @@
 # PARAMETER OPTIONAL truncq: "Truncate reads after this base quality" TYPE INTEGER FROM 0 DEFAULT 2 (Truncate reads at the first instance of a quality score less than or equal to the specified number. Setting this parameter to 0, turns this behaviour off.)
 # PARAMETER OPTIONAL triml: "The number of nucleotides to remove from start of each read" TYPE INTEGER FROM 0 DEFAULT 0 (The number of nucleotides to remove from the start of each read. If both truncLen and trimLeft are provided, filtered reads will have length truncLen - trimLeft.)
 # PARAMETER OPTIONAL minlen: "Remove reads which are shorter than this" TYPE INTEGER FROM 0 DEFAULT 0 (Removes reads which are shorter than the specified value. Min length is enforced after all other trimming and truncation. This parameter is especially usefull when truncLen parameter is not used for example with ITS data.)
-# RUNTIME R-4.4.3-asv
+# RUNTIME R-4.1.1-asv
 # SLOTS 2
-# TOOLS_BIN ""
 
 
 # ES 15.07.2022

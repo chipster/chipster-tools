@@ -7,8 +7,7 @@
 # PARAMETER type: "Is the data paired end reads, IonTorrent or other types of single end reads?" TYPE [paired, IonTorrent, single] DEFAULT paired (If the reads were produced with Ion Torrent, DADA2 setting for that techonology will be applied.)
 # PARAMETER ploterr: "Do you want to visualize the estimated error rates?" TYPE [yes,no] DEFAULT no (Do you want to visualize the error rates to a pdf file)
 # PARAMETER pool: "Type of pooling" TYPE [independent, pseudo-pooling] DEFAULT independent (If this is set to pseudo-pooling, the dada algorithm will perform independent processign twice, which makes the sensitivity better but processing takes twice longer. Check the manual.)
-# RUNTIME R-4.4.3-asv
-# TOOLS_BIN ""
+# RUNTIME R-4.1.1-asv
 
 
 # ES 15.07.2022
