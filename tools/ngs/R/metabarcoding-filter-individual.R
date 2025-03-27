@@ -13,6 +13,7 @@
 # RUNTIME R-4.2.0-phyloseq
 
 # JH 2020-2021
+# HJ 27.3.2025 add summary of Phyloseq object to output
 
 # Load packages
 library(phyloseq)
@@ -87,6 +88,11 @@ if (type == "phylum") {
 
 # Print out taxon table
 sink("ps_ind_taxon.txt")
+cat("\n\n\n")
+cat("### Summary of Phyloseq object ###\n")
+cat("### (After removing individual taxa) ###\n")
+cat("\n\n\n")
+print(ps)
 cat("\n\n\n")
 cat("### Summary of taxon frequencies ###\n")
 cat("### (After removing individual taxa) ###\n")

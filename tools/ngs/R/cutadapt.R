@@ -6,7 +6,7 @@
 # OUTPUT OPTIONAL samples.fastqs.txt
 # PARAMETER paired: "Are the reads paired end or single end" TYPE [paired, single] DEFAULT paired (If your reads are paired end, the reverse complement of the 3' and 5' adapters will be removed from the reverse reads.)
 # PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer.)
-# PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer.)
+# PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer in the orientation it exists in the forward/single reads, usually in reverse complement.)
 # PARAMETER OPTIONAL discarduntrimmed: "Remove reads which were not trimmed" TYPE [yes, no] DEFAULT no (Remove reads which did not contain an adapter.)
 # RUNTIME R-4.1.1-asv
 
@@ -14,7 +14,7 @@
 # ES 28.12.2022 added samples.fastqs.txt output and input file
 # added multi-core support 20.10.2022
 # INPUT OPTIONAL file.fastq: "fastq file" TYPE GENERIC
-
+# HJ 27.3.2025 add to adapter3 description that it should be reverse complement
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
