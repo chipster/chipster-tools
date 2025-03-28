@@ -9,7 +9,7 @@
 # PARAMETER OPTIONAL lr: "Learning rate" TYPE DECIMAL DEFAULT 0.0001 (This parameter controls the amount by which the neural network's parameters are updated in the opposite direction of the gradient of the loss function when training the neural network. The default is typically a good choice, but it can be reduced if there are large downward dips in the ELBO score. The value should be between 0 and 1.)
 # PARAMETER OPTIONAL fpr: "Nominal false positive rate" TYPE DECIMAL DEFAULT 0.01 (This controls the trade-off between removing noise and retaining signal. Larger values correspond to removing more noise at the expense of more signal. The value should be between 0 and 1. )
 # RUNTIME R-4.2.3-cellbender
-# SLOTS 2
+# SLOTS 4
 
 # The output cellbender_fb_matrix_filtered.h5 of this CellBender tool is formatted 
 # exactly like a 10x Cell Ranger v3 hdf5 file so that it is compatible with 
