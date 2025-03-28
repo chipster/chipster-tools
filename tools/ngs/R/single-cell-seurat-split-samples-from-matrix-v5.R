@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL sample_{...}.tsv
 # PARAMETER OPTIONAL sample.name.to.look.for: "Sample name to separate into own matrix" TYPE STRING DEFAULT My_sample_name (Give here the name of the sample as it is in column names of the full matrix)
 # RUNTIME R-4.3.2-single-cell
-# SLOTS 9
+# SLOTS 5
 # TOOLS_BIN ""
 
 
