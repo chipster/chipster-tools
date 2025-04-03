@@ -1,6 +1,6 @@
 # TOOL convert-bam-to-edger.R: "Convert genomic BAM file to count table" (This tool takes BAM files as an input, calculates the number of times each sequence tag is identified and removes the ones for which the count is under the user defined threshold.)
 # INPUT bam_file.bam: "Alignment against genome in BAM format" TYPE GENERIC
-# OUTPUT edgeR-input.tsv: "A converted BAM file suitable for edgeR analysis"
+# OUTPUT counts.tsv: "A converted BAM file suitable for DEG analysis"
 # PARAMETER count_limit: "Count limit" TYPE INTEGER FROM 0 TO 100000 DEFAULT 0 (The lowest number of times a sequence tag has to appear in the data)
 # PARAMETER merge_overlapping: "Merge overlapping reads" TYPE [no, start, end, both] DEFAULT both (If enabled, reads with identical start or end position, but differing in length or nucleotide composition, will be merged into one. The count number will be summed over the merged reads and the sequence and length of the longest among the merged reads will be reported.)
 
@@ -59,13 +59,13 @@ system(trim.command)
 headers <- paste("id\t", "sequence\t", "chr\t", "start\t", "end\t", "length\t", "count", sep = "")
 input.file <- output.file
 header.file <- "header_file"
-output.file <- "edgeR-input.tsv"
+output.file <- "counts.tsv"
 system(paste("echo \"", headers, "\"", ">", header.file))
 merge.command <- paste("cat", header.file, input.file, ">", output.file)
 system(merge.command)
 
 # Make final output
-file <- c("edgeR-input.tsv")
+file <- c("counts.tsv")
 dat <- read.table(file, header = T, sep = "\t", row.names = 1)
 
 if (merge_overlapping == "no") {
@@ -170,6 +170,6 @@ if (merge_overlapping == "end" || merge_overlapping == "both") {
 
 results_table <- results_table[results_table$count >= count_limit, ]
 # Writing data to disk
-write.table(data.frame(id = rownames(results_table), results_table), file = "edgeR-input.tsv", col.names = T, quote = F, sep = "\t", row.names = F)
+write.table(data.frame(id = rownames(results_table), results_table), file = "counts.tsv", col.names = T, quote = F, sep = "\t", row.names = F)
 
 # EOF
