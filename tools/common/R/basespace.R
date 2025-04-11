@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL {...}.fastqc.gz: "FASTQ files"
 # OUTPUT OPTIONAL bs_download.tar.gz
 # PARAMETER OPTIONAL name: "Name of dataset" TYPE STRING (Give the name of the dataset. This parameter is not needed if you just want to list your datasets in Illumina BaseSpace.)
-# PARAMETER action: "Action" TYPE [list: "List datasets", download: "Download dataset", download_project: "Download project", download_project: "Download project_id", download_dataset_id: "Download dataset ID, dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list (Action to be performed.)
+# PARAMETER action: "Action" TYPE [list: "List datasets", download: "Download dataset", download_project: "Download project", download_project_id: "Download project_id", download_dataset_id: "Download dataset ID", dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list (Action to be performed.)
 # PARAMETER apiserver: "API server" TYPE [api.basespace.illumina.com: "api.basespace.illumina.com"] DEFAULT api.basespace.illumina.com (Define the BaseSpace server to be used.)
 # PARAMETER token: "Access token" TYPE STRING (Your personal Illumina BaseSpace access token.)
 # PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file for debugging.)
