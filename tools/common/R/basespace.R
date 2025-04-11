@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL bs_data.tsv
 # OUTPUT OPTIONAL bs_data.txt
 # OUTPUT OPTIONAL {...}.fastqc.gz: "FASTQ files"
-# OUTPUT OPTIONAL bs_download.tar.gz
+# OUTPUT OPTIONAL bs_download.tar
 # PARAMETER OPTIONAL name: "Name of dataset or project" TYPE STRING (Give the name of the dataset or project. This parameter is not needed if you just want to list your datasets or projects in Illumina BaseSpace.)
 # PARAMETER action: "Action" TYPE [list_datasets: "List datasets", list_projects: "List projects", download_dataset: "Download dataset", download_project: "Download project", dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list_datasets (Action to be performed.)
 # PARAMETER apiserver: "API server" TYPE [api.basespace.illumina.com: "api.basespace.illumina.com"] DEFAULT api.basespace.illumina.com (Define the BaseSpace server to be used.)
@@ -60,6 +60,17 @@ if (action == "download_project") {
 # }
 
 system("ls -l >> bs.log")
+
+if (file.exists("bs_download.tar.gz")) {
+
+  # extract without path
+  print("extract bs_download.tar.gz")
+  system("tar xzf bs_download.tar.gz --transform='s/.*\///' -C extracted_files")
+
+  # add only .fastq.gz files (no .json) to a tar package (without compression, because individual files are compressed already)
+  print("package fastq files")
+  system("tar cf bs_download.tar -C extracted_files extracted_files/*.fastq.qz")
+}
 
 if (save_log == "no") {
   system("rm -f bs.log")
