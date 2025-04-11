@@ -4,8 +4,8 @@
 # OUTPUT OPTIONAL bs_data.txt
 # OUTPUT OPTIONAL {...}.fastqc.gz: "FASTQ files"
 # OUTPUT OPTIONAL bs_download.tar.gz
-# PARAMETER OPTIONAL name: "Name of dataset" TYPE STRING (Give the name of the dataset. This parameter is not needed if you just want to list your datasets in Illumina BaseSpace.)
-# PARAMETER action: "Action" TYPE [list: "List datasets", download: "Download dataset", download_project: "Download project", download_project_id: "Download project_id", download_dataset_id: "Download dataset ID", dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list (Action to be performed.)
+# PARAMETER OPTIONAL name: "Name of dataset or project" TYPE STRING (Give the name of the dataset or project. This parameter is not needed if you just want to list your datasets or projects in Illumina BaseSpace.)
+# PARAMETER action: "Action" TYPE [list_datasets: "List datasets", list_projects: "List projects", download_dataset: "Download dataset", download_project: "Download project", dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list_datasets (Action to be performed.)
 # PARAMETER apiserver: "API server" TYPE [api.basespace.illumina.com: "api.basespace.illumina.com"] DEFAULT api.basespace.illumina.com (Define the BaseSpace server to be used.)
 # PARAMETER token: "Access token" TYPE STRING (Your personal Illumina BaseSpace access token.)
 # PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file for debugging.)
@@ -17,8 +17,14 @@ bs.binary <- file.path(chipster.tools.path, "basespace/bin/bs")
 # turn of cacheing
 bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep = "")
 
-if (action == "list") {
+if (action == "list_datasets") {
   command.full <- paste(bs.command_start, 'list dataset -f csv | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
+  cat(command.full, "\n", file = "bs.log", append = TRUE)
+  system(command.full)
+}
+
+if (action == "list_projects") {
+  command.full <- paste(bs.command_start, 'list project -f csv | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
   cat(command.full, "\n", file = "bs.log", append = TRUE)
   system(command.full)
 }
@@ -35,7 +41,7 @@ if (action == "info") {
   system(command.full)
 }
 
-if (action == "download") {
+if (action == "download_dataset") {
   command.full <- paste(bs.command_start, "download dataset --name", name, " -z -o bs_download 1>>bs.log 2>>bs.log")
   cat(command.full, "\n", file = "bs.log", append = TRUE)
   system(command.full)
@@ -47,17 +53,11 @@ if (action == "download_project") {
   system(command.full)
 }
 
-if (action == "download_project_id") {
-  command.full <- paste(bs.command_start, "download project -i", name, " --extension=fastq.gz -z -o bs_download 1>>bs.log 2>>bs.log")
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
-}
-
-if (action == "download_dataset_id") {
-  command.full <- paste(bs.command_start, "download dataset -i", name, " -z -o bs_download 1>>bs.log 2>>bs.log")
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
-}
+# if (action == "download_dataset_id") {
+#   command.full <- paste(bs.command_start, "download dataset -i", name, " -z -o bs_download 1>>bs.log 2>>bs.log")
+#   cat(command.full, "\n", file = "bs.log", append = TRUE)
+#   system(command.full)
+# }
 
 system("ls -l >> bs.log")
 
