@@ -17,6 +17,7 @@
 # 2022-07-21 IH
 # 2022-10-13 ML nfeatures = 3000 fix
 # 2024-03-21 EP Update to Seurat v5 (and add SCTransform to this tool)
+# 2025-04-14 ML Bug fix in >= 3 sample case
 
 library(Seurat)
 library(gplots)
@@ -46,32 +47,41 @@ if (length(seurat_objects) < 2) {
 
 if (method == "merge") {
     # Merging mainly follows spatial analysis vignette (https://satijalab.org/seurat/articles/spatial_vignette.html#10x-visium)
-    # where seurat objects are first individually normalized using SCTransform before merging objects 
+    # where seurat objects are first individually normalized using SCTransform before merging objects
 
     # Run SCTransform and print warnings after SCTransform() but suppress them from Chipster note
-    sctransformed_obj_1 <- tryCatch({
-        SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
-    }, warning=function(w) {
-        print(w) 
-        return(suppressWarnings(SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
-    })
-   sctransformed_obj_2 <- tryCatch({
-        SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
-    }, warning=function(w) {
-        print(w) 
-        return(suppressWarnings(SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
-    })
+    sctransformed_obj_1 <- tryCatch(
+        {
+            SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+        },
+        warning = function(w) {
+            print(w)
+            return(suppressWarnings(SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+        }
+    )
+    sctransformed_obj_2 <- tryCatch(
+        {
+            SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+        },
+        warning = function(w) {
+            print(w)
+            return(suppressWarnings(SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+        }
+    )
     sctransformed_objects <- c(sctransformed_obj_1, sctransformed_obj_2)
 
     if (length(seurat_objects) >= 3) {
-       for (i in 3:length(seurat_objects)) {
-            sctransformed_obj <- tryCatch({
-            SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
-        }, warning=function(w) {
-            print(w) 
-            return(suppressWarnings(SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
-        })
-            sctransformed_objects <- append(sctransformed_objects, sctransformed_seurat_obj)
+        for (i in 3:length(seurat_objects)) {
+            sctransformed_obj <- tryCatch(
+                {
+                    SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+                },
+                warning = function(w) {
+                    print(w)
+                    return(suppressWarnings(SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+                }
+            )
+            sctransformed_objects <- append(sctransformed_objects, sctransformed_obj)
         }
     }
 
@@ -94,16 +104,16 @@ if (method == "merge") {
 
     # Variable genes that are not in all data sets (scale.data) need to be removed from the list before downstream analyses.
     # This is done because without it there will be a 'subsrict out of bounds' error in FindSpatiallyVariableFeatures()
-    # as genes that are not in all objects are not scaled. In addition, PCA excludes genes not in scale.data from analysis.  
+    # as genes that are not in all objects are not scaled. In addition, PCA excludes genes not in scale.data from analysis.
     # More information in issues  https://github.com/satijalab/seurat/issues/3041 and https://github.com/satijalab/seurat/issues/4611
-    variable_feats_in_all_objects <- intersect(variable_feats, rownames(seurat_obj[['SCT']]$scale.data))
+    variable_feats_in_all_objects <- intersect(variable_feats, rownames(seurat_obj[["SCT"]]$scale.data))
     if (length(variable_feats_in_all_objects) < length(variable_feats)) {
         sink("logfile.txt")
         warning_message <- paste("
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, 
+        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool,
         you can try to select a higher number of returned variable genes in SCTransform to see if the number
-        of deemed variable genes across all data sets increases. You can also run the tool again with less 
+        of deemed variable genes across all data sets increases. You can also run the tool again with less
         than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
         cat(warning_message)
 
@@ -112,7 +122,7 @@ if (method == "merge") {
     }
     VariableFeatures(seurat_obj) <- variable_feats_in_all_objects
 
-    # PCA 
+    # PCA
     seurat_obj <- RunPCA(seurat_obj, npcs = PCstocompute, assay = "SCT", verbose = FALSE)
 
     # PCA genes in txt file
@@ -133,7 +143,7 @@ if (method == "integration") {
     # Integration follows single-cell analysis vignette (https://satijalab.org/seurat/articles/integration_introduction)
     # where a combined object is used for SCTransform, but samples are individually normalized using SCTransform by using different sample
     # layers stored in the object. Seurat object needs to be split by the samples before SCTransform so that SCTransform
-    # is run for each sample individually. However, splitting the object as shown in the vignette is not needed after merging 
+    # is run for each sample individually. However, splitting the object as shown in the vignette is not needed after merging
     # multiple unnormalized Seurat objects because objects are already split by their sample (=orig.ident) after merge
 
     # Merge multiple slices
@@ -146,25 +156,28 @@ if (method == "integration") {
     # SCTransform (no need to split object before SCTransform)
     # This will also set variable genes in all objects (different compared to merge)
     # Print warnings after SCTransform() but suppress them from Chipster note
-    seurat_obj <- tryCatch({
-        SCTransform(seurat_obj, variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
-    }, warning=function(w) {
-        print(w) 
-        return(suppressWarnings(SCTransform(seurat_obj, variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
-    })
+    seurat_obj <- tryCatch(
+        {
+            SCTransform(seurat_obj, variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+        },
+        warning = function(w) {
+            print(w)
+            return(suppressWarnings(SCTransform(seurat_obj, variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+        }
+    )
 
-    # There is an issue with running SCTransform for a merged object as explained by StepahieHowe in issue 
+    # There is an issue with running SCTransform for a merged object as explained by StepahieHowe in issue
     # https://github.com/satijalab/seurat/issues/8235. This solution does not solve issues with
     # FindSpatiallyVariableFeatures() but it allows to perform integration with scRNA-seq data without
     # any errors. FindSpatiallyVariableFeatures() must still be run for each object individually because
     # otherwise it will result in 'please provide the same number of observations as spatial locations' error
     # as explained by tingchiafelix
     for (i in length(seurat_objects)) {
-        slot(object = seurat_obj@assays$SCT@SCTModel.list[[i]], name="umi.assay")<-"Spatial"
+        slot(object = seurat_obj@assays$SCT@SCTModel.list[[i]], name = "umi.assay") <- "Spatial"
     }
-    
+
     # You can use this to check that all "umi.assay" slots are called "Spatial"
-    print(SCTResults(object=seurat_obj, slot="umi.assay"))
+    print(SCTResults(object = seurat_obj, slot = "umi.assay"))
 
     # Set default assay and variable features before integration
     DefaultAssay(seurat_obj) <- "SCT"
@@ -178,16 +191,16 @@ if (method == "integration") {
 
     # Variable genes that are not in all data sets (scale.data) need to be removed from the list before downstream analyses.
     # This is done because without it there will be a 'subsrict out of bounds' error in FindSpatiallyVariableFeatures()
-    # as genes that are not in all objects are not scaled. In addition, PCA excludes genes not in scale.data from analysis.  
+    # as genes that are not in all objects are not scaled. In addition, PCA excludes genes not in scale.data from analysis.
     # More information in issues  https://github.com/satijalab/seurat/issues/3041 and https://github.com/satijalab/seurat/issues/4611
-    variable_feats_in_all_objects <- intersect(variable_feats, rownames(seurat_obj[['SCT']]$scale.data))
+    variable_feats_in_all_objects <- intersect(variable_feats, rownames(seurat_obj[["SCT"]]$scale.data))
     if (length(variable_feats_in_all_objects) < length(variable_feats)) {
         sink("logfile.txt")
         warning_message <- paste("
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, 
+        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool,
         you can try to select a higher number of returned variable genes in SCTransform to see if the number
-        of deemed variable genes across all data sets increases. You can also run the tool again with less 
+        of deemed variable genes across all data sets increases. You can also run the tool again with less
         than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
         cat(warning_message)
         # Close the log file
@@ -212,11 +225,13 @@ if (method == "integration") {
     dev.off() # close the pdf
 
     # Name of new reduction
-    new.reduction = "integrated.cca"
+    new.reduction <- "integrated.cca"
 
-    # Integration 
-    seurat_obj <- IntegrateLayers(object = seurat_obj, method = "CCAIntegration", normalization.method = "SCT", new.reduction = new.reduction,
-    dims = 1:PCstocompute, assay = "SCT", features = variable_feats_in_all_objects, verbose = FALSE)
+    # Integration
+    seurat_obj <- IntegrateLayers(
+        object = seurat_obj, method = "CCAIntegration", normalization.method = "SCT", new.reduction = new.reduction,
+        dims = 1:PCstocompute, assay = "SCT", features = variable_feats_in_all_objects, verbose = FALSE
+    )
 }
 
 # Save the combined Robj for the next tool
