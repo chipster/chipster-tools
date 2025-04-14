@@ -1,16 +1,20 @@
 # TOOL basespace.R: "Retrieve data from Illumina BaseSpace" (Retrieve data from Illumina BaseSpace. This tool requires that you have an access token for the bs client program. Please see the manual for how to obtain it.)
-# OUTPUT OPTIONAL bs.log
 # OUTPUT OPTIONAL bs_data.tsv
 # OUTPUT OPTIONAL bs_data.txt
-# OUTPUT OPTIONAL {...}.fastqc.gz: "FASTQ files"
-# OUTPUT OPTIONAL bs_download.tar
+# OUTPUT OPTIONAL bs_data.tar
 # PARAMETER OPTIONAL name: "Name of dataset or project" TYPE STRING (Give the name of the dataset or project. This parameter is not needed if you just want to list your datasets or projects in Illumina BaseSpace.)
 # PARAMETER action: "Action" TYPE [list_datasets: "List datasets", list_projects: "List projects", download_dataset: "Download dataset", download_project: "Download project", dir: "Display content of a dataset", info: "Display detailed information about a dataset"  ] DEFAULT list_datasets (Action to be performed.)
 # PARAMETER apiserver: "API server" TYPE [api.basespace.illumina.com: "api.basespace.illumina.com"] DEFAULT api.basespace.illumina.com (Define the BaseSpace server to be used.)
 # PARAMETER token: "Access token" TYPE STRING (Your personal Illumina BaseSpace access token.)
-# PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file for debugging.)
+
+# OUTPUT OPTIONAL {...}.fastqc.gz: "FASTQ files"
 
 # KM 25.02.2018
+
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+
+# Make a matrix of output names
+outputnames <- matrix(NA, nrow = 1, ncol = 2)
 
 
 bs.binary <- file.path(chipster.tools.path, "basespace/bin/bs")
@@ -18,80 +22,71 @@ bs.binary <- file.path(chipster.tools.path, "basespace/bin/bs")
 bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep = "")
 
 if (action == "list_datasets") {
-  command.full <- paste(bs.command_start, 'list dataset -f csv | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
+  command.full <- paste(bs.command_start, 'list dataset -f csv | tr "," "\t" 1>>bs_data.tsv')
+  runExternal(command.full)
+  outputnames[1, ] <- c("bs_data.tsv", "basespace-datasets.tsv")
 }
 
 if (action == "list_projects") {
-  command.full <- paste(bs.command_start, 'list project -f csv | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
+  command.full <- paste(bs.command_start, 'list project -f csv | tr "," "\t" 1>>bs_data.tsv')
+  runExternal(command.full)
+  outputnames[1, ] <- c("bs_data.tsv", "basespace-projects.tsv")
 }
 
 if (action == "dir") {
-  command.full <- paste(bs.command_start, "dir dataset -f csv --name", name, '  | tr "," "\t" 1>>bs_data.tsv 2>>bs.log')
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
+  command.full <- paste(bs.command_start, "dir dataset -f csv --name", name, '  | tr "," "\t" 1>>bs_data.tsv')
+  runExternal(command.full)
+  outputnames[1, ] <- c("bs_data.tsv", paste(name, "-dir.tsv", sep=""))
 }
 
 if (action == "info") {
-  command.full <- paste(bs.command_start, "get dataset --name", name, "  1>>bs_data.txt 2>>bs.log")
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
+  command.full <- paste(bs.command_start, "get dataset --name", name, " 1>>bs_data.txt")
+  runExternal(command.full)
+  outputnames[1, ] <- c("bs_data.txt", paste(name, "-info.txt", sep=""))
 }
 
 if (action == "download_dataset") {
-  command.full <- paste(bs.command_start, "download dataset --name", name, " -z -o bs_download 1>>bs.log 2>>bs.log")
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
+  command.full <- paste(bs.command_start, "download dataset --name", name, " -z -o bs_download")
+  runExternal(command.full)
+  outputnames[1, ] <- c("bs_data.tar", paste(name, ".tar", sep=""))
 }
 
 if (action == "download_project") {
-  command.full <- paste(bs.command_start, "download project --name", name, " --extension=fastq.gz -z -o bs_download 1>>bs.log 2>>bs.log")
-  cat(command.full, "\n", file = "bs.log", append = TRUE)
-  system(command.full)
+  command.full <- paste(bs.command_start, "download project --name", name, " --extension=fastq.gz -z -o bs_download")
+  runExternal(command.full)
+  outputnames[1, ] <- c("bs_data.tar", paste(name, ".tar", sep=""))
 }
 
 # if (action == "download_dataset_id") {
-#   command.full <- paste(bs.command_start, "download dataset -i", name, " -z -o bs_download 1>>bs.log 2>>bs.log")
-#   cat(command.full, "\n", file = "bs.log", append = TRUE)
-#   system(command.full)
+#   command.full <- paste(bs.command_start, "download dataset -i", name, " -z -o bs_download")
+#   runExternal(command.full)
 # }
 
-system("ls -l >> bs.log")
+system("ls -lah")
+
 
 if (file.exists("bs_download.tar.gz")) {
 
+  runExternal("mkdir extracted_files")
   # extract without path
   print("extract bs_download.tar.gz")
-  system("tar xzf bs_download.tar.gz --transform='s/.*\///' -C extracted_files")
+  runExternal("tar xzf bs_download.tar.gz --transform='s/.*\\///' -C extracted_files")
+
+  system("ls -lah extracted_files")
 
   # add only .fastq.gz files (no .json) to a tar package (without compression, because individual files are compressed already)
+  # use bash to fill in the wildcard '*'
   print("package fastq files")
-  system("tar cf bs_download.tar -C extracted_files extracted_files/*.fastq.qz")
+
+  fastq.files <- list.files(path = "extracted_files", pattern=".fastq.gz$")
+  if (length(fastq.files) == 0) {
+    stop("No FASTQ files in the project.")
+  } else {
+    joined_files <- paste(fastq.files, collapse=" ")
+    cmd <- paste("tar cf bs_data.tar -C extracted_files", joined_files)
+    runExternal(cmd)
+  }
 }
 
-if (save_log == "no") {
-  system("rm -f bs.log")
-}
-
-
-# check that we got something
-# "fastq.files <- Sys.glob("*.fastq.gz")
-# if (length(fastq.files) == 0) {
-# 	system('echo srafetch.log:')
-# 	system('cat srafetch.log')
-# 	stop("Fetching fastq files failed, see the end of the details for more information")
-# }
-
-## rename outputs and create output names file
-# source(file.path(chipster.common.lib.path, "tool-utils.R"))
-# outputnames <- matrix(NA, nrow=length(fastq.files), ncol=2)
-# for (i in 1:length(fastq.files)) {
-# 	original.name <- fastq.files[i]
-# 	new.name <- paste("sra_reads_", i, ".fastqc.gz", sep ="")
-# 	outputnames[i,] <- c(new.name, original.name)#
-# 	system(paste("mv", original.name, new.name))
-# }
-# write_output_definitions(outputnames)
+# Write output definitions file
+write_output_definitions(outputnames)
