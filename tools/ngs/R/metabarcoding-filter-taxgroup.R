@@ -12,6 +12,7 @@
 # RUNTIME R-4.2.0-phyloseq
 
 # JH 2020-2021
+# HJ 27.3.2025 add summary of Phyloseq object to output
 
 # Load packages
 library(phyloseq)
@@ -86,8 +87,13 @@ prevsummary <- dplyr::rename(prevsummary,
 if (group == "bacteria") {
     sink("ps_bacteria_taxon.txt")
     cat("\n\n\n")
+    cat("### Summary of Phyloseq object ###\n")
+    cat("### (After removal of non-bacterial features) ###\n")
+    cat("\n\n\n")
+    print(ps)
+    cat("\n\n\n")
     cat("### Summary of phylum frequencies ###\n")
-    cat("### (Following removal of non-bacterial / chloroplast features) ###\n")
+    cat("### (After removal of non-bacterial features) ###\n")
     cat("\n\n\n")
     print(taxonsummary)
     cat("\n\n\n")
@@ -101,8 +107,13 @@ if (group == "bacteria") {
 if (group == "archaea") {
     sink("ps_archaea_taxon.txt")
     cat("\n\n\n")
+    cat("### Summary of Phyloseq object ###\n")
+    cat("### (After removal of non-archaeal features) ###\n")
+    cat("\n\n\n")
+    print(ps)
+    cat("\n\n\n")
     cat("### Summary of phylum frequencies ###\n")
-    cat("### (Following removal of non-archaeal features) ###\n")
+    cat("### (After removal of non-archaeal features) ###\n")
     cat("\n\n\n")
     print(taxonsummary)
     cat("\n\n\n")
@@ -116,8 +127,13 @@ if (group == "archaea") {
 if (group == "eukaryotes") {
     sink("ps_eukaryota_taxon.txt")
     cat("\n\n\n")
+    cat("### Summary of Phyloseq object ###\n")
+    cat("### (After removal of non-eukaryotic features) ###\n")
+    cat("\n\n\n")
+    print(ps)
+    cat("\n\n\n")
     cat("### Summary of phylum frequencies ###\n")
-    cat("### (Following removal of non-eukaryotic features) ###\n")
+    cat("### (After removal of non-eukaryotic features) ###\n")
     cat("\n\n\n")
     print(taxonsummary)
     cat("\n\n\n")
@@ -131,8 +147,13 @@ if (group == "eukaryotes") {
 if (group == "fungi") {
     sink("ps_fungi_taxon.txt")
     cat("\n\n\n")
+    cat("### Summary of Phyloseq object ###\n")
+    cat("### (After removal of non-fungal features) ###\n")
+    cat("\n\n\n")
+    print(ps)
+    cat("\n\n\n")
     cat("### Summary of phylum frequencies ###\n")
-    cat("### (Following removal of non-fungal features) ###\n")
+    cat("### (After removal of non-fungal features) ###\n")
     cat("\n\n\n")
     print(taxonsummary)
     cat("\n\n\n")

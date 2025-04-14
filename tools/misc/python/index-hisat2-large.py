@@ -1,4 +1,4 @@
-# TOOL index-hisat2-large.py: "Create Hisat2 index for large genomes" ()
+# TOOL index-hisat2-large.py: "Create HISAT2 index for large genomes without tar package" ()
 # INPUT input.fa TYPE GENERIC
 # INPUT input.gtf TYPE GENERIC
 # OUTPUT output{...}

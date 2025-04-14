@@ -132,9 +132,11 @@
 		<tool>bowtie2.R</tool>
 		<tool>bowtie2-paired-end.R</tool>
 		<tool>bowtie2-with-index-building.R</tool>
-	    	<tool>bowtie2-paired-end-with-index-building.R</tool>
+		<tool>index-bowtie2-tar.py</tool>
+	    <tool>bowtie2-paired-end-with-index-building.R</tool>
 		<tool>hisat2.R</tool>
-		<tool>hisat2-paired-end.R</tool>		
+		<tool>hisat2-paired-end.R</tool>
+		<tool>index-hisat2-tar.py</tool>
 		<tool>hisat2-single-end-with-index-building.R</tool>		
 		<tool>hisat2-paired-end-with-index-building.R</tool>
 		<tool>hisat2-paired-end-with-index-building-large-memory.R</tool>
@@ -142,18 +144,21 @@
 		<tool>star-paired-end.R</tool>	
 		<tool>star-paired-end-storage.R</tool>
 		<tool>bwa-mem.R</tool>
+		<tool>index-bwa-tar.py</tool>
 		<tool>bwa-mem-with-index-building.R</tool>
 		<tool>bowtie.R</tool>
 		<tool>bowtie-paired-end.R</tool>
+		<tool>index-bowtie-tar.py</tool>
 		<tool>bowtie-with-index-building.R</tool>
 		<tool>bowtie-paired-end-with-index-building.R</tool>
+		<tool>index-tophat2-tar.py</tool>
 		<tool>tophat2-single-end-with-index-building.R</tool>
 		<tool>tophat2-with-index-building.R</tool>
 		<!--<tool>bwa.R</tool>
 		<tool>bwa-paired-end.R</tool>
 		<tool>bwa-with-index-building.R</tool>
 		<tool>bwa-paired-end-with-index-building.R</tool>-->
-		<tool>minimap2.R</tool>
+		<tool>minimap2.R</tool>		
 	</category>
 	
 	<category name="Variants" color="#80a3b7">

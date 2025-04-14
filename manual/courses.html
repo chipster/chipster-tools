@@ -36,7 +36,7 @@
 		<li> <a href="#single-cell">Single-cell RNA-seq data analysis</a> </li>
 		<li> <a href="#rna">Bulk RNA-seq data analysis</a> </li>
 		<li> <a href="#quantseq">3' RNA-seq data analysis (QuantSeq)</a> </li>
-		<li> <a href="#microbiome">Microbial community analysis </a> </li>
+		<li> <a href="#microbiome">Microbial community / eDNA analysis </a> </li>
 		<li> <a href="#virusdetect">Virus detection using small RNA-seq</a> </li>
 		<li> <a href="#variant">Detection and annotation of genomic variants</a> </li>
 		<li> <a href="#chip">ChIP-seq data analysis</a> </li>
@@ -47,12 +47,11 @@
 	<h3><a name="visium">Visium data analysis (spatially resolved transcriptomics)</a></h3>
 
 	<br>
-	This course covers the analysis of 10X Visium data using Seurat v4 (note that the materials will be updated to v5
-	during the summer 2024). We usually run it as a three-hour module after the single-cell RNA-seq course,
+	This course covers the analysis of 10X Visium data using Seurat v5. We usually run it as a three-hour module after the single-cell RNA-seq course,
 	because part of the theory is the same. You will learn how to
 
 	<ul>
-		<li>create a Seurat v4 object</li>
+		<li>create a Seurat object</li>
 		<li>perform QC and filter out low quality spots (damaged tissue)</li>
 		<li>normalize gene expression values and detect highly variable genes with SCTransform</li>
 		<li>reduce dimensions with PCA using the highly variable genes</li>
@@ -77,13 +76,13 @@
 	<h3><a name="single-cell">Single-cell RNA-seq data analysis</a></h3>
 
 	<br>
-	<u>Course 1 (January 2024)</u>
-	<br>This course covers the analysis of 10X data using Seurat v4 and SingleR, from digital gene expression matrix
+	<u>Course 1 (March 2025)</u>
+	<br>This course covers the analysis of 10X data using Seurat v5 and SingleR, from digital gene expression matrix
 	(DGE) to clustering cells and finding marker genes for those clusters.
 	It also covers how to compare two samples and detect conserved cluster markers and differentially expressed genes in
 	them. The course takes one day. You will learn how to
 	<ul>
-		<li>create Seurat v4 object</li>
+		<li>create a Seurat object</li>
 		<li>perform QC and filter out low quality cells</li>
 		<li>normalize expression values</li>
 		<li>detect highly variable genes using VST</li>
@@ -102,16 +101,12 @@
 	</ul>
 	Course material:
 	<ul>
-		<li><a
-				href="https://chipster.github.io/training/single-cell/Single-cell RNA-seq data analysis_2024.pdf">slides</a>
-			(2024)</li>
+		<li>slides: <a href="https://chipster.github.io/training/rnaseq/IntroToChipster2025.pdf">Introduction to Chipster</a></li>
+		<li>slides: <a href="https://chipster.github.io/training/single-cell/Single-cell RNA-seq data analysis_2025.pdf">scRNA seq data analysis</a></li>
 		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elC4ag_Y_lSNiNh2BmsU26Z-">lecture videos</a>
-		<li><a href="https://chipster.github.io/training/single-cell/scRNA-seq_exercises_202401.pdf">exercises:
-				Clustering
-				10X Genomics data and Integrated analysis of two samples</a> (2024).
-			The data are available on Chipster server in the example sessions listed in the exercise sheet.</li>
-		<li>Note: excellent <a href="https://www.youtube.com/playlist?list=PLjiXAZO27elC_xnk7gVNM85I2IQl5BEJN">lecture
-				videos covering scRNA-seq theory</a> from another course (May 2019)</li>
+		<li>exercises: <a href="https://chipster.github.io/training/single-cell/scRNA-seq_exercises_20250304day1.pdf">one sample analysis</a></li>
+		<li>exercises: <a href="https://chipster.github.io/training/single-cell/scRNA-seq_exercises_20250305day2.pdf">integrated analysis of two samples</a></li>
+		<li>Note: excellent <a href="https://www.youtube.com/playlist?list=PLjiXAZO27elC_xnk7gVNM85I2IQl5BEJN">lecture videos covering scRNA-seq theory</a> from another course (May 2019)</li>
 	</ul>
 	<br>
 	<u>Course 2 (March 2019)</u>
@@ -148,7 +143,7 @@
 	discussed.
 	The course takes two days. You will learn how to
 	<ul>
-		<li>check the quality of reads with FastQC and MultiQC</li>
+		<li>check the quality of reads with MultiQC</li>
 		<li>remove bad quality data with Trimmomatic</li>
 		<li>infer strandedness with RseQC</li>
 		<li>align reads to the reference genome with HISAT2 and STAR</li>
@@ -162,16 +157,12 @@
 		<li>perform pathway analysis with ConsensusPathDB</li>
 	</ul>
 
-	Course material (2023):
+	Course material (2025):
 	<ul>
-		<li><a href="https://chipster.github.io/training/rnaseq/Chipster.pdf">introductory slides about Chipster and the
-				course</a></li>
-		<li><a href="https://chipster.github.io/training/rnaseq/RNAseqDataAnalysis2023.pdf">slides on RNA-seq data
-				analysis</a></li>
-		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBj3KYi7ACscgOxlNkNOxPc">lecture videos</a>
-			(2019-2022)
-		</li>
-		<li>exercises (data is available on Chipster server in the example sessions listed in the exercise sheets)</li>
+		<li>slides: <a href="https://chipster.github.io/training/rnaseq/IntroToChipster2025.pdf">Introduction to Chipster</a></li>
+		<li>slides: <a href="https://chipster.github.io/training/rnaseq/RNAseqDataAnalysis2025.pdf">Bulk RNA-seq data analysis</a></li>
+		<li><a href="https://www.youtube.com/playlist?list=PLjiXAZO27elBj3KYi7ACscgOxlNkNOxPc">lecture videos</a></li>
+		<li>exercises</li>
 		<ol>
 			<li><a
 					href="https://chipster.github.io/training/rnaseq/exercises1_RNAseq_lung-lymphnode_comparison_2samples.pdf">Analysis
@@ -245,7 +236,7 @@
 	</ul>
 	<hr>
 
-	<h3><a name="microbiome">Microbial community analysis</a></h3>
+	<h3><a name="microbiome">Microbial community / eDNA analysis</a></h3>
 
 	We offer two courses for microbial community analysis: Course 1 covers amplicon sequence variant (ASV) analysis
 	using DADA2, and Course 2
@@ -303,7 +294,7 @@
 		<li>Example analysis session in Chipster: 08_microbial_community_analysis_16S_ASV_preprocessing_DADA2</li>
 	</ul>
 	<br>
-	<u>Course 2: OTU-based analysis of Miseq and Ion Torrent data with Mothur, VSEARCH and Phyloseq (2023)</u>
+	<u>Course 2: OTU-based analysis of Miseq and Ion Torrent data with Mothur, VSEARCH and Phyloseq (2025)</u>
 	<br>
 	<br>
 	Topics covered:
@@ -356,33 +347,23 @@
 			<li>Part 1, preprocessing:
 				<ul>
 					<!--<li><a href="https://drive.google.com/file/d/1X5HHc_rWX12lFI7dJRmBCCWktEl-B7gi/view?usp=sharing">MiSeq</a></li>-->
-					<li><a
-							href="https://chipster.github.io/training/microbiome-otu-miseq/MicrobialCommunityAnalysis_day1.pdf">MiSeq</a>
-					</li>
-					<li><a
-							href="https://chipster.github.io/training/microbiome-otu-iontorrent/microbiome-iontorrent-OTU_day1.pdf">Ion
-							Torrent</a></li>
+					<li><a href="https://chipster.github.io/training/microbiome-otu-miseq/MicrobialCommunityAnalysis_day1.pdf">MiSeq</a></li>
+					<li><a href="https://chipster.github.io/training/microbiome-otu-iontorrent/microbiome-iontorrent-OTU_day1.pdf">Ion Torrent</a></li>
 				</ul>
 			</li>
 			<li>Part 2, analysis:
 				<ul>
-					<li><a href="https://chipster.github.io/training/microbiome-otu-miseq/miseq-OTU_d2.pdf">MiSeq</a>
-					</li>
-					<li><a
-							href="https://chipster.github.io/training/microbiome-otu-iontorrent/microbiome-iontorrent-OTU_day2.pdf">Ion
-							Torrent</a></li>
+					<li><a href="https://chipster.github.io/training/microbiome-otu-miseq/MicrobialCommunityAnalysis_day2.pdf">MiSeq</a></li>
+					<li><a href="https://chipster.github.io/training/microbiome-otu-iontorrent/microbiome-iontorrent-OTU_day2.pdf">Ion Torrent</a></li>
 				</ul>
 			</li>
 		</ul>
-		<li>Exercises (the data is available on Chipster server in the example session listed in the part 1 exercise
-			sheet)</li>
+		<li>Exercises </li>
 		<ul>
 			<li>Miseq:
 				<ul>
-					<li><a href="https://csc-training.github.io/chipster-microbial/MiSeq/Exercises_day1.html">part 1
-							exercises</a></li>
-					<li><a href="https://csc-training.github.io/chipster-microbial/MiSeq/Exercises_day2.html">part 2
-							exercises</a></li>
+					<li><a href="https://csc-training.github.io/chipster-microbial/MiSeq/Exercises_day1.html">part 1 exercises</a></li>
+					<li><a href="https://csc-training.github.io/chipster-microbial/MiSeq/Exercises_day2.html">part 2 exercises</a></li>
 				</ul>
 			</li>
 			<li>Ion Torrent:

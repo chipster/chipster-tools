@@ -1,4 +1,4 @@
-# TOOL index-star.py: "Create STAR index" ()
+# TOOL index-star.py: "Create STAR index without tar package" ()
 # INPUT input.fa TYPE GENERIC
 # OUTPUT SA
 # OUTPUT SAindex

@@ -1,6 +1,6 @@
-# TOOL index-bowtie2.py: "Create Bowtie2 index without tar package" ()
-# INPUT input.fa TYPE GENERIC
-# OUTPUT output{...}
+# TOOL index-bowtie2-tar.py: "Create Bowtie2 index" ()
+# INPUT input.fa TYPE FASTA
+# OUTPUT output.tar
 # RUNTIME python3
 # SLOTS 2
 
@@ -53,21 +53,26 @@ def main():
 
     run_process(["ls", "-lah"])
 
-    # rename index files to fixed output names and define real names for the client
+    # create tar package
 
-    output_names = {}
+    index_files = []
 
     # bowtie2 index files
     for file in os.listdir("."):
         if file.endswith(".bt2"):
-            output_name = file.replace(fasta_basename, "output") + str(
-                len(output_names)
-            )
-            os.rename(file, output_name)
-            # output_names[output_name] = "bowtie2/" + file
-            output_names[output_name] = file
+            index_files.append(file)
+            
+    run_process(["tar", "-cf", "output.tar"] + index_files)
 
-    tool_utils.write_output_definitions(output_names)
+    tool_utils.write_output_definitions({
+        "output.tar": fasta_basename + ".tar"
+    })
+    
+    # save version information
+    version = subprocess.check_output([bowtie2_build, "--version"])
+    version_number = str(version).split("\\n")[0].split(" ")[2]
+    
+    version_utils.document_version("Bowtie2", version_number)
 
 
 def run_bash(cmd: str):

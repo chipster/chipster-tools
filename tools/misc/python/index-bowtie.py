@@ -1,4 +1,4 @@
-# TOOL index-bowtie.py: "Create Bowtie index" ()
+# TOOL index-bowtie.py: "Create Bowtie index without tar package" ()
 # INPUT input.fa TYPE GENERIC
 # OUTPUT output{...}
 # RUNTIME python3

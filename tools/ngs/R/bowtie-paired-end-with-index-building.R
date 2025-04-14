@@ -37,16 +37,53 @@ unzipIfGZipFile("reads1.fq")
 unzipIfGZipFile("reads2.fq")
 unzipIfGZipFile("genome.txt")
 
-# bowtie index building
-genome.base <- "genome"
-bowtie.index.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie-build"))
-command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", genome.base)
-runExternal(command.indexing)
 
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie"))
 version <- system(paste(bowtie.binary, "--version | head -1 | cut -d ' ' -f 3"), intern = TRUE)
 documentVersion("Bowtie", version)
+bowtie.index.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie-build"))
+
+genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE)
+print(paste("Host genome file type", genome.filetype))
+
+# case 1. Ready calculated indexes in tar format
+if (genome.filetype == "tar") {
+  print("Extracting tar formatted gemome index file")
+  runExternal("tar xf genome.txt")
+  # Check index base name
+  if (length(Sys.glob("*.1.ebwt")) != 0) {
+    f <- list.files(getwd(), pattern = "\\.1.ebwt$")
+    bowtie.genome <- substr(f[1], 1, nchar(f[1]) - 7)
+  } else {
+    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie index.")
+  }
+
+  runExternal("ls -l")
+  # case 2. Fasta file
+} else {
+  # Do indexing
+  # check sequence file type
+  emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
+  options(scipen = 999)
+  inputfile.to.check <- ("genome.txt")
+  sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+  str.filetype <- system(sfcheck.command, intern = TRUE)
+
+  if (str.filetype == "Not an EMBOSS compatible sequence file") {
+    stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
+  }
+
+  # bowtie index building
+  print("Indexing the genome...")
+  bowtie.genome <- "genome"
+
+  command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", bowtie.genome)
+  runExternal(command.indexing)
+  runExternal("ls -l")
+}
+print(paste("Internal genome name:", bowtie.genome))
 command.start <- paste("bash -c '", bowtie.binary)
 
 # common parameters
@@ -65,7 +102,7 @@ multiread.output <- ifelse(multiread.file == "yes", "--max multireads.fq", "")
 output.parameters <- paste(unaligned.output, multiread.output)
 
 # command ending
-command.end <- paste("-x", genome.base, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2> bowtie.log'")
+command.end <- paste("-x", bowtie.genome, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
 bowtie.command <- paste(command.start, common.parameters, quality.parameter, orientation.parameter, mode.parameters, output.parameters, command.end)
