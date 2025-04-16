@@ -17,7 +17,7 @@
 # 2022-07-21 IH
 # 2022-10-13 ML nfeatures = 3000 fix
 # 2024-03-21 EP Update to Seurat v5 (and add SCTransform to this tool)
-# 2025-04-14 ML Bug fixes in >= 3 sample case
+# 2025-04-16 ML Fix >3 samples bugs
 
 library(Seurat)
 library(gplots)
@@ -44,6 +44,8 @@ seurat_objects <- as.list(mget(objects(pattern = "seurat_obj_")))
 if (length(seurat_objects) < 2) {
     stop(paste("CHIPSTER-NOTE: ", "It seems you don't have multiple samples. Please check your input files."))
 }
+
+# MERGE
 
 if (method == "merge") {
     # Merging mainly follows spatial analysis vignette (https://satijalab.org/seurat/articles/spatial_vignette.html#10x-visium)
@@ -72,6 +74,8 @@ if (method == "merge") {
     )
     sctransformed_objects <- c(sctransformed_obj_1, sctransformed_obj_2)
 
+    # print(length(sctransformed_objects))
+
     # samples 3 ->
     if (length(seurat_objects) >= 3) {
         for (i in 3:length(seurat_objects)) {
@@ -87,6 +91,7 @@ if (method == "merge") {
             sctransformed_objects <- append(sctransformed_objects, sctransformed_obj)
         }
     }
+    # print(length(sctransformed_objects))
 
     # Merge multiple slices
     if (length(seurat_objects) == 2) {
@@ -94,6 +99,9 @@ if (method == "merge") {
     } else {
         seurat_obj <- merge(sctransformed_objects[[1]], y = c(sctransformed_objects[c(2:(length(sctransformed_objects)))]))
     }
+
+    # print(unique(seurat_obj@meta.data$orig.ident))
+    # print(levels(as.factor(seurat_obj@meta.data$orig.ident)))
 
     # Set default assay and variable features for merged Seurat object
     DefaultAssay(seurat_obj) <- "SCT"
@@ -128,6 +136,10 @@ if (method == "merge") {
     # PCA
     seurat_obj <- RunPCA(seurat_obj, npcs = PCstocompute, assay = "SCT", verbose = FALSE)
 
+    # print(unique(seurat_obj@meta.data$orig.ident))
+    # print(levels(as.factor(seurat_obj@meta.data$orig.ident)))
+
+
     # PCA genes in txt file
     if (loadings == TRUE) {
         sink("PCAloadings.txt")
@@ -142,6 +154,8 @@ if (method == "merge") {
     dev.off() # close the pdf
 }
 
+# INTEGRATION
+
 if (method == "integration") {
     # Integration follows single-cell analysis vignette (https://satijalab.org/seurat/articles/integration_introduction)
     # where a combined object is used for SCTransform, but samples are individually normalized using SCTransform by using different sample
@@ -155,6 +169,8 @@ if (method == "integration") {
     } else {
         seurat_obj <- merge(seurat_objects[[1]], y = c(seurat_objects[c(2:(length(seurat_objects)))]))
     }
+    # print(unique(seurat_obj@meta.data$orig.ident))
+    # print(levels(as.factor(seurat_obj@meta.data$orig.ident)))
 
     # SCTransform (no need to split object before SCTransform)
     # This will also set variable genes in all objects (different compared to merge)
@@ -169,13 +185,16 @@ if (method == "integration") {
         }
     )
 
+    # print(unique(seurat_obj@meta.data$orig.ident))
+    # print(levels(as.factor(seurat_obj@meta.data$orig.ident)))
+
     # There is an issue with running SCTransform for a merged object as explained by StepahieHowe in issue
     # https://github.com/satijalab/seurat/issues/8235. This solution does not solve issues with
     # FindSpatiallyVariableFeatures() but it allows to perform integration with scRNA-seq data without
     # any errors. FindSpatiallyVariableFeatures() must still be run for each object individually because
     # otherwise it will result in 'please provide the same number of observations as spatial locations' error
     # as explained by tingchiafelix
-    for (i in length(seurat_objects)) {
+    for (i in 1:length(seurat_objects)) {
         slot(object = seurat_obj@assays$SCT@SCTModel.list[[i]], name = "umi.assay") <- "Spatial"
     }
 
@@ -212,6 +231,9 @@ if (method == "integration") {
     VariableFeatures(seurat_obj) <- variable_feats_in_all_objects
 
     seurat_obj <- RunPCA(seurat_obj, npcs = PCstocompute, assay = "SCT", verbose = FALSE)
+
+    # print(unique(seurat_obj@meta.data$orig.ident))
+    # print(levels(as.factor(seurat_obj@meta.data$orig.ident)))
 
     # PCA genes in txt file
     if (loadings == TRUE) {
