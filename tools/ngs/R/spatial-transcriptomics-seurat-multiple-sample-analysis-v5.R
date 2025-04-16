@@ -17,7 +17,7 @@
 # 2022-07-21 IH
 # 2022-10-13 ML nfeatures = 3000 fix
 # 2024-03-21 EP Update to Seurat v5 (and add SCTransform to this tool)
-# 2025-04-14 ML Bug fix in >= 3 sample case
+# 2025-04-14 ML Bug fixes in >= 3 sample case
 
 library(Seurat)
 library(gplots)
@@ -50,6 +50,7 @@ if (method == "merge") {
     # where seurat objects are first individually normalized using SCTransform before merging objects
 
     # Run SCTransform and print warnings after SCTransform() but suppress them from Chipster note
+    # sample 1
     sctransformed_obj_1 <- tryCatch(
         {
             SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
@@ -59,6 +60,7 @@ if (method == "merge") {
             return(suppressWarnings(SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
         }
     )
+    # sample 2
     sctransformed_obj_2 <- tryCatch(
         {
             SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
@@ -70,6 +72,7 @@ if (method == "merge") {
     )
     sctransformed_objects <- c(sctransformed_obj_1, sctransformed_obj_2)
 
+    # samples 3 ->
     if (length(seurat_objects) >= 3) {
         for (i in 3:length(seurat_objects)) {
             sctransformed_obj <- tryCatch(
@@ -89,7 +92,7 @@ if (method == "merge") {
     if (length(seurat_objects) == 2) {
         seurat_obj <- merge(sctransformed_objects[[1]], sctransformed_objects[[2]])
     } else {
-        seurat_obj <- merge(sctransformed_objects[[1]], y = c(sctransformed_objects[c(2, (length(sctransformed_objects)))]))
+        seurat_obj <- merge(sctransformed_objects[[1]], y = c(sctransformed_objects[c(2:(length(sctransformed_objects)))]))
     }
 
     # Set default assay and variable features for merged Seurat object
@@ -150,7 +153,7 @@ if (method == "integration") {
     if (length(seurat_objects) == 2) {
         seurat_obj <- merge(seurat_objects[[1]], seurat_objects[[2]])
     } else {
-        seurat_obj <- merge(seurat_objects[[1]], y = c(seurat_objects[c(2, (length(seurat_objects)))]))
+        seurat_obj <- merge(seurat_objects[[1]], y = c(seurat_objects[c(2:(length(seurat_objects)))]))
     }
 
     # SCTransform (no need to split object before SCTransform)
