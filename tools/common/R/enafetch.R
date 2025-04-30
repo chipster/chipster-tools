@@ -9,8 +9,8 @@
 # OUTPUT OPTIONAL {...}.crai: "cram files"
 # PARAMETER entry_id: "ENA ID" TYPE STRING DEFAULT "entry" (Give the ID of the ENA dataset to be retrieved. For example SRR000021)
 # PARAMETER format: "Data format" TYPE [default: "Default", fastq: "FASTQ", fasta: "FASTA", embl: "EMBL formatted sequence" ] DEFAULT default (Define the format for retrieved data. Please use the FASTQ format for reads.)
-# IMAGE comp-r-4-2-3-enabrowsertools
-# RUNTIME R-4.2.3
+# IMAGE comp-r-4-3-2-enabrowsertools
+# RUNTIME R-4.3.2
 # TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
