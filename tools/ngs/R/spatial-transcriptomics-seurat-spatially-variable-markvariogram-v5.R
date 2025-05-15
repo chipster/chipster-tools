@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
 # PARAMETER OPTIONAL method.to.use: "Method to use" TYPE [markvariogram: markvariogram, moransi: moransi] DEFAULT moransi (Method to use. Mark variogram takes longer to run, Moran's I is faster.)
 # PARAMETER OPTIONAL number_of_var_feats: "Number of variable genes to use" TYPE INTEGER DEFAULT 1000 (Number of variable genes to use for identifying highest spatially variable genes. You can speed up the computation by choosing a smaller number of variable genes. This number should be less than or equal to the number of variable genes in the Seurat object.)
-# PARAMETER OPTIONAL number.of.top.features: "Number of genes to plot" TYPE INTEGER DEFAULT 6 (How many top features to plot.)
+# PARAMETER OPTIONAL number.of.top.features: "Number of spatially variable genes to report and plot" TYPE INTEGER DEFAULT 6 (How many top genes to report.)
 # PARAMETER OPTIONAL color.scale: "Determine color scale based on all genes" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes.)
 # PARAMETER OPTIONAL multi_analysis: "Multiple sample analysis" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (If you performed multiple sample analysis i.e. if your samples have been merged/integrated into one single seurat object, select 'yes'. This tool will identify spatially variable genes for each sample individually.)
 # RUNTIME R-4.2.3-seurat5
