@@ -12,8 +12,7 @@
 	<h3>Description</h3>
 
 	<p>
-		This tool searches for genes that exhibit spatial differential gene expression patterning without cluster annotation information in the absence of pre-annotated anatomical 
-		regions. If you would like to use cluster information, you should use the tool <i> Seurat v5 -Identify spatially variable genes based on clusters</i>. 
+		This tool searches for genes that exhibit spatial differential gene expression patterning without using cluster information. 
     </p>
 	<p>
 		As an input, you can provide the Seurat object after the "Seurat v5 -Clustering" step. If you performed multiple sample analysis i.e. if your samples have been merged 
@@ -25,7 +24,7 @@
 	<ul>
 			<li>Method to use [moransi]</li>
 			<li>Number of variable genes to use [1000]</li>
-			<li>Number of genes to plot [6]</li>
+			<li>Number of spatially variable genes to report and plot [6]</li>
 			<li>Determine color scale based on all genes [no]</li>
 			<li>Multiple sample analysis [no]</li>
 	</ul>
@@ -33,7 +32,7 @@
 	<h3>Details</h3>
 
 	<p>
-        This tool identifies and selects genes exhibiting spatial patterning by using the Moran's I ("moransi") or Mark Variogram ("markvariogram") method. The Mark Variogram method
+        This tool identifies genes exhibiting spatial patterning by using the Moran's I ("moransi") or Mark Variogram ("markvariogram") method. The Mark Variogram method
 		models spatial transcriptomics data as a mark point process and computes a 'variogram', which identifies genes whose expression level is dependent on their spatial location. 
 		Specifically, this process calculates gamma(r) values measuring the dependence between two spots that are a certain “r” distance apart. The Moran's I method measures spatial
 		autocorrelation that explains how much nearby locations resemble each other in terms of gene expression. It computes the Moran's I autocorrelation coefficient using the gene
@@ -45,7 +44,7 @@
 		performace.
     </p>
 	<p>
-		This tool finally visualizes and lists the spatially variable genes determined by this tool. By default, the color scale is determined for each 
+		This tool finally visualizes and lists the spatially variable genes detected. By default, the color scale is determined for each 
 		gene individually and may differ between genes. If you wish to compare expression between different genes, it may be useful to set the parameter value for "Determine color
 		scale based on all genes" to "yes" so that the color scale is the same for all genes. If you performed multiple sample analysis i.e. if your samples have been merged or
 		integrated into one single seurat object, select 'yes' as the value for parameter 'Multiple sample analysis'. However, this tool will still identify and visualize spatially
