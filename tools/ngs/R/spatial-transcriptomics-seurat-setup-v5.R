@@ -13,6 +13,7 @@
 # 2022-11-01 ML Add top expressed genes boxplot
 # 2023-09-08 IH add percent.rb to QC
 # 2024-03-21 EP Update to Seurat v5
+# 2025-06-26 ML Add HB plotting on top of tissue image
 
 library(Seurat)
 library(ggplot2)
@@ -21,7 +22,7 @@ library(dplyr)
 library(Matrix)
 library(Biobase)
 
-source(file.path(chipster.common.lib.path, "tool-utils.R")) 
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 print(package.version("Seurat"))
 documentVersion("Seurat", package.version("Seurat"))
 
@@ -97,7 +98,7 @@ seurat_obj[["percent.rb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^
 
 VlnPlot(seurat_obj, features = c("nCount_Spatial", "nFeature_Spatial"), pt.size = 0.1, ncol = 2) + NoLegend()
 VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb", "percent.rb"), pt.size = 0.1, ncol = 2) + NoLegend()
-SpatialFeaturePlot(seurat_obj, c("nCount_Spatial", "nFeature_Spatial", "percent.mt", "percent.rb")) # + theme(legend.position = "right")
+SpatialFeaturePlot(seurat_obj, c("nCount_Spatial", "nFeature_Spatial", "percent.mt", "percent.rb", "percent.hb")) # + theme(legend.position = "right")
 
 # Top expressing genes
 # Code from: https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Top_expressed_genes)
