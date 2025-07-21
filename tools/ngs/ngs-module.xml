@@ -305,6 +305,7 @@
 
 	<category name="Spatially resolved transcriptomics (Seurat v5, new)" color="#37dddd">	
 		<tool>spatial-transcriptomics-seurat-setup-v5.R</tool>
+		<tool>spatial-transcriptomics-seurat-setup-v5-HD.R</tool>
 		<tool>spatial-transcriptomics-seurat-filter-v5.R</tool>		
 		<tool>spatial-transcriptomics-seurat-top-expressed-genes-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5.R</tool>	
