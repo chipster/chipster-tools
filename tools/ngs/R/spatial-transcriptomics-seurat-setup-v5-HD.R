@@ -37,7 +37,7 @@ documentVersion("Seurat", package.version("Seurat"))
 sample_name <- gsub(" ", "_", sample_name)
 
 # # Read the contents of the tar file into a list
-# system("tar tf files.tar > tar.contents 2>> log.txt")
+system("tar tf files.tar > tar.contents 2>> log.txt")
 file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
