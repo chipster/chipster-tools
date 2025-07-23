@@ -16,11 +16,11 @@
 # 2024-03-21 EP Update to Seurat v5
 # 2025-06-26 ML Add HB plotting on top of tissue image
 
-install.packages('ggplot2', repos='http://cran.us.r-project.org') # 3.5.2
-install.packages('patchwork', repos='http://cran.us.r-project.org') # 1.3.1 
-install.packages('hdf5r', repos='http://cran.us.r-project.org') # 1.3.10 / 1.3.12
-install.packages('arrow', repos='http://cran.us.r-project.org') # 20.0.0.2
-install.packages('Seurat', repos='http://cran.us.r-project.org') # 5.3.0
+# install.packages('ggplot2', repos='http://cran.us.r-project.org') # 3.5.2
+# install.packages('patchwork', repos='http://cran.us.r-project.org') # 1.3.1 
+# install.packages('hdf5r', repos='http://cran.us.r-project.org') # 1.3.10 / 1.3.12
+# install.packages('arrow', repos='http://cran.us.r-project.org') # 20.0.0.2
+# install.packages('Seurat', repos='http://cran.us.r-project.org') # 5.3.0
 
 library(Seurat)
 library(ggplot2)
@@ -36,53 +36,59 @@ documentVersion("Seurat", package.version("Seurat"))
 # Replace empty spaces in sample name with underscore _ :
 sample_name <- gsub(" ", "_", sample_name)
 
-# Read the contents of the tar file into a list
-system("tar tf files.tar > tar.contents 2>> log.txt")
-file.list <- scan("tar.contents", what = "", sep = "\n")
+# # Read the contents of the tar file into a list
+# system("tar tf files.tar > tar.contents 2>> log.txt")
+# file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 
-# Make an output folder
-system("mkdir output_folder")
-system("mkdir output_folder/spatial")
+# # Make an output folder
+# system("mkdir output_folder")
+# system("mkdir output_folder/spatial")
 
 # Open tar package. Make a folder called input_folder, open the tar there so that each file
 # will be on the root level (remove everything from the name until the last "/" with the --xform option)
 
-# system("mkdir input_folder; cd input_folder; tar xf ../files.tar")
-system("mkdir input_folder; cd input_folder; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
+# # system("mkdir input_folder; cd input_folder; tar xf ../files.tar")
+# system("mkdir input_folder; cd input_folder; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
 
 # Code for manipulating aggregation files (not needed atm)
 # if (file.exists("aggregation.csv") & file.exists("aggr_tissue_positions_list.csv")) {
 # aggregation splitting step based on the aggregation.csv
 # aggregation.csv, aggr_tissue_position_list.csv -> tissue_positions_list.csv }
 
-# Rename and move filtered_feature_bc_matrix.h5
-file1 <- list.files("input_folder", pattern = "feature_bc_matrix.h5", full.names = TRUE)
-file1 <- paste("mv", file1, "output_folder/filtered_feature_bc_matrix.h5")
-system(file1)
+# # Rename and move filtered_feature_bc_matrix.h5
+# file1 <- list.files("input_folder", pattern = "feature_bc_matrix.h5", full.names = TRUE)
+# file1 <- paste("mv", file1, "output_folder/filtered_feature_bc_matrix.h5")
+# system(file1)
 
-# Rename and move tissue_positions_list.csv
-tissue_positions <- list.files("input_folder", pattern = "tissue_positions", full.names = TRUE)
-if (file.exists(tissue_positions)) {
-  tissue_positions <- paste("mv", tissue_positions, "output_folder/spatial/tissue_positions_list.csv")
-  system(tissue_positions)
-}
+# # Rename and move tissue_positions_list.csv
+# tissue_positions <- list.files("input_folder", pattern = "tissue_positions", full.names = TRUE)
+# if (file.exists(tissue_positions)) {
+#   tissue_positions <- paste("mv", tissue_positions, "output_folder/spatial/tissue_positions_list.csv")
+#   system(tissue_positions)
+# }
 
 # Copy image files to spatial subdir
-file.copy("input_folder/scalefactors_json.json", "output_folder/spatial")
-file.copy("input_folder/tissue_hires_image.png", "output_folder/spatial")
-file.copy("input_folder/tissue_lowres_image.png", "output_folder/spatial")
-file.copy("input_folder/tissue_positions.csv", "output_folder/spatial/tissue_positions_list.csv")
+#file.copy("input_folder/scalefactors_json.json", "output_folder/spatial")
+#file.copy("input_folder/tissue_hires_image.png", "output_folder/spatial")
+#file.copy("input_folder/tissue_lowres_image.png", "output_folder/spatial")
+#file.copy("input_folder/tissue_positions.csv", "output_folder/spatial/tissue_positions_list.csv")
 
 # Load spatial data, returns a Seurat object
 # slice = name for the stored image of the tissue slice later used in the analysis
 # bin sizes:
 bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
-seurat_obj <- Load10X_Spatial(data.dir = "output_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+# output_folder <- files.tar
+# seurat_obj <- Load10X_Spatial(data.dir = "output_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+
+# open tar:
+system("mkdir input_folder; cd input_folder; tar -xvzf ../files.tar")
+
+seurat_obj <- Load10X_Spatial(data.dir = "input_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
 
 # Sometimes the coordinates of the spatial image are characters instead of integers.
 # Check this and switch them to intergers if need be:
