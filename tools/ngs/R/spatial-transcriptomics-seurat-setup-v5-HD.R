@@ -88,7 +88,7 @@ bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
 # open tar:
 # system("mkdir input_folder; cd input_folder; tar -xvzf ../files.tar")
 system("mkdir input_folder; cd input_folder; tar -xvzf ../files.tar")
-system("cd input_folder; cd binned_outputs; rm -rf square_002um; rm -rf square_008um/analysis; rm -rf square_008um/raw*; rm -rf square_012um/analysis; rm -rf square_012um/raw*; cd square_008um; cd ..; ls")
+system("cd input_folder; cd binned_outputs; rm -rf square_002um; rm -rf square_008um/analysis; rm -rf square_008um/raw*; rm -rf square_012um/analysis; rm -rf square_012um/raw*; cd square_008um; ls; cd ..; ls")
 
 
 seurat_obj <- Load10X_Spatial(data.dir = "input_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
