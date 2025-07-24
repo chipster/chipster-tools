@@ -94,7 +94,7 @@ system("cd input_folder; pwd; chmod -R o=r input_folder/; cd input_folder; ls -l
 # system("cd input_folder; cd binned_outputs; rm -rf square_002um; rm -rf square_008um/analysis; rm -rf square_008um/raw*; rm -rf square_012um/analysis; rm -rf square_012um/raw*; cd square_008um; pwd; ls; cd spatial; pwd; ls; cd ..; cd ..; pwd; ls")
 
 
-seurat_obj <- Load10X_Spatial(data.dir = "input_folder/input_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+seurat_obj <- Load10X_Spatial(data.dir = "input_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
 
 # Sometimes the coordinates of the spatial image are characters instead of integers.
 # Check this and switch them to intergers if need be:
