@@ -88,6 +88,7 @@ bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
 # open tar:
 # system("mkdir input_folder; cd input_folder; tar -xvzf ../files.tar")
 system("mkdir input_folder; cd input_folder; tar -xzf ../files.tar")
+system("pwd; cd input_folder; pwd; ls -lth; cd spatial; pwd; ls -lth")
 # system("cd input_folder; cd binned_outputs; rm -rf square_002um; rm -rf square_008um/analysis; rm -rf square_008um/raw*; rm -rf square_012um/analysis; rm -rf square_012um/raw*; cd square_008um; pwd; ls; cd spatial; pwd; ls; cd ..; cd ..; pwd; ls")
 
 
