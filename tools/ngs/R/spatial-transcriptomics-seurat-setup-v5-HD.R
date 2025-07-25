@@ -36,14 +36,14 @@ documentVersion("Seurat", package.version("Seurat"))
 # Replace empty spaces in sample name with underscore _ :
 sample_name <- gsub(" ", "_", sample_name)
 
-# # Read the contents of the tar file into a list
-system("tar tf files.tar > tar.contents 2>> log.txt")
-file.list <- scan("tar.contents", what = "", sep = "\n")
+# # # Read the contents of the tar file into a list
+# system("tar tf files.tar > tar.contents 2>> log.txt")
+# file.list <- scan("tar.contents", what = "", sep = "\n")
 
-# Check that the input is a valid tar file
-if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
-}
+# # Check that the input is a valid tar file
+# if (length(file.list) == 0) {
+#   stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+# }
 
 # # Make an output folder
 # system("mkdir output_folder")
@@ -88,8 +88,10 @@ bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
 # open tar:
 # system("mkdir input_folder; cd input_folder; tar -xvzf ../files.tar")
 system("mkdir input_folder; cd input_folder; tar -xzf ../files.tar")
-system("pwd; cd input_folder; pwd; ls -lth; cd binned_outputs; ls -lth; cd spatial; pwd; ls -lth")
-system("cd input_folder; pwd; chmod -R o=r input_folder/; cd input_folder; ls -lth; cd spatial; pwd; ls -lth")
+system("pwd; ls -lth")
+system("pwd; chmod -R o=r binned_outputs/; ls -lth")
+
+system("pwd; ls -lth; cd binned_outputs; ls -lth; cd square_008um; pwd; ls -lth")
 
 # system("cd input_folder; cd binned_outputs; rm -rf square_002um; rm -rf square_008um/analysis; rm -rf square_008um/raw*; rm -rf square_012um/analysis; rm -rf square_012um/raw*; cd square_008um; pwd; ls; cd spatial; pwd; ls; cd ..; cd ..; pwd; ls")
 
