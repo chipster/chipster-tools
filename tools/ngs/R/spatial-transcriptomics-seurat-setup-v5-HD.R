@@ -98,7 +98,7 @@ bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
 # EI TEHÄ input folderia. Sillä tulee ikävästi extra folder kerros ja se aiheuttaa file not found -ongelman.
 system("tar -xzf files.tar")
 
-seurat_obj <- Load10X_Spatial(data.dir = "binned_outputs/", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+seurat_obj <- Load10X_Spatial(data.dir = "input_folder/", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
 
 # Sometimes the coordinates of the spatial image are characters instead of integers.
 # Check this and switch them to intergers if need be:
