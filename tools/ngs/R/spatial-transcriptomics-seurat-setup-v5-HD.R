@@ -101,7 +101,7 @@ system("pwd; ls -lth; cd input_folder; ls -lth; cd spatial; ls -lth; cd ..; cd b
 
 
 
-seurat_obj <- Load10X_Spatial(data.dir = "input_folder/", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+seurat_obj <- Load10X_Spatial(data.dir = "input_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
 
 # Sometimes the coordinates of the spatial image are characters instead of integers.
 # Check this and switch them to intergers if need be:
