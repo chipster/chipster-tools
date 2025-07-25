@@ -97,7 +97,7 @@ bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
 
 # EI TEHÄ input folderia. Sillä tulee ikävästi extra folder kerros ja se aiheuttaa file not found -ongelman.
 system("tar -xzf files.tar")
-system("pwd; ls -lth; cd spatial; ls -lth; cd ..; cd binned_outputs; pwd; ls -lth")
+system("pwd; ls -lth; cd input_folder; ls -lth; cd spatial; ls -lth; cd ..; cd binned_outputs; pwd; ls -lth")
 
 
 
