@@ -170,7 +170,7 @@
 		<tool>gatk4-collectsequencingartifactmetrics.R</tool>
 		<tool>gatk4-filterbyorientation.R</tool>										
 		<tool>vcftools.R</tool>
-       <!--<tool>annotate-variant.R</tool>-->
+       		<!--<tool>annotate-variant.R</tool>-->
 		<tool module="common">vep.py</tool>
 		<tool>bcftools-intersect-vcf.R</tool>	
 		<tool>vcftools-reports.R</tool>
@@ -218,7 +218,7 @@
 		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
-<category name="Single-cell RNA-seq (Seurat v5, new)" color="#2196F3">
+<category name="Single-cell RNA-seq (Seurat v5)" color="#2196F3">
 		<tool>single-cell-cellbender-background-removal-v5.R</tool> 
 		<tool>single-cell-seurat-setup-v5.R</tool>  
 		<tool>single-cell-seurat-filter-v5.R</tool> 	
@@ -262,7 +262,7 @@
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
 
-	<category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
+	<!-- <category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
 		<tool>single-cell-cellbender-background-removal.R</tool> 	
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool>
@@ -301,10 +301,11 @@
 	    	<!--<tool>picard-sortsam.R</tool>	--> 
 		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
-	</category>
+	</category> -->
 
-	<category name="Spatially resolved transcriptomics (Seurat v5, new)" color="#37dddd">	
+	<category name="Spatially resolved transcriptomics (Seurat v5)" color="#37dddd">	
 		<tool>spatial-transcriptomics-seurat-setup-v5.R</tool>
+		<!--<tool>spatial-transcriptomics-seurat-setup-v5-HD.R</tool> -->
 		<tool>spatial-transcriptomics-seurat-filter-v5.R</tool>		
 		<tool>spatial-transcriptomics-seurat-top-expressed-genes-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5.R</tool>	
@@ -320,7 +321,7 @@
 		<tool>single-cell-extract-information-v5.R</tool>
 	</category>
 
-	<category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
+	<!-- <category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
 		<tool>spatial-transcriptomics-seurat-setup.R</tool>
 		<tool>spatial-transcriptomics-seurat-sctransform.R</tool>	
 		<tool>spatial-transcriptomics-seurat-multiple-samples.R</tool>	
@@ -335,7 +336,7 @@
 		<tool>spatial-transcriptomics-seurat-integrated.R</tool>
 		<tool>spatial-transcriptomics-seurat-visualise-integration.R</tool>
 		<tool>deconvolution-SCDC.R</tool>
-	</category>
+	</category> -->
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
 		<tool>macs2.R</tool>
 		<tool>ngs-find-peaks-macs-one.R</tool>
