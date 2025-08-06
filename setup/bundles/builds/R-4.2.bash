@@ -24,5 +24,4 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
   ls -lah $TOOLS_PATH/
 EOF
 
-bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/R-4.2.0-single-cell $JOB_NAME $BUILD_NUMBER
 bash $BUNDLE_SCRIPTS_DIR/move-to-artefacts.bash $TOOLS_PATH/R-4.2.0-phyloseq $JOB_NAME $BUILD_NUMBER
