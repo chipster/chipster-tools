@@ -1,11 +1,11 @@
 # TOOL spatial-transcriptomics-seurat-setup-v5-HD.R: "Seurat v5 HD -Setup and QC" (This tool sets up a Seurat object for spatial transcriptomics data.)
-# INPUT OPTIONAL files.tar: "tar package of 10X output files" TYPE GENERIC
+# INPUT files.tar: "tar package of 10X output files" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
-# PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE STRING DEFAULT "8, 12" (List here the bin sizes, separated by comma)
+# PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE STRING DEFAULT "8, 16" (List here the bin sizes, separated by comma)
 # RUNTIME R-4.2.3-seurat5
-# SLOTS 2
+# SLOTS 3
 # TOOLS_BIN ""
 
 # 2022-07-15 IH
@@ -78,10 +78,9 @@ sample_name <- gsub(" ", "_", sample_name)
 #file.copy("input_folder/tissue_lowres_image.png", "output_folder/spatial")
 #file.copy("input_folder/tissue_positions.csv", "output_folder/spatial/tissue_positions_list.csv")
 
-# Load spatial data, returns a Seurat object
-# slice = name for the stored image of the tissue slice later used in the analysis
-# bin sizes:
-bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
+
+
+
 # output_folder <- files.tar
 # seurat_obj <- Load10X_Spatial(data.dir = "output_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
 
@@ -96,47 +95,121 @@ bin_sizes <- as.numeric(unlist(strsplit(bin_sizes, ",")))
 # system("cd input_folder; cd binned_outputs; rm -rf square_002um; rm -rf square_008um/analysis; rm -rf square_008um/raw*; rm -rf square_012um/analysis; rm -rf square_012um/raw*; cd square_008um; pwd; ls; cd spatial; pwd; ls; cd ..; cd ..; pwd; ls")
 
 # EI TEHÄ input folderia. Sillä tulee ikävästi extra folder kerros ja se aiheuttaa file not found -ongelman.
-system("tar -xzf files.tar")
-system("pwd; ls -lth; cd input_folder; ls -lth; cd spatial; ls -lth; cd ..; cd binned_outputs; pwd; ls -lth")
+# system("tar -xzf files.tar")
 
 
 
-seurat_obj <- Load10X_Spatial(data.dir = "input_folder", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+# Open tar package into a new folder called input_folder. 
+# -C changes to the specified directory before unpacking. 
+# --strip-components 1 removes 1 directory from the filenames stored in the archive.
+system("mkdir input_folder && tar xf files.tar -C input_folder --strip-components 1")
 
-# Sometimes the coordinates of the spatial image are characters instead of integers.
-# Check this and switch them to intergers if need be:
-if (class(seurat_obj@images[[sample_name]]@coordinates[["tissue"]]) == "character") {
-  seurat_obj@images[[sample_name]]@coordinates[["tissue"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["tissue"]])
-  seurat_obj@images[[sample_name]]@coordinates[["row"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["row"]])
-  seurat_obj@images[[sample_name]]@coordinates[["col"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["col"]])
-  seurat_obj@images[[sample_name]]@coordinates[["imagerow"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagerow"]])
-  seurat_obj@images[[sample_name]]@coordinates[["imagecol"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagecol"]])
-}
+# system("pwd; ls -lth; cd input_folder; ls -lth; cd spatial; ls -lth; cd ..; cd binned_outputs; pwd; ls -lth")
+system("pwd; ls -lth; cd input_folder/; pwd; ls -lth;  cd binned_outputs; pwd; ls -lth; cd square_008um; ls -lth ")
+
+
+# Load spatial data, returns a Seurat object
+# slice = name for the stored image of the tissue slice later used in the analysis
+# bin sizes:
+
+# print(bin_sizes)
+# print(class(bin_sizes))
+# cat(bin_sizes) 
+# charToRaw(bin_sizes)
+# print(length(bin_sizes))
+# print(object.size(bin_sizes))
+
+# bin_sizes <-  "8, 16"
+bin_sizes <- as.numeric(trimws(unlist(strsplit(bin_sizes, ","))))
+print(bin_sizes)
+# print(class(bin_sizes))
+# cat(bin_sizes) 
+# print(length(bin_sizes))
+# print(object.size(bin_sizes))
+# str(bin_sizes)
+# length(bin_sizes)
+# is.numeric(bin_sizes)
+
+
+# die here:
+# charToRaw(testi2)
+
+
+# seurat_obj <- Load10X_Spatial(data.dir = "SeuratHD_small_extra_folder/SeuratHD_small_nosymlink", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+
+seurat_obj <- Load10X_Spatial(data.dir = "input_folder/", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+# seurat_obj <- Load10X_Spatial(data.dir = "input_folder/", assay = "Spatial", slice = sample_name, bin.size = c(8, 16)) 
+# seurat_obj <- Load10X_Spatial(data.dir = "SeuratHD_small_extra_folder/SeuratHD_small_nosymlink/", bin.size = c(8, 16))
+
+
+# # Tällä on mennyt läpi, 3 slots:
+# bin_sizes <-  "8, 16"
+# bin_sizes <- as.numeric(trimws(unlist(strsplit(bin_sizes, ","))))
+# seurat_obj <- Load10X_Spatial(data.dir = "input_folder/", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
+
+# # Sometimes the coordinates of the spatial image are characters instead of integers.
+# # Check this and switch them to intergers if need be:
+# if (class(seurat_obj@images[[sample_name]]@coordinates[["tissue"]]) == "character") {
+#   seurat_obj@images[[sample_name]]@coordinates[["tissue"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["tissue"]])
+#   seurat_obj@images[[sample_name]]@coordinates[["row"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["row"]])
+#   seurat_obj@images[[sample_name]]@coordinates[["col"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["col"]])
+#   seurat_obj@images[[sample_name]]@coordinates[["imagerow"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagerow"]])
+#   seurat_obj@images[[sample_name]]@coordinates[["imagecol"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagecol"]])
+# }
 
 # Add samplename to metadata field (for plotting)
-seurat_obj <- RenameIdents(seurat_obj, "SeuratProject" = sample_name)
+# seurat_obj <- RenameIdents(seurat_obj, "SeuratProject" = sample_name)
 seurat_obj@meta.data$orig.ident <- sample_name
 
 # Open the pdf file for plotting
 pdf(file = "QC_plots.pdf", width = 13, height = 7)
 
+# Need to edit the parameter names according the bins and loop trough them.
+
+# Setting default assay changes between 8um and 16um binning
+assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
+
+# NEEDS THE LOOP STILL.
+DefaultAssay(seurat_obj) <- assay_names[1] # "Spatial.008um"
+assay_bin <- assay_names[1]
+nCount_bin <- paste("nCount_",assay_names[1], sep="")
+nFeature_bin <- paste("nFeature_",assay_names[1], sep="")
+# vln.plot <- VlnPlot(object, features = "nCount_Spatial.008um", pt.size = 0) + theme(axis.text = element_text(size = 4)) + NoLegend()
+vln.plot <- VlnPlot(seurat_obj, features = nCount_bin, pt.size = 0) + theme(axis.text = element_text(size = 4)) + NoLegend()
+# count.plot <- SpatialFeaturePlot(object, features = "nCount_Spatial.008um") + theme(legend.position = "right")
+count.plot <- SpatialFeaturePlot(seurat_obj, features = nCount_bin) + theme(legend.position = "right")
+
+# note that many spots have very few counts, in-part
+# due to low cellular density in certain tissue regions
+vln.plot | count.plot
+
+
+
 seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-")
 seurat_obj[["percent.hb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^Hb.*-")
 seurat_obj[["percent.rb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl")
 
-VlnPlot(seurat_obj, features = c("nCount_Spatial", "nFeature_Spatial"), pt.size = 0.1, ncol = 2) + NoLegend()
-VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb", "percent.rb"), pt.size = 0.1, ncol = 2) + NoLegend()
-SpatialFeaturePlot(seurat_obj, c("nCount_Spatial", "nFeature_Spatial", "percent.mt", "percent.rb", "percent.hb")) # + theme(legend.position = "right")
+
+# VlnPlot(seurat_obj, features = c("nCount_Spatial", "nFeature_Spatial"), pt.size = 0.1, ncol = 2) + NoLegend()
+# VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb", "percent.rb"), pt.size = 0.1, ncol = 2) + NoLegend()
+# SpatialFeaturePlot(seurat_obj, c("nCount_Spatial", "nFeature_Spatial", "percent.mt", "percent.rb", "percent.hb")) # + theme(legend.position = "right")
+VlnPlot(seurat_obj, features = c(nCount_bin, nFeature_bin), pt.size = 0.1, ncol = 2) + NoLegend()
+VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb"), pt.size = 0.1, ncol = 2) + NoLegend() # , "percent.rb"
+SpatialFeaturePlot(seurat_obj, c(nCount_bin, nFeature_bin, "percent.mt", "percent.hb")) # + theme(legend.position = "right") , "percent.rb"
+
+
 
 # Top expressing genes
 # Code from: https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Top_expressed_genes)
-C <- LayerData(seurat_obj, assay = "Spatial", layer = "counts")
+# C <- LayerData(seurat_obj, assay = "Spatial.008um", layer = "counts")
+C <- LayerData(seurat_obj, assay = assay_bin, layer = "counts")
 C@x <- C@x / rep.int(colSums(C), diff(C@p))
 most_expressed <- order(Matrix::rowSums(C), decreasing = T)[20:1]
 boxplot(as.matrix(t(C[most_expressed, ])),
   cex = 0.1, las = 1, xlab = "% total count per spot",
   col = (scales::hue_pal())(20)[20:1], horizontal = TRUE
 )
+
 
 # Close the pdf
 dev.off()
