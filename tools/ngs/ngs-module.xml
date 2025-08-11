@@ -102,8 +102,8 @@
 		<tool module="common">remove-special-characters.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
-	    	<tool module="common">share_via_object_storage.R</tool>
-	    	<tool module="common">basespace.R</tool>		 
+	    <tool module="common">share_via_object_storage.R</tool>
+	    <tool module="common">basespace.R</tool>		 
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
@@ -131,8 +131,8 @@
 	<category name="Alignment" color="#d53833">
 		<tool>bowtie2.R</tool>
 		<tool>bowtie2-paired-end.R</tool>
-		<tool>bowtie2-with-index-building.R</tool>
 		<tool>index-bowtie2-tar.py</tool>
+		<tool>bowtie2-with-index-building.R</tool>
 	    <tool>bowtie2-paired-end-with-index-building.R</tool>
 		<tool>hisat2.R</tool>
 		<tool>hisat2-paired-end.R</tool>
