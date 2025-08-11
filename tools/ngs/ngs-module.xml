@@ -176,6 +176,24 @@
 		<tool>vcftools-reports.R</tool>
 		<tool>samtools-snp-indel-single.R</tool>
 	</category>
+
+	<category name="Small RNA-seq" color="#629a9b">
+		<tool>convert-bam-to-edger.R</tool>
+		<tool>convert-miRBase-bam-to-edger.R</tool>
+		<tool>deseq2.R</tool>
+		<tool>ngs-dea-edger-RNA.R</tool>
+		<tool>edgeR-multivariate.R</tool>
+		<tool>ngs-annotate-miRNA-targets.R</tool> 
+		<tool module="common">pathways-mirna-hyperg-go.R</tool>
+		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
+		<tool>miRNA_RNA-seq_integration.R</tool>
+		<tool>ngs-correlation-analysis-mirna.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool>ngs-up-down-analysis-mirna.R</tool> -->
+		<tool>ngs-extract-target-gene-expression.R</tool>
+		<tool>virusdetect.R</tool>
+		<tool>virusdetect-with-index-building.R</tool>
+	</category>
 	
 	<category name="RNA-seq" color="#0177b7">
 		<tool>htseq-count.R</tool>
@@ -198,24 +216,6 @@
 		<tool>cuffdiff2_with_replicates.R</tool>
 		<tool>samtools-change-bam-strandness.R</tool>
 		<tool>express.R</tool>		
-	</category>
-
-	<category name="Small RNA-seq" color="#629a9b">
-		<tool>convert-bam-to-edger.R</tool>
-		<tool>convert-miRBase-bam-to-edger.R</tool>
-		<tool>deseq2.R</tool>
-		<tool>ngs-dea-edger-RNA.R</tool>
-		<tool>edgeR-multivariate.R</tool>
-		<tool>ngs-annotate-miRNA-targets.R</tool> 
-		<tool module="common">pathways-mirna-hyperg-go.R</tool>
-		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
-		<tool>miRNA_RNA-seq_integration.R</tool>
-		<tool>ngs-correlation-analysis-mirna.R</tool>
-		<!-- hidden until multiple phenodatas are supported -->
-		<!-- <tool>ngs-up-down-analysis-mirna.R</tool> -->
-		<tool>ngs-extract-target-gene-expression.R</tool>
-		<tool>virusdetect.R</tool>
-		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
 <category name="Single-cell RNA-seq (Seurat v5)" color="#2196F3">
