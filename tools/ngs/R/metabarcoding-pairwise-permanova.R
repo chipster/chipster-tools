@@ -3,7 +3,8 @@
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT pairwise_permanova.txt: pairwise_permanova.txt
 # PARAMETER pheno: "Phenodata variable" TYPE METACOLUMN_SEL (Phenodata variable used for pairwise comparisons)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 

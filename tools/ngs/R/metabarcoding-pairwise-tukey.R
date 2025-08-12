@@ -3,7 +3,8 @@
 # OUTPUT pairwise_tukey_table.txt: pairwise_tukey_table.txt
 # OUTPUT pairwise_tukey_plot.pdf: pairwise_tukey_plot.pdf
 # PARAMETER howmany: "No. of PERMDISP analyses in preceding step (PERMDISP tool)?" TYPE INTEGER FROM 1 TO 3 (Number of PERMDISP analyses performed during the preceding analysis step, i.e. when using the PERMDISP tool.)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 
 

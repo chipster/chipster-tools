@@ -33,7 +33,7 @@ The tool employs the following R functions and packages:
 <li>Alpha diversity indices: estimate_richness() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>) and evenness() (<a href="https://bioconductor.org/packages/release/bioc/html/microbiome.html">microbiome</a>)
 <li>Wilcoxon rank sum test</li>
 </ul>
-Note that the alpha diversity estimates are only reliable when using raw OTU data, as many diversity metrics depend on the presence of singletons and doubletons in the data set under analysis.
+Note that the richness estimator Chao1 should not be used when singletons or doubletons have been removed from the data, because its calculation requires information on singletons and doubletons.
 <br>
 <br>
 If the phenodata variable is selected, this tool calculates also the means, standard error and standard deviation of alpha diversity estimates.
