@@ -9,6 +9,7 @@
 # TOOLS_BIN ""
 
 # 2024-05 EP Move from other tool and create own tool
+# 2025-04 ML Print SpatialDimPlots in 2 columns
 
 # Load seurat object (called seurat_obj)
 load("seurat_object.Robj")
@@ -32,11 +33,11 @@ seurat_obj <- FindClusters(seurat_obj, resolution = res, verbose = FALSE)
 seurat_obj <- RunUMAP(seurat_obj, reduction = selected.reduction, dims = 1:dims.reduction, verbose = FALSE)
 
 # Visualization
-pdf(file = "clustering_plots.pdf", width = 9, height = 12) 
+pdf(file = "clustering_plots.pdf", width = 9, height = 12)
 
 print(DimPlot(seurat_obj, reduction = "umap", group.by = "ident"))
 print(DimPlot(seurat_obj, reduction = "umap", group.by = "orig.ident"))
-print(SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3))
+print(SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3, ncol = 2))
 
 # Close the pdf
 dev.off()

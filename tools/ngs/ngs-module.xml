@@ -102,8 +102,8 @@
 		<tool module="common">remove-special-characters.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
-	    	<tool module="common">share_via_object_storage.R</tool>
-	    	<tool module="common">basespace.R</tool>		 
+	    <tool module="common">share_via_object_storage.R</tool>
+	    <tool module="common">basespace.R</tool>		 
 	</category>
 
 	<category name="Matching sets of genomic regions" color="#e7881c">
@@ -131,8 +131,8 @@
 	<category name="Alignment" color="#d53833">
 		<tool>bowtie2.R</tool>
 		<tool>bowtie2-paired-end.R</tool>
-		<tool>bowtie2-with-index-building.R</tool>
 		<tool>index-bowtie2-tar.py</tool>
+		<tool>bowtie2-with-index-building.R</tool>
 	    <tool>bowtie2-paired-end-with-index-building.R</tool>
 		<tool>hisat2.R</tool>
 		<tool>hisat2-paired-end.R</tool>
@@ -170,11 +170,29 @@
 		<tool>gatk4-collectsequencingartifactmetrics.R</tool>
 		<tool>gatk4-filterbyorientation.R</tool>										
 		<tool>vcftools.R</tool>
-       <!--<tool>annotate-variant.R</tool>-->
+       		<!--<tool>annotate-variant.R</tool>-->
 		<tool module="common">vep.py</tool>
 		<tool>bcftools-intersect-vcf.R</tool>	
 		<tool>vcftools-reports.R</tool>
 		<tool>samtools-snp-indel-single.R</tool>
+	</category>
+
+	<category name="Small RNA-seq" color="#629a9b">
+		<tool>convert-bam-to-edger.R</tool>
+		<tool>convert-miRBase-bam-to-edger.R</tool>
+		<tool>deseq2.R</tool>
+		<tool>ngs-dea-edger-RNA.R</tool>
+		<tool>edgeR-multivariate.R</tool>
+		<tool>ngs-annotate-miRNA-targets.R</tool> 
+		<tool module="common">pathways-mirna-hyperg-go.R</tool>
+		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
+		<tool>miRNA_RNA-seq_integration.R</tool>
+		<tool>ngs-correlation-analysis-mirna.R</tool>
+		<!-- hidden until multiple phenodatas are supported -->
+		<!-- <tool>ngs-up-down-analysis-mirna.R</tool> -->
+		<tool>ngs-extract-target-gene-expression.R</tool>
+		<tool>virusdetect.R</tool>
+		<tool>virusdetect-with-index-building.R</tool>
 	</category>
 	
 	<category name="RNA-seq" color="#0177b7">
@@ -199,26 +217,8 @@
 		<tool>samtools-change-bam-strandness.R</tool>
 		<tool>express.R</tool>		
 	</category>
-
-	<category name="Small RNA-seq" color="#629a9b">
-		<tool>convert-bam-to-edger.R</tool>
-		<tool>convert-miRBase-bam-to-edger.R</tool>
-		<tool>deseq2.R</tool>
-		<tool>ngs-dea-edger-RNA.R</tool>
-		<tool>edgeR-multivariate.R</tool>
-		<tool>ngs-annotate-miRNA-targets.R</tool> 
-		<tool module="common">pathways-mirna-hyperg-go.R</tool>
-		<!-- <tool runtime="R-3.0.2" module="common">pathways-mirna-hyperg-kegg.R</tool>-->
-		<tool>miRNA_RNA-seq_integration.R</tool>
-		<tool>ngs-correlation-analysis-mirna.R</tool>
-		<!-- hidden until multiple phenodatas are supported -->
-		<!-- <tool>ngs-up-down-analysis-mirna.R</tool> -->
-		<tool>ngs-extract-target-gene-expression.R</tool>
-		<tool>virusdetect.R</tool>
-		<tool>virusdetect-with-index-building.R</tool>
-	</category>
 	
-<category name="Single-cell RNA-seq (Seurat v5, new)" color="#2196F3">
+<category name="Single-cell RNA-seq (Seurat v5)" color="#2196F3">
 		<tool>single-cell-cellbender-background-removal-v5.R</tool> 
 		<tool>single-cell-seurat-setup-v5.R</tool>  
 		<tool>single-cell-seurat-filter-v5.R</tool> 	
@@ -262,7 +262,7 @@
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
 
-	<category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
+	<!-- <category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
 		<tool>single-cell-cellbender-background-removal.R</tool> 	
 		<tool>single-cell-seurat-setup.R</tool>	   
 		<tool>single-cell-scater-QC.R</tool>
@@ -276,7 +276,7 @@
 		<tool>single-cell-seurat-singler.R</tool>
 		<tool>single-cell-extract-information.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object.R</tool>
-		<!-- <tool>single-cell-seurat-CCA.R</tool> --> 
+		<tool>single-cell-seurat-CCA.R</tool>
 		<tool>single-cell-seurat-combine-multiple-samples.R</tool>
 		<tool>single-cell-seurat-integrated-analysis.R</tool>
 		<tool>single-cell-seurat-diffexp-samples.R</tool>
@@ -288,23 +288,23 @@
 		<tool>single-cell-seurat-rename-clusters.R</tool>
 		<tool>single-cell-seurat-modify-clusters.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix.R</tool>	
-		<tool>single-cell-seurat-part-of-h5.R</tool>	
-		<!-- Dropseq tools: --> 
+		<tool>single-cell-seurat-part-of-h5.R</tool>
 		<tool>single-cell-preprocessing.R</tool>
 		<tool>picard-merge-bam-alignment.R</tool>	
 		<tool>single-cell-bam-tag-histogram.R</tool>	  	
 		<tool>single-cell-digital-expression.R</tool>
-		<!--<tool>picard-fastqtosam.R</tool> --> 
-		<!--<tool>single-cell-TagBam.R</tool> --> 
-		<!--<tool>single-cell-FilterBam.R</tool> --> 
-		<!--<tool>picard-samtofastq.R</tool> --> 		
-	    	<!--<tool>picard-sortsam.R</tool>	--> 
-		<!--<tool>single-cell-tag-read-with-gene-exon.R</tool>	  -->  	
-		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
-	</category>
+		<tool>picard-fastqtosam.R</tool> 
+		<tool>single-cell-TagBam.R</tool> 
+		<tool>single-cell-FilterBam.R</tool> 
+		<tool>picard-samtofastq.R</tool> 		
+	    	<tool>picard-sortsam.R</tool>
+		<tool>single-cell-tag-read-with-gene-exon.R</tool> 	
+		<tool>single-cell-detect-bead-synthesis-errors.R</tool> 
+	</category> -->
 
-	<category name="Spatially resolved transcriptomics (Seurat v5, new)" color="#37dddd">	
+	<category name="Spatially resolved transcriptomics (Seurat v5)" color="#37dddd">	
 		<tool>spatial-transcriptomics-seurat-setup-v5.R</tool>
+		<!--<tool>spatial-transcriptomics-seurat-setup-v5-HD.R</tool> -->
 		<tool>spatial-transcriptomics-seurat-filter-v5.R</tool>		
 		<tool>spatial-transcriptomics-seurat-top-expressed-genes-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5.R</tool>	
@@ -320,7 +320,7 @@
 		<tool>single-cell-extract-information-v5.R</tool>
 	</category>
 
-	<category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
+	<!-- <category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
 		<tool>spatial-transcriptomics-seurat-setup.R</tool>
 		<tool>spatial-transcriptomics-seurat-sctransform.R</tool>	
 		<tool>spatial-transcriptomics-seurat-multiple-samples.R</tool>	
@@ -335,7 +335,7 @@
 		<tool>spatial-transcriptomics-seurat-integrated.R</tool>
 		<tool>spatial-transcriptomics-seurat-visualise-integration.R</tool>
 		<tool>deconvolution-SCDC.R</tool>
-	</category>
+	</category> -->
 	<category name="ChIP- and DNase-seq" color="#c0d2de">
 		<tool>macs2.R</tool>
 		<tool>ngs-find-peaks-macs-one.R</tool>

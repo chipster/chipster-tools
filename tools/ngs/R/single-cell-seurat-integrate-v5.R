@@ -130,8 +130,10 @@ plot_grid(p1, p2)
 p3 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("stim"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by sample")
 p4 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("seurat_clusters"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by cluster")
 plot_grid(p3, p4)
+
 # Show both conditions in separate plots:
-DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, samples")
+# Split to multiple rows with ncol
+DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels, ncol = 3) + labs(title = "Chosen reduction method, integrated, samples")
 
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
