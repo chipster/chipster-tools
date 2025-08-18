@@ -358,6 +358,7 @@
 		<tool>dada2-dada.R</tool>
 		<tool>dada2-merge.R</tool>
 		<tool>dada2-sqtab-chimera.R</tool>
+		<tool>dada2-sqtab-merge.R</tool>
 		<tool>dada2-assign-taxonomy.R</tool>
 		<tool>dada-make-phyloseq-object.R</tool>
 		<tool>dada-merge-phenodata-phyloseq.R</tool>
