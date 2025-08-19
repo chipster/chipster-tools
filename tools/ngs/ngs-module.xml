@@ -2,7 +2,6 @@
 	
 	<category name="Quality control" color="#d5c796">
 		<tool>fastqc_multiqc.R</tool>
-		<tool>fastqc_multiqc_storage.R</tool>
 		<tool>fastqc.R</tool>
 		<tool>fastx-statistics.R</tool>
 		<!-- <tool>prinseq-statistics.R</tool> -->
@@ -85,10 +84,8 @@
 	    	<tool module="common">srabamfetch.R</tool>
 		 -->
 		<tool module="common">download-file.py</tool>
-		<tool module="common">download-file-storage.py</tool>
 		<tool module="common">ensemblfetch.R</tool>
 		<tool module="common">extract_gzip_tar.py</tool>
-		<tool module="common">extract_gzip_tar_storage.py</tool>
 		<tool module="common">make_zip.py</tool>
 		<tool module="common">extract_zip.py</tool>
 		<tool module="common">gunzip.py</tool>
@@ -141,8 +138,7 @@
 		<tool>hisat2-paired-end-with-index-building.R</tool>
 		<tool>hisat2-paired-end-with-index-building-large-memory.R</tool>
 		<tool>star-single-end.R</tool>
-		<tool>star-paired-end.R</tool>	
-		<tool>star-paired-end-storage.R</tool>
+		<tool>star-paired-end.R</tool>
 		<tool>bwa-mem.R</tool>
 		<tool>index-bwa-tar.py</tool>
 		<tool>bwa-mem-with-index-building.R</tool>
