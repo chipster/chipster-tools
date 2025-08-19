@@ -1,13 +1,13 @@
-# TOOL dada2-assign-taxonomy.R: "Assign taxonomy" (Assign taxonomy to the sequence variants. This tool uses SILVA v.138.1 reference fastas for assignment if own reference files are not provided. The names of the ASV sequences are changed to ASV1, ASV2... just for visualisation. Check the manual for more information.)
+# TOOL dada2-assign-taxonomy.R: "Assign taxonomy" (Assign taxonomy to the sequence variants. This tool uses SILVA v.138.2 reference fastas for assignment if own reference files are not provided. The names of the ASV sequences are changed to ASV1, ASV2... just for visualisation. Check the manual for more information.)
 # INPUT seqtab_nochim.Rda: "Seqtab object saved as .Rda file." TYPE GENERIC (File is produced with tool "Make contigs and remove chimeras" and named seqtab_nochim.Rda.)
-# INPUT OPTIONAL taxa_reference.fasta: "Own reference training fasta for assignTaxonomy" TYPE GENERIC (Own reference file for kingdom-genus level assignments. Otherwise use the SILVA v.138.1 reference file)
+# INPUT OPTIONAL taxa_reference.fasta: "Own reference training fasta for assignTaxonomy" TYPE GENERIC (Own reference file for kingdom-genus level assignments. Otherwise use the SILVA v.138.2 reference file)
 # INPUT OPTIONAL species_reference.fasta: "Own reference training fasta for assignSpecies" TYPE GENERIC (Own reference file for exact, 100% identity, species level assignment.)
 # OUTPUT taxonomy-assignment-matrix.Rda
 # OUTPUT OPTIONAL taxa_seqtab_combined.tsv
 # OUTPUT OPTIONAL taxonomy_assignment.tsv
 # PARAMETER boot: "The minimum bootstrap confidence for assigning a taxonomic level" TYPE INTEGER FROM 0 TO 100 DEFAULT 50 (The minimum bootstrap confidence score for assigning a taxonomic level)
 # PARAMETER tryrc: "Try the reverse-complement of each sequence for classification if it is a better match to the reference sequences" TYPE [yes, no] DEFAULT no (If set to yes, use the reverse-complement of each sequences for classification if it is a better match to the reference sequences than the original sequence.)
-# PARAMETER species: "Exact species level assignment?" TYPE [yes, no] DEFAULT yes (Do you want to assign the sequences to the species level if there is an exact match 100% identity between ASVs and sequenced reference strains?)
+# PARAMETER species: "Exact species level assignment?" TYPE [yes, no] DEFAULT no (Do you want to assign the sequences to the species level if there is an exact match 100% identity between ASVs and sequenced reference strains?)
 # PARAMETER combine_tables: "Combine the taxonomy and the sequence table" TYPE [yes,no] DEFAULT yes (If set to yes, it combines the taxonomy and the sequence/ASV table into one .tsv file, otherwise the tsv file consist only of the taxonomy table.)
 # RUNTIME R-4.4.3-asv
 # SLOTS 2
@@ -29,7 +29,7 @@ load("seqtab_nochim.Rda", verbose = TRUE)
 if (file.exists("taxa_reference.fasta")) {
     path1 <- "taxa_reference.fasta"
 } else {
-    path1 <- c(file.path(chipster.tools.path, "dada2-silva-reference", "silva_nr99_v138.1_train_set.fa"))
+    path1 <- c(file.path(chipster.tools.path, "dada2-silva-reference", "silva_nr99_v138.2_toGenus_trainset.fa"))
     # path1 <- c(file.path(chipster.tools.path,"dada2-silva-reference","silva_nr99_v138.1_wSpecies_train_set.fa"))
 }
 if (tryrc == "yes") {
@@ -44,7 +44,7 @@ set.seed(100) # Initialize random number generator for reproducibility
 taxa <- assignTaxonomy(seqtab.nochim, path1, minBoot = boot, multithread = as.integer(chipster.threads.max), tryRC = tryrc)
 
 
-# check if parameter species yes, otherwise skip species level assignment. Use reference file if selected otherwise Silva v.138.1
+# check if parameter species yes, otherwise skip species level assignment. Use reference file if selected otherwise Silva v.138.2
 if (species == "yes") {
     if ((file.exists("species_reference.fasta"))) {
         path2 <- "species_reference.fasta"
@@ -53,7 +53,7 @@ if (species == "yes") {
             stop(paste("CHIPSTER-NOTE: ", "You didn't give a reference file for exact Species level assignment, but you wanted to use your own
             reference file for assignTaxonomy and selected the addSpecies parameter yes. Run the tool again by selecting addSpecies no."))
         } else {
-            path2 <- c(file.path(chipster.tools.path, "dada2-silva-reference", "silva_species_assignment_v138.1.fa"))
+            path2 <- c(file.path(chipster.tools.path, "dada2-silva-reference", "silva_v138.2_assignSpecies.fa"))
         }
     }
     # run addSpecies()

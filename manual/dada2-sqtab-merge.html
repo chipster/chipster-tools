@@ -8,7 +8,12 @@
   <h3>Description</h3>
   
   <p>
-    This tool merges two ASV/sequence tables, for example from two different sequencing runs. To merge more than two ASV tables, run the tool several times. 
+    When analyzing data from multiple sequencing runs with DADA2, it is recommended to carry out sample inference and combine reads into 
+    contigs independently for each run with the same settings. This is because error rate estimations can depend on the sequencing run or 
+    the sequencing machine. After that, the resulting ASV tables are merged with this tool.
+    <br>
+    <br>
+    When merging more than two ASV tables, first merge two ASV tables. Then, give the resulting merged ASV table as one of the inputs files.
     </p>
     
     <h3>Details</h3>
@@ -18,13 +23,6 @@
         <li>An ASV table saved as a .Rda file, which is the output from the tool "Make an ASV table and remove chimeras". Name: seqtab_nochim.Rda</li> 
         <li>When merging more than two ASV tables: a merged ASV table as an .Rda object, which is produced in a previous merging step with this tool. Name: seqtab_merged.Rda</li> 
       </ul>
-    <br>
-    Error rate estimations can depend on the sequencing run or the sequencing machine. When analyzing data from multiple sequencing runs, it is therefore recommended to  carry out sample inference
-    independently for each run, and combine the resulting ASV tables.
-    <br>
-    <br>
-    When merging more than two ASV tables, first merge two ASV tables. Then, give the resulting merged ASV table as one of the inputs files.
-    <br>
     </p>
   
     <h3>Output</h3>
