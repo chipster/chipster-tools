@@ -24,12 +24,10 @@
             time needed to generate the index.
         </p>
         <p>
-            If you have multiple samples of paired-end reads, you can use the "Run for Each Sample" option to run multiple 
-            alignment jobs at the same time. To define the files with paired-end reads for each sample, please use the
-            "Define Samples" option. This option allows to define paired-end reads for multiple samples and enables the
-            "Run for Each Sample" option such that the alignment tool can be run for multiple samples at the same time. 
-            Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
-            “Run for Each Sample” Option</a> for more information.
+        If you have multiple samples with paired-end reads, you can use the "Run for Each Sample" option to run multiple 
+        alignment jobs at the same time. In order to do this, you need to define first which FASTQ files belong to which sample. You can do this using the 
+        "Define Samples" functionality. Please see the tutorial video <a href="https://www.youtube.com/watch?v=TIDS6aBHqqo">Define Samples to Enable 
+        “Run for Each Sample” Option</a> for more information.
         </p>
 
      <h3>Parameters</h3>
@@ -83,10 +81,10 @@
             After running HISAT2, Chipster indexes the BAM file using the <a
                 href="http://samtools.sourceforge.net/">SAMtools</a> package.</p>
         <p>
-            Note that if you have more than two FASTQ files <i>per sample</i> (for example, Illumina NextSeq produces 8
-            FASTQ files per sample), you will need to provide two list files containing the ordered file names in order to assign
-            the FASTQ files to each direction. Please produce the list files using the tool <a
-                href="make_namelist.html">"Utilities / Make a list of file names"</a>.
+        Note that if you have more than two FASTQ files <i>per ONE sample</i> (Illumina NextSeq produces 8
+        FASTQ files per sample), you need to reduce them to two first: 
+        Merge the R1 FASTQ files using the tool <a href="merge-fastq.html">"Utilities / Merge FASTQ"</a> and rename the resulting merged.fq.gz to samplename_R1.fq.gz. 
+        Repeat the same for the R2 FASTQ files and rename the result samplename_R2.fq.gz
         </p>
         
         <h3>Output</h3>
