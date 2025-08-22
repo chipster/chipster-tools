@@ -7,7 +7,8 @@
 # PARAMETER OPTIONAL group_column: "Phenodata variable for showing grouping" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable describing groping which is added to alpha diversity table for improved readability and for calculating means within groups.)
 # PARAMETER OPTIONAL group1: "Group 1 for Wilcoxon rank sum test  (if >2 groups overall)" TYPE STRING DEFAULT empty (First sample group name (one of the sample groups under the phenodata variable used for grouping\) for Wilcoxon rank sum test  )
 # PARAMETER OPTIONAL group2: "Group 2 for Wilcoxon rank sum test  (if >2 groups overall)" TYPE STRING DEFAULT empty (Second sample group name (one of the sample groups under the phenodata variable used for grouping\) for Wilcoxon rank sum test  )
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 # ES 9.7.2021 alpha diversity estimates for rarefied data

@@ -17,9 +17,10 @@
 # OUTPUT OPTIONAL file.agc.shared
 # PARAMETER datatype: "Type of data" TYPE [other: "16S or 18S", its: "ITS"] DEFAULT other (Indicate if you have ITS data as it is treated differently.)
 # PARAMETER cutoff: "Clustering cutoff" TYPE [0.05, 0.04, 0.03, 0.02, 0.01] DEFAULT 0.03 (Dissimilarity threshold for OTU clustering, e.g. a cut-off value of 0.03 corresponds to 97% similarity)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-mothur
 # SLOTS 4
 # STORAGE 2000
+# TOOLS_BIN ""
 
 # AMS JH EK 2020-2021
 # ES 28.12.2022 not possible to update to new mothur version because reshape library not in the RUNTIME R-4.1.1, use old until reshsape updated
@@ -34,7 +35,8 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("file.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# mothur 1.48.2 is installed in container image in /opt/chipster/tools
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 

@@ -6,6 +6,7 @@
 # PARAMETER decostandm: "Method for standardizing species abundance values" TYPE [total: total, normalize: normalize, pa: pa, chi.square: chi-square, hellinger: Hellinger, log: log] DEFAULT hellinger (Method for standardizing species abundance values before running the RDA and statistical analyses.)
 
 
+# 1.8.2025 HJ This script is not in use anymore
 
 # 28.8.2013
 

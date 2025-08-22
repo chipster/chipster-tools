@@ -2,7 +2,8 @@
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT ps_prevfilter.Rda: ps_prevfilter.Rda
 # PARAMETER OPTIONAL threshold: "Filtering threshold (%)" TYPE INTEGER FROM 1 TO 25 DEFAULT 5 (Prevalence threshold \(%\) for filtering, accepts integer numbers from 1 to 25)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 

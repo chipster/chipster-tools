@@ -16,6 +16,7 @@
 # EK 30.8.2018 added transposed count table compatible with edgeR and DESeq2 tools
 # JT 31.8.2018 added rarefy parameter
 # JT 20.12.2018 remove those species whose rarefied counts are zero in all samples, the same seed is used so that the results don't vary from run to run.
+# HJ 4.8.2025 This script is not in use in the current tools.
 
 library(reshape2)
 

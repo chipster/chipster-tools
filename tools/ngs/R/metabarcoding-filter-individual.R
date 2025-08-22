@@ -10,7 +10,8 @@
 # PARAMETER OPTIONAL tax3: "3rd taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax4: "4th taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax5: "5th taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020-2021
 # HJ 27.3.2025 add summary of Phyloseq object to output

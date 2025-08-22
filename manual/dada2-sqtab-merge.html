@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Merge two ASV tables</h2>
+
+  <h3>Description</h3>
+  
+  <p>
+    When analyzing data from multiple sequencing runs with DADA2, it is recommended to carry out sample inference and combine reads into 
+    contigs independently for each run with the same settings. This is because error rate estimations can depend on the sequencing run or 
+    the sequencing machine. After that, the resulting ASV tables are merged with this tool.
+    <br>
+    <br>
+    When merging more than two ASV tables, first merge two ASV tables. Then, give the resulting merged ASV table as one of the inputs files.
+    </p>
+    
+    <h3>Details</h3>
+    <p>
+    As an input you can give two ASV tables:
+    <ul>
+        <li>An ASV table saved as a .Rda file, which is the output from the tool "Make an ASV table and remove chimeras". Name: seqtab_nochim.Rda</li> 
+        <li>When merging more than two ASV tables: a merged ASV table as an .Rda object, which is produced in a previous merging step with this tool. Name: seqtab_merged.Rda</li> 
+      </ul>
+    </p>
+  
+    <h3>Output</h3>
+    <p>
+    The analysis output consists of the following:
+    <ul>
+        <li>seqtab_merged.Rda: An object of matching the merged sequence table saved as .Rda file. It's the output of the mergeSequenceTables() function </li>
+        <li>summary.txt: Text file to see how many ASVs and samples there are in the merged ASV table</li>
+        <li>sequence_table_merged.tsv: The sequence (ASV) table produced after the mergeSequenceTables() function printed out in a .tsv file. The column names/names of each ASV sequence are being edited to asv0, asv1... to make it easier to investigate the table.</li>
+    </ul>
+    </p>
+    
+    <h3>References</h3>
+    <p>
+        Check mergeSequenceTable()  commands in the dada2 manual: <br>
+    <a href=https://www.bioconductor.org/packages/devel/bioc/manuals/dada2/man/dada2.pdf> DADA2 manual </a> 
+    <br>
+    <a href="https://benjjneb.github.io/dada2/tutorial.html">DADA2 tutorial</a>
+    <br>
+    by Callahan BJ, McMurdie PJ, Rosen MJ, Han AW, Johnson AJ, Holmes SP (2016). 13(7), 581-3. <br>
+    <a href="https://www.researchgate.net/publication/345890170_DADA2_High_resolution_sample_inference_from_amplicon_data"> DADA2: High resolution sample inference from Illumina amplicon data. Nature Methods </a> 
+    </p>
+    </body>

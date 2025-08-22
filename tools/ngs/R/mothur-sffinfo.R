@@ -7,6 +7,7 @@
 # PARAMETER OPTIONAL trim: "Trim reads for quality" TYPE [yes, no] DEFAULT no (Trim sequences and quality scores to the clipQualLeft and clipQualRight values.)
 
 # AMS 19.06.2013
+# HJ 4.8.2025 This script is not in use in the current tools.
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 

@@ -7,27 +7,31 @@
 
 <h3>Description</h3>
 <p>
-Performs a global permutational analysis of variance (PERMANOVA, 999 iterations) using a distance matrix derived from OTU abundance data. Accepts up to three phenodata variables. Depending on the study design, it is possible to select between a model including only main effects vs. one including main effects and all interactions. Terms in the model are added sequentially (first to last).
+Performs a global permutational analysis of variance (PERMANOVA, 999 iterations) using a distance matrix derived from OTU abundance data. Accepts up to three phenodata variables. Depending on the study design, it is possible to select between a model including only main effects vs. one including main effects and all interactions.
 </p>
 
 
 <h3>Parameters</h3>
 <ul>
-<li>PERMANOVA formula to be used (Main effects only, Main effects and interactions; the default is Main effects only)</li>
+<li>PERMANOVA formula to be used (Main effects only, Main effects and interactions; the default is Main effects only).</li>
 <li>Phenodata variable(s) used to specify the formula to be tested (up to three variables can be specified)</li>
 </ul>
 
 <h3>Details</h3>
 <p> 
+When testing for main effects only, the order of the phenodata variable does not influence the results. When testing for main effects and interactions, please note that the order of the phenodata variables affects the results of the main effects. The terms in the model are added sequentially (first to last).
+</p>
+<p>
 The tool requires the following input files:
 <ul>
 <li>An Rda file including <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object sample data and a distance matrix (ps_dist.Rda, produced using the tool "Distance matrices and ordinations") </li>
 <li>Data groupings are automatically fetched from a phenodata file linked to a Mothur shared file (file.opti_mcc.shared)</li>
-</ul>
+</ul>  
 The tool employs the following R functions and packages:
 <ul>
-<li>adonis() (<a href="https://cran.r-project.org/web/packages/vegan/index.html">vegan</a>)</li>
+<li>adonis2() (<a href="https://cran.r-project.org/web/packages/vegan/index.html">vegan</a>)</li>
 </ul>
+The test of main effects only uses the adonis2 argument by = "margin" (examines the marginal effect of each term in a model with all other variables). The test of main effects and interactions uses the adonis2 argument by = "terms" (terms are added sequentially from first to last). 
 </p>
 
 <h3>Output</h3>

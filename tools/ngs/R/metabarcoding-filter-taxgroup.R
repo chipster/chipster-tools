@@ -9,7 +9,8 @@
 # OUTPUT OPTIONAL ps_fungi.Rda
 # OUTPUT OPTIONAL ps_fungi_taxon.txt
 # PARAMETER group: "Group to retain" TYPE [bacteria: "Bacteria", archaea: "Archaea", eukaryotes: "Eukaryotes", fungi: "Fungi"] DEFAULT bacteria (Taxonomic group to retain)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020-2021
 # HJ 27.3.2025 add summary of Phyloseq object to output
