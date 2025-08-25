@@ -389,6 +389,7 @@
 
 	<category name="Microbial amplicon data analyses" color="#a49900">
 		<tool>phyloseq-info.R</tool>
+		<tool>metabarcoding-remove-sample.R</tool>
 		<tool>metabarcoding-filter-taxgroup.R</tool>
 		<tool>metabarcoding-filter-individual.R</tool>
 		<tool>metabarcoding-taxon-overview.R</tool>
@@ -405,6 +406,7 @@
     		<tool>metabarcoding-pairwise-permanova.R</tool>
 		<tool>metabarcoding-pairwise-tukey.R</tool>
 		<tool>metabarcoding-deseq2.R</tool>
+		<tool>metabarcoding-heatmap.R</tool>
 	</category>
 	
 	<category name="CNA-seq" color="#83010b">
