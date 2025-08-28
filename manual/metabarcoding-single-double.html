@@ -3,17 +3,17 @@
 <head><title></title></head>
 <body>
 
-<h2>Remove OTUs with 0-20 occurrences</h2>
+<h2>Remove OTUs with specified number of occurrences</h2>
 
 <h3>Description</h3>
 <p>
-Prunes a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that only OTUs with >0-20 occurrences according to the selected threshold are retained. The resulting object is saved in Rda format.
-</p>
+Prunes a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object so that only OTUs with more than the specified number of occurrences according are retained. The resulting object is saved in Rda format. 
+The main purpose of this tool is to remove OTUs with low occurrence, generally 0-2 occurrences. The default value is 2, meaning OTUs occurring in the data set 0, 1 or 2 times are removed.
 
 
 <h3>Parameters</h3>
 <ul>
-<li>Filtering threshold (>0-20 occurrences; the default is >2)</li>
+<li>Filtering threshold (user-specified value; the default is 2). OTUs with fewer occurrences are removed.</li>
 </ul>
 
 <h3>Details</h3>

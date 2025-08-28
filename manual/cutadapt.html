@@ -19,6 +19,7 @@ This tool is based on <a href="https://cutadapt.readthedocs.io/en/stable/">Cutad
     <li>The 5´ end adapter to be trimmed</li>
     <li>The 3' end adapter to be trimmed</li>
     <li>Remove reads which were not trimmed [yes, no] (no)</li>
+    <li>Minimum overlap between the adapter sequence and the read (the default is 3 base pairs)</li>
 </ul>
 
 <h3>Details</h3>
@@ -56,6 +57,7 @@ Cutadapt removes and identifies adapter sequences even if there are errors betwe
 Cutadapt uses an error treshold of 0.1 which means that it allows one error in every 10 nucleotides. 
 The allowed errors are mismatches, insertions and deletions. 
 In addition, the minimun overlap between the adapter sequence and the read needs to be at least 3 base pairs long, which reduces the risk of random matches. 
+The length of the minimum overlap can be increased by setting the minimum overlap parameter to a higher value.
 <br>
 For more information on Cutadapt please check the <a href="https://cutadapt.readthedocs.io/en/stable/guide.html#">User guide</a>
 <br>

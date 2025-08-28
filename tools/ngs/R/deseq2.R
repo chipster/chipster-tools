@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL round_others: "Round other values to this many digits" TYPE INTEGER DEFAULT 2 (Round other computed values to this many digits.)
 # PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
 # PARAMETER OPTIONAL size.factor.estimation.type: "Method for estimating size factors" TYPE [ratio:"ratio", poscounts:"poscounts"] DEFAULT ratio (Which size estimation method to use. Default option "ratio" uses the standard median ratio method introduced in DESeq. "poscounts" offers alternative estimator, which can be used even when all genes contain a sample with a zero.)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
 
 
 
