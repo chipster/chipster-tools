@@ -8,19 +8,31 @@
 # PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer.)
 # PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer in the orientation it exists in the forward/single reads, usually in reverse complement.)
 # PARAMETER OPTIONAL discarduntrimmed: "Remove reads which were not trimmed" TYPE [yes, no] DEFAULT no (Remove reads which did not contain an adapter.)
-# RUNTIME R-4.1.1-asv
+# PARAMETER overlap: "Minimum overlap length" TYPE INTEGER FROM 0 DEFAULT 3 (Minimum number of bases in the adapter aligned to the read to count as a match. Default: 3)
+# RUNTIME R-4.4.3-asv
+# TOOLS_BIN ""
 
 # ES 30.9.2022
 # ES 28.12.2022 added samples.fastqs.txt output and input file
 # added multi-core support 20.10.2022
 # INPUT OPTIONAL file.fastq: "fastq file" TYPE GENERIC
 # HJ 27.3.2025 add to adapter3 description that it should be reverse complement
+# HJ 25.8.2025 add minimum overlap parameter and runtime update
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
+# cutadapt is installed in a python virtualenv
+# activate it, like shown in https://stackoverflow.com/questions/20337202/using-python-virtual-env-in-r/53585703#53585703
+python.venv <- "/opt/chipster/tools/cutadapt/venv"
+Sys.setenv(
+  PATH = paste(file.path(python.venv, "bin"), Sys.getenv("PATH"), sep = .Platform$path.sep),
+  VIRTUAL_ENV = python.venv
+)
+
 # binary
-binary <- c(file.path(chipster.tools.path, "python-3.8.11", "bin", "cutadapt"))
+
+binary <- "cutadapt"
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Cutadapt", version)
 
@@ -148,7 +160,7 @@ if (discarduntrimmed == "yes") {
 if (paired == "single") {
   x <- 1
   for (file in filenames) {
-    command <- paste(binary, dut, R1.flags, "--rc", "-n", 2, "-j", as.integer(chipster.threads.max), "-o", cutreads[x], file, "> report2.txt")
+    command <- paste(binary, dut, R1.flags, "--rc", "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", cutreads[x], file, "> report2.txt")
     x <- x + 1
     system(command)
     system("cat report2.txt >> report.txt")
@@ -156,7 +168,7 @@ if (paired == "single") {
 } else { # paired
   x <- 1
   for (file in fnFs) {
-    command <- paste(binary, dut, R1.flags, R2.flags, "-n", 2, "-j", as.integer(chipster.threads.max), "-o", fnFs.cut[x], "-p", fnRs.cut[x], file, fnRs[x], "> report2.txt")
+    command <- paste(binary, dut, R1.flags, R2.flags, "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", fnFs.cut[x], "-p", fnRs.cut[x], file, fnRs[x], "> report2.txt")
     x <- x + 1
     system(command)
     # rows <- readLines("report2.txt")

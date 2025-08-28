@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Heatmap of community profiles</h2>
+
+<h3>Description</h3>
+
+<p>
+Produces a heatmap to visualize taxon distribution and abundance across samples at a user-selected taxonomic level.
+</p>
+
+
+<h3>Parameters</h3>
+<ul>
+<li>Level of biological organization to display on the heatmap (OTU/ASV, Genus, Family, Order, Class, Phylum; the default is OTU/ASV)</li>
+<li>Number of most abundant taxa to include (accepts integer values between 1 and 300; the default is 50)</li>
+<li>Select a colour scheme (Light on dark, Dark on light, Contrast emphasized; the default is Light on dark)</li>
+</ul>
+
+
+<h3>Details</h3>
+<p>
+This tool requires the following input files:
+<ul>
+<li><a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object in Rda format. 
+</ul>
+The heatmap visualizes the abundances of up to 300 most abundant taxa at the selected level of biological organization. Taxa are displayed 
+on the y axis of the heatmap plot. If the heatmap is too crowded vertically, reduce the number of taxa with the parameter 
+'Number of most abundant taxa to include'. Lightness and darkness of colours reflects the abundance of a taxon in a sample. 
+The abundance values are displayed as defined in the Phyloseq object. To facilitate comparisons among samples, you can first transform OTU counts
+to relative abundances with the tool 'Transform OTU counts' or rarery the counts with the tool 'Rarefy OTU data to even depth'.
+<br>
+<br>
+Samples are displayed on the x axis of the heatmap plot, and they are ordered according to community profile similarity based 
+on Bray-Curtis dissimilarity and NMDS ordination. This means that samples with similar community composition
+are placed close to each other.
+<br>
+<br>
+Three colour schemes are available: Light on dark (shades of blue on a black-dark blue background), Dark on light 
+(shades of blue on a white background) and Contrast emphasized (shades of
+blue-gray and yellow on a white background to improve contrast). For examples, please see 
+<a href="https://joey711.github.io/phyloseq/plot_heatmap-examples.html">the Phyloseq heatmap examples</a>.
+</p>
+
+The tool employs the following R functions and packages:
+<ul>
+<li>tax_glom(), prune_taxa() and plot_heatmap() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>)</li>
+</ul>
+</p>
+
+<h3>Output</h3>
+<p>
+The tool produces the following output files:</p>
+<ul>
+<li>Heatmap plot (ps_heatmap.pdf)</li>
+</ul>
+</p>
+
+
+<h3>References</h3>
+<p>
+<a href="https://joey711.github.io/phyloseq/">Phyloseq resources and GitHub repository</a>
+<br>
+<a href="https://joey711.github.io/phyloseq/plot_heatmap-examples.html">Heatmap plots in Phyloseq</a>
+</p>
+
+</body>
+
+</html>

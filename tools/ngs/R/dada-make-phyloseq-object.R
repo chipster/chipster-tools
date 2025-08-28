@@ -4,7 +4,7 @@
 # OUTPUT META phenodata.tsv: "Phenodata"
 # OUTPUT ps_nophe.Rda
 # OUTPUT ps_summary.txt
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
 
 # seems to work in this tools, but check other phyloseq tools
 # RUNTIME R-4.4.3-phyloseq
