@@ -46,9 +46,6 @@ bash $BUNDLE_SCRIPTS_DIR/run-in-pod.bash $JOB_NAME $BUILD_NUMBER ubuntu - <<EOF
 
   cd $TOOLS_PATH/python-3.8.11
 
-  bin/pip3 install cutadapt
-  bin/cutadapt --version
-
   bin/pip3 install multiqc
   mkdir ${TOOLS_PATH}/multiqc
   ln -s ../python-3.8.11/bin/multiqc ${TOOLS_PATH}/multiqc/multiqc
