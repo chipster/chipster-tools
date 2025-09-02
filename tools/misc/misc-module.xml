@@ -122,6 +122,7 @@
 		<tool>test-parameters.R</tool>
 		<tool>test-output-missing.R</tool>
 		<tool>test-chipster-note.py</tool>
+		<tool>test-oom.py</tool>
 		<tool>test-note.R</tool>
 		<tool>fail.R</tool>
 		<tool>sort_gtf.R</tool>
