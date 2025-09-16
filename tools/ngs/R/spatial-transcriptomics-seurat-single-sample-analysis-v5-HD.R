@@ -68,7 +68,7 @@ seurat_obj <- RunPCA(seurat_obj, reduction.name = pca_bin, npcs = PCstocompute, 
 # }
     
 # You can use this to check that all "umi.assay" slots are called "Spatial"
-print(SCTResults(object=seurat_obj, slot="umi.assay"))
+# print(SCTResults(object=seurat_obj, slot="umi.assay"))
 
 
 # PCA genes in txt file
