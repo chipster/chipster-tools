@@ -23,7 +23,8 @@ file <- c("normalized.tsv")
 # dat <- read.table(file, header = T, sep = "\t", row.names = 1)
 # check.names = FALSE added as without it the column names were changed:
 # LogFC-(Intercept) -> "logFC..Intercept."
-dat <- read.table(file, header = T, sep = "\t", row.names = 1, check.names = FALSE)
+# In annotated files, there might be some quote marks in the names, which are then confused as text field markers. To get around this, let's use quote=""
+dat <- read.table(file, header = T, sep = "\t", row.names = 1, check.names = FALSE, quote = "")
 
 # Sanity checks
 if (fold.change.column == "EMPTY") {
