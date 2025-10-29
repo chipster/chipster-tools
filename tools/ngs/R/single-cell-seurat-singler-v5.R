@@ -45,7 +45,11 @@ if (exists("data.combined")) {
 
 # Let’s convert our Seurat object to single cell experiment (SCE) for convenience
 # sce <- as.SingleCellExperiment(DietSeurat(seurat_obj)) # DietSeurat: only necessary parts
-sce <- as.SingleCellExperiment(seurat_obj)
+if (seurat_obj@active.assay == "SCT") {
+  sce <- as.SingleCellExperiment(seurat_obj, assay = "SCT")
+} else {
+  sce <- as.SingleCellExperiment(seurat_obj)
+}
 
 
 # HumanPrimaryCellAtlasData, BlueprintEncodeData, MouseRNAseqData, ImmGenData, DatabaseImmuneCellExpressionData, NovershternHematopoieticData, MonacoImmuneData

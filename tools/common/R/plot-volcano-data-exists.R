@@ -12,6 +12,7 @@
 # JTT 08.11.2007: Volcano plot from existing results
 # MG: 21.09.2009: Modified
 # MK: 10.10.2013: Added p-value coloring
+# ML 02.10.2025: Fixed column name handling (check.names = FALSE and grep -> pmatch)
 
 # Renaming variables
 w <- image.width
@@ -19,7 +20,11 @@ h <- image.height
 
 # Loads the normalized data
 file <- c("normalized.tsv")
-dat <- read.table(file, header = T, sep = "\t", row.names = 1)
+# dat <- read.table(file, header = T, sep = "\t", row.names = 1)
+# check.names = FALSE added as without it the column names were changed:
+# LogFC-(Intercept) -> "logFC..Intercept."
+# In annotated files, there might be some quote marks in the names, which are then confused as text field markers. To get around this, let's use quote=""
+dat <- read.table(file, header = T, sep = "\t", row.names = 1, check.names = FALSE, quote = "")
 
 # Sanity checks
 if (fold.change.column == "EMPTY") {
@@ -33,8 +38,11 @@ if (sum(grep(("p.adjusted|padj|FDR"), colnames(dat))) == 0) {
 }
 
 # Extracts the data
-expression <- dat[, grep(fold.change.column, colnames(dat))]
-pvalues <- dat[, grep(p.value.column, colnames(dat))]
+# switched grep to pmatch
+# expression <- dat[, grep(fold.change.column, colnames(dat))]
+# pvalues <- dat[, grep(p.value.column, colnames(dat))]
+expression <- dat[, pmatch(fold.change.column, colnames(dat))]
+pvalues <- dat[, pmatch(p.value.column, colnames(dat))]
 dot_colors <- rep(1, length(pvalues))
 dot_colors[pvalues <= p.value.threshold] <- 2
 
