@@ -6,6 +6,7 @@
 # PARAMETER type: "Level of biological organization to display on the heatmap" TYPE [otu: "OTU/ASV", genus: "Genus", family: "Family", order: "Order", class: "Class", phylum: "Phylum"] DEFAULT otu (Default: OTU/ASV)
 # PARAMETER OPTIONAL thresh: "Number of most abundant taxa to include at the selected taxonomic level" TYPE INTEGER FROM 1 TO 300 DEFAULT 50 (1-300, default 50)
 # PARAMETER OPTIONAL colour: "Select a colour scheme" TYPE [dark: "Light on dark", light: "Dark on light", contrast: "Contrast emphasized"] DEFAULT dark
+# PARAMETER OPTIONAL ordering: "Order samples by variable" TYPE METACOLUMN_SEL DEFAULT EMPTY (Samples are ordered by the alphabetical order of the chosen phenodata variable. Overrides the default similarity-based order.)
 # RUNTIME R-4.4.3-phyloseq
 # TOOLS_BIN ""
 
@@ -78,7 +79,11 @@ if (type == "phylum") {
 }
 }
 
+if (ordering == "EMPTY") { 
 psheatmap <- plot_heatmap(ps, "NMDS", "bray", low = lowcol, high = highcol, na.value = navalue)
+} else
+psheatmap <- plot_heatmap(ps, "NMDS", "bray", low = lowcol, high = highcol, na.value = navalue,
+    sample.order = ordering)
 
 # Open a report PDF
 pdf("ps_heatmap.pdf", width = 12, height = 7)
