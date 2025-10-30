@@ -17,7 +17,8 @@ do
     -p version=$VERSION \
     -p release=$RELEASE \
     -p site=$SITE \
-    -p action=check_version
+    -p assembly=primary_assembly \
+    -p action=check_version_only
 done < ~/git/chipster-tools/setup/bundles/genomes/$GENOMES
 
 chipster session delete download-genomes-version-check-$BUILD_NUMBER
@@ -38,7 +39,9 @@ do
    	-p species=$SPECIES \
     -p version=$VERSION \
     -p release=$RELEASE \
-    -p site=$SITE
+    -p site=$SITE \
+    -p assembly=primary_assembly \
+    -p action=download
    
    genome_dir="$SPECIES-$VERSION-$RELEASE"
    mkdir $genome_dir

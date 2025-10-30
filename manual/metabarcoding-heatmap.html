@@ -17,6 +17,7 @@ Produces a heatmap to visualize taxon distribution and abundance across samples 
 <li>Level of biological organization to display on the heatmap (OTU/ASV, Genus, Family, Order, Class, Phylum; the default is OTU/ASV)</li>
 <li>Number of most abundant taxa to include (accepts integer values between 1 and 300; the default is 50)</li>
 <li>Select a colour scheme (Light on dark, Dark on light, Contrast emphasized; the default is Light on dark)</li>
+<li>Order samples by a phenodata variable (if selected, overrides the default similarity-based sample order)</li>
 </ul>
 
 
@@ -35,7 +36,7 @@ to relative abundances with the tool 'Transform OTU counts' or rarery the counts
 <br>
 Samples are displayed on the x axis of the heatmap plot, and they are ordered according to community profile similarity based 
 on Bray-Curtis dissimilarity and NMDS ordination. This means that samples with similar community composition
-are placed close to each other.
+are placed close to each other. Alternatively, samples can be ordered by a chosen phenodata variable in alphabetical order.
 <br>
 <br>
 Three colour schemes are available: Light on dark (shades of blue on a black-dark blue background), Dark on light 

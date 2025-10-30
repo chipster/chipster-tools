@@ -16,7 +16,11 @@ BUILD_NUMBER="$3"
 
 name="$(get_name $JOB_NAME $BUILD_NUMBER)"
 
-ssh $K3S_BUILD_HOST "\
+# use ssh-agent forwarding to authenticate from K3S_BUILD_HOST to aux
+eval $(ssh-agent)
+ssh-add ~/.ssh/id_ed25519
+
+ssh -A $K3S_BUILD_HOST "\
     TOOLS_PATH="$TOOLS_PATH" \
     TMPDIR_PATH="$TMPDIR_PATH" \
     bash tmp/$name/move-to-artefacts.bash \"$source\" \"$JOB_NAME\" \"$BUILD_NUMBER\""
