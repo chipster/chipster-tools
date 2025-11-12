@@ -31,6 +31,9 @@ if (paired == "yes") {
     bam <- "alignment.bam"
 }
 
+# run python explicitly, because the shebang line in htseq-count uses now defunct /mnt/tools
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
+
 # htseq-count
 if (print.coord == "no") {
     htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count")
@@ -49,7 +52,7 @@ if (chr == "1") {
 }
 
 
-htseq <- paste(htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, annotation.file, " > htseq-counts-out.txt")
+htseq <- paste(python.binary, htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, annotation.file, " > htseq-counts-out.txt")
 
 # run
 system(htseq)

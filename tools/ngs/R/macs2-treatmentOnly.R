@@ -27,6 +27,10 @@
 # 10.07.2014 AMS, Updated genome sizes, added parameter userspecified.size
 # 12.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters, added the broad option and outputs, polished the script and output
 
+
+# run python explicitly, because the shebang line in macs2 uses now defunct /mnt/tools
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
+
 # MACS settings
 macs.binary <- file.path(chipster.tools.path, "macs", "macs2")
 
@@ -96,7 +100,7 @@ runMACS <- function(..., logFile = "/dev/null") {
         }
 
         # Command
-        command <- paste(macs.binary, paste(flags, params, collapse = " "))
+        command <- paste(python.binary, macs.binary, paste(flags, params, collapse = " "))
         if (!is.null(switchOnParams)) {
             switchOnParams <- paste(switchOnParams, collapse = " ")
             command <- paste(command, switchOnParams)

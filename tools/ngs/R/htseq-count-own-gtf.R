@@ -40,7 +40,10 @@ if (print.coord == "no") {
     htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count_chr")
 }
 
-htseq <- paste(htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, "features.gtf > htseq-counts-out.txt")
+# run python explicitly, because the shebang line in htseq-count uses now defunct /mnt/tools
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
+
+htseq <- paste(python.binary, htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, "features.gtf > htseq-counts-out.txt")
 
 # run
 system(htseq)
