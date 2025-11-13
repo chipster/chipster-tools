@@ -41,6 +41,14 @@ if (print.coord == "no") {
     htseq.binary <- file.path(chipster.tools.path, "htseq", "htseq-count_chr")
 }
 
+# parse version number from last line "Public License v3. Part of the 'HTSeq' framework, version 0.6.0."
+htseq.version.command <- paste(python.binary, htseq.binary, " --help | tail -n 1 | rev | cut -d '.' -f 2- | cut -d ' ' -f 1 | rev")
+version <- system(htseq.version.command, intern = TRUE)
+documentVersion("HTSeq", version)
+samtools.version.command <- paste(samtools.binary, " 2>&1 | grep Version | cut -d ' ' -f 2")
+version <- system(samtools.version.command, intern = TRUE)
+documentVersion("Samtools", version)
+
 
 internal.gtf <- file.path(chipster.tools.path, "genomes", "gtf", paste(organism, ".gtf", sep = "", collapse = ""))
 if (chr == "1") {
