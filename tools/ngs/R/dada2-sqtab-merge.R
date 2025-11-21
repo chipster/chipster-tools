@@ -24,19 +24,18 @@ seqtab_nochim2 <- seqtab.nochim
 rm(seqtab.nochim)
 
 # merge ASV tables
-seqtab_merged <- mergeSequenceTables(seqtab_nochim1, seqtab_nochim2)
+seqtab.nochim <- mergeSequenceTables(seqtab_nochim1, seqtab_nochim2)
 
 # write a log/summary file
 sink(file = "summary.txt")
 cat("\nAfter merging, the sequence table consist of:\n")
-cat(length(rownames(seqtab_merged)), " samples and ", length(colnames(seqtab_merged)), " amplicon sequence variants\n\n")
+cat(length(rownames(seqtab.nochim)), " samples and ", length(colnames(seqtab.nochim)), " amplicon sequence variants\n\n")
 sink()
 
-# write the merged ASV table
-colnames(seqtab_merged) <- paste0("ASV", seq(length(colnames(seqtab_merged))))
-write.table(seqtab_merged, file = "sequence_table_merged.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
-
-
 # save the object as .Rda
-save(seqtab_merged, file = "seqtab_merged.Rda")
+save(seqtab.nochim, file = "seqtab_merged.Rda")
+
+# write the merged ASV table
+colnames(seqtab.nochim) <- paste0("ASV", seq(length(colnames(seqtab.nochim))))
+write.table(seqtab.nochim, file = "sequence_table_merged.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
 
