@@ -79,6 +79,9 @@ if (type == "phylum") {
 }
 }
 
+# removing samples with no taxa after selecting thresh number of most abundance taxa
+ps <- prune_samples(sample_sums(ps)>0, ps)
+
 if (ordering == "EMPTY") { 
 psheatmap <- plot_heatmap(ps, "NMDS", "bray", low = lowcol, high = highcol, na.value = navalue)
 } else
