@@ -1,6 +1,8 @@
 # TOOL row_count.R: "Row count" (Counts how many lines there are)
 # INPUT input.txt: "Input file" TYPE GENERIC
 # OUTPUT output.txt
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # AO 15.5.2017
 
