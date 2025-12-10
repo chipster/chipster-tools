@@ -8,6 +8,8 @@
 # PARAMETER OPTIONAL gene.labels: "Gene labels" TYPE COLUMN_SEL DEFAULT EMPTY (Select which column for gene labels. This is not applicable if you do not select the number of genes you would like displayed on your plot.)
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # JTT 08.11.2007: Volcano plot from existing results
 # MG: 21.09.2009: Modified

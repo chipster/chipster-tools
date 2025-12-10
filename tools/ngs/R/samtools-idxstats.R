@@ -2,6 +2,7 @@
 # INPUT alignment.bam: "BAM file" TYPE GENERIC
 # INPUT alignment.bai: "Index file .bai" TYPE GENERIC
 # OUTPUT bam-stats.tsv
+# RUNTIME R-4.5.1
 
 # EK 26.10.2011
 

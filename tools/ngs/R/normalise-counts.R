@@ -4,6 +4,9 @@
 # PARAMETER method.value: "Calculate normalization factors" TYPE [TMM: TMM, RLE: RLE, upperquartile: upperquartile, none: none] DEFAULT TMM (Method to be used for computing normalization factors. None corresponds to lib.size normalisation)
 # PARAMETER log.value: "Log transform" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Is data log2-transformed.)
 
+# Default runtime because edgeR is needed
+
+
 # 25.04.2014 MK, created
 
 # Loads the normalized data and phenodata files

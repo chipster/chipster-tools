@@ -5,7 +5,7 @@
 # OUTPUT alignment-subset.bam.bai
 # PARAMETER region: "Region to retrieve alignments for" TYPE STRING DEFAULT chr1 (The genomic region for which you would like to retrieve the alignments for.)
 # PARAMETER OPTIONAL mapping.quality: "Minimum mapping quality" TYPE INTEGER FROM 0 TO 1000 DEFAULT 0 (Retrieves only alignments which have a mapping quality higher than this. Note that Bowtie doesn't calculate mapping quality, but just inserts 255 to the field 5 of BAM file if the read aligns, and 0 if it doesn't align.)
-
+# RUNTIME R-4.5.1
 
 # EK 26.10.2011
 # AMS 24.9.2014: added indexing to the result file
