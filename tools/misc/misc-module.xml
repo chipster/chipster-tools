@@ -10,7 +10,6 @@
 		<tool>dbfetch_list.R</tool>
 		<tool>entret_list.R</tool>
 		<tool module="common">download-file.py</tool>
-		<tool module="common">share_via_object_storage.R</tool>
 		<tool module="common">basespace.R</tool>
 	</category>
 
