@@ -49,7 +49,9 @@ if (group_column != "empty") {
 }
 
 # Open a report PDF
-pdf("ps_rarecurve.pdf", width = 13, height = 7)
+pdf("ps_rarecurve.pdf")
+
+options(scipen=99)
 
 # Plot rarefaction curve
 set.seed(1)
