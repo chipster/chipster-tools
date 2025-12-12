@@ -49,16 +49,24 @@ if (group_column != "empty") {
 }
 
 # Open a report PDF
-pdf("ps_rarecurve.pdf")
+pdf("ps_rarecurve.pdf", width = 13, height = 7)
 
 # Plot rarefaction curve
 set.seed(1)
 otu_table <- otu_table(ps)
 class(otu_table) <- "matrix"
+
+if (taxa_are_rows(ps) == FALSE) { 
+rarecurve(otu_table,
+    step = 100,
+    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "ASVs", xlab = "No. of sequences"
+)
+} else {
 rarecurve(t(otu_table),
     step = 100,
-    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs / ASVs", xlab = "No. of sequences"
+    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs", xlab = "No. of sequences"
 )
+}
 
 # Close the report PDF
 dev.off()
@@ -166,7 +174,7 @@ if (group_column != "empty") {
         cat("# For Shannon index: \n")
         print(wilcox.test(shannon_a, shannon_b))
 
-        cat("# For Pielou's evennes: \n")
+        cat("# For Pielou's evenness: \n")
         print(wilcox.test(pielou_a, pielou_b))
     } else {
         if (test1 == FALSE || test2 == FALSE) {
@@ -181,7 +189,7 @@ if (group_column != "empty") {
             print(wilcox.test(chao1_a, chao1_b))
             cat("# For Shannon index: \n")
             print(wilcox.test(shannon_a, shannon_b))
-            cat("# For Pielou's evennes: \n")
+            cat("# For Pielou's evenness: \n")
             print(wilcox.test(pielou_a, pielou_b))
         }
     }
@@ -204,7 +212,7 @@ if ((group_column != "empty")) {
     }
 
     # plot_richness(ps, color=group_column, measures=c("Observed","Chao1","Shannon")) + geom_point(size=5,alpha=0.7)
-    # ggplot(richness, aes(group,Pielou, colour=group)) + geom_point(size=5,alpha=0.7) + labs(title="Pielou's evennes"))
+    # ggplot(richness, aes(group,Pielou, colour=group)) + geom_point(size=5,alpha=0.7) + labs(title="Pielou's evenness"))
     # dev.off()
     # if 2 groups or more and group1 and group2 specified, then calculate wilcox test #c("****", "***", "**", "*", "ns"))
     if (length(groups) == 2) {
@@ -213,7 +221,7 @@ if ((group_column != "empty")) {
         plot2 <- ggplot(richness, aes(group, Pielou, colour = group)) +
             geom_boxplot(alpha = 0.7) +
             geom_point(size = 3, alpha = 0.7) +
-            labs(title = "\t\t\t\tPielou's evennes") +
+            labs(title = "\t\t\t\tPielou's evenness") +
             stat_compare_means(method = "wilcox.test", comparisons = list(groups), label = "p.signif", symnum.args = symnum_args)
         # sample names + geom_text_repel(aes(label = rownames(richness)))
     } else {
@@ -221,10 +229,10 @@ if ((group_column != "empty")) {
         plot2 <- ggplot(richness, aes(group, Pielou, colour = group)) +
             geom_boxplot(alpha = 0.3) +
             geom_point(size = 3, alpha = 0.7) +
-            labs(title = "\t\t\t\tPielou's evennes")
+            labs(title = "\t\t\t\tPielou's evenness")
     }
 
-    pdf("plot_richness.pdf", , width = 13, height = 7)
+    pdf("plot_richness.pdf", width = 13, height = 7)
     print(plot1)
     print(plot2)
     dev.off()

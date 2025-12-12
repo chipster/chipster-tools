@@ -99,7 +99,6 @@
 		<tool module="common">remove-special-characters.R</tool>
 		<tool>virusdetect.R</tool>
 		<tool>virusdetect-with-index-building.R</tool>
-	    <tool module="common">share_via_object_storage.R</tool>
 	    <tool module="common">basespace.R</tool>		 
 	</category>
 
