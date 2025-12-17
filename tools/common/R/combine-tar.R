@@ -1,6 +1,8 @@
 # TOOL combine-tar.R: "Combine tar files" (Combines tar files into a single tar file.)
 # INPUT tar{...}.tar: "Tar files" TYPE GENERIC
 # OUTPUT combined.tar
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 

@@ -7,6 +7,7 @@
 # PARAMETER OPTIONAL ed: "Use BAM edit distance for BED score" TYPE [yes,no] DEFAULT no (Use BAM edit distance (NM tag\) for BED score. Default for BED is to use mapping quality. Default for BEDPE is to use the minimum of the two mapping qualities for the pair.)
 # PARAMETER OPTIONAL color: "Color string" TYPE STRING DEFAULT "255,0,0" (An R,G,B string for the color used with BED12 format. Default is (255,0,0\).)
 # PARAMETER OPTIONAL cigar: "Add the CIGAR string" TYPE [yes,no] DEFAULT no (Add the CIGAR string to the BED entry as a 7th column.)
+# RUNTIME R-4.5.1
 
 # AMS 23.4.2012
 # AMS 23.9.2013 Improved output/error file handling
