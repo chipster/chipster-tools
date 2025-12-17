@@ -6,6 +6,8 @@
 # PARAMETER OPTIONAL rename.identifiers: "Rename sequence identifiers as numbers" TYPE [yes, no] DEFAULT no (Rename sequence identifiers as numbers)
 # PARAMETER quality.format: "Base quality encoding used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
 # PARAMETER OPTIONAL log.file: "Write a log file" TYPE [ no: "no", yes: "yes"] DEFAULT no (Produce a log file indicating how many sequences contained unknown nucleotides and were therefore discarded)
+# RUNTIME R-4.5.1-fastx
+# TOOLS_BIN ""
 
 # EK 17.6.2011
 # EK 6.4.2021 Gzip fasta, parameter for producing a log file.
@@ -17,7 +19,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads.fastq")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastq_to_fasta"))
+binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastq_to_fasta"))
 
 # parameters
 remove.parameter <- ifelse(remove.unknowns == "yes", "", "-n")

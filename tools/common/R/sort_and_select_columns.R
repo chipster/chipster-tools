@@ -5,6 +5,8 @@
 # PARAMETER column: "Column to sort by" TYPE COLUMN_SEL (Data column to sort by)
 # PARAMETER sortorder: "Sorting order" TYPE [ascending: "Ascending", descending: "Descending"] DEFAULT ascending (Sortitng order)
 # PARAMETER OPTIONAL rstyle: "First column has rownames" TYPE [yes: Yes, no: No] DEFAULT no (Choose Yes if the first column does not have a title.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # KM 8.2.2015
 # KM 17.4.2015 Added support for rownames

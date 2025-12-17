@@ -6,6 +6,8 @@
 # PARAMETER cutoff: "Cut-off value" TYPE DECIMAL FROM -10000000 TO 10000000 DEFAULT 0.05 (Cut-off for filtering)
 # PARAMETER smaller.or.larger: "Filtering criteria" TYPE [equal-to: equal-to, smaller-than: smaller-than, larger-than: larger-than, within: within, outside: outside] DEFAULT smaller-than (Smaller or larger than the cutoff is filtered.
 # Use the "within" or "outside" options to filter symmmetrically around two cut-offs, useful for example when searching for up- and down-regulated genes.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # Filter NGS results on the basis of a continuous parameter in a column
 # 26.05.2010, MG

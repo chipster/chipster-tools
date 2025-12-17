@@ -2,11 +2,12 @@
 # INPUT alignment.sam: "SAM file to convert" TYPE GENERIC
 # OUTPUT alignment.bam
 # OUTPUT alignment.bam.bai
+# RUNTIME R-4.5.1
 
 # EK 10.1.2012
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
 
 # convert sam to bam
 system(paste(samtools.binary, "view -bS alignment.sam -o alignmentUnsorted.bam"))

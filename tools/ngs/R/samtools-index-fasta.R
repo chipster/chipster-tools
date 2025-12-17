@@ -1,6 +1,7 @@
 # TOOL samtools-index-fasta.R: "Index FASTA" (Creates an index for a FASTA file. This tool is based on the SAMTools package.)
 # INPUT sequence.fa TYPE GENERIC
 # OUTPUT sequence.fa.fai
+# RUNTIME R-4.5.1
 
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
@@ -8,7 +9,7 @@ unzipIfGZipFile("sequence.fa")
 
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
 
 system(paste(samtools.binary, "faidx sequence.fa"))
 

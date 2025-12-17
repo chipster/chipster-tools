@@ -1,6 +1,8 @@
 # TOOL gzip.R: "Compress a file with gzip" (Compress a file with gzip. Note that some file types like BAM are already compressed, and compressing them will not make the files any smaller.)
 # INPUT file: "File to compress" TYPE GENERIC
 # OUTPUT OPTIONAL file.gz
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 

@@ -2,11 +2,12 @@
 # INPUT alignment{...}.bam: alignment{...}.bam TYPE GENERIC
 # OUTPUT merged.bam
 # OUTPUT merged.bam.bai
+# RUNTIME R-4.5.1
 
 # EK 27.10.2011
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
 
 # convert sam to bam
 system(paste(samtools.binary, "merge merged-not-sorted.bam alignment*.bam"))

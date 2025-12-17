@@ -1,7 +1,8 @@
 # TOOL extract-features-from-BED.R: "Extract features from BED" (This tool extracts the description column, usually gene identifiers, removes duplicate entries and creates a table containing only the extracted features. The output is compatible with downstream tools.)
 # INPUT bedfile.bed: "BED file with description column to extract" TYPE GENERIC
 # OUTPUT extracted-features.tsv: "Table listing the unique features found in the description column of the bed file."
-
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 
 # MG, 1.11.2011

@@ -12,6 +12,8 @@
 # PARAMETER OPTIONAL stoprow: "Last row to select" TYPE INTEGER DEFAULT 10000000 (Number of the last row to be selected.)
 # PARAMETER OPTIONAL fstyle: "Input file format" TYPE [txt: Text, tsv: Table, bed: BED, gtf: GTF] DEFAULT txt (Is the input file a text file, tab-delimited table, BED file or GTF file)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # KM 10.4.2015
 # AMS 9.11.2015 Added support for compressed input files

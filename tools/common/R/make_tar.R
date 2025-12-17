@@ -2,7 +2,8 @@
 # INPUT file{...}.tsv: "Files to include" TYPE GENERIC
 # OUTPUT OPTIONAL chipster.tar
 # PARAMETER name: "File name for tar package" TYPE STRING DEFAULT "chipster" (File name for the tar package. Ending .tar will be added to the name.)
-# RUNTIME R-4.1.1
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # Read input names
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

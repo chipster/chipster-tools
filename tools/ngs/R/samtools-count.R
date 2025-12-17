@@ -2,7 +2,7 @@
 # INPUT alignment.bam TYPE GENERIC
 # OUTPUT alignment-counts.txt
 # PARAMETER OPTIONAL mapping.quality: "Minimum mapping quality required for counting" TYPE INTEGER FROM 0 TO 1000 DEFAULT 0 (Counts only alignments which have a mapping quality higher than this.)
-
+# RUNTIME R-4.5.1
 
 # EK 26.10.2011
 

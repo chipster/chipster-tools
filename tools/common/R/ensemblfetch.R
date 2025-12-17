@@ -3,13 +3,15 @@
 # OUTPUT OPTIONAL ensemblfetch.gtf
 # OUTPUT OPTIONAL ensemblfetch_species.tsv
 # OUTPUT OPTIONAL ensemblfetch.log
-# PARAMETER OPTIONAL species_menu: "Ensembl species" TYPE [species: "Use the text box below", Homo_sapiens: "Human", Mus_musculus: "Mouse", Danio_rerio: "Zebrafish", Mus_spretus: "Algerian_mouse", Ciona_intestinalis: "C.intestinalis", Caenorhabditis_elegans: "Caenorhabditis_elegans", Gallus_gallus: "Chicken", Pan_troglodytes: "Chimpanzee", Gadus_morhua: "Cod", Bos_taurus: "Cow", Canis_lupus: "Dog", Drosophila_melanogaster: "Fruitfly", Cavia_porcellus: "Guinea_Pig", Equus_caballus: "Horse", Sus_scrofa: "Pig", Oryctolagus_cuniculus: "Rabbit", Rattus_norvegicus: "Rat", Saccharomyces_cerevisiae: "Saccharomyces_cerevisiae", Ovis_aries: "Sheep", Gasterosteus_aculeatus: "Stickleback", Xenopus_tropicalis: "Xenopus" ] DEFAULT species ( Quick selection meny of commonly used Ensembl species.)
-# PARAMETER OPTIONAL species: "Species name" TYPE STRING (Then latin name of the species for which the data is retrieved. Note that you should use under score: _ in stead of the space character in the species name. For example homo_sapiens)
+# PARAMETER OPTIONAL species_menu: "Ensembl species" TYPE [species: "Use the text box below", Homo_sapiens: "Human", Mus_musculus: "Mouse", Danio_rerio: "Zebrafish", Mus_spretus: "Algerian_mouse", Ciona_intestinalis: "C.intestinalis", Caenorhabditis_elegans: "Caenorhabditis_elegans", Gallus_gallus: "Chicken", Pan_troglodytes: "Chimpanzee", Gadus_morhua: "Cod", Bos_taurus: "Cow", Canis_lupus: "Dog", Drosophila_melanogaster: "Fruitfly", Cavia_porcellus: "Guinea_Pig", Equus_caballus: "Horse", Sus_scrofa: "Pig", Oryctolagus_cuniculus: "Rabbit", Rattus_norvegicus: "Rat", Saccharomyces_cerevisiae: "Saccharomyces_cerevisiae", Ovis_aries: "Sheep", Gasterosteus_aculeatus: "Stickleback", Xenopus_tropicalis: "Xenopus" ] DEFAULT species (The most commonly used species. If your organism is not here, please type its name below.)
+# PARAMETER OPTIONAL species: "Species name" TYPE STRING (Then latin name of the species for which the data is retrieved. Note that you should use underscore _ instead of the space character in the species name, for example homo_sapiens)
 # PARAMETER OPTIONAL type: "Data to retrieve" TYPE [dna: "Genomic DNA", cdna: "cDNA transcripts", pep: "Protein sequences", gtf: "GTF file" ] DEFAULT dna (Sequence data type to retrieve)
 # PARAMETER OPTIONAL names: "List the available species names" TYPE [ yes: "All species", nonbac: "List non-bacterial species", no: No] DEFAULT "no" (List the available species names)
 # PARAMETER OPTIONAL save_log: "Collect a log file about the ensemblfetch run" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the enseblfetch run.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
-# K.M 28.10.2013
+# KM 28.10.2013
 
 # enseblfecth settings
 ensemblfetch.binary <- file.path(chipster.module.path, "../admin/shell/ensemblfetch.sh ")
