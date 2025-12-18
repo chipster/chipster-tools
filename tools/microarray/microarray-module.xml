@@ -102,10 +102,10 @@
 		<!-- <tool module="common">annotate-cpdb.py</tool> -->
 	</category>
 
-	<category name="Promoter analysis" color="#629a9b">
+	<!-- <category name="Promoter analysis" color="#629a9b">
 		<tool>promoter-tfbs.R</tool>
 		<tool>promoter-retrprom.R</tool>
-	</category>
+	</category> -->
 
 	<category name="Copy number aberrations" color="#c0d2de">
 		<tool>import-soft2.R</tool>
