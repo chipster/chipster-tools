@@ -23,6 +23,7 @@ binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastq_to_fasta"))
 # parameters
 remove.parameter <- ifelse(remove.unknowns == "yes", "", "-n")
 rename.parameter <- ifelse(rename.identifiers == "no", "", "-r")
+quality.scale <- "-Q 33"
 
 # command
 command <- paste(binary, remove.parameter, rename.parameter, quality.scale, "-v -i reads.fastq -o reads.fasta > fasta.log")
