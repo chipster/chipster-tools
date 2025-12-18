@@ -4,7 +4,6 @@
 # OUTPUT OPTIONAL fasta.log
 # PARAMETER OPTIONAL remove.unknowns: "Remove sequences with unknown nucleotides" TYPE [yes, no] DEFAULT no (Remove sequences with unknown nucleotides)
 # PARAMETER OPTIONAL rename.identifiers: "Rename sequence identifiers as numbers" TYPE [yes, no] DEFAULT no (Rename sequence identifiers as numbers)
-# PARAMETER quality.format: "Base quality encoding used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
 # PARAMETER OPTIONAL log.file: "Write a log file" TYPE [ no: "no", yes: "yes"] DEFAULT no (Produce a log file indicating how many sequences contained unknown nucleotides and were therefore discarded)
 # RUNTIME R-4.5.1-fastx
 # TOOLS_BIN ""
@@ -24,7 +23,6 @@ binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastq_to_fasta"))
 # parameters
 remove.parameter <- ifelse(remove.unknowns == "yes", "", "-n")
 rename.parameter <- ifelse(rename.identifiers == "no", "", "-r")
-quality.scale <- ifelse(quality.format == "sanger", "-Q 33", "")
 
 # command
 command <- paste(binary, remove.parameter, rename.parameter, quality.scale, "-v -i reads.fastq -o reads.fasta > fasta.log")
