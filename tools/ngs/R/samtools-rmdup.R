@@ -3,6 +3,7 @@
 # OUTPUT duplicates-removed.bam
 # PARAMETER end.type: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (Does the data come from paired end or single end sequencing?)
 # RUNTIME R-4.5.1-samtools
+# TOOLS_BIN ""
 
 # EK 12.1.2012
 

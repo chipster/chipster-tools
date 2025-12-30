@@ -2,15 +2,16 @@
 # INPUT alignment.bam: "BAM file to sort and index" TYPE GENERIC
 # OUTPUT alignment-sorted.bam
 # OUTPUT alignment-sorted.bam.bai
-# RUNTIME R-4.5.1
+# RUNTIME R-4.5.1-samtools
+# TOOLS_BIN ""
 
 # EK 10.1.2012
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path("/opt/chipster/tools", "samtools", "bin", "samtools"))
 
 # sort bam
-system(paste(samtools.binary, "sort alignment.bam alignment-sorted"))
+system(paste(samtools.binary, "sort alignment.bam -o alignment-sorted.bam"))
 
 # index bam
 system(paste(samtools.binary, "index alignment-sorted.bam"))
