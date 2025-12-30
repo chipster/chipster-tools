@@ -2,12 +2,13 @@
 # INPUT alignment.bam: "BAM file" TYPE GENERIC
 # INPUT alignment.bai: "Index file .bai" TYPE GENERIC
 # OUTPUT bam-stats.tsv
-# RUNTIME R-4.5.1
+# RUNTIME R-4.5.1-samtools
+# TOOLS_BIN ""
 
 # EK 26.10.2011
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path("/opt/chipster/tools", "samtools", "bin", "samtools"))
 
 # convert sam to bam
 system(paste(samtools.binary, "idxstats alignment.bam > bam-out.tsv"))
