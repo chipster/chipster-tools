@@ -4,13 +4,13 @@
 # OUTPUT OPTIONAL trimmed.tar
 # PARAMETER first: "First base to keep" TYPE INTEGER FROM 1 TO 100 DEFAULT 1 (First base to keep.)
 # PARAMETER last: "Last base to keep" TYPE INTEGER FROM 1 TO 400 DEFAULT 200 (Last base to keep.)
-# PARAMETER quality.format: "Quality value format used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
-
-
+# RUNTIME R-4.5.1-fastx
+# TOOLS_BIN ""
 
 
 # EK 17.6.2011
 # AMS 11.3.2014, gzip fastq outputs
+
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
@@ -18,7 +18,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 
 # Binary
-binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastx_trimmer"))
+binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastx_trimmer"))
 version <- system(paste(binary, "-h | sed -n 2p"), intern = TRUE)
 documentVersion("fastx_trimmer", version)
 
@@ -38,8 +38,7 @@ if (isTar) {
     output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
 
     # Command
-    quality.scale <- ifelse(quality.format == "sanger", "-Q 33", "")
-    command <- paste(binary, "-f", first, "-l", last, quality.scale, "-i", input_fastq, "-o", output_fastq)
+    command <- paste(binary, "-f", first, "-l", last, "-Q 33", "-i", input_fastq, "-o", output_fastq)
     # documentCommand(command)
     system(command)
   }
@@ -54,8 +53,7 @@ if (isTar) {
   unzipIfGZipFile("input.file")
 
   # Command
-  quality.scale <- ifelse(quality.format == "sanger", "-Q 33", "")
-  command <- paste(binary, "-f", first, "-l", last, quality.scale, "-i input.file -o trimmed.fq")
+  command <- paste(binary, "-f", first, "-l", last, "-Q 33 -i input.file -o trimmed.fq")
   documentCommand(command)
 
   # Run

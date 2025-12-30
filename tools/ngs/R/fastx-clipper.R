@@ -8,7 +8,9 @@
 # PARAMETER minimum.alignment: "Minimum adapter alignment length" TYPE INTEGER FROM 0 DEFAULT 0 (Required minimum adapter alignment length. Maximum is adapter length. 0 means option is ignored.)
 # PARAMETER OPTIONAL short: "Discard sequences shorter than" TYPE INTEGER FROM 1 DEFAULT 15 (Minimum length of sequences to keep.)
 # PARAMETER OPTIONAL discard.n: "Discard sequences with Ns" TYPE [yes, no] DEFAULT yes (Keep sequences with unknown nucleotides. Default is to discard such sequences.)
-# PARAMETER OPTIONAL quality.format: "Quality value format used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
+# RUNTIME R-4.5.1-fastx
+# TOOLS_BIN ""
+
 
 # EK 27.6.2011
 # AMS 01.11.2012: Added minimum.alignement and output.options options
@@ -19,7 +21,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads.fastq")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastx_clipper"))
+binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastx_clipper"))
 
 # options
 options <- paste("")
@@ -28,9 +30,7 @@ if (minimum.alignment > 0) {
     options <- paste(options, "-M", minimum.alignment)
 }
 options <- paste(options, "-l", short)
-if (quality.format == "sanger") {
-    options <- paste(options, "-Q 33")
-}
+
 if (discard.n == "no") {
     options <- paste(options, "-n")
 }
@@ -42,7 +42,7 @@ if (output.options == "unclipped") {
 }
 
 # command
-command <- paste(binary, "-v", options, "-i reads.fastq -o clipped.fastq  > clipped.log")
+command <- paste(binary, "-v", options, "-Q 33 -i reads.fastq -o clipped.fastq  > clipped.log")
 
 # run
 system(command)
