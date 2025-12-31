@@ -14,7 +14,7 @@ unzipIfGZipFile("reads.fastq")
 binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastx_collapser"))
 
 # command
-command <- paste(binary, quality.scale, "-Q 33 -i reads.fastq -o duplicates-removed.fastq")
+command <- paste(binary, "-Q 33 -i reads.fastq -o duplicates-removed.fastq")
 
 # run
 system(command)
