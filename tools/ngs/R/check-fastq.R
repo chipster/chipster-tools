@@ -3,7 +3,8 @@
 # OUTPUT OPTIONAL fail.log
 # OUTPUT OPTIONAL pass.log
 # OUTPUT OPTIONAL duplicates.log
-
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # AMS 2017-03-29
 
