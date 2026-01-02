@@ -4,7 +4,7 @@
 # PARAMETER input.type: "Input type" TYPE [FASTQ, FASTA] DEFAULT FASTQ (Input type.)
 # PARAMETER tag5: "Tag sequence at 5'-end" TYPE STRING DEFAULT "-" (Tag sequence at 5'-end.)
 # PARAMETER tag3: "Tag sequence at 3'-end" TYPE STRING DEFAULT "-" (Tag sequence at 3'-end.)
-
+# RUNTIME R-4.5.1
 
 # AMS 2013.02.18
 
