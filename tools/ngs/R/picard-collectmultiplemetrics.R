@@ -1,8 +1,9 @@
-# TOOL picard-collectmultiplemetrics.R: "Collect multiple metrics from BAM" (Takes an input BAM and runs some Picard metrics modules. This tool is based on the Picard Tools package.)
+# TOOL picard-collectmultiplemetrics.R: "Collect multiple metrics for BAM" (Calculates several metrics such as base quality, base content and insert size distribution. This tool is based on the Picard CalculateMultipleMetrics tool.)
 # INPUT alignment.bam: "BAM alignment file" TYPE GENERIC
 # OUTPUT OPTIONAL alignment_summary_metrics.tsv
 # OUTPUT OPTIONAL insert_size_metrics.tsv
 # OUTPUT OPTIONAL reports.pdf
+# RUNTIME R-4.4.3-phyloseq
 
 # 2015.09.09 AMS
 

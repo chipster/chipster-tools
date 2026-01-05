@@ -9,6 +9,7 @@
 # PARAMETER OPTIONAL trimq: "Threshold for quality trimming" TYPE DECIMAL DEFAULT 10 (Regions with base quality below this Phred score will be trimmed, if quality trimming is selected. Can be a floating-point number like 7.3.)
 # PARAMETER OPTIONAL minlength: "Minimum length for reads to be kept after trimming" TYPE INTEGER DEFAULT 20 (Reads shorter than this after trimming will be discarded.)
 # PARAMETER OPTIONAL log: "Produce log file" TYPE [yes,no] DEFAULT no (Produce log file.)
+# RUNTIME R-4.5.1
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
