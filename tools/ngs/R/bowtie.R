@@ -10,7 +10,6 @@
 # PARAMETER limit.to.seed: "Consider mismatches only in the seed region" TYPE [yes, no] DEFAULT no (Should the mismatch limit be applied only to the left, good quality part of the read? You can define the length of this seed region with the next parameter.)
 # PARAMETER seed: "Length of the seed region" TYPE INTEGER FROM 5 TO 50 DEFAULT 28 (If you have chosen to apply the mismatch limit only to the left, good quality part of the read, how many bases should be considered? The minimum length of seed region is 5.)
 # PARAMETER quality: "Allowed total of mismatch qualities" TYPE INTEGER FROM 10 TO 100 DEFAULT 70 (What is the maximum permitted total of quality values of ALL mismatch positions throughout the read (not just in the seed region\)? Note that this parameter is taken into account only if you have chosen to apply the mismatch limit to the seed region.)
-# PARAMETER quality.format: "Quality value format used" TYPE [solexa1_3: "Illumina GA v1.3-1.5", sanger: Sanger] DEFAULT sanger (Note that this parameter is taken into account only if you chose to apply the mismatch limit to the seed region. Are the quality values in the Sanger format (ASCII characters equal to the Phred quality plus 33\) or in the Illumina Genome Analyzer Pipeline v1.3 or later format (ASCII characters equal to the Phred quality plus 64\)? Please see the manual for details.)
 # PARAMETER OPTIONAL multiread: "How many best category hits is the read allowed to have" TYPE [1, 2, 1000000: "no limit"] DEFAULT 1000000 (If you select 1, only those reads which have a unique best category hit will be reported. Note that the read can still have other, lower category hits even if they are not reported. The hit categories are based on the number of mismatches.)
 # PARAMETER OPTIONAL alignment.no: "How many valid alignments are reported per read" TYPE [1, 2, 3] DEFAULT 1 (If there are several, equally good alignments, how many should be reported?)
 # PARAMETER OPTIONAL multiread.file: "Put multireads to a separate file" TYPE [yes, no] DEFAULT no (If you chose not to have alignments for reads which map to multiple positions, would you like to store these reads to a separate fastq file?)
@@ -40,8 +39,7 @@ command.start <- paste("bash -c '", bowtie.binary)
 common.parameters <- paste("-q --best -S --strata", "-m", multiread, "-k", alignment.no, "-p", chipster.threads.max)
 
 # mode specific parameters
-quality.parameter <- ifelse(quality.format == "solexa1_3", "--solexa1.3-quals", "")
-n.mode.parameters <- paste("-n", max.mismatches, "-l", seed, "-e", quality, quality.parameter)
+n.mode.parameters <- paste("-n", max.mismatches, "-l", seed, "-e", quality)
 v.mode.parameters <- paste("-v", max.mismatches)
 mode.parameters <- ifelse(limit.to.seed == "yes", n.mode.parameters, v.mode.parameters)
 
@@ -54,7 +52,7 @@ output.parameters <- paste(unaligned.output, multiread.output)
 command.end <- paste("-x", bowtie.index, "reads.txt 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
-bowtie.command <- paste(command.start, common.parameters, quality.parameter, mode.parameters, output.parameters, command.end)
+bowtie.command <- paste(command.start, common.parameters, mode.parameters, output.parameters, command.end)
 # stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal(bowtie.command)
 
