@@ -25,16 +25,13 @@ This tool can be used either for single or paired end reads.
 <p>
 This tool takes a tar package of FASTQ files. The FASTQ files in the tar package can be compressed.
 <br>
-If the reads are paired end, you need to be carefull that the FASTQ files/pairs are assigned correctly to samples.
+If the reads are paired end, you need to be careful that the FASTQ files/pairs are assigned correctly to samples.
 <br> Note that the dada() function doesn't allow any Ns bases in the FASTQ files. Therefore it's recommend to remove the Ns
-and filter the reads with the tool "Filter sequences with DADA2" before and use the output tar package as the input for this tool. 
-<br> That way also the names of the FASTQ file/sample pairs are handled correctly.
+and filter the reads with the tool "Filter and trim sequences with DADA2" before and use the output tar package as the input for this tool. 
+<br> That way also the names of the FASTQ file/sample pairs are handled correctly. For more information, please check the manual of the tool "Filter and trim sequences with DADA2".
 <br>
 Otherwise the samples will be recognized based on the names of the files by splitting the filename with the underscore mark '_' 
 and the reverse and forward files should have the same sample names but different tags like ('R1' and 'R2').
-<br>
-For more information, please check the manual of the tool "Filter sequences with DADA2".
-<br>
 <br>
 You need to specify if the reads are paired end, IonTorrent or other types of single end reads, because for IonTorrent data
 different settings for the dada() function should be used. 
@@ -43,16 +40,17 @@ different settings for the dada() function should be used.
 First, the learnErrors() function is run for the both forward and reverse files independently. 
 If the reads are single end, then the learnErrors() is run only for forward reads. Error rates are learned by alternating
 between sample inferences and error rate estimation until convergence.<br>
-Error rate estimation is performed with the error estimation function lossErrfun() which use a loess fit to estimate error rates from
+Error rate estimation is performed with the error estimation function loessErrfun() which use a loess fit to estimate error rates from
 transition counts.
 <br>
-<br> If the parameter "visualize error rates" is selected to "yes", then the error rates are visualized with plotErrors() function.<br>
+<br> 
+If the parameter "visualize error rates" is selected to "yes", the error rates are visualized with plotErrors() function.<br>
 Then all the observed frequencies of each transition (eg. A->C, A->G..) in a log(10) scale as a function of the associated quality score 
 are being plotted. 
 <br> The observed error rates for each consensus quality score are plotted as points, the estimated output error rates
 as a black solid line and the expected error rates if quality scores matched exactly their nominal definition  Q = -10 log10(p_err),
 as a red line. <br>
-For more information check the DADA2 manual and learnErrors() and lossErrfun() functions.
+For more information, please check the DADA2 manual and the learnErrors() and loessErrfun() functions.
 <br> 
 Note that the learnErrors() function can take quite long. 
 <br>
@@ -84,10 +82,10 @@ by default.
 <br> or <a href="https://benjjneb.github.io/dada2/pseudo.html#pseudo-pooling">pseudo-pooling</a>
 <br>
 <br>
-If the parameter pooling is set to pseudo, dada() uses a 2 step process in which the independent processing is run twice. 
+If the parameter pooling is set to pseudo, dada() uses a two-step process in which the independent processing is run twice. 
 <br> First on the raw data alone, and then on the raw data again, but this time informed by priors generated from the first run.
 <br> All ASVs detected in at least two samples in the first sample processing step are input as priors to the second step.
-<br> Pseudo-pooling takes longer (approximately 2 times longer than independent processing) but with that more ASVs are observed per 
+<br> Pseudo-pooling takes longer (approximately twice as long as independent processing) but with that more ASVs are observed per 
 sample and more chimeras are being identified. 
 <br>
 Pseudo-pooling approximates pooling in linear time. 
@@ -105,9 +103,9 @@ This tool is based on the learnErrors() and dada() functions from the DADA2 R-pa
 The analysis output consists of the following:
 <ul>
     <li>dada_forward.Rda: list of dada-class objects produced with dada() function from forwards FASTQ files </li>
-    <li>dada_reverse.Rda: list of dada-class objects produced with dada() function from reverse FASTQ files. Optional, only if paired end data</li>
+    <li>dada_reverse.Rda: list of dada-class objects produced with dada() function from reverse FASTQ files</li>
     <li>summary.txt: summary file based on the data produced by learnErrors() and dada()</li>
-    <li>plotErrors.pdf: Optional, if the parameter is set to yes, plots the error rates from forward and reverse reads to a .pdf file</li>
+    <li>plotErrors.pdf: Optional, if the parameter is set to yes, plots the error rates from forward and reverse reads to a pdf file</li>
 </ul>
 </p>
 
