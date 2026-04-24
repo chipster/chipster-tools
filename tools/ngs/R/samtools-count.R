@@ -2,11 +2,12 @@
 # INPUT alignment.bam TYPE GENERIC
 # OUTPUT alignment-counts.txt
 # PARAMETER OPTIONAL mapping.quality: "Minimum mapping quality required for counting" TYPE INTEGER FROM 0 TO 1000 DEFAULT 0 (Counts only alignments which have a mapping quality higher than this.)
-# RUNTIME R-4.5.1
+# RUNTIME R-4.5.1-samtools
+# TOOLS_BIN ""
 
 # EK 26.10.2011
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path("/opt/chipster/tools", "samtools", "bin", "samtools"))
 
 system(paste(samtools.binary, "view -bc -q", mapping.quality, "alignment.bam > alignment-counts.txt"))

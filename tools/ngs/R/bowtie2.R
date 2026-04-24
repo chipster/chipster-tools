@@ -1,5 +1,5 @@
 # TOOL bowtie2.R: "Bowtie2 for single end reads" (This tool uses Bowtie2 to align single-end reads to a publicly available reference genome. Single-end reads can either be in FASTA or FASTQ format.)
-# INPUT reads{...}.fq: "Reads to align" TYPE GENERIC
+# INPUT reads{...}.fq: "Reads to align" TYPE FASTQ
 # OUTPUT bowtie2.bam
 # OUTPUT bowtie2.log
 # OUTPUT OPTIONAL bowtie2.bam.bai
@@ -66,13 +66,13 @@ if (unaligned.file == "yes") {
 }
 
 # Check if reads are in FASTA forma
-emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
-sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
-sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads001.fq")
-str.filetype <- system(sfcheck.command, intern = TRUE)
-if (str.filetype == "fasta") {
-  parameters <- paste(parameters, "-f")
-}
+# emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
+# sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
+# sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads001.fq")
+# str.filetype <- system(sfcheck.command, intern = TRUE)
+# if (str.filetype == "fasta") {
+#  parameters <- paste(parameters, "-f")
+# }
 
 # Input fastq names
 reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")

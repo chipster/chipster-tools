@@ -2,6 +2,7 @@
 # INPUT reads: "FASTQ/FASTA file" TYPE GENERIC
 # OUTPUT OPTIONAL tag.predict.tsv
 # PARAMETER input.type: "Input type" TYPE [FASTQ, FASTA] DEFAULT FASTQ (Input type.)
+# RUNTIME R-4.5.1
 
 # AMS 2013.02.18
 

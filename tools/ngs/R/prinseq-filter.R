@@ -36,8 +36,8 @@
 # PARAMETER OPTIONAL log.file: "Write a log file" TYPE [ n: "no", y: "yes"] DEFAULT y (Write a log file)
 # PARAMETER OPTIONAL output.mode: "Results to write out" TYPE [ filt: "accepted sequences only", both: "accepted and rejected sequences into separate files"] DEFAULT filt (With this section you can define if the sequences that get filtered out are collected to a separate file)
 # PARAMETER OPTIONAL singletons: "Write singletons for paired end reads" TYPE [yes, no] DEFAULT no (Write singletons in separate files for paired end reads.)
+# RUNTIME R-4.5.1
 
-# Filter fastq and fasta files based on a number of criteria
 # KM, EK, 16-04-2012
 # MG, 18-04-2012, added matepair functionality
 # KM, 22-05-2012, fixed fastq checking

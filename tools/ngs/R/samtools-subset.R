@@ -3,15 +3,16 @@
 # INPUT alignment.bai: "Index file .bai" TYPE GENERIC
 # OUTPUT alignment-subset.bam
 # OUTPUT alignment-subset.bam.bai
-# PARAMETER region: "Region to retrieve alignments for" TYPE STRING DEFAULT chr1 (The genomic region for which you would like to retrieve the alignments for.)
+# PARAMETER region: "Region to retrieve alignments for" TYPE STRING DEFAULT 1 (The genomic region for which you would like to retrieve the alignments for. Please see the manual page for details.)
 # PARAMETER OPTIONAL mapping.quality: "Minimum mapping quality" TYPE INTEGER FROM 0 TO 1000 DEFAULT 0 (Retrieves only alignments which have a mapping quality higher than this. Note that Bowtie doesn't calculate mapping quality, but just inserts 255 to the field 5 of BAM file if the read aligns, and 0 if it doesn't align.)
-# RUNTIME R-4.5.1
+# RUNTIME R-4.5.1-samtools
+# TOOLS_BIN ""
 
 # EK 26.10.2011
 # AMS 24.9.2014: added indexing to the result file
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path("/opt/chipster/tools", "samtools", "bin", "samtools"))
 
 system(paste(samtools.binary, "view -b -q", mapping.quality, "-o alignment-subset.bam alignment.bam", region))
 

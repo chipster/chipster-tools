@@ -1,12 +1,13 @@
 # TOOL samtools-index.R: "Index BAM" (Creates an index for a BAM file. This tool is based on the SAMtools package.)
 # INPUT alignment.bam TYPE GENERIC
 # OUTPUT alignment.bam.bai
-# RUNTIME R-4.5.1
+# RUNTIME R-4.5.1-samtools
+# TOOLS_BIN ""
 
 # EK 30.10.2011
 
 # samtools binary
-samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
+samtools.binary <- c(file.path("/opt/chipster/tools", "samtools", "bin", "samtools"))
 
 system(paste(samtools.binary, "index alignment.bam > alignment.bam.bai"))
 

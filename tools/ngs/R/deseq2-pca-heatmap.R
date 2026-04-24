@@ -5,6 +5,7 @@
 # PARAMETER column: "Phenodata column for coloring samples in PCA plot" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column by which the samples will be colored in the PCA plot.)
 # PARAMETER OPTIONAL second.column: "Phenodata column for the shape of samples in PCA plot" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata column by which the samples will be shaped in the PCA plot.)
 # PARAMETER OPTIONAL show.names: "Show sample names in PCA plot" TYPE [yes, no] DEFAULT yes (You can add sample names to the PCA plot from the description column of the phenodata file. In more complex cases this may make the plot too cluttered.)
+# RUNTIME R-4.4.3-phyloseq
 
 # EK 3.2.2015
 # AMS 22.4.2015 Added option for sample names in plot
