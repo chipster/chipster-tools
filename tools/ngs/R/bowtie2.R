@@ -78,7 +78,7 @@ if (str.filetype == "fasta") {
 reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")
 
 # command ending
-command.end <- paste("-x", bowtie.genome, "-U", reads1, "1> alignment.sam 2>> bowtie2.log'")
+command.end <- paste("-x", bowtie.genome, "-U", reads1, "1> alignment.sam'")
 
 # run bowtie
 bowtie.command <- paste(command.start, parameters, command.end)
