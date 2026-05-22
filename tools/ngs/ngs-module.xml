@@ -305,8 +305,6 @@
 
 	<category name="Spatially resolved transcriptomics (Seurat v5, new)" color="#37dddd">	
 		<tool>spatial-transcriptomics-seurat-setup-v5.R</tool>
-		<tool>spatial-transcriptomics-seurat-setup-v5-HD.R</tool>
-		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R</tool>	
 		<tool>spatial-transcriptomics-seurat-filter-v5.R</tool>		
 		<tool>spatial-transcriptomics-seurat-top-expressed-genes-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5.R</tool>	
@@ -320,6 +318,14 @@
 		<tool>spatial-transcriptomics-seurat-integrated-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-visualise-integration-v5.R</tool>
 		<tool>single-cell-extract-information-v5.R</tool>
+	</category>
+
+	<category name="Spatially resolved transcriptomics (Seurat v5, HD new)" color="#37a6dd">	
+		<tool>spatial-transcriptomics-seurat-setup-v5-HD.R</tool>
+		<tool>spatial-transcriptomics-seurat-filter-v5-HD.R</tool>
+		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R</tool>
+		<tool>spatial-transcriptomics-seurat-clustering-v5-HD.R</tool>	
+		<tool>spatial-transcriptomics-seurat-clustering-plots-v5-HD.R</tool>
 	</category>
 
 	<category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">

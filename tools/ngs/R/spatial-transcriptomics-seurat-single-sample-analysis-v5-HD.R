@@ -11,9 +11,8 @@
 # SLOTS 3
 # TOOLS_BIN ""
 
-# 2022-07-27 IH
-# 2022-10-20 ML Add UMAP plot with sample names
-# 2024-03-21 EP Update to Seurat v5 (and add SCTransform to this tool)
+
+# 2026-02 ML
 
 library(Seurat)
 library(dplyr)
@@ -34,24 +33,34 @@ load("seurat_object.Robj")
 # bin_sizes <- as.numeric(trimws(unlist(strsplit(bin_sizes, ","))))
 # print(bin_sizes)
 
-# NEEDS THE LOOP STILL.
-assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
-DefaultAssay(seurat_obj) <- assay_names[1] # "Spatial.008um"
-assay_bin <- assay_names[1]
-nCount_bin <- paste("nCount_",assay_names[1], sep="")
-nFeature_bin <- paste("nFeature_",assay_names[1], sep="")
-just.bin <- sub("Spatial\\.", "", assay_names[1])
-pca_bin <- paste("pca.", just.bin, sep="")
+# Loop through the different bins = different assays (usually 008um and 016um)
 
-# SCTransform normalizes the data, detects high-variance features, and stores the data in the SCT assay.
-# "--we generally don't recommend using sctransform on spatial data, instead you can run through the older version of normalization, scaling, and find variable features."
-# https://github.com/satijalab/seurat/issues/9456
-# seurat_obj <- SCTransform(seurat_obj, assay = assay_bin, variable.features.n = num.features, verbose = FALSE)
-seurat_obj <- NormalizeData(seurat_obj)
-seurat_obj <- FindVariableFeatures(seurat_obj)
-seurat_obj <- ScaleData(seurat_obj)
-seurat_obj <- RunPCA(seurat_obj, reduction.name = pca_bin, npcs = PCstocompute, verbose = FALSE )
-# seurat_obj <- RunPCA(seurat_obj, assay = "SCT", npcs = PCstocompute, verbose = FALSE)
+assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
+
+# Open pdf for plotting:
+pdf(file = "PCAplots.pdf", , width = 9, height = 12)
+
+for (i in 1:length(assay_names)) {
+  
+    DefaultAssay(seurat_obj) <- assay_names[i] # "Spatial.008um"
+    assay_bin <- assay_names[i]
+    nCount_bin <- paste("nCount_",assay_names[i], sep="")
+    nFeature_bin <- paste("nFeature_",assay_names[i], sep="")
+    just.bin <- sub("Spatial\\.", "", assay_names[i])
+    pca_bin <- paste("pca.", just.bin, sep="")
+
+    # SCTransform normalizes the data, detects high-variance features, and stores the data in the SCT assay.
+    # " --we generally don't recommend using sctransform on spatial data, 
+    # instead you can run through the older version of normalization, scaling, and find variable features."
+    # https://github.com/satijalab/seurat/issues/9456
+
+    # seurat_obj <- SCTransform(seurat_obj, assay = assay_bin, variable.features.n = num.features, verbose = FALSE)
+    # seurat_obj <- RunPCA(seurat_obj, assay = "SCT", npcs = PCstocompute, verbose = FALSE)
+
+    seurat_obj <- NormalizeData(seurat_obj)
+    seurat_obj <- FindVariableFeatures(seurat_obj)
+    seurat_obj <- ScaleData(seurat_obj)
+    seurat_obj <- RunPCA(seurat_obj, reduction.name = pca_bin, npcs = PCstocompute, verbose = FALSE )
 
 # The following makes sure that all "umi.assay" slots are called "Spatial" after SCTransform
 # This is not an issue with one sample. It is an issue, when using this tool after subsetting out anatomical 
@@ -70,19 +79,22 @@ seurat_obj <- RunPCA(seurat_obj, reduction.name = pca_bin, npcs = PCstocompute, 
 # You can use this to check that all "umi.assay" slots are called "Spatial"
 # print(SCTResults(object=seurat_obj, slot="umi.assay"))
 
+    # PCA genes in txt file
+    if (loadings == TRUE) {
+        sink("PCAloadings.txt")
+        print(seurat_obj[[pca_bin]], dims = 1:PCstocompute, nfeatures = num.of.genes.loadings)
+        sink()
+    }
 
-# PCA genes in txt file
-if (loadings == TRUE) {
-    sink("PCAloadings.txt")
-    print(seurat_obj[["pca"]], dims = 1:PCstocompute, nfeatures = num.of.genes.loadings)
-    sink()
-}
+    # # PDF plots
+    
+    print(ElbowPlot(seurat_obj, ndims = PCstocompute, reduction = pca_bin) + ggtitle("Amount of variation in the data explained by each PC"))
 
-# PDF plots
-pdf(file = "PCAplots.pdf", , width = 9, height = 12)
-ElbowPlot(seurat_obj, ndims = PCstocompute) + ggtitle("Amount of variation in the data explained by each PC")
-VizDimLoadings(seurat_obj, dims = 1:1, reduction = pca_bin) + ggtitle("Top 30 genes associated with PC 1")
-VizDimLoadings(seurat_obj, dims = 2:2, reduction = pca_bin) + ggtitle("Top 30 genes associated with PC 2")
+    print(VizDimLoadings(seurat_obj, dims = 1:1, reduction = pca_bin) + ggtitle("Top 30 genes associated with PC 1"))
+    print(VizDimLoadings(seurat_obj, dims = 2:2, reduction = pca_bin) + ggtitle("Top 30 genes associated with PC 2"))
+
+} # end looping for bins = assays
+
 dev.off() # close the pdf
 
 # Save the Robj for the next tool
