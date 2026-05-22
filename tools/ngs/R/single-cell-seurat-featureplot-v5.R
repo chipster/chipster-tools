@@ -26,6 +26,8 @@ if (exists("data.combined")) {
     seurat_obj <- data.combined
 }
 
+add.labels <- as.logical(add.labels)
+
 # Plot tSNE
 pdf(file = "UMAPplot.pdf")
 FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label = add.labels, order = as.logical(plotting.order.used))
