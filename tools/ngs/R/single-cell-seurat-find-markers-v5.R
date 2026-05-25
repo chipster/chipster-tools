@@ -27,7 +27,8 @@
 # PARAMETER OPTIONAL test.type: "Which test to use for detecting marker genes" TYPE [wilcox, DESeq2, MAST, bimod, roc, t, tobit, poisson, negbinom] DEFAULT wilcox (Seurat currently implements Wilcoxon rank sum test, bimod \(likelihood-ratio test for single cell gene expression\), roc \(standard AUC classifier\), Students t-test, Tobit-test, MAST \(GLM-framework that treates cellular detection rate as a covariate\), poisson, negbinom and DESeq2. The latter three should be used on UMI datasets only, and assume an underlying poisson or negative-binomial distribution. Note that DESeq2 is very slow and should be used only for comparisons between two clusters.)
 # 2023-02-03 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
-# 2023-10-31 IH Update to Seurat 5
+# 2023-10-31 IH Update to Seurat 5 
+# 2026-05-25 JV Add MAST test as an option in test.type parameter
 
 # PARAMETER OPTIONAL mincellsfeat: "Minimum number of cells expressing the feature" TYPE INTEGER DEFAULT 3 (Minimum number of cells expressing the feature in at least one of the two groups, currently only used for poisson and negative binomial tests.)
 # PARAMETER OPTIONAL mincellsgroup: "Minimum number of cells" TYPE INTEGER DEFAULT 3 (Minimum number of cells in one of the groups.)
