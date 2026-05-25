@@ -11,6 +11,7 @@
 # PARAMETER OPTIONAL reduction.method: "Feature plot visualisation with tSNE, UMAP or PCA" TYPE [umap:UMAP, tsne:tSNE, pca:PCA] DEFAULT umap (Which dimensionality reduction plot to use.)
 # PARAMETER OPTIONAL point.size: "Point size in feature plot" TYPE DECIMAL DEFAULT 1 (Point size in the UMAP, tSNE or PCA feature plot.)
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in feature plot" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Add cluster numbers on top of clusters in the feature plot.)
+# PARAMETER OPTIONAL label.size: "Choose the size for labels" TYPE DECIMAL FROM 0 TO 20 DEFAULT 5 (Size of the labels in the UMAP plot. Only applies if "add labels on top of clusters in feature plot" = yes)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression in feature plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression in the feature plot. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # PARAMETER OPTIONAL color.scale: "Determine color scale based on all features in feature plot" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale in the feature plot is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes. If you wish to compare gene expression between different genes, it is useful to set this parameter to "yes" so that the color scale is the same for all genes.)
 # PARAMETER OPTIONAL output_aver_expr: "For each gene, list the average expression and percentage of cells expressing it in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns two tables: average expression and percentage of cells expressing the user defined genes in each cluster.)
@@ -26,6 +27,7 @@
 # 2020-06-18 ML Add ridge plot
 # 2021-10-04 ML Update to Seurat v4
 # 2023-10-25 IH remove python usage and update to Seurat v5
+# 2026-05-25 JV Add label.size parameter and fix add.labels = TRUE in FeaturePlot
 
 # UMAP uses R on default now
 #library(reticulate)
@@ -90,7 +92,12 @@ pdf(file = "biomarker_plot.pdf", width = 12, height = 12)
 VlnPlot(seurat_obj, features = biomarker)
 
 # Feature plot:
-FeaturePlot(seurat_obj, features = biomarker, pt.size = point.size, reduction = reduction.method, label = add.labels, order = as.logical(plotting.order.used), keep.scale=color.scale)
+
+#Make add.labels logical for the FeaturePlot function:
+
+add.labels <- as.logical(add.labels)
+
+FeaturePlot(seurat_obj, features = biomarker, pt.size = point.size, reduction = reduction.method, label.size = label.size, label = add.labels, order = as.logical(plotting.order.used), keep.scale=color.scale)
 
 # Ridge plot:
 RidgePlot(seurat_obj, features = biomarker, ncol = 2)
