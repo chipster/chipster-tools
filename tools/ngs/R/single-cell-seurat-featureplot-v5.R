@@ -14,7 +14,8 @@
 # 09.09.2019 ML remove optins for orig.ident, PC1, PC2
 # 2021-10-04 ML Update to Seurat v4
 # 2023-10-25 IH Update to Seurat v5
-# 2026-05-22 JV Added "percent.rb" as a feature_to_plot
+# 2026-05-22 JV Added "percent.rb" as a feature to feature_to_plot
+# 2026-05-25 JV Fixed label = TRUE in FeaturePlot
 
 library(Seurat)
 library(gplots)
@@ -27,7 +28,9 @@ if (exists("data.combined")) {
     seurat_obj <- data.combined
 }
 
-# Plot tSNE
+add.labels <- as.logical(add.labels)
+
+# Plot UMAP
 pdf(file = "UMAPplot.pdf")
 FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label = add.labels, order = as.logical(plotting.order.used))
 dev.off() # close the pdf
