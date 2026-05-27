@@ -4,7 +4,7 @@
 # PARAMETER OPTIONAL feature_to_plot: "Feature" TYPE [percent.mt, nCount_RNA, nFeature_RNA, percent.rb] DEFAULT percent.mt (Denotes which feature to use for coloring the cells.)
 # PARAMETER OPTIONAL point.size: "Point size in UMAP plot" TYPE DECIMAL DEFAULT 1 (Point size for UMAP plot. )
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plot" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Add cluster number on top of the cluster in UMAP plot.)
-# PARAMETER OPTIONAL label.size: "Choose the size for labels" TYPE DECIMAL FROM 0 TO 20 DEFAULT 5 (Size of the labels in the UMAP plot.)
+# PARAMETER OPTIONAL label.size: "Choose the size for labels" TYPE DECIMAL FROM 0 TO 20 DEFAULT 5 (Size of the labels in the UMAP plot. Only applies if "Add labels on top of clusters in plot" = yes)
 # PARAMETER OPTIONAL plotting.order.used: "Plotting order of cells based on expression" TYPE [TRUE:yes, FALSE:no] DEFAULT FALSE (Plot cells in the the order of expression. Can be useful to turn this on if cells expressing given feature are getting buried.)
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
