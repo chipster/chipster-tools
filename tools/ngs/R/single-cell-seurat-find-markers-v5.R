@@ -87,4 +87,5 @@ if (find.all.markers == TRUE) {
 # Save the Robj for the next tool -not necessary here
 # save(seurat_obj, file = "seurat_obj_markers.Robj")
 
+
 # EOF
