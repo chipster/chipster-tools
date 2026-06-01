@@ -11,6 +11,7 @@
 
 # 2022-08-05 IH
 # 2022-10-20 ML Add moransi option
+# 2026-06-01 JV Fix moransi option 
 
 library(Seurat)
 library(ggplot2)
@@ -23,6 +24,9 @@ documentVersion("Seurat", package.version("Seurat"))
 
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj_integrated.Robj")
+
+#Check which assays even exist in the object
+print(Assays(seurat_obj))
 
 DefaultAssay(seurat_obj) <- "predictions"
 
