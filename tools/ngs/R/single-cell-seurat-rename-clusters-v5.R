@@ -11,6 +11,7 @@
 
 # 2021-12-27 ML
 # 2023-12-15 IH
+# 2026-04-06 JV
 
 celltypes <- trimws(strsplit(celltypes, ",")[[1]])
 
@@ -105,10 +106,11 @@ missing <- setdiff(
   rownames(seurat_obj)
 )
 
-#if (!is.null(missing)) {
-#  message(missing)
-#  stop("CHIPSTER-NOTE: Some genes are missing")
-#}
+if (length(missing) > 0) {
+  message("These genes are missing, please remove them:")
+  message(paste0(missing, collapse = ", "))
+  stop("CHIPSTER-NOTE: Some genes are missing")
+}
 
 #Printtaa puuttuvat geenit, jos ei ole niin ota pois
 print(missing)
@@ -122,13 +124,17 @@ old_names
 
 score_mat <- seurat_obj@meta.data[, old_names]
 
-#ChatGPT code
-max_score <- apply(score_mat, 1, function(x) max(x))
+
 #Get the max score for each cell (needed later because if its under 0 apparently, then its not the correct cell type???)
-#GPT ends here
+max_score <- apply(score_mat, 1, function(x) max(x))
+
 
 #This line of code from https://stackoverflow.com/questions/17735859/for-each-row-return-the-column-name-of-the-largest-value
 best_type <- colnames(score_mat)[apply(score_mat,1,which.max)]
+
+#Remove the last number of cell type names created by AddModuleScore, e.g., "NK1" -> "NK"
+best_type <- stringr::str_sub(best_type, start = 1, end = -2) 
+
 
 
 #Check if the addmodulescore is over 0 if so, then label with the highest score ("The most correct cell type"), and if its under 0, then unknown cell type
