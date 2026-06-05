@@ -12,11 +12,12 @@
 # 2021-12-27 ML
 # 2023-12-15 IH
 # 2026-04-06 JV
-
+# EI MASTERIIN; KOSKA VÄÄRÄ RUNTIME (UCELL ASENNETTU)
 celltypes <- trimws(strsplit(celltypes, ",")[[1]])
 
 genes <- trimws(strsplit(genesets, ",")[[1]])
 
+library(UCell)
 library(Seurat)
 library(dplyr)
 library(Matrix)
@@ -99,6 +100,7 @@ markers
 #Geeni pitää löytyä rivinimistä, muuten ei pysty laskemaan modulescorea -> Error
 
 
+
 #Setdiff etsii ne alkiot, jotka ovat x:ssa mutteivat y:ssa
 #Eli mitkä on markereissa ja mitkä eivät löydy sitten itse scRNA datasta
 missing <- setdiff(
@@ -115,12 +117,12 @@ if (length(missing) > 0) {
 #Printtaa puuttuvat geenit, jos ei ole niin ota pois
 print(missing)
 
-seurat_obj <- AddModuleScore(seurat_obj, features = markers, name = names(markers))
+seurat_obj <- AddModuleScore_UCell(seurat_obj, features = markers)
 
 #Get the AddModuleScore -made columns:
 
-old_names <- paste0(names(markers), seq_along(markers))
-old_names
+old_names <- paste0(names(markers), "_UCell")
+message(old_names)
 
 score_mat <- seurat_obj@meta.data[, old_names]
 
@@ -148,6 +150,7 @@ dev.off()
 
 }
 
+#Compare performance against SingeR at some point
 
 ##Plot with renamed clusters:
 #pdf(file = "clusterPlotRenamed.pdf")
