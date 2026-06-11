@@ -1,7 +1,10 @@
 # TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to annotate clusters using ScType)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL DimPlot.pdf
-# PARAMETER tissuetype: "Tissue type" TYPE [Lung: "Lung", "Immune system": "Immune system"] DEFAULT "Immune system"  (Which CellDex reference to use for annotations.)
+# PARAMETER tissuetype: "Tissue type" TYPE ["Immune system": "Immune system", Pancreas: "Pancreas", Liver: "Liver", Eye: "Eye", Kidney: "Kidney", Brain: "Brain", Lung: "Lung", Adrenal: "Adrenal", Heart: "Heart", Intestine: "Intestine", Muscle: "Muscle", Placenta: "Placenta", Spleen: "Spleen", Stomach: "Stomach", Thymus: "Thymus", Hippocampus: "Hippocampus"] DEFAULT "Immune system" (Choose the tissue type of your study)
+# PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size in the output plots.)
+# PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
+# PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # RUNTIME R-4.5.1-seurat5
 # TOOLS_BIN ""
 
@@ -17,9 +20,7 @@ library("igraph")
 library("tidyverse")
 library("data.tree")
 
-# PARAMETER tissuetype: "Tissue type of seurat object" TYPE [Immune System: "Immune system"] DEFAULT Lung (Choose the tissue type of your study)
 
-#tissuetype <- as.character(tissuetype)
 
 load("seurat_obj.Robj")
 
@@ -27,7 +28,7 @@ if (exists("data.combined")) {
   seurat_obj <- data.combined
 }
 
-#The following functions are from https://github.com/IanevskiAleksandr/sc-type
+#The following functions are from https://github.com/IanevskiAleksandr/sc-type and R folder
 
 gene_sets_prepare <- function(path_to_db_file, cell_type){
   
@@ -297,6 +298,10 @@ nodes <- rbind(nodes_lvl1, nodes_lvl2); nodes$ncells[nodes$ncells<1] = 1;
 files_db <- openxlsx::read.xlsx(db_)[,c("cellName","shortName")]; files_db = unique(files_db); nodes = merge(nodes, files_db, all.x = T, all.y = F, by.x = "realname", by.y = "cellName", sort = F)
 nodes$shortName[is.na(nodes$shortName)] = nodes$realname[is.na(nodes$shortName)]; nodes = nodes[,c("cluster", "ncells", "Colour", "ord", "shortName", "realname")]
 
+
+if (any(duplicated(nodes$cluster)) == FALSE) {
+
+print("IFFI")
 mygraph <- graph_from_data_frame(edges, vertices=nodes)
 
 # Make the graph
@@ -305,17 +310,35 @@ gggr <- ggraph(mygraph, layout = 'circlepack', weight=I(ncells)) +
   theme_void() + geom_node_text(aes(filter=ord==2, label=shortName, colour=I("#ffffff"), fill="white", repel = !1, parse = T, size = I(log(ncells,25)*1.5)))+ geom_node_label(aes(filter=ord==1,  label=shortName, colour=I("#000000"), size = I(3), fill="white", parse = T), repel = !0, segment.linetype="dotted")
 
 
-pdf(file = "DimPlot.pdf")
 
-DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, group.by = 'sctype_classification') 
-DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, group.by = 'sctype_classification') 
-DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, cols = ccolss)
-print(gggr)
-DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, cols = ccolss)+gggr+DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, group.by = 'sctype_classification') 
-DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, group.by = 'sctype_classification') + gggr
+pdf(file = "DimPlot.pdf", width = width, height = height)
 
 
+p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') 
+p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification') 
+p3 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)
+p4 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)+ gggr+ DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') 
+p5 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') + gggr
+
+print(p1)
+print(p2)
+print(p3)
+print(p4)
+print(p5)
 
 dev.off()
+
+} else {
+
+  pdf(file = "DimPlot.pdf", width = width, height = height)
+
+  print("ELSE")
+  p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') 
+  p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification') 
+
+  print(p1)
+  print(p2)
+  dev.off()
+}
 
 # EOF
