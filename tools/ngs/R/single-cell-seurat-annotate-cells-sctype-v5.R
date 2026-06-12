@@ -1,16 +1,16 @@
-# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to annotate clusters using ScType)
+# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to annotate clusters using ScType. This tool outputs UMAPs.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL DimPlot.pdf
-# PARAMETER tissuetype: "Tissue type" TYPE ["Immune system": "Immune system", Pancreas: "Pancreas", Liver: "Liver", Eye: "Eye", Kidney: "Kidney", Brain: "Brain", Lung: "Lung", Adrenal: "Adrenal", Heart: "Heart", Intestine: "Intestine", Muscle: "Muscle", Placenta: "Placenta", Spleen: "Spleen", Stomach: "Stomach", Thymus: "Thymus", Hippocampus: "Hippocampus"] DEFAULT "Immune system" (Choose the tissue type of your study)
-# PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size in the output plots.)
+# OUTPUT OPTIONAL Plots.pdf
+# PARAMETER OPTIONAL tissuetype: "Tissue type" TYPE ["Auto": "Auto", "Immune system": "Immune system", "Pancreas": "Pancreas", "Liver": "Liver", "Eye": "Eye", "Kidney": "Kidney", "Brain": "Brain", "Lung": "Lung", "Adrenal": "Adrenal", "Heart": "Heart", "Intestine": "Intestine", "Muscle": "Muscle", "Placenta": "Placenta", "Spleen": "Spleen", "Stomach": "Stomach", "Thymus": "Thymus", "Hippocampus": "Hippocampus"] DEFAULT "Auto" (Choose the tissue type of your data)
+# PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # RUNTIME R-4.5.1-seurat5
 # TOOLS_BIN ""
 
+# JV 2026-12-06
 
-
-#Load needed packages
+# Load needed packages
 library("Seurat")
 library("dplyr")
 library("HGNChelper")
@@ -28,7 +28,7 @@ if (exists("data.combined")) {
   seurat_obj <- data.combined
 }
 
-#The following functions are from https://github.com/IanevskiAleksandr/sc-type and R folder
+# The following functions are from https://github.com/IanevskiAleksandr/sc-type and R folder
 
 gene_sets_prepare <- function(path_to_db_file, cell_type){
   
@@ -77,7 +77,7 @@ gene_sets_prepare <- function(path_to_db_file, cell_type){
 
 
 
-#Actual score calculation
+# Actual score calculation
 sctype_score <- function(scRNAseqData, scaled = !0, gs, gs2 = NULL, gene_names_to_uppercase = !0, ...){
   
   # check input matrix
@@ -180,7 +180,7 @@ run_sctype <- function(seurat_object, known_tissue_type = NULL, assay = "RNA", s
                           scaled = TRUE,gs = gs_list$gs_positive, 
                           gs2 = gs_list$gs_negative)   
     
-  } else{
+  } else {
     
     print("Using Seurat v5 object")
     
@@ -228,13 +228,75 @@ sctype_source <- function(){
 
 
 
+# load auto-detection function
+
+auto_detect_tissue_type <- function(path_to_db_file, seuratObject, scaled, assay = "RNA", ...){
+  
+  # get all tissue types in DB
+  db_read = openxlsx::read.xlsx(path_to_db_file); tissues_ = unique(db_read$tissueType); result_ = c()
+  
+  for(tissue in tissues_){ print(paste0("Checking...", tissue));
+    
+    # prepare gene sets
+    gs_list = gene_sets_prepare(path_to_db_file, tissue);
+    
+    # check Seurat version
+    package_type <- substr(packageVersion("Seurat"), 1, 1)
+    data_type <- if (scaled) "scale.data" else "counts"
+    obj <- if (package_type == "5") {
+      as.matrix(seuratObject[[assay]][data_type])
+    } else {
+      as.matrix(seuratObject[[assay]][data_type])
+    }
+    
+    es.max = sctype_score(scRNAseqData = obj, scaled = scaled, gs = gs_list$gs_positive, gs2 = gs_list$gs_negative, 
+                          marker_sensitivity = gs_list$marker_sensitivity, verbose=!0);
+    
+    cL_resutls = do.call("rbind", lapply(unique(seuratObject@meta.data$seurat_clusters), function(cl){
+      
+      es.max.cl = sort(rowSums(es.max[ ,rownames(seuratObject@meta.data[seuratObject@meta.data$seurat_clusters==cl, ])]), decreasing = !0)
+      head(data.frame(cluster = cl, type = names(es.max.cl), scores = es.max.cl), 10)
+    }))
+    
+    dt_out = cL_resutls %>% group_by(cluster) %>% top_n(n = 1)
+    
+    # return mean score for tissue
+    result_ = rbind(result_, data.frame(tissue = tissue, score = mean(dt_out$scores)))
+  }
+  
+  # order by mean score
+  result_ = result_[order(-result_$score),]
+  
+  # plot 
+   barplot(height=result_$score, names=result_$tissue, col=rgb(0.8,0.1,0.1,0.6),
+          xlab="Tissue", ylab="Summary score",  main="The higher summary score, the more likely tissue type is")
+  result_
+}
+
+# Needed at the end
+tissuetype_input <- tissuetype
+
+
+# Actual code starts now:
+
+
 #Get database and tissuetype 
 db_ <- "https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx";
-tissue <- tissuetype # e.g. Immune system,Pancreas,Liver,Eye,Kidney,Brain,Lung,Adrenal,Heart,Intestine,Muscle,Placenta,Spleen,Stomach,Thymus 
 
-db_
+if (tissuetype == "Auto") {
+tissueguess <- auto_detect_tissue_type(path_to_db_file = db_, seuratObject = seurat_obj, scaled = TRUE, assay = "RNA")  # if saled = TRUE, make sure the data is scaled, as seuratObject[[assay]]@scale.data is used. If you just created a Seurat object, without any scaling and normalization, set scaled = FALSE, seuratObject[[assay]]@counts will be used         
+tissuetype <- tissueguess$tissue[1]
 
-tissue
+print("Tissue type auto-detected as: ")
+print(tissuetype)
+
+} else {
+  tissuetype <- tissuetype
+  }
+
+print(tissuetype)
+
+tissue <- tissuetype
 
 # prepare gene sets
 gs_list <- gene_sets_prepare(db_, tissue)
@@ -301,7 +363,7 @@ nodes$shortName[is.na(nodes$shortName)] = nodes$realname[is.na(nodes$shortName)]
 
 if (any(duplicated(nodes$cluster)) == FALSE) {
 
-print("IFFI")
+#print("IFFI") For troubleshooting
 mygraph <- graph_from_data_frame(edges, vertices=nodes)
 
 # Make the graph
@@ -311,33 +373,43 @@ gggr <- ggraph(mygraph, layout = 'circlepack', weight=I(ncells)) +
 
 
 
-pdf(file = "DimPlot.pdf", width = width, height = height)
+pdf(file = "Plots.pdf", width = width, height = height)
 
 
-p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') 
-p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification') 
+p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Cell type:", tissue)) 
+p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Cell type:", tissue)) 
 p3 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)
-p4 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)+ gggr+ DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') 
-p5 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') + gggr
+p4 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)+ gggr+ DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Cell type:", tissue)) 
+p5 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') + gggr+labs(color = paste("Cell type:", tissue)) 
 
+p6 <- NULL
+if (tissuetype_input == "Auto") {
+  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type \t higher score means more likely tissue type")
+}
 print(p1)
 print(p2)
 print(p3)
 print(p4)
 print(p5)
+if (!is.null(p6)) {print(p6)}
 
 dev.off()
 
 } else {
 
-  pdf(file = "DimPlot.pdf", width = width, height = height)
+  pdf(file = "Plots.pdf", width = width, height = height)
 
-  print("ELSE")
-  p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') 
-  p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification') 
-
+  #print("ELSE") for troubleshooting
+  p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') +labs(color = paste("Cell type:", tissue)) 
+  p2 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = F, label.size = label.size, group.by = 'sctype_classification') +labs(color = paste("Cell type:", tissue)) 
+  p6 <- NULL
+  if (tissuetype_input == "Auto") {
+  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type \t higher score means more likely tissue type")
+  }
   print(p1)
   print(p2)
+  print(p6)
+
   dev.off()
 }
 
