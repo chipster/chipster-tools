@@ -1,10 +1,10 @@
-# TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 -Annotate cells with UCell" (You can use this tool to annotate the clusters.)
+# TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 -Annotate cells with UCell" (You can use this tool to annotate the clusters with own cell types and gene sets.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Plots.pdf
-# PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
-# PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # PARAMETER  celltypes: "Cell types to plot" TYPE STRING DEFAULT "T cells, B cells, NK cells, Monocytes" (Please use comma\(s\) \(,\) as a separator, e.g., \T Cells\, B cells\. Minimum of 2 cell types is required because UCell is based on Mann-Whitney U test) 
 # PARAMETER  genesets: "Gene sets for celltypes" TYPE STRING DEFAULT "CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8" (Gene sets for cell types in the same order as celltypes. For example if you have T cells, B cells, NK cells, Monocytes, please input first the geneset for T cells, then use word "sep" and then type in geneset for B cells and so on. If you list multiple gene sets, please use comma\(s\) \(,\) as a separator, e.g., \CD3D\, CD3E\, IL7R\, sep\, MS4A1\, CD79A\, CD79B\, sep\, NKG7\, GNLY\, PRF1\, sep\, CD14\, LST1\, S100A8\. ) 
+# PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
+# PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
 # PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
 # RUNTIME R-4.5.1-seurat5

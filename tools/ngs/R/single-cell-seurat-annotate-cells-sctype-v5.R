@@ -1,7 +1,7 @@
-# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to annotate clusters using ScType. This tool outputs UMAPs.)
+# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to automatically annotate clusters using ScType. This tool outputs UMAPs.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Plots.pdf
-# PARAMETER OPTIONAL tissuetype: "Tissue type" TYPE ["Auto": "Auto", "Immune system": "Immune system", "Pancreas": "Pancreas", "Liver": "Liver", "Eye": "Eye", "Kidney": "Kidney", "Brain": "Brain", "Lung": "Lung", "Adrenal": "Adrenal", "Heart": "Heart", "Intestine": "Intestine", "Muscle": "Muscle", "Placenta": "Placenta", "Spleen": "Spleen", "Stomach": "Stomach", "Thymus": "Thymus", "Hippocampus": "Hippocampus"] DEFAULT "Auto" (Choose the tissue type of your data)
+# PARAMETER OPTIONAL tissuetype: "Tissue type" TYPE ["Auto": "Auto", "Immune system": "Immune system", "Pancreas": "Pancreas", "Liver": "Liver", "Eye": "Eye", "Kidney": "Kidney", "Brain": "Brain", "Lung": "Lung", "Adrenal": "Adrenal", "Heart": "Heart", "Intestine": "Intestine", "Muscle": "Muscle", "Placenta": "Placenta", "Spleen": "Spleen", "Stomach": "Stomach", "Thymus": "Thymus", "Hippocampus": "Hippocampus"] DEFAULT "Auto" (Choose the tissue type of your data. Auto detects tissue type based on ScType scoring. The scores will be plotted if Auto is chosen.)
 # PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
@@ -361,6 +361,7 @@ files_db <- openxlsx::read.xlsx(db_)[,c("cellName","shortName")]; files_db = uni
 nodes$shortName[is.na(nodes$shortName)] = nodes$realname[is.na(nodes$shortName)]; nodes = nodes[,c("cluster", "ncells", "Colour", "ord", "shortName", "realname")]
 
 
+
 if (any(duplicated(nodes$cluster)) == FALSE) {
 
 #print("IFFI") For troubleshooting
@@ -376,22 +377,23 @@ gggr <- ggraph(mygraph, layout = 'circlepack', weight=I(ncells)) +
 pdf(file = "Plots.pdf", width = width, height = height)
 
 
-p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Cell type:", tissue)) 
-p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Cell type:", tissue)) 
+p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
+p2 <- DimPlot(seurat_obj, reduction = "umap", label = F, repel = F, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
 p3 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)
-p4 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)+ gggr+ DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Cell type:", tissue)) 
-p5 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') + gggr+labs(color = paste("Cell type:", tissue)) 
-
+p4 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, cols = ccolss)+ gggr+ DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
+p5 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') + gggr+labs(color = paste("Tissue type:", tissue)) 
 p6 <- NULL
 if (tissuetype_input == "Auto") {
-  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type \t higher score means more likely tissue type")
+  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type. \n higher score means more likely tissue type")
 }
+p7 <- gggr+labs(color = paste("Tissue type:", tissue)) 
 print(p1)
 print(p2)
 print(p3)
 print(p4)
 print(p5)
 if (!is.null(p6)) {print(p6)}
+print(p7)
 
 dev.off()
 
@@ -400,11 +402,11 @@ dev.off()
   pdf(file = "Plots.pdf", width = width, height = height)
 
   #print("ELSE") for troubleshooting
-  p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') +labs(color = paste("Cell type:", tissue)) 
-  p2 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = F, label.size = label.size, group.by = 'sctype_classification') +labs(color = paste("Cell type:", tissue)) 
+  p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, label.size = label.size, group.by = 'sctype_classification') +labs(color = paste("Tissue type:", tissue)) 
+  p2 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = F, label.size = label.size, group.by = 'sctype_classification') +labs(color = paste("Tissue type:", tissue)) 
   p6 <- NULL
   if (tissuetype_input == "Auto") {
-  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type \t higher score means more likely tissue type")
+  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type. \n higher score means more likely tissue type")
   }
   print(p1)
   print(p2)

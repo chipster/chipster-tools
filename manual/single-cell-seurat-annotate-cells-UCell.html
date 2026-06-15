@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Annotate cells with UCell</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        With this tool, you can annotate celltypes for cells/clusters with your own marker genes and cell types.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Cell types to plot [T cells, B cells, NK cells, Monocytes]</li>
+        <li>Gene sets for cell types [CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8]</li>
+        <li>width of plots [10]</li>
+        <li>height of plots [10]</li>
+        <li>Point size in tSNE and UMAP plots [1]</li>
+        <li>Label size in the output plots [4]</li>
+
+
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+         With this tool, you can annotate cells with UCell. UCell is an R package for scoring gene signatures in single-cell datasets. UCell scores, based on the Mann-Whitney U statistic, are robust to dataset size and heterogeneity, and their calculation demands relatively less computing time and memory than other robust methods, enabling the processing of large datasets (>10^5 cells). UCell can be applied to any cell vs. gene data matrix, and includes functions to directly interact with Seurat and Bioconductor's SingleCellExperiment objects.
+         </p> UCell does not have a built-in database of marker genes or cell types. You need to firstly name cell types yourself and then input the marker genes resepective to each cell type using "sep" as a separator between gene sets.
+    <p></p>
+        UCell article: <a href=https://www.sciencedirect.com/science/article/pii/S2001037021002816 >UCell: Robust and scalable single-cell gene signature scoring https://www.sciencedirect.com/science/article/pii/S2001037021002816 </a>
+    </p>
+
+
+    <p>
+        For more details, please check:<br>
+        The <a href="https://github.com/carmonalab/UCell">UCell GitHub repository</a>
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
+			but you can view the contents of the object using the <i>Extract information from Seurat object </i> tool. </li>
+        <li>Plots.pdf: UMAP of cell type scores in cells and clusters, assigned cell types per cell and cluster with labels. </li>
+    </ul>
+
+
+
+</body>
