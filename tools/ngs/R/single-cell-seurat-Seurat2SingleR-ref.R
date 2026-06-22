@@ -1,15 +1,20 @@
-# TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Create custom SingleR reference with pre-annotated seurat object"
-# INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information." TYPE GENERIC
-# INPUT seurat_obj_clustering.Robj: "Reference Seurat object with pre-annotated cell types." TYPE GENERIC
+# TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Annotate seurat object's celltypes with pre-annotated seurat object using SingleR"
+# INPUT seurat_ref_obj.Robj: "Reference Seurat object with pre-annotated cell types. Object must be renamed as seurat_ref_obj.Robj" TYPE GENERIC
+# INPUT seurat_obj_unannotated.Robj: "Seurat object. Has to be pre-processed so that it contains at least UMAP information. Has to be renamed as seurat_obj_unannotated.Robj" TYPE GENERIC
+# OUTPUT seurat_obj_annotated.Robj
+# OUTPUT Built_SingleR_ref.Robj
 # OUTPUT OPTIONAL Plots.pdf
+# PARAMETER OPTIONAL aggregate_reference: "Aggregate cells into one “pseudo-bulk” sample per label (e.g., by averaging across log-expression values) and using that as the reference profile. If set to TRUE, faster to run but may not be as accurate." TYPE [FALSE, TRUE] DEFAULT FALSE
 # RUNTIME R-4.5.1-seurat5
 # TOOLS_BIN ""
 
 
 
 
+# 2026-06-22 JV
 
-#Iivari's SingleR functions:
+
+#  Iivari's SingleR functions:
 
 #  build_singler_reference()
 #  Create a SummarizedExperiment reference from a labelled Seurat object
@@ -98,7 +103,7 @@ run_singler_annotation <- function(
 
 
 
-
+aggregate_reference <- as.logical(aggregate_reference)
 
 
 library("Seurat")
@@ -106,70 +111,66 @@ library("SingleR")
 library("scater")
 
 
-load("seurat_obj.Robj", verbose = TRUE)
+load("seurat_ref_obj.Robj", verbose = TRUE)
 
 seurat_ref_obj <- seurat_obj
+rm(seurat_obj)
 
+print(unique(colnames(seurat_ref_obj@meta.data)))
 
-# Figure out how to load a second seurat obj
-#load("seurat_obj_ref.Robj")
+# Chipster pipeline puts celltypes as idents(??), needs to be added as a column for this function
+seurat_ref_obj$celltype <- Idents(seurat_ref_obj)
 
-load("seurat_obj_clustering.Robj", verbose = TRUE)
-
-
-
-
-
-ref <- build_singler_reference(seurat_obj, label_col = "seurat_clusters", aggr_ref = FALSE)
-
-print("refdone")
-
-# Unannotated seurat obj
-expr <- GetAssayData(seurat_ref_obj, layer = "data")
-
-expr <- as.matrix(expr)
-
-
-anno <- SingleR(test = expr, ref = ref, assay.type.test=1,
-                labels = ref$label)
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  build_singler_reference()
-#  Cell-level reference with optional per-label downsampling
-# ══════════════════════════════════════════════════════════════════════════════
-
-#Iivari func No. 2
-
-#ref <- build_singler_reference(seurat_ref_obj, label_col = "seurat_clusters")
-
-anno2 <- SingleR(test = expr, ref = ref, assay.type.test=1,
-                 labels = ref$label)
+head(seurat_ref_obj$celltype)
+print("Up is the reference seurat object")
 
 
 
+load("seurat_obj_unannotated.Robj", verbose = TRUE)
+
+print(unique(colnames(seurat_obj@meta.data)))
+print("Now this one is the unannotated sobj")
 
 
+print("Starting to build the reference")
+
+
+ref <- build_singler_reference(seurat_ref_obj, label_col = "celltype", aggr_ref = aggregate_reference)
+
+print("Reference building succesful")
+
+# Annotate the unannotated expression matrix by using the just created reference
+
+
+print("Running singleR annotation on the seurat object")
 seurat_obj <- run_singler_annotation(query_seurat = seurat_obj, ref = ref, label_col = "label")
-
-
 
 
 seurat_obj$seurat$celltype <- seurat_obj$pred$labels
 
+predictions <- seurat_obj$pred
+
+
 sobj <- seurat_obj$seurat
+sobj <- SetIdent(object = sobj, value = predictions$labels)
 
-sobj$singler_label
+# New PCA and UMAP? Maybe needed, maybe not, check SingleR docs
 
-sobj <- RunPCA(sobj, dims = 1:10)
-sobj <- RunUMAP(sobj, dims = 1:10)
+#sobj <- RunPCA(sobj, dims = 1:10)
+#sobj <- RunUMAP(sobj, dims = 1:10)
+
+print("Annotation succesful")
 
 
 pdf(file = "Plots.pdf")
 
 print(DimPlot(sobj, group.by = "singler_label"))
+print(plotScoreHeatmap(predictions))
+print(plotDeltaDistribution(predictions))
 
 dev.off()
 
+save(ref, file = "Built_SingleR_ref.Robj")
+save(sobj, file = "seurat_obj_annotated.Robj")
 
 # EOF
