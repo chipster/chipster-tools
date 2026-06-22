@@ -25,9 +25,6 @@ library("data.tree")
 
 load("seurat_obj.Robj")
 
-if (exists("data.combined")) {
-  seurat_obj <- data.combined
-}
 
 # The following functions are from https://github.com/IanevskiAleksandr/sc-type and R folder
 

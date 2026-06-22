@@ -36,10 +36,6 @@ options(Seurat.object.assay.version = "v5")
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
-if (exists("data.combined")) {
-  seurat_obj <- data.combined
-}
-
 # Make a new column called cell_type and fill it with "" emptiness
 seurat_obj$cell_type <- ""
 

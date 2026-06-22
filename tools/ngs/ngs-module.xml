@@ -236,6 +236,9 @@
 		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
 		<tool>single-cell-seurat-subset-v5.R</tool>
 		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
+		<tool>single-cell-seurat-annotate-cells-sctype-v5.R</tool>
+		<tool>single-cell-seurat-annotate-cells-UCell.R</tool>
+		<tool>single-cell-seurat-Seurat2SingleR-ref.R</tool>
 		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
 		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	
