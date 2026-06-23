@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Build a celltype reference from a pre-annotated Seurat and transfer labels to unannotated Seurat</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        With this tool,.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Tissue type [AUTO]</li> 
+        <li>Label size [4]</li>
+        <li>width of plots [10]</li>
+        <li>height of plots [10]</li>
+        <li>Point size in tSNE and UMAP plots [1]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+         With this tool, you can annotate cells with ScType. ScType a computational method for automated selection of marker genes based merely on scRNA-seq data. You can also get a graph showing the relationship of the clusters and the cell types, and a barplot showing the auto-detection of tissue type based on the expression of marker genes
+    <p></p>
+        Ianevski, A., Giri, A.K. & Aittokallio, T. Fully-automated and ultra-fast cell-type identification using specific marker combinations from single-cell transcriptomic data. Nat Commun 13, 1246 (2022). <a href=https://doi.org/10.1038/s41467-022-28803-w >https://doi.org/10.1038/s41467-022-28803-w </a>
+    </p>
+
+
+    <p>
+        For more details, please check:<br>
+        The <a href="https://github.com/IanevskiAleksandr/sc-type">ScType GitHub repository</a>
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
+			but you can view the contents of the object using the <i>Extract information from Seurat object </i> tool. </li>
+        <li>Plots.pdf: Plots showing auto detection tissue score if tissuetype is AUTO. UMAPs of annotated cell types and clusters. (EXTRA): If ScType does not find any duplicates, it also produces bubble plots. </li>
+    </ul>
+
+
+
+</body>
