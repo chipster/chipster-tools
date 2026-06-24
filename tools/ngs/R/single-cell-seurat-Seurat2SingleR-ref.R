@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Build a celltype reference from a pre-annotated Seurat and transfer labels to unannotated Seurat"
+# TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Build celltype reference from Seurat object" (With this tool you can make a custom reference SummarizedExperiment object, which can be used to annotate cells in seurat objects)
 # INPUT seurat_ref_obj.Robj: "Reference Seurat object with pre-annotated cell types." TYPE GENERIC
 # OUTPUT OPTIONAL custom_singleR_ref.Robj
 # PARAMETER OPTIONAL aggregate_reference: "Aggregate cells into one “pseudo-bulk” sample per label (e.g., by averaging across log-expression values) and using that as the reference profile. If set to TRUE, faster to run but may not be as accurate." TYPE [FALSE, TRUE] DEFAULT FALSE

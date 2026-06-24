@@ -7,43 +7,43 @@
 
 <body>
 
-    <h2>Build a celltype reference from a pre-annotated Seurat and transfer labels to unannotated Seurat</h2>
+    <h2>Build a celltype reference from a pre-annotated Seurat object</h2>
 
     <h3>Description</h3>
 
     <p>
-        With this tool you can build a SingleR celltype annotation reference object by using a pre-annotated Seurat object. You can also annotate cells on an unannotated seurat object.
+        With this tool you can build a SummarizedExperiment celltype annotation reference object by using a pre-annotated Seurat object.
     </p>
 
     <h3>Parameters</h3>
     <ul>
         <li>Aggregate cells [FALSE]</li>
-        <li>Pruning [TRUE]</li>
-        <li>Fine tuning [TRUE]</li> 
     </ul>
 
     <h3>Details</h3>
 
     <p>
-         <p>Detailjea tähän</p>
-        Tähän ehkä Iivari acknowledgement </a>
+         <p>The SummarizedExperiment class is used to store rectangular matrices of experimental results, which are commonly produced by sequencing and microarray experiments. Note that SummarizedExperiment can simultaneously manage several experimental results or assays as long as they be of the same dimensions.
+
+Each object stores observations of one or more samples, along with additional meta-data describing both the observations (features) and samples (phenotypes).
+
+A key aspect of the SummarizedExperiment class is the coordination of the meta-data and assays when subsetting. For example, if you want to exclude a given sample you can do for both the meta-data and assay in one operation, which ensures the meta-data and observed data will remain in sync. Improperly accounting for meta and observational data has resulted in a number of incorrect results and retractions so this is a very desirable property.</p>
+
+<h3>Acknowledgements</h3>
+We would like to acknowledge  <a href = ""> ... Lab </a> for help with this tool </a>
     </p>
 
 
     <p>
         For more details, please check:<br>
-        The <a href="https://github.com/dviraran/singler">SingleR GitHub repository</a> 
-         And The <a href="https://bioconductor.org/books/devel/SingleRBook/">SingleR Book</a> 
+        The <a href="https://www.bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment Bioconductor page</a> 
 
     </p>
 
     <h3>Output</h3>
 
     <ul>
-        <li>Built-SingleR-ref.Robj: The reference object made by SingleR by using pre-annotated Seurat Object.</li>
-        <li>seurat_obj_annotated.Robj:(Only if unannotated Seurat object is inputted) The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
-			but you can view the contents of the object using the <i>Extract information from Seurat object </i> tool. </li>
-        <li>Plots.pdf: A UMAP showing celltype annotations on clusters and cells. Additionally, if pruning is TRUE, also plotScoreHeatmap and DeltaDistribution plots are plotted.</li>
+        <li>custom_singleR_ref.Robj: The reference object made by SummarizedExperiment by using pre-annotated Seurat Object. This is used with SingleR to annotate cells on an unannotated Seurat object.</li>
     </ul>
 
 

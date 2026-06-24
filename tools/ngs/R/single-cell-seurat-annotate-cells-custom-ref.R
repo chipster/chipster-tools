@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - Annotate cells with Chipster made custom SingleR-reference"
+# TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - Annotate cells with custom SummarizedExperiment reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
 # INPUT custom_singleR_ref.Robj: "Reference object" TYPE GENERIC
 # INPUT seurat_obj_unannotated.Robj: "Seurat object. Has to be pre-processed so that it contains at least UMAP information." TYPE GENERIC
 # OUTPUT seurat_obj_annotated.Robj
@@ -11,6 +11,7 @@
 chipster.threads.max <- as.numeric(chipster.threads.max)
 prune <- as.logical(prune)
 fine.tune <- as.logical(fine.tune)
+
 
 
 #  Annotate a query Seurat object using a SingleR reference
