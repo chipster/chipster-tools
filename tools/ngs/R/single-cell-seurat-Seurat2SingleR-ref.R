@@ -1,6 +1,6 @@
 # TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Build celltype reference from Seurat object" (With this tool you can make a custom reference SummarizedExperiment object, which can be used to annotate cells in seurat objects)
 # INPUT seurat_ref_obj.Robj: "Reference Seurat object with pre-annotated cell types." TYPE GENERIC
-# OUTPUT OPTIONAL custom_singleR_ref.Robj
+# OUTPUT SummarizedExperiment_reference.Robj
 # PARAMETER OPTIONAL aggregate_reference: "Aggregate cells into one “pseudo-bulk” sample per label (e.g., by averaging across log-expression values) and using that as the reference profile. If set to TRUE, faster to run but may not be as accurate." TYPE [FALSE, TRUE] DEFAULT FALSE
 # RUNTIME R-4.5.1-seurat5
 # TOOLS_BIN ""
@@ -26,7 +26,7 @@ build_singler_reference <- function(
   mat <- LayerData(seurat_obj, assay = assay, layer = layer)
   
   labels <- seurat_obj[[label_col, drop = TRUE]]
-  if (is.null(labels)) stop("Column '", label_col, "' not found in metadata.")
+  if (is.null(labels)) stop("CHIPSTER-NOTE: Column '", label_col, "' not found in metadata.")
 
   
   if (!is.null(genes)) {
@@ -45,10 +45,6 @@ build_singler_reference <- function(
   
   ref
 }
-
-
-
-
 
 
 
@@ -81,12 +77,12 @@ seurat_ref_obj$celltype <- Idents(seurat_ref_obj)
 print("Starting to build the reference")
 
 
-custom_singleR_ref <- build_singler_reference(seurat_ref_obj, label_col = "celltype", aggr_ref = aggregate_reference)
+SummarizedExperiment_reference <- build_singler_reference(seurat_ref_obj, label_col = "celltype", aggr_ref = aggregate_reference)
 
 print("Reference building succesful")
 
 
-save(custom_singleR_ref, file = "custom_singleR_ref.Robj")
+save(SummarizedExperiment_reference, file = "SummarizedExperiment_reference.Robj")
 
 
 # EOF

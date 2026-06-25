@@ -1,10 +1,13 @@
 # TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - Annotate cells with custom SummarizedExperiment reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
-# INPUT custom_singleR_ref.Robj: "Reference object" TYPE GENERIC
-# INPUT seurat_obj_unannotated.Robj: "Seurat object. Has to be pre-processed so that it contains at least UMAP information." TYPE GENERIC
+# INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
+# INPUT seurat_obj_unannotated.Robj: "Seurat object that will get annotated" TYPE GENERIC (Has to be pre-processed so that it contains at least UMAP information.)
 # OUTPUT seurat_obj_annotated.Robj
 # OUTPUT Plots.pdf
 # PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE, TRUE] DEFAULT TRUE (If set to TRUE, removes weak cell types and will be set as NA.) 
 # PARAMETER OPTIONAL fine.tune: "fine tuning" TYPE [FALSE, TRUE] DEFAULT TRUE (If set to TRUE, improves ranking accuracy of the best label.) 
+# PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
+# PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
+# PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # RUNTIME R-4.5.1-seurat5
 # TOOLS_BIN ""
 
@@ -66,14 +69,17 @@ library("scater")
 
 
 
-load("custom_singleR_ref.Robj")
+load("SummarizedExperiment_reference.Robj")
 
-if (!exists("custom_singleR_ref")) {
-stop("CHIPSTER-NOTE: Wrong input file. Try swapping input files ")
+# The actual R variable has to be named as SummarizedExperiment_refernce (Chipster does this with Build celltype ref form seurat object)
+# This if exists is basically to check whether user actually inputted the correct file (Note that currently if they input a SummarizedExperiment object that is not named as stated before, this error will pop out)
+
+if (!exists("SummarizedExperiment_reference")) {
+  stop("CHIPSTER-NOTE: Wrong input file. Try swapping input files ")
 }
 
-ref <- custom_singleR_ref
-rm(custom_singleR_ref)
+ref <- SummarizedExperiment_reference
+rm(SummarizedExperiment_reference)
 
 
 
@@ -94,14 +100,37 @@ predictions <- seurat_obj$pred
 seurat_obj <- seurat_obj$seurat
 seurat_obj <- SetIdent(object = seurat_obj, value = predictions$labels)
 
+# Assign one cell type per cluster // wait for Iivari confirmation
+
+seurat_table <- table(seurat_obj$seurat_clusters, seurat_obj$celltype)
+
+type <- apply(seurat_table, 1, function(x) names(which.max(x)))
+
+
+# Check that cluster numbers on the seurat object and on the table actually match
+
+
+match <- all(seurat_obj$seurat_clusters == names(type[as.character(seurat_obj$seurat_clusters)]))
+
+if (!match) {
+  "CHIPSER-NOTE: Cluster number on the seurat object does not match with the seurat_table. Wrong cell types would be annotated. Stopping process..."
+} else {
+  print("Cluster numbers match, assigning a cell type per cluster")
+}
+
+head(type, 20)
+seurat_obj$cluster_celltype <- as.vector(type[as.character(seurat_obj$seurat_clusters)])
+
+
+
 print("Annotation succesful")
 
 if (length(predictions$pruned.labels) > 0) {
 print("Pruned, saving QC plots")
 
-pdf(file = "Plots.pdf")
+pdf(file = "Plots.pdf", width = width, height = height)
 
-p0 <- DimPlot(seurat_obj, group.by = "singler_label")
+p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = label.size)
 print(p0)
 
 p1 <- plotScoreHeatmap(predictions)
@@ -110,15 +139,27 @@ print(p1)
 p2 <- plotDeltaDistribution(predictions)
 print(p2)
 
+p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = label.size)
+
+p4 <-DimPlot(seurat_obj, group.by = "seurat_clusters", label = label.size)
+
+print(p3+p4)
+
 dev.off()
 save(seurat_obj, file = "seurat_obj_annotated.Robj")
 
 } else {
 
 pdf(file = "Plots.pdf")
-p0 <- DimPlot(seurat_obj, group.by = "singler_label")
+p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = label.size)
 
 print(p0)
+
+p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = label.size)
+
+p4 <-DimPlot(seurat_obj, group.by = "seurat_clusters", label = label.size)
+
+print(p3+p4)
 
 dev.off()
 
