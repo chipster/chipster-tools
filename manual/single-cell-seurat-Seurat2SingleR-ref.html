@@ -17,33 +17,29 @@
 
     <h3>Parameters</h3>
     <ul>
-        <li>Aggregate cells [FALSE]</li>
+        <li>Aggregate cells [no]</li>
     </ul>
 
     <h3>Details</h3>
 
     <p>
-         <p>The SummarizedExperiment class is used to store rectangular matrices of experimental results, which are commonly produced by sequencing and microarray experiments. Note that SummarizedExperiment can simultaneously manage several experimental results or assays as long as they be of the same dimensions.
+         <p> Tämä detail uusiksi</p>
 
-Each object stores observations of one or more samples, along with additional meta-data describing both the observations (features) and samples (phenotypes).
-
-A key aspect of the SummarizedExperiment class is the coordination of the meta-data and assays when subsetting. For example, if you want to exclude a given sample you can do for both the meta-data and assay in one operation, which ensures the meta-data and observed data will remain in sync. Improperly accounting for meta and observational data has resulted in a number of incorrect results and retractions so this is a very desirable property.</p>
-
-<h3>Acknowledgements</h3>
-We would like to acknowledge  <a href = ""> ... Lab </a> for help with this tool </a>
     </p>
 
 
     <p>
         For more details, please check:<br>
         The <a href="https://www.bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment Bioconductor page</a> 
+        <p>We would like to thank Iivari Kleino for his kind assistance with the development of this tool.</p>
+
 
     </p>
 
     <h3>Output</h3>
 
     <ul>
-        <li>custom_singleR_ref.Robj: The reference object made by SummarizedExperiment by using pre-annotated Seurat Object. This is used with SingleR to annotate cells on an unannotated Seurat object.</li>
+        <li>SummarizedExperiment_reference.Robj: The reference object made by SummarizedExperiment by using pre-annotated Seurat Object. This is used with SingleR to annotate cells on an unannotated Seurat object.</li>
     </ul>
 
 
