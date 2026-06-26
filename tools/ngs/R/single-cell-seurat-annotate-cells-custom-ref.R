@@ -2,7 +2,7 @@
 # INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
 # INPUT seurat_obj_unannotated.Robj: "Seurat object that will get annotated" TYPE GENERIC (Has to be pre-processed so that it contains at least UMAP information.)
 # OUTPUT seurat_obj_annotated.Robj
-# OUTPUT Plots.pdf
+# OUTPUT SingleR_custom_annotation_Plots.pdf
 # PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, removes weak cell types and will be set as NA.) 
 # PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, improves ranking accuracy of the best label.) 
 # PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
@@ -75,7 +75,6 @@ load("SummarizedExperiment_reference.Robj")
 
 SummarizedExperiment_reference
 
-save(SummarizedExperiment_reference = file "ref.Robj")
 # The actual R variable has to be named as SummarizedExperiment_refernce (Chipster does this with Build celltype ref form seurat object)
 # This if exists is basically to check whether user actually inputted the correct file (Note that currently if they input a SummarizedExperiment object that is not named as stated before, this error will pop out)
 
@@ -133,7 +132,7 @@ print("Pruned, saving QC plots")
 
 pdf(file = "SingleR_custom_annotation_Plots.pdf", width = width, height = height)
 
-p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = label.size)
+p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = T, label.size = label.size)
 print(p0)
 
 p1 <- plotScoreHeatmap(predictions)
@@ -142,9 +141,9 @@ print(p1)
 p2 <- plotDeltaDistribution(predictions)
 print(p2)
 
-p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = label.size)
+p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size = label.size)
 
-p4 <-DimPlot(seurat_obj, group.by = "seurat_clusters", label = label.size)
+p4 <-DimPlot(seurat_obj, group.by = "seurat_clusters", label = T, label.size = label.size)
 
 print(p3+p4)
 
@@ -154,14 +153,14 @@ save(seurat_obj, file = "seurat_obj_annotated.Robj")
 } else {
 
 print("Not pruned, no QC plots available.")
-pdf(file = "Plots.pdf")
-p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = label.size)
+pdf(file = "SingleR_custom_annotation_Plots.pdf", width = width, height = height)
+p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = T, label.size = label.size)
 
 print(p0)
 
-p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = label.size)
+p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size = label.size)
 
-p4 <- DimPlot(seurat_obj, group.by = "seurat_clusters", label = label.size)
+p4 <- DimPlot(seurat_obj, group.by = "seurat_clusters", label = T, label.size = label.size)
 
 print(p3+p4)
 
