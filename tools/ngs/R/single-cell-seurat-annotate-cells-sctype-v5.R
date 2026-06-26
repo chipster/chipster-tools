@@ -385,7 +385,6 @@ if (tissuetype_input == "Auto") {
 }
 p7 <- gggr+labs(color = paste("Tissue type:", tissue)) 
 print(p1)
-print(p2)
 print(p3)
 print(p4)
 print(p5)
