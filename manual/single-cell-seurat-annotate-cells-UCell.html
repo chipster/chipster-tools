@@ -31,7 +31,29 @@
 
     <p>
          With this tool, you can annotate cells with UCell. UCell is an R package for scoring gene signatures in single-cell datasets. UCell scores, based on the Mann-Whitney U statistic, are robust to dataset size and heterogeneity, and their calculation demands relatively less computing time and memory than other robust methods, enabling the processing of large datasets (>10^5 cells). UCell can be applied to any cell vs. gene data matrix, and includes functions to directly interact with Seurat and Bioconductor's SingleCellExperiment objects.
-         </p> UCell does not have a built-in database of marker genes or cell types. You need to firstly name cell types yourself and then input the marker genes resepective to each cell type using "sep" as a separator between gene sets.
+         </p> UCell does not have a built-in database of marker genes or cell types. You need to firstly name cell types yourself and then input the marker genes resepective to each cell type using "sep" as a separator between gene sets. 
+         <p></p>
+         <p>Optionally you can input a .tsv file containing 2 columns, first celltype and then genesets like this:</p>
+
+            <table>
+        <tr>
+            <th>Celltype</th>
+
+            <th>Gene sets</th>
+        </tr>
+        <tr>
+            <td>T cells</td>
+            <td>CD3D, CD3E, IL7R</td>
+        </tr>
+        <tr>
+            <td>B cells</td>
+            <td>MS4A1, CD79A, CD79B</td>
+        </tr>
+        <tr>
+            <td>NK cells</td>
+            <td>NKG7, GNLY, PRF1</td>
+        </tr>
+    </table>
     <p></p>
         UCell article: <a href=https://www.sciencedirect.com/science/article/pii/S2001037021002816 >UCell: Robust and scalable single-cell gene signature scoring https://www.sciencedirect.com/science/article/pii/S2001037021002816 </a>
     </p>

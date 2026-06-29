@@ -1,8 +1,9 @@
 # TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 -Annotate cells with UCell" (You can use this tool to annotate the clusters with own cell types and gene sets.)
 # INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information" TYPE GENERIC
+# INPUT OPTIONAL celltypes_markers.tsv: "Cell types and gene sets" TYPE GENERIC
 # OUTPUT OPTIONAL Plots.pdf
-# PARAMETER  celltypes: "Cell types to plot" TYPE STRING DEFAULT "T cells, B cells, NK cells, Monocytes" (Please use comma\(s\) \(,\) as a separator, e.g., \T Cells\, B cells\. Minimum of 2 cell types is required because UCell is based on Mann-Whitney U test) 
-# PARAMETER  genesets: "Gene sets for celltypes" TYPE STRING DEFAULT "CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8" (Gene sets for cell types in the same order as celltypes. For example if you have T cells, B cells, NK cells, Monocytes, please input first the geneset for T cells, then use word "sep" and then type in geneset for B cells and so on. If you list multiple gene sets, please use comma\(s\) \(,\) as a separator, e.g., \CD3D\, CD3E\, IL7R\, sep\, MS4A1\, CD79A\, CD79B\, sep\, NKG7\, GNLY\, PRF1\, sep\, CD14\, LST1\, S100A8\. ) 
+# PARAMETER OPTIONAL celltypes: "Cell types to plot" TYPE STRING DEFAULT "T cells, B cells, NK cells, Monocytes" (Please use comma\(s\) \(,\) as a separator, e.g., \T Cells\, B cells\. Minimum of 2 cell types is required because UCell is based on Mann-Whitney U test) 
+# PARAMETER OPTIONAL genesets: "Gene sets for celltypes" TYPE STRING DEFAULT "CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8" (Gene sets for cell types in the same order as celltypes. For example if you have T cells, B cells, NK cells, Monocytes, please input first the geneset for T cells, then use word "sep" and then type in geneset for B cells and so on. If you list multiple gene sets, please use comma\(s\) \(,\) as a separator, e.g., \CD3D\, CD3E\, IL7R\, sep\, MS4A1\, CD79A\, CD79B\, sep\, NKG7\, GNLY\, PRF1\, sep\, CD14\, LST1\, S100A8\. ) 
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
@@ -18,9 +19,6 @@
 
 # Turn user given list into a vector
 
-celltypes <- trimws(strsplit(celltypes, ",")[[1]])
-
-genes <- trimws(strsplit(genesets, ",")[[1]])
 
 #Load needed packages
 library(UCell)
@@ -33,11 +31,36 @@ library(ggplot2)
 
 options(Seurat.object.assay.version = "v5")
 
+# Check first if cell type and gene set .tsv file exists:
 # Load the R-Seurat-object (called seurat_obj)
+
+
 load("seurat_obj.Robj")
+
 
 # Make a new column called cell_type and fill it with "" emptiness
 seurat_obj$cell_type <- ""
+
+if (file.exists("celltypes_markers.tsv")) {
+  file <- read.table("celltypes_markers.tsv", sep = "\t", header = T)
+
+  celltypes <- file[,1]
+  genes <- file[,2]
+
+  markers <- split(x = genes, f = celltypes)
+
+  # Make the gene list in the proper format
+  markers <- lapply(markers, function(x) {
+    trimws(strsplit(x, ",")[[1]])
+  })
+
+} else {
+
+celltypes <- trimws(strsplit(celltypes, ",")[[1]])
+
+genes <- trimws(strsplit(genesets, ",")[[1]])
+
+
 
 
 # Empty vectors for the for loop
@@ -63,6 +86,7 @@ gene_groups <- split(x = genes_list, f = factors)
 
 markers <- setNames(gene_groups, celltypes)
 
+}
 
 # The gene has to be found in the rownames, otherwise it can't calculate the modulescore -> Error
 
