@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to automatically annotate clusters using ScType. This tool outputs UMAPs.)
+# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - BETA Annotate cells with ScType" (You can use this tool to automatically annotate clusters using ScType. This tool outputs UMAPs.)
 # INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information." TYPE GENERIC
 # OUTPUT OPTIONAL Plots.pdf
 # PARAMETER OPTIONAL tissuetype: "Tissue type" TYPE ["Auto": "Auto", "Immune system": "Immune system", "Pancreas": "Pancreas", "Liver": "Liver", "Eye": "Eye", "Kidney": "Kidney", "Brain": "Brain", "Lung": "Lung", "Adrenal": "Adrenal", "Heart": "Heart", "Intestine": "Intestine", "Muscle": "Muscle", "Placenta": "Placenta", "Spleen": "Spleen", "Stomach": "Stomach", "Thymus": "Thymus", "Hippocampus": "Hippocampus"] DEFAULT "Auto" (Choose the tissue type of your data. Auto detects tissue type based on ScType scoring. The scores will be plotted if Auto is chosen.)
