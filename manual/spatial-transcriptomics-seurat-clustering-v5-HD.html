@@ -54,11 +54,14 @@
 
     <h4>Sketch-based clustering for the 8 &mu;m assay</h4>
     <p>
-        Visium HD data at 8 &mu;m resolution can contain several hundred thousand bins, making standard
-        clustering slow and memory-intensive. When sketch-based clustering is enabled, a representative subset
-        of bins is selected from the full dataset using leverage scores, clustered in memory, and the resulting
-        cluster labels and UMAP are then projected back to all bins using the
-        <code>ProjectData</code> function. This approach is recommended for large datasets and follows the
+        Visium HD data at 8 &mu;m resolution can contain several hundred thousand bins. While the standard
+        clustering approach works on this data, it can be slow. When sketch-based clustering is enabled, a
+        representative subset of bins is selected from the full dataset using leverage scores, clustered in
+        memory, and the resulting cluster labels and UMAP are then projected back to all bins using the
+        <code>ProjectData</code> function. This can speed up the clustering step considerably. In addition,
+        leverage-score subsampling ensures that rare and transcriptomically distinct populations are well represented in
+        the sketch, which can improve the identification of rare and spatially restricted cell groups. The approach
+        follows the
         <a href="https://satijalab.org/seurat/articles/visiumhd_analysis_vignette">Seurat v5 Visium HD vignette</a>.
     </p>
     <p>
