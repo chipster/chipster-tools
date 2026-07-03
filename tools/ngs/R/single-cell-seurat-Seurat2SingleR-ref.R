@@ -10,6 +10,7 @@ aggregate_reference <- as.logical(aggregate_reference)
 # 2026-06-22 JV
 
 
+
 #  Function for reference building by Iivari Kleino
 
 #  Create a SummarizedExperiment reference from a labelled Seurat object
