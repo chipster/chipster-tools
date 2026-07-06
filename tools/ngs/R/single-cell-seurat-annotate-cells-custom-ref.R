@@ -1,7 +1,7 @@
 # TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - BETA Annotate cells with own reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
 # INPUT seurat_obj_unannotated.Robj: "Seurat object that will get annotated" TYPE GENERIC (Has to be pre-processed so that it contains at least UMAP information.)
 # INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
-# OUTPUT seurat_obj_annotated.Robj
+# OUTPUT seurat_obj_annotated_custom.Robj
 # OUTPUT SingleR_custom_annotation_Plots.pdf
 # PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, removes weak cell types and will be set as NA.) 
 # PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, improves ranking accuracy of the best label.) 
@@ -15,6 +15,7 @@ chipster.threads.max <- as.numeric(chipster.threads.max)
 prune <- as.logical(prune)
 fine.tune <- as.logical(fine.tune)
 
+set.seed(123)
 
 
 
@@ -162,7 +163,7 @@ print(p3)
 
 dev.off()
 
-save(seurat_obj, file = "seurat_obj_annotated.Robj")
+save(seurat_obj, file = "seurat_obj_annotated_custom.Robj")
 }
 
 

@@ -12,6 +12,8 @@
 
 # JV 2026-12-06
 
+set.seed(123)
+
 # Load needed packages
 library("Seurat")
 library("dplyr")
@@ -378,12 +380,11 @@ pdf(file = "Plots_ScType.pdf", width = width, height = height)
 
 
 p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, pt.size = point.size, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
-p3 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, pt.size = point.size, repel = TRUE, label.size = label.size, cols = ccolss)
-p6 <- NULL
+p2 <- NULL
 if (tissuetype_input == "Auto") {
-  p6 <- barplot(height = tissueguess$score, names = tissueguess$tissue, names.arg = F, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type. \n higher score means more likely tissue type")
+  p2 <- barplot(height = tissueguess$score, names = tissueguess$tissue, names.arg = F, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type. \n higher score means more likely tissue type")
   text(
-  x = p6,
+  x = p2,
   y = par("usr")[3] - 0.02 * diff(par("usr")[3:4]),
   labels = tissueguess$tissue,
   srt = 45,      # 45-degree rotation
@@ -391,6 +392,8 @@ if (tissuetype_input == "Auto") {
   xpd = TRUE
 )
 
+print(p1)
+print(p2)
 }
 
 # EOF

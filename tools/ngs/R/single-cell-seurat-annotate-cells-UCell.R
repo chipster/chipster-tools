@@ -14,6 +14,8 @@
 
 chipster.threads.max <- as.numeric(chipster.threads.max)
 
+set.seed(123)
+
 
 # 2026-04-06 JV 
 
