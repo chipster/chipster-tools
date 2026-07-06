@@ -12,7 +12,7 @@
     <h3>Description</h3>
 
     <p>
-        With this tool, you can annotate celltypes for cells/clusters with ScType.
+        With this tool, you can annotate cell types for cells/clusters with ScType.
     </p>
 
     <h3>Parameters</h3>
@@ -29,12 +29,14 @@
     <p>
          With this tool, you can annotate cells with ScType. ScType a computational method for automated selection of marker genes based merely on scRNA-seq data. You can also get a graph showing the relationship of the clusters and the cell types, and a barplot showing the auto-detection of tissue type based on the expression of marker genes
     <p></p>
+            <p>For more details, please check:</p>
+
         Ianevski, A., Giri, A.K. & Aittokallio, T. Fully-automated and ultra-fast cell-type identification using specific marker combinations from single-cell transcriptomic data. Nat Commun 13, 1246 (2022). <a href=https://doi.org/10.1038/s41467-022-28803-w >https://doi.org/10.1038/s41467-022-28803-w </a>
     </p>
 
 
     <p>
-        For more details, please check:<br>
+        <br>
         The <a href="https://github.com/IanevskiAleksandr/sc-type">ScType GitHub repository</a>
 
     </p>
@@ -44,7 +46,7 @@
     <ul>
         <li>seurat_obj_clustering.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
 			but you can view the contents of the object using the <i>Extract information from Seurat object </i> tool. </li>
-        <li>Plots.pdf: Plots showing auto detection tissue score if tissuetype is AUTO. UMAPs of annotated cell types and clusters. (EXTRA): If ScType does not find any duplicates, it also produces bubble plots. </li>
+        <li>Plots_ScType.pdf: Plots showing auto detection tissue score if tissuetype is AUTO. UMAPs of annotated cell types and clusters. (EXTRA): If ScType does not find any duplicates, it also produces bubble plots. </li>
     </ul>
 
 

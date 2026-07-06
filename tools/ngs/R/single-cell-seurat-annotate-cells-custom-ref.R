@@ -1,13 +1,13 @@
 # TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - BETA Annotate cells with own reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
-# INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
 # INPUT seurat_obj_unannotated.Robj: "Seurat object that will get annotated" TYPE GENERIC (Has to be pre-processed so that it contains at least UMAP information.)
+# INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
 # OUTPUT seurat_obj_annotated.Robj
 # OUTPUT SingleR_custom_annotation_Plots.pdf
 # PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, removes weak cell types and will be set as NA.) 
 # PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, improves ranking accuracy of the best label.) 
-# PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
-# PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
+# PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
+# PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
 # RUNTIME R-4.5.1-seurat5
 # TOOLS_BIN ""
 
@@ -76,6 +76,7 @@ load("SummarizedExperiment_reference.Robj")
 
 # The actual R variable has to be named as SummarizedExperiment_refernce (Chipster does this with Build celltype ref form seurat object)
 # This if exists is basically to check whether user actually inputted the correct file (Note that currently if they input a SummarizedExperiment object that is not named as stated before, this error will pop out)
+# This can be discussed if this is needed or not. By removing this you give option to the user to input any SummarizedExperiment object, but then they have to know what they are doing. They can also do it now, but the object in R has to be named strictly as SummarizedExperiment_reference (Not the file, the object inside the file)
 
 if (!exists("SummarizedExperiment_reference")) {
   stop("CHIPSTER-NOTE: Wrong input file. Try swapping input files ")
@@ -86,7 +87,7 @@ rm(SummarizedExperiment_reference)
 
 
 
-load("seurat_obj_unannotated.Robj", verbose = TRUE)
+load("seurat_obj_unannotated.Robj")
 
 
 
@@ -142,9 +143,7 @@ print(p2)
 
 p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size = label.size)
 
-p4 <-DimPlot(seurat_obj, group.by = "seurat_clusters", label = T, label.size = label.size)
-
-print(p3+p4)
+print(p3)
 
 dev.off()
 save(seurat_obj, file = "seurat_obj_annotated.Robj")
@@ -159,9 +158,7 @@ print(p0)
 
 p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size = label.size)
 
-p4 <- DimPlot(seurat_obj, group.by = "seurat_clusters", label = T, label.size = label.size)
-
-print(p3+p4)
+print(p3)
 
 dev.off()
 

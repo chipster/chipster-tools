@@ -344,7 +344,6 @@ seurat_obj <- run_sctype(seurat_obj, known_tissue_type = tissue, custom_marker_f
 
 
 
-
 # prepare edges
 cL_resutls <- cL_resutls[order(cL_resutls$cluster),]; edges = cL_resutls; edges$type = paste0(edges$type,"_",edges$cluster); edges$cluster = paste0("cluster ", edges$cluster); edges = edges[,c("cluster", "type")]; colnames(edges) = c("from", "to"); rownames(edges) <- NULL
 

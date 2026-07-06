@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Build celltype reference from Seurat object" (With this tool you can make a custom reference SummarizedExperiment object, which can be used to annotate cells in seurat objects)
+# TOOL single-cell-seurat-Seurat2SingleR-ref.R: "Seurat v5 - Build cell type reference from Seurat object" (With this tool you can make a custom reference SummarizedExperiment object, which can be used to annotate cells in seurat objects)
 # INPUT seurat_ref_obj.Robj: "Reference Seurat object with pre-annotated cell types." TYPE GENERIC
 # OUTPUT SummarizedExperiment_reference.Robj
 # PARAMETER OPTIONAL aggregate_reference: "Aggregate cells" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT FALSE (Aggregate cells into one “pseudo-bulk” sample per label e.g., by averaging across log-expression values and using that as the reference profile. If set to TRUE, faster to run but may not be as accurate.)
@@ -20,7 +20,7 @@ build_singler_reference <- function(
     assay          = "RNA",
     layer          = "data",       # use normalised counts
     genes          = NULL,         # optional: restrict to these genes
-    aggr_ref       = TRUE,         # aggregate to pseudo-bulk per label
+    aggr_ref       = FALSE,         # aggregate to pseudo-bulk per label
     aggr_args      = list(power = 0.5)
 ) {
   

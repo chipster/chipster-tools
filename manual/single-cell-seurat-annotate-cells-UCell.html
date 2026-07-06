@@ -12,7 +12,7 @@
     <h3>Description</h3>
 
     <p>
-        With this tool, you can annotate celltypes for cells/clusters with your own marker genes and cell types.
+        With this tool, you can annotate cell types for cells/clusters with your own marker genes and cell types.
     </p>
 
     <h3>Parameters</h3>
@@ -33,7 +33,7 @@
          With this tool, you can annotate cells with UCell. UCell is an R package for scoring gene signatures in single-cell datasets. UCell scores, based on the Mann-Whitney U statistic, are robust to dataset size and heterogeneity, and their calculation demands relatively less computing time and memory than other robust methods, enabling the processing of large datasets (>10^5 cells). UCell can be applied to any cell vs. gene data matrix, and includes functions to directly interact with Seurat and Bioconductor's SingleCellExperiment objects.
          </p> UCell does not have a built-in database of marker genes or cell types. You need to firstly name cell types yourself and then input the marker genes resepective to each cell type using "sep" as a separator between gene sets. 
          <p></p>
-         <p>Optionally you can input a .tsv file containing 2 columns, first celltype and then genesets like this:</p>
+         <p>Optionally you can input a .tsv file containing 2 columns, first cell type and then genesets like this:</p>
 
             <table>
         <tr>
@@ -70,7 +70,7 @@
     <ul>
         <li>seurat_obj_annotated.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
 			but you can view the contents of the object using the <i>Extract information from Seurat object </i> tool. </li>
-        <li>Plots.pdf: UMAP of cell type scores in cells and clusters, assigned cell types per cell and cluster with labels. </li>
+        <li>Plots_UCell.pdf: UMAP of cell type scores in cells and clusters, assigned cell types per cell and cluster with labels. </li>
     </ul>
 
 

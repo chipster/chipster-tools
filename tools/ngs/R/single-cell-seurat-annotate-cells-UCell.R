@@ -28,7 +28,6 @@ library(ggplot2)
 
 options(Seurat.object.assay.version = "v5")
 
-
 # Try catch checking if the correct file has been inputted
 
 try_catch_load <- function(file) {
