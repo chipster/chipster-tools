@@ -212,6 +212,7 @@
 		<tool>express.R</tool>		
 	</category>
 	
+	
 <category name="Single-cell RNA-seq (Seurat v5)" color="#2196F3">
 		<tool>single-cell-cellbender-background-removal-v5.R</tool> 
 		<tool>single-cell-seurat-setup-v5.R</tool>  
@@ -238,6 +239,8 @@
 		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
 		<tool>single-cell-seurat-annotate-cells-sctype-v5.R</tool>
 		<tool>single-cell-seurat-annotate-cells-UCell.R</tool>
+		<tool>single-cell-seurat-Seurat2SingleR-ref.R</tool>
+		<tool>single-cell-seurat-annotate-cells-custom-ref.R</tool>
 		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
 		<tool>single-cell-seurat-part-of-h5-v5.R</tool>	
