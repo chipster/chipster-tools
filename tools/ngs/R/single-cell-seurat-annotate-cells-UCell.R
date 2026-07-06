@@ -33,19 +33,6 @@ library(ggplot2)
 
 options(Seurat.object.assay.version = "v5")
 
-<<<<<<< HEAD
-=======
-# Try catch checking if the correct file has been inputted
-
-try_catch_load <- function(file) {
-  tryCatch({
-    suppressWarnings(load(file, envir = globalenv()))
-  }, error = function(e) {
-    stop("CHIPSTER-NOTE: Failed to load the file, try swapping the files", call. = FALSE)
-  })
-}
-
->>>>>>> f75e937f (Add ScType, UCell, SingleR_customRef and custom ref build tools)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj.Robj")
 
