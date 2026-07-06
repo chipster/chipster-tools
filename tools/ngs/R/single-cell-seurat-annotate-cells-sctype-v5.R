@@ -380,6 +380,8 @@ pdf(file = "Plots_ScType.pdf", width = width, height = height)
 
 
 p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, pt.size = point.size, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
+print(p1)
+
 p2 <- NULL
 if (tissuetype_input == "Auto") {
   p2 <- barplot(height = tissueguess$score, names = tissueguess$tissue, names.arg = F, col = rgb(0.8,0.1,0.1,0.6), xlab = "Tissue", ylab = "Summary score", main = "ScType auto-detection of tissue type. \n higher score means more likely tissue type")
@@ -392,7 +394,6 @@ if (tissuetype_input == "Auto") {
   xpd = TRUE
 )
 
-print(p1)
 print(p2)
 }
 

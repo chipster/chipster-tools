@@ -124,7 +124,7 @@ best_type <- colnames(score_mat)[apply(score_mat,1,which.max)]
 
 seurat_obj$cell_type <- best_type
 
-
+seurat_obj <- SetIdent(seurat_obj, value = "cell_type")
 
 # Assign a cell type to each cluster based on the majority of cells in that cluster
 
