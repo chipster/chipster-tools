@@ -396,4 +396,6 @@ print(p1)
 print(p2)
 }
 
+save(seurat_obj, file = "seurat_obj_annotated_ScType.Robj")
+
 # EOF
