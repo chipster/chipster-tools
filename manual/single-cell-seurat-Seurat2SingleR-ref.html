@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Build a cell type reference from a pre-annotated Seurat object</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        With this tool you can build a SummarizedExperiment cell type annotation reference object by using a pre-annotated Seurat object.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Aggregate cells [no]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+         <p>A cell type reference for SingleR is a SummarizedExperiment object that contains the normalized expression counts of cells with a cell type label. This SummarizedExperiment object can be built with an annotated Seurat object.</p>
+
+    </p>
+
+
+    <p>
+        For more details, please check:<br>
+        The <a href="https://www.bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">SummarizedExperiment Bioconductor page</a> 
+        <p>We would like to thank Iivari Kleino for his kind assistance with the development of this tool.</p>
+
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>SummarizedExperiment_reference.Robj: The reference object made by SummarizedExperiment by using pre-annotated Seurat Object. This is used with SingleR to annotate cells on an unannotated Seurat object.</li>
+    </ul>
+
+
+
+</body>
