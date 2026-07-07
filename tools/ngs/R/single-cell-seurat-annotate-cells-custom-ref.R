@@ -147,7 +147,7 @@ p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size =
 print(p3)
 
 dev.off()
-save(seurat_obj, file = "seurat_obj_annotated.Robj")
+save(seurat_obj, file = "seurat_obj_annotated_custom.Robj")
 
 } else {
 
