@@ -29,6 +29,9 @@ library("data.tree")
 load("seurat_obj.Robj")
 
 
+# This is important because by default ScType uses RNA assay, but the user might have used another assay, e.g., SCT. So we need to get the default assay from the Seurat object.
+assay <- as.character(DefaultAssay(seurat_obj))
+
 # The following functions are from https://github.com/IanevskiAleksandr/sc-type and R folder
 
 gene_sets_prepare <- function(path_to_db_file, cell_type){
@@ -285,7 +288,7 @@ tissuetype_input <- tissuetype
 db_ <- "https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx";
 
 if (tissuetype == "Auto") {
-tissueguess <- auto_detect_tissue_type(path_to_db_file = db_, seuratObject = seurat_obj, scaled = TRUE, assay = "RNA")  # if saled = TRUE, make sure the data is scaled, as seuratObject[[assay]]@scale.data is used. If you just created a Seurat object, without any scaling and normalization, set scaled = FALSE, seuratObject[[assay]]@counts will be used         
+tissueguess <- auto_detect_tissue_type(path_to_db_file = db_, seuratObject = seurat_obj, scaled = TRUE, assay = assay)  # if scaled = TRUE, make sure the data is scaled, as seuratObject[[assay]]@scale.data is used. If you just created a Seurat object, without any scaling and normalization, set scaled = FALSE, seuratObject[[assay]]@counts will be used         
 tissuetype <- tissueguess$tissue[1]
 
 print("Tissue type auto-detected as: ")
@@ -302,16 +305,20 @@ tissue <- tissuetype
 # prepare gene sets
 gs_list <- gene_sets_prepare(db_, tissue)
 
-
+print("Current assay is")
+print(assay)
 
 # check Seurat object version (scRNA-seq matrix extracted differently in Seurat v4/v5)
-seurat_package_v5 <- isFALSE('counts' %in% names(attributes(seurat_obj[["RNA"]])));
+# No need since Chipster is using Seurat v5
+#seurat_package_v5 <- isFALSE('counts' %in% names(attributes(seurat_obj[[assay]])));
+seurat_package_v5 <- TRUE
+
 
 #No need for this check
 #print(sprintf("Seurat object %s is used", ifelse(seurat_package_v5, "v5", "v4")))
 
 # extract scaled scRNA-seq matrix
-scRNAseqData_scaled <- if (seurat_package_v5) as.matrix(seurat_obj[["RNA"]]$scale.data) else as.matrix(seurat_obj[["RNA"]]@scale.data)
+scRNAseqData_scaled <- if (seurat_package_v5) as.matrix(seurat_obj[[assay]]$scale.data) else as.matrix(seurat_obj[[assay]]@scale.data)
 
 es.max <- sctype_score(scRNAseqData = scRNAseqData_scaled, scaled = TRUE, gs = gs_list$gs_positive, gs2 = gs_list$gs_negative)
 
@@ -342,7 +349,7 @@ DimPlot(seurat_obj, reduction = "umap", label = TRUE, repel = TRUE, group.by = '
 
 
 #Run ScType on your seurat object
-seurat_obj <- run_sctype(seurat_obj, known_tissue_type = tissue, custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx",name="sctype_classification",plot=TRUE)
+seurat_obj <- run_sctype(seurat_obj, assay = assay, known_tissue_type = tissue, custom_marker_file="https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx",name="sctype_classification",plot=TRUE)
 
 
 

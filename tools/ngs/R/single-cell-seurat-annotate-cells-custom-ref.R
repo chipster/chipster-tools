@@ -90,10 +90,11 @@ rm(SummarizedExperiment_reference)
 
 load("seurat_obj_unannotated.Robj")
 
+assay <- as.character(DefaultAssay(seurat_obj))
 
 
 print("Running SingleR annotation on the unannotated Seurat object")
-seurat_obj <- run_singler_annotation(query_seurat = seurat_obj, ref = ref, label_col = "label")
+seurat_obj <- run_singler_annotation(query_seurat = seurat_obj, ref = ref, label_col = "label", assay = assay)
 
 
 # Add labels into the seurat object

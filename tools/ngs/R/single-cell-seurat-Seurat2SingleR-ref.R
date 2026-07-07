@@ -60,6 +60,8 @@ load("seurat_ref_obj.Robj", verbose = TRUE)
 seurat_ref_obj <- seurat_obj
 rm(seurat_obj)
 
+assay <- as.character(DefaultAssay(seurat_ref_obj))
+
 # print(unique(colnames(seurat_ref_obj@meta.data)))
 
 # Chipster pipeline puts celltypes as idents(??), needs to be added as a column for this function
@@ -78,7 +80,7 @@ seurat_ref_obj$celltype <- Idents(seurat_ref_obj)
 print("Starting to build the reference")
 
 
-SummarizedExperiment_reference <- build_singler_reference(seurat_ref_obj, label_col = "celltype", aggr_ref = aggregate_reference)
+SummarizedExperiment_reference <- build_singler_reference(seurat_ref_obj, label_col = "celltype", aggr_ref = aggregate_reference, assay = assay)
 
 print("Reference building succesful")
 
