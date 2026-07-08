@@ -21,8 +21,6 @@ set.seed(123)
 
 
 # Function for SingleR annotation by Iivari Kleino
-
-
 run_singler_annotation <- function(
     query_seurat,
     ref,
@@ -67,6 +65,8 @@ run_singler_annotation <- function(
   pred
 }
 
+# Load libraries
+
 library("Seurat")
 library("SingleR")
 library("scater")
@@ -79,7 +79,6 @@ load("SummarizedExperiment_reference.Robj")
 # The actual R variable has to be named as SummarizedExperiment_refernce (Chipster does this with Build celltype ref form seurat object)
 # This if exists is basically to check whether user actually inputted the correct file (Note that currently if they input a SummarizedExperiment object that is not named as stated before, this error will pop out)
 # This can be discussed if this is needed or not. By removing this you give option to the user to input any SummarizedExperiment object, but then they have to know what they are doing. They can also do it now, but the object in R has to be named strictly as SummarizedExperiment_reference (Not the file, the object inside the file)
-
 if (!exists("SummarizedExperiment_reference")) {
   stop("CHIPSTER-NOTE: Wrong input file. Try swapping input files ")
 }
@@ -116,8 +115,6 @@ type <- apply(seurat_table, 1, function(x) names(which.max(x)))
 
 
 # Check that cluster numbers on the seurat object and on the table actually match
-
-
 match <- all(seurat_obj$seurat_clusters == names(type[as.character(seurat_obj$seurat_clusters)]))
 
 if (!match) {
@@ -126,7 +123,6 @@ if (!match) {
   print("Cluster numbers match, assigning a cell type per cluster")
 }
 
-# head(type, 20)
 seurat_obj$cluster_celltype <- as.vector(type[as.character(seurat_obj$seurat_clusters)])
 
 print("Annotation succesful")
@@ -170,7 +166,5 @@ dev.off()
 save(seurat_obj, file = "seurat_obj_custom_ref_annotated.Robj")
 write.table(seurat_table, file = "cluster_celltype_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
-
-
 
 # EOF

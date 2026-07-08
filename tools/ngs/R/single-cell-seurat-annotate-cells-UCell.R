@@ -31,7 +31,6 @@ library(ggplot2)
 options(Seurat.object.assay.version = "v5")
 
 # Try catch checking if the correct file has been inputted
-
 try_catch_load <- function(file) {
   tryCatch({
     suppressWarnings(load(file, envir = globalenv()))
@@ -41,7 +40,6 @@ try_catch_load <- function(file) {
 }
 
 # Load the R-Seurat-object (called seurat_obj)
-
 try_catch_load("seurat_obj.Robj")
 
 # Make a new column called cell_type and fill it with "" 
@@ -82,19 +80,15 @@ if (file.exists("celltypes_markers.tsv")) {
   }
   
   # This groups the genes based on their celltype group
-  
   gene_groups <- split(x = genes_list, f = factors)
   
-  # This combines the gene groups with the correct cell types (Assumes that the user has put them in the correct order)
-  
+  #This combines the gene groups with the correct cell types (Assumes that the user has put them in the correct order)
   markers <- setNames(gene_groups, celltypes)
   
 }
 
 # The gene has to be found in the rownames, otherwise it can't calculate the modulescore -> Error
-
-#Find genes not found in the seurat object rownames
-
+# Find genes not found in the seurat object rownames
 gene_names <- unlist(markers, use.names = F)
 gene_names <- sub("[+-]$", "", gene_names)
 
@@ -119,7 +113,6 @@ score_mat <- seurat_obj@meta.data[, names(markers)]
 
 # This line of code from https://stackoverflow.com/questions/17735859/for-each-row-return-the-column-name-of-the-largest-value
 # Gets the cell type that has the highest module score
-
 best_type <- colnames(score_mat)[apply(score_mat,1,which.max)]
 
 seurat_obj$cell_type <- best_type
@@ -127,16 +120,12 @@ seurat_obj$cell_type <- best_type
 seurat_obj <- SetIdent(seurat_obj, value = "cell_type")
 
 # Assign a cell type to each cluster based on the majority of cells in that cluster
-
-
 seurat_table <- table(seurat_obj$seurat_clusters, seurat_obj$cell_type)
 
 type <- apply(seurat_table, 1, function(x) names(which.max(x)))
 
 
 # Check that cluster numbers on the seurat object and on the table actually match
-
-
 match <- all(seurat_obj$seurat_clusters == names(type[as.character(seurat_obj$seurat_clusters)]))
 
 if (!match) {
@@ -145,14 +134,10 @@ if (!match) {
   print("Cluster numbers match, assigning a cell type per cluster")
 }
 
-# head(type, 20)
 seurat_obj$cluster_celltype <- as.vector(type[as.character(seurat_obj$seurat_clusters)])
 
 
-
-# Featureplot showing the score of each cell type (1 being max, 0 min)
-# This is a sanity check for the researcher to see if the assigned cell type is about correct
-
+# Plots
 pdf(file = "UCell_Plots.pdf", width = width, height = height)
 
 p1 <- FeaturePlot(seurat_obj, label = T, label.size = label.size, pt.size = point.size, reduction = "umap",  features = names(markers)[1:length(markers)])+
