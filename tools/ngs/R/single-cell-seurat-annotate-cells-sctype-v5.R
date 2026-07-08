@@ -1,7 +1,7 @@
-# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - BETA Annotate cells with ScType" (You can use this tool to automatically annotate clusters using ScType. This tool outputs UMAPs.)
+# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to automatically annotate cells using ScType)
 # INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information." TYPE GENERIC
-# OUTPUT OPTIONAL Plots_ScType.pdf
-# OUTPUT OPTIONAL seurat_obj_annotated_ScType.Robj
+# OUTPUT OPTIONAL ScType_Plots.pdf
+# OUTPUT OPTIONAL seurat_obj_sctype_annotations.Robj
 # PARAMETER OPTIONAL tissuetype: "Tissue type" TYPE ["Auto": "Auto", "Immune system": "Immune system", "Pancreas": "Pancreas", "Liver": "Liver", "Eye": "Eye", "Kidney": "Kidney", "Brain": "Brain", "Lung": "Lung", "Adrenal": "Adrenal", "Heart": "Heart", "Intestine": "Intestine", "Muscle": "Muscle", "Placenta": "Placenta", "Spleen": "Spleen", "Stomach": "Stomach", "Thymus": "Thymus", "Hippocampus": "Hippocampus"] DEFAULT "Auto" (Choose the tissue type of your data. Auto detects tissue type based on ScType scoring. The scores will be plotted if Auto is chosen.)
 # PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
@@ -33,7 +33,6 @@ load("seurat_obj.Robj")
 assay <- as.character(DefaultAssay(seurat_obj))
 
 # The following functions are from https://github.com/IanevskiAleksandr/sc-type and R folder
-
 gene_sets_prepare <- function(path_to_db_file, cell_type){
   
   cell_markers = openxlsx::read.xlsx(path_to_db_file)
@@ -143,8 +142,6 @@ sctype_score <- function(scRNAseqData, scaled = !0, gs, gs2 = NULL, gene_names_t
 
 
 # Run ScType function:
-
-
 run_sctype <- function(seurat_object, known_tissue_type = NULL, assay = "RNA", scaled = TRUE, custom_marker_file = NULL, plot = FALSE, name = "sctype_classification") {
   db_=sctype_source()
   # Check for missing arguments
@@ -233,7 +230,6 @@ sctype_source <- function(){
 
 
 # load auto-detection function
-
 auto_detect_tissue_type <- function(path_to_db_file, seuratObject, scaled, assay = "RNA", ...){
   
   # get all tissue types in DB
@@ -279,9 +275,6 @@ auto_detect_tissue_type <- function(path_to_db_file, seuratObject, scaled, assay
 
 # Needed at the end
 tissuetype_input <- tissuetype
-
-
-# Actual code starts now:
 
 
 #Get database and tissuetype 
@@ -379,11 +372,11 @@ ccolss <- c("#5f75ae","#92bbb8","#64a841","#e5486e","#de8e06","#eccf5a","#b5aa0f
 #   geom_node_circle(aes(filter=ord==1,fill=I("#F5F5F5"), colour=I("#D3D3D3")), alpha=0.9) + geom_node_circle(aes(filter=ord==2,fill=I(Colour), colour=I("#D3D3D3")), alpha=0.9) +
 #   theme_void() + geom_node_text(aes(filter=ord==2, label=shortName, colour=I("#ffffff"), fill="white", repel = !1, parse = T, size = I(log(ncells,25)*1.5)))+ geom_node_label(aes(filter=ord==1,  label=shortName, colour=I("#000000"), size = I(3), fill="white", parse = T), repel = !0, segment.linetype="dotted")
 
-
+# Set sctype cell types as Idents of seurat object
 seurat_obj <- SetIdent(seurat_obj, value = "sctype_classification")
 
-
-pdf(file = "Plots_ScType.pdf", width = width, height = height)
+# Plots
+pdf(file = "ScType_Plots.pdf", width = width, height = height)
 
 
 p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, pt.size = point.size, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
@@ -404,6 +397,6 @@ if (tissuetype_input == "Auto") {
 print(p2)
 }
 
-save(seurat_obj, file = "seurat_obj_annotated_ScType.Robj")
+save(seurat_obj, file = "seurat_obj_sctype_annotations.Robj")
 
 # EOF

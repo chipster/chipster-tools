@@ -1,8 +1,8 @@
-# TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 - BETA Annotate cells with UCell" (You can use this tool to annotate the clusters with own cell types and gene sets.)
+# TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 - Annotate cells with UCell" (You can use this tool to annotate the cells and clusters with own cell types and gene sets.)
 # INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information" TYPE GENERIC
 # INPUT OPTIONAL celltypes_markers.tsv: "Cell types and gene sets" TYPE GENERIC
 # OUTPUT UCell_Plots.pdf
-# OUTPUT seurat_obj_annotated_UCell.Robj
+# OUTPUT seurat_obj_ucell_annotated.Robj
 # PARAMETER OPTIONAL celltypes: "Cell types to plot" TYPE STRING DEFAULT "T cells, B cells, NK cells, Monocytes" (Please use comma\(s\) \(,\) as a separator, e.g., \T Cells\, B cells\. Minimum of 2 cell types is required because UCell is based on Mann-Whitney U test) 
 # PARAMETER OPTIONAL genesets: "Gene sets for cell types" TYPE STRING DEFAULT "CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8" (Gene sets for cell types in the same order as celltypes. For example if you have T cells, B cells, NK cells, Monocytes, please input first the geneset for T cells, then use word "sep" and then type in geneset for B cells and so on. If you list multiple gene sets, please use comma\(s\) \(,\) as a separator, e.g., \CD3D\, CD3E\, IL7R\, sep\, MS4A1\, CD79A\, CD79B\, sep\, NKG7\, GNLY\, PRF1\, sep\, CD14\, LST1\, S100A8\. ) 
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
@@ -31,7 +31,6 @@ library(ggplot2)
 options(Seurat.object.assay.version = "v5")
 
 # Try catch checking if the correct file has been inputted
-
 try_catch_load <- function(file) {
   tryCatch({
     suppressWarnings(load(file, envir = globalenv()))
@@ -41,7 +40,6 @@ try_catch_load <- function(file) {
 }
 
 # Load the R-Seurat-object (called seurat_obj)
-
 try_catch_load("seurat_obj.Robj")
 
 # Make a new column called cell_type and fill it with "" 
@@ -82,19 +80,15 @@ if (file.exists("celltypes_markers.tsv")) {
   }
   
   # This groups the genes based on their celltype group
-  
   gene_groups <- split(x = genes_list, f = factors)
   
-  # This combines the gene groups with the correct cell types (Assumes that the user has put them in the correct order)
-  
+  #This combines the gene groups with the correct cell types (Assumes that the user has put them in the correct order)
   markers <- setNames(gene_groups, celltypes)
   
 }
 
 # The gene has to be found in the rownames, otherwise it can't calculate the modulescore -> Error
-
-#Find genes not found in the seurat object rownames
-
+# Find genes not found in the seurat object rownames
 gene_names <- unlist(markers, use.names = F)
 gene_names <- sub("[+-]$", "", gene_names)
 
@@ -119,7 +113,6 @@ score_mat <- seurat_obj@meta.data[, names(markers)]
 
 # This line of code from https://stackoverflow.com/questions/17735859/for-each-row-return-the-column-name-of-the-largest-value
 # Gets the cell type that has the highest module score
-
 best_type <- colnames(score_mat)[apply(score_mat,1,which.max)]
 
 seurat_obj$cell_type <- best_type
@@ -127,16 +120,12 @@ seurat_obj$cell_type <- best_type
 seurat_obj <- SetIdent(seurat_obj, value = "cell_type")
 
 # Assign a cell type to each cluster based on the majority of cells in that cluster
-
-
 seurat_table <- table(seurat_obj$seurat_clusters, seurat_obj$cell_type)
 
 type <- apply(seurat_table, 1, function(x) names(which.max(x)))
 
 
 # Check that cluster numbers on the seurat object and on the table actually match
-
-
 match <- all(seurat_obj$seurat_clusters == names(type[as.character(seurat_obj$seurat_clusters)]))
 
 if (!match) {
@@ -145,14 +134,10 @@ if (!match) {
   print("Cluster numbers match, assigning a cell type per cluster")
 }
 
-# head(type, 20)
 seurat_obj$cluster_celltype <- as.vector(type[as.character(seurat_obj$seurat_clusters)])
 
 
-
-# Featureplot showing the score of each cell type (1 being max, 0 min)
-# This is a sanity check for the researcher to see if the assigned cell type is about correct
-
+# Plots
 pdf(file = "UCell_Plots.pdf", width = width, height = height)
 
 p1 <- FeaturePlot(seurat_obj, label = T, label.size = label.size, pt.size = point.size, reduction = "umap",  features = names(markers)[1:length(markers)])+
@@ -174,6 +159,6 @@ print(p3)
 
 dev.off()
 
-save(seurat_obj, file = "seurat_obj_annotated_UCell.Robj")
+save(seurat_obj, file = "seurat_obj_ucell_annotated.Robj")
 
 # EOF

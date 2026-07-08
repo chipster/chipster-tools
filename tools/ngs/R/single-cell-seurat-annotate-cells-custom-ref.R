@@ -1,8 +1,9 @@
-# TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - BETA Annotate cells with own reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
+# TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - Annotate cells with own reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
 # INPUT seurat_obj_unannotated.Robj: "Seurat object that will get annotated" TYPE GENERIC (Has to be pre-processed so that it contains at least UMAP information.)
 # INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
-# OUTPUT seurat_obj_annotated_custom.Robj
-# OUTPUT SingleR_custom_annotation_Plots.pdf
+# OUTPUT seurat_obj_custom_ref_annotated.Robj
+# OUTPUT SingleR_custom_ref_annotation_Plots.pdf
+# OUTPUT cluster_celltype_table.tsv
 # PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, removes weak cell types and will be set as NA.) 
 # PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, improves ranking accuracy of the best label.) 
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
@@ -20,8 +21,6 @@ set.seed(123)
 
 
 # Function for SingleR annotation by Iivari Kleino
-
-
 run_singler_annotation <- function(
     query_seurat,
     ref,
@@ -66,6 +65,8 @@ run_singler_annotation <- function(
   pred
 }
 
+# Load libraries
+
 library("Seurat")
 library("SingleR")
 library("scater")
@@ -78,7 +79,6 @@ load("SummarizedExperiment_reference.Robj")
 # The actual R variable has to be named as SummarizedExperiment_refernce (Chipster does this with Build celltype ref form seurat object)
 # This if exists is basically to check whether user actually inputted the correct file (Note that currently if they input a SummarizedExperiment object that is not named as stated before, this error will pop out)
 # This can be discussed if this is needed or not. By removing this you give option to the user to input any SummarizedExperiment object, but then they have to know what they are doing. They can also do it now, but the object in R has to be named strictly as SummarizedExperiment_reference (Not the file, the object inside the file)
-
 if (!exists("SummarizedExperiment_reference")) {
   stop("CHIPSTER-NOTE: Wrong input file. Try swapping input files ")
 }
@@ -106,16 +106,15 @@ predictions <- seurat_obj$pred
 seurat_obj <- seurat_obj$seurat
 seurat_obj <- SetIdent(object = seurat_obj, value = predictions$labels)
 
-# Assign one cell type per cluster 
 
+
+# Assign one cell type per cluster 
 seurat_table <- table(seurat_obj$seurat_clusters, seurat_obj$celltype)
 
 type <- apply(seurat_table, 1, function(x) names(which.max(x)))
 
 
 # Check that cluster numbers on the seurat object and on the table actually match
-
-
 match <- all(seurat_obj$seurat_clusters == names(type[as.character(seurat_obj$seurat_clusters)]))
 
 if (!match) {
@@ -124,7 +123,6 @@ if (!match) {
   print("Cluster numbers match, assigning a cell type per cluster")
 }
 
-# head(type, 20)
 seurat_obj$cluster_celltype <- as.vector(type[as.character(seurat_obj$seurat_clusters)])
 
 print("Annotation succesful")
@@ -132,7 +130,7 @@ print("Annotation succesful")
 if (length(predictions$pruned.labels) > 0) {
 print("Pruned, saving QC plots")
 
-pdf(file = "SingleR_custom_annotation_Plots.pdf", width = width, height = height)
+pdf(file = "SingleR_custom_ref_annotation_Plots.pdf", width = width, height = height)
 
 p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = T, label.size = label.size)
 print(p0)
@@ -148,12 +146,13 @@ p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size =
 print(p3)
 
 dev.off()
-save(seurat_obj, file = "seurat_obj_annotated_custom.Robj")
+save(seurat_obj, file = "seurat_obj_custom_ref_annotated.Robj")
+write.table(seurat_table, file = "cluster_celltype_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 } else {
 
 print("Not pruned, no QC plots available.")
-pdf(file = "SingleR_custom_annotation_Plots.pdf", width = width, height = height)
+pdf(file = "SingleR_custom_ref_annotation_Plots.pdf", width = width, height = height)
 p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = T, label.size = label.size)
 
 print(p0)
@@ -164,9 +163,8 @@ print(p3)
 
 dev.off()
 
-save(seurat_obj, file = "seurat_obj_annotated_custom.Robj")
+save(seurat_obj, file = "seurat_obj_custom_ref_annotated.Robj")
+write.table(seurat_table, file = "cluster_celltype_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
-
-
 
 # EOF

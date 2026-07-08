@@ -10,9 +10,7 @@ aggregate_reference <- as.logical(aggregate_reference)
 # 2026-06-22 JV
 
 
-
 #  Function for reference building by Iivari Kleino
-
 #  Create a SummarizedExperiment reference from a labelled Seurat object
 build_singler_reference <- function(
     seurat_obj,
@@ -47,14 +45,13 @@ build_singler_reference <- function(
   ref
 }
 
-
+# Load libraries
 
 library("Seurat")
 library("SingleR")
 library("scater")
 
 # Load Seurat object that will be used as a reference
-
 load("seurat_ref_obj.Robj", verbose = TRUE)
 
 seurat_ref_obj <- seurat_obj
@@ -62,17 +59,13 @@ rm(seurat_obj)
 
 assay <- as.character(DefaultAssay(seurat_ref_obj))
 
-# print(unique(colnames(seurat_ref_obj@meta.data)))
-
-# Chipster pipeline puts celltypes as idents(??), needs to be added as a column for this function
-
+# Check that cell types are stored in idents
 if (any(Idents(seurat_ref_obj) %in% c(0,1,2))) {
   stop("CHIPSTER-NOTE: No cell types found, only cluster numbers.")
 }
 
+# Add celltype column
 seurat_ref_obj$celltype <- Idents(seurat_ref_obj)
-
-#head(seurat_ref_obj$celltype)
 
 
 
@@ -86,6 +79,5 @@ print("Reference building succesful")
 
 
 save(SummarizedExperiment_reference, file = "SummarizedExperiment_reference.Robj")
-
 
 # EOF
