@@ -1,8 +1,8 @@
-# TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 - BETA Annotate cells with UCell" (You can use this tool to annotate the clusters with own cell types and gene sets.)
+# TOOL single-cell-seurat-annotate-cells-UCell.R: "Seurat v5 - Annotate cells with UCell" (You can use this tool to annotate the cells and clusters with own cell types and gene sets.)
 # INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information" TYPE GENERIC
 # INPUT OPTIONAL celltypes_markers.tsv: "Cell types and gene sets" TYPE GENERIC
 # OUTPUT UCell_Plots.pdf
-# OUTPUT seurat_obj_annotated_UCell.Robj
+# OUTPUT seurat_obj_ucell_annotated.Robj
 # PARAMETER OPTIONAL celltypes: "Cell types to plot" TYPE STRING DEFAULT "T cells, B cells, NK cells, Monocytes" (Please use comma\(s\) \(,\) as a separator, e.g., \T Cells\, B cells\. Minimum of 2 cell types is required because UCell is based on Mann-Whitney U test) 
 # PARAMETER OPTIONAL genesets: "Gene sets for cell types" TYPE STRING DEFAULT "CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8" (Gene sets for cell types in the same order as celltypes. For example if you have T cells, B cells, NK cells, Monocytes, please input first the geneset for T cells, then use word "sep" and then type in geneset for B cells and so on. If you list multiple gene sets, please use comma\(s\) \(,\) as a separator, e.g., \CD3D\, CD3E\, IL7R\, sep\, MS4A1\, CD79A\, CD79B\, sep\, NKG7\, GNLY\, PRF1\, sep\, CD14\, LST1\, S100A8\. ) 
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
@@ -174,6 +174,6 @@ print(p3)
 
 dev.off()
 
-save(seurat_obj, file = "seurat_obj_annotated_UCell.Robj")
+save(seurat_obj, file = "seurat_obj_ucell_annotated.Robj")
 
 # EOF

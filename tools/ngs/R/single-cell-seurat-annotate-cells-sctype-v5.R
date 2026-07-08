@@ -1,7 +1,7 @@
-# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - BETA Annotate cells with ScType" (You can use this tool to automatically annotate clusters using ScType. This tool outputs UMAPs.)
+# TOOL single-cell-seurat-annotate-cells-sctype-v5.R: "Seurat v5 - Annotate cells with ScType" (You can use this tool to automatically annotate cells using ScType)
 # INPUT seurat_obj.Robj: "Seurat object. Has to be pre-processed so that it contains UMAP information." TYPE GENERIC
-# OUTPUT OPTIONAL Plots_ScType.pdf
-# OUTPUT OPTIONAL seurat_obj_annotated_ScType.Robj
+# OUTPUT OPTIONAL ScType_Plots.pdf
+# OUTPUT OPTIONAL seurat_obj_sctype_annotations.Robj
 # PARAMETER OPTIONAL tissuetype: "Tissue type" TYPE ["Auto": "Auto", "Immune system": "Immune system", "Pancreas": "Pancreas", "Liver": "Liver", "Eye": "Eye", "Kidney": "Kidney", "Brain": "Brain", "Lung": "Lung", "Adrenal": "Adrenal", "Heart": "Heart", "Intestine": "Intestine", "Muscle": "Muscle", "Placenta": "Placenta", "Spleen": "Spleen", "Stomach": "Stomach", "Thymus": "Thymus", "Hippocampus": "Hippocampus"] DEFAULT "Auto" (Choose the tissue type of your data. Auto detects tissue type based on ScType scoring. The scores will be plotted if Auto is chosen.)
 # PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
@@ -383,7 +383,7 @@ ccolss <- c("#5f75ae","#92bbb8","#64a841","#e5486e","#de8e06","#eccf5a","#b5aa0f
 seurat_obj <- SetIdent(seurat_obj, value = "sctype_classification")
 
 
-pdf(file = "Plots_ScType.pdf", width = width, height = height)
+pdf(file = "ScType_Plots.pdf", width = width, height = height)
 
 
 p1 <- DimPlot(seurat_obj, reduction = "umap", label = TRUE, pt.size = point.size, repel = TRUE, label.size = label.size, group.by = 'sctype_classification')+labs(color = paste("Tissue type:", tissue)) 
@@ -404,6 +404,14 @@ if (tissuetype_input == "Auto") {
 print(p2)
 }
 
-save(seurat_obj, file = "seurat_obj_annotated_ScType.Robj")
+save(seurat_obj, file = "seurat_obj_sctype_annotations.Robj")
 
 # EOF
+
+
+
+
+# TODO Kaikki nimet html filusta ja outputista kuntoon. Katso että on linjassa youtuben kanssa.
+# TODO Korjaa myös output .Robj nimet kuntoon
+# TODO seurat_obj_singler_annotations <
+# UCell_Plots, ScType_Plots
