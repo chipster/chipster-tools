@@ -145,7 +145,7 @@ p1 <- FeaturePlot(seurat_obj, label = T, label.size = label.size, pt.size = poin
 
 
 p2 <- DimPlot(seurat_obj, group.by = "cell_type", label = T, pt.size = point.size, label.size = label.size)+
-  ggtitle("Assigned cell types based on highest UCell module score")+
+  ggtitle("Assigned cell types based on the highest UCell module score")+
   labs(color = "Cell types")
 
 p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, pt.size = point.size, label.size = label.size)+

@@ -42,7 +42,8 @@ run_singler_annotation <- function(
     labels    = ref[[label_col]],
     fine.tune = fine_tune,
     prune     = prune_score,
-    BPPARAM   = BPPARAM
+    BPPARAM   = BPPARAM,
+    de.method = "wilcox"
   )
   
   if (add_to_seurat) {
