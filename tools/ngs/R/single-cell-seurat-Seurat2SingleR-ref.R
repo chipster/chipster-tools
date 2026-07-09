@@ -46,13 +46,16 @@ build_singler_reference <- function(
 }
 
 # Load libraries
-
 library("Seurat")
 library("SingleR")
 library("scater")
 
 # Load Seurat object that will be used as a reference
-load("seurat_ref_obj.Robj", verbose = TRUE)
+load("seurat_ref_obj.Robj", verbose = F)
+
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
+}
 
 seurat_ref_obj <- seurat_obj
 rm(seurat_obj)

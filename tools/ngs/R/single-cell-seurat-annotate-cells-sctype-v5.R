@@ -28,6 +28,9 @@ library("data.tree")
 
 load("seurat_obj.Robj")
 
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
+}
 
 # This is important because by default ScType uses RNA assay, but the user might have used another assay, e.g., SCT. So we need to get the default assay from the Seurat object.
 assay <- as.character(DefaultAssay(seurat_obj))

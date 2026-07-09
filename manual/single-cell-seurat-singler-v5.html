@@ -7,14 +7,12 @@
 
 <body>
 
-    <h2>SingleR cluster annotation </h2>
+    <h2>Annotate cells with SingleR</h2>
 
     <h3>Description</h3>
 
     <p>
-        This tool can be used to annotate clustered scRNAseq data by comparing it to
-        the CellDex annotation datasets.
-
+        This tool annotates cells and clusters by comparing them to the CellDex annotation datasets. The scRNA-seq data to be annotated needs to be clustered first.
     </p>
 
     <h3>Parameters</h3>
@@ -27,32 +25,40 @@
     <h3>Details</h3>
 
     <p>
-        SingleR is an automatic annotation method for single-cell RNA sequencing (scRNAseq)
-        data (Aran et al. 2019).
-        Given a reference dataset of samples (single-cell or bulk) with known labels,
-        it labels new cells from a test dataset based on similarity to the reference.
-        The CellDex package provides access to several reference datasets
-        (mostly derived from bulk RNA-seq or microarray data) through dedicated retrieval functions.
-        User can select the CellDex package to be used as reference.
+	Given a reference dataset (single-cell or bulk RNA-seq) with known cell types, SingleR labels new cells from a test dataset based on similarity to the reference. 
+	You can choose between several reference datasets (mostly derived from bulk RNA-seq or microarray data) offered by the CellDex package. 
+	If you would like to use your reference, please prepare the reference using the Chipster tool <i>Build cell type reference from Seurat object</i> and then use the tool <i>Annotate cells with SingleR and own reference</i>.
+    </p>
 
-        As inputs, give a Seurat object which includes the clustering information. <br>
-
-    </p>
-    <p>
-        Main and fine annotations are done cell by cell, and this data is returned as tsv tables and in the
-        Seurat object (in fields: seurat_obj@meta.data$annotation.main and seurat_obj@meta.data$annotation.fine).
-        The annotation results are also shown in the pdf file as <b>UMAP plots</b>, together with heatmap and violin
-        plots
-        that can be used to estimate the confidence of the annotations. Before the main and fine annotations
-        there's also the UMAP plot colored according the clustering result, and after that the annotations
-        according the clusters.
-    </p>
-    <p>
-        The <b>heatmaps</b> display the scores for all cells across all reference labels: ideally, each cell (=column)
-        has one score that is much higher (=yellow) than the rest. Similar diagnostic can be viewed in the
-        violion plots, where per cell "deltas" are shown. Deltas are the difference between the score for the highest
-        label and the median across all labels for each cell.
-    </p>
+	<p>
+	The CellDex references contain both main and fine level annotations. Main level annotations define the major cell types, while fine-grained annotations define cell subtypes or states.
+	Both main and fine annotations are assigned to each individual cell, and this data is returned as tsv tables and in the Seurat object (in fields: seurat_obj@meta.data$annotation.main and seurat_obj@meta.data$annotation.fine). 
+	The annotation results are also shown in the pdf file as UMAP plots.
+	</p>
+	
+	<p>
+	SingleR computes the Spearman correlation between cell's expression profile and that of each reference sample. The use of Spearman’s correlation provides a measure of robustness to batch effects across datasets. 
+	The per-label score is defined as a fixed quantile (0.8) of the correlations across all samples with that label. 
+	This accounts for differences in the number of reference samples for each label, and avoids penalizing classifications to heterogeneous labels by only requiring a good match to a minority of samples. 
+	The score calculation is repeated for all labels in the reference dataset, and the label with the highest score is used as SingleR’s prediction for this cell. 
+	In addition, a fine-tuning step is performed to improve resolution between closely related labels. The reference dataset is subsetted to only include labels with scores close to the maximum; 
+	scores are recomputed using only marker genes for the subset of labels, and this process is iterated until only one label remains.
+	</p>
+	
+	<p>
+	You can estimate the confidence of the annotations by inspecting two types of plots:
+		<ul>
+			<li>Heatmaps display the scores for all cells across all reference labels: ideally, each cell (column) has one score that is much higher (yellow) than the rest.</li>
+			<li>Violin plots display delta values for each cell. Delta is the difference between the score for the assigned label and the median across all labels for each cell, so high delta indicates a reliable annotation. 
+			The aim is to discard low delta values caused by (i) ambiguous assignments with closely related reference labels and (ii) incorrect assignments that match poorly to all reference labels. 
+			The yellow dots in the violin plot are cells, whose cell type assignment has been removed (pruned) due to low deltas.</li>
+		</ul>
+	</p>
+	
+	<p>
+	In addition to the cell-level annotations, this tool provides cluster-level annotations using the clusters argument of the SingleR method. 
+	In this case SingleR aggregates the gene expression profiles of all cells within a single cluster into a single "pseudo-bulk" sample, resulting in a clean, cohesive cell-type assignment for each cluster, which is visualized in a UMAP plot.
+	</p>
 
     <p>
         For more details, please check:
@@ -68,17 +74,16 @@
     </ul>
     </p>
 
-    </p>
-
     <h3>Output</h3>
 
     <ul>
 
-        <li>seurat_obj_singler_annotations.Robj: TThe Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
+        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
 			but you can view the contents of the object using the <i>Extract information from Seurat object</i> tool. </li>
-        <li>singleR_annotation_plots.pdf: Plots showing annotation diagnostics </li>
-        <li>annotations_main.tsv: Main level annotations table </li>
-        <li>annotations_fine.tsv: Fine level annotations table </li>
+        <li>singleR_annotation_plots.pdf: Several pages containing (i) UMAP plot colored according the orignal clustering result, (ii) UMAP plot colored according to main cell types at cluster level, 
+			(iii) UMAP plots colored according to main and fine annotations at cell level, and (iv) heatmaps and violin plots for main and fine annotations at cell level. </li>
+        <li>annotations_main.tsv: Main level annotations table at cell level.</li>
+        <li>annotations_fine.tsv: Fine level annotations table at cell level.</li>
 
     </ul>
 

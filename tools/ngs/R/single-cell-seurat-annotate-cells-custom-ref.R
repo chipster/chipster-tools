@@ -42,7 +42,8 @@ run_singler_annotation <- function(
     labels    = ref[[label_col]],
     fine.tune = fine_tune,
     prune     = prune_score,
-    BPPARAM   = BPPARAM
+    BPPARAM   = BPPARAM,
+    de.method = "wilcox"
   )
   
   if (add_to_seurat) {
@@ -89,6 +90,10 @@ rm(SummarizedExperiment_reference)
 
 
 load("seurat_obj_unannotated.Robj")
+
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
+}
 
 assay <- as.character(DefaultAssay(seurat_obj))
 
