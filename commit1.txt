@@ -1,0 +1,39 @@
+commit 0e6608284f8cb2091a2c670f5cc2fbb0f9af91a4
+Author: Eija Korpelainen <ekorpelainen@gmail.com>
+Date:   Thu Jul 9 12:46:14 2026 +0300
+
+    Update single-cell-seurat-singler-v5.html
+    
+    Fix typos.
+
+diff --git a/manual/single-cell-seurat-singler-v5.html b/manual/single-cell-seurat-singler-v5.html
+index 779c912a..2a1b8841 100644
+--- a/manual/single-cell-seurat-singler-v5.html
++++ b/manual/single-cell-seurat-singler-v5.html
+@@ -12,7 +12,7 @@
+     <h3>Description</h3>
+ 
+     <p>
+-        This tool annotates cells and clusters by comparing it to the CellDex annotation datasets. The scRNA-seq data to be annotated needs to be clustered first.
++        This tool annotates cells and clusters by comparing them to the CellDex annotation datasets. The scRNA-seq data to be annotated needs to be clustered first.
+     </p>
+ 
+     <h3>Parameters</h3>
+@@ -33,7 +33,7 @@
+     </p>
+     <p>
+ 		The CellDex references contain both main and fine level annotations. Main level annotations define the major cell types, while fine-grained annotations define cell subtypes or states. 
+-        Both main and fine annotations are done cell by cell, and this data is returned as tsv tables and in the Seurat object (in fields: seurat_obj@meta.data$annotation.main and seurat_obj@meta.data$annotation.fine).
++        Both main and fine annotations are assigned to each individual cell, and the results are available as tsv tables and in the Seurat object (in fields: seurat_obj@meta.data$annotation.main and seurat_obj@meta.data$annotation.fine).
+         The annotation results are also shown in the pdf file as UMAP plots. 
+ 	</p>
+ 	<p>
+@@ -76,7 +76,7 @@
+     <h3>Output</h3>
+ 
+     <ul>
+-        <li>seurat_obj_singler_annotations.Robj: TThe Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
++        <li>seurat_obj_singler_annotations.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
+ 			but you can view the contents of the object using the <i>Extract information from Seurat object</i> tool. </li>
+         <li>singleR_annotation_plots.pdf: Several pages containing (i) UMAP plot colored according the orignal clustering result, (ii) UMAP plot colored according to main cell types at cluster level, 
+ 			(iii) UMAP plots colored according to main and fine annotations at cell level, and (iv) heatmaps and violin plots for main and fine annotations at cell level. </li>
