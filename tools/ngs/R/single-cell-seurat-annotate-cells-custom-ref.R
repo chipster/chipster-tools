@@ -91,6 +91,10 @@ rm(SummarizedExperiment_reference)
 
 load("seurat_obj_unannotated.Robj")
 
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
+}
+
 assay <- as.character(DefaultAssay(seurat_obj))
 
 

@@ -42,6 +42,10 @@ try_catch_load <- function(file) {
 # Load the R-Seurat-object (called seurat_obj)
 try_catch_load("seurat_obj.Robj")
 
+if (exists("data.combined")) {
+  seurat_obj <- data.combined
+}
+
 # Make a new column called cell_type and fill it with "" 
 seurat_obj$cell_type <- ""
 
