@@ -326,6 +326,7 @@
 		<tool>spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R</tool>
 		<tool>spatial-transcriptomics-seurat-clustering-v5-HD.R</tool>	
 		<tool>spatial-transcriptomics-seurat-clustering-plots-v5-HD.R</tool>
+		<tool>spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R</tool>
 	</category>
 
 	<category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
