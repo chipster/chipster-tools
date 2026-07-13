@@ -1,5 +1,6 @@
 # TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 -Visualize gene expression in spatial transcriptomics data" (This)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
+# INPUT OPTIONAL genes.tsv: "Gene list in tsv format" TYPE GENERIC (A tab-separated file with a list of genes)
 # OUTPUT OPTIONAL gene_expression_plot.pdf
 # PARAMETER OPTIONAL genes: "Gene name\(s\)" TYPE STRING DEFAULT "Hpca, Ttr" (Name\(s\) of the gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in spatial feature plot" TYPE DECIMAL DEFAULT 1.6 (Point size for the plot. Default is 1.6)
@@ -12,11 +13,12 @@
 # SLOTS 4
 # TOOLS_BIN ""
 
-
+# Have to see whether we want to include the bin size here or maybe in earlier tools... Apparently some info is lacking if changed now.
 ## PARAMETER OPTIONAL bin: "Bin size for the spatial plot" TYPE INTEGER DEFAULT 2
 
 # 2026-09-06 JV
 
+#Load libraries
 library(Seurat)
 library(ggplot2)
 library(patchwork)
@@ -32,29 +34,41 @@ library(Biobase)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj_clustering.Robj")
 
-#DefaultAssay(seurat_obj) <- sprintf("Spatial.%03dum", bin)
+# Check if the genes.tsv file exists. If so, read it and use it, else use the genes param.
+if (file.exists("genes.tsv")) {
+    genes <- read.table("genes.tsv", header = FALSE, sep = "\t", stringsAsFactors = FALSE)[,1]
+    genes <- as.character(genes)
+} else {
+    genes <- unlist(strsplit(genes, ","))
+}
 
+# Make genes uppercase for easy match (User definitely knows which organism is used)
+genes <- toupper(genes)
 
-genes <- trimws(unlist(strsplit(genes, ",")))
+# Remove leading and trailing whitespace from gene names
+genes <- trimws(genes)
 
+# Make rownames of seurat_obj also uppercase for easy match
 rownames(seurat_obj) <- toupper(rownames(seurat_obj))
 
+# Find common genes between seurat_obj and gene list
 match <- intersect(genes, rownames(seurat_obj))
 
-if (!match) {
+print(paste("Found", length(match), "genes in the Seurat object:"))
+print(match)
+
+# Check if any genes were found
+if (length(match) == 0) {
   stop("CHIPSTER-NOTE: None of the given genes were found in the Seurat object")
 }
 
-
+# Plots
 pdf(file = "gene_expression_plot.pdf", width = width, height = height)
 
 p1 <- SpatialFeaturePlot(seurat_obj, features = genes, keep.scale = color.scale, pt.size.factor = point.size, alpha = c(min_transparency, max_transparency))
 
 print(p1)
-print(p2)
 
 dev.off()
 
 # EOF
-
-
