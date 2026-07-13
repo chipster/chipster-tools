@@ -258,6 +258,11 @@
 		<!--<tool>single-cell-detect-bead-synthesis-errors.R</tool>	--> 
 	</category>
 
+<category name="Spatial" color="#2196F3">
+<tool>spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R</tool>
+</category>
+
+
 	<!-- <category name="Single-cell RNA-seq (Seurat v4, old)" color="#3300ff">
 		<tool>single-cell-cellbender-background-removal.R</tool> 	
 		<tool>single-cell-seurat-setup.R</tool>	   
