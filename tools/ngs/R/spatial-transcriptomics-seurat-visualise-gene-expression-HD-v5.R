@@ -1,5 +1,5 @@
-# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 -Visualize gene expression in spatial transcriptomics data" (This)
-# INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
+# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 -Visualize gene expression in spatial transcriptomics data" (Visualize the expression of selected genes in spatial transcriptomics data.)
+# INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC (A Seurat object containing spatial transcriptomics data. This object has to be pre-processed and PCA has to be run)
 # INPUT OPTIONAL genes.tsv: "Gene list in tsv format" TYPE GENERIC (A tab-separated file with a list of genes)
 # OUTPUT OPTIONAL gene_expression_plot.pdf
 # PARAMETER OPTIONAL genes: "Gene name\(s\)" TYPE STRING DEFAULT "Hpca, Ttr" (Name\(s\) of the gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
@@ -34,6 +34,7 @@ library(Biobase)
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj_clustering.Robj")
 
+
 # Check if the genes.tsv file exists. If so, read it and use it, else use the genes param.
 if (file.exists("genes.tsv")) {
     genes <- read.table("genes.tsv", header = FALSE, sep = "\t", stringsAsFactors = FALSE)[,1]
@@ -42,7 +43,7 @@ if (file.exists("genes.tsv")) {
     genes <- unlist(strsplit(genes, ","))
 }
 
-# Make genes uppercase for easy match (User definitely knows which organism is used)
+# Make genes uppercase for easy match (User definitely knows which organism is used, so gene names can be given in any case(?))
 genes <- toupper(genes)
 
 # Remove leading and trailing whitespace from gene names
