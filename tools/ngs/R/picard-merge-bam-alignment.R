@@ -4,6 +4,8 @@
 # INPUT OPTIONAL own.gtf: "Own GTF reference file" TYPE GENERIC
 # OUTPUT merged_tagged.bam
 # OUTPUT merged_tagged.bam.bai
+# OUTPUT OPTIONAL log.txt
+# OUTPUT OPTIONAL stderr.log
 # PARAMETER reference: "Reference genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Use same reference as in the alignment!)
 # PARAMETER OPTIONAL organism: "Reference GTF" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
 
