@@ -2,8 +2,8 @@
 # INPUT unmapped.bam: "Unaligned BAM" TYPE BAM
 # INPUT aligned.bam: "Aligned BAM" TYPE BAM
 # INPUT OPTIONAL own.gtf: "Own GTF reference file" TYPE GENERIC
-# OUTPUT merged_tagged.bam
-# OUTPUT merged_tagged.bam.bai
+# OUTPUT OPTIONAL merged_tagged.bam
+# OUTPUT OPTIONAL merged_tagged.bam.bai
 # OUTPUT OPTIONAL log.txt
 # OUTPUT OPTIONAL stderr.log
 # PARAMETER reference: "Reference genome" TYPE ["FILES genomes/fasta .fa"] DEFAULT "SYMLINK_TARGET genomes/fasta/default .fa" (Use same reference as in the alignment!)
