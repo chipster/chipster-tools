@@ -1,6 +1,6 @@
-# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 -Visualize gene expression in spatial transcriptomics data" (Visualize the expression of selected genes in spatial transcriptomics data.)
+# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 HD -Visualize gene expression" (Visualize the expression of selected genes in spatial transcriptomics data.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC (A Seurat object containing spatial transcriptomics data. This object has to be pre-processed and PCA has to be run)
-# INPUT OPTIONAL genes.tsv: "Gene list in tsv format" TYPE GENERIC (A tab-separated file with a list of genes)
+# INPUT OPTIONAL genes.txt: "Gene list in txt format" TYPE GENERIC (A tab-separated file with a list of genes)
 # OUTPUT OPTIONAL gene_expression_plot.pdf
 # PARAMETER OPTIONAL genes: "Gene name\(s\)" TYPE STRING DEFAULT "Hpca, Ttr" (Name\(s\) of the gene to plot. If you list multiple gene names, use comma \(,\) as separator.)
 # PARAMETER OPTIONAL point.size: "Point size in spatial feature plot" TYPE DECIMAL DEFAULT 1.6 (Point size for the plot. Default is 1.6)
@@ -35,40 +35,57 @@ library(Biobase)
 load("seurat_obj_clustering.Robj")
 
 
-# Check if the genes.tsv file exists. If so, read it and use it, else use the genes param.
-if (file.exists("genes.tsv")) {
-    genes <- read.table("genes.tsv", header = FALSE, sep = "\t", stringsAsFactors = FALSE)[,1]
+# Check if the genes.txt file exists. If so, read it and use it, else use the genes param.
+if (file.exists("genes.txt")) {
+    #genes <- read.table("genes.tsv", header = FALSE, sep = "\t", stringsAsFactors = FALSE)[,1]
+    genes <- readLines("genes.txt")
     genes <- as.character(genes)
 } else {
+    #stop("CHIPSTER-NOTE: No gene list file found. Please provide a gene list in a txt file or specify genes in the parameter.")
     genes <- unlist(strsplit(genes, ","))
 }
 
 # Make genes uppercase for easy match (User definitely knows which organism is used, so gene names can be given in any case(?))
-genes <- toupper(genes)
 
-# Remove leading and trailing whitespace from gene names
 genes <- trimws(genes)
 
-# Make rownames of seurat_obj also uppercase for easy match
-rownames(seurat_obj) <- toupper(rownames(seurat_obj))
+# Match the gene names in the given list and seurat object. Get indexes and find the wanted genes from seurat object
+match_genes <- function(gene_list, seurat_names) {
 
-# Find common genes between seurat_obj and gene list
-match <- intersect(genes, rownames(seurat_obj))
+    gene_list_upper <- toupper(gene_list)
+    seurat_names_upper <- toupper(seurat_names)
 
-print(paste("Found", length(match), "genes in the Seurat object:"))
-print(match)
+    match_id <- match(gene_list_upper, seurat_names_upper)
+
+    matched_genes <- seurat_names[match_id]
+
+    matched_genes <- na.omit(matched_genes)
+    return(matched_genes)
+}
+
+# Use the function explained above
+genes <- match_genes(genes, rownames(seurat_obj))
+genes <- as.character(genes)
+
+print("Common genes:")
+print(genes)
+
 
 # Check if any genes were found
-if (length(match) == 0) {
+if (length(genes) == 0) {
   stop("CHIPSTER-NOTE: None of the given genes were found in the Seurat object")
 }
 
 # Plots
 pdf(file = "gene_expression_plot.pdf", width = width, height = height)
 
-p1 <- SpatialFeaturePlot(seurat_obj, features = genes, keep.scale = color.scale, pt.size.factor = point.size, alpha = c(min_transparency, max_transparency))
+plot_chunks <- split(genes, ceiling(seq_along(genes)/4))
 
-print(p1)
+# NCOL = 2 ensure only 2 columns so basically 2x2 grid of plots
+for (i in plot_chunks) {
+    p1 <- SpatialFeaturePlot(seurat_obj, features = i, keep.scale = color.scale, pt.size.factor = point.size, ncol = 2, alpha = c(min_transparency, max_transparency))
+    print(p1)
+}
 
 dev.off()
 
