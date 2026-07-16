@@ -327,7 +327,14 @@
 		<tool>spatial-transcriptomics-seurat-clustering-v5-HD.R</tool>	
 		<tool>spatial-transcriptomics-seurat-clustering-plots-v5-HD.R</tool>
 		<tool>spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R</tool>
+		<tool>spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R</tool>
+		<tool>spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R</tool>
 	</category>
+
+	<category name = "testi" color = "#FFFF13">
+		<tool>spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R</tool>
+	</category>
+	
 
 	<category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
 		<tool>spatial-transcriptomics-seurat-setup.R</tool>
