@@ -1,0 +1,86 @@
+# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 HD -Subset regions " (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
+# INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
+# OUTPUT OPTIONAL spatiaaliplotti.pdf
+# PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
+# PARAMETER OPTIONAL x_coord_max: "Subset x max coordinate" TYPE INTEGER DEFAULT 0
+# PARAMETER OPTIONAL y_coord_min: "Subset y min coordinate" TYPE INTEGER DEFAULT 0
+# PARAMETER OPTIONAL y_coord_min: "Subset y max coordinate" TYPE INTEGER DEFAULT 0
+# PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
+# PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
+# RUNTIME R-4.5.1-seurat5
+# SLOTS 5
+# TOOLS_BIN ""
+
+# 2026-07-17 JV
+
+chosen_clusters <- as.character(chosen_clusters) # A parameter
+
+chosen_clusters <- trimws(unlist(strsplit(chosen_clusters, ",")))
+chosen_clusters <- strtoi(chosen_clusters, base = 0L)
+
+chosen_clusters
+library(Seurat)
+library(SeuratObject)
+
+
+load("seurat_obj_clustering.Robj")
+
+# Add cluster numbers as Idents
+
+Graphs(seurat_obj)
+
+for (g in Graphs(seurat_obj)) {
+  seurat_obj[[g]] <- NULL
+}
+
+print(colnames(seurat_obj@meta.data))
+head(Idents(seurat_obj))
+
+seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_clusters)
+
+head(Idents(seurat_obj))
+
+seurat_obj <- UpdateSeuratObject(seurat_obj)
+
+subset_obj <- subset(seurat_obj, idents = chosen_clusters)
+
+# The simplest way to do this
+pdf(file = "spatiaaliplotti.pdf")
+p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend() + 
+  SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
+
+print(p)
+
+dev.off()
+
+# EOF
+
+# Maybe add an option to use coords instead or also, then:
+# if (coords) {
+
+# If coordinates want to be used, then:
+
+# # Adds x and y axis numbers for coordinate search
+# theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
+#                            axis.text.y = element_text(size = 10),
+#                            axis.title.x = element_text(size = 10),
+#                            axis.title.y = element_text(size = 10))
+
+# coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
+
+# region # a parameter that the user names
+
+# x_coord_min # a param that has range: start-end for x axis
+# x_coord_max # a param that has range: start-end for y axis
+
+#y_coord_min
+#y_coord_max
+
+# cropped_obj <- Crop(subset_obj, x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max)
+
+# p1 <- SpatialDimPlot(cropped_obj, label = T) + theme_axis_labels
+# print(p1)
+
+# dev.off()
+
+#}
