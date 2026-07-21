@@ -329,10 +329,13 @@
 		<tool>spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R</tool>
+		<tool>spatial-transcriptomics-seurat-subset-regions-HD-v5.R</tool>
+
 	</category>
 
 	<category name = "testi" color = "#FFFF13">
 		<tool>spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R</tool>
+		<tool>spatial-transcriptomics-seurat-subset-regions-HD-v5.R</tool>
 	</category>
 	
 

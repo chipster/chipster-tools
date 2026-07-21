@@ -18,8 +18,13 @@
 resolution = 0.5
 dims.reduction = 30
 label.size = 2
+num_cores = as.numeric(chipster.threads.max)
+parallel = TRUE
 
 # 2026-07-15 JV
+
+
+# Matrix version 1.8.0 needed for zgeMatrix. Trying to install it on the VM Runtime R-4.5.1-seurat5 through github
 
 library(Seurat)
 library(ggplot2)
@@ -58,7 +63,7 @@ seurat_obj <- FindClusters(seurat_obj, resolution = resolution, cluster.name = "
 
 Idents(seurat_obj) <- "banksy_cluster"
 
-#Plotting
+# Plotting
 
 pdf(file = "spatiaaliplotti.pdf")
 

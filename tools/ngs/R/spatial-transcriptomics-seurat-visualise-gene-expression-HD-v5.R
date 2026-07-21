@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 HD -Visualize gene expression" (Visualize the expression of selected genes in spatial transcriptomics data.)
+# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 HD -Visualize gene expression" (Visualize the expression of selected genes in spatial transcriptomics data. This allows to observe spatial patterns of gene expression and correlate them with histological features.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC (A Seurat object containing spatial transcriptomics data. This object has to be pre-processed and PCA has to be run)
 # INPUT OPTIONAL genes.txt: "Gene list in txt format" TYPE GENERIC (A tab-separated file with a list of genes)
 # OUTPUT OPTIONAL gene_expression_plot.pdf

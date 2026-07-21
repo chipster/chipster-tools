@@ -20,29 +20,41 @@ chosen_clusters <- as.character(chosen_clusters) # A parameter
 chosen_clusters <- trimws(unlist(strsplit(chosen_clusters, ",")))
 chosen_clusters <- strtoi(chosen_clusters, base = 0L)
 
-chosen_clusters
 library(Seurat)
 library(SeuratObject)
 library(ggplot2)
 
-sessionInfo()
+#sessionInfo()
 
 load("seurat_obj_clustering.Robj")
 
 # Add cluster numbers as Idents
 
-Graphs(seurat_obj)
 
+# Make graphs empty because it is causing issues
+# seurat_obj <- UpdateSeuratObject(seurat_obj)
+
+#seurat_obj@graphs <- list()
+
+# This loop works, check what causes this graph issue, a possible contact in Meilahti
 for (g in Graphs(seurat_obj)) {
-  seurat_obj[[g]] <- NULL
+seurat_obj[[g]] <- NULL
 }
 
+
+# Recompute graphs if needed
+#subset_obj <- RunPCA(seurat_obj, dims = 1:10)
+#subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
+#subset_obj <- FindClusters(subset_obj)
+
+# Set some clusters as Idents
 seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_clusters)
 
 
-seurat_obj <- UpdateSeuratObject(seurat_obj)
-
+# Subset 
 subset_obj <- subset(seurat_obj, idents = chosen_clusters)
+
+# Check amount of images -> Message sent to Meilahti
 print("Images of sobj")
 print(names(subset_obj@images))
 
@@ -82,7 +94,7 @@ y_coord_max
 # subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
 # }
 
-
+# For loop for image cropping, may not work
 for (img_name in Images(subset_obj)) {
   subset_obj[[img_name]] <- Crop(
     subset_obj[[img_name]],
@@ -92,7 +104,6 @@ for (img_name in Images(subset_obj)) {
 }
 
 pdf(file = "spatiaaliplotti2.pdf")
-
 
 p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
 print(p1)
