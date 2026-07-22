@@ -1,7 +1,10 @@
-# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 HD -Subset regions " (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
+# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 HD -Subset regions " (This tool subsets regions based on clusters and or coordinates)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
+# INPUT coords.file.csv: "Seurat scRNA data" TYPE GENERIC
 # OUTPUT OPTIONAL spatiaaliplotti.pdf
 # OUTPUT OPTIONAL spatiaaliplotti2.pdf
+# OUTPUT OPTIONAL spatiaaliplotti3.pdf
+# PARAMETER coords.file: "Coordination csv file" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER coords: "coords..." TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
 # PARAMETER OPTIONAL x_coord_max: "Subset x max coordinate" TYPE INTEGER DEFAULT 100
@@ -23,12 +26,14 @@ chosen_clusters <- strtoi(chosen_clusters, base = 0L)
 library(Seurat)
 library(SeuratObject)
 library(ggplot2)
+# sf library apparently needed
+library("sf")
 
-#sessionInfo()
+print("Session info: ")
+sessionInfo()
 
 load("seurat_obj_clustering.Robj")
 
-# Add cluster numbers as Idents
 
 
 # Make graphs empty because it is causing issues
@@ -40,7 +45,6 @@ load("seurat_obj_clustering.Robj")
 for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
-
 
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
@@ -106,10 +110,34 @@ for (img_name in Images(subset_obj)) {
 pdf(file = "spatiaaliplotti2.pdf")
 
 p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
+
 print(p1)
 
 dev.off()
 
+}
+
+if (coords.file) {
+
+  img_name <- Images(subset_obj)[1]
+
+  coordinates <- as.data.frame(read.csv("coords.file.csv"))
+
+  head(coordinates)
+
+  segment <- CreateSegmentation(coordinates)
+
+  # Overlay function wants an "sf" package
+  seurat_obj[[img_name]] <- Overlay(seurat_obj[[img_name]], segment)
+  segment <- subset(seurat_obj, cells = Cells(seurat_obj[[img_name]]))
+
+  pdf("spatiaaliplotti3.pdf")
+
+  p<- SpatialDimPlot(segment)
+
+  print(p)
+
+  dev.off()
 }
 
 # EOF

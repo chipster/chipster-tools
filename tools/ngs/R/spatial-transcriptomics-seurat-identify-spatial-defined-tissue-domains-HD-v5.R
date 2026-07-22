@@ -28,9 +28,7 @@ parallel = TRUE
 
 library(Seurat)
 library(ggplot2)
-library(patchwork)
-library(dplyr)
-library(Biobase)
+library("Matrix")
 library("SeuratWrappers")
 library("Banksy")
 
@@ -48,10 +46,10 @@ sessionInfo()
 
 load("seurat_obj_clustering.Robj")
 
-#Spatial.008um
+# Spatial.008um
 DefaultAssay(seurat_obj) <- "Spatial.008um"
 
-seurat_obj <- RunBanksy(seurat_obj, lambda = 0.8, lazy = F, verbose = T, assay = DefaultAssay(seurat_obj))
+seurat_obj <- RunBanksy(seurat_obj, lambda = 0.8, lazy = FALSE, verbose = T, assay = DefaultAssay(seurat_obj))
 
 DefaultAssay(seurat_obj) <- "BANKSY"
 
