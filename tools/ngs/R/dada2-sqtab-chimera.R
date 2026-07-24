@@ -47,7 +47,7 @@ rownames(data) <- "Counts:"
 sink(file = "summary.txt")
 cat("\nAfter sample inference and contig creation, the ASV table consists of:\n")
 cat(length(rownames(seqtab)), " samples and ", length(colnames(seqtab)), " amplicon sequence variants\n\n")
-cat("Distribution of the amplicon sequence variant's lengths: Column names are the sequence lengths\n\n")
+cat("Distribution of amplicon sequence variant lengths: Column names are the sequence lengths\n\n")
 print(data)
 cat("\n###Removing Chimeras:###\n")
 
