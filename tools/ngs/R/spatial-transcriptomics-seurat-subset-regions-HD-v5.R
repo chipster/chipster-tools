@@ -46,6 +46,7 @@ for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
 
+
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
 #subset_obj <- FindNeighbors(subset_obj, dims = 1:10)

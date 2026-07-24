@@ -45,6 +45,7 @@ if (sketch) {
         skeched.assay = "sketch"
     )
 
+
     DefaultAssay(spatial_obj) <- "sketch"
 
     spatial_obj <- ScaleData(spatial_obj)
