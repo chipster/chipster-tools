@@ -22,16 +22,23 @@ num_cores = as.numeric(chipster.threads.max)
 parallel = TRUE
 
 # 2026-07-15 JV
+print("Package info:")
+packageDescription("Banksy")[c("Version", "GithubRef", "GithubSHA1")]
+packageDescription("SeuratWrappers")[c("Version", "GithubRef", "GithubSHA1")]
 
+
+# Install seurat wrappers for now here, THIS WORKS!
+Sys.setenv(GITHUB_PAT = code)
+
+# code is locally saved, only for package installation (out of tokens)
+remotes::install_github("satijalab/seurat-wrappers", upgrade = "never")
 
 # Matrix version 1.8.0 needed for zgeMatrix. Trying to install it on the VM Runtime R-4.5.1-seurat5 through github
-
-
-library(Seurat)
-library(ggplot2)
-library("Matrix")
-library("SeuratWrappers")
+library("Seurat")
 library("Banksy")
+library("SeuratWrappers")
+
+packageVersion("Banksy")
 
 print("Session info:")
 sessionInfo()
