@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL dna_sequences.fasta
 # OUTPUT OPTIONAL dna_sequences.tsv
 # OUTPUT OPTIONAL sample_information.tsv
-# PARAMETER otu: "Extract OTU table" TYPE [yes,no] DEFAULT no
+# PARAMETER otu: "Extract OTU/ASV table" TYPE [yes,no] DEFAULT no
 # PARAMETER taxa: "Extract taxonomy table" TYPE [yes,no] DEFAULT no
 # PARAMETER fasta: "Extract DNA sequences in FASTA" TYPE [yes,no] DEFAULT no
 # PARAMETER ref: "Extract DNA sequences as tabular data" TYPE [yes,no] DEFAULT no
