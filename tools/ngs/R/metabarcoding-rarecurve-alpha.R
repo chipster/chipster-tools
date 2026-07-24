@@ -1,4 +1,4 @@
-# TOOL metabarcoding-rarecurve-alpha.R: "Sequence numbers, rarefaction curve and alpha diversity estimates" (Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates and visualize those in a boxplot \(observed no. of OTUs, Chao1 and Shannon indices, and Pielou's evenness\) and calculates means of them if the group parameter is selected. It calculates also Wilcoxon rank sum test between two groups. If you have more than two groups, please specify which groups you want to compare. Requires a phyloseq object in Rda format as the input. Note that the diversity estimates are only reliable when using raw \(untrimmed\) OTU data, as many diversity metrics are dependent on singletons and doubletons in the data set under analysis. )
+# TOOL metabarcoding-rarecurve-alpha.R: "Sequence numbers, rarefaction curve and alpha diversity estimates" (Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates and visualize those in a boxplot \(observed no. of OTUs/ASVs, Chao1 and Shannon indices, and Pielou's evenness\) and calculates means of them if the group parameter is selected. It calculates also Wilcoxon rank sum test between two groups. If you have more than two groups, please specify which groups you want to compare. Requires a phyloseq object in Rda format as the input. Note that the diversity estimates are only reliable when using raw \(untrimmed\) OTU/ASV data, as many diversity metrics are dependent on singletons and doubletons in the data set under analysis. )
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_rarecurve.pdf
@@ -83,7 +83,7 @@ cat("### Per-sample sequence no.s ###\n")
 cat("\n\n\n")
 print(seqno)
 cat("\n\n\n")
-cat("### Alpha diversity estimates (observed OTUs, Chao1, Shannon's index, Pielou's evenness) ###\n")
+cat("### Alpha diversity estimates (observed OTUs/ASVs, Chao1, Shannon's index, Pielou's evenness) ###\n")
 cat("\n\n\n")
 print(richness)
 cat("\n\n\n")
@@ -107,7 +107,7 @@ if (group_column != "empty") {
         set1 <- subset(richness, richness[, ncol(richness)] == name)
         # Observed OTUs
 
-        cat("Observed OTUs\t\tMean:", round(mean(set1[, "Observed"]), 3), sep = " ")
+        cat("Observed OTUs/ASVs\tMean:", round(mean(set1[, "Observed"]), 3), sep = " ")
         cat("\t\tStandard deviation:", round(sd(set1[, "Observed"]), 3), sep = " ")
         cat("\t\tStandard Error:", round(sd(set1[, "Observed"]) / sqrt(length(set1[, "Observed"])), 3), sep = " ")
         cat("\n")
@@ -167,7 +167,7 @@ if (group_column != "empty") {
         cat("### Wilcoxon rank sum test between groups:", names[1], names[2], "###", sep = " ")
         cat("\n\n")
 
-        cat("# For observed OTUs: \n")
+        cat("# For observed OTUs/ASVs: \n")
         print(wilcox.test(observed_a, observed_b))
 
         cat("# For Chao1: \n")
@@ -185,7 +185,7 @@ if (group_column != "empty") {
         } else {
             cat("### Wilcoxon rank sum test between groups:", group1, ",", group2, sep = " ")
             cat("\n\n")
-            cat("# For observed OTUs: \n")
+            cat("# For observed OTUs/ASVs: \n")
             print(wilcox.test(observed_a, observed_b))
             cat("# For Chao1: \n")
             print(wilcox.test(chao1_a, chao1_b))
