@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL spatiaaliplotti.pdf
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-seurat5
-# SLOTS 5
+# SLOTS 6
 # TOOLS_BIN ""
 
 resolution = 0.5
@@ -32,7 +32,8 @@ load("seurat_obj_clustering.Robj")
 spatial_obj <- seurat_obj
 rm(seurat_obj)
 
-
+# For now use sketching, add as a param later
+sketch = TRUE
 if (sketch) {
     DefaultAssay(spatial_obj) <- "Spatial.008um"
 

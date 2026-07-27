@@ -13,7 +13,7 @@
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
 # RUNTIME R-4.5.1-seurat5
-# SLOTS 5
+# SLOTS 6
 # TOOLS_BIN ""
 
 # 2026-07-17 JV
@@ -26,11 +26,7 @@ chosen_clusters <- strtoi(chosen_clusters, base = 0L)
 library(Seurat)
 library(SeuratObject)
 library(ggplot2)
-# sf library apparently needed
 library("sf")
-
-print("Session info: ")
-sessionInfo()
 
 load("seurat_obj_clustering.Robj")
 
