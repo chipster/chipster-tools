@@ -1,6 +1,6 @@
 # TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 HD -Subset regions " (This tool subsets regions based on clusters and or coordinates)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
-# INPUT coords.file.csv: "Seurat scRNA data" TYPE GENERIC
+# INPUT coords.file.csv: "Coordinates file" TYPE GENERIC
 # OUTPUT OPTIONAL spatiaaliplotti.pdf
 # OUTPUT OPTIONAL spatiaaliplotti2.pdf
 # OUTPUT OPTIONAL spatiaaliplotti3.pdf
@@ -30,6 +30,7 @@ library("sf")
 
 load("seurat_obj_clustering.Robj")
 
+DefaultAssay(seurat_obj) <- "Spatial.008um"
 
 
 # Make graphs empty because it is causing issues
@@ -89,8 +90,8 @@ y_coord_min
 y_coord_max
 
 # Original
-# img_name <- Images(subset_obj)[1]
-# img_name
+img_name <- Images(subset_obj)[1]
+img_name
 
 # subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
 # }

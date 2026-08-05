@@ -24,13 +24,19 @@ library("Matrix")
 library("SeuratWrappers")
 library("spacexr")
 
-print("Session info:")
-sessionInfo()
+#print("Session info:")
+#sessionInfo()
 
 load("seurat_obj_clustering.Robj")
+n_cells <- 20000  # target number of cells
+set.seed(42)      # for reproducibility
+
+cells_to_keep <- sample(colnames(seurat_obj), size = n_cells)
+seurat_obj <- subset(seurat_obj, cells = cells_to_keep)
 
 spatial_obj <- seurat_obj
 rm(seurat_obj)
+
 
 # For now use sketching, add as a param later
 sketch = TRUE
@@ -41,9 +47,10 @@ if (sketch) {
 
     spatial_obj <- SketchData(
         object = spatial_obj,
-        ncells = 50000,
+        ncells = 5000,
         method = "LeverageScore",
-        skeched.assay = "sketch"
+        skeched.assay = "sketch",
+        features = VariableFeatures(spatial_obj)
     )
 
 
@@ -55,10 +62,20 @@ if (sketch) {
     spatial_obj <- RunUMAP(spatial_obj, reduction = "pca.spatial_obj.sketch", reduction.name = "umap.spatial_obj.sketch", return.model = T, dims = 1:50, verbose = T)
 }
 
+
+print("Loading ref object")
+
 load("seurat_obj_scrna.Robj")
 
-ref <- seurat_obj
-rm(seurat_obj)
+cells_to_keep <- sample(colnames(data), size = n_cells)
+data <- subset(data, cells = cells_to_keep)
+
+ref <- data
+rm(data)
+
+ref <- subset(ref, 
+            subset = nFeature_RNA > 200 & 
+                    nFeature_RNA < 2500)
 
 
 Idents(ref) <- "subclass_label"
@@ -79,12 +96,13 @@ coords <- GetTissueCoordinates(spatial_obj)[spatial_obj_cells_hd,1:2]
 query <- SpatialRNA(coords, counts_hd, colSums(counts_hd))
 
 # Run RCTD
-
-RCTD <- create.RCTD(query, reference, max_cores = 4)
-RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
+print("Starting RCCTD")
+RCTD <- create.RCTD(query, reference, max_cores = 12, CELL_MIN_INSTANCE = 0)
+RCTD <- run.RCTD(RCTD)
 
 spatial_obj <- AddMetaData(spatial_obj, metadata = RCTD@results$results_df)
 
+print("RCTDD DONE")
 # Project RCTD labels 
 
 # project RCTD labels from sketched cortical cells to all cortical cells
@@ -104,8 +122,8 @@ spatial_obj <- ProjectData(
 # Plotting
 
 
-DefaultAssay(spatial_obj) <- "Spatial.008um"
-
+#DefaultAssay(spatial_obj) <- "Spatial.008um"
+print("Final things")
 # we only ran RCTD on the cortical cells
 # set labels to all other cells as "Unknown"
 spatial_obj[[]][, "full_first_type"] <- "Unknown"

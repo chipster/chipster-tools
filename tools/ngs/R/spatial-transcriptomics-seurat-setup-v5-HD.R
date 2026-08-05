@@ -5,7 +5,7 @@
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
 # PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE STRING DEFAULT "8, 16" (List here the bin sizes, separated by comma)
 # RUNTIME R-4.5.1-seurat5
-# SLOTS 3
+# SLOTS 4
 # TOOLS_BIN ""
 
 # 2026-02 ML 
@@ -25,6 +25,7 @@ library(dplyr)
 library(Matrix)
 library(Biobase)
 
+
 # Get the Seurat version info for displaying:
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 print(package.version("Seurat"))
@@ -42,7 +43,7 @@ documentVersion("Seurat", package.version("Seurat"))
 # -C changes to the specified directory before unpacking. 
 # --strip-components 1 removes 1 directory from the filenames stored in the archive. 
 # "2> /dev/null" can be used to redirect the errors to /dev/null (Mac OS X uses BSD tar and creates some extra info that is not recognized by GNU tar which causes messages: tar: Ignoring unknown extended header keyword 'SCHILY.fflags')
-system("mkdir input_folder && tar -xf files.tar -C input_folder --strip-components=2 2> /dev/null")
+system("mkdir input_folder && tar -xf files.tar")# -C input_folder --strip-components=2 2> /dev/null")
 
 # For testing:
 # die here:
@@ -55,6 +56,9 @@ sample_name <- gsub(" ", "_", sample_name)
 # bin_sizes <-  "8, 16"
 bin_sizes <- as.numeric(trimws(unlist(strsplit(bin_sizes, ","))))
 print(bin_sizes)
+
+print("list files")
+list.files("input_folder/", recursive = T)
 
 # Load spatial data, returns a Seurat object
 # slice = name for the stored image of the tissue slice later used in the analysis
