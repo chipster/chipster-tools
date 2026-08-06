@@ -18,6 +18,7 @@
 # TOOLS_BIN ""
 
 # 2023-11-29 IH
+# 2026-08-06 JV Add JoinLayers()
 
 library(Seurat, quietly = TRUE)
 library(dplyr, quietly = TRUE)
@@ -188,6 +189,11 @@ ElbowPlot(seurat_obj, ndims = num.of.pcas) + ggtitle("Amount of variation in the
 textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2) # , cex=0.8
 
 dev.off() # close the pdf
+
+
+# Seurat V5, JoinLayers is needed for downstream analysis
+
+seurat_obj <- JoinLayers(seurat_obj)
 
 # Save the Robj for the next tool
 save(seurat_obj, file = "seurat_obj_merged.Robj")
