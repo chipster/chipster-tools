@@ -9,7 +9,7 @@
 # PARAMETER OPTIONAL k_geom: "Amount of neighbours" TYPE INTEGER DEFAULT 15
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-seurat5
-# SLOTS 6
+# SLOTS 10
 # TOOLS_BIN ""
 
 
@@ -41,11 +41,11 @@ load("seurat_obj_clustering.Robj")
 
 # For testing, make seurat smaller:
 
-n_cells <- 50000  # target number of cells
-set.seed(42)      # for reproducibility
+# n_cells <- 50000  # target number of cells
+# set.seed(42)      # for reproducibility
 
-cells_to_keep <- sample(colnames(seurat_obj), size = n_cells)
-seurat_obj <- subset(seurat_obj, cells = cells_to_keep)
+# cells_to_keep <- sample(colnames(seurat_obj), size = n_cells)
+# seurat_obj <- subset(seurat_obj, cells = cells_to_keep)
 
 gc()
 # fixes as.graph error
@@ -138,24 +138,8 @@ save(seurat_obj_sub, file = "seurat_obj_banksy.Robj")
 
 
 # Else for lazy = FALSE, commented out for test purposes.
-
-
-gc()
-
-seurat_obj <- DietSeurat(
-  object = seurat_obj,
-  counts = TRUE,        # keep raw counts
-  data = TRUE,           # keep normalized data
-  scale.data = FALSE,    # drop scaled data (usually the biggest memory hog)
-  features = NULL,       # keep all features, or pass a vector to subset
-  assays = "Spatial.008um",          # or specify which assays to keep, e.g. "RNA"
-  dimreducs = c("umap"),  # keep only these reductions
-  graphs = NULL,          # drop neighbor graphs if you don't need them
-  misc = NULL             # keep the misc slot
-)
-gc()
 # Run Banksy
-seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = DefaultAssay(seurat_obj), parallel = TRUE, num_cores = 4)
+seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = DefaultAssay(seurat_obj), parallel = TRUE, num_cores = num_cores)
 
 # Make BANKSY Default assay and run pca, neighboring and clustering
 DefaultAssay(seurat_obj) <- "BANKSY"

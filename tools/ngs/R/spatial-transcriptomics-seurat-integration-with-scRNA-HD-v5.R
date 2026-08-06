@@ -24,15 +24,17 @@ library("Matrix")
 library("SeuratWrappers")
 library("spacexr")
 
+
+options(future.globals.maxSize = 3000 * 1024^2)  # 1000 MiB
 #print("Session info:")
 #sessionInfo()
 
 load("seurat_obj_clustering.Robj")
-n_cells <- 20000  # target number of cells
-set.seed(42)      # for reproducibility
+# n_cells <- 20000  # target number of cells
+# set.seed(42)      # for reproducibility
 
-cells_to_keep <- sample(colnames(seurat_obj), size = n_cells)
-seurat_obj <- subset(seurat_obj, cells = cells_to_keep)
+# cells_to_keep <- sample(colnames(seurat_obj), size = n_cells)
+# seurat_obj <- subset(seurat_obj, cells = cells_to_keep)
 
 spatial_obj <- seurat_obj
 rm(seurat_obj)
@@ -67,8 +69,8 @@ print("Loading ref object")
 
 load("seurat_obj_scrna.Robj")
 
-cells_to_keep <- sample(colnames(data), size = n_cells)
-data <- subset(data, cells = cells_to_keep)
+# cells_to_keep <- sample(colnames(data), size = n_cells)
+# data <- subset(data, cells = cells_to_keep)
 
 ref <- data
 rm(data)
@@ -97,7 +99,7 @@ query <- SpatialRNA(coords, counts_hd, colSums(counts_hd))
 
 # Run RCTD
 print("Starting RCCTD")
-RCTD <- create.RCTD(query, reference, max_cores = 12, CELL_MIN_INSTANCE = 0)
+RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 0)
 RCTD <- run.RCTD(RCTD)
 
 spatial_obj <- AddMetaData(spatial_obj, metadata = RCTD@results$results_df)
@@ -126,8 +128,7 @@ spatial_obj <- ProjectData(
 print("Final things")
 # we only ran RCTD on the cortical cells
 # set labels to all other cells as "Unknown"
-spatial_obj[[]][, "full_first_type"] <- "Unknown"
-spatial_obj$full_first_type[Cells(spatial_obj)] <- spatial_obj$full_first_type[Cells(spatial_obj)]
+spatial_obj$full_first_type[is.na(spatial_obj$full_first_type)] <- "Unknown"
 Idents(spatial_obj) <- 'full_first_type'
 
 # now we can spatially map the location of any scRNA-seq cell type
