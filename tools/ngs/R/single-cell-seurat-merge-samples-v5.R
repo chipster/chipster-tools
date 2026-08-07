@@ -13,6 +13,7 @@
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings to a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
 # PARAMETER OPTIONAL filter.cell.cycle: "Regress out cell cycle differences" TYPE [no:no, all.diff:"all differences", diff.phases:"the difference between the G2M and S phase scores"] DEFAULT no (Would you like to regress out cell cycle scores during data scaling? If yes, should all signal associated with cell cycle be removed, or only the difference between the G2M and S phase scores.)
+# PARAMETER OPTIONAL JoinLayers: "Do you want to join the layers" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Seurat v5 requires JoinLayers to be run before downstream analysis tools. If you do not plan to integrate samples, choose Yes to join layers now)
 # RUNTIME R-4.3.2-single-cell
 # SLOTS 5
 # TOOLS_BIN ""
@@ -193,7 +194,9 @@ dev.off() # close the pdf
 
 # Seurat V5, JoinLayers is needed for downstream analysis
 
-seurat_obj <- JoinLayers(seurat_obj)
+if (JoinLayers == TRUE) {
+    seurat_obj <- JoinLayers(seurat_obj)
+}
 
 # Save the Robj for the next tool
 save(seurat_obj, file = "seurat_obj_merged.Robj")
