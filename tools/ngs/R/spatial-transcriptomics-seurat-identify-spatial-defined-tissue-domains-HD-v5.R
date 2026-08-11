@@ -8,6 +8,8 @@
 # PARAMETER OPTIONAL lambda: "lambda for weighting" TYPE DECIMAL DEFAULT 0.5
 # PARAMETER OPTIONAL k_geom: "Amount of neighbours" TYPE INTEGER DEFAULT 15
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
+# PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL height: "Height of the pdf" TYPE INTEGER DEFAULT 10
 # RUNTIME R-4.5.1-seurat5
 # SLOTS 10
 # TOOLS_BIN ""
@@ -56,7 +58,17 @@ seurat_obj[[g]] <- NULL
 
 # Spatial.008um
 # Maybe add this as a param also
-DefaultAssay(seurat_obj) <- "Spatial.008um"
+
+print("Assays in seurat obj")
+Assays(seurat_obj)
+
+for (assay in Assays(seurat_obj)) {
+
+DefaultAssay(seurat_obj) <- assay
+
+img_name <- Images(seurat_obj, assay = assay)
+print("image name")
+print(img_name)
 
 # print("Does data slot exist:")
 # length(seurat_obj@assays$Spatial.008um@layers$data) > 0
@@ -67,41 +79,24 @@ DefaultAssay(seurat_obj) <- "Spatial.008um"
 
 
 if (lazy) {
+
 seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, verbose = TRUE,
-    assay = "Spatial.008um", slot = "data",  features = "variable",
-    k_geom = k_geom, lazy = T, split.scale = T, parallel = FALSE, num_cores = num_cores)
+    assay = assay, slot = "data",  features = "variable",
+    k_geom = k_geom, lazy = T, split.scale = T, parallel = parallel, num_cores = num_cores)
 
 # If lazy = False, no BANKSY assay is created but a reduction called banksy is, just find new neighbors and clusters and plot that
 # Like 10000000x faster
 
 print("Banksy done, gc")
-gc()
 
 seurat_obj <- FindNeighbors(seurat_obj, reduction = "BANKSY", dims = 1:dims.reduction)
 print("Neighbor done")
 seurat_obj <- FindClusters(seurat_obj, cluster.name = "banksy_cluster", resolution = resolution)
 print("Clusters done")
 
-# A new error of NA values, need to check this, here is claude fix
-
-
-# Again this graph error:
-# Error in `as.Graph()`:
-# ! Please provide rownames to the matrix before converting to a Graph
-# Backtrace:
-#     x
-#  1. +-base::subset(seurat_obj, cells = common_cells)
-#  2. \-SeuratObject:::subset.Seurat(seurat_obj, cells = common_cells)
-#  3.   +-base::suppressWarnings(...)
-#  4.   | \-base::withCallingHandlers(...)
-#  5.   +-SeuratObject::as.Graph(x = x[[g]][cells.g, cells.g, drop = FALSE])
-#  6.   \-SeuratObject:::as.Graph.Matrix(x = x[[g]][cells.g, cells.g, drop = FALSE])
-#  7.     \-rlang::abort(message = "Please provide rownames to the matrix before converting to a Graph")
-# Execution halted
-
 
 print("Starting coords")
-coords <- GetTissueCoordinates(seurat_obj, image = "slice1.008um")
+coords <- GetTissueCoordinates(seurat_obj, image = img_name)
 print("Coords done")
 common_cells <- intersect(Cells(seurat_obj), rownames(coords))
 
@@ -112,14 +107,13 @@ for (g in Graphs(seurat_obj)) {
 
 print("For loop done")
 
-seurat_obj_sub <- seurat_obj
-#seurat_obj_sub <- subset(seurat_obj, cells = common_cells)
+seurat_obj_sub <- subset(seurat_obj, cells = common_cells)
 
 
 print("Subset done, next plotting:")
-pdf(file = "spatiaaliplotti.pdf")
+pdf(file = paste0("spatiaaliplotti_", assay, ".pdf"), width = width, height = height)
 
-    p <- SpatialDimPlot(seurat_obj_sub, images = "slice1.008um", group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
+    p <- SpatialDimPlot(seurat_obj_sub, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
     print(p)
 
 
@@ -132,48 +126,54 @@ pdf(file = "spatiaaliplotti.pdf")
 
 dev.off()
 
-save(seurat_obj_sub, file = "seurat_obj_banksy.Robj")
+save(seurat_obj_sub, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
 
-} else {
-
-
-# Else for lazy = FALSE, commented out for test purposes.
-# Run Banksy
-seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = DefaultAssay(seurat_obj), parallel = TRUE, num_cores = num_cores)
-
-# Make BANKSY Default assay and run pca, neighboring and clustering
-DefaultAssay(seurat_obj) <- "BANKSY"
-
-print("PCA: ")
-seurat_obj <- RunPCA(seurat_obj, assay = "BANKSY", reduction.name = "pca.banksy", features = rownames(seurat_obj), npcs = 30)
-
-print("Neighbours")
-seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca.banksy", dims = 1:dims.reduction)
-
-print("Clusters: ")
-seurat_obj <- FindClusters(seurat_obj, resolution = resolution, cluster.name = "banksy_cluster")
-
-# Set banksy_cluster as idents
-Idents(seurat_obj) <- "banksy_cluster"
-
-# Plotting
-
-pdf(file = "spatiaaliplotti.pdf")
-
-    p <- SpatialDimPlot(seurat_obj, images = "slice1.008um", group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
-    print(p)
-
-
-    banksy_cells <- CellsByIdentities(seurat_obj)
-
-    p1 <- SpatialDimPlot(seurat_obj, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
-    facet.highlight = T, combine = T)
-
-    print(p1)
-
-dev.off()
-
-save(seurat_obj, file = "seurat_obj_banksy.Robj")
+print("Loop finished, new round!!!")
 
 }
+}
+
+# } else {
+
+
+# # Else for lazy = FALSE, commented out for test purposes.
+# # Run Banksy
+# seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = DefaultAssay(seurat_obj), parallel = TRUE, num_cores = num_cores)
+
+# # Make BANKSY Default assay and run pca, neighboring and clustering
+# DefaultAssay(seurat_obj) <- "BANKSY"
+
+# print("PCA: ")
+# seurat_obj <- RunPCA(seurat_obj, assay = "BANKSY", reduction.name = "pca.banksy", features = rownames(seurat_obj), npcs = 30)
+
+# print("Neighbours")
+# seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca.banksy", dims = 1:dims.reduction)
+
+# print("Clusters: ")
+# seurat_obj <- FindClusters(seurat_obj, resolution = resolution, cluster.name = "banksy_cluster")
+
+# # Set banksy_cluster as idents
+# Idents(seurat_obj) <- "banksy_cluster"
+
+# # Plotting
+
+# pdf(file = paste0("spatiaaliplotti_", assay, ".pdf"), width = width, height = height)
+
+#     p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
+#     print(p)
+
+
+#     banksy_cells <- CellsByIdentities(seurat_obj)
+
+#     p1 <- SpatialDimPlot(seurat_obj, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
+#     facet.highlight = T, combine = T)
+
+#     print(p1)
+
+# dev.off()
+
+# save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
+
+# }
+
 # EOF
