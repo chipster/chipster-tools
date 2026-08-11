@@ -62,7 +62,9 @@ seurat_obj[[g]] <- NULL
 print("Assays in seurat obj")
 Assays(seurat_obj)
 
-for (assay in Assays(seurat_obj)) {
+# Loop over the first two assays (8 and 16um bins, not sketch!). If it reaches sketch, dim error...
+
+for (assay in Assays(seurat_obj)[1:2]) {
 
 DefaultAssay(seurat_obj) <- assay
 
@@ -84,7 +86,7 @@ seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, verbose = TRUE,
     assay = assay, slot = "data",  features = "variable",
     k_geom = k_geom, lazy = T, split.scale = T, parallel = parallel, num_cores = num_cores)
 
-# If lazy = False, no BANKSY assay is created but a reduction called banksy is, just find new neighbors and clusters and plot that
+# If lazy = TRUE, no BANKSY assay is created but a reduction called banksy is, just find new neighbors and clusters and plot that
 # Like 10000000x faster
 
 print("Banksy done, gc")
