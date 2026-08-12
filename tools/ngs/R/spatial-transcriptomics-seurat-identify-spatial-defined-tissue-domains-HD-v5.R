@@ -1,7 +1,9 @@
 # TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 HD -Identify spatially-defined tissue domains" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL spatiaaliplotti.pdf
-# OUTPUT OPTIONAL seurat_obj_banksy.Robj
+# OUTPUT OPTIONAL spatiaaliplotti_Spatial.008um.pdf
+# OUTPUT OPTIONAL spatiaaliplotti_Spatial.016um.pdf
+# OUTPUT OPTIONAL seurat_obj_banksy_Spatial.008um.Robj
+# OUTPUT OPTIONAL seurat_obj_banksy_Spatial.016um.Robj
 # PARAMETER OPTIONAL resolution: "reso" TYPE DECIMAL DEFAULT 0.5
 # PARAMETER OPTIONAL dims.reduction: "dims to redu" TYPE INTEGER DEFAULT 30
 # PARAMETER OPTIONAL lazy: "Lazy calc or not" TYPE [FALSE, TRUE] DEFAULT FALSE
@@ -13,6 +15,11 @@
 # RUNTIME R-4.5.1-seurat5
 # SLOTS 10
 # TOOLS_BIN ""
+
+# For loop saving output files
+# # OUTPUT spatiaaliplotti_{assay}.pdf
+# {...}: "Extracted file(s)"
+
 
 
 resolution <- as.numeric(resolution)
