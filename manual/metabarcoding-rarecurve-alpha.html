@@ -3,12 +3,12 @@
 <head><title></title></head>
 <body>
 
-<h2>Sequence numbers, rarefaction curve and alpha diversity estimates for phyloseq OTU data</h2>
+<h2>Sequence numbers, rarefaction curve and alpha diversity estimates for phyloseq OTU/ASV data</h2>
 
 <h3>Description</h3>
 
 <p>
-Lists per-sample sequence numbers, plots rarefaction curves and tabulates and creates a boxplot on alpha diversity estimates (observed no. of OTUs, Chao1 and Shannon indices, Pielou's evenness) for OTU abundance data stored as a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object and calculates means of alpha diversity estimates as well as Wilcoxon rank sum test if the phenodata variable is selected.
+Lists per-sample sequence numbers, plots rarefaction curves and tabulates and creates a boxplot on alpha diversity estimates (observed no. of OTUs/ASVs, Chao1 and Shannon indices, Pielou's evenness) for OTU abundance data stored as a <a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a> object and calculates means of alpha diversity estimates as well as Wilcoxon rank sum test if the phenodata variable is selected.
 </p>
 
 
@@ -33,7 +33,8 @@ The tool employs the following R functions and packages:
 <li>Alpha diversity indices: estimate_richness() (<a href="http://bioconductor.org/packages/release/bioc/html/phyloseq.html">phyloseq</a>) and evenness() (<a href="https://bioconductor.org/packages/release/bioc/html/microbiome.html">microbiome</a>)
 <li>Wilcoxon rank sum test</li>
 </ul>
-Note that the richness estimator Chao1 should not be used when singletons or doubletons have been removed from the data, because its calculation requires information on singletons and doubletons.
+Note that the richness estimator Chao1 should not be used when singletons or doubletons have been removed from the data, because its calculation requires information on singletons and doubletons. This index should not be
+used with ASV data, because DADA2 removes singletons.
 <br>
 <br>
 If the phenodata variable is selected, this tool calculates also the means, standard error and standard deviation of alpha diversity estimates.

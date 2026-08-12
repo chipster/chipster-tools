@@ -1,4 +1,4 @@
-# TOOL metabarcoding-prevalence-filter.R: "Proportional prevalence filtering" (Filters out any OTUs below a user-specified prevalence threshold \(%\) using phyloseq. The resulting object is saved as an Rda file. Requires a phyloseq object in Rda format as the input.)
+# TOOL metabarcoding-prevalence-filter.R: "Proportional prevalence filtering" (Filters out any OTUs/ASVs below a user-specified prevalence threshold \(%\) using phyloseq. The resulting object is saved as an Rda file. Requires a phyloseq object in Rda format as the input.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT ps_prevfilter.Rda: ps_prevfilter.Rda
 # PARAMETER OPTIONAL threshold: "Filtering threshold (%)" TYPE INTEGER FROM 1 TO 25 DEFAULT 5 (Prevalence threshold \(%\) for filtering, accepts integer numbers from 1 to 25)

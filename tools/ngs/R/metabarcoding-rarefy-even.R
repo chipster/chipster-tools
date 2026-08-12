@@ -1,4 +1,4 @@
-# TOOL metabarcoding-rarefy-even.R: "Rarefy OTU data to even depth" (Resamples a phyloseq OTU table such that all samples have the same sequencing depth, and saves the resulting object as an Rda file. Requires a phyloseq object in Rda format as the input.)
+# TOOL metabarcoding-rarefy-even.R: "Rarefy OTU/ASV data to even depth" (Resamples a phyloseq OTU/ASV table such that all samples have the same sequencing depth, and saves the resulting object as an Rda file. Requires a phyloseq object in Rda format as the input.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT ps_rarefied.txt: ps_rarefied.txt
 # OUTPUT ps_rarefied.Rda: ps_rarefied.Rda

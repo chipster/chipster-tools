@@ -1,4 +1,4 @@
-# TOOL dada2-sqtab-chimera.R: "Make an ASV table and remove chimeras" (This tool makes an ASV-table and removes chimeras. As the input you can give either if you have single end reads the output .Rda object from the tool Sample inference or if you have paired end data the output .Rda object from the tool Combine paired reads to contigs with Dada2. )
+# TOOL dada2-sqtab-chimera.R: "Make an ASV table and remove chimeras" (This tool makes an ASV-table and removes chimeras. As the input you can give either if you have single end reads the output .Rda object from the tool Sample inference or if you have paired end data the output .Rda object from the tool Combine paired reads to contigs with DADA2. )
 # INPUT object.Rda: "Either mergers object named contigs.Rda or dada-class object named dada-forward.Rda"  TYPE GENERIC (Dada-class object named dada-forward.Rda if single end reads or a mergers object named contigs.Rda if paired end reads.)
 # OUTPUT seqtab_nochim.Rda
 # OUTPUT reads_summary.tsv
@@ -45,9 +45,9 @@ rownames(data) <- "Counts:"
 
 # Write a log/summary file
 sink(file = "summary.txt")
-cat("\nAfter  dada() algorithm sequence table consist of:\n")
+cat("\nAfter sample inference and contig creation, the ASV table consists of:\n")
 cat(length(rownames(seqtab)), " samples and ", length(colnames(seqtab)), " amplicon sequence variants\n\n")
-cat("Distribution of the amplicon sequence variant's lengths: Column names are the sequence lengths\n\n")
+cat("Distribution of amplicon sequence variant lengths: Column names are the sequence lengths\n\n")
 print(data)
 cat("\n###Removing Chimeras:###\n")
 
@@ -55,7 +55,7 @@ cat("\n###Removing Chimeras:###\n")
 seqtab.nochim <- removeBimeraDenovo(seqtab, method = method1, multithread = as.integer(chipster.threads.max), verbose = TRUE)
 num <- length(colnames(seqtab)) - length(colnames(seqtab.nochim))
 cat("Identified ", num, " bimeras out of ", length(colnames(seqtab)), " input sequences\n")
-cat("Total amount of ASVs is: ")
+cat("Total amount of ASVs after chimera removal is: ")
 cat(length(colnames(seqtab.nochim)))
 cat("\n\n")
 # if (!is.na(mock)){
@@ -74,7 +74,7 @@ seqtab.nochim2 <- seqtab.nochim
 if (names(object)[1] != "sequence" && names(object)[1] != "denoised") { # If processing a single sample, remove the sapply calls: e.g. replace sapply(object, getN) with getN(dadaFs)
     track <- cbind(sapply(object, getN), rowSums(seqtab.nochim))
     rownames(track) <- sample.names
-    colnames(track) <- c(name, "Removed chimeras")
+    colnames(track) <- c(name, "After chimera removal")
     write.table(track, file = "reads_summary.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
 
     colnames(seqtab.nochim2) <- paste0("ASV", seq(length(colnames(seqtab.nochim2))))
@@ -82,7 +82,7 @@ if (names(object)[1] != "sequence" && names(object)[1] != "denoised") { # If pro
 } else {
     track <- cbind(getN(object), rowSums(seqtab.nochim))
     # sample.names="Sample1" # rename to sample 1 if only one sample
-    colnames(track) <- c(name, "Removed chimeras")
+    colnames(track) <- c(name, "After chimera removal")
     write.table(track, file = "reads_summary.tsv", sep = "\t", row.names = FALSE, col.names = T, quote = F)
 
     colnames(seqtab.nochim2) <- paste0("ASV", seq(length(colnames(seqtab.nochim2))))

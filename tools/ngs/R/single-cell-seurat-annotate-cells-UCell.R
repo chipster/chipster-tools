@@ -26,7 +26,7 @@ library(dplyr)
 library(Matrix)
 library(gplots)
 library(ggplot2)
-
+library(patchwork)
 
 options(Seurat.object.assay.version = "v5")
 
@@ -144,8 +144,17 @@ seurat_obj$cluster_celltype <- as.vector(type[as.character(seurat_obj$seurat_clu
 # Plots
 pdf(file = "UCell_Plots.pdf", width = width, height = height)
 
-p1 <- FeaturePlot(seurat_obj, label = T, label.size = label.size, pt.size = point.size, reduction = "umap",  features = names(markers)[1:length(markers)])+
-  labs(color = "Module scores")
+# Chunk to only plot 2x2 per page
+
+feature_names <- names(markers)
+feature_chunks <- split(feature_names, ceiling(seq_along(feature_names)/4))
+
+for (chunk in feature_chunks) {
+p1 <- FeaturePlot(seurat_obj, label = T, label.size = label.size, pt.size = point.size, reduction = "umap",  features = chunk, ncol = 2)+
+  plot_annotation(title = "Module Scores")
+  print(p1)
+}
+
 
 
 p2 <- DimPlot(seurat_obj, group.by = "cell_type", label = T, pt.size = point.size, label.size = label.size)+
@@ -157,7 +166,6 @@ p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, pt.size = po
   labs(color = "Cell types")
 
 
-print(p1)
 print(p2)
 print(p3)
 

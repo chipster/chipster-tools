@@ -1,4 +1,4 @@
-# TOOL metabarcoding-permdisp.R: "PERMDISP for OTU abundance data" (Performs a permutation-based test of the multivariate homogeneity of group dispersions \(PERMDISP, 999 iterations\), using a distance matrix derived from OTU abundance data. Accepts a single phenodata variable at a time, with the option to run three consecutive tests \(for three different variables\). Requires an Rda file \(ps_dist.Rda\) produced by the "Distance matrices and ordinations" tool as the input.)
+# TOOL metabarcoding-permdisp.R: "PERMDISP for OTU/ASV abundance data" (Performs a permutation-based test of the multivariate homogeneity of group dispersions \(PERMDISP, 999 iterations\), using a distance matrix derived from OTU abundance data. Accepts a single phenodata variable at a time, with the option to run three consecutive tests \(for three different variables\). Requires an Rda file \(ps_dist.Rda\) produced by the "Distance matrices and ordinations" tool as the input.)
 # INPUT ps.Rda: "Data set in .Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT permdisp.txt: permdisp.txt

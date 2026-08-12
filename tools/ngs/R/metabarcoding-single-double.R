@@ -1,4 +1,4 @@
-# TOOL metabarcoding-single-double.R: "Remove OTUs with specified number of occurrences" (Filters a phyloseq object so that only OTUs with more occurrences than the selected threshold are retained. The resulting object is saved in Rda format. Requires a phyloseq object in Rda format as the input. The main use case of the tool is to remove OTUs with 0-2 occurrences.)
+# TOOL metabarcoding-single-double.R: "Remove OTUs/ASVs with specified number of occurrences" (Filters a phyloseq object so that only OTUs/ASVs with more occurrences than the selected threshold are retained. The resulting object is saved in Rda format. Requires a phyloseq object in Rda format as the input. The main use case of the tool is to remove OTUs/ASVs with 0-2 occurrences.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT ps_pruned.Rda: ps_pruned.Rda
 # OUTPUT ps_pruned.txt: ps_pruned.txt
