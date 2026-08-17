@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL spatiaaliplotti.pdf
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-seurat5
-# SLOTS 6
+# SLOTS 20
 # TOOLS_BIN ""
 
 resolution = 0.5
@@ -40,30 +40,6 @@ spatial_obj <- seurat_obj
 rm(seurat_obj)
 
 
-# For now use sketching, add as a param later
-sketch = TRUE
-if (sketch) {
-    DefaultAssay(spatial_obj) <- "Spatial.008um"
-
-    spatial_obj <- FindVariableFeatures(spatial_obj)
-
-    spatial_obj <- SketchData(
-        object = spatial_obj,
-        ncells = 5000,
-        method = "LeverageScore",
-        skeched.assay = "sketch",
-        features = VariableFeatures(spatial_obj)
-    )
-
-
-    DefaultAssay(spatial_obj) <- "sketch"
-
-    spatial_obj <- ScaleData(spatial_obj)
-    spatial_obj <- RunPCA(spatial_obj, assay="sketch", reduction.name = "pca.spatial_obj.sketch", verbose = T)
-    spatial_obj <- FindNeighbors(spatial_obj, reduction = "pca.spatial_obj.sketch", dims = 1:50)
-    spatial_obj <- RunUMAP(spatial_obj, reduction = "pca.spatial_obj.sketch", reduction.name = "umap.spatial_obj.sketch", return.model = T, dims = 1:50, verbose = T)
-}
-
 
 print("Loading ref object")
 
@@ -90,8 +66,71 @@ cluster <- droplevels(cluster)
 # create the RCTD reference object
 reference <- Reference(counts, cluster, nUMI)
 
+
+if ("sketch" %in% Assays(spatial_obj)) {
+
 counts_hd <- spatial_obj[["sketch"]]$counts
 spatial_obj_cells_hd <- colnames(spatial_obj[["sketch"]])
+
+# Claude help
+coords <- GetTissueCoordinates(spatial_obj)[spatial_obj_cells_hd,1:2]
+rownames(coords) <- coords$cell
+coords <- coords[spatial_obj_cells_hd,1:2]
+
+# create the RCTD query object
+query <- SpatialRNA(coords, counts_hd, colSums(counts_hd))
+
+# Run RCTD
+print("Starting RCCTD")
+RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 0)
+RCTD <- run.RCTD(RCTD)
+
+spatial_obj <- AddMetaData(spatial_obj, metadata = RCTD@results$results_df)
+
+print("RCTDD DONE")
+# Project RCTD labels 
+
+# project RCTD labels from sketched cortical cells to all cortical cells
+spatial_obj$first_type <- as.character(spatial_obj$first_type)
+spatial_obj$first_type[is.na(spatial_obj$first_type)] <- 'Unknown'
+spatial_obj <- ProjectData(
+  object = spatial_obj,
+  assay = "Spatial.008um",
+  full.reduction = "pca.spatial_obj",
+  sketched.assay = "sketch",
+  sketched.reduction = "pca.spatial_obj.sketch",
+  umap.model = "umap.spatial_obj.sketch",
+  dims = 1:50,
+  refdata = list(full_first_type = "first_type")
+)
+
+# Plotting
+
+
+DefaultAssay(spatial_obj) <- "Spatial.008um"
+print("Final things")
+# we only ran RCTD on the cortical cells
+# set labels to all other cells as "Unknown"
+spatial_obj$full_first_type[is.na(spatial_obj$full_first_type)] <- "Unknown"
+Idents(spatial_obj) <- 'full_first_type'
+
+# now we can spatially map the location of any scRNA-seq cell type
+# start with Layered (starts with L), excitatory neurons in the cortex
+cells <- CellsByIdentities(spatial_obj)
+excitatory_names <- sort(grep("^L.* CTX",names(cells),value = TRUE)) # This needs to be customized
+
+
+pdf(file = "spatiaaliplotti.pdf")
+p <- SpatialDimPlot(spatial_obj, cells.highlight = cells[excitatory_names], cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T, ncol=4)
+print(p)
+
+dev.off()
+
+} else {
+
+
+counts_hd <- spatial_obj[["Spatial.008um"]]$counts
+spatial_obj_cells_hd <- colnames(spatial_obj[["Spatial.008um"]])
 coords <- GetTissueCoordinates(spatial_obj)[spatial_obj_cells_hd,1:2]
 
 # create the RCTD query object
@@ -124,7 +163,7 @@ spatial_obj <- ProjectData(
 # Plotting
 
 
-#DefaultAssay(spatial_obj) <- "Spatial.008um"
+DefaultAssay(spatial_obj) <- "Spatial.008um"
 print("Final things")
 # we only ran RCTD on the cortical cells
 # set labels to all other cells as "Unknown"
@@ -143,4 +182,6 @@ print(p)
 
 dev.off()
 
+
+}
 # EOF
