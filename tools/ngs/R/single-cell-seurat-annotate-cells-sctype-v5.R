@@ -226,7 +226,7 @@ run_sctype <- function(seurat_object, known_tissue_type = NULL, assay = "RNA", s
 matrix <- GetAssayData(seurat_obj, layer = "counts")
 
 sctype_source <- function(){
-  db_ = "https://raw.githubusercontent.com/IanevskiAleksandr/sc-type/master/ScTypeDB_full.xlsx"
+  db_ = "https://a3s.fi/bundle-builds/ScTypeDB_full_2026-08-18.xlsx" #This file can be found also on sctype github but it is on our server for faster and more reliable access.
   return(db_)
 }
 
