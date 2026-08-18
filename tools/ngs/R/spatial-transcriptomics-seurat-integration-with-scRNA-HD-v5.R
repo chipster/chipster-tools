@@ -69,6 +69,8 @@ reference <- Reference(counts, cluster, nUMI)
 
 if ("sketch" %in% Assays(spatial_obj)) {
 
+print("Sketch in the assay was found, using that:")
+
 counts_hd <- spatial_obj[["sketch"]]$counts
 spatial_obj_cells_hd <- colnames(spatial_obj[["sketch"]])
 
@@ -128,10 +130,17 @@ dev.off()
 
 } else {
 
+print("Sketch in the assay was NOT found, using Spatial.008um:")
+
+
 
 counts_hd <- spatial_obj[["Spatial.008um"]]$counts
 spatial_obj_cells_hd <- colnames(spatial_obj[["Spatial.008um"]])
-coords <- GetTissueCoordinates(spatial_obj)[spatial_obj_cells_hd,1:2]
+
+
+coords <- GetTissueCoordinates(spatial_obj)
+rownames(coords) <- coords$cell
+coords <- coords[spatial_obj_cells_hd, c("x", "y")]
 
 # create the RCTD query object
 query <- SpatialRNA(coords, counts_hd, colSums(counts_hd))
