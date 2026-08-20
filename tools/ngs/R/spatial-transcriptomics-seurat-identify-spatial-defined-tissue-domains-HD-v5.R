@@ -4,6 +4,7 @@
 # OUTPUT OPTIONAL spatiaaliplotti_Spatial.016um.pdf
 # OUTPUT OPTIONAL seurat_obj_banksy_Spatial.008um.Robj
 # OUTPUT OPTIONAL seurat_obj_banksy_Spatial.016um.Robj
+# PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL resolution: "reso" TYPE DECIMAL DEFAULT 0.5
 # PARAMETER OPTIONAL dims.reduction: "dims to redu" TYPE INTEGER DEFAULT 30
 # PARAMETER OPTIONAL lazy: "Lazy calc or not" TYPE [FALSE, TRUE] DEFAULT FALSE
@@ -50,9 +51,9 @@ load("seurat_obj_clustering.Robj")
 
 
 # Null sketch assay so banksy can loop over normal assays
-if ("sketch" %in% Assays(seurat_obj)) {
-  seurat_obj[["sketch"]] <- NULL
-}
+# if ("sketch" %in% Assays(seurat_obj)) {
+#   seurat_obj[["sketch"]] <- NULL
+# }
 
 # For testing, make seurat smaller:
 
@@ -77,7 +78,7 @@ Assays(seurat_obj)
 
 # Loop over the first two assays (8 and 16um bins, not sketch!). If it reaches sketch, dim error...
 
-for (assay in Assays(seurat_obj)[1]) {
+
 
 DefaultAssay(seurat_obj) <- assay
 
@@ -187,5 +188,5 @@ dev.off()
 save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
 
 }
-}
+
 # EOF

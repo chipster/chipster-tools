@@ -2,6 +2,7 @@
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
+# PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
 # PARAMETER OPTIONAL height: "Height of the pdf" TYPE INTEGER DEFAULT 10
@@ -15,6 +16,8 @@
 
 suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
 
+assay <- as.character(assay)
+
 library("ape")
 library(Seurat)
 library(ggplot2)
@@ -24,6 +27,12 @@ library(tidyverse)
 
 load("seurat_obj_clustering.Robj")
 
+print("Nimet!!")
+print((Reductions(seurat_obj)))
+
+print("Colnames")
+print(colnames(seurat_obj@meta.data))
+
 if ("sketch" %in% Assays(seurat_obj)) {
   seurat_obj[["sketch"]] <- NULL
 }
@@ -32,50 +41,37 @@ for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
 
-DefaultAssay(seurat_obj) <- "Spatial.008um"
-reduction <- Reductions(seurat_obj)[6] #Full umap sketch
+# Crete downsampled object to make visualization either
+if (assay == "Spatial.008um") {
+  cluster_col <- "seurat_cluster.008um"
+  reduction   <- "pca.008um"
+} else {
+  cluster_col <- "seurat_cluster.016um"
+  reduction   <- "pca.016um"
+}
 
-print("colnames of meta.data")
-print(colnames(seurat_obj@meta.data))
-
-
-head(Cells(seurat_obj[["Spatial.008um"]]))
-
-head(Reductions(seurat_obj))
-
-
-#Idents(object) <- "seurat_cluster.projected"
-#object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]]), downsample=1000)
+DefaultAssay(seurat_obj) <- assay
+Idents(seurat_obj) <- cluster_col
 
 object_subset <- seurat_obj
+DefaultAssay(object_subset) <- assay
+Idents(object_subset) <- cluster_col
 
+object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE)
 
-#print(reduction)
-
-
-
-## Order clusters by similarity
-#DefaultAssay(object_subset) <- assay
-Idents(object_subset) <- "seurat_cluster.projected"
-
-head(Idents(object_subset))
-
-object_subset <- BuildClusterTree(object_subset, assay = "Spatial.008um", reduction = reduction, reorder = T)
-
-FindMarkers(object_subset, assay = "Spatial.008um", ident.1 = 0)
-
-#markers <- FindAllMarkers(object_subset, assay = "Spatial.008um")
+markers <- FindAllMarkers(object_subset, assay = assay, only.pos = TRUE)
 markers %>%
   group_by(cluster) %>%
   dplyr::filter(avg_log2FC > 1) %>%
   slice_head(n = 5) %>%
   ungroup() -> top5
 
-object_subset <- ScaleData(object_subset, assay = "Spatial.008um", features = top5$gene)
+object_subset <- ScaleData(object_subset, assay = assay, features = top5$gene)
+p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) + theme(axis.text = element_text(size = 5.5)) + NoLegend()
+p
+pdf(file = paste0("markers_", assay, ".pdf"), width = width, height = height)
 
-pdf(file = paste0("markers_", "Spatial.008um", ".pdf"), width = width, height = height)
-
-p <- DoHeatmap(object_subset, assay = "Spatial.008um", features = top5$gene, size = 2.5) + theme(axis.text = element_text(size = 5.5)) + NoLegend()
+p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) + theme(axis.text = element_text(size = 5.5)) + NoLegend()
 
 print(p)
 
