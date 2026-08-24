@@ -79,7 +79,8 @@ Assays(seurat_obj)
 # Loop over the first two assays (8 and 16um bins, not sketch!). If it reaches sketch, dim error...
 
 
-
+# We ended up deciding to use only 1 assay per run, because if lazy = FALSE, banksy creates a new assay called BANKSY based on the assay you choose.
+# Thus looping over assays would only take the last assay used likely? Also this is computationally the most expensive step.
 DefaultAssay(seurat_obj) <- assay
 
 img_name <- Images(seurat_obj, assay = assay)
@@ -149,7 +150,7 @@ print("Loop finished, new round!!!")
 } else {
 
 
-# Else for lazy = FALSE, commented out for test purposes.
+# Else for lazy = FALSE
 # Run Banksy
 seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = DefaultAssay(seurat_obj), parallel = TRUE, num_cores = num_cores)
 
