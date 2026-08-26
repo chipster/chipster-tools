@@ -14,7 +14,9 @@
 # SLOTS 10
 # TOOLS_BIN ""
 
-suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
+
+# This package was installed along the new docker image
+#suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
 
 assay <- as.character(assay)
 
@@ -24,19 +26,24 @@ library(ggplot2)
 library(patchwork)
 library(dplyr)
 library(tidyverse)
+library("presto")
 
 load("seurat_obj_clustering.Robj")
 
 print("Nimet!!")
-print((Reductions(seurat_obj)))
+#print((Reductions(seurat_obj)))
 
 print("Colnames")
-print(colnames(seurat_obj@meta.data))
+#print(colnames(seurat_obj@meta.data))
 
-if ("sketch" %in% Assays(seurat_obj)) {
-  seurat_obj[["sketch"]] <- NULL
-}
 
+# Maybe a useless step???
+# if ("sketch" %in% Assays(seurat_obj)) {
+#   seurat_obj[["sketch"]] <- NULL
+# }
+
+
+# This is the one error still present, this "fixes" it
 for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
@@ -59,21 +66,23 @@ Idents(object_subset) <- cluster_col
 
 object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE)
 
-markers <- FindAllMarkers(object_subset, assay = assay, only.pos = TRUE)
+print("Finding markers...")
+markers <- FindAllMarkers(object_subset, assay = assay, only.pos = TRUE, print.bar = TRUE)
 markers %>%
   group_by(cluster) %>%
-  dplyr::filter(avg_log2FC > 1) %>%
+  dplyr::filter(avg_log2FC > 0.5) %>%
   slice_head(n = 5) %>%
   ungroup() -> top5
 
 object_subset <- ScaleData(object_subset, assay = assay, features = top5$gene)
-p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) + theme(axis.text = element_text(size = 5.5)) + NoLegend()
-p
+
 pdf(file = paste0("markers_", assay, ".pdf"), width = width, height = height)
 
 p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) + theme(axis.text = element_text(size = 5.5)) + NoLegend()
 
 print(p)
+
+dev.off()
 
 
 # EOF

@@ -143,7 +143,9 @@ pdf(file = paste0("spatiaaliplotti_", assay, ".pdf"), width = width, height = he
 
 dev.off()
 
-save(seurat_obj_sub, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
+seurat_obj <- seurat_obj_sub
+rm(seurat_obj_sub)
+save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
 
 print("Loop finished, new round!!!")
 

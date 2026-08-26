@@ -7,6 +7,7 @@
 # OUTPUT OPTIONAL spatiaaliplotti_16um.pdf
 # OUTPUT OPTIONAL spatiaaliplotti_16um2.pdf
 # OUTPUT OPTIONAL spatiaaliplotti_16um3.pdf
+# PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL coords.file: "Coordination csv file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER coords: "coords..." TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
@@ -46,7 +47,7 @@ seurat_obj[[g]] <- NULL
 }
 
 ##Tähän 8um
-if (TRUE) {
+if (assay == "Spatial.008um") {
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
 #subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
@@ -75,7 +76,7 @@ print(p)
 
 dev.off()
 
-}
+
 
 # Maybe add an option to use coords instead or also, then:
 if (coords) {
@@ -147,11 +148,12 @@ if (coords.file) {
 }
 
 # }
+}
 
 print("Starting 16um")
 
 # #Tähän 16um
-if (TRUE) {
+if (assay == "Spatial.016um") {
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
 #subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
