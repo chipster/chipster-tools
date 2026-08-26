@@ -2,11 +2,13 @@
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
 # OUTPUT OPTIONAL spatiaaliplotti.pdf
+# PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um", Spatial.016um: "Spatial.016um"] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-seurat5
 # SLOTS 20
 # TOOLS_BIN ""
 
+assay <- as.character(assay)
 resolution = 0.5
 dims.reduction = 30
 label.size = 2
@@ -25,7 +27,7 @@ library("SeuratWrappers")
 library("spacexr")
 
 
-options(future.globals.maxSize = 3000 * 1024^2)  # 1000 MiB
+options(future.globals.maxSize = 3000 * 1024^2)  # 3000 MiB
 #print("Session info:")
 #sessionInfo()
 
@@ -85,7 +87,7 @@ query <- SpatialRNA(coords, counts_hd, colSums(counts_hd))
 
 # Run RCTD
 print("Starting RCCTD")
-RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 0)
+RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 0)
 RCTD <- run.RCTD(RCTD)
 
 spatial_obj <- AddMetaData(spatial_obj, metadata = RCTD@results$results_df)
@@ -131,12 +133,14 @@ dev.off()
 
 } else {
 
-print("Sketch in the assay was NOT found, using Spatial.008um:")
+print(paste0("Sketch in the assay was NOT found, using: ", assay))
+print(assay)
 
 
+DefaultAssay(spatial_obj) <- assay
 
-counts_hd <- spatial_obj[["Spatial.008um"]]$counts
-spatial_obj_cells_hd <- colnames(spatial_obj[["Spatial.008um"]])
+counts_hd <- spatial_obj[[assay]]$counts
+spatial_obj_cells_hd <- colnames(spatial_obj[[assay]])
 
 
 coords <- GetTissueCoordinates(spatial_obj)
@@ -165,7 +169,7 @@ spatial_obj$first_type[is.na(spatial_obj$first_type)] <- 'Unknown'
 # Plotting
 
 
-DefaultAssay(spatial_obj) <- "Spatial.008um"
+DefaultAssay(spatial_obj) <- assay
 print("Final things")
 # we only ran RCTD on the cortical cells
 # set labels to all other cells as "Unknown"
