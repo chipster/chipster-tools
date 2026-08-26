@@ -3,7 +3,8 @@
 # INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
 # OUTPUT seurat_obj_custom_ref_annotated.Robj
 # OUTPUT SingleR_custom_ref_annotation_Plots.pdf
-# OUTPUT cluster_celltype_table.tsv
+# OUTPUT OPTIONAL cluster_celltype_table.tsv
+# PARAMETER method: "Method to assign one cell type per cluster" TYPE [majority: "Majority", singleR: "SingleR"] DEFAULT singleR (If you want to assign one cell type per cluster, choose majority. If you want to keep the SingleR annotations as they are, choose none.)
 # PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, removes weak cell types and will be set as NA.) 
 # PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, improves ranking accuracy of the best label.) 
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
@@ -114,6 +115,8 @@ seurat_obj <- SetIdent(object = seurat_obj, value = predictions$labels)
 
 
 # Assign one cell type per cluster 
+
+if (method == "majority") {
 seurat_table <- table(seurat_obj$seurat_clusters, seurat_obj$celltype)
 
 type <- apply(seurat_table, 1, function(x) names(which.max(x)))
@@ -172,4 +175,61 @@ save(seurat_obj, file = "seurat_obj_custom_ref_annotated.Robj")
 write.table(seurat_table, file = "cluster_celltype_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
 
+} else {
+
+Idents(seurat_obj) <- seurat_obj@meta.data$seurat_clusters
+
+sce <- as.SingleCellExperiment(seurat_obj)
+
+annotation.main.clusters <- SingleR(test = sce, assay.type.test = 1, ref = ref, labels = ref$label, clusters = Idents(seurat_obj))
+new.cluster.ids <- annotation.main.clusters$labels
+names(new.cluster.ids) <- levels(seurat_obj)
+seurat_obj_annotated_clusters <- seurat_obj
+seurat_obj_annotated_clusters <- RenameIdents(seurat_obj, new.cluster.ids)
+
+
+print("Annotation succesful")
+
+if (length(predictions$pruned.labels) > 0) {
+print("Pruned, saving QC plots")
+
+pdf(file = "SingleR_custom_ref_annotation_Plots.pdf", width = width, height = height)
+
+p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = T, label.size = label.size)
+print(p0)
+
+p1 <- plotScoreHeatmap(predictions)
+print(p1)
+
+p2 <- plotDeltaDistribution(predictions)
+print(p2)
+
+p3 <- DimPlot(seurat_obj_annotated_clusters, label = T, label.size = label.size) + ggtitle("Main annotatinos based on clusters")
+
+print(p3)
+
+dev.off()
+
+save(seurat_obj, file = "seurat_obj_custom_ref_annotated.Robj")
+#write.table(seurat_table, file = "cluster_celltype_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+
+} else {
+
+print("Not pruned, no QC plots available.")
+pdf(file = "SingleR_custom_ref_annotation_Plots.pdf", width = width, height = height)
+p0 <- DimPlot(seurat_obj, group.by = "singler_label", label = T, label.size = label.size)
+
+print(p0)
+
+p3 <- DimPlot(seurat_obj, group.by = "cluster_celltype", label = T, label.size = label.size)
+
+print(p3)
+
+dev.off()
+
+save(seurat_obj, file = "seurat_obj_custom_ref_annotated.Robj")
+#write.table(seurat_table, file = "cluster_celltype_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+
+ }
+}
 # EOF
