@@ -4,9 +4,9 @@
 # OUTPUT seurat_obj_custom_ref_annotated.Robj
 # OUTPUT SingleR_custom_ref_annotation_Plots.pdf
 # OUTPUT OPTIONAL cluster_celltype_table.tsv
-# PARAMETER method: "Method to assign one cell type per cluster" TYPE [majority: "Majority", SingleR: "SingleR"] DEFAULT SingleR (Assign one cell type per cluster. Majority method checks which type of cells are found the most in a cluster and assigns that cell type for that cluster. SingleR method's annotation is performed on the aggregated cluster profiles, see SingleR documentation.)
-# PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, removes weak cell types and will be set as NA.) 
-# PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (If yes, improves ranking accuracy of the best label.) 
+# PARAMETER method: "Method to assign one cell type per cluster" TYPE [majority: "Majority", SingleR: "SingleR"] DEFAULT SingleR (SingleR computes an aggregated profile per cluster. Majority method checks which type of cells are found the most in a cluster and assigns that cell type for that cluster.)
+# PARAMETER OPTIONAL prune: "Pruning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (Remove weak cell types and set them as NA.) 
+# PARAMETER OPTIONAL fine.tune: "Fine tuning" TYPE [FALSE: "no", TRUE: "yes"] DEFAULT TRUE (Improve ranking accuracy of the best label.) 
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # PARAMETER OPTIONAL width: "Width of the output plots" TYPE INTEGER DEFAULT 10 (Width of the output plots in inches.)
 # PARAMETER OPTIONAL label.size: "Label size in the output plots" TYPE DECIMAL DEFAULT 4 (Label size for cluster numbers or cell type names on top of UMAP. If you don't want any labels, set this to 0.)
