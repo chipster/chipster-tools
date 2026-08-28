@@ -17,6 +17,7 @@
 
     <h3>Parameters</h3>
     <ul>
+		<li>Method to annotate clusters based on cell annotation [SingleR]</li>
         <li>Pruning [yes]</li>
         <li>Fine tuning [yes]</li>
         <li>Height [10]</li>
@@ -29,15 +30,17 @@
     <h3>Details</h3>
 
     <p>
-    <p>SingleR leverages reference transcriptomic datasets of pure cell types to infer the cell of origin of each of the single cells independently. A custom reference (SummarizedExperiment object) can be used to train the SingleR model, and its annotations are combined with an unannotated Seurat object. SingleR DE method is wilcox. </p>
+    <p>SingleR leverages reference transcriptomic datasets of pure cell types to infer the cell of origin of each of the single cells independently. SingleR uses the wilcoxon method for comparing gene expression.
+		A custom reference (SummarizedExperiment object) can be used to train the SingleR model, and its annotations are combined with an unannotated Seurat object. 
+		You can make a custom reference from an annotated Seurat object in Chipster using the tool Build own reference for SingleR.</p>
     </p>
     <p>The heatmaps display the scores for all cells across all reference labels: ideally, each cell (=column) has one score that is much higher (=yellow) than the rest. Similar diagnostic can be viewed in the violion plots, where per cell "deltas" are shown. Deltas are the difference between the score for the highest label and the median across all labels for each cell.</p>
 
 
     <p>
         For more details about SingleR, please check:<br>
-        The <a href="https://github.com/dviraran/singler">SingleR GitHub repository</a> 
-         And The <a href="https://bioconductor.org/books/devel/SingleRBook/">SingleR Book</a> 
+        the <a href="https://github.com/dviraran/singler">SingleR GitHub repository</a> 
+         And the <a href="https://bioconductor.org/books/devel/SingleRBook/">SingleR Book</a> 
 
         <p>We would like to thank Iivari Kleino for his kind assistance with the development of this tool.</p>
 
