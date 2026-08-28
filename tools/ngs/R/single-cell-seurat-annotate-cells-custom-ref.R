@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - Annotate cells with own reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
+# TOOL single-cell-seurat-annotate-cells-custom-ref.R: "Seurat v5 - Annotate cells with SingleR and own reference" (Annotate cells on a Seurat object by using your custom SummarizedExperiment object as the reference.)
 # INPUT seurat_obj_unannotated.Robj: "Seurat object that will get annotated" TYPE GENERIC (Has to be pre-processed so that it contains at least UMAP information.)
 # INPUT SummarizedExperiment_reference.Robj: "Reference object" TYPE GENERIC (A SummarizedExperiment object.)
 # OUTPUT seurat_obj_custom_ref_annotated.Robj
