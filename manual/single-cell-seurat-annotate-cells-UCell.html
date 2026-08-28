@@ -12,15 +12,15 @@
     <h3>Description</h3>
 
     <p>
-        With this tool, you can annotate cell types for cells/clusters with your own marker genes and cell types.
+        UCell allows you to annotate cells/clusters with your own marker gene and cell type information.
     </p>
 
     <h3>Parameters</h3>
     <ul>
         <li>Cell types to plot [T cells, B cells, NK cells, Monocytes]</li>
         <li>Gene sets for cell types [CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8]</li>
-        <li>width of plots [10]</li>
-        <li>height of plots [10]</li>
+        <li>Width of plots [10]</li>
+        <li>Height of plots [10]</li>
         <li>Point size in tSNE and UMAP plots [1]</li>
         <li>Label size in the output plots [4] </li>
 
@@ -30,10 +30,10 @@
     <h3>Details</h3>
 
     <p>
-         With this tool, you can annotate cells with UCell. UCell is an R package for scoring gene signatures in single-cell datasets. UCell scores, based on the Mann-Whitney U statistic, are robust to dataset size and heterogeneity, and their calculation demands relatively less computing time and memory than other robust methods, enabling the processing of large datasets (>10^5 cells).
-         </p> UCell does not have a built-in database of marker genes or cell types. Firstly, you need to name cell types yourself and then input the marker genes resepective to each cell type using "sep" as a separator between gene sets. 
-         <p></p>
-         <p>(RECOMMENDED) Optionally you can input a .tsv file. The tsv-file should contain 2 columns. The first column should be for cell types, and the second for gene sets. The first is reserved for names e.g. "celltype" and "genes". Example below:</p>
+         With this tool, you can annotate cells with UCell. UCell is an R package for scoring gene signatures in single-cell datasets. 
+		UCell scores, based on the Mann-Whitney U statistic, are robust to dataset size and heterogeneity, and their calculation demands relatively less computing time and memory than other robust methods, enabling the processing of large datasets (>10^5 cells).
+	You need to provide the names of cell types and marker genes for them. You can either enter them in the respective parameter fields (separate gene sets for different cell types with sep), or 
+	provide a .tsv file containing two columns. The first column should be for cell types, and the second for gene sets. The first is reserved for names e.g. "celltype" and "genes". Example below:</p>
 
             <table>
         <tr>
