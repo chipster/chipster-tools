@@ -23,6 +23,8 @@ parallel = TRUE
 
 library(Seurat)
 library(ggplot2)
+library("dplyr")
+library("tidyverse")
 library("Matrix")
 library("SeuratWrappers")
 library("spacexr")
@@ -72,7 +74,7 @@ if (!("sketch" %in% Assays(seurat_obj))) {
 
 seurat_obj <- SketchData(
   object = seurat_obj,
-  ncells = 5000,
+  ncells = 100000,
   method = "LeverageScore",
   sketched.assay = "sketch",
   features = VariableFeatures(seurat_obj)
@@ -111,10 +113,10 @@ print("Troubleshoot")
 
 if (assay == "Spatial.016um") {
 img_16um <-Images(seurat_obj)[[2]]
-coords_raw <- GetTissueCoordinates(seurat_obj, image = img_16um)[,1:2]
+coords_raw <- GetTissueCoordinates(seurat_obj, image = img_16um)[seurat_obj_cells_hd,1:2]
 } else {
   #8um bin
-  coords_raw <- GetTissueCoordinates(seurat_obj)[,1:2]
+  coords_raw <- GetTissueCoordinates(seurat_obj)[seurat_obj_cells_hd,1:2]
 }
 
 
@@ -123,7 +125,7 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 #SpatialDimPlot(seurat_obj)
 
 # run RCTD with min of 1 cell
-RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 1)
+RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 1, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
 seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)
@@ -169,7 +171,7 @@ print(p)
 # seurat_obj$full_first_type[Cells(seurat_obj)] <- seurat_obj$full_first_type[Cells(seurat_obj)]
 # Idents(seurat_obj) <- "full_first_type"
 
-# cells <- CellsByIdentities(seurat_obj)
+ cells <- CellsByIdentities(seurat_obj)
 
 # excitatory_names <- sort(grep("^L.* CTX",names(cells),value = TRUE))
 
@@ -181,19 +183,42 @@ print(p)
 # Claude code
 
 
-known_types <- names(sort(table(seurat_obj$full_first_type), decreasing = TRUE))[1:4]
+known_types <- names(sort(table(seurat_obj$full_first_type), decreasing = TRUE))[1:8]
 known_types <- setdiff(known_types, "Unknown")
  
 p_highlight <- SpatialDimPlot(
   seurat_obj,
   cells.highlight  = cells[known_types],
-  cols.highlight   = c("#FFFF00", "grey50"),
+  cols.highlight   = c("#FFFF00", "black"),
   facet.highlight  = TRUE,
   combine          = TRUE,
-  ncol             = 4
+  ncol             = 4,
+  image.alpha = 0
 )
 print(p_highlight)
- 
+
+
+if ("BANKSY" %in% Assays(seurat_obj)) {
+  plot_cell_types <- function(data, label) {
+  p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
+    geom_bar(stat = "identity", position = "stack") +
+    geom_text(aes(label = ifelse(n >= min_count_to_show_label, full_first_type, "")), position = position_stack(vjust = 0.5), size = 2) +
+    xlab(label) +
+    ylab("# of Spots") +
+    ggtitle(paste0("Distribution of Cell Types across ", label)) +
+    theme_minimal()
+}
+
+cell_type_banksy_counts <- seurat_obj[[]] %>%
+  dplyr::filter(full_first_type %in% known_types) %>%
+  dplyr::count(full_first_type, banksy_cluster)
+
+min_count_to_show_label <- 1
+
+p_banksy <- plot_cell_types(cell_type_banksy_counts, "banksy_cluster")
+print(p_banksy)
+}
+
 dev.off()
 
 save(seurat_obj, file = "seurat_obj_integrated.Robj")
