@@ -13,6 +13,7 @@
 
 # 2026-02 ML
 # 2026-06 ML added sketch-based clustering option for 8um assay
+# 2026-08 JV Highlight all the clusters in plots
 
 # Load seurat object (called seurat_obj)
 load("seurat_object.Robj")
@@ -127,7 +128,11 @@ for (i in 1:length(assay_names)) {
         theme(legend.position = "right")
 
     Idents(seurat_obj) <- "seurat_clusters"
-    cells <- CellsByIdentities(seurat_obj, idents=c(0,4,30,34,35))
+
+    # Print all the clusters highlighted one by one
+
+    cells <- CellsByIdentities(seurat_obj)
+    
     p <- SpatialDimPlot(seurat_obj, cells.highlight = cells[setdiff(names(cells), "NA")], 
                     cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T) + NoLegend()
  
