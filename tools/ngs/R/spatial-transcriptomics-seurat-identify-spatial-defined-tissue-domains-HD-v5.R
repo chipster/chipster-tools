@@ -62,8 +62,7 @@ gc()
 DefaultAssay(seurat_obj) <- assay
 
 img_name <- Images(seurat_obj, assay = assay)
-print("image name")
-print(img_name)
+
 
 # print("Does data slot exist:")
 # length(seurat_obj@assays$Spatial.008um@layers$data) > 0
@@ -86,10 +85,8 @@ seurat_obj <- FindNeighbors(seurat_obj, reduction = "BANKSY", dims = 1:dims.redu
 seurat_obj <- FindClusters(seurat_obj, cluster.name = "banksy_cluster", resolution = resolution)
 
 
-print("Getting tissue coordinates")
 coords <- GetTissueCoordinates(seurat_obj, image = img_name)
 
-print("Finding common cells")
 common_cells <- intersect(Cells(seurat_obj), rownames(coords))
 
 # for (g in Graphs(seurat_obj)) {
@@ -119,7 +116,6 @@ seurat_obj <- seurat_obj_sub
 rm(seurat_obj_sub)
 save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
 
-print("Loop finished, new round!!!")
 
 } else {
 
