@@ -85,17 +85,17 @@ seurat_obj <- FindNeighbors(seurat_obj, reduction = "BANKSY", dims = 1:dims.redu
 seurat_obj <- FindClusters(seurat_obj, cluster.name = "banksy_cluster", resolution = resolution)
 
 
-coords <- GetTissueCoordinates(seurat_obj, image = img_name)
+#coords <- GetTissueCoordinates(seurat_obj, image = img_name)
 
-common_cells <- intersect(Cells(seurat_obj), rownames(coords))
+#common_cells <- intersect(Cells(seurat_obj), rownames(coords))
 
 # for (g in Graphs(seurat_obj)) {
 #   seurat_obj[[g]] <- NULL
 # }
 
 
-seurat_obj_sub <- subset(seurat_obj, cells = common_cells)
-
+#seurat_obj_sub <- subset(seurat_obj, cells = common_cells)
+seurat_obj_sub <- seurat_obj
 
 pdf(file = paste0("spatiaaliplotti_", assay, ".pdf"), width = width, height = height)
 
@@ -105,7 +105,7 @@ pdf(file = paste0("spatiaaliplotti_", assay, ".pdf"), width = width, height = he
 
     banksy_cells <- CellsByIdentities(seurat_obj_sub)
 
-    p1 <- SpatialDimPlot(seurat_obj_sub, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
+    p1 <- SpatialDimPlot(seurat_obj_sub, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
     facet.highlight = T, combine = T)
 
     print(p1)
@@ -148,7 +148,7 @@ pdf(file = paste0("spatiaaliplotti_", assay, ".pdf"), width = width, height = he
 
     banksy_cells <- CellsByIdentities(seurat_obj)
 
-    p1 <- SpatialDimPlot(seurat_obj, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
+    p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
     facet.highlight = T, combine = T)
 
     print(p1)
