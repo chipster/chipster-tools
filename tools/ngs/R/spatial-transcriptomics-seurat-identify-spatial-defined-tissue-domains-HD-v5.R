@@ -8,7 +8,6 @@
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.016um.png
 # OUTPUT OPTIONAL BANKSY_plot_2Spatial.008um.png
 # OUTPUT OPTIONAL BANKSY_plot_2Spatial.016um.png
-# OUTPUT OPTIONAL pngtesti.png
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
 # PARAMETER OPTIONAL resolution: "Resolution" TYPE DECIMAL DEFAULT 0.5
 # PARAMETER OPTIONAL dims.reduction: "Dimensions to reduce" TYPE INTEGER DEFAULT 30
@@ -22,11 +21,13 @@
 # RUNTIME R-4.5.1-seurat5
 # SLOTS 10
 # TOOLS_BIN ""
+install.packages("ragg", repos = "https://cloud.r-project.org/")
 
 
 # For png, cairo should be installed in this RUNTIME now...
 # This forces png function to use cairo over X11
-options(bitmapType = "cairo")
+
+# For png, cairo should be installed in this RUNTIME
 
 
 resolution <- as.numeric(resolution)
@@ -45,6 +46,7 @@ parallel = TRUE
 library("Seurat")
 library("Banksy")
 library("SeuratWrappers")
+library("ragg")
 
 # Current setup: Banksy 1.9.2, matrix 1.7.5, seuratwrappers 0.4.0
 
@@ -112,14 +114,14 @@ if (lazy == TRUE) {
   dev.off()
   
   # res has to be spesified and 300 is generally good
-  png(filename = "pngtesti.png",
+  agg_png(filename = paste0("BANKSY_plot_", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
   print(p)
   dev.off()
   
-  png(filename = paste0("BANKSY_plot_2", assay, ".png"),
+  agg_png(filename = paste0("BANKSY_plot_2", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   banksy_cells <- CellsByIdentities(seurat_obj)
@@ -171,13 +173,13 @@ if (lazy == TRUE) {
   dev.off()
   
   # res has to be spesified and 300 is generally good
-  png(filename = "pngtesti.png",
+  agg_png(filename = paste0("BANKSY_plot_1", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
   print(p)
   dev.off()
   
-  png(filename = paste0("BANKSY_plot_2", assay, ".png"),
+  agg_png(filename = paste0("BANKSY_plot_2", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   banksy_cells <- CellsByIdentities(seurat_obj)
