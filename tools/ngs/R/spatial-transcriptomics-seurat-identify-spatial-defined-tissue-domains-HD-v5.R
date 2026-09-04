@@ -21,14 +21,13 @@
 # RUNTIME R-4.5.1-seurat5
 # SLOTS 10
 # TOOLS_BIN ""
-install.packages("ragg", repos = "https://cloud.r-project.org/")
 
 
-# For png, cairo should be installed in this RUNTIME now...
-# This forces png function to use cairo over X11
+
+
 
 # For png, cairo should be installed in this RUNTIME
-
+# DONE -- BANKSY also working now
 
 resolution <- as.numeric(resolution)
 dims.reduction <- as.numeric(dims.reduction)
@@ -42,7 +41,6 @@ parallel = TRUE
 
 # 2026-07-15 JV
 
-# Matrix version 1.8.0 needed for zgeMatrix. Trying to install it on the VM Runtime R-4.5.1-seurat5 through github
 library("Seurat")
 library("Banksy")
 library("SeuratWrappers")
@@ -50,13 +48,9 @@ library("ragg")
 
 # Current setup: Banksy 1.9.2, matrix 1.7.5, seuratwrappers 0.4.0
 
-# sessionInfo() shows all versions if needed
-# set.seed(123)
-
 load("seurat_obj_clustering.Robj")
 
 # This might become a problem later
-
 # fixes as.graph error
 # for (g in Graphs(seurat_obj)) {
 # seurat_obj[[g]] <- NULL
@@ -173,7 +167,7 @@ if (lazy == TRUE) {
   dev.off()
   
   # res has to be spesified and 300 is generally good
-  agg_png(filename = paste0("BANKSY_plot_1", assay, ".png"),
+  agg_png(filename = paste0("BANKSY_plot_", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
   print(p)
