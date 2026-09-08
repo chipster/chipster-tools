@@ -8,6 +8,7 @@
 # PARAMETER OPTIONAL height: "Height of the output plots" TYPE INTEGER DEFAULT 10 (Height of the output plots in inches.)
 # PARAMETER OPTIONAL point.size: "Point size in tSNE and UMAP plots" TYPE DECIMAL DEFAULT 1 (Point size for the cluster plots.)
 # RUNTIME R-4.5.1-seurat5
+# SLOTS 2
 # TOOLS_BIN ""
 
 # JV 2026-12-06

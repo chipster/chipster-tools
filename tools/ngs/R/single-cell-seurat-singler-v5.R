@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-singler-v5.R: "Seurat v5 - SingleR cluster annotation" (Annotate your cell clusters using SingleR tool and CellDex annotation packages.)
+# TOOL single-cell-seurat-singler-v5.R: "Seurat v5 - Annotate cells with SingleR" (Annotate your cell clusters using SingleR tool and CellDex annotation packages.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_singler_annotations.Robj
 # OUTPUT OPTIONAL log.txt

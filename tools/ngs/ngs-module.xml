@@ -224,11 +224,11 @@
 		<tool>single-cell-seurat-find-markers-v5.R</tool>
 		<tool>single-cell-seurat-gene-plots-v5.R</tool>
 		<tool>single-cell-seurat-featureplot-v5.R</tool>
-		<tool>single-cell-seurat-singler-v5.R</tool>
-		<tool>single-cell-seurat-annotate-cells-sctype-v5.R</tool>
 		<tool>single-cell-seurat-annotate-cells-UCell.R</tool>
-		<tool>single-cell-seurat-Seurat2SingleR-ref.R</tool>
+		<tool>single-cell-seurat-annotate-cells-sctype-v5.R</tool>
+		<tool>single-cell-seurat-singler-v5.R</tool>
 		<tool>single-cell-seurat-annotate-cells-custom-ref.R</tool>
+		<tool>single-cell-seurat-Seurat2SingleR-ref.R</tool>
 		<tool>single-cell-extract-information-v5.R</tool>
 		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
 		<tool>single-cell-seurat-merge-samples-v5.R</tool>	
