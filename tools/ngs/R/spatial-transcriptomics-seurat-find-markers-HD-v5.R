@@ -2,7 +2,11 @@
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
+# OUTPUT OPTIONAL markers_Spatial.008um.tsv
+# OUTPUT OPTIONAL markers_Spatial.016um.tsv
+# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
+# PARAMETER reduction: "Reduction to use" TYPE [PCA, UMAP] DEFAULT PCA
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
 # PARAMETER OPTIONAL height: "Height of the pdf" TYPE INTEGER DEFAULT 10
@@ -19,6 +23,9 @@
 #suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
 
 assay <- as.character(assay)
+reduction <- tolower(as.character(reduction))
+test.use <- as.character(test.use)
+only.pos <- as.logical(only.pos)
 
 library("ape")
 library(Seurat)
@@ -30,47 +37,48 @@ library("presto")
 
 load("seurat_obj_clustering.Robj")
 
-print("Nimet!!")
-#print((Reductions(seurat_obj)))
-
-print("Colnames")
-#print(colnames(seurat_obj@meta.data))
-
-
-# Maybe a useless step???
-# if ("sketch" %in% Assays(seurat_obj)) {
-#   seurat_obj[["sketch"]] <- NULL
-# }
-
 
 # This is the one error still present, this "fixes" it
 for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
 
-# Crete downsampled object to make visualization either
-if (assay == "Spatial.008um") {
-  cluster_col <- "seurat_cluster.008um"
-  reduction   <- "pca.008um"
+
+if(assay == "Spatial.008um") {
+  DefaultAssay(seurat_obj) <- "Spatial.008um"
+
+  if(sketch) {
+    cluster_col <- "seurat_cluster.projected"
+    reduction <- paste0("full.", reduction, ".sketch")
+  } else {
+    cluster_col <- "seurat_cluster.008um"
+    reduction <- paste0(reduction, ".008um")
+  }
 } else {
+  DefaultAssay(seurat_obj) <- "Spatial.016um"
+
   cluster_col <- "seurat_cluster.016um"
-  reduction   <- "pca.016um"
+  reduction <- paste0(reduction, ".016um")
 }
+
+
 
 DefaultAssay(seurat_obj) <- assay
 Idents(seurat_obj) <- cluster_col
 
-object_subset <- seurat_obj
+object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
+
 DefaultAssay(object_subset) <- assay
 Idents(object_subset) <- cluster_col
 
 object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE)
 
 print("Finding markers...")
-markers <- FindAllMarkers(object_subset, assay = assay, only.pos = TRUE, print.bar = TRUE)
+markers <- FindAllMarkers(object_subset, assay = assay, only.pos = only.pos, test.use = test.use, min.pct = min.pct, logfc.threshold = logfc.threshold, print.bar = TRUE)
+
 markers %>%
   group_by(cluster) %>%
-  dplyr::filter(avg_log2FC > 0.5) %>%
+  dplyr::filter(avg_log2FC > logfc.threshold) %>%
   slice_head(n = 5) %>%
   ungroup() -> top5
 
@@ -84,5 +92,6 @@ print(p)
 
 dev.off()
 
+save(markers, file = paste0("markers_", assay, ".tsv"))
 
 # EOF

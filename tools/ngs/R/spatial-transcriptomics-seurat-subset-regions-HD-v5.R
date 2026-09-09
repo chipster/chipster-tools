@@ -7,6 +7,7 @@
 # OUTPUT OPTIONAL spatiaaliplotti_16um.pdf
 # OUTPUT OPTIONAL spatiaaliplotti_16um2.pdf
 # OUTPUT OPTIONAL spatiaaliplotti_16um3.pdf
+# OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL coords.file: "Coordination csv file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER coords: "coords..." TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
@@ -63,9 +64,6 @@ seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
 # Subset 
 subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
-# Check amount of images -> Message sent to Meilahti
-print("Images of sobj")
-print(names(subset_obj@images))
 
 # The simplest way to do this
 pdf(file = "spatiaaliplotti_8um.pdf")
@@ -75,7 +73,6 @@ p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend(
 print(p)
 
 dev.off()
-
 
 
 # Maybe add an option to use coords instead or also, then:
@@ -91,27 +88,27 @@ theme_axis_labels <- theme(axis.text.x = element_text(size = 10),
 
 coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
 
-x_coord_min # a param that has range: start-end for x axis
-x_coord_max # a param that has range: start-end for y axis
+# x_coord_min # a param that has range: start-end for x axis
+# x_coord_max # a param that has range: start-end for y axis
 
-y_coord_min
-y_coord_max
+# y_coord_min
+# y_coord_max
 
-# Original
+# select 8um image
 img_name <- Images(subset_obj)[1]
 img_name
 
-# subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
-# }
+ subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
 
-# For loop for image cropping, may not work
-for (img_name in Images(subset_obj)) {
-  subset_obj[[img_name]] <- Crop(
-    subset_obj[[img_name]],
-    x = c(x_coord_min, x_coord_max),
-    y = c(y_coord_min, y_coord_max)
-  )
-}
+
+# # For loop for image cropping, may not work
+# for (img_name in Images(subset_obj)) {
+#   subset_obj[[img_name]] <- Crop(
+#     subset_obj[[img_name]],
+#     x = c(x_coord_min, x_coord_max),
+#     y = c(y_coord_min, y_coord_max)
+#   )
+# }
 
 pdf(file = "spatiaaliplotti_8um2.pdf")
 
@@ -125,7 +122,7 @@ dev.off()
 
 if (coords.file) {
 
-  img_name <- Images(subset_obj)[1]
+  img_name <- Images(subset_obj)["slice.008um"]
 
   coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
@@ -139,7 +136,7 @@ if (coords.file) {
 
   pdf("spatiaaliplotti_8um3.pdf")
 
-  p<- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend() + 
+  p<- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
 
 
   print(p)
@@ -203,7 +200,7 @@ y_coord_min
 y_coord_max
 
 # Original
-img_name <- Images(subset_obj)[1]
+img_name <- Images(subset_obj)["slice.016um"]
 img_name
 
 # subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
@@ -244,12 +241,14 @@ if (coords.file) {
 
   pdf("spatiaaliplotti_16um3.pdf")
 
-  p<-SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend() + 
+  p<-SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend() 
 
 
   print(p)
 
   dev.off()}
 }
+
+save(subset_obj, file = "seurat_obj_subset.Robj")
 
 # EOF

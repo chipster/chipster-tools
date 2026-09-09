@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat Visium HD - Find all markers </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool gives you a list of all markers in your data based on clusters.
+
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Was sketch clustering used for 8 bin assay [no]</li>
+        <li> Assay to use [Spatial.008um]</li>
+       <li>Reduction to use [PCA]</li>
+        <li>Determine the label size of the plots [3]</li>
+       <li>Width of the pdf [10]</li>
+        <li> Height of the pdf [10]</li>
+       <li>Limit testing to genes which are expressed in at least this fraction of spots [0.01]</li>
+        <li>Limit testing to genes which show at least this fold [0.1]</li>
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As inputs, give a Seurat object.
+    </p>
+
+    <p>
+        Select the gene based on which you want to subset the data (as an example, this parameter is set to "MS4A1").
+        Then select the expression value threshold (as an exampe, this parameter is set to 1).
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>markers_{assay}.pdf: A heatmap of the identified top marker genes for the specified assay
+        <li>markers_{assay}.tsv: A table of the identified marker genes for the specified assay</li>
+    </ul>
+
+
+</body>
