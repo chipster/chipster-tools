@@ -1,7 +1,10 @@
 # TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R: "Seurat v5 HD -Identify spatially variable genes based on clusters" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
-# INPUT seurat_spatial_obj_pca.Robj: "Seurat object" TYPE GENERIC
+# INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot.pdf
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
+# PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
+# PARAMETER OPTIONAL sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
+# PARAMETER OPTIONAL reduction: "Reduction to use" TYPE [PCA, UMAP] DEFAULT PCA
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
 # PARAMETER OPTIONAL min_pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either cluster. Withholding infrequently expressed genes will speed up testing.)
@@ -18,6 +21,18 @@
 # 2022-10-20 ML Add output for spatially_variable_genes.tsv
 # 2023-02-23 LG Add parameters min.pct, logfc.threshold, and only.pos
 # 2024-03-21 EP Update to Seurat v5
+# 2026-09-10 JV Update to Visium HD
+
+assay <- as.character(assay)
+sketch <- as.logical(sketch)
+reduction <- tolower(as.character(reduction))
+cluster1 <- as.numeric(cluster1)
+cluster2 <- as.numeric(cluster2)
+min_pct <- as.numeric(min_pct)
+logfc_threshold <- as.numeric(logfc_threshold)
+test <- as.character(test)
+only_pos <- as.logical(only_pos)
+
 
 library(Seurat)
 library(ggplot2)
@@ -29,14 +44,34 @@ print(package.version("Seurat"))
 documentVersion("Seurat", package.version("Seurat"))
 
 # Load the R-Seurat-object (called seurat_obj)
-load("seurat_spatial_obj_pca.Robj")
+load("seurat_obj_clustering.Robj")
 
-print(Assays(seurat_obj))
+print(colnames(seurat_obj@meta.data))
+
+
+if(assay == "Spatial.008um") {
+  DefaultAssay(seurat_obj) <- "Spatial.008um"
+
+  if(sketch) {
+    Idents(seurat_obj) <- seurat_obj$seurat_cluster.projected
+    reduction <- paste0("full.", reduction, ".sketch")
+  } else {
+    Idents(seurat_obj) <- seurat_obj$seurat_cluster.008um
+    reduction <- paste0(reduction, ".008um")
+  }
+} else {
+  DefaultAssay(seurat_obj) <- "Spatial.016um"
+
+  Idents(seurat_obj) <- seurat_obj$seurat_cluster.016um
+  reduction <- paste0(reduction, ".016um")
+}
+
+print(Idents(seurat_obj))
 
 #seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
 # Differential expression
-de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
+de_markers <- FindMarkers(seurat_obj, assay = assay, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")

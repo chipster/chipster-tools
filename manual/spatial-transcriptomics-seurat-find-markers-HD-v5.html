@@ -26,25 +26,28 @@
         <li> Height of the pdf [10]</li>
        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.01]</li>
         <li>Limit testing to genes which show at least this fold [0.1]</li>
+        <li>Report only positive marker genes [no]</li>
+        <li>Test for differential expression [wilcox]</li>
     </ul>
 
 
     <h3>Details</h3>
 
     <p>
-        As inputs, give a Seurat object.
+        As inputs, give a clustered Seurat object.
     </p>
 
     <p>
-        Select the gene based on which you want to subset the data (as an example, this parameter is set to "MS4A1").
-        Then select the expression value threshold (as an exampe, this parameter is set to 1).
+        Finds markers (differentially expressed genes) for each of the identity classes (clusters) in a dataset. Each cluster is compared to all the other clusters.
+
+
     </p>
 
     <h3>Output</h3>
 
     <ul>
         <li>markers_{assay}.pdf: A heatmap of the identified top marker genes for the specified assay
-        <li>markers_{assay}.tsv: A table of the identified marker genes for the specified assay</li>
+        <li>markers_{assay}.tsv: A table of the identified marker genes for each cluster for the specified assay</li>
     </ul>
 
 

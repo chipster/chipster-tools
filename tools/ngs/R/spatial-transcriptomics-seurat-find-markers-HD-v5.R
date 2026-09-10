@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 HD -Find markers" (This tool identifies marker genes.)
+# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 HD -Find all markers" (This tool identifies marker genes for all clusters.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
@@ -66,7 +66,8 @@ if(assay == "Spatial.008um") {
 DefaultAssay(seurat_obj) <- assay
 Idents(seurat_obj) <- cluster_col
 
-object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
+#object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
+object_subset <- seurat_obj
 
 DefaultAssay(object_subset) <- assay
 Idents(object_subset) <- cluster_col
@@ -93,5 +94,6 @@ print(p)
 dev.off()
 
 save(markers, file = paste0("markers_", assay, ".tsv"))
+write.table(as.matrix(markers), file = paste0("markers_", assay, ".tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
 
 # EOF
