@@ -7,7 +7,7 @@
 # PARAMETER OPTIONAL add.labels: "Add labels on top of clusters in plots" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (Add cluster number on top of each cluster in the UMAP plots.)
 # PARAMETER OPTIONAL output_aver_expr: "Give a list of average expression in each cluster" TYPE [T: yes, F: no] DEFAULT F (Returns an expression table for an average single cell in each cluster.)
 # PARAMETER OPTIONAL normalisation.method: "Normalisation method used previously" TYPE [LogNormalize:"Global scaling normalization", SCT:"SCTransform"] DEFAULT LogNormalize (Which normalisation method was used in preprocessing. This is needed only when requesting the average expression table.)
-# RUNTIME R-4.3.1-single-cell
+# RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
 # 2026-09-18 ML Split off from single-cell-seurat-integrated-analysis-v5.R for standalone use
