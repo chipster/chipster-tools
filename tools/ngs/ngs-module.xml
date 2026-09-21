@@ -221,6 +221,7 @@
 		<tool>single-cell-seurat-sctransform-v5.R</tool>
 		<tool>single-cell-seurat-pca-v5.R</tool>
 		<tool>single-cell-seurat-clustering-v5.R</tool>
+		<tool>single-cell-seurat-cluster-vis-v5.R</tool>
 		<tool>single-cell-seurat-find-markers-v5.R</tool>
 		<tool>single-cell-seurat-gene-plots-v5.R</tool>
 		<tool>single-cell-seurat-featureplot-v5.R</tool>
@@ -233,6 +234,7 @@
 		<tool>single-cell-from-rds-to-seurat-object-v5.R</tool>
 		<tool>single-cell-seurat-merge-samples-v5.R</tool>	
 		<tool>single-cell-seurat-integrate-v5.R</tool>
+		<tool>single-cell-seurat-integrated-vis-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-sample-groups-v5.R</tool>
