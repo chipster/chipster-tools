@@ -235,13 +235,15 @@
 		<tool>single-cell-seurat-merge-samples-v5.R</tool>	
 		<tool>single-cell-seurat-integrate-v5.R</tool>
 		<tool>single-cell-seurat-integrated-vis-v5.R</tool>
-		<tool>single-cell-seurat-diffexp-samples-v5.R</tool>
+		<!-- <tool>single-cell-seurat-diffexp-samples-v5.R</tool> --> 
+		<tool>single-cell-seurat-de-between-samples-v5.R</tool>
+		<tool>single-cell-seurat-find-conserved-markers-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-chosen-samples-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-sample-groups-v5.R</tool>
 		<tool>single-cell-seurat-diffexp-pseudobulk-v5.R</tool>
 		<tool>single-cell-seurat-split-dot-plot-v5.R</tool>	
-		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
 		<tool>single-cell-seurat-subset-v5.R</tool>
+		<tool>single-cell-seurat-extract-cluster-v5.R</tool>
 		<tool>single-cell-seurat-rename-clusters-v5.R</tool>
 		<tool>single-cell-seurat-modify-clusters-v5.R</tool>
 		<tool>single-cell-seurat-split-samples-from-matrix-v5.R</tool>	
