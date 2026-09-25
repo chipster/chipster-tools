@@ -14,7 +14,7 @@
 # PARAMETER OPTIONAL color.scale: "Determine color scale based on all genes" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes.)
 # PARAMETER OPTIONAL width: "Width of the output pdf" TYPE DECIMAL DEFAULT 10 (Width of the output pdf in inches)
 # PARAMETER OPTIONAL height: "Height of the output pdf" TYPE DECIMAL DEFAULT 10 (Height of the output pdf in inches)
-# RUNTIME R-4.5.1-seurat5
+# RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
 

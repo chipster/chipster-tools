@@ -4,11 +4,16 @@
 # OUTPUT OPTIONAL QC_plots.pdf
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
 # PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE STRING DEFAULT "8, 16" (List here the bin sizes, separated by comma)
-# RUNTIME R-4.5.1-seurat5
+# RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
 
 # 2026-02 ML 
+
+
+      #toolbox-runtime-command-R-4.5.1-visium-hd: /opt/chipster/tools/R-4.5.1/bin/R
+      #toolbox-runtime-image-R-4.5.1-visium-hd: comp-r-4-5-1-visium-hd
+      #toolbox-runtime-tools-bin-path-R-4.5.1-visium-hd: tools-bin
 
 # RUNTIME R-4.2.3-seurat5 -> R-4-5-1-seurat5 
 
@@ -46,7 +51,7 @@ documentVersion("Seurat", package.version("Seurat"))
 
 # Tässä on ongelma jos on 2um folder mukana // JV
 # Jos koommentoi tuon strip components pois niin korjaantuu // JV
-system("mkdir input_folder && tar -xf files.tar -C input_folder")# --strip-components=2 2> /dev/null")
+system("mkdir input_folder && tar -xf files.tar -C input_folder --strip-components=1")# --strip-components=2 2> /dev/null")
 
 # For testing:
 # die here:
@@ -61,7 +66,7 @@ bin_sizes <- as.numeric(trimws(unlist(strsplit(bin_sizes, ","))))
 print(bin_sizes)
 
 print("list files")
-list.files("input_folder/", recursive = T)
+list.files("input_folder/", recursive = T, full.names = T)
 
 # Load spatial data, returns a Seurat object
 # slice = name for the stored image of the tissue slice later used in the analysis

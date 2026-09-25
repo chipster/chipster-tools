@@ -9,16 +9,16 @@
 # OUTPUT OPTIONAL BANKSY_plot_2Spatial.008um.png
 # OUTPUT OPTIONAL BANKSY_plot_2Spatial.016um.png
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
-# PARAMETER OPTIONAL resolution: "Resolution" TYPE DECIMAL DEFAULT 0.5
+# PARAMETER OPTIONAL resolution: "Resolution" TYPE DECIMAL DEFAULT 0.8
 # PARAMETER OPTIONAL dims.reduction: "Dimensions to reduce" TYPE INTEGER DEFAULT 30
 # PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT FALSE (Makes the analysis faster but no "BANKSY" assay will be created to the seurat object)
 # PARAMETER OPTIONAL features: "Features to compute" TYPE [all: "all", variable: "variable"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled)
-# PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.5 (A parameter to weight the contributions of the cell-transcriptome matrix and the neighbor expression matrices. Smaller lambda emphasizes cell's own transcriptomes and causes cells to cluster according to cell type. Bigger lambda causes cells to cluster according to tissue domain.)
-# PARAMETER OPTIONAL k_geom: "Amount of neighbours" TYPE INTEGER DEFAULT 15 (Local neighborhood size. Larger values will yield larger domains)
+# PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (A parameter to weight the contributions of the cell-transcriptome matrix and the neighbor expression matrices. Smaller lambda emphasizes cell's own transcriptomes and causes cells to cluster according to cell type. Bigger lambda causes cells to cluster according to tissue domain.)
+# PARAMETER OPTIONAL k_geom: "Amount of neighbours" TYPE INTEGER DEFAULT 50 (Local neighborhood size. Larger values will yield larger domains)
 # PARAMETER OPTIONAL label.size: "Determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the pdf file" TYPE INTEGER DEFAULT 10
 # PARAMETER OPTIONAL height: "Height of the pdf file" TYPE INTEGER DEFAULT 10
-# RUNTIME R-4.5.1-seurat5
+# RUNTIME R-4.5.1-visium-hd
 # SLOTS 10
 # TOOLS_BIN ""
 
@@ -68,11 +68,8 @@ DefaultAssay(seurat_obj) <- assay
 img_name <- Images(seurat_obj, assay = assay)
 
 
-
-if (lazy == TRUE) {
-  
-  print("Lazy calculation")
-  
+if (lazy) {
+    
   seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, verbose = TRUE,
                           assay = assay, slot = "data",  features = features,
                           k_geom = k_geom, lazy = TRUE, split.scale = TRUE, parallel = parallel, num_cores = num_cores)
@@ -83,14 +80,6 @@ if (lazy == TRUE) {
   seurat_obj <- FindNeighbors(seurat_obj, reduction = "BANKSY", dims = 1:dims.reduction)
   seurat_obj <- FindClusters(seurat_obj, cluster.name = "banksy_cluster", resolution = resolution)
   
-  # This error still under investigation (No error currently for some reason)
-  
-  # for (g in Graphs(seurat_obj)) {
-  #   seurat_obj[[g]] <- NULL
-  # }
-  
-  
-  #seurat_obj_sub <- subset(seurat_obj, cells = common_cells)
   
   pdf(file = paste0("BANKSY_plot_", assay, ".pdf"), width = width, height = height)
   
@@ -130,9 +119,7 @@ if (lazy == TRUE) {
   save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
   
 } else {
-  
-  print("Normal calculation")
-  
+    
   # Else for lazy = FALSE
   # The RunBanksy function creates a new BANKSY assay, which can be used for dimensional reduction and clustering:
   # features parameter only works for lazy=T because RunBanksy() has hardcoded limitations to sizes. "all" features would be too much, at least for this dummy data.

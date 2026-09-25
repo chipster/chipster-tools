@@ -17,7 +17,7 @@
 # PARAMETER OPTIONAL y_coord_max: "Subset y max coordinate" TYPE INTEGER DEFAULT 9000
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
-# RUNTIME R-4.5.1-seurat5
+# RUNTIME R-4.5.1-visium-hd
 # SLOTS 6
 # TOOLS_BIN ""
 

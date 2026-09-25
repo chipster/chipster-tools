@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um", Spatial.016um: "Spatial.016um"] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
-# RUNTIME R-4.5.1-seurat5
+# RUNTIME R-4.5.1-visium-hd
 # SLOTS 40
 # TOOLS_BIN ""
 
