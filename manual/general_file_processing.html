@@ -9,16 +9,23 @@
 
 <p>
 This tool reads a text file and performs the selected operation for it.
-Note that the search string is interpreted as regular expression where: 
+Note that the search string is interpreted as an extended regular expression where:
 <ul>
 <li>dot (.) is interpreted as "any single character". For example <i>a.a</i> would match for example <i>aba</i>, <i>aca</i> but not <i>abba</i>.</li>
-<li>plus (+) is interpreted as "one or more of the proceeding characters". For example <i>a+b</i> would match for example <i>ab</i>, <i>aab</i> and <i>caaab</i>.</li>
-<li>asterisk (*) is interpreted as "zero or more of the proceeding characters". For example <i>cA*b</i> would match for example <i>cb</i> and <i>cAAb</i> but not <i>cDb</i>.</li>
+<li>plus (+) is interpreted as "one or more of the preceding characters". For example <i>a+b</i> would match for example <i>ab</i>, <i>aab</i> and <i>caaab</i>.</li>
+<li>asterisk (*) is interpreted as "zero or more of the preceding characters". For example <i>cA*b</i> would match for example <i>cb</i> and <i>cAAb</i> but not <i>cDb</i>.</li>
+<li>question mark (?) is interpreted as "zero or one of the preceding character".</li>
+<li>caret (^) and dollar ($) match the beginning and the end of the row. For example <i>^chr1\b</i> would match rows starting with <i>chr1</i> but not <i>chr10</i>.</li>
+<li>vertical bar (|) separates alternatives, parentheses ( ) group them and square brackets [ ] define a set of characters. For example <i>gene(A|B)</i> would match <i>geneA</i> and <i>geneB</i>.</li>
 </ul>
 
-Further, because of security issues, several non-alphabet characters are not allowed in string definitions. 
-These include:
-",#,[,],{,},%,$,&,|,>,&gt , ?
+To match one of these characters literally, put a backslash in front of it. For example <i>\(x\+y\)</i> would match the text <i>(x+y)</i>.
+The search string can be at most 50 characters long.
+
+<p>
+The replacement string is used as is, but for security reasons it can contain only letters, numbers, spaces and the characters
+- + _ : . , * ( )
+</p>
 
 
 The available operations are:
