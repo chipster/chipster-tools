@@ -28,7 +28,7 @@ if (isTar) {
   system("mkdir input_folder")
   system("mkdir output_folder")
   system("cd input_folder && tar xf ../input.file")
-  system("cd input_folder && gunzip *.gz")
+  system("cd input_folder && gunzip -- *.gz")
   system("cd input_folder && ls -l")
   filenames <- safe_name(list.files("input_folder"))
   for (f in filenames) {
@@ -44,7 +44,7 @@ if (isTar) {
   # gzip all output FASTQ files
   system("gzip output_folder/*.fq")
   # Make a tar package.
-  system("cd output_folder && tar cf ../subset.tar *")
+  system("cd output_folder && tar cf ../subset.tar -- *")
 
   # read input names
   inputnames <- read_input_definitions()

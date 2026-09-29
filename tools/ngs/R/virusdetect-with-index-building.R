@@ -64,9 +64,15 @@ hg_ifn <- ("")
 if (hostgenome.filetype == "tar") {
     check.command <- paste(bwa.index.binary, "hostgenome| tail -1 ")
     bwa.genome <- system(check.command, intern = TRUE)
+    if (bwa.genome == "wrong_tar_content") {
+        stop("CHIPSTER-NOTE: The selected host genome file does not contain BWA indexes.")
+    }
+    # The script extracts the tar package to genome_index
+    host.reference <- file.path(getwd(), "genome_index", safe_name(basename(bwa.genome)))
 
     # case 2. Fasta file
 } else {
+    host.reference <- "hostgenome"
     check.command <- paste(bwa.index.binary, "hostgenome -tar| tail -1 ")
     bwa.genome <- system(check.command, intern = TRUE)
     cp.command <- paste("cp ", bwa.genome, "_bwa_index.tar ./hostgenome_bwa_index.tar ", sep = "")
@@ -79,7 +85,7 @@ if (hostgenome.filetype == "tar") {
     write_output_definitions(outputnames)
 }
 
-vd.parameters <- paste(vd.parameters, "--host_reference hostgenome")
+vd.parameters <- paste(vd.parameters, "--host_reference", host.reference)
 # system("ls -l >> vd.log")
 system("date >> vd.log")
 

@@ -48,6 +48,10 @@ untar("reads.tar", exdir = "input_folder")
 # list the full file names
 # filepaths <- list.files("input_folder", full.names=TRUE)
 filenames <- safe_name(list.files("input_folder"))
+# Mothur uses - to separate the files in the fasta= and groups= lists
+if (any(grepl("-", filenames, fixed = TRUE))) {
+  stop(paste("CHIPSTER-NOTE: File names can't contain - in this tool. Please rename these:", paste(filenames[grepl("-", filenames, fixed = TRUE)], collapse = ", ")))
+}
 
 # Go through the files and gzip. Files that are already gzipped will be skipped
 for (file in filenames) {

@@ -60,6 +60,7 @@ if (genome.filetype == "tar") {
     if (bwa.genome == "wrong_tar_content") {
         stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")
     }
+    bwa.genome <- file.path(getwd(), "genome_index", safe_name(basename(bwa.genome)))
     runExternal("ls -l >> bwa.log")
     # case 2. Fasta file
 } else {
