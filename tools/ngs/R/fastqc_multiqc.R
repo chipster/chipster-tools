@@ -17,7 +17,7 @@ system("cat chipster-inputs.tsv")
 system("ls -l")
 
 for (i in 1:nrow(input.names)) {
-  system(paste("mv --backup=numbered", input.names[i, 1], input.names[i, 2]))
+  system(paste("mv --backup=numbered --", shQuote(input.names[i, 1]), shQuote(input.names[i, 2])))
 }
 system("ls -l")
 
@@ -34,10 +34,10 @@ documentVersion("FastQC", version)
 version <- system(paste(multiqc.binary, "--version"), intern = TRUE)
 documentVersion("MultiQC", version)
 
-fastq.files <- system("ls *.fastq *.fastq.gz *.fq *.fq.gz *.gz", intern = TRUE)
+fastq.files <- system("ls -- *.fastq *.fastq.gz *.fq *.fq.gz *.gz", intern = TRUE)
 
 # commands
-fastqc.command <- paste(fastqc.binary, "-f fastq --noextract ", paste(fastq.files, collapse = " "))
+fastqc.command <- paste(fastqc.binary, "-f fastq --noextract ", paste(shQuote(paste0("./", fastq.files)), collapse = " "))
 multiqc.command <- paste(multiqc.binary, "--module fastqc .")
 
 documentCommand(fastqc.command)

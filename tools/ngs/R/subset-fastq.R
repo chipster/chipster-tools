@@ -30,14 +30,14 @@ if (isTar) {
   system("cd input_folder && tar xf ../input.file")
   system("cd input_folder && gunzip *.gz")
   system("cd input_folder && ls -l")
-  filenames <- list.files("input_folder")
+  filenames <- safe_name(list.files("input_folder"))
   for (f in filenames) {
     input_fastq <- paste("input_folder/", f, sep = "")
     output_base <- strip_name(f)
     output_fastq <- paste("output_folder/", output_base, "_subset.fq", sep = "")
 
     # Command
-    command <- paste(seqtk.binary, "sample", seed.option, input_fastq, n.seq, ">", output_fastq)
+    command <- paste(seqtk.binary, "sample", seed.option, shQuote(input_fastq), n.seq, ">", shQuote(output_fastq))
     documentCommand(command)
     runExternal(command)
   }

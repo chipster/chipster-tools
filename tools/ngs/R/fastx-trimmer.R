@@ -31,14 +31,14 @@ if (isTar) {
   system("mkdir output_folder")
   system("cd input_folder && tar xf ../input.file")
   system("cd input_folder && gunzip *.gz")
-  filenames <- list.files("input_folder")
+  filenames <- safe_name(list.files("input_folder"))
   for (f in filenames) {
     input_fastq <- paste("input_folder/", f, sep = "")
     output_base <- strip_name(f)
     output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
 
     # Command
-    command <- paste(binary, "-f", first, "-l", last, "-Q 33", "-i", input_fastq, "-o", output_fastq)
+    command <- paste(binary, "-f", first, "-l", last, "-Q 33", "-i", shQuote(input_fastq), "-o", shQuote(output_fastq))
     # documentCommand(command)
     system(command)
   }

@@ -32,7 +32,7 @@ if (length(file.list) == 0) {
     stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
-if (grepl("/", file.list[1])) {
+if (any(grepl("/", file.list))) {
     stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
 
@@ -55,6 +55,7 @@ vector_notmerged <- c()
 
 # list the files full names with input_folder/
 filenames <- list.files("input_folder", full.names = TRUE)
+safe_name(basename(filenames))
 # if input list selected use it, and make a new list of filenames
 if (fileOk("input_list.txt")) {
     txt_filenames <- c()
@@ -67,6 +68,7 @@ if (fileOk("input_list.txt")) {
         txt_filenames <- c(txt_filenames, first)
         txt_filenames <- c(txt_filenames, second)
     }
+    safe_name(c(sample.names, txt_filenames))
     # if the input list has a different amount of files than the tar package
     if (length(txt_filenames) != length(filenames)) {
         line1 <- paste(c("Filenames from the given txt file:\n", txt_filenames), collapse = "\n")
@@ -110,16 +112,16 @@ for (name in sample.names) {
     # if maxns is selected
     if (!is.na(maxns)) { # command with maxns parameter
         command <- paste(
-            binary, "--fastq_mergepairs", fnFs[x], "--reverse", fnRs[x], "--eeout",
+            binary, "--fastq_mergepairs", shQuote(fnFs[x]), "--reverse", shQuote(fnRs[x]), "--eeout",
             "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct, "--fastq_maxns", maxns,
-            "--fastqout", output_fastq, "--label_suffix", name, ">>summary.txt 2>&1"
+            "--fastqout", shQuote(output_fastq), "--label_suffix", shQuote(name), ">>summary.txt 2>&1"
         )
     } else { # else without --fastq_maxns
         # command without maxns parameter
         command <- paste(
-            binary, "--fastq_mergepairs", fnFs[x], "--reverse", fnRs[x], "--eeout",
+            binary, "--fastq_mergepairs", shQuote(fnFs[x]), "--reverse", shQuote(fnRs[x]), "--eeout",
             "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct,
-            "--fastqout", output_fastq, "--label_suffix", name, ">>summary.txt 2>&1"
+            "--fastqout", shQuote(output_fastq), "--label_suffix", shQuote(name), ">>summary.txt 2>&1"
         )
     }
     x <- x + 1

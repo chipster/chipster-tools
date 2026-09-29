@@ -27,7 +27,7 @@ for (i in 1:nrow(input.names)) {
   isTar <- grepl("POSIX tar", system(paste("file", input.names[i, 1]), intern = TRUE))
   # Input is a tar file
   if (isTar) {
-    tarlist <- untar(paste(input.names[i, 1]), list = TRUE)
+    tarlist <- safe_name(untar(paste(input.names[i, 1]), list = TRUE))
     untar(paste(input.names[i, 1]))
     # go throug list
     for (j in 1:length(tarlist)) {
@@ -36,7 +36,7 @@ for (i in 1:nrow(input.names)) {
       fastaname <- paste(basename, ".fasta", sep = "")
       # If input is FASTQ file, convert to FASTA
       if (isFastq(paste(tarlist[j]))) {
-        command <- paste(fastx.binary, "-n -i", tarlist[j], "-o", fastaname)
+        command <- paste(fastx.binary, "-n -i", shQuote(tarlist[j]), "-o", shQuote(fastaname))
         runExternal(command)
         # If input is FASTA file, just make sure file name ends with .fasta
       } else if (isFasta(paste(tarlist[j]))) {

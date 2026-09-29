@@ -34,16 +34,17 @@ if (length(file.list) == 0) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
-if (grepl("/", file.list[1])) {
+if (any(grepl("/", file.list))) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
+safe_name(file.list)
 
 # Open tar package
 system("tar xf reads.tar")
 
 # Go through the file list and gzip. Files that are already gzipped will be skipped
 for (i in 1:length(file.list)) {
-  system(paste("gzip", file.list[i]))
+  system(paste("gzip", shQuote(file.list[i])))
 }
 
 # Use input_list if provided. Else use Mothur make.file tool to generate the input list

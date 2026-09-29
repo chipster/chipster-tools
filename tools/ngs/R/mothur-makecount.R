@@ -34,7 +34,7 @@ if (length(file.list) == 0) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
-if (grepl("/", file.list[1])) {
+if (any(grepl("/", file.list))) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
 
@@ -47,7 +47,7 @@ untar("reads.tar", exdir = "input_folder")
 
 # list the full file names
 # filepaths <- list.files("input_folder", full.names=TRUE)
-filenames <- list.files("input_folder")
+filenames <- safe_name(list.files("input_folder"))
 
 # Go through the files and gzip. Files that are already gzipped will be skipped
 for (file in filenames) {
@@ -58,7 +58,7 @@ for (file in filenames) {
 
   fastaname <- paste("output_folder/", basename, ".fasta", sep = "")
 
-  command <- paste(emboss.binary, "-sequence", file_path, "-outseq", fastaname)
+  command <- paste(emboss.binary, "-sequence", shQuote(file_path), "-outseq", shQuote(fastaname))
   runExternal(command)
   fasta_names <- paste(fasta_names, fastaname, sep = "-")
   group_names <- paste(group_names, basename, sep = "-")
