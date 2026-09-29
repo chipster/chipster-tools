@@ -1,6 +1,6 @@
 import sys
 import os
-import chipster_variables  # this file is created by PythonCompJob.java when starting the job
+import chipster_variables  # created in memory by PythonCompJob.java when starting the job
 
 
 def document_version(application, version_string):
