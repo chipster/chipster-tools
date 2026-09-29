@@ -28,7 +28,7 @@ if (length(file.list) == 0) {
     stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
-if (grepl("/", file.list[1])) {
+if (any(grepl("/", file.list))) {
     stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
 # Input is a tar file: make input and output folder and create file samples.fastq.txt
@@ -44,7 +44,7 @@ vector_proportion <- c()
 # untar the tar package to input_folder and list the filenames
 untar("contigs.tar", exdir = "input_folder")
 filenames <- list.files("input_folder", full.names = TRUE)
-txt_filenames <- list.files("input_folder")
+txt_filenames <- safe_name(list.files("input_folder"))
 # file names
 sample.names <- sapply(strsplit(basename(txt_filenames), "_"), `[`, 1)
 
@@ -55,7 +55,7 @@ for (file in filenames) {
     output_fastq <- paste0("output_folder/", sample.names[x])
     x <- x + 1
     # make the fastq_filter command
-    command <- paste(binary, "--fastq_filter", file, "--fastq_maxee", maxee, "--fastq_qmax", qmax, "--fastqout", output_fastq, ">>summary_test.txt 2>&1")
+    command <- paste(binary, "--fastq_filter", shQuote(file), "--fastq_maxee", maxee, "--fastq_qmax", qmax, "--fastqout", shQuote(output_fastq), ">>summary_test.txt 2>&1")
     # run command
     runExternal(command)
     documentCommand(command)

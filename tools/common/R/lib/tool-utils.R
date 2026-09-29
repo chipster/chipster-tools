@@ -50,6 +50,28 @@ strip_name <- function(name) {
   return(name)
 }
 
+# Checks names that come from the user's data, e.g. the file names in a tar package or the
+# lines of a list file, before they are used in commands. Allows only letters (also ä, ö, å etc.),
+# numbers and . _ + -, so that the shell sees each name as one plain word. Stops the job otherwise.
+# Returns the names, so that the check can wrap the listing: names <- safe_name(list.files(...))
+#
+safe_name <- function(names) {
+  # The job may run in the C locale, where R would see the bytes of ä instead of a letter
+  utf8 <- names
+  Encoding(utf8)[Encoding(utf8) == "unknown"] <- "UTF-8"
+  valid <- !is.na(utf8) & validUTF8(utf8)
+  # \p{M} for the accents of decomposed letters, which e.g. macOS uses in file names
+  valid[valid] <- grepl("^[\\p{L}\\p{M}\\p{N}._+][\\p{L}\\p{M}\\p{N}._+-]*\\z", utf8[valid], perl = TRUE)
+  unsafe <- names[!valid | names %in% c(".", "..")]
+  if (length(unsafe) > 0) {
+    stop(paste(
+      "CHIPSTER-NOTE: File and sample names can contain only letters, numbers and the characters . _ + -",
+      "and they can't start with -. Please rename these:", paste(unsafe, collapse = ", ")
+    ))
+  }
+  return(names)
+}
+
 # If the names look like typical paired-end names: *_1, *_2, remove the ending and return the name.
 # If not, return first name as-is.
 #
@@ -170,7 +192,7 @@ fileCheck <- function(filename, minsize, minlines) {
 isFasta <- function(filename) {
   emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
   sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary, emboss.path, filename)
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, shQuote(filename))
   str.filetype <- system(sfcheck.command, intern = TRUE)
   if (str.filetype == "fasta") {
     return(TRUE)
@@ -189,7 +211,7 @@ isFastq <- function(filename,version=1) {
   }
   
   sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary, emboss.path, filename)
+  sfcheck.command <- paste(sfcheck.binary, emboss.path, shQuote(filename))
   str.filetype <- system(sfcheck.command, intern = TRUE)
   if (grepl("fastq", str.filetype)) {
     return(TRUE)

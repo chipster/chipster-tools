@@ -99,12 +99,12 @@ if (isTar) {
     system("mkdir output_folder")
     system("cd input_folder && tar xf ../reads.tar")
     system("cd input_folder && gunzip *.gz")
-    filenames <- list.files("input_folder")
+    filenames <- safe_name(list.files("input_folder"))
     for (f in filenames) {
         input_fastq <- paste("input_folder/", f, sep = "")
         output_base <- strip_name(f)
         output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
-        trimmomatic.command <- paste("java -jar", trimmomatic.binary, trim.params, input_fastq, output_fastq, step.params)
+        trimmomatic.command <- paste("java -jar", trimmomatic.binary, trim.params, shQuote(input_fastq), shQuote(output_fastq), step.params)
         documentCommand(trimmomatic.command)
         system(trimmomatic.command)
     }
