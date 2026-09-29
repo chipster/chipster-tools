@@ -87,7 +87,7 @@ if (paired == "paired") {
   if (fileOk("input_list.txt")) {
     txt_filenames <- c() # name of the files in the txt file
     sample.names <- c() # sample names
-    input <- readLines("input_list.txt") # read the file
+    input <- read_list_file("input_list.txt") # read the file
 
     # take out the filenames and sample name and put them to one vector, those are separeted with '\t'
     for (row in input) {
@@ -97,12 +97,13 @@ if (paired == "paired") {
       txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
       txt_filenames <- c(txt_filenames, trimws(sample[[1]][3])) # reverse read
     }
-    safe_name(txt_filenames)
     # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
     if (length(txt_filenames) != length(filenames)) {
-      print(txt_filenames, filenames)
+      print(txt_filenames)
+      print(filenames)
       stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
     } else {
+      safe_name(txt_filenames)
       filenames <- paste0("input_folder/", txt_filenames) # now the input files in correct order
     }
   }
@@ -192,4 +193,4 @@ if (paired == "single") {
 # sink()
 
 # make a tar package from the output folder
-system("cd output_folder && tar cf ../adapters_removed.tar *")
+system("cd output_folder && tar cf ../adapters_removed.tar -- *")

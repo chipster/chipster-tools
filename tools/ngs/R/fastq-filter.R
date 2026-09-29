@@ -85,4 +85,4 @@ summ.data <- data.frame("Sample" = sample.names, "Sequences_kept" = vector_seque
 write.table(summ.data, file = "summary.tsv", row.names = FALSE)
 # make a output tar package named contigs.tar and qzip all the files
 system("gzip output_folder/*.fq")
-system("cd output_folder && tar cf ../filtered_contigs.tar *")
+system("cd output_folder && tar cf ../filtered_contigs.tar -- *")

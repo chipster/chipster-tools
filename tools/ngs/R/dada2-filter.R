@@ -63,7 +63,7 @@ if (paired == "paired") {
   if (fileOk("input_list.txt")) {
     txt_filenames <- c() # name of the files in the txt file
     sample.names <- c()
-    input <- readLines("input_list.txt")
+    input <- read_list_file("input_list.txt")
     # take out the file names and sample name and put them to one vector, those are separeted with '\t'
     for (row in input) {
       sample <- strsplit(row, "\t", fixed = TRUE)
@@ -161,7 +161,7 @@ if (paired == "paired") {
   if (fileOk("input_list.txt")) {
     txt_filenames <- c() # name of the files in the txt file
     sample.names <- c()
-    input <- readLines("input_list.txt")
+    input <- read_list_file("input_list.txt")
     # take out the file names and sample name and put them to one vector, those are separeted with '\t'
     for (row in input) {
       sample <- strsplit(row, "\t", fixed = TRUE)
@@ -218,6 +218,6 @@ if (paired == "paired") {
 
 # make a output tar package named filtered.tar and gzip
 system("gzip output_folder/*.fq")
-system("cd output_folder && tar cf ../filtered.fastqs.tar *")
+system("cd output_folder && tar cf ../filtered.fastqs.tar -- *")
 
 # EOF

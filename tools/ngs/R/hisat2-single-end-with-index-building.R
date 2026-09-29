@@ -56,14 +56,16 @@ if (fileOk("genome.txt")) {
   if (genome.filetype == "tar") {
     runExternal("echo Extracting tar formatted gemome index file >> hisat.log")
     # Untar. Folders are flattened
-    runExternal("tar xf genome.txt --xform='s#^.+/##x' 2>> hisat.log")
+    # Extract to a folder of its own, so that the files of the package can't replace the files of the job
+    dir.create("genome_index")
+    runExternal("tar xf genome.txt -C genome_index --xform='s#^.+/##x' 2>> hisat.log")
     # Check index base name
-    if (length(Sys.glob("*.1.ht2")) != 0) {
-      f <- list.files(getwd(), pattern = "\\.1.ht2$")
-      hisat2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
-    } else if (length(Sys.glob("*.1.ht2l")) != 0) {
-      f <- list.files(getwd(), pattern = "\\.1.ht2l$")
-      hisat2.genome <- substr(f[1], 1, nchar(f[1]) - 7)
+    if (length(Sys.glob("genome_index/*.1.ht2")) != 0) {
+      f <- list.files("genome_index", pattern = "\\.1.ht2$")
+      hisat2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
+    } else if (length(Sys.glob("genome_index/*.1.ht2l")) != 0) {
+      f <- list.files("genome_index", pattern = "\\.1.ht2l$")
+      hisat2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
     } else {
       stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Hisat2 index.")
     }
@@ -80,7 +82,7 @@ if (fileOk("genome.txt")) {
     runExternal(echo.command)
     # Make tar package from the index
     if (file.exists(Sys.glob("*.1.ht*"))) {
-      runExternal("tar cf hisat2_index.tar *.ht*")
+      runExternal("tar cf hisat2_index.tar -- *.ht*")
     }
   }
 } else {

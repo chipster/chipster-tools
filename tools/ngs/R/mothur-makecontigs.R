@@ -37,10 +37,21 @@ if (length(file.list) == 0) {
 if (any(grepl("/", file.list))) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
-safe_name(file.list)
 
-# Open tar package
-system("tar xf reads.tar")
+# Open tar package. Check the extracted names, because tar escapes some characters in the listing
+untar("reads.tar", exdir = "input_folder")
+file.list <- safe_name(list.files("input_folder"))
+if (length(file.list) == 0) {
+  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains no FASTQ files. Files whose name starts with a dot are not used."))
+}
+# Don't let the tar package replace the input files of the job, or stand in for the optional input_list
+reserved <- file.list[file.exists(file.list) | file.list == "input_list"]
+if (length(reserved) > 0) {
+  stop(paste("CHIPSTER-NOTE: The tar package can't contain files with the same names as the inputs of this tool (reads.tar, input_list). Please rename these:", paste(reserved, collapse = ", ")))
+}
+if (!all(file.rename(file.path("input_folder", file.list), file.list))) {
+  stop("Moving the files of the tar package failed")
+}
 
 # Go through the file list and gzip. Files that are already gzipped will be skipped
 for (i in 1:length(file.list)) {

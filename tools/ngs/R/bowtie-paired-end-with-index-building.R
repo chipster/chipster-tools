@@ -50,11 +50,13 @@ print(paste("Host genome file type", genome.filetype))
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
   print("Extracting tar formatted gemome index file")
-  runExternal("tar xf genome.txt")
+  # Extract to a folder of its own, so that the files of the package can't replace the files of the job
+  dir.create("genome_index")
+  runExternal("tar xf genome.txt -C genome_index")
   # Check index base name
-  if (length(Sys.glob("*.1.ebwt")) != 0) {
-    f <- list.files(getwd(), pattern = "\\.1.ebwt$")
-    bowtie.genome <- substr(f[1], 1, nchar(f[1]) - 7)
+  if (length(Sys.glob("genome_index/*.1.ebwt")) != 0) {
+    f <- list.files("genome_index", pattern = "\\.1.ebwt$")
+    bowtie.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
   } else {
     stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie index.")
   }

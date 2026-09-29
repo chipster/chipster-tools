@@ -59,7 +59,7 @@ safe_name(basename(filenames))
 # if input list selected use it, and make a new list of filenames
 if (fileOk("input_list.txt")) {
     txt_filenames <- c()
-    input <- readLines("input_list.txt")
+    input <- read_list_file("input_list.txt")
     for (row in input) {
         sample <- strsplit(row, "\t", fixed = TRUE)
         sample.names <- c(sample.names, trimws(sample[[1]][1]))
@@ -68,12 +68,12 @@ if (fileOk("input_list.txt")) {
         txt_filenames <- c(txt_filenames, first)
         txt_filenames <- c(txt_filenames, second)
     }
-    safe_name(c(sample.names, txt_filenames))
     # if the input list has a different amount of files than the tar package
     if (length(txt_filenames) != length(filenames)) {
         line1 <- paste(c("Filenames from the given txt file:\n", txt_filenames), collapse = "\n")
         stop(paste0("CHIPSTER-NOTE: ", "It seems that the list of the FASTQ files (.txt file) has different amount of filenames than the .tar package. Please check the manual\n\n", line1))
     } else { # add the full name
+        safe_name(c(sample.names, txt_filenames))
         filenames <- paste0("input_folder/", txt_filenames)
     }
 } else {
@@ -188,4 +188,4 @@ write.table(summ.data, file = "summary_stats.tsv", row.names = FALSE)
 
 # make a output tar package named contigs.tar and qzip
 system("gzip output_folder/*.fq")
-system("cd output_folder && tar cf ../contigs.tar *")
+system("cd output_folder && tar cf ../contigs.tar -- *")

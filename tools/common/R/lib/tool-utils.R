@@ -56,6 +56,10 @@ strip_name <- function(name) {
 # Returns the names, so that the check can wrap the listing: names <- safe_name(list.files(...))
 #
 safe_name <- function(names) {
+  # Encoding<- fails on an empty vector
+  if (length(names) == 0) {
+    return(names)
+  }
   # The job may run in the C locale, where R would see the bytes of ä instead of a letter
   utf8 <- names
   Encoding(utf8)[Encoding(utf8) == "unknown"] <- "UTF-8"
@@ -70,6 +74,22 @@ safe_name <- function(names) {
     ))
   }
   return(names)
+}
+
+# Reads the lines of a list file from the user. Removes the byte order mark that e.g. Windows Notepad
+# may add to the beginning of the file, so that it doesn't end up in the first name. Checks the bytes,
+# because the job may run in the C locale. gzfile() reads also uncompressed files, so that gzipped
+# list files keep working like with readLines(filename).
+#
+read_list_file <- function(filename) {
+  lines <- readLines(gzfile(filename))
+  if (length(lines) > 0) {
+    first <- charToRaw(lines[1])
+    if (length(first) >= 3 && all(first[1:3] == as.raw(c(0xef, 0xbb, 0xbf)))) {
+      lines[1] <- rawToChar(first[-(1:3)])
+    }
+  }
+  return(lines)
 }
 
 # If the names look like typical paired-end names: *_1, *_2, remove the ending and return the name.
