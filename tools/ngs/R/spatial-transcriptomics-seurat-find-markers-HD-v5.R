@@ -15,7 +15,7 @@
 # PARAMETER OPTIONAL test.use: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (By default, this tool)
 # RUNTIME R-4.5.1-visium-hd
-# SLOTS 10
+# SLOTS 6
 # TOOLS_BIN ""
 
 

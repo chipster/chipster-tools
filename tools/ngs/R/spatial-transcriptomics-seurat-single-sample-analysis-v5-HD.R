@@ -8,7 +8,7 @@
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings in a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
 # RUNTIME R-4.5.1-visium-hd
-# SLOTS 3
+# SLOTS 6
 # TOOLS_BIN ""
 
 

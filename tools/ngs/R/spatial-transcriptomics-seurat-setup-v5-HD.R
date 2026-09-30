@@ -10,11 +10,6 @@
 
 # 2026-02 ML 
 
-
-      #toolbox-runtime-command-R-4.5.1-visium-hd: /opt/chipster/tools/R-4.5.1/bin/R
-      #toolbox-runtime-image-R-4.5.1-visium-hd: comp-r-4-5-1-visium-hd
-      #toolbox-runtime-tools-bin-path-R-4.5.1-visium-hd: tools-bin
-
 # RUNTIME R-4.2.3-seurat5 -> R-4-5-1-seurat5 
 
 # install.packages('ggplot2', repos='http://cran.us.r-project.org') # 3.5.2
