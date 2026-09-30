@@ -29,11 +29,8 @@ source(file.path(chipster.common.lib.path, "bam-utils.R"))
 # minimap2.binary <- file.path(chipster.tools.path, "minimap2", "minimap2")
 # minimap2.binary <- file.path("chipster.tools.path,/opt/chipster/tools_local/minimap2-2.9_x64-linux/minimap2")
 
-conda.path <- file.path(chipster.tools.path, "miniconda3", "conda_execute")
-conda.env <- ("chipster_tools")
-conda.tool <- ("minimap2")
-conda.def <- paste(conda.env, "/", conda.tool, sep = "")
-minimap2.binary <- paste(conda.path, conda.def)
+# call the binary in the conda env directly, conda_execute fails because conda activate is not initialized
+minimap2.binary <- file.path(chipster.tools.path, "miniconda3", "envs", "chipster_tools", "bin", "minimap2")
 
 
 samtools.binary <- file.path(chipster.tools.path, "samtools-1.2", "samtools")
