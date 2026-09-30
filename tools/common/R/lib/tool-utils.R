@@ -76,6 +76,23 @@ safe_name <- function(names) {
   return(names)
 }
 
+# Checks names from the user's data that are used only as file names in R or in quoted commands, where
+# safe_name() would reject too much. Allows everything except names that would point outside the folder.
+# Stops the job otherwise. Returns the names invisibly, so that a plain check call doesn't print them.
+#
+safe_file_name <- function(names) {
+  # R expands a leading ~ to the home folder
+  unsafe <- names[is.na(names) | grepl("/", names, fixed = TRUE, useBytes = TRUE) | grepl("^~", names, useBytes = TRUE) |
+    names %in% c("", ".", "..")]
+  if (length(unsafe) > 0) {
+    stop(paste(
+      "CHIPSTER-NOTE: Names can't be empty, . or .., start with ~ or contain /.",
+      "Please rename these:", paste0("\"", unsafe, "\"", collapse = ", ")
+    ))
+  }
+  invisible(names)
+}
+
 # Reads the lines of a list file from the user. Removes the byte order mark that e.g. Windows Notepad
 # may add to the beginning of the file, so that it doesn't end up in the first name. Checks the bytes,
 # because the job may run in the C locale. gzfile() reads also uncompressed files, so that gzipped

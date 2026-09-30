@@ -76,6 +76,7 @@ if (paired == "paired") {
     if (length(txt_filenames) != length(filenames)) {
       stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
     } else {
+      safe_file_name(c(sample.names, txt_filenames))
       filenames <- paste0("input_folder/", txt_filenames)
     }
   } else {
@@ -174,6 +175,7 @@ if (paired == "paired") {
     if (length(txt_filenames) != length(filenames)) {
       stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
     } else {
+      safe_file_name(c(sample.names, txt_filenames))
       filenames <- paste0("input_folder/", txt_filenames)
     }
   } else {

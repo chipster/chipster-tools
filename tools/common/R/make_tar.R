@@ -5,15 +5,19 @@
 # RUNTIME R-4.5.1
 # TOOLS_BIN ""
 
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+
 # Read input names
-input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
+input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t", quote = "", comment.char = "#", colClasses = "character", na.strings = character(0))
+
+# Check that the file names don't point outside the job folder
+safe_file_name(input.names[, 2])
 
 # Check for duplicate file names
 if (anyDuplicated(input.names[2])) {
     message <- paste("You have selected files with duplicated file names. File names must be unique. Please rename the files.")
     stop(paste("CHIPSTER-NOTE: ", message))
 }
-
 
 # Renamefiles to display names
 for (i in 1:nrow(input.names)) {
@@ -26,8 +30,6 @@ system("tar --exclude=\'chipster-inputs.tsv\' -cf chipster.tar -- *")
 
 # Handle output names
 #
-source(file.path(chipster.common.lib.path, "tool-utils.R"))
-
 # Define output name
 if (nchar(name) > 0) {
     filename <- name
