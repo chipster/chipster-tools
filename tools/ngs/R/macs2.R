@@ -31,9 +31,12 @@
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
+# run python explicitly, because the shebang line in macs2 uses now defunct /mnt/tools
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
+
 # MACS binary
 macs.binary <- file.path(chipster.tools.path, "macs", "macs2")
-version <- system(paste(macs.binary, "--version 2>&1| grep macs | tail -1 | cut -d ' ' -f 2"), intern = TRUE)
+version <- system(paste(python.binary, macs.binary, "--version 2>&1| grep macs | tail -1 | cut -d ' ' -f 2"), intern = TRUE)
 documentVersion("MACS2", version)
 
 # Options
@@ -101,7 +104,7 @@ if (broad == "yes") {
 options <- paste(options, "--verbose=2")
 
 # Run macs
-macs.command <- paste(macs.binary, options, "2> macs2-log.txt")
+macs.command <- paste(python.binary, macs.binary, options, "2> macs2-log.txt")
 # stop(paste('CHIPSTER-NOTE: ', macs.command))
 system(macs.command)
 

@@ -1,7 +1,5 @@
 # TOOL star-paired-end.R: "STAR for paired end reads" (This tool uses STAR to align paired-end reads to a publicly available reference genome. You need to supply the paired-end reads in FASTQ format.)
 # INPUT reads{...}.fq: "Reads" TYPE GENERIC
-# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
-# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # INPUT OPTIONAL annotation.gtf: "Optional GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL alignment.bam
 # OUTPUT OPTIONAL alignment.bam.bai
@@ -37,26 +35,31 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools
 # samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools"))
 
 # Input files
-if (fileOk("reads1.txt", 0) && fileOk("reads2.txt", 0)) {
+
+# Removed the option to use list files, instead merge FASTQs when more than two per sample
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
+# if (fileOk("reads1.txt", 0) && fileOk("reads2.txt", 0)) {
   # Case: list files exist
-  reads1.list <- make_input_list("reads1.txt")
-  reads2.list <- make_input_list("reads2.txt")
-  if (identical(intersect(reads1.list, reads2.list), character(0))) {
-    reads1 <- paste(reads1.list, sep = "", collapse = ",")
-    reads2 <- paste(reads2.list, sep = "", collapse = ",")
-  } else {
-    stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
-  }
-} else if (fileOk("reads002.fq") && fileNotOk("reads003.fq")) {
+  # reads1.list <- make_input_list("reads1.txt")
+  # reads2.list <- make_input_list("reads2.txt")
+  # if (identical(intersect(reads1.list, reads2.list), character(0))) {
+  #   reads1 <- paste(reads1.list, sep = "", collapse = ",")
+  #   reads2 <- paste(reads2.list, sep = "", collapse = ",")
+  #  } else {
+  #  stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
+  # }
+# } else if (fileOk("reads002.fq") && fileNotOk("reads003.fq")) {
   # Case: no list file, but only two fastq inputs
+
   in.sorted <- input.names[order(input.names[, 2]), ]
   reads <- grep("reads", in.sorted[, 1], value = TRUE)
   reads1 <- reads[1]
   reads2 <- reads[2]
-} else {
+# } else {
   # Case: no list files, more than two fastq inputs
-  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
-}
+ #  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
+# }
 
 # command
 command <- paste(star.binary, "--genomeDir", path.star.index, "--readFilesIn", reads1, reads2, "--outSAMtype BAM SortedByCoordinate", "--twopassMode Basic", "--runThreadN", chipster.threads.max, "--alignSJoverhangMin 8", "--alignSJDBoverhangMin 1", "--outSAMstrandField intronMotif", "--outFilterType BySJout", "--outFilterMultimapNmax", alignments.per.read, "--outFilterMismatchNmax", mismatches.per.pair)

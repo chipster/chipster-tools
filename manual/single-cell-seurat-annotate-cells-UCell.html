@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Annotate cells with UCell</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        UCell allows you to annotate cells/clusters with your own marker gene and cell type information.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Cell types to plot [T cells, B cells, NK cells, Monocytes]</li>
+        <li>Gene sets for cell types [CD3D, CD3E, IL7R, sep, MS4A1, CD79A, CD79B, sep, NKG7, GNLY, PRF1, sep, CD14, LST1, S100A8]</li>
+        <li>Width of plots [10]</li>
+        <li>Height of plots [10]</li>
+        <li>Point size in tSNE and UMAP plots [1]</li>
+        <li>Label size in the output plots [4] </li>
+
+
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+         With this tool, you can annotate cells with UCell. UCell is an R package for scoring gene signatures in single-cell datasets. 
+		UCell scores, based on the Mann-Whitney U statistic, are robust to dataset size and heterogeneity, and their calculation demands relatively less computing time and memory than other robust methods, enabling the processing of large datasets (>10^5 cells).
+	You need to provide the names of cell types and marker genes for them. You can either enter them in the respective parameter fields (separate gene sets for different cell types with sep), or 
+	provide a .tsv file containing two columns. The first column should be for cell types, and the second for gene sets. The first is reserved for names e.g. "celltype" and "genes". Example below:</p>
+
+            <table>
+        <tr>
+            <th>Celltype</th>
+
+            <th>Genes</th>
+        </tr>
+        <tr>
+            <td>T cells</td>
+            <td>CD3D, CD3E, IL7R</td>
+        </tr>
+        <tr>
+            <td>B cells</td>
+            <td>MS4A1, CD79A, CD79B</td>
+        </tr>
+        <tr>
+            <td>NK cells</td>
+            <td>NKG7, GNLY, PRF1</td>
+        </tr>
+    </table>
+
+
+    <p></p>
+        <p>You can also input negative marker genes by postfixing them with a "-" (e.g., "CD3D-", "CD3E-"). You can also postfix the positive marker genes with a "+", like this:</p>
+
+        <table>
+        <tr>
+<th>Celltype</th>
+<th>Genes</th>
+</tr>
+<tr>
+<td>T cells</td>
+<td>CD3D+, CD3E+, IL7R+, MS4A1-, CD19-</td>
+</tr>
+<tr>
+<td>B cells</td>
+<td>MS4A1+, CD79A+, CD79B+, CD3D-, CD3E-</td>
+</tr>
+<tr>
+<td>NK cells</td>
+<td>NKG7+, GNLY+, PRF1+, CD3D-, CD3E-, CD19-</td>
+</tr>
+</table>
+
+
+
+    <p>
+        For more details, please check:<br>
+
+                UCell article: <a href=https://www.sciencedirect.com/science/article/pii/S2001037021002816 >UCell: Robust and scalable single-cell gene signature scoring https://www.sciencedirect.com/science/article/pii/S2001037021002816 </a>
+    </p>
+
+        The <a href="https://github.com/carmonalab/UCell">UCell GitHub repository</a>
+
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>seurat_obj_ucell_annotated.Robj: The Seurat R-object to pass to the next Seurat tool, or to import to R. You cannot open this file in Chipster,
+			but you can view the contents of the object using the <i>Extract information from Seurat object </i> tool. </li>
+        <li>Plots_UCell.pdf: UMAP of cell type scores in cells and clusters, assigned cell types per cell and cluster with labels. </li>
+    </ul>
+
+
+
+</body>

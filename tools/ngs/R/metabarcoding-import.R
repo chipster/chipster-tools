@@ -5,7 +5,8 @@
 # OUTPUT ps_imported.txt
 # OUTPUT ps.Rda
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020-2021
 # NOTE: Tax info initially listed as Rank1-Rank6 (e.g. using mothur SILVA reference) or

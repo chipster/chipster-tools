@@ -1,7 +1,7 @@
-verteberates	drosophila_melanogaster	BDGP6.32	current	index-all	default
+verteberates	drosophila_melanogaster	BDGP6.54	current	index-all	default
 verteberates	drosophila_melanogaster	BDGP6	release-95	no-index	not-default
 verteberates	drosophila_melanogaster	BDGP5	release-78	no-index	not-default
 fungi	schizosaccharomyces_pombe	ASM294v2	current	small-indexes	not-default
-plants	populus_trichocarpa	Pop_tri_v3	current	small-indexes	not-default
+plants	populus_trichocarpa	Pop_tri_v4	current	small-indexes	not-default
 plants	populus_trichocarpa	JGI2.0	release-37	small-indexes	not-default
 bacteria	synechocystis_sp_pcc_6803_gca_000009725	ASM972v1	current	small-indexes	not-default

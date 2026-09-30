@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v5 -Integrated analysis visualisation</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool visualises clusters from an integrated multi-sample Seurat object. It produces UMAP plots coloured
+        by sample identity and cluster assignment, a split UMAP showing each sample side by side, and a summary table
+        of cell counts per cluster per sample. It is intended for use after the
+        <i>Seurat v5 -Integrated analysis</i> tool, which performs the clustering and computes the dimensionality
+        reductions. Use this tool when you want to regenerate or customise the plots without rerunning the full
+        integration and clustering step.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Point size in plots [0.5]</li>
+        <li>Add labels on top of clusters in plots [yes]</li>
+        <li>Give a list of average expression in each cluster [no]</li>
+        <li>Normalisation method used previously [Global scaling normalization]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+        This tool takes as input the integrated Seurat R-object produced by the <i>Seurat v5 -Integrated analysis</i>
+        tool (the object is named <code>data.combined</code> internally). The object must already contain cluster
+        assignments and a UMAP reduction; the tool will stop with an informative error if these are missing.
+    </p>
+
+    <p>
+        The PDF output contains three panels:
+    </p>
+
+    <ul>
+        <li>
+            <b>Unintegrated vs integrated UMAP</b>: Two plots are shown side by side. The first shows the
+            <i>unintegrated</i> UMAP coloured by sample (<code>stim</code>) and cluster, illustrating the
+            batch effect before integration. The second shows the <i>integrated</i> UMAP, coloured by sample
+            and cluster annotation. If the unintegrated UMAP is not present in the object, the integrated UMAP
+            coloured by sample is shown in its place and a warning is written to the log.
+        </li>
+        <li>
+            <b>Split UMAP</b>: The integrated UMAP is plotted separately for each sample, making it straightforward
+            to compare cluster composition across conditions.
+        </li>
+        <li>
+            <b>Cell count table</b>: A summary table listing the number of cells in each cluster, broken down by
+            sample, with column totals. This helps to judge whether clusters are dominated by a single sample,
+            which can be a sign of incomplete integration.
+        </li>
+    </ul>
+
+    <h4>Fallback behaviour when optional data are missing</h4>
+
+    <p>
+        Two pieces of data in the Seurat object are used by the plots but are not guaranteed to exist in every
+        version of the pipeline, so the tool handles their absence gracefully rather than stopping with an error.
+    </p>
+    <p>
+        <b>Unintegrated UMAP (<code>umap.unintegrated</code>)</b>: This reduction is computed automatically in
+        recent versions of the integration pipeline and is used in the first panel to show what the data looked like
+        <i>before</i> batch correction — a useful visual reference. If it is not present in your object (for example
+        because the object was produced by an older version of the pipeline), the tool substitutes a plain integrated
+        UMAP coloured by sample identity and writes a warning to the log. The other plots are unaffected.
+    </p>
+    <p>
+        <b>Cluster annotations (<code>seurat_annotations</code>)</b>: This metadata column holds human-readable
+        cell-type labels when the optional annotation step has been run after clustering. It is used to colour the
+        second UMAP panel. If it is absent, the tool falls back to colouring by the numeric Seurat cluster identities
+        instead, and again writes a warning to the log. The other plots are unaffected.
+    </p>
+
+    <h4>Average expression table</h4>
+
+    <p>
+        When the <b>Give a list of average expression in each cluster</b> parameter is set to <i>yes</i>,
+        the tool returns a table (<code>aver_expr_in_clusters.tsv</code>) with the average expression of every
+        gene in each cluster. This represents an "average" single cell per cluster and can be useful for a quick
+        overview of which genes characterise each cluster. Make sure to set the <b>Normalisation method</b>
+        parameter to match what was used in the earlier preprocessing step: choosing the wrong method will not
+        cause an error, but the values in the table will come from the wrong assay.
+        Read more about the
+        <a href="https://rdrr.io/github/satijalab/seurat/man/AverageExpression.html">AverageExpression function</a>.
+    </p>
+
+    <p>
+        The <b>point size</b> parameter controls the size of individual cells in all plots. For datasets with many
+        cells, a smaller point size (e.g. 0.1–0.3) reduces overplotting and makes cluster boundaries easier to see.
+    </p>
+
+    <p>
+        The <b>Add labels</b> option places the cluster number at the centroid of each cluster directly on the plot.
+        Turn this off if labels overlap or obscure the data.
+    </p>
+
+    <p>
+        For more details on the integration and clustering steps, please see the manual page of the
+        <i>Seurat v5 -Integrated analysis</i> tool and the
+        <a href="https://satijalab.org/seurat/articles/integration_introduction#perform-integration">Seurat tutorials
+            for integrative analysis</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>integrated_plot.pdf: UMAP plots coloured by sample and cluster identity, a split UMAP per sample,
+            and a table showing the number of cells per cluster per sample.</li>
+        <li>aver_expr_in_clusters.tsv: A table of average gene expression per cluster, one column per cluster
+            (only produced when requested).</li>
+    </ul>
+
+</body>
+
+</html>

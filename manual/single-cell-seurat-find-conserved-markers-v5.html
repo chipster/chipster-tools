@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -Find conserved cluster markers in multiple samples</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		For a given cluster, this tool finds cell type marker genes that are conserved across all
+		conditions/samples — i.e. genes that show specific expression in that cluster regardless of the treatment
+		or sample of origin. This tool can be used for combined Seurat objects with 2 or more samples.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Normalisation method used previously [Global scaling normalization]</li>
+		<li>Name of the cluster [3]</li>
+		<li>Return only positive marker genes [yes]</li>
+		<li>Fold change in log2 scale [0.25]</li>
+		<li>Adjusted p-value cutoff [0.05]</li>
+		<li>Limit testing to genes expressed in at least this fraction of cells [0.1]</li>
+		<li>Minimum number of cells in one of the groups [3]</li>
+	</ul>
+
+	<h3>Details</h3>
+
+	<p>
+		As input, give the combined Seurat object produced by the <i>Seurat v5 -Integrated analysis</i> tool.
+		Make sure to set the <b>Normalisation method</b> parameter to match what was used in the earlier
+		preprocessing step.
+	</p>
+
+	<p>
+		Select the cluster to inspect by entering its name in the <b>Name of the cluster</b> parameter field.
+		By default, clusters are numbered starting from 0. The example default value is cluster "3".
+	</p>
+
+	<p>
+		Conserved markers are found using the Seurat function <code>FindConservedMarkers</code>, which runs a
+		differential expression test within each sample separately, comparing cells in the chosen cluster against
+		all other cells. The script then keeps only genes where the adjusted p-value meets the cutoff in
+		<i>all</i> samples — meaning the gene must show specific expression in the chosen cluster regardless
+		of the condition or sample of origin.
+	</p>
+
+	<p>
+		You can pre-filter genes using the <b>fold change</b> and <b>minimum fraction of cells</b> parameters.
+		Both are applied before the statistical test to speed up the analysis. Only genes that pass the
+		<b>adjusted p-value cutoff</b> in <i>all</i> samples are kept in the final table — the tool filters on
+		the maximum adjusted p-value across samples, so every sample must individually meet the threshold.
+	</p>
+
+	<p>
+		The <b>Minimum number of cells</b> parameter sets a lower bound on how many cells must be present in the
+		chosen cluster within each sample. Increasing this value can prevent the test from running on clusters
+		that are nearly absent in one sample, which would otherwise produce unreliable results.
+	</p>
+
+	<h3>Output</h3>
+
+	<ul>
+		<li><b>conserved_markers.tsv</b>: A ranked list of conserved marker genes for the chosen cluster.
+			The table has one group of columns per sample (p_val, avg_log2FC, pct.1, pct.2, p_val_adj), plus
+			the following summary columns across all samples:
+			<ul>
+				<li><b>max.adj.p.val</b>: the highest adjusted p-value across all samples — this is the value
+					used for filtering</li>
+				<li><b>minimum.adj.p.val</b>: the lowest adjusted p-value across all samples</li>
+			</ul>
+		</li>
+	</ul>
+
+	<p>
+		For more details, please check the
+		<a href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
+			for multiple sample analysis</a>.
+	</p>
+
+</body>
+</html>

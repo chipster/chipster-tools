@@ -179,7 +179,7 @@ if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
 # output.parameters <- paste(unaligned.output, multiread.output)
 # stop(paste('CHIPSTER-NOTE: ', parameters))
 # command ending
-command.end <- paste("-x", bowtie2.genome, "-1", reads1, "-2", reads2, "1> alignment.sam 2>> bowtie2.log'")
+command.end <- paste("-x", bowtie2.genome, "-1", reads1, "-2", reads2, "1> alignment.sam'")
 
 # run bowtie
 bowtie.command <- paste(command.start, parameters, command.end)

@@ -185,7 +185,7 @@ isFastq <- function(filename,version=1) {
   if (version == 1){
     emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
   }else{
-    emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
+    emboss.path <- file.path(chipster.tools.path, "emboss-24.04", "bin")
   }
   
   sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")

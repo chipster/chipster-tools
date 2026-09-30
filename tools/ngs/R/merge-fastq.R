@@ -4,6 +4,8 @@
 # OUTPUT OPTIONAL merged.fq.gz
 # PARAMETER order: "Order by file name" TYPE [yes, no] DEFAULT yes (Concatenate files in alphabetical order by file name.)
 # PARAMETER compress: "Compress merged file with gzip" TYPE [yes, no] DEFAULT yes (Compress merged file with gzip.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # AMS 2017-03-09
 

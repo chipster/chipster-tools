@@ -1,9 +1,10 @@
-# TOOL metabarcoding-pairwise-tukey.R: "Post-hoc pairwise Tukey's HSD for OTU abundance data" (Performs post-hoc pairwise comparisons of group dispersions using a Tukey's Honestly Significant Difference \(HSD\) test. Should only be used after a significant PERMDISP result. Performs up to three tests \(for three different phenodata variables\), depending on preceding steps taken when using the PERMDISP tool. Requires an Rda file \(ps_disp.Rda\) produced by the PERMDISP tool as the input.)
+# TOOL metabarcoding-pairwise-tukey.R: "Post-hoc pairwise Tukey's HSD for OTU/ASV abundance data" (Performs post-hoc pairwise comparisons of group dispersions using a Tukey's Honestly Significant Difference \(HSD\) test. Should only be used after a significant PERMDISP result. Performs up to three tests \(for three different phenodata variables\), depending on preceding steps taken when using the PERMDISP tool. Requires an Rda file \(ps_disp.Rda\) produced by the PERMDISP tool as the input.)
 # INPUT ps.Rda: "Data set in Rda format" TYPE GENERIC
 # OUTPUT pairwise_tukey_table.txt: pairwise_tukey_table.txt
 # OUTPUT pairwise_tukey_plot.pdf: pairwise_tukey_plot.pdf
 # PARAMETER howmany: "No. of PERMDISP analyses in preceding step (PERMDISP tool)?" TYPE INTEGER FROM 1 TO 3 (Number of PERMDISP analyses performed during the preceding analysis step, i.e. when using the PERMDISP tool.)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 
 

@@ -8,10 +8,10 @@
 <h3>Description</h3>
 
 <p>
-Given a sequence_table and a taxonomy_table saved as a .Rda object, this tool creates a new
+Given an ASV table and a taxonomy table saved as a .Rda object, this tool creates a new
  <a href="https://joey711.github.io/phyloseq/">phyloseq</a> object and saves it as a .Rda file.
 It will create also a phenodata table, which can be used to specify sample information and sample groups.
-It can be merged to the phyloseq object with the tool "/Merge phenodata to the phyloseq object".
+It can be merged to the phyloseq object with the tool "Merge phenodata to the phyloseq object".
 </p>
 <h3>Parameters</h3>
 <ul>
@@ -22,8 +22,8 @@ It can be merged to the phyloseq object with the tool "/Merge phenodata to the p
 <h3>Details</h3>
 <p>
 This tool creates a new phyloseq object. To make a new phyloseq object, 
-it needs an otu_table (ASV table created with "make contigs and remove chimeras") and a taxonomy_table (created with 
-"assign taxonomy") saved as a .Rda file. 
+it needs an ASV table (created with "Make contigs and remove chimeras") and a taxonomy table (created with 
+"Assign taxonomy") saved as a .Rda file. 
 <br><br>
 For visualization purposes, the names of the ASV sequences are changed from the full DNA sequences to ASV1, ASV2... 
 <br> The full DNA sequences of the ASVs are stored in the refseq() slot of the phyloseq object. That way, the short ASV names will

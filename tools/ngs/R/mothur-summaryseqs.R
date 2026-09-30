@@ -1,7 +1,8 @@
 # TOOL mothur-summaryseqs.R: "Summarize sequences" (Given a fasta file with unaligned or aligned sequences, provides summary statistics on sequence start and end coordinates, length, number of ambiguous bases, and homopolymer length. This tool is based on the Mothur tool summary.seqs.)
 # INPUT reads.fasta: "FASTA file" TYPE FASTA
 # OUTPUT summary.tsv
-# RUNTIME R-4.1.1
+# RUNTIME R-4.4.3-mothur
+# TOOLS_BIN ""
 
 # AMS 4.6.2013
 # EK 27.6.2013 Changes to description and output
@@ -13,7 +14,8 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads.fasta")
 
 # binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
+#binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
 # binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)

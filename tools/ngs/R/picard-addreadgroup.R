@@ -6,6 +6,7 @@
 # PARAMETER rglb: "Library identifier for read group" TYPE STRING DEFAULT "1" (DNA preparation library identifier. The Mark Duplicates tool uses this field to determine which read groups might contain molecular duplicates, in case the same DNA library was sequenced on multiple lanes.)
 # PARAMETER rgpl: "Platform for read group" TYPE [ none: "Not defined",CAPILLARY, DNBSEQ, HELICOS, ILLUMINA, IONTORRENT, LS454, ONT, PACBIO, SOLID] DEFAULT ILLUMINA (Platform\/technology used to produce the read.)
 # PARAMETER rgpu: "Read Group platform unit" TYPE STRING DEFAULT "1" (Read Group platform unit \(e.g., flowcell-barcode.lane for Illumina or slide for SOLiD\).)
+# RUNTIME R-4.5.1
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 

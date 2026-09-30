@@ -1,13 +1,15 @@
-# TOOL metabarcoding-distance-ordination.R: "Distance matrices and ordinations" (Produces a Euclidean or Bray-Curtis distance matrix using a phyloseq object. Can also be used to compute Aitchison distances \(if selecting Euclidean distances for a CLR-transformed data set\). The matrix is used to perform either an 1\) unconstrained ordination \(non-metric multidimensional scaling, nMDS\) or 2\) a constrained ordination \(distance-based redundancy analysis, db-RDA\). To perform db-RDA, it is necessary to specify at least one phenodata variable describing the study design \(with the ordination axes constrained to linear combinations of variables\). It is possible to list up to five variables. Distances and a data frame containing sample variables are saved as an Rda file. Requires a phyloseq object in Rda format as the input. Note: groupings currently support only discrete \(i.e. non-numerical\) labels.)
+# TOOL metabarcoding-distance-ordination.R: "Distance matrices and ordinations" (Produces a Euclidean, Bray-Curtis or Jaccard distance matrix using a phyloseq object. Can also be used to compute Aitchison distances \(if selecting Euclidean distances for a CLR-transformed data set\). The matrix is used to perform either an 1\) unconstrained ordination \(non-metric multidimensional scaling, nMDS\) or 2\) a constrained ordination \(distance-based redundancy analysis, db-RDA\). To perform db-RDA, it is necessary to specify at least one phenodata variable describing the study design \(with the ordination axes constrained to linear combinations of variables\). It is possible to list up to five variables. Distances and a data frame containing sample variables are saved as an Rda file. Requires a phyloseq object in Rda format as the input. Note: groupings currently support only discrete \(i.e. non-numerical\) labels.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_ordi.txt: ps_ordi.txt
 # OUTPUT ps_ordiplot.pdf: ps_ordiplot.pdf
 # OUTPUT ps_dist.Rda: ps_dist.Rda
-# PARAMETER disttype: "Type of distance measure" TYPE [euclidean: "Euclidean", bray: "Bray-Curtis"] DEFAULT euclidean (Choice between Euclidean and Bray-Curtis distances)
+# OUTPUT OPTIONAL ps_scores.tsv
+# PARAMETER disttype: "Type of distance measure" TYPE [euclidean: "Euclidean", bray: "Bray-Curtis", jaccard: "Jaccard"] DEFAULT euclidean (Choice among Euclidean, Bray-Curtis and Jaccard distances)
 # PARAMETER orditype: "Type of ordination" TYPE [nmds: "nMDS", dbrda: "db-RDA"] DEFAULT nmds (Choice between using non-metric multidimensional scaling \(nMDS\) or distance-based redundancy analysis \(db-RDA\))
 # PARAMETER samplevar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
 # PARAMETER OPTIONAL samplenames: "Show sample IDs in ordination?" TYPE [yes: "Yes", no: "No"] DEFAULT yes (Should sample labels be plotted next to data points in the ordination?)
+# PARAMETER OPTIONAL axis_scores: "Export axis scores of data points?" TYPE [yes: "Yes", no: "No"] DEFAULT no (Do you want to export the locations of the data points in the ordination?)
 # PARAMETER OPTIONAL group_colour: "Phenodata variable for grouping ordination points by colour" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable used for grouping ordination points by colour.)
 # PARAMETER OPTIONAL group_shape: "Phenodata variable for grouping ordination points by shape" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable used for grouping ordination points by shape.)
 # PARAMETER OPTIONAL cap_variable1: "Phenodata variable 1 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (1st phenodata variable used in the \"formula\" argument when performing db-RDA \(minimum requirement is 1 variable\))
@@ -15,14 +17,17 @@
 # PARAMETER OPTIONAL cap_variable3: "Phenodata variable 3 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (3rd phenodata variable used in the \"formula\" argument when performing db-RDA)
 # PARAMETER OPTIONAL cap_variable4: "Phenodata variable 4 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (4th phenodata variable used in the \"formula\" argument when performing db-RDA)
 # PARAMETER OPTIONAL cap_variable5: "Phenodata variable 5 for db-RDA formula specification" TYPE METACOLUMN_SEL DEFAULT EMPTY (5th phenodata variable used in the \"formula\" argument when performing db-RDA)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
+# HJ 8/2025 Added Jaccard for presence-absence data
 
 # Load packages
 library(phyloseq)
 library(ggplot2)
 library(ggrepel)
+library(vegan)
 
 # Load phyloseq object
 load("ps.Rda")
@@ -36,7 +41,7 @@ if (orditype == "dbrda" &&
 # nMDS or db-RDA
 # Also create two further objects for downstream statistics:
 # 1) a data frame of the ps object sample data
-# 2) Euclidean or Bray-Curtis distances
+# 2) Euclidean, Bray-Curtis or Jaccard distances
 
 if (disttype == "euclidean" && orditype == "nmds") {
     set.seed(1)
@@ -237,6 +242,108 @@ if (disttype == "bray" && orditype == "dbrda" &&
     ps_df <- data.frame(sample_data(ps))
     set.seed(1)
     ps_dist <- phyloseq::distance(ps, method = "bray")
+}
+
+if (disttype == "jaccard" && orditype == "nmds") {
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "jaccard", binary = TRUE)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "NMDS", distance = ps_dist
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+    
+}
+if (disttype == "jaccard" && orditype == "dbrda" &&
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 == "EMPTY" &&
+    cap_variable3 == "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "jaccard", binary = TRUE)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = ps_dist,
+        formula = ~ get(cap_variable1)
+    )
+    ps_df <- data.frame(sample_data(ps))
+}
+if (disttype == "jaccard" && orditype == "dbrda" &&
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 == "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "jaccard", binary = TRUE)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = ps_dist,
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+
+}
+if (disttype == "jaccard" && orditype == "dbrda" &&
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 == "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "jaccard", binary = TRUE)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = ps_dist,
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+}
+if (disttype == "jaccard" && orditype == "dbrda" &&
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 != "EMPTY" &&
+    cap_variable5 == "EMPTY") {
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "jaccard", binary = TRUE)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = ps_dist,
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3) +
+            get(cap_variable4)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
+}
+if (disttype == "jaccard" && orditype == "dbrda" &&
+    cap_variable1 != "EMPTY" &&
+    cap_variable2 != "EMPTY" &&
+    cap_variable3 != "EMPTY" &&
+    cap_variable4 != "EMPTY" &&
+    cap_variable5 != "EMPTY") {
+    set.seed(1)
+    ps_dist <- phyloseq::distance(ps, method = "jaccard", binary = TRUE)
+    ps_ordi <- ordinate(
+        physeq = ps,
+        method = "CAP", distance = ps_dist,
+        formula = ~ get(cap_variable1) +
+            get(cap_variable2) +
+            get(cap_variable3) +
+            get(cap_variable4) +
+            get(cap_variable5)
+    )
+    ps_df <- data.frame(sample_data(ps))
+    set.seed(1)
 }
 
 # Ordination plots
@@ -573,6 +680,14 @@ if (group_colour == "EMPTY" &&
             size = 5
         ) +
         ggtitle("db-RDA")
+}
+if (axis_scores == "yes" && orditype == "nmds"){
+    sample_scores <- ps_ordi$points
+    write.table(sample_scores, file = "ps_scores.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
+}
+if (axis_scores == "yes" && orditype == "dbrda"){
+    sample_scores <- scores(ps_ordi, display = "sites")
+    write.table(sample_scores, file = "ps_scores.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
 }
 
 # Open a report PDF

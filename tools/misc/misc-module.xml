@@ -10,8 +10,6 @@
 		<tool>dbfetch_list.R</tool>
 		<tool>entret_list.R</tool>
 		<tool module="common">download-file.py</tool>
-		<tool module="common">download-file-storage.py</tool>
-		<tool module="common">share_via_object_storage.R</tool>
 		<tool module="common">basespace.R</tool>
 	</category>
 
@@ -123,10 +121,10 @@
 		<tool>test-parameters.R</tool>
 		<tool>test-output-missing.R</tool>
 		<tool>test-chipster-note.py</tool>
+		<tool>test-oom.py</tool>
 		<tool>test-note.R</tool>
 		<tool>fail.R</tool>
 		<tool>sort_gtf.R</tool>
-		<tool module="ngs">hisat2-paired-end-storage.R</tool>
 		<tool module="ngs">hisat2-paired-end-test.R</tool>
 		<tool>verify-tools-bin.py</tool>
 		<tool>test-r-in-container.R</tool>

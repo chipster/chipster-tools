@@ -6,7 +6,8 @@
 # PARAMETER match.term: "Term to match" TYPE STRING DEFAULT empty (Textual term to search for. If you list multiple terms, separate them with comma \(,\). Note that this list is NOT used if you give a list as a tsv file as input!)
 # PARAMETER has.rownames: "Does the first column lack a title" TYPE [no: no, yes: yes] DEFAULT no (Specifies whether the first column has a title or not.)
 # PARAMETER mode: Mode TYPE [include: include, exclude: exclude] DEFAULT include (Defines whether the found terms\/genes should be included or excluded from the resulting data table.)
-
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # MG 29.5.2010
 # MK, EK 21.08.2013 added support for rownames

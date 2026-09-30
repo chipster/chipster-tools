@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-singler-v5.R: "SingleR cluster annotation -v5" (Annotate your cell clusters using SingleR tool and CellDex annotation packages.)
+# TOOL single-cell-seurat-singler-v5.R: "Seurat v5 - Annotate cells with SingleR" (Annotate your cell clusters using SingleR tool and CellDex annotation packages.)
 # INPUT OPTIONAL seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_singler_annotations.Robj
 # OUTPUT OPTIONAL log.txt
@@ -45,7 +45,11 @@ if (exists("data.combined")) {
 
 # Let’s convert our Seurat object to single cell experiment (SCE) for convenience
 # sce <- as.SingleCellExperiment(DietSeurat(seurat_obj)) # DietSeurat: only necessary parts
-sce <- as.SingleCellExperiment(seurat_obj)
+if (seurat_obj@active.assay == "SCT") {
+  sce <- as.SingleCellExperiment(seurat_obj, assay = "SCT")
+} else {
+  sce <- as.SingleCellExperiment(seurat_obj)
+}
 
 
 # HumanPrimaryCellAtlasData, BlueprintEncodeData, MouseRNAseqData, ImmGenData, DatabaseImmuneCellExpressionData, NovershternHematopoieticData, MonacoImmuneData

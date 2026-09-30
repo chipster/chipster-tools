@@ -2,7 +2,7 @@
 # INPUT ps.Rda: "Phyloseq object in .Rda format" TYPE GENERIC
 # OUTPUT ps_ind.Rda
 # OUTPUT ps_ind_taxon.txt
-# PARAMETER OPTIONAL remove.chloroplast: "Remove class Chloroplast" TYPE [yes, no] DEFAULT yes (Remove class Chloroplast)
+# PARAMETER OPTIONAL remove.chloroplast: "Remove order Chloroplast" TYPE [yes, no] DEFAULT yes (Remove order Chloroplast)
 # PARAMETER OPTIONAL remove.mitochondria: "Remove family Mitochondria" TYPE [yes, no] DEFAULT yes (Remove family Mitochondria)
 # PARAMETER OPTIONAL type: "Level of biological organization for manual taxon removal" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus", species: "Species"] DEFAULT phylum (Select the desired taxonomic level; default is phylum)
 # PARAMETER OPTIONAL tax1: "Taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
@@ -10,7 +10,8 @@
 # PARAMETER OPTIONAL tax3: "3rd taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax4: "4th taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
 # PARAMETER OPTIONAL tax5: "5th taxon to be removed" TYPE STRING (Name of taxon to be filtered out)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020-2021
 # HJ 27.3.2025 add summary of Phyloseq object to output

@@ -1,4 +1,4 @@
-# TOOL metabarcoding-rarecurve-alpha.R: "Sequence numbers, rarefaction curve and alpha diversity estimates" (Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates and visualize those in a boxplot \(observed no. of OTUs, Chao1 and Shannon indices, and Pielou's evenness\) and calculates means of them if the group parameter is selected. It calculates also Wilcoxon rank sum test between two groups. If you have more than two groups, please specify which groups you want to compare. Requires a phyloseq object in Rda format as the input. Note that the diversity estimates are only reliable when using raw \(untrimmed\) OTU data, as many diversity metrics are dependent on singletons and doubletons in the data set under analysis. )
+# TOOL metabarcoding-rarecurve-alpha.R: "Sequence numbers, rarefaction curve and alpha diversity estimates" (Lists per-sample sequence numbers, plots rarefaction curves and tabulates alpha diversity estimates and visualize those in a boxplot \(observed no. of OTUs/ASVs, Chao1 and Shannon indices, and Pielou's evenness\) and calculates means of them if the group parameter is selected. It calculates also Wilcoxon rank sum test between two groups. If you have more than two groups, please specify which groups you want to compare. Requires a phyloseq object in Rda format as the input. Note that the diversity estimates are only reliable when using raw \(untrimmed\) OTU/ASV data, as many diversity metrics are dependent on singletons and doubletons in the data set under analysis. )
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_rarecurve.pdf
@@ -7,7 +7,8 @@
 # PARAMETER OPTIONAL group_column: "Phenodata variable for showing grouping" TYPE METACOLUMN_SEL DEFAULT empty (Phenodata variable describing groping which is added to alpha diversity table for improved readability and for calculating means within groups.)
 # PARAMETER OPTIONAL group1: "Group 1 for Wilcoxon rank sum test  (if >2 groups overall)" TYPE STRING DEFAULT empty (First sample group name (one of the sample groups under the phenodata variable used for grouping\) for Wilcoxon rank sum test  )
 # PARAMETER OPTIONAL group2: "Group 2 for Wilcoxon rank sum test  (if >2 groups overall)" TYPE STRING DEFAULT empty (Second sample group name (one of the sample groups under the phenodata variable used for grouping\) for Wilcoxon rank sum test  )
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 # ES 9.7.2021 alpha diversity estimates for rarefied data
@@ -50,14 +51,24 @@ if (group_column != "empty") {
 # Open a report PDF
 pdf("ps_rarecurve.pdf")
 
+options(scipen=99)
+
 # Plot rarefaction curve
 set.seed(1)
 otu_table <- otu_table(ps)
 class(otu_table) <- "matrix"
+
+if (taxa_are_rows(ps) == FALSE) { 
+rarecurve(otu_table,
+    step = 100,
+    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "ASVs", xlab = "No. of sequences"
+)
+} else {
 rarecurve(t(otu_table),
     step = 100,
-    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs / ASVs", xlab = "No. of sequences"
+    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs", xlab = "No. of sequences"
 )
+}
 
 # Close the report PDF
 dev.off()
@@ -72,7 +83,7 @@ cat("### Per-sample sequence no.s ###\n")
 cat("\n\n\n")
 print(seqno)
 cat("\n\n\n")
-cat("### Alpha diversity estimates (observed OTUs, Chao1, Shannon's index, Pielou's evenness) ###\n")
+cat("### Alpha diversity estimates (observed OTUs/ASVs, Chao1, Shannon's index, Pielou's evenness) ###\n")
 cat("\n\n\n")
 print(richness)
 cat("\n\n\n")
@@ -96,7 +107,7 @@ if (group_column != "empty") {
         set1 <- subset(richness, richness[, ncol(richness)] == name)
         # Observed OTUs
 
-        cat("Observed OTUs\t\tMean:", round(mean(set1[, "Observed"]), 3), sep = " ")
+        cat("Observed OTUs/ASVs\tMean:", round(mean(set1[, "Observed"]), 3), sep = " ")
         cat("\t\tStandard deviation:", round(sd(set1[, "Observed"]), 3), sep = " ")
         cat("\t\tStandard Error:", round(sd(set1[, "Observed"]) / sqrt(length(set1[, "Observed"])), 3), sep = " ")
         cat("\n")
@@ -156,7 +167,7 @@ if (group_column != "empty") {
         cat("### Wilcoxon rank sum test between groups:", names[1], names[2], "###", sep = " ")
         cat("\n\n")
 
-        cat("# For observed OTUs: \n")
+        cat("# For observed OTUs/ASVs: \n")
         print(wilcox.test(observed_a, observed_b))
 
         cat("# For Chao1: \n")
@@ -165,7 +176,7 @@ if (group_column != "empty") {
         cat("# For Shannon index: \n")
         print(wilcox.test(shannon_a, shannon_b))
 
-        cat("# For Pielou's evennes: \n")
+        cat("# For Pielou's evenness: \n")
         print(wilcox.test(pielou_a, pielou_b))
     } else {
         if (test1 == FALSE || test2 == FALSE) {
@@ -174,13 +185,13 @@ if (group_column != "empty") {
         } else {
             cat("### Wilcoxon rank sum test between groups:", group1, ",", group2, sep = " ")
             cat("\n\n")
-            cat("# For observed OTUs: \n")
+            cat("# For observed OTUs/ASVs: \n")
             print(wilcox.test(observed_a, observed_b))
             cat("# For Chao1: \n")
             print(wilcox.test(chao1_a, chao1_b))
             cat("# For Shannon index: \n")
             print(wilcox.test(shannon_a, shannon_b))
-            cat("# For Pielou's evennes: \n")
+            cat("# For Pielou's evenness: \n")
             print(wilcox.test(pielou_a, pielou_b))
         }
     }
@@ -203,7 +214,7 @@ if ((group_column != "empty")) {
     }
 
     # plot_richness(ps, color=group_column, measures=c("Observed","Chao1","Shannon")) + geom_point(size=5,alpha=0.7)
-    # ggplot(richness, aes(group,Pielou, colour=group)) + geom_point(size=5,alpha=0.7) + labs(title="Pielou's evennes"))
+    # ggplot(richness, aes(group,Pielou, colour=group)) + geom_point(size=5,alpha=0.7) + labs(title="Pielou's evenness"))
     # dev.off()
     # if 2 groups or more and group1 and group2 specified, then calculate wilcox test #c("****", "***", "**", "*", "ns"))
     if (length(groups) == 2) {
@@ -212,7 +223,7 @@ if ((group_column != "empty")) {
         plot2 <- ggplot(richness, aes(group, Pielou, colour = group)) +
             geom_boxplot(alpha = 0.7) +
             geom_point(size = 3, alpha = 0.7) +
-            labs(title = "\t\t\t\tPielou's evennes") +
+            labs(title = "\t\t\t\tPielou's evenness") +
             stat_compare_means(method = "wilcox.test", comparisons = list(groups), label = "p.signif", symnum.args = symnum_args)
         # sample names + geom_text_repel(aes(label = rownames(richness)))
     } else {
@@ -220,10 +231,10 @@ if ((group_column != "empty")) {
         plot2 <- ggplot(richness, aes(group, Pielou, colour = group)) +
             geom_boxplot(alpha = 0.3) +
             geom_point(size = 3, alpha = 0.7) +
-            labs(title = "\t\t\t\tPielou's evennes")
+            labs(title = "\t\t\t\tPielou's evenness")
     }
 
-    pdf("plot_richness.pdf", , width = 13, height = 7)
+    pdf("plot_richness.pdf", width = 13, height = 7)
     print(plot1)
     print(plot2)
     dev.off()

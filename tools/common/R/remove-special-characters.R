@@ -1,8 +1,10 @@
-# TOOL remove-special-characters.R: "Remove special characters from a file" (Removes potetially problematic characters from a file. Please note that this tol removes all instances of the characters and does not do any context checking. In some case it may render the file unusable.)
+# TOOL remove-special-characters.R: "Remove special characters from a file" (Removes potentially problematic characters from a file. Please note that this tool removes all instances of the characters and does not do any context checking. In some case it may render the file unusable.)
 # INPUT input: "File to process" TYPE GENERIC
 # OUTPUT OPTIONAL output
 # OUTPUT OPTIONAL output.gz
 # PARAMETER remove: "Charackters to remove" TYPE [all: "all", ex:"\!", pi: "\|",hy: "-", us: "_", br: "\(\)", cb: "\{\}", sb: "\[\]", ac: "\'"] DEFAULT all (Characters to remove.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))

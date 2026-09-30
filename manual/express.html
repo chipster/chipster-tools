@@ -29,7 +29,7 @@ Note that Bowtie2 can be very slow if many alignments are allowed per read.
 Counting reads at transcript level is complicated by the fact that transcript isoforms typically have overlapping parts. 
 In order to assign ambiguously mapping reads to different isoforms, an expectation maximization (EM) approach is used. 
 This approach alternates between two steps: an expectation step where reads are assigned to transcripts with a probability according 
-to those transcripts’ abundances (which are initially assumed to be equal), and a maximization step where the abundances are updated based 
+to the abundances of those transcripts (which are initially assumed to be equal), and a maximization step where the abundances are updated based 
 on the assignment probability.
 </p>
 <p>
@@ -40,11 +40,11 @@ In addition, eXpress also includes a model for sequencing errors including indel
 <p>
 The fragment length and standard deviation parameters are used by eXpress.
 While the empirical distribution is estimated from paired-end reads on-the-fly, these values parameterize the prior distribution. 
-If only single-end reads are available, this prior distribution is also used to determine the effective length
+If only single-end reads are available, this prior distribution is also used to determine the effective length.
 </p>
 <p>
 eXpress reports the following abundance measures for each transcript: estimated counts, effective counts, FPKM and TPM.
-The authors of eXpress recommend using rounded effective counts differential expression analysis with tools like edgeR.
+The authors of eXpress recommend using rounded effective counts for differential expression analysis with tools like edgeR.
 You can combine several count files to a count table using the tool "Utilities / Create NGS experiment"
 </p>
 
@@ -58,7 +58,7 @@ You can combine several count files to a count table using the tool "Utilities /
 <h3>Reference</h3>
 
 Please cite the following article if you use this tool:<br>
-A Roberts and L Pachter: <a href="http://www.nature.com/nmeth/journal/v10/n1/full/nmeth.2251.html">Streaming fragment assignment for real-time analysis of sequencing experiments</a> Nature Methods 10,71–73(2013). 
+A Roberts and L Pachter: <a href="http://www.nature.com/nmeth/journal/v10/n1/full/nmeth.2251.html">Streaming fragment assignment for real-time analysis of sequencing experiments</a> Nature Methods 10,71(2013). 
 
 </body>
 </html>

@@ -34,9 +34,11 @@
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
+# run python explicitly, because the shebang line in macs14 uses now defunct /mnt/tools
+python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
 # MACS binary
 macs.binary <- file.path(chipster.tools.path, "macs", "macs14")
-version <- system(paste(macs.binary, "--version | cut -d ' ' -f 2"), intern = TRUE)
+version <- system(paste(python.binary, macs.binary, "--version | cut -d ' ' -f 2"), intern = TRUE)
 documentVersion("MACS", version)
 
 # Use user-specified genome size if given
@@ -96,7 +98,7 @@ runMACS <- function(..., logFile = "/dev/null") {
         }
 
         # Command
-        command <- paste(macs.binary, paste(flags, params, collapse = " "))
+        command <- paste(python.binary, macs.binary, paste(flags, params, collapse = " "))
         if (!is.null(switchOnParams)) {
             switchOnParams <- paste(switchOnParams, collapse = " ")
             command <- paste(command, switchOnParams)

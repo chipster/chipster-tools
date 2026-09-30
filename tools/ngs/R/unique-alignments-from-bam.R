@@ -3,11 +3,12 @@
 # OUTPUT OPTIONAL unique_alignments.bam
 # PARAMETER paired: "Does the alignment file contain paired-end data" TYPE [yes, no] DEFAULT no (Does the alignment data contain paired end or single end reads?)
 # PARAMETER OPTIONAL nhtag: "Add NH tag" TYPE [yes, no] DEFAULT no (Add NH tag.)
+# RUNTIME R-4.5.1
 
 # 2014.06.02 AMS
 
 # convert bam to sam, sort bam if the data is paired-end
-samtools.binary <- file.path(chipster.tools.path, "samtools-0.1.19", "samtools")
+samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 
 if (paired == "yes") {

@@ -4,6 +4,8 @@
 # OUTPUT extract.tsv: extract.tsv
 # OUTPUT META phenodata-extract.tsv: phenodata-extract.tsv
 # PARAMETER column.extract: "Which column contains the extraction info"  TYPE METACOLUMN_SEL DEFAULT group (Phenodata column containing the samples to be extracted)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # JTT, 19.10.2007
 # MG 20.4.2010, ability to include annotation info in the output dataset

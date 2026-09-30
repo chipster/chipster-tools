@@ -77,7 +77,7 @@ spec:
         args: ["inf"]
         volumeMounts:
         - name: tools-bin
-          mountPath: /mnt/tools
+          mountPath: /opt/chipster/tools
         - name: artefacts
           mountPath: /mnt/artefacts
       volumes:

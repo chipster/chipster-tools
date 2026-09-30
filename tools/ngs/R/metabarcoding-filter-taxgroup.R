@@ -1,4 +1,4 @@
-# TOOL metabarcoding-filter-taxgroup.R: "Filter by taxonomic group" (Tidies a phyloseq object so that OTUs only from the desired taxonomic group \(bacteria, archaea, eukaryotes or fungi\) are retained. For bacteria, archaea and eukaryotes, filtering is performed at the domain level \(Bacteria, Archaea, Eukaryota\). For fungi, filtering is performed at the kingdom level \(Fungi\). Features with ambiguous phylum-level annotation \(e.g. NA, unknown, uncharacterized\) are removed. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file. Requires a phyloseq object in Rda format as the input.)
+# TOOL metabarcoding-filter-taxgroup.R: "Filter by taxonomic group" (Tidies a phyloseq object so that OTUs/ASVs only from the desired taxonomic group \(bacteria, archaea, eukaryotes or fungi\) are retained. For bacteria, archaea and eukaryotes, filtering is performed at the domain level \(Bacteria, Archaea, Eukaryota\). For fungi, filtering is performed at the kingdom level \(Fungi\). Features with ambiguous phylum-level annotation \(e.g. NA, unknown, uncharacterized\) are removed. Produces a phylum-level taxonomy summary and prevalence table following filtering, and saves the resulting phyloseq object as an Rda file. Requires a phyloseq object in Rda format as the input.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT OPTIONAL ps_bacteria.Rda
 # OUTPUT OPTIONAL ps_bacteria_taxon.txt
@@ -9,7 +9,8 @@
 # OUTPUT OPTIONAL ps_fungi.Rda
 # OUTPUT OPTIONAL ps_fungi_taxon.txt
 # PARAMETER group: "Group to retain" TYPE [bacteria: "Bacteria", archaea: "Archaea", eukaryotes: "Eukaryotes", fungi: "Fungi"] DEFAULT bacteria (Taxonomic group to retain)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020-2021
 # HJ 27.3.2025 add summary of Phyloseq object to output

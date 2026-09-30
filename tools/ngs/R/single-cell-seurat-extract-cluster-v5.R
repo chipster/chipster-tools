@@ -1,4 +1,4 @@
-# TOOL single-cell-seurat-extract-cluster-v5.R: "Seurat v5 BETA -Extract cells in a cluster" (Extract cells in a particular cluster into a new R-object for closer inspection. As input, use R-object after clustering the data. Read the tool manual to see how you can continue the analysis.)
+# TOOL single-cell-seurat-extract-cluster-v5.R: "Seurat v5 -Extract cells in a cluster" (Extract cells in a particular cluster into a new R-object for closer inspection. As input, use R-object after clustering the data. Read the tool manual to see how you can continue the analysis.)
 # INPUT seurat_obj.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT seurat_obj_subset.Robj
 # OUTPUT OPTIONAL log.txt

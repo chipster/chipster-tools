@@ -4,6 +4,7 @@
 # OUTPUT OPTIONAL subset.tar
 # PARAMETER n.seq: "Size of subset" TYPE INTEGER DEFAULT 100000 (Number of reads to return from the FASTQ file.)
 # PARAMETER seed: "Random seed" TYPE INTEGER DEFAULT 11 (Random seed for the sampling. When using paired-end data, use same random seed to keep pairing.)
+# RUNTIME R-4.5.1
 
 # AMS 14.5.2012
 # EK 15.5.2012 added unzipping

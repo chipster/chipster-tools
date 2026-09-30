@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<h2>Seurat v5 -DE genes between samples for a given cluster</h2>
+
+	<h3>Description</h3>
+
+	<p>
+		For a given cluster, this tool finds differentially expressed (DE) genes by comparing each sample against
+		all other samples. It produces one result file per sample. This tool can be used for combined Seurat objects
+		with 2 or more samples.
+	</p>
+
+	<h3>Parameters</h3>
+	<ul>
+		<li>Normalisation method used previously [Global scaling normalization]</li>
+		<li>Name of the cluster [3]</li>
+		<li>Return only positive marker genes [yes]</li>
+		<li>Fold change in log2 scale [0.25]</li>
+		<li>Adjusted p-value cutoff [0.05]</li>
+		<li>Limit testing to genes expressed in at least this fraction of cells [0.1]</li>
+		<li>Minimum number of cells in one of the groups [3]</li>
+	</ul>
+
+	<h3>Details</h3>
+
+	<p>
+		As input, give the combined Seurat object produced by the <i>Seurat v5 -Integrated analysis</i> tool.
+		Make sure to set the <b>Normalisation method</b> parameter to match what was used in the earlier
+		preprocessing step.
+	</p>
+
+	<p>
+		Select the cluster to inspect by entering its name in the <b>Name of the cluster</b> parameter field.
+		By default, clusters are numbered starting from 0. The example default value is cluster "3".
+	</p>
+
+	<p>
+		For each sample, the tool uses the Seurat function <code>FindMarkers</code> to compare cells from that
+		sample in the chosen cluster against cells from all other samples in the same cluster. This allows you
+		to identify genes whose expression in a particular cluster is driven by one specific condition or sample.
+		Conditions/samples are determined by the Sample or Group name set in the Setup tool.
+	</p>
+
+	<p>
+		You can pre-filter genes using the <b>fold change</b> and <b>minimum fraction of cells</b> parameters,
+		both applied before the statistical test to speed up the analysis. The <b>adjusted p-value cutoff</b>
+		is applied after testing: only genes meeting the threshold are kept in the output. Seurat adjusts
+		p-values using the Bonferroni method based on the total number of genes in the dataset. This is
+		intentional: because Seurat pre-filters genes before testing, other correction methods are not
+		recommended.
+	</p>
+
+	<p>
+		The <b>Minimum number of cells</b> parameter sets a lower bound on how many cells must be present in
+		each group for a comparison to be attempted. If either the sample being tested or the combined group of
+		all other samples has fewer cells than this threshold in the chosen cluster, that comparison is skipped
+		and a warning describing the cell counts is written to <b>log.txt</b>. The remaining comparisons still
+		run normally. This prevents unreliable results from groups that are too small for meaningful statistics.
+	</p>
+
+	<p>
+		The result tables also include columns with the average expression of the compared groups in the chosen
+		cluster, which makes it easier to judge the biological relevance of the fold change.
+	</p>
+
+	<h3>Output</h3>
+
+	<p>
+		One tab-separated file per sample, named <b>de-list_samplenameVsAllOthers.tsv</b>. The columns in
+		each file are:
+	</p>
+	<ul>
+		<li><b>p_val</b>: unadjusted p-value</li>
+		<li><b>avg_log2FC</b>: log2 fold change of the average expression between the two groups.
+			Positive values indicate higher expression in the sample being tested. Note that the ordering
+			of group 1 vs group 2 follows alphabetical order of the sample names.</li>
+		<li><b>pct.1</b>: fraction of cells in the sample being tested (group 1) that express this gene</li>
+		<li><b>pct.2</b>: fraction of cells in all other samples (group 2) that express this gene</li>
+		<li><b>p_val_adj</b>: Bonferroni-adjusted p-value based on the total number of genes in the dataset — use this value when filtering and reporting results</li>
+		<li><b>aver_expr_ident1</b>: average expression in the sample being tested, within the chosen cluster</li>
+		<li><b>aver_expr_ident2</b>: average expression in all other samples, within the chosen cluster</li>
+	</ul>
+
+	<p>
+		For more details, please check the
+		<a href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
+			for multiple sample analysis</a>.
+	</p>
+
+</body>
+</html>

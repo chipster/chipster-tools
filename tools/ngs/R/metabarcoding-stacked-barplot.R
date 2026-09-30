@@ -1,16 +1,19 @@
-# TOOL metabarcoding-stacked-barplot.R: "Relative abundance bar plots" (Visualizes OTU relative abundance data with stacked bar plots that are built using a user-specified level of biological organization \(with a maximum of displaying 22 taxa\). You can set a minimal OTU relative abundance threshold for plotting. The plot can be divided into subplots based on a phenodata column. Requires a phyloseq object in Rda format as the input. To use this tool, OTU abundances must be provided as relative abundances \(with per-column OTU abundances adding up to 1\).)
+# TOOL metabarcoding-stacked-barplot.R: "Relative abundance bar plots" (Visualizes OTU/ASV relative abundance data with stacked bar plots that are built using a user-specified level of biological organization \(with a maximum of displaying 22 taxa\). You can set a minimal OTU/ASV relative abundance threshold for plotting. The plot can be divided into subplots based on a phenodata column. Requires a phyloseq object in Rda format as the input. To use this tool, OTU/ASV abundances must be provided as relative abundances \(with per-column OTU/ASV abundances adding up to 1\).)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT ps_barplot.pdf
 # PARAMETER xvar: "Phenodata variable with sequencing sample IDs" TYPE METACOLUMN_SEL DEFAULT EMPTY (Phenodata variable with unique IDs for each community profile.)
-# PARAMETER OPTIONAL thresh: "Relative abundance cut-off threshold \(%\) for excluding OTUs" TYPE INTEGER FROM 0 TO 99 DEFAULT 0
+# PARAMETER OPTIONAL thresh: "Relative abundance cut-off threshold \(%\) for excluding OTUs/ASVs" TYPE INTEGER FROM 0 TO 99 DEFAULT 0
 # PARAMETER OPTIONAL type: "Level of biological organization for tabulating taxon composition" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus"] DEFAULT phylum (Level of biological organization for plot construction \(default is phylum\))
 # PARAMETER OPTIONAL facet1: "Phenodata variable 1 for dividing plots into subplots" TYPE METACOLUMN_SEL DEFAULT EMPTY (First phenodata variable used for dividing plots into subplots.)
 # PARAMETER OPTIONAL facet2: "Phenodata variable 2 for dividing plots into subplots" TYPE METACOLUMN_SEL DEFAULT EMPTY (Second phenodata variable used for dividing plots into subplots.)
-# RUNTIME R-4.2.0-phyloseq
+# PARAMETER OPTIONAL names: "Display sample names" TYPE [yes: "Yes", no: "No"] DEFAULT yes
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 # HJ 30.4.2025 Added rounding before checking if sample sums add to 1, changed plot y axis to %, and set limits to 0-100% to make sure subplots have the same y axis. Facet_wrap free -> free_x.
+# HJ 14.8.2025 Change y axis to precentages; when two factors in faceting, scales = free -> free_x (to make sure x axis scale can vary but the facets have the same y axis)
 
 # Load packages
 library(phyloseq)
@@ -71,6 +74,32 @@ colours <- c(
     "#771122", "#AA4455", "#DD7788", "#CBD588"
 )
 
+# Define common plot settings
+# Settings if sample names are shown (default)
+if (names == "yes") { 
+plot_settings <- theme(axis.text.y = element_text(size = 12, hjust = 0.5),
+        	axis.title.y = element_text(size = 14),
+        	axis.title.x = element_blank(),
+        	axis.text.x = element_text(
+            	size = 12, angle = 30, vjust = 0.5, hjust = 0.5),
+        	axis.ticks.x = element_blank(),
+        	strip.text.x = element_text(size = 11),
+        	legend.title = element_blank(),
+        	legend.position = "right",
+        	legend.text = element_text(size = 10))
+} else { 
+# Settings without sample names
+plot_settings <- theme(axis.text.y = element_text(size = 12, hjust = 0.5),
+        	axis.title.y = element_text(size = 14),
+        	axis.title.x = element_blank(),
+        	axis.text.x = element_blank(),
+        	axis.ticks.x = element_blank(),
+        	strip.text.x = element_text(size = 11),
+        	legend.title = element_blank(),
+        	legend.position = "right",
+        	legend.text = element_text(size = 10))
+}
+
 # Bar plots
 
 if (facet1 == "EMPTY" &&
@@ -87,21 +116,9 @@ if (type == "phylum" &&
         geom_bar(stat = "identity", position = "stack") +
         facet_wrap(~ get(facet1), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "class" &&
     facet1 != "EMPTY" &&
@@ -113,21 +130,9 @@ if (type == "class" &&
         geom_bar(stat = "identity", position = "stack") +
         facet_wrap(~ get(facet1), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "order" &&
     facet1 != "EMPTY" &&
@@ -139,21 +144,9 @@ if (type == "order" &&
         geom_bar(stat = "identity", position = "stack") +
         facet_wrap(~ get(facet1), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "family" &&
     facet1 != "EMPTY" &&
@@ -165,21 +158,9 @@ if (type == "family" &&
         geom_bar(stat = "identity", position = "stack") +
         facet_wrap(~ get(facet1), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "genus" &&
     facet1 != "EMPTY" &&
@@ -191,21 +172,9 @@ if (type == "genus" &&
         geom_bar(stat = "identity", position = "stack") +
         facet_wrap(~ get(facet1), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "phylum" &&
     facet1 != "EMPTY" &&
@@ -215,23 +184,11 @@ if (type == "phylum" &&
         y = Abundance, fill = Phylum
     )) +
         geom_bar(stat = "identity", position = "stack") +
-        facet_grid(get(facet1) ~ get(facet2), scales = "free") +
+        facet_grid(get(facet1) ~ get(facet2), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "class" &&
     facet1 != "EMPTY" &&
@@ -241,23 +198,11 @@ if (type == "class" &&
         y = Abundance, fill = Class
     )) +
         geom_bar(stat = "identity", position = "stack") +
-        facet_grid(get(facet1) ~ get(facet2), scales = "free") +
+        facet_grid(get(facet1) ~ get(facet2), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "order" &&
     facet1 != "EMPTY" &&
@@ -267,23 +212,11 @@ if (type == "order" &&
         y = Abundance, fill = Order
     )) +
         geom_bar(stat = "identity", position = "stack") +
-        facet_grid(get(facet1) ~ get(facet2), scales = "free") +
+        facet_grid(get(facet1) ~ get(facet2), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "family" &&
     facet1 != "EMPTY" &&
@@ -293,23 +226,11 @@ if (type == "family" &&
         y = Abundance, fill = Family
     )) +
         geom_bar(stat = "identity", position = "stack") +
-        facet_grid(get(facet1) ~ get(facet2), scales = "free") +
+        facet_grid(get(facet1) ~ get(facet2), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 8))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "genus" &&
     facet1 != "EMPTY" &&
@@ -319,23 +240,11 @@ if (type == "genus" &&
         y = Abundance, fill = Genus
     )) +
         geom_bar(stat = "identity", position = "stack") +
-        facet_grid(get(facet1) ~ get(facet2), scales = "free") +
+        facet_grid(get(facet1) ~ get(facet2), scales = "free_x") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "phylum" &&
     facet1 == "EMPTY" &&
@@ -346,21 +255,9 @@ if (type == "phylum" &&
     )) +
         geom_bar(stat = "identity", position = "stack") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "class" &&
     facet1 == "EMPTY" &&
@@ -371,21 +268,9 @@ if (type == "class" &&
     )) +
         geom_bar(stat = "identity", position = "stack") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "order" &&
     facet1 == "EMPTY" &&
@@ -396,21 +281,9 @@ if (type == "order" &&
     )) +
         geom_bar(stat = "identity", position = "stack") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "family" &&
     facet1 == "EMPTY" &&
@@ -421,21 +294,9 @@ if (type == "family" &&
     )) +
         geom_bar(stat = "identity", position = "stack") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 if (type == "genus" &&
     facet1 == "EMPTY" &&
@@ -446,21 +307,9 @@ if (type == "genus" &&
     )) +
         geom_bar(stat = "identity", position = "stack") +
         scale_fill_manual(values = colours) +
-        scale_y_continuous(name = "Relative abundance (%)\n",
-            labels = scales::percent_format(accuracy = 1),
-            limits = c(0, 1)) +
-        theme(axis.text.y = element_text(size = 12, hjust = 0.5)) +
-        theme(axis.title.y = element_text(size = 14)) +
-        theme(axis.title.x = element_blank()) +
-        theme(axis.text.x = element_text(
-            size = 12,
-            angle = 30, vjust = 0.5, hjust = 0.5
-        )) +
-        theme(axis.ticks.x = element_blank()) +
-        theme(strip.text.x = element_text(size = 11)) +
-        theme(legend.title = element_blank()) +
-        theme(legend.position = "right") +
-        theme(legend.text = element_text(size = 10))
+        scale_y_continuous(name = "Relative abundance",
+            labels = scales::percent_format(accuracy = 1)) +
+        plot_settings
 }
 
 # Open a report PDF

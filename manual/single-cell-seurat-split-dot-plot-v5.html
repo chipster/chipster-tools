@@ -18,12 +18,19 @@
 
 	<h3>Parameters</h3>
 	<ul>
-        <li>Normalisation method used previously [LogNormalize]</li>
+		<li>Normalisation method used previously [LogNormalize]</li>
 		<li>Markers to plot [CD3D, CREM, HSPH1, SELL, GIMAP5]</li>
 		<li>Scale data in split dot plot [no]</li>
 		<li>Visualisation with tSNE, UMAP or PCA in feature plot [UMAP] </li>
 		<li>Plotting order of cells based on expression in feature plot [no]</li>
 		<li>Determine color scale based on all features in feature plot [no]</li>
+		<li>Width of the output plots [10]</li>
+		<li>Height of the output plots [10]</li>
+		<li>Point size in feature plots [1]</li>
+		<li>Add labels on top of clusters in feature plots [no]</li>
+		<li>Point size in tSNE and UMAP plots [1]</li>
+		<li>Label size in the feature plots [4]</li>
+
 	</ul>
 
 
@@ -45,14 +52,14 @@
 		showing both the expression level and the percentage of cells in a cluster expressing any given gene.
 		The <b>size of the dot</b> encodes the percentage of cells within a class (=cluster),
 		while the <b>color</b> encodes the AverageExpression level of 'expressing' cells (stronger color, more
-		experssion). By default, the raw expression data is used but the user can choose to use scaled data by 
+		experssion). By default, the raw expression data is used but the user can choose to use scaled data by
 		setting the parameter value for "plotting order of cells based on expression in feature plot" to "yes".
 	</p>
 
 	<p>
-		Another useful way to visualize changes in gene expression is with "feature plots" that are also visualized 
-		by splitting them by conditions. By default, the color scale in the feature plots are determined for each 
-		gene individually and may differ between genes. If you wish to compare gene expression between different genes, 
+		Another useful way to visualize changes in gene expression is with "feature plots" that are also visualized
+		by splitting them by conditions. By default, the color scale in the feature plots are determined for each
+		gene individually and may differ between genes. If you wish to compare gene expression between different genes,
 		it is useful to set the parameter "determine color scale based on all features in feature plot" to "yes" so
 		that the color scale is the same for all of the visualized genes.
 	</p>
@@ -69,7 +76,7 @@
 	<h3>Output</h3>
 
 	<ul>
-		<li>split_dot_plot.pdf: Plots showing user defined markers/genes across the conditions </li>
+		<li>seurat_multi_sample_plots.pdf: Plots showing user defined markers/genes across the conditions </li>
 	</ul>
 
 

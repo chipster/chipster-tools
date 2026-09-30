@@ -1,6 +1,7 @@
 # TOOL gtftobed.R: "Convert GTF to BED" (Converts GTF to BED format.)
 # INPUT file.gtf: "GTF file" TYPE GENERIC
 # OUTPUT OPTIONAL gtftobed.bed
+# RUNTIME R-4.5.1
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))

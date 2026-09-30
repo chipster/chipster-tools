@@ -1,5 +1,5 @@
 # TOOL test-data-in-out.R: "Test data input and output in R" (Data input output test.)
-# INPUT input: "input" TYPE GENERIC (Just some test file)
+# INPUT input: "input" TYPE GENERIC (Just a test file)
 # OUTPUT output
 # PARAMETER delay: Delay TYPE INTEGER FROM 0 TO 10000 DEFAULT 1 (Delay in seconds)
 

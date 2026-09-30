@@ -12,16 +12,16 @@ With this tool you can extract information from the Phyloseq object:
 <ul>
     <li>OTU or ASV table</li>
     <li>taxonomy table</li>
-    <li>Dna sequences stored to refseq in the Phyloseq object in FASTA</li>
-    <li>Dna sequences stored to refseq in the Phyloseq object as tabular data</li>
-    <li>Sample information which is the Phenodata information</li>
+    <li>DNA sequences stored to refseq in the Phyloseq object in FASTA (ASV data only)</li>
+    <li>DNA sequences stored to refseq in the Phyloseq object as tabular data (ASV data only)</li>
+    <li>Sample information which is the phenodata information</li>
 </ul>
  
 </p>
 
 <h3>Parameters</h3>
 <ul>
-    <li>Extract OTU table? (yes, no) [no]</li>
+    <li>Extract OTU/ASV table? (yes, no) [no]</li>
     <li>Extract taxonomy table? (yes, no) [no]</li>
     <li>Extract DNA sequences in FASTA? (yes, no) [no]</li>
     <li>Extract DNA sequences as tabular data? (yes, no) [no]</li>
@@ -44,7 +44,7 @@ In the refseq() slot is stored the information of which full DNA sequence corres
     
 <br>
 <br>
-This tool can be used also to investigate how the Phenodata table, in other words the sample information merged to the 
+This tool can be used also to investigate how the phenodata table, in other words the sample information merged to the 
 Phyloseq object looks like or if you want to get the OTU/ASV table and the taxonomy table used to create the object.
 </p>
 
@@ -52,7 +52,7 @@ Phyloseq object looks like or if you want to get the OTU/ASV table and the taxon
 </p>
 The analysis output consists of the following:
 <ul>
-    <li>otu_table.tsv: OTU table from the Phyloseq object </li>
+    <li>otu_table.tsv: OTU/ASV table from the Phyloseq object </li>
     <li>taxonomy_table.tsv: Taxonomy table from the Phyloseq object.</li>
     <li>dna_sequences.fasta: Full DNA sequences of the ASVs stored to the refseq() of the Phyloseq object in FASTA format</li>
     <li>dna_sequences.tsv: Full DNA sequences of the ASVs stored to the refseq() of the Phyloseq object as tabular data</li>

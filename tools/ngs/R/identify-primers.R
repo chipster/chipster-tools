@@ -7,7 +7,7 @@
 # PARAMETER paired: "Is the data paired end or single end reads" TYPE [paired, single] DEFAULT paired (If paired end, identify primers from forward and reverse reads.)
 # PARAMETER OPTIONAL adapter5: "The 5' adapter:" TYPE STRING (Give here the 5 end adapter/primer)
 # PARAMETER OPTIONAL adapter3: "The 3' adapter:" TYPE STRING (Give here the 3 end adapter/primer)
-# RUNTIME R-4.1.1-asv
+# RUNTIME R-4.4.3-asv
 
 # ES 13.10.2022
 # could use either tar package or fastq files as input, Decided to use tar, because it's more convenient in the pipeline

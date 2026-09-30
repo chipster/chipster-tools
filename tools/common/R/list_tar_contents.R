@@ -1,6 +1,8 @@
 # TOOL list_tar_contents.R: "List contents of a tar file" (List the contents of a tar package. The file can be gzip compressed.)
 # INPUT file.tar: "Tar file" TYPE GENERIC
 # OUTPUT toc.txt
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # List contents of tar to a file
 system("tar tf file.tar > toc.txt")

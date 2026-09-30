@@ -2,6 +2,8 @@
 # INPUT table{...}.tsv: "Tables to merge" TYPE GENERIC
 # OUTPUT combined.tsv: "Merged table"
 # PARAMETER OPTIONAL include.everything: "Include all the rows in the result file" TYPE [yes, no] DEFAULT no (Include also the non-matching lines in the result file.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # JTT 22.10.2007
 # EK 20.4.2015 clarified the script

@@ -10,13 +10,15 @@
 # OUTPUT error-rate-summary.txt
 # PARAMETER group: "The Mock group name" TYPE STRING DEFAULT "Mock"
 # PARAMETER aligned: "Does the reference contain aligned sequences" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (The aligned parameter allows you to specify whether your reference sequences are aligned. default=no)
-# RUNTIME R-4.1.1
+# RUNTIME R-4.4.3-mothur
+# TOOLS_BIN ""
 
 # OUTPUT log.txt
 # OUTPUT log2.txt
 # OUTPUT log3.txt
 # ES 03.08.2021
 # ES 28.12.2022 updated to use new mothur version and RUNTIME R-4.1.1
+# HJ 4.8.25 update to mothur 148.2. and R-4.4.3
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
@@ -25,8 +27,8 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("a.fasta")
 
 # binary
-# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
+# mothur 1.48.2 is installed in container image in /opt/chipster/tools
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 

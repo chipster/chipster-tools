@@ -3,6 +3,8 @@
 # OUTPUT merged.tsv
 # PARAMETER header: "Tables contain a header row" TYPE [yes, no] DEFAULT yes (Do the TSV files contain a header row?)
 # PARAMETER remove.duplicates: "Remove duplicate rows" TYPE [yes, no] DEFAULT no (Remove exact duplicates of rows.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 files <- list.files(pattern = "*.tsv", full.names = FALSE, recursive = FALSE)

@@ -1,4 +1,4 @@
-# TOOL metabarcoding-transform-otu.R: "Transform OTU counts" (This tool is used to transform raw OTU counts within a phyloseq object. Four options are available\: 1\) CLR transformation \(with pseudocount\), 2\) relative abundance \(%\) conversion\; 3\) Hellinger transformation\; 4\) DESeq2 format conversion and variance-stabilizing transformation. The CLR transformation is based on the R package microbiome and applies a pseudocount of min\(relative abundance\)\/2 to zero relative abundance entries in the OTU table. Converting to DESeq2 format requires a user-specified phenodata variable as part of the DESeq2 experimental design formula. Note that data subjected to VST are saved as a phyloseq format \(data saved in the DESeq2 format are not VST-transformed\). Requires a phyloseq object in Rda format as the input. The resulting data are saved as an Rda file.)
+# TOOL metabarcoding-transform-otu.R: "Transform OTU/ASV counts" (This tool is used to transform raw OTU counts within a phyloseq object. Four options are available\: 1\) CLR transformation \(with pseudocount\), 2\) relative abundance \(%\) conversion\; 3\) Hellinger transformation\; 4\) DESeq2 format conversion and variance-stabilizing transformation. The CLR transformation is based on the R package microbiome and applies a pseudocount of min\(relative abundance\)\/2 to zero relative abundance entries in the OTU/ASV table. Converting to DESeq2 format requires a user-specified phenodata variable as part of the DESeq2 experimental design formula. Note that data subjected to VST are saved as a phyloseq format \(data saved in the DESeq2 format are not VST-transformed\). Requires a phyloseq object in Rda format as the input. The resulting data are saved as an Rda file.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # INPUT META phenodata.tsv: "Phenodata" TYPE GENERIC
 # OUTPUT OPTIONAL ps_clr.Rda
@@ -8,7 +8,8 @@
 # OUTPUT OPTIONAL deseq2.Rda
 # PARAMETER treatment: "Data treatment" TYPE [clr: "Centered log-ratio transfomation with pseudocount", relabund: "Relative abundances \(%\)", hellinger: "Hellinger transformation", deseq2: "DESeq2 format conversion and variance-stabilizing transformation"] DEFAULT clr (Choice between data transformation types)
 # PARAMETER OPTIONAL group_column1: "Phenodata variable used for DESeq2 conversion" TYPE METACOLUMN_SEL DEFAULT empty (Select a phenodata variable used to specify the experimental design when converting the data to DESeq2 format.)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 

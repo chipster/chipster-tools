@@ -5,6 +5,7 @@
 # OUTPUT sequences-summary.tsv
 
 # EK 6.4.2021
+# HJ 4.8.2025 This script is not in use in the current tools.
 # OUTPUT log1.txt
 
 

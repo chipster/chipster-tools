@@ -28,7 +28,7 @@
         <li>Name of the sample group to compare with [STIM]</li>
         <li>Name of the sample group to compare to [CTRL]</li>
         <li>Name of the cluster [3]</li>
-        <li>Which test to use for detecting marker genes [wilcox]</li>
+        <li>Which test to use for detecting marker genes [negbiom]</li>
         <li>Return only positive marker genes [TRUE]</li>
         <li>Fold change in log2 scale [0.25]</li>
         <li>Adjusted p-value cutoff [0.05]</li>
@@ -86,6 +86,41 @@
     </p>
 
     <p>
+    <h4>Choosing a statistical test for pseudobulk analysis</h4>
+
+    <p>
+        Because this tool uses a <b>pseudobulk approach</b> (=aggregating counts per sample before
+        testing) not all statistical tests are equally appropriate. The tests available in Seurat
+        were originally designed for single-cell data with thousands of independent observations per
+        group. In pseudobulk analysis, each group typically has only a handful of replicates (one
+        aggregated value per biological sample), which changes what is statistically valid.
+    </p>
+
+    <p><b>Recommended for pseudobulk:</b></p>
+    <ul>
+        <li><b>DESeq2</b>: Models aggregated counts using a negative binomial
+            distribution and accounts for biological variability between samples, which is the scenario
+            pseudobulk replicates represent. Note that DESeq2 can produce NA p-values for genes with
+            extreme count outliers; these are handled separately by the
+            <i>How to handle DESeq2 NA values</i> parameter.
+        </li>
+        <li><b>negbinom</b> (default): Also appropriate for pseudobulk. Like DESeq2, it models overdispersed
+            count data and gives reliable results with a small number of replicates.</li>
+    </ul>
+
+    <p><b>Use with caution:</b></p>
+    <ul>
+        <li><b>wilcox</b> and <b>t</b>: These tests are valid in principle, but with few pseudobulk
+            replicates they have very limited statistical power. For example, with only three samples
+            per group, the minimum p-value Wilcoxon can achieve is 0.1, making it nearly impossible
+            to detect significant genes after multiple testing correction. These tests may be
+            useful if you have a larger number of samples per group (≥5).</li>
+        <li><b>poisson</b>: Assumes mean equals variance, which is rarely true for RNA-seq count
+            data. negbinom is strictly more appropriate.</li>
+    </ul>
+    </p>
+
+    <p>
         In case of <b>DESeq2</b>, the FindMarkers function can give NAs as p-values to some "outlier" genes. <a
             href="https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#pvaluesNA">Read
             more about
@@ -97,8 +132,11 @@
 
 
     <p>
-        For more details, please check the <a
-            href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorial
+        For more details, please check the
+        <a href="https://satijalab.org/seurat/articles/de_vignette#perform-de-analysis-after-pseudobulking">Seurat
+            tutorial
+            for differential expression testing</a> ,
+        <a href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorial
             for multiple sample analysis</a> and
         <a href="https://satijalab.org/seurat/articles/parsebio_sketch_integration">Seurat tutorial
             for sketch integration containing the pseudobulk analysis step</a>.

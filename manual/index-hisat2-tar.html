@@ -7,11 +7,11 @@
 
 <body>
 
-    <h2>Create Hisat2 index</h2>
+    <h2>Create HISAT2 index</h2>
 
     <h3>Description</h3>
 
-    <p>This tool creates index files for the Hisat2 aligner. 
+    <p>This tool creates index files for the HISAT2 aligner. 
     </p>
 
     <h3>Parameters</h3>
@@ -22,16 +22,16 @@
     <h3>Input</h3>
     <p>
         <ul>
-            <li>input.fa: reference genome fasta file</li>
-            <li>input.gtf: reference genome gtf file</li>
+            <li>input.fa: reference genome FASTA file</li>
+            <li>input.gtf: reference genome GTF file</li>
         </ul>
 
-        If the input.gtf is given, the tools tries to create an index with splice site and exon annotations, which requires huge amount of memory for larger genomes. Memory consumption is much lower if the gtf file is not given.
+        If the input.gtf is given, the tools tries to create an index with splice site and exon annotations, which requires huge amount of memory for larger genomes. Memory consumption is much lower if the GTF file is not given.
     </p>
 
     <h3>Output</h3>
     <p>
-        This tool produces tar package that can be given to tools "HISAT2 for single end reads and own genome" or "HISAT2 for paired end reads and own genome".
+        This tool produces a Tar package that can be given to the tools "HISAT2 for single end reads and own genome" and "HISAT2 for paired end reads and own genome".
     </p>
 
     <h3>Reference</h3>

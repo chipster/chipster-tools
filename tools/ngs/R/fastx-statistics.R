@@ -1,7 +1,8 @@
 # TOOL fastx-statistics.R: "Read quality statistics with FASTX" (Calculates quality statistics of the reads. This tool is based on the FASTX Statistics tool of the FASTX package.)
 # INPUT reads.fastq TYPE GENERIC
 # OUTPUT quality-stats.tsv
-# PARAMETER quality.format: "Quality value format used" TYPE [sanger: Sanger, illuminaold: "Illumina GA v1.3-1.5"] DEFAULT sanger (What quality encoding is used in your FASTQ file. Select Sanger if your data comes from Illumina 1.8 or later, SOLiD or 454.)
+# RUNTIME R-4.5.1-fastx
+# TOOLS_BIN ""
 
 
 # EK 17.6.2011
@@ -11,11 +12,10 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads.fastq")
 
 # binary
-binary.stats <- c(file.path(chipster.tools.path, "fastx", "bin", "fastx_quality_stats"))
+binary.stats <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastx_quality_stats"))
 
 # command
-quality.scale <- ifelse(quality.format == "sanger", "-Q 33", "")
-command.stats <- paste(binary.stats, quality.scale, "-i reads.fastq -o quality-stats.tsv")
+command.stats <- paste(binary.stats, "-Q 33 -i reads.fastq -o quality-stats.tsv")
 
 # run
 ret <- system(command.stats)

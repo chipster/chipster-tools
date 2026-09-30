@@ -3,7 +3,7 @@
 # OUTPUT sequences.count_table
 # OUTPUT sequences-summary.tsv
 # OUTPUT sequences.fasta.gz
-# RUNTIME R-4.1.1
+# RUNTIME R-4.4.3-mothur
 
 # ES 1.12.2022 new mothur version needs count
 # Fastx not in new ubuntu, emboss is. Other possibility is mothur fastq.info
@@ -15,7 +15,7 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # Binary emboss
-emboss.binary <- c(file.path(chipster.tools.path, "emboss-20.04", "bin", "seqret"))
+emboss.binary <- c(file.path(chipster.tools.path, "emboss-24.04", "bin", "seqret"))
 version <- system(paste(emboss.binary, "--version"), intern = TRUE)
 
 # Go through the input files. Uncompress if necessary. Untar if necessary.
@@ -73,8 +73,8 @@ group_names <- sub(".", "", group_names)
 # print(group_names)
 
 # Binary
-binary <- c(file.path(chipster.tools.path, "mothur", "mothur"))
-# binary <- c(file.path(chipster.tools.path,"mothur-1.44.3","mothur"))
+# mothur 1.48.2 is installed in container image in /opt/chipster/tools
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 makegroup.options <- paste("make.count(fasta=", fasta_names, ", groups=", group_names, ")", sep = "")

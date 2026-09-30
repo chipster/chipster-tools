@@ -15,8 +15,7 @@
         For a given cluster this tool gives you 
     <ul>
         <li> the cell type markers that are conserved across all the conditions (conserved_markers.tsv)</li>
-        <li> differentially expressed genes between the conditions (de-list.tsv) </li>
-        <li> OR, in case of more than 2 samples, differentially expressed genes of each sample compared to all the other
+        <li> differentially expressed genes of each sample compared to all the other
             samples (de-list_samplenameVsAllOthers.tsv) </li>
     </ul>
     Conditions/samples are determined in the Setup tool with the Sample or Group name parameter.
@@ -24,16 +23,17 @@
 
     <h3>Parameters</h3>
     <ul>
-		<li>Normalisation method used previously [Global scaling normalization]</li>
-		<li>Name of the cluster [3]</li>
-		<li>Return only positive marker genes [TRUE]</li>
-		<li>Conserved markers: Fold change in log2 scale [0.25]</li>
-		<li>Conserved markers: Adjusted p-value cutoff [0.05]</li>
-		<li>Conserved markers: Limit testing to genes which are expressed in at least this fraction of cells [0.1]</li>
-		<li>Conserved markers: Minimum number of cells in one of the groups [3]</li>
-		<li>Differentially expressed genes: Fold change in log2 scale [0.25]</li>
-		<li>Differentially expressed genes: Adjusted p-value cutoff [0.05]</li>
-		<li>Differentially expressed genes: Limit testing to genes which are expressed in at least this fraction of cells [0.1]</li>
+        <li>Normalisation method used previously [Global scaling normalization]</li>
+        <li>Name of the cluster [3]</li>
+        <li>Return only positive marker genes [TRUE]</li>
+        <li>Conserved markers: Fold change in log2 scale [0.25]</li>
+        <li>Conserved markers: Adjusted p-value cutoff [0.05]</li>
+        <li>Conserved markers: Limit testing to genes which are expressed in at least this fraction of cells [0.1]</li>
+        <li>Conserved markers: Minimum number of cells in one of the groups [3]</li>
+        <li>Differentially expressed genes: Fold change in log2 scale [0.25]</li>
+        <li>Differentially expressed genes: Adjusted p-value cutoff [0.05]</li>
+        <li>Differentially expressed genes: Limit testing to genes which are expressed in at least this fraction of
+            cells [0.1]</li>
     </ul>
 
 
@@ -58,7 +58,7 @@
                 and narrows down the result list.
             </p>
             <p>The result table <b>de-list.tsv</b> contains the genes which are differentially expressed between the two
-                conditions in the selected cluster. In case of more than 2 samples, there will be as many
+                conditions in the selected cluster. There will be as many
                 files as there are samples, named <b>de-list_samplenamevsAllOthers.tsv</b>. The columns in these files
                 include
             <ul>
@@ -92,20 +92,17 @@
         <li> max_pval = maximum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
         <li> min_pval = minimum p-value of the samples (note: comparing the p-values, not the adjusted p-values)</li>
     </ul>
-    </p>
 
-    <p>
-        For more details, please check the <a
-            href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
-            for multiple sample analysis</a>.
+    For more details, please check the <a
+        href="https://satijalab.org/seurat/articles/integration_introduction.html">Seurat tutorials
+        for multiple sample analysis</a>.
     </p>
 
     <h3>Output</h3>
 
     <ul>
         <li>conserved_markers.tsv: Conserved cell type markers across the conditions </li>
-        <li>de-list.tsv: Differentially expressed genes between the conditions </li>
-        <li>OR several de-list_samplenameVsAllOthers.tsv files: Differentially expressed genes between each sample and
+        <li>Oseveral de-list_samplenameVsAllOthers.tsv files: Differentially expressed genes between each sample and
             all other samples</li>
     </ul>
 

@@ -1,8 +1,9 @@
-# TOOL metabarcoding-taxon-overview.R: "Overview of taxon composition" (Tabulates the overall OTU count and a summary of taxon frequencies. Requires a phyloseq object in Rda format as the input.)
+# TOOL metabarcoding-taxon-overview.R: "Overview of taxon composition" (Tabulates the overall OTU/ASV count and a summary of taxon frequencies. Requires a phyloseq object in Rda format as the input.)
 # INPUT ps.Rda: "Phyloseq object in Rda format" TYPE GENERIC
 # OUTPUT ps_taxon.txt: ps_taxon.txt
 # PARAMETER OPTIONAL type: "Level of biological organization for tabulating taxon composition" TYPE [phylum: "Phylum", class: "Class", order: "Order", family: "Family", genus: "Genus", species: "Species"] DEFAULT phylum (Select the desired taxonomic level; default is phylum)
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat v5 -Cluster visualisation</h2>
+
+    <h3>Description</h3>
+
+    <p>
+        This tool visualizes existing cluster assignments in tSNE and UMAP plots. It is intended for use after the
+        <i>Seurat v5 -Clustering</i> tool, which performs the clustering and computes the dimensionality reductions.
+        Use this tool when you want to regenerate or customise the cluster plots without rerunning the full clustering
+        step.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Point size in tSNE and UMAP plots [1]</li>
+        <li>Add labels on top of clusters in plots [yes]</li>
+        <li>Which dimensionality reductions to plot [UMAP and tSNE]</li>
+    </ul>
+
+    <h3>Details</h3>
+
+    <p>
+        This tool takes as input a Seurat R-object that already contains cluster assignments and pre-computed
+        dimensionality reductions (UMAP and/or tSNE). Both are produced by the <i>Seurat v5 -Clustering</i> tool.
+        <br><br>
+        The <b>point size</b> parameter controls the size of individual cells in the plots. For datasets with many
+        cells, a smaller point size (e.g. 0.3–0.5) can make the plot easier to read by reducing overplotting.
+        <br><br>
+        The <b>Add labels</b> option places the cluster number at the centroid of each cluster directly on the plot.
+        This is convenient for quick inspection. If the labels overlap or obscure the data, switch this off and rely
+        on the colour legend instead.
+        <br><br>
+        The <b>Which dimensionality reductions to plot</b> parameter lets you request UMAP only, tSNE only, or both.
+        If a requested reduction is not present in the Seurat object, that plot will be skipped and a warning will be
+        written to the log. The tool will stop with an informative error if neither UMAP nor tSNE is available in the
+        object.
+    </p>
+
+    <p>
+        A summary table showing the number of cells in each cluster
+        is included as the last page of the PDF.
+    </p>
+
+    <p>
+        For more details on the clustering itself and how the dimensionality reductions are computed, please see the
+        manual page of the <i>Seurat v5 -Clustering</i> tool and the
+        <a href="http://satijalab.org/seurat/get_started.html">Seurat tutorials</a>.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>clusterPlot.pdf: Cluster visualisation in UMAP and/or tSNE plots, followed by a table showing the number
+            of cells per cluster per sample.</li>
+    </ul>
+
+</body>
+
+</html>

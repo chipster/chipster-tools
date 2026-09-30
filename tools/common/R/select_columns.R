@@ -7,6 +7,8 @@
 # PARAMETER OPTIONAL startrow: "First row to read" TYPE INTEGER DEFAULT 1 (Skip the first few lines of the input dataset. Note that in table files, the title row is considered as the first row.)
 # PARAMETER OPTIONAL skiprows: "Number of rows to remove from the end of the file" TYPE INTEGER DEFAULT 0 (Remove the given number number of lines from the end of the file or table.)
 # PARAMETER OPTIONAL rstyle: "Does the first column of the input file have a title" TYPE [no: Yes, yes: No] DEFAULT yes (Choose No if the first column contains row names with no title. This is typical for tables made with R-based tools.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # KM 8.11.2013
 # KM 16.4.2015 Support for rownames.

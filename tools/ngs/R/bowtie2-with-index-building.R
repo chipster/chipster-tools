@@ -129,7 +129,7 @@ if (unaligned.file == "yes") {
 reads1 <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", collapse = ",")
 
 # command ending
-command.end <- paste("-x", bowtie2.genome, "-U", reads1, "1> alignment.sam 2>> bowtie2.log'")
+command.end <- paste("-x", bowtie2.genome, "-U", reads1, "1> alignment.sam'")
 
 # run bowtie
 bowtie.command <- paste(command.start, parameters, command.end)

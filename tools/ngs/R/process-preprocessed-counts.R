@@ -4,6 +4,8 @@
 # OUTPUT META phenodata.tsv: phenodata.tsv
 # PARAMETER experimentype: "Experiment type" TYPE STRING DEFAULT empty (You can define experiment type, for example rna-seq.)
 # PARAMETER OPTIONAL keep.annotations: "Keep annotations" TYPE [yes: yes, no: no] DEFAULT no (Keep or discard annotation columns after preprocessing.)
+# RUNTIME R-4.5.1
+# TOOLS_BIN ""
 
 # MK 08.05.2013 Created based on the process prenormalized affy script
 # MK 11.04.2013 Support for multiple annotation columns added

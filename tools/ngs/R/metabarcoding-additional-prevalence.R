@@ -2,7 +2,8 @@
 # INPUT ps.Rda: "Phyloseq object in .Rda format" TYPE GENERIC
 # OUTPUT ps_prevalence.pdf: ps_prevalence.pdf
 # OUTPUT ps_low.txt: ps_low.txt
-# RUNTIME R-4.2.0-phyloseq
+# RUNTIME R-4.4.3-phyloseq
+# TOOLS_BIN ""
 
 # JH 2020
 

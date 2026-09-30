@@ -14,7 +14,7 @@ Given a fasta-formatted alignment file, removes chimeric sequences.
 <h3>Parameters</h3>
 
 <ul>
-<li>Reference (16S rRNA Silva gold bacteria, none) [16S rRNA Silva gold bacteria]</li>
+<li>Reference (none, 16S rRNA Silva gold bacteria) [none]</li>
 <li>Method (vsearch, uchime) [vsearch]</li>
 <li>Dereplicate (false, true) [false]</li>
 </ul>
@@ -28,7 +28,7 @@ This then acts as a primer that is extended to form a chimeric sequence.
 
 <p>
 You can use the <a href="https://mothur.org/w/images/9/98/Silva.bacteria.zip">16S rRNA Silva gold bacterial set</a> as a reference, or you can detect chimeras de novo using the more abundant sequences in your samples as a reference. 
-De novo detection uses the more abundant sequences from the same sample to check the query sequence. 
+De novo detection uses the more abundant sequences from the same sample to check the query sequence. Please note that currently the reference-based chimera search works only with UCHIME.
 When a sequence is flagged as chimeric in one sample, it can be removed from only that sample by setting dereplicate = true, or from all samples by setting dereplicate = false. 
 As of the 138 release SILVA databases, taxonomy and all the files provided for download are freely available for academic and 
 commercial use: <a href="https://www.arb-silva.de/silva-license-information">SILVA-license</a>

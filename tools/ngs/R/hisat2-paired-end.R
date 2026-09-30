@@ -1,7 +1,5 @@
 # TOOL hisat2-paired-end.R: "HISAT2 for paired end reads" (This tool uses HISAT2 to align paired-end reads to a publicly available reference genome. You need to supply the paired-end reads in FASTQ format.)
 # INPUT reads{...}.fq.gz: "Reads to align" TYPE GENERIC
-# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
-# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # OUTPUT OPTIONAL hisat.bam
 # OUTPUT OPTIONAL hisat.bam.bai
 # OUTPUT OPTIONAL hisat.log
@@ -50,26 +48,30 @@ input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 hisat.parameters <- ""
 # Reads to align
 # Parse the read names from input files
-if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
+
+# Removed list files
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
+# if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
   # Case: list files exist
-  reads1.list <- make_input_list("reads1.txt")
-  reads2.list <- make_input_list("reads2.txt")
-  if (identical(intersect(reads1.list, reads2.list), character(0))) {
-    reads1 <- paste(reads1.list, sep = "", collapse = ",")
-    reads2 <- paste(reads2.list, sep = "", collapse = ",")
-  } else {
-    stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
-  }
-} else if (file.exists("reads002.fq.gz") && !file.exists("reads003.fq.gz")) {
+#   reads1.list <- make_input_list("reads1.txt")
+#   reads2.list <- make_input_list("reads2.txt")
+#   if (identical(intersect(reads1.list, reads2.list), character(0))) {
+#     reads1 <- paste(reads1.list, sep = "", collapse = ",")
+#     reads2 <- paste(reads2.list, sep = "", collapse = ",")
+#   } else {
+#     stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
+#   }
+# } else if (file.exists("reads002.fq.gz") && !file.exists("reads003.fq.gz")) {
   # Case: no list file, but only two fastq inputs
   in.sorted <- input.names[order(input.names[, 2]), ]
   reads <- grep("reads", in.sorted[, 1], value = TRUE)
   reads1 <- reads[1]
   reads2 <- reads[2]
-} else {
+# } else {
   # Case: no list files, more than two fastq inputs
-  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
-}
+ #  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
+# }
 hisat.parameters <- paste(hisat.parameters, "-1", reads1, "-2", reads2)
 # Organism
 hisat.parameters <- paste(hisat.parameters, "-x", organism)
