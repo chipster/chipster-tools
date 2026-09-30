@@ -335,13 +335,6 @@
 
 
 	</category>
-
-	<category name = "testi" color = "#FFFF13">
-		<tool>spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R</tool>
-		<tool>spatial-transcriptomics-seurat-subset-regions-HD-v5.R</tool>
-		<tool>spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R</tool>
-		<tool>spatial-transcriptomics-seurat-find-markers-HD-v5.R</tool>
-	</category>
 	
 
 	<category name="Spatially resolved transcriptomics (Seurat v4, old)" color="#9FE2BF">
