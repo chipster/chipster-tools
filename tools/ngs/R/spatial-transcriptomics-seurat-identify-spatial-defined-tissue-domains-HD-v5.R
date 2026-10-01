@@ -11,7 +11,7 @@
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
 # PARAMETER OPTIONAL resolution: "Resolution" TYPE DECIMAL DEFAULT 0.8
 # PARAMETER OPTIONAL dims.reduction: "Dimensions to reduce" TYPE INTEGER DEFAULT 30
-# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT FALSE (Makes the analysis faster but no "BANKSY" assay will be created to the seurat object)
+# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster but no "BANKSY" assay will be created to the seurat object)
 # PARAMETER OPTIONAL features: "Features to compute" TYPE [all: "all", variable: "variable"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled)
 # PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (A parameter to weight the contributions of the cell-transcriptome matrix and the neighbor expression matrices. Smaller lambda emphasizes cell's own transcriptomes and causes cells to cluster according to cell type. Bigger lambda causes cells to cluster according to tissue domain.)
 # PARAMETER OPTIONAL k_geom: "Amount of neighbours" TYPE INTEGER DEFAULT 50 (Local neighborhood size. Larger values will yield larger domains)
