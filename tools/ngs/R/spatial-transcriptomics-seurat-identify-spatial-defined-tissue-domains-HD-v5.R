@@ -104,7 +104,7 @@ if (lazy) {
   print(p)
   dev.off()
   
-  agg_png(filename = paste0("banksy_plot_highlight_", assay, ".png"),
+  agg_png(filename = paste0("BANKSY_plot_highlight_", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   banksy_cells <- CellsByIdentities(seurat_obj)
@@ -160,7 +160,7 @@ if (lazy) {
   print(p)
   dev.off()
   
-  agg_png(filename = paste0("banksy_plot_highlight_", assay, ".png"),
+  agg_png(filename = paste0("BANKSY_plot_highlight_", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   banksy_cells <- CellsByIdentities(seurat_obj)
