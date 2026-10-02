@@ -17,11 +17,11 @@ if (anyDuplicated(input.names[2])) {
 
 # Renamefiles to display names
 for (i in 1:nrow(input.names)) {
-    system(paste("mv --backup=numbered --suffix=.", input.names[i, 1], input.names[i, 2]))
+    system(paste("mv --backup=numbered --suffix=. --", shQuote(input.names[i, 1]), shQuote(input.names[i, 2])))
 }
 
 # Tar
-system("tar --exclude=\'chipster-inputs.tsv\' -cf chipster.tar *")
+system("tar --exclude=\'chipster-inputs.tsv\' -cf chipster.tar -- *")
 
 
 # Handle output names

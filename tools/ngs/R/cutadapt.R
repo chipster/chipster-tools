@@ -52,7 +52,7 @@ if (length(file.list) == 0) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar package contains folders
-if (grepl("/", file.list[1])) {
+if (any(grepl("/", file.list))) {
   stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
 }
 
@@ -67,7 +67,7 @@ untar("reads.tar", exdir = "input_folder")
 filenames <- sort(list.files("input_folder", full.names = TRUE))
 
 # without path to make the samples fastqs txt file
-txt_filenames <- sort(list.files("input_folder", full.names = FALSE))
+txt_filenames <- safe_name(sort(list.files("input_folder", full.names = FALSE)))
 
 # take out the names without the relative path
 # short_names <- sub('\\..*', '', basename(filenames)) #take everything before first .
@@ -87,7 +87,7 @@ if (paired == "paired") {
   if (fileOk("input_list.txt")) {
     txt_filenames <- c() # name of the files in the txt file
     sample.names <- c() # sample names
-    input <- readLines("input_list.txt") # read the file
+    input <- read_list_file("input_list.txt") # read the file
 
     # take out the filenames and sample name and put them to one vector, those are separeted with '\t'
     for (row in input) {
@@ -99,9 +99,11 @@ if (paired == "paired") {
     }
     # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
     if (length(txt_filenames) != length(filenames)) {
-      print(txt_filenames, filenames)
+      print(txt_filenames)
+      print(filenames)
       stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
     } else {
+      safe_name(txt_filenames)
       filenames <- paste0("input_folder/", txt_filenames) # now the input files in correct order
     }
   }
@@ -160,7 +162,7 @@ if (discarduntrimmed == "yes") {
 if (paired == "single") {
   x <- 1
   for (file in filenames) {
-    command <- paste(binary, dut, R1.flags, "--rc", "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", cutreads[x], file, "> report2.txt")
+    command <- paste(binary, dut, R1.flags, "--rc", "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", shQuote(cutreads[x]), shQuote(file), "> report2.txt")
     x <- x + 1
     system(command)
     system("cat report2.txt >> report.txt")
@@ -168,7 +170,7 @@ if (paired == "single") {
 } else { # paired
   x <- 1
   for (file in fnFs) {
-    command <- paste(binary, dut, R1.flags, R2.flags, "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", fnFs.cut[x], "-p", fnRs.cut[x], file, fnRs[x], "> report2.txt")
+    command <- paste(binary, dut, R1.flags, R2.flags, "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", shQuote(fnFs.cut[x]), "-p", shQuote(fnRs.cut[x]), shQuote(file), shQuote(fnRs[x]), "> report2.txt")
     x <- x + 1
     system(command)
     # rows <- readLines("report2.txt")
@@ -191,4 +193,4 @@ if (paired == "single") {
 # sink()
 
 # make a tar package from the output folder
-system("cd output_folder && tar cf ../adapters_removed.tar *")
+system("cd output_folder && tar cf ../adapters_removed.tar -- *")

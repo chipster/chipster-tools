@@ -56,6 +56,10 @@ check.command <- paste(bwa.index.binary, "genome.txt| tail -1 ")
 # genome.dir <- system(check.command, intern = TRUE)
 # bwa.genome <- file.path( genome.dir , "genome.txt")
 bwa.genome <- system(check.command, intern = TRUE)
+if (bwa.genome == "wrong_tar_content") {
+    stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")
+}
+safe_name(basename(bwa.genome))
 
 
 ###
