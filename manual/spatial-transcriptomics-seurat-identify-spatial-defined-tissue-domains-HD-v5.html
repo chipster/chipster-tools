@@ -31,14 +31,41 @@
 
 
     <h3>Details</h3>
-    <p>TEKSTIÄ</p>
-    <p>Tekstiä2</p>
+
+    <p>Along default clustering methods, the Seurat developers have integrated BANKSY (Building Aggregates with a Neighborhood Kernel and Spatial Yardstick) 
+       method to run clustering on spatial data. Previous clustering algorithms are mainly used for scRNA-seq data, which ignore spatial information.</p>
+
+
+    <p> BANKSY is a method for clustering spatial omics data by augmenting the features of each cell with both an average of the features of its spatial neighbors along with neighborhood feature gradients. 
+        By incorporating neighborhood information for clustering, BANKSY is able to
+    
+        <ul>
+    <li>Improve cell-type assignment in noisy data</li>
+    <li>Distinguish subtly different cell types stratified by microenvironment</li>
+    <li>Identify spatial domains sharing the same microenvironment</li>
+    </ul>
+</p>
+
+
+
+
+
+
+    <p>For Visium HD data, we recommend the usual defaults for lambda. For cell typing, use lambda = 0.2, and for domain segmentation, use lambda = 0.8.</p>
+
+    <p>For more information, please check <a href="https://github.com/prabhakarlab/Banksy">the BANKSY github repository</a> and 
+        <a href="https://www.nature.com/articles/s41588-024-01664-3"> The BANKSY paper </a>
+    </p>
 
     <h3>Output</h3>
 
+    <p>{assay} means the spatial assay being used e.g. Spatial.008um</p>
     <ul>
-        <li>Markerplot.pdf: A plot of the identified top marker genes for the specified assay
-        <li>spatially_variable_genes.tsv: A table of the identified marker genes for each cluster for the specified assay</li>
+
+<li>BANKSY_plot_Spatial.{assay}.pdf</li>
+<li>seurat_obj_banksy_Spatial.{assay}.Robj</li>
+<li>BANKSY_plot_Spatial.{assay}.png</li>
+<li>BANKSY_plot_2Spatial.{assay}.png</li>
     </ul>
 
 

@@ -6,8 +6,8 @@
 # OUTPUT OPTIONAL seurat_obj_banksy_Spatial.016um.Robj
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.008um.png
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.016um.png
-# OUTPUT OPTIONAL BANKSY_plot_2Spatial.008um.png
-# OUTPUT OPTIONAL BANKSY_plot_2Spatial.016um.png
+# OUTPUT OPTIONAL BANKSY_plot_highlight_Spatial.008um.png
+# OUTPUT OPTIONAL BANKSY_plot_highlight_Spatial.016um.png
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
 # PARAMETER OPTIONAL resolution: "Resolution" TYPE DECIMAL DEFAULT 0.8
 # PARAMETER OPTIONAL dims.reduction: "Dimensions to reduce" TYPE INTEGER DEFAULT 30
@@ -104,7 +104,7 @@ if (lazy) {
   print(p)
   dev.off()
   
-  agg_png(filename = paste0("BANKSY_plot_2", assay, ".png"),
+  agg_png(filename = paste0("banksy_plot_highlight_", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   banksy_cells <- CellsByIdentities(seurat_obj)
@@ -160,7 +160,7 @@ if (lazy) {
   print(p)
   dev.off()
   
-  agg_png(filename = paste0("BANKSY_plot_2", assay, ".png"),
+  agg_png(filename = paste0("banksy_plot_highlight_", assay, ".png"),
       width = width, height = height, units = "in", res = 300)
   
   banksy_cells <- CellsByIdentities(seurat_obj)
