@@ -46,7 +46,7 @@ documentVersion("Seurat", package.version("Seurat"))
 
 # Tässä on ongelma jos on 2um folder mukana // JV
 # Jos koommentoi tuon strip components pois niin korjaantuu // JV
-system("mkdir input_folder && tar -xf files.tar -C input_folder --strip-components=1")# --strip-components=2 2> /dev/null")
+system("mkdir input_folder && tar -xf files.tar -C input_folder  --strip-components=0 2> /dev/null")
 
 # For testing:
 # die here:
