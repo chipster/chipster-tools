@@ -12,7 +12,7 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 # check out if the file is compressed and if so unzip it
-unzipIfGZipFile("reads.tar")
+unzipIfGZipFile("contigs.tar")
 
 # binary
 binary <- c(file.path(chipster.tools.path, "vsearch", "vsearch"))
@@ -55,11 +55,12 @@ for (file in filenames) {
     output_fastq <- paste0("output_folder/", sample.names[x])
     x <- x + 1
     # make the fastq_filter command
-    command <- paste(binary, "--fastq_filter", file, "--fastq_maxee", maxee, "--fastq_qmax", qmax, "--fastqout", output_fastq, ">>summary_test.txt 2>&1")
+    command <- paste(binary, "--fastq_filter", file, "--fastq_maxee", maxee, "--fastq_qmax", qmax, "--fastqout", output_fastq)
     # run command
     runExternal(command)
     documentCommand(command)
-    system(command)
+    # vsearch writes the filtering stats to stderr, which runExternal captures to stderr.tmp
+    file.append("summary_test.txt", "stderr.tmp")
 }
 # create summary.tsv dataframe and add filter info for each sample
 summary_data <- readLines("summary_test.txt")
