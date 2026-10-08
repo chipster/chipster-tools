@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-clustering-plots-v5-HD.R: "Seurat v5 HD -Clustering plots" (Only plot the UMAP.)
+# TOOL spatial-transcriptomics-seurat-clustering-plots-v5-HD.R: "Seurat v5 -Clustering plots" (When provided with a seurat object with clustering information, this tool plots UMAP. This way you can for example make UMAP plots with new cluster names, if yo uhave integrated the Visium HD data with scRNA-seq data.)
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_clustering_plots.Robj
 # OUTPUT OPTIONAL clustering_plots.pdf
