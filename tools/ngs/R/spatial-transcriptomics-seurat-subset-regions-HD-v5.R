@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 HD -Subset regions " (This tool subsets regions based on clusters and or coordinates)
+# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 -Subset regions " (This tool subsets regions based on clusters and or coordinates)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT OPTIONAL coords.file.csv: "Coordinates file" TYPE GENERIC
 # OUTPUT OPTIONAL spatiaaliplotti_8um.pdf
