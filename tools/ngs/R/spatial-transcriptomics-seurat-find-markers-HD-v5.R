@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 HD -Find all markers" (This tool identifies marker genes for all clusters.)
+# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find all markers" (This tool identifies marker genes for all clusters.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
