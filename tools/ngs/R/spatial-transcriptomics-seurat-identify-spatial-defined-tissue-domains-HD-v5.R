@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 HD -Identify spatially-defined tissue domains" (This tool accurately finds tissue domains rather than cell types of spatial data)
+# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Identify spatially-defined tissue domains" (This tool accurately finds tissue domains rather than cell types of spatial data)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.008um.pdf
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.016um.pdf
