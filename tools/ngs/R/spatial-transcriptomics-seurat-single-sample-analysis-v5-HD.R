@@ -1,9 +1,9 @@
-# TOOL spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R: "Seurat v5 HD -Normalization and PCA" (This tool performs normalization and PCA for a single Seurat object. It first normalizes data with SCTransform and detects highly variable genes. Then, it performs principal component analysis on the highly variable genes detected by SCTransform.)
+# TOOL spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R: "Seurat v5 -Normalization and PCA" (This tool performs normalization and PCA for a single sample Seurat object. It first log-normalizes data and detects highly variable genes, which are then used for principal component analysis.
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_obj_pca.Robj
 # OUTPUT OPTIONAL PCAloadings.txt
 # OUTPUT OPTIONAL PCAplots.pdf
-# PARAMETER OPTIONAL num.features: "Number of variable genes to return in LogNormalize" TYPE INTEGER DEFAULT 2000 (Number of highest variable genes to return in LogNormalize.)
+# PARAMETER OPTIONAL num.features: "Number of variable genes to return" TYPE INTEGER DEFAULT 2000 (Number of the top variable genes to return.)
 # PARAMETER OPTIONAL PCstocompute: "Number of PCs to compute" TYPE INTEGER DEFAULT 50 (Number of PCs to compute in PCA.)
 # PARAMETER OPTIONAL loadings: "Print loadings in a file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Print the PC loadings in a txt file.)
 # PARAMETER OPTIONAL num.of.genes.loadings: "Number of genes to list in the loadings file" TYPE INTEGER DEFAULT 5 (How many genes to list in the loadings txt file.)
