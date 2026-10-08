@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R: "Seurat v5 HD -Identify spatially variable genes based on clusters" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
+# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R: "Seurat v5 -Identify spatially variable genes based on clusters" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot.pdf
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
