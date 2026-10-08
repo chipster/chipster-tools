@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-filter-v5-HD.R: "Seurat v5 HD -Filter spots" (This tool filters out spots based on mitochondrial, ribosomal and hemoglobin transcript percentage.)
+# TOOL spatial-transcriptomics-seurat-filter-v5-HD.R: "Seurat v5 -Filter spots" (This tool filters out spots based on mitochondrial, ribosomal and hemoglobin transcript percentage.)
 # INPUT OPTIONAL seurat_spatial_setup.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_filtered.Robj
 # PARAMETER OPTIONAL mitocutoff: "Filter out spots which have higher mitochondrial transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots that have higher percentage of mitochondrial transcripts than this.)
