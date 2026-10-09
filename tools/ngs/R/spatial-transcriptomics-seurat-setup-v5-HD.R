@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-setup-v5-HD.R: "Seurat v5 -Setup and QC" (This tool sets up a Seurat object for Visium HD spatial transcriptomics data.)
+# TOOL spatial-transcriptomics-seurat-setup-v5-HD.R: "Seurat v5 -Setup and QC" (This tool sets up a Seurat object and produces quality control plots for Visium HD data. You need to give the input files as a tar package, please see the manual for details.)
 # INPUT files.tar: "tar package of 10X output files" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf
