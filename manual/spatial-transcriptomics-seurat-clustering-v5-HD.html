@@ -7,15 +7,14 @@
 
 <body>
 
-    <h2>Seurat v5 HD -Clustering</h2>
+    <h2>Seurat v5 -Clustering</h2>
 
     <h3>Description</h3>
 
     <p>
-        This tool performs clustering for a single sample after the <i>"Seurat v5 HD -Normalization and PCA"</i> step,
-        or for multiple samples that have been combined into one Seurat object using the tool
-        <i>"Seurat v5 -Combine multiple samples, normalization and PCA"</i>. This tool clusters the spots with a
-        graph-based clustering approach and visualizes the clustering results.
+        This tool performs clustering of Visium HD data after the <i>"Seurat v5 -Normalize, find variable genes and PCA"</i> step.
+        <!-- or for multiple samples that have been combined into one Seurat object using the tool <i>"Seurat v5 -Combine multiple samples, normalization and PCA"</i>-->. 
+        Spots are clustered with a graph-based approach and the clusters are visualized with UMAP.
     </p>
     <p>
         The tool processes both the 8 &mu;m and 16 &mu;m assays. For the 8 &mu;m assay, an optional
@@ -57,8 +56,7 @@
         Visium HD data at 8 &mu;m resolution can contain several hundred thousand bins. While the standard
         clustering approach works on this data, it can be slow. When sketch-based clustering is enabled, a
         representative subset of bins is selected from the full dataset using leverage scores, clustered in
-        memory, and the resulting cluster labels and UMAP are then projected back to all bins using the
-        <code>ProjectData</code> function. This can speed up the clustering step considerably. In addition,
+        memory, and the resulting cluster labels and UMAP are then projected back to all bins. This can speed up the clustering step considerably. In addition,
         leverage-score subsampling ensures that rare and transcriptomically distinct populations are well represented in
         the sketch, which can improve the identification of rare and spatially restricted cell groups. The approach
         follows the
