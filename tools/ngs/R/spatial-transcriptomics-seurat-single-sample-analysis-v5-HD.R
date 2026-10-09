@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R: "Seurat v5 -Normalization and PCA" (This tool performs normalization and PCA for a single sample Seurat object. It first log-normalizes data and detects highly variable genes, which are then used for principal component analysis.)
+# TOOL spatial-transcriptomics-seurat-single-sample-analysis-v5-HD.R: "Seurat v5 -Normalize, find variable genes and PCA" (This tool log-normalizes Visium HD data and detects highly variable genes, which are then used for principal component analysis, PCA.)
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_spatial_obj_pca.Robj
 # OUTPUT OPTIONAL PCAloadings.txt
