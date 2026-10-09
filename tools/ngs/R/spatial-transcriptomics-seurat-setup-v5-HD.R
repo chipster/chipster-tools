@@ -228,4 +228,5 @@ image_write(images, format="pdf", path = "QC_plots.pdf")
 # Save the Robj for the next tool
 save(seurat_obj, file = "seurat_spatial_setup.Robj")
 
+
 # EOF
