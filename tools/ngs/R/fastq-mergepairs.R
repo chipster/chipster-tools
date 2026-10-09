@@ -112,14 +112,14 @@ for (name in sample.names) {
         command <- paste(
             binary, "--fastq_mergepairs", fnFs[x], "--reverse", fnRs[x], "--eeout",
             "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct, "--fastq_maxns", maxns,
-            "--fastqout", output_fastq, "--label_suffix", name, ">>summary.txt 2>&1"
+            "--fastqout", output_fastq, "--label_suffix", name
         )
     } else { # else without --fastq_maxns
         # command without maxns parameter
         command <- paste(
             binary, "--fastq_mergepairs", fnFs[x], "--reverse", fnRs[x], "--eeout",
             "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct,
-            "--fastqout", output_fastq, "--label_suffix", name, ">>summary.txt 2>&1"
+            "--fastqout", output_fastq, "--label_suffix", name
         )
     }
     x <- x + 1
@@ -136,7 +136,8 @@ for (name in sample.names) {
     # run command
     runExternal(command)
     documentCommand(command)
-    system(command)
+    # vsearch writes the merging stats to stderr, which runExternal captures to stderr.tmp
+    file.append("summary.txt", "stderr.tmp")
     write("--------------------------------------------------------------", file = "summary.txt", append = TRUE)
 }
 
