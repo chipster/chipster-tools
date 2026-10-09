@@ -150,15 +150,10 @@ for (i in seq_along(assay_names)) {
   nCount_bin <- paste0("nCount_", assay_bin)
   nFeature_bin <- paste0("nFeature_", assay_bin)
   just.bin <- sub("Spatial\\.", "", assay_bin)
-  
 
-  mt <- paste0("percent.mt_", just.bin)
-  hb <- paste0("percent.hb_", just.bin)
-  rb <- paste0("percent.rb_", just.bin)
-
-  seurat_obj[[mt]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-", assay = assay_bin)
-  seurat_obj[[hb]] <- PercentageFeatureSet(seurat_obj, pattern = "^HB[^(P)]|^Hb[^(p)]", assay = assay_bin)
-  seurat_obj[[rb]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl", assay = assay_bin)
+  seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-", assay = assay_bin)
+  seurat_obj[["percent.hb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^HB[^(P)]|^Hb[^(p)]", assay = assay_bin)
+  seurat_obj[["percent.rb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl", assay = assay_bin)
 
 
   vln.plot <- VlnPlot(seurat_obj, features = nCount_bin, pt.size = 0) + theme(axis.text = element_text(size = 4)) + NoLegend()
@@ -170,7 +165,7 @@ for (i in seq_along(assay_names)) {
   p1 <- (VlnPlot(seurat_obj, features = c(nCount_bin, nFeature_bin), pt.size = 0.1, ncol = 2) + NoLegend())
 
   
-  p2 <- (VlnPlot(seurat_obj, features = c(mt, hb), pt.size = 0.1, ncol = 2) + NoLegend()) # , "percent.rb"
+  p2 <- (VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb"), pt.size = 0.1, ncol = 2) + NoLegend()) # , "percent.rb"
 
   
   p3 <- (SpatialFeaturePlot(seurat_obj, c(nCount_bin, nFeature_bin, "percent.mt", "percent.hb"))) # + theme(legend.position = "right") , "percent.rb"
