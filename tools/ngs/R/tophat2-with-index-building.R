@@ -66,20 +66,22 @@ path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
 set.path <- paste(sep = "", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 
 print("Extracting tar formatted gemome index file")
-runExternal("tar xf genome.tar")
+# Extract to a folder of its own, so that the files of the package can't replace the files of the job
+dir.create("genome_index")
+runExternal("tar xf genome.tar -C genome_index")
 
 # Check bowtie2 index base name
-if (length(Sys.glob("*.1.bt2")) != 0) {
-    f <- list.files(getwd(), pattern = "\\.1.bt2$")
-    bowtie2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
+if (length(Sys.glob("genome_index/*.1.bt2")) != 0) {
+    f <- list.files("genome_index", pattern = "\\.1.bt2$")
+    bowtie2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
 } else {
     stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid TopHat2 index.")
 }
 
 # Check optional tophat2 index base name
-if (length(Sys.glob("tophat2/*.1.bt2")) != 0) {
-    f <- list.files(file.path(getwd(), "tophat2"), pattern = "\\.1.bt2$")
-    tophat2.genome <- file.path("tophat2", substr(f[1], 1, nchar(f[1]) - 6))
+if (length(Sys.glob("genome_index/tophat2/*.1.bt2")) != 0) {
+    f <- list.files(file.path("genome_index", "tophat2"), pattern = "\\.1.bt2$")
+    tophat2.genome <- file.path("genome_index", "tophat2", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
     print(paste("TopHat2 genome name:", tophat2.genome))
 } else {
     print("The .tar package does not contain TopHat2 transcriptome index.")

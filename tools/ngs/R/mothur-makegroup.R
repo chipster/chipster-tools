@@ -27,8 +27,27 @@ for (i in 1:nrow(input.names)) {
   isTar <- grepl("POSIX tar", system(paste("file", input.names[i, 1]), intern = TRUE))
   # Input is a tar file
   if (isTar) {
-    tarlist <- untar(paste(input.names[i, 1]), list = TRUE)
-    untar(paste(input.names[i, 1]))
+    # Check the extracted names, because tar escapes some characters in the listing
+    untar(paste(input.names[i, 1]), exdir = "input_folder")
+    tarlist <- list.files("input_folder", all.files = TRUE, no.. = TRUE)
+    if (any(dir.exists(file.path("input_folder", tarlist)))) {
+      stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    }
+    if (length(tarlist) == 0) {
+      stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package is empty."))
+    }
+    tarlist <- safe_name(tarlist)
+    # Mothur uses - to separate the files in the fasta= and groups= lists
+    if (any(grepl("-", tarlist, fixed = TRUE))) {
+      stop(paste("CHIPSTER-NOTE: File names can't contain - in this tool. Please rename these:", paste(tarlist[grepl("-", tarlist, fixed = TRUE)], collapse = ", ")))
+    }
+    # Don't let the tar package replace the input files of the job or the files of an earlier tar package
+    if (any(file.exists(tarlist))) {
+      stop(paste("CHIPSTER-NOTE: The tar package can't contain files with the same names as the other inputs of this tool. Please rename these:", paste(tarlist[file.exists(tarlist)], collapse = ", ")))
+    }
+    if (!all(file.rename(file.path("input_folder", tarlist), tarlist))) {
+      stop("Moving the files of the tar package failed")
+    }
     # go throug list
     for (j in 1:length(tarlist)) {
       unzipIfGZipFile(tarlist[j])
@@ -36,7 +55,7 @@ for (i in 1:nrow(input.names)) {
       fastaname <- paste(basename, ".fasta", sep = "")
       # If input is FASTQ file, convert to FASTA
       if (isFastq(paste(tarlist[j]))) {
-        command <- paste(fastx.binary, "-n -i", tarlist[j], "-o", fastaname)
+        command <- paste(fastx.binary, "-n -i", shQuote(tarlist[j]), "-o", shQuote(fastaname))
         runExternal(command)
         # If input is FASTA file, just make sure file name ends with .fasta
       } else if (isFasta(paste(tarlist[j]))) {
