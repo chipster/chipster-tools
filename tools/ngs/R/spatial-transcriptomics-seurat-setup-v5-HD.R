@@ -138,55 +138,71 @@ assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
 # Plot png and turn them into a pdf at the end.
 
 
-output_dir <- paste0(getwd(), "QC_plots")
+output_dir <- paste0(getwd(), "/QC_plots")
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
 
 for (i in seq_along(assay_names)) {
-  
-  DefaultAssay(seurat_obj) <- assay_names[i]
-  
-  seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-")
-  seurat_obj[["percent.hb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^Hb.*-")
-  seurat_obj[["percent.rb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl")
 
-  nCount_bin <- paste0("nCount_", assay_names[i])
-  nFeature_bin <- paste0("nFeature_", assay_names[i])
-  just.bin <- sub("Spatial\\.", "", assay_names[i])
+  assay_bin <- assay_names[i]
+  DefaultAssay(seurat_obj) <- assay_bin
   
+  nCount_bin <- paste0("nCount_", assay_bin)
+  nFeature_bin <- paste0("nFeature_", assay_bin)
+  just.bin <- sub("Spatial\\.", "", assay_bin)
+  
+
+  mt <- paste0("percent.mt_", just.bin)
+  hb <- paste0("percent.hb_", just.bin)
+  rb <- paste0("percent.rb_", just.bin)
+
+  seurat_obj[[mt]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-", assay = assay_bin)
+  seurat_obj[[hb]] <- PercentageFeatureSet(seurat_obj, pattern = "^HB[^(P)]|^Hb[^(p)]", assay = assay_bin)
+  seurat_obj[[rb]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl", assay = assay_bin)
+
+
+  vln.plot <- VlnPlot(seurat_obj, features = nCount_bin, pt.size = 0) + theme(axis.text = element_text(size = 4)) + NoLegend()
+  count.plot <- SpatialFeaturePlot(seurat_obj, features = nCount_bin) + theme(legend.position = "right")
+
+  p0 <- print(vln.plot | count.plot)
+
   # Create the four plots
-  p1 <- VlnPlot(
-    seurat_obj,
-    features = nCount_bin,
-    pt.size = 0
-  ) +
-    theme(axis.text = element_text(size = 4)) +
-    NoLegend()
+  p1 <- (VlnPlot(seurat_obj, features = c(nCount_bin, nFeature_bin), pt.size = 0.1, ncol = 2) + NoLegend())
+
   
-  p2 <- SpatialFeaturePlot(
-    seurat_obj,
-    features = nCount_bin
-  ) +
-    theme(legend.position = "right")
+  p2 <- (VlnPlot(seurat_obj, features = c(mt, hb), pt.size = 0.1, ncol = 2) + NoLegend()) # , "percent.rb"
+
   
-  p3 <- VlnPlot(
-    seurat_obj,
-    features = c(nCount_bin, nFeature_bin),
-    pt.size = 0.1,
-    ncol = 2
-  ) +
-    NoLegend()
+  p3 <- (SpatialFeaturePlot(seurat_obj, c(nCount_bin, nFeature_bin, "percent.mt", "percent.hb"))) # + theme(legend.position = "right") , "percent.rb"
+
+  C <- LayerData(seurat_obj, assay = assay_bin, layer = "counts")
+  C@x <- C@x / rep.int(colSums(C), diff(C@p))
+  most_expressed <- order(Matrix::rowSums(C), decreasing = T)[20:1]
+  top_genes <- rownames(C)[most_expressed]
+
+
+#  p4 <- (boxplot(as.matrix(t(C[most_expressed, ])),
+#      cex = 0.1, las = 1, xlab = "% total count per spot",
+#      col = (scales::hue_pal())(20)[20:1], horizontal = TRUE
+#    ))
+  # ggplot version of p4, this needs to be rechecked, so far looks good.
+
+  top_df <- data.frame(
+    gene = factor(rep(top_genes, each = ncol(C)), levels = top_genes),
+    pct  = as.vector(t(as.matrix(C[most_expressed, ])))
+  )
+  rm(C)
   
-  p4 <- VlnPlot(
-    seurat_obj,
-    features = c("percent.mt", "percent.hb", "percent.rb"),
-    pt.size = 0.1,
-    ncol = 2
-  ) +
-    NoLegend()
+  p4 <- ggplot(top_df, aes(x = pct, y = gene, fill = gene)) +
+  geom_boxplot(outlier.size = 0.1) +
+  scale_fill_manual(values = rev(scales::hue_pal()(20))) +
+  labs(x = "% total count per bin", y = NULL,
+    title = paste("Top 20 expressed genes,", just.bin)) +
+  theme_classic() +
+  NoLegend()
   
   # Put plots into a list
-  plots <- list(p1, p2, p3, p4)
+  plots <- list(p0, p1, p2, p3, p4)
   
   # Loop over the plots and save each as a separate PNG
   for (j in seq_along(plots)) {
