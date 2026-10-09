@@ -47,8 +47,8 @@ documentVersion("Seurat", package.version("Seurat"))
 # --strip-components 1 removes 1 directory from the filenames stored in the archive. 
 # "2> /dev/null" can be used to redirect the errors to /dev/null (Mac OS X uses BSD tar and creates some extra info that is not recognized by GNU tar which causes messages: tar: Ignoring unknown extended header keyword 'SCHILY.fflags')
 
-# Tässä on ongelma jos on 2um folder mukana // JV
-# Jos koommentoi tuon strip components pois niin korjaantuu // JV
+# There is a problem if 2um folder is included // JV
+# If you comment out the --strip-components, the problem is solved // JV
 system("mkdir input_folder && tar -xf files.tar -C input_folder  --strip-components=0 2> /dev/null")
 
 # For testing:
