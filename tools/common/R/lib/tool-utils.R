@@ -302,8 +302,10 @@ displayNamesToFile <- function(input.file) {
     paste("s/", pattern, "/", subs$placeholder, "/g", sep = ""),
     paste("s/", subs$placeholder, "/", replacement, "/g", sep = "")
   )
-  writeLines(sed.script, "display-names.sed", useBytes = TRUE)
-  runExternal(paste("sed -i -f display-names.sed", input.file))
+  sed.file <- tempfile(fileext = ".sed")
+  on.exit(unlink(sed.file))
+  writeLines(sed.script, sed.file, useBytes = TRUE)
+  runExternal(paste("sed -i -f", sed.file, input.file))
 }
 
 # Formats and prints out the command to stdout. Input names are substituted with

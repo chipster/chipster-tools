@@ -104,6 +104,13 @@ if (vcftools.info.all == "yes") {
     command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
 }
 
+# mpileup needs an index to read only a region of the BAMs
+if (mpileup.r != "all") {
+    for (bam in Sys.glob("alignment*.bam")) {
+        runExternal(paste(samtools.binary, "index", bam))
+    }
+}
+
 # run. The exit status of a pipeline is that of its last command, so pipefail is needed
 # to notice that e.g. samtools failed.
 # stop(paste('CHIPSTER-NOTE: ', command1))
