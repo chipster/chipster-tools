@@ -161,7 +161,7 @@ make_input_list <- function(listfile) {
   name.list <- scan(listfile, what = "", sep = "\n")
 
   # read input names
-  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
+  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character")
 
   # Check for duplicated etries
   if (anyDuplicated(name.list)) {
@@ -357,7 +357,7 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 #
 displayNamesToFile <- function(input.file) {
   # Read input names
-  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
+  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character")
   # Go through input names and change names in one sed run. Display names can contain spaces and
   # parentheses, so escape and quote the expressions.
   sed.expressions <- character(0)
@@ -375,7 +375,7 @@ displayNamesToFile <- function(input.file) {
 documentCommand <- function(command.string) {
   # Substitute input names
   input.names <- tryCatch(
-    read.table("chipster-inputs.tsv", header = FALSE, sep = "\t"),
+    read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character"),
     error = function(e) {
       print("no inputs")
       NULL
@@ -384,7 +384,7 @@ documentCommand <- function(command.string) {
 
   if (!is.null(input.names)) {
     for (i in 1:nrow(input.names)) {
-      command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string)
+      command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string, fixed = TRUE)
     }
   }
   cat("##", "COMMAND:", command.string, "\n")
