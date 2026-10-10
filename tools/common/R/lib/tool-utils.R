@@ -19,17 +19,22 @@ read_input_names <- function() {
   read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "", comment.char = "#")
 }
 
-# Input names with their display names and a placeholder for each, for changing the input names
-# to display names in a text. The names are changed to the placeholders first and the placeholders
-# to the display names after that, so that a display name which is the same as another input name
-# isn't changed again. The placeholders are delimited with a control character, which can't be
-# part of a name, so that a name isn't found inside a placeholder either. Longer input names come
-# first, so that an input name isn't changed inside another one (reads inside reads.oligos).
+# Input names with their display names, for changing the input names to display names in a text.
+#
+# pattern is an extended regular expression (for sed -E and R's default regex) that finds the input
+# name only where it is a file name of its own: not next to a letter, digit, ".", "_" or "-". So
+# reference isn't found in reference.fasta, nor reads001.fq in reads001.fq.gz. The pattern
+# captures the characters around the name, so the replacement must put back \1 and \2.
+#
+# The names are changed to the placeholders first and the placeholders to the display names after
+# that, so that a display name which is the same as another input name isn't changed again. The
+# placeholders are delimited with a control character, which can't be part of a name.
 #
 input_name_substitutions <- function(input.names) {
-  input.names <- input.names[order(-nchar(input.names[, 1])), , drop = FALSE]
+  name.char <- "A-Za-z0-9._-"
+  escaped <- gsub("([][\\\\.*+?{}()|^$])", "\\\\\\1", input.names[, 1], perl = TRUE)
   data.frame(
-    input = input.names[, 1],
+    pattern = paste("(^|[^", name.char, "])", escaped, "([^", name.char, "]|$)", sep = ""),
     display = input.names[, 2],
     placeholder = paste("\001", seq_len(nrow(input.names)), "\001", sep = ""),
     stringsAsFactors = FALSE
@@ -294,18 +299,22 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 #
 displayNamesToFile <- function(input.file) {
   subs <- input_name_substitutions(read_input_names())
-  # Escape the characters that are special in a sed pattern or replacement
-  pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", subs$input, perl = TRUE)
+  # Escape / for the s command, and the characters that are special in a sed replacement
+  pattern <- gsub("/", "\\/", subs$pattern, fixed = TRUE)
   replacement <- gsub("([\\\\&/])", "\\\\\\1", subs$display, perl = TRUE)
-  # The expressions go through a script file, so that the shell doesn't see the names
+  # Each pattern also matches the character after the name, so a global replace would miss the
+  # second name in "a,a". Instead, replace one match at a time, until there are no more.
+  labels <- paste("name", seq_len(nrow(subs)), sep = "")
   sed.script <- c(
-    paste("s/", pattern, "/", subs$placeholder, "/g", sep = ""),
+    paste(":", labels, "\ns/", pattern, "/\\1", subs$placeholder, "\\2/\nt", labels, sep = ""),
     paste("s/", subs$placeholder, "/", replacement, "/g", sep = "")
   )
+  # The script goes through a file, so that the shell doesn't see the names
   sed.file <- tempfile(fileext = ".sed")
   on.exit(unlink(sed.file))
   writeLines(sed.script, sed.file, useBytes = TRUE)
-  runExternal(paste("sed -i -f", sed.file, input.file))
+  # LC_ALL=C: match bytes, so that [A-Za-z] means the same in all locales and invalid UTF-8 is fine
+  runExternal(paste("env LC_ALL=C sed -E -i -f", sed.file, input.file))
 }
 
 # Formats and prints out the command to stdout. Input names are substituted with
@@ -322,9 +331,12 @@ documentCommand <- function(command.string) {
   )
 
   if (!is.null(input.names)) {
+    # Like displayNamesToFile, one match at a time
     subs <- input_name_substitutions(input.names)
     for (i in seq_len(nrow(subs))) {
-      command.string <- gsub(subs$input[i], subs$placeholder[i], command.string, fixed = TRUE)
+      while (grepl(subs$pattern[i], command.string)) {
+        command.string <- sub(subs$pattern[i], paste("\\1", subs$placeholder[i], "\\2", sep = ""), command.string)
+      }
     }
     for (i in seq_len(nrow(subs))) {
       command.string <- gsub(subs$placeholder[i], subs$display[i], command.string, fixed = TRUE)

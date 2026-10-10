@@ -125,6 +125,23 @@ expect_equal(display_names("other.txt input"), "A.txt B.txt",
   info = "displayNamesToFile works with an input name that could be part of a placeholder"
 )
 
+# An input name is changed only where it is a file name of its own
+write_inputs(c("S1 (1).fq", "my genome"), c("reads001.fq", "reference"))
+expect_equal(
+  display_names(c(
+    "-1 reads001.fq,reads001.fq -x /path/reference (reads001.fq)",
+    "reference.fasta reads001.fq.gz x.reads001.fq my_reference reference-1"
+  )),
+  c(
+    "-1 S1 (1).fq,S1 (1).fq -x /path/my genome (S1 (1).fq)",
+    "reference.fasta reads001.fq.gz x.reads001.fq my_reference reference-1"
+  ),
+  info = "displayNamesToFile changes a name next to a separator, but not inside a longer file name"
+)
+expect_equal(display_names("reads001.fq"), "S1 (1).fq",
+  info = "displayNamesToFile changes a name that is the whole line"
+)
+
 write_inputs(sprintf("S%d.fq", 1:12))
 expect_equal(
   display_names(paste(sprintf("reads%03d.fq", 1:12), collapse = " ")),
@@ -169,6 +186,13 @@ expect_equal(
 write_inputs(c("A.txt", "B.txt"), c("other.txt", "input"))
 expect_equal(document_command("other.txt input"), "A.txt B.txt",
   info = "documentCommand works with an input name that could be part of a placeholder"
+)
+
+write_inputs(c("S1 (1).fq", "my genome"), c("reads001.fq", "reference"))
+expect_equal(
+  document_command("-1 reads001.fq,reads001.fq -x /path/reference -R reference.fasta reads001.fq.gz"),
+  "-1 S1 (1).fq,S1 (1).fq -x /path/my genome -R reference.fasta reads001.fq.gz",
+  info = "documentCommand changes a name next to a separator, but not inside a longer file name"
 )
 
 
