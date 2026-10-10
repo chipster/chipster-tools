@@ -11,6 +11,13 @@ read_input_definitions <- function() {
   return(inputdef)
 }
 
+# Reads chipster-inputs.tsv as a data frame with the input name in column 1 and the dataset name in
+# column 2, both as character: dataset names can look like numbers, or be "NA".
+#
+read_input_names <- function() {
+  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "")
+}
+
 write_output_definitions <- function(output_names) {
   write.table(output_names, file = "chipster-outputs.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 }
@@ -69,10 +76,10 @@ paired_name <- function(name1, name2) {
 #
 make_input_list <- function(listfile) {
   # read list file
-  name.list <- scan(listfile, what = "", sep = "\n")
+  name.list <- scan(listfile, what = "", sep = "\n", na.strings = character(0))
 
   # read input names
-  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character")
+  input.names <- read_input_names()
 
   # Check for duplicated etries
   if (anyDuplicated(name.list)) {
@@ -84,14 +91,14 @@ make_input_list <- function(listfile) {
   sdf <- setdiff(name.list, input.names[, 2])
   if (identical(sdf, character(0))) {
     # A listed name must identify one input
-    dataset.names <- as.character(input.names[, 2])
+    dataset.names <- input.names[, 2]
     ambiguous <- intersect(name.list, dataset.names[duplicated(dataset.names)])
     if (length(ambiguous) > 0) {
       message <- paste("Several selected files have the same name:", paste(ambiguous, collapse = ", "), "\nRename them so that they can be told apart in the list file.")
       stop(paste("CHIPSTER-NOTE: ", message))
     }
     # Exact match, dataset names can contain regex characters like ( ) + .
-    input.list <- as.character(input.names[match(name.list, dataset.names), 1])
+    input.list <- input.names[match(name.list, dataset.names), 1]
   } else {
     message <- paste("Input file list includes one or more files that has not been selected:", sdf)
     stop(paste("CHIPSTER-NOTE: ", message))
@@ -268,16 +275,21 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 #
 displayNamesToFile <- function(input.file) {
   # Read input names
-  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character")
-  # Go through input names and change names in one sed run. Display names can contain spaces and
-  # parentheses, so escape and quote the expressions.
-  sed.expressions <- character(0)
-  for (i in 1:nrow(input.names)) {
-    pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", as.character(input.names[i, 1]), perl = TRUE)
-    replacement <- gsub("([\\\\&/])", "\\\\\\1", as.character(input.names[i, 2]), perl = TRUE)
-    sed.expressions <- c(sed.expressions, "-e", shQuote(paste("s/", pattern, "/", replacement, "/", sep = "")))
-  }
-  runExternal(paste("sed -i", paste(sed.expressions, collapse = " "), shQuote(input.file)))
+  input.names <- read_input_names()
+  # Change the input names to placeholders first and the placeholders to display names after that,
+  # so that a display name which is the same as another input name isn't changed again. Dataset
+  # names can't contain %, so the placeholders can't collide with them.
+  placeholders <- paste("%%input", 1:nrow(input.names), "%%", sep = "")
+  # Escape the characters that are special in a sed pattern or replacement
+  pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", input.names[, 1], perl = TRUE)
+  replacement <- gsub("([\\\\&/])", "\\\\\\1", input.names[, 2], perl = TRUE)
+  # The expressions go through a script file, so that the shell doesn't see the names
+  sed.script <- c(
+    paste("s/", pattern, "/", placeholders, "/", sep = ""),
+    paste("s/", placeholders, "/", replacement, "/", sep = "")
+  )
+  writeLines(sed.script, "display-names.sed", useBytes = TRUE)
+  runExternal(paste("sed -i -f display-names.sed", input.file))
 }
 
 # Formats and prints out the command to stdout. Input names are substituted with
@@ -286,7 +298,7 @@ displayNamesToFile <- function(input.file) {
 documentCommand <- function(command.string) {
   # Substitute input names
   input.names <- tryCatch(
-    read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character"),
+    read_input_names(),
     error = function(e) {
       print("no inputs")
       NULL
@@ -294,8 +306,13 @@ documentCommand <- function(command.string) {
   )
 
   if (!is.null(input.names)) {
+    # Through placeholders, like displayNamesToFile
+    placeholders <- paste("%%input", 1:nrow(input.names), "%%", sep = "")
     for (i in 1:nrow(input.names)) {
-      command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string, fixed = TRUE)
+      command.string <- gsub(input.names[i, 1], placeholders[i], command.string, fixed = TRUE)
+    }
+    for (i in 1:nrow(input.names)) {
+      command.string <- gsub(placeholders[i], input.names[i, 2], command.string, fixed = TRUE)
     }
   }
   cat("##", "COMMAND:", command.string, "\n")

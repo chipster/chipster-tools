@@ -104,15 +104,13 @@ if (vcftools.info.all == "yes") {
     command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
 }
 
-# run
+# run. The exit status of a pipeline is that of its last command, so pipefail is needed
+# to notice that e.g. samtools failed.
 # stop(paste('CHIPSTER-NOTE: ', command1))
-system(command1)
-system(command2)
-system(command3)
-system("mv vcftools.recode.vcf variants.vcf")
+runExternal(paste("bash -c 'set -o pipefail;", command1, "'"))
+runExternal(paste("bash -c 'set -o pipefail;", command2, "'"))
+runExternal(command3)
+runExternal("mv vcftools.recode.vcf variants.vcf")
 
-# Change bam names in VCF to original names. The commands above are not checked, so
-# the VCF is missing if one of them failed.
-if (fileOk("variants.vcf")) {
-  displayNamesToFile("variants.vcf")
-}
+# Change bam names in VCF to original names
+displayNamesToFile("variants.vcf")
