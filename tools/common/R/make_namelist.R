@@ -9,11 +9,8 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # Read input names
 input.names <- read_input_names()
 
-# Add original names to a vector
-input.list <- vector(mode = "character", length = 0)
-for (i in 1:nrow(input.names)) {
-    input.list <- c(input.list, paste(input.names[i, 2]))
-}
+# Original names
+input.list <- input.names[, 2]
 
 # Sort
 if (sort == "yes") {
