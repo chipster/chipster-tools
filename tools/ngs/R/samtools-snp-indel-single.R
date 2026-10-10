@@ -25,6 +25,8 @@
 
 # To be added later PARAMETER OPTIONAL mpileup.us: "Output per sample strand bias P-value" TYPE [yes, no] DEFAULT no (Output per-sample Phred-scaled strand bias P-value.)
 
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("ownref.fa")
@@ -102,16 +104,20 @@ if (vcftools.info.all == "yes") {
     command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
 }
 
-# run
+# mpileup needs an index to read only a region of the BAMs
+if (mpileup.r != "all") {
+    for (bam in Sys.glob("alignment*.bam")) {
+        runExternal(paste(samtools.binary, "index", bam))
+    }
+}
+
+# run. The exit status of a pipeline is that of its last command, so pipefail is needed
+# to notice that e.g. samtools failed.
 # stop(paste('CHIPSTER-NOTE: ', command1))
-system(command1)
-system(command2)
-system(command3)
-system("mv vcftools.recode.vcf variants.vcf")
+runExternal(paste("bash -c 'set -o pipefail;", command1, "'"))
+runExternal(paste("bash -c 'set -o pipefail;", command2, "'"))
+runExternal(command3)
+runExternal("mv vcftools.recode.vcf variants.vcf")
 
 # Change bam names in VCF to original names
-input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
-for (i in 1:nrow(input.names)) {
-    sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-    system(paste("sed -i", sed.command, "variants.vcf"))
-}
+displayNamesToFile("variants.vcf")

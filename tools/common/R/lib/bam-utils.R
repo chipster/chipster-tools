@@ -13,12 +13,8 @@ displayNamesToBAM <- function(input.bam, samtools.binary = c(file.path(chipster.
     # Read BAM header to file
     runExternal(paste(samtools.binary, "view -H", input.bam, "> header.sam"))
 
-    # Go through input names and change names
-    input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
-    for (i in 1:nrow(input.names)) {
-        sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-        runExternal(paste("sed -i", sed.command, "header.sam"))
-    }
+    # Go through input names and change names (displayNamesToFile is in tool-utils.R)
+    displayNamesToFile("header.sam")
 
     # Write new header to BAM
     runExternal(paste(samtools.binary, "reheader header.sam", input.bam, "> tmp.bam"))

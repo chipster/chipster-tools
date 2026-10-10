@@ -11,6 +11,36 @@ read_input_definitions <- function() {
   return(inputdef)
 }
 
+# Reads chipster-inputs.tsv as a data frame with the input name in column 1 and the dataset name in
+# column 2, both as character: dataset names can look like numbers, or be "NA".
+#
+read_input_names <- function() {
+  # comp writes comment lines before the names (ToolUtils.writeInputDescription)
+  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "", comment.char = "#")
+}
+
+# Input names with their display names, for changing the input names to display names in a text.
+#
+# pattern is an extended regular expression (for sed -E and R's default regex) that finds the input
+# name only where it is a file name of its own: not next to a letter, digit, ".", "_" or "-". So
+# reference isn't found in reference.fasta, nor reads001.fq in reads001.fq.gz. The pattern
+# captures the characters around the name, so the replacement must put back \1 and \2.
+#
+# The names are changed to the placeholders first and the placeholders to the display names after
+# that, so that a display name which is the same as another input name isn't changed again. The
+# placeholders are delimited with a control character, which can't be part of a name.
+#
+input_name_substitutions <- function(input.names) {
+  name.char <- "A-Za-z0-9._-"
+  escaped <- gsub("([][\\\\.*+?{}()|^$])", "\\\\\\1", input.names[, 1], perl = TRUE)
+  data.frame(
+    pattern = paste("(^|[^", name.char, "])", escaped, "([^", name.char, "]|$)", sep = ""),
+    display = input.names[, 2],
+    placeholder = paste("\001", seq_len(nrow(input.names)), "\001", sep = ""),
+    stringsAsFactors = FALSE
+  )
+}
+
 write_output_definitions <- function(output_names) {
   write.table(output_names, file = "chipster-outputs.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE, sep = "\t")
 }
@@ -69,10 +99,11 @@ paired_name <- function(name1, name2) {
 #
 make_input_list <- function(listfile) {
   # read list file
-  name.list <- scan(listfile, what = "", sep = "\n")
+  # scan also removes the \r of Windows line endings
+  name.list <- scan(listfile, what = "", sep = "\n", na.strings = character(0))
 
   # read input names
-  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
+  input.names <- read_input_names()
 
   # Check for duplicated etries
   if (anyDuplicated(name.list)) {
@@ -83,10 +114,15 @@ make_input_list <- function(listfile) {
   # Check that inputs exist
   sdf <- setdiff(name.list, input.names[, 2])
   if (identical(sdf, character(0))) {
-    input.list <- vector(mode = "character", length = 0)
-    for (i in 1:length(name.list)) {
-      input.list <- c(input.list, paste(input.names[grep(paste("^", name.list[i], "$", sep = ""), input.names[, 2]), 1]))
+    # A listed name must identify one input
+    dataset.names <- input.names[, 2]
+    ambiguous <- intersect(name.list, dataset.names[duplicated(dataset.names)])
+    if (length(ambiguous) > 0) {
+      message <- paste("Several selected files have the same name:", paste(ambiguous, collapse = ", "), "\nRename them so that they can be told apart in the list file.")
+      stop(paste("CHIPSTER-NOTE: ", message))
     }
+    # Exact match, dataset names can contain regex characters like ( ) + .
+    input.list <- input.names[match(name.list, dataset.names), 1]
   } else {
     message <- paste("Input file list includes one or more files that has not been selected:", sdf)
     stop(paste("CHIPSTER-NOTE: ", message))
@@ -262,13 +298,23 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 # Changes the file names in a text file to display names according to chipster-inputs.tsv
 #
 displayNamesToFile <- function(input.file) {
-  # Read input names
-  input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
-  # Go through input names and change names
-  for (i in 1:nrow(input.names)) {
-    sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-    system(paste("sed -i", sed.command, input.file))
-  }
+  subs <- input_name_substitutions(read_input_names())
+  # Escape / for the s command, and the characters that are special in a sed replacement
+  pattern <- gsub("/", "\\/", subs$pattern, fixed = TRUE)
+  replacement <- gsub("([\\\\&/])", "\\\\\\1", subs$display, perl = TRUE)
+  # Each pattern also matches the character after the name, so a global replace would miss the
+  # second name in "a,a". Instead, replace one match at a time, until there are no more.
+  labels <- paste("name", seq_len(nrow(subs)), sep = "")
+  sed.script <- c(
+    paste(":", labels, "\ns/", pattern, "/\\1", subs$placeholder, "\\2/\nt", labels, sep = ""),
+    paste("s/", subs$placeholder, "/", replacement, "/g", sep = "")
+  )
+  # The script goes through a file, so that the shell doesn't see the names
+  sed.file <- tempfile(fileext = ".sed")
+  on.exit(unlink(sed.file))
+  writeLines(sed.script, sed.file, useBytes = TRUE)
+  # LC_ALL=C: match bytes, so that [A-Za-z] means the same in all locales and invalid UTF-8 is fine
+  runExternal(paste("env LC_ALL=C sed -E -i -f", sed.file, input.file))
 }
 
 # Formats and prints out the command to stdout. Input names are substituted with
@@ -277,7 +323,7 @@ displayNamesToFile <- function(input.file) {
 documentCommand <- function(command.string) {
   # Substitute input names
   input.names <- tryCatch(
-    read.table("chipster-inputs.tsv", header = FALSE, sep = "\t"),
+    read_input_names(),
     error = function(e) {
       print("no inputs")
       NULL
@@ -285,8 +331,15 @@ documentCommand <- function(command.string) {
   )
 
   if (!is.null(input.names)) {
-    for (i in 1:nrow(input.names)) {
-      command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string)
+    # Like displayNamesToFile, one match at a time
+    subs <- input_name_substitutions(input.names)
+    for (i in seq_len(nrow(subs))) {
+      while (grepl(subs$pattern[i], command.string)) {
+        command.string <- sub(subs$pattern[i], paste("\\1", subs$placeholder[i], "\\2", sep = ""), command.string)
+      }
+    }
+    for (i in seq_len(nrow(subs))) {
+      command.string <- gsub(subs$placeholder[i], subs$display[i], command.string, fixed = TRUE)
     }
   }
   cat("##", "COMMAND:", command.string, "\n")
