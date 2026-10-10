@@ -83,10 +83,15 @@ make_input_list <- function(listfile) {
   # Check that inputs exist
   sdf <- setdiff(name.list, input.names[, 2])
   if (identical(sdf, character(0))) {
-    input.list <- vector(mode = "character", length = 0)
-    for (i in 1:length(name.list)) {
-      input.list <- c(input.list, paste(input.names[grep(paste("^", name.list[i], "$", sep = ""), input.names[, 2]), 1]))
+    # A listed name must identify one input
+    dataset.names <- as.character(input.names[, 2])
+    ambiguous <- intersect(name.list, dataset.names[duplicated(dataset.names)])
+    if (length(ambiguous) > 0) {
+      message <- paste("Several selected files have the same name:", paste(ambiguous, collapse = ", "), "\nRename them so that they can be told apart in the list file.")
+      stop(paste("CHIPSTER-NOTE: ", message))
     }
+    # Exact match, dataset names can contain regex characters like ( ) + .
+    input.list <- as.character(input.names[match(name.list, dataset.names), 1])
   } else {
     message <- paste("Input file list includes one or more files that has not been selected:", sdf)
     stop(paste("CHIPSTER-NOTE: ", message))
@@ -264,11 +269,15 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 displayNamesToFile <- function(input.file) {
   # Read input names
   input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
-  # Go through input names and change names
+  # Go through input names and change names in one sed run. Display names can contain spaces and
+  # parentheses, so escape and quote the expressions.
+  sed.expressions <- character(0)
   for (i in 1:nrow(input.names)) {
-    sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-    system(paste("sed -i", sed.command, input.file))
+    pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", as.character(input.names[i, 1]), perl = TRUE)
+    replacement <- gsub("([\\\\&/])", "\\\\\\1", as.character(input.names[i, 2]), perl = TRUE)
+    sed.expressions <- c(sed.expressions, "-e", shQuote(paste("s/", pattern, "/", replacement, "/", sep = "")))
   }
+  runExternal(paste("sed -i", paste(sed.expressions, collapse = " "), shQuote(input.file)))
 }
 
 # Formats and prints out the command to stdout. Input names are substituted with

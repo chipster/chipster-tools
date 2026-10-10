@@ -25,6 +25,8 @@
 
 # To be added later PARAMETER OPTIONAL mpileup.us: "Output per sample strand bias P-value" TYPE [yes, no] DEFAULT no (Output per-sample Phred-scaled strand bias P-value.)
 
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("ownref.fa")
@@ -110,8 +112,4 @@ system(command3)
 system("mv vcftools.recode.vcf variants.vcf")
 
 # Change bam names in VCF to original names
-input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
-for (i in 1:nrow(input.names)) {
-    sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-    system(paste("sed -i", sed.command, "variants.vcf"))
-}
+displayNamesToFile("variants.vcf")
