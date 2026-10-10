@@ -185,6 +185,12 @@ expect_equal(make_input_list("list.txt"), c("reads002.fq", "reads001.fq"),
   info = "make_input_list reads a list file with Windows line endings"
 )
 
+write_inputs(c("S1 ", "S1"))
+writeLines("S1 ", "list.txt")
+expect_equal(make_input_list("list.txt"), "reads001.fq",
+  info = "make_input_list finds a name that ends with a space"
+)
+
 write_inputs(c("001", "010", "NA"))
 writeLines(c("010", "NA"), "list.txt")
 expect_equal(make_input_list("list.txt"), c("reads002.fq", "reads003.fq"),

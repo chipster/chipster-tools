@@ -94,9 +94,8 @@ paired_name <- function(name1, name2) {
 #
 make_input_list <- function(listfile) {
   # read list file
+  # scan also removes the \r of Windows line endings
   name.list <- scan(listfile, what = "", sep = "\n", na.strings = character(0))
-  # A list file written on Windows has \r at the end of each line
-  name.list <- sub("[[:space:]]+$", "", name.list)
 
   # read input names
   input.names <- read_input_names()
