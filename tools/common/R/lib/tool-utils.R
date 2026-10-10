@@ -15,7 +15,25 @@ read_input_definitions <- function() {
 # column 2, both as character: dataset names can look like numbers, or be "NA".
 #
 read_input_names <- function() {
-  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "")
+  # comp writes comment lines before the names (ToolUtils.writeInputDescription)
+  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "", comment.char = "#")
+}
+
+# Input names with their display names and a placeholder for each, for changing the input names
+# to display names in a text. The names are changed to the placeholders first and the placeholders
+# to the display names after that, so that a display name which is the same as another input name
+# isn't changed again. The placeholders are delimited with a control character, which can't be
+# part of a name, so that a name isn't found inside a placeholder either. Longer input names come
+# first, so that an input name isn't changed inside another one (reads inside reads.oligos).
+#
+input_name_substitutions <- function(input.names) {
+  input.names <- input.names[order(-nchar(input.names[, 1])), , drop = FALSE]
+  data.frame(
+    input = input.names[, 1],
+    display = input.names[, 2],
+    placeholder = paste("\001", seq_len(nrow(input.names)), "\001", sep = ""),
+    stringsAsFactors = FALSE
+  )
 }
 
 write_output_definitions <- function(output_names) {
@@ -77,6 +95,8 @@ paired_name <- function(name1, name2) {
 make_input_list <- function(listfile) {
   # read list file
   name.list <- scan(listfile, what = "", sep = "\n", na.strings = character(0))
+  # A list file written on Windows has \r at the end of each line
+  name.list <- sub("[[:space:]]+$", "", name.list)
 
   # read input names
   input.names <- read_input_names()
@@ -274,19 +294,14 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 # Changes the file names in a text file to display names according to chipster-inputs.tsv
 #
 displayNamesToFile <- function(input.file) {
-  # Read input names
-  input.names <- read_input_names()
-  # Change the input names to placeholders first and the placeholders to display names after that,
-  # so that a display name which is the same as another input name isn't changed again. Dataset
-  # names can't contain %, so the placeholders can't collide with them.
-  placeholders <- paste("%%input", 1:nrow(input.names), "%%", sep = "")
+  subs <- input_name_substitutions(read_input_names())
   # Escape the characters that are special in a sed pattern or replacement
-  pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", input.names[, 1], perl = TRUE)
-  replacement <- gsub("([\\\\&/])", "\\\\\\1", input.names[, 2], perl = TRUE)
+  pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", subs$input, perl = TRUE)
+  replacement <- gsub("([\\\\&/])", "\\\\\\1", subs$display, perl = TRUE)
   # The expressions go through a script file, so that the shell doesn't see the names
   sed.script <- c(
-    paste("s/", pattern, "/", placeholders, "/", sep = ""),
-    paste("s/", placeholders, "/", replacement, "/", sep = "")
+    paste("s/", pattern, "/", subs$placeholder, "/g", sep = ""),
+    paste("s/", subs$placeholder, "/", replacement, "/g", sep = "")
   )
   writeLines(sed.script, "display-names.sed", useBytes = TRUE)
   runExternal(paste("sed -i -f display-names.sed", input.file))
@@ -306,13 +321,12 @@ documentCommand <- function(command.string) {
   )
 
   if (!is.null(input.names)) {
-    # Through placeholders, like displayNamesToFile
-    placeholders <- paste("%%input", 1:nrow(input.names), "%%", sep = "")
-    for (i in 1:nrow(input.names)) {
-      command.string <- gsub(input.names[i, 1], placeholders[i], command.string, fixed = TRUE)
+    subs <- input_name_substitutions(input.names)
+    for (i in seq_len(nrow(subs))) {
+      command.string <- gsub(subs$input[i], subs$placeholder[i], command.string, fixed = TRUE)
     }
-    for (i in 1:nrow(input.names)) {
-      command.string <- gsub(placeholders[i], input.names[i, 2], command.string, fixed = TRUE)
+    for (i in seq_len(nrow(subs))) {
+      command.string <- gsub(subs$placeholder[i], subs$display[i], command.string, fixed = TRUE)
     }
   }
   cat("##", "COMMAND:", command.string, "\n")
