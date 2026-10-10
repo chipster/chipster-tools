@@ -111,5 +111,8 @@ system(command2)
 system(command3)
 system("mv vcftools.recode.vcf variants.vcf")
 
-# Change bam names in VCF to original names
-displayNamesToFile("variants.vcf")
+# Change bam names in VCF to original names. The commands above are not checked, so
+# the VCF is missing if one of them failed.
+if (fileOk("variants.vcf")) {
+  displayNamesToFile("variants.vcf")
+}
