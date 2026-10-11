@@ -64,10 +64,10 @@ cell_selection <- SetIdent(cell_selection, value = "type")
 
 if (normalisation.method == "SCT") {
   # Note: assay = "SCT" and recorrect_umi = FALSE
-  DGE_cell_selection <- FindMarkers(cell_selection, assay = "SCT", ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct, verbose = FALSE, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+  DGE_cell_selection <- FindMarkers(cell_selection, assay = "SCT", ident.1 = samples1, ident.2 = samples2, group.by = "type", logfc.threshold = logFC.de, min.pct = minpct, verbose = FALSE, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 
 } else {
-  DGE_cell_selection <- FindMarkers(cell_selection, assay = "RNA", ident.1 = samples1, ident.2 = samples2, group.by = "type", log2FC.threshold = logFC.de, min.pct = minpct,  verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+  DGE_cell_selection <- FindMarkers(cell_selection, assay = "RNA", ident.1 = samples1, ident.2 = samples2, group.by = "type", logfc.threshold = logFC.de, min.pct = minpct,  verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 }
   
 # Filter based on adj-p-val (no return.thresh parameter):
