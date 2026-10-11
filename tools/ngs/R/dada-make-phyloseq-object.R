@@ -77,7 +77,7 @@ if (taxlength == "7") {
 ps.tax <- tax_table(ps)
 
 # vector for abbreviations of taxonomic levels
-taxabb <- c("ki", "ph", "cl", "or", "fa", "ge")
+taxabb <- c("ki", "ph", "cl", "or", "fa", "ge", "sp")
 
 # for loop for replacing NAs
 # when an entry does not have an NA, it is saved as tmptax
