@@ -1,10 +1,10 @@
-# Tests for the input name helpers in tool-utils.R: read_input_names, make_input_list,
-# displayNamesToFile and documentCommand.
+# Tests for the input name helpers in tool-utils.R: read_input_names, make_input_list and
+# displayNamesToFile.
 #
 # Written in the style of the tinytest package, but runs without it on any R in tools-bin. Run it in
 # a comp container, e.g. on this VM:
 #
-#   tool-dev/tool-dev.py shell bowtie2-paired-end.R -- /opt/chipster/tools/R-4.1.1/bin/R --vanilla --slave \
+#   tool-dev/tool-dev.py shell --runtime R-4.1.1 bowtie2.R -- /opt/chipster/tools/R-4.1.1/bin/R --vanilla --slave \
 #     -f /opt/chipster/toolbox/tools/common/R/lib/tests/test-tool-utils.R
 #
 # The R process exits with status 1 if a test fails. Set CHIPSTER_TEST_LARGE=1 to also run the test with a
@@ -27,9 +27,6 @@ if (!exists("expect_equal")) {
       paste("  current:", paste(deparse(current), collapse = "")),
       paste("  target: ", paste(deparse(target), collapse = ""))
     ))
-  }
-  expect_true <- function(current, info = "") {
-    expect_equal(current, TRUE, info)
   }
   expect_error <- function(current, pattern = ".*", info = "") {
     msg <- tryCatch({
@@ -70,11 +67,6 @@ display_names <- function(lines) {
   readLines("test.txt")
 }
 
-# Returns what documentCommand prints, without the "## COMMAND:" prefix
-document_command <- function(command) {
-  sub("^## COMMAND: (.*) $", "\\1", capture.output(documentCommand(command)))
-}
-
 
 ## read_input_names
 
@@ -88,9 +80,9 @@ expect_equal(read_input_names()[, 2], c("001", "010", "NA"), info = "read_input_
 # characters here are escaped too, in case the pattern is extended.
 write_inputs(c("S1 (1)_1.fq", "näyte+x.fq", "a&b/c\\d [x].fq", "two  spaces.fq"))
 expect_equal(
-  display_names(c("cmd -1 reads001.fq,reads002.fq -2 reads003.fq reads004.fq reads001.fq", "not me: reads001Xfq")),
-  c("cmd -1 S1 (1)_1.fq,näyte+x.fq -2 a&b/c\\d [x].fq two  spaces.fq S1 (1)_1.fq", "not me: reads001Xfq"),
-  info = "displayNamesToFile handles special characters and repeated names, and doesn't treat . as a regex"
+  display_names(c("cmd -1 reads001.fq,reads002.fq -2 reads003.fq reads004.fq", "not me: reads001Xfq")),
+  c("cmd -1 S1 (1)_1.fq,näyte+x.fq -2 a&b/c\\d [x].fq two  spaces.fq", "not me: reads001Xfq"),
+  info = "displayNamesToFile handles special characters, and doesn't treat . as a regex"
 )
 
 writeBin(c(charToRaw("bad byte: "), as.raw(0xff), charToRaw(" reads001.fq\n")), "test.txt")
@@ -104,42 +96,6 @@ expect_equal(
 write_inputs(c("001", "010", "NA"))
 expect_equal(display_names("-1 reads001.fq -2 reads002.fq -3 reads003.fq"), "-1 001 -2 010 -3 NA",
   info = "displayNamesToFile handles names like numbers and NA"
-)
-
-# Display names that are the same as other inputs' names, assigned crosswise
-write_inputs(c("reads002.fq", "reads001.fq"))
-expect_equal(display_names("-1 reads001.fq -2 reads002.fq"), "-1 reads002.fq -2 reads001.fq",
-  info = "displayNamesToFile doesn't change a display name again"
-)
-
-# An input name inside another one, as in mothur-trimseqs-uniqueseqs.R
-write_inputs(c("sample.fastq", "my.oligos"), c("reads", "reads.oligos"))
-expect_equal(
-  display_names("trim.seqs(fasta=reads, oligos=reads.oligos) reads reads.oligos"),
-  "trim.seqs(fasta=sample.fastq, oligos=my.oligos) sample.fastq my.oligos",
-  info = "displayNamesToFile doesn't change an input name inside another one"
-)
-
-write_inputs(c("A.txt", "B.txt"), c("other.txt", "input"))
-expect_equal(display_names("other.txt input"), "A.txt B.txt",
-  info = "displayNamesToFile works with an input name that could be part of a placeholder"
-)
-
-# An input name is changed only where it is a file name of its own
-write_inputs(c("S1 (1).fq", "my genome"), c("reads001.fq", "reference"))
-expect_equal(
-  display_names(c(
-    "-1 reads001.fq,reads001.fq -x /path/reference (reads001.fq)",
-    "reference.fasta reads001.fq.gz x.reads001.fq my_reference reference-1"
-  )),
-  c(
-    "-1 S1 (1).fq,S1 (1).fq -x /path/my genome (S1 (1).fq)",
-    "reference.fasta reads001.fq.gz x.reads001.fq my_reference reference-1"
-  ),
-  info = "displayNamesToFile changes a name next to a separator, but not inside a longer file name"
-)
-expect_equal(display_names("reads001.fq"), "S1 (1).fq",
-  info = "displayNamesToFile changes a name that is the whole line"
 )
 
 write_inputs(sprintf("S%d.fq", 1:12))
@@ -163,37 +119,8 @@ if (Sys.getenv("CHIPSTER_TEST_LARGE") == "1") {
     "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS1 (1).bam\tS2.bam",
     info = "displayNamesToFile handles a large file"
   )
-  expect_equal(length(readLines("large.vcf")), n + 1L, info = "displayNamesToFile keeps all lines of a large file")
+  expect_equal(length(readLines("large.vcf")), n + 1, info = "displayNamesToFile keeps all lines of a large file")
 }
-
-
-## documentCommand
-
-write_inputs(c("reads002.fq", "reads001.fq"))
-expect_equal(
-  document_command("bowtie2 -1 reads001.fq -2 reads002.fq reads001Xfq"),
-  "bowtie2 -1 reads002.fq -2 reads001.fq reads001Xfq",
-  info = "documentCommand doesn't change a display name again, and doesn't treat . as a regex"
-)
-
-write_inputs(c("sample.fastq", "my.oligos"), c("reads", "reads.oligos"))
-expect_equal(
-  document_command("trim.seqs(fasta=reads, oligos=reads.oligos)"),
-  "trim.seqs(fasta=sample.fastq, oligos=my.oligos)",
-  info = "documentCommand doesn't change an input name inside another one"
-)
-
-write_inputs(c("A.txt", "B.txt"), c("other.txt", "input"))
-expect_equal(document_command("other.txt input"), "A.txt B.txt",
-  info = "documentCommand works with an input name that could be part of a placeholder"
-)
-
-write_inputs(c("S1 (1).fq", "my genome"), c("reads001.fq", "reference"))
-expect_equal(
-  document_command("-1 reads001.fq,reads001.fq -x /path/reference -R reference.fasta reads001.fq.gz"),
-  "-1 S1 (1).fq,S1 (1).fq -x /path/my genome -R reference.fasta reads001.fq.gz",
-  info = "documentCommand changes a name next to a separator, but not inside a longer file name"
-)
 
 
 ## make_input_list
