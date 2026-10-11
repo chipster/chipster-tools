@@ -44,7 +44,8 @@ if (organism == "other") {
     # If user has provided a GTF, we use it
     if (file.exists("annotation.gtf")) {
         annotation.file <- "annotation.gtf"
-    } else {
+    } else if (ug == "yes" || lg == "yes") {
+        # The annotation is needed only for -G and -g, plain assembly works without it
         stop(paste("CHIPSTER-NOTE: ", "You need provide a GTF file if you are not using one of the provided ones."))
     }
 } else {
