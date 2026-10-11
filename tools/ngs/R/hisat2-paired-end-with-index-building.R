@@ -132,7 +132,7 @@ hisat.parameters <- paste(hisat.parameters, "--max-intronlen", max.intron.length
 # Specify strand-specific information: the default is unstranded
 if (rna.strandness == "FR") {
   hisat.parameters <- paste(hisat.parameters, "--rna-strandness FR")
-} else if (rna.strandness == "fr-secondstrand") {
+} else if (rna.strandness == "RF") {
   hisat.parameters <- paste(hisat.parameters, "--rna-strandness RF")
 }
 # Organism
