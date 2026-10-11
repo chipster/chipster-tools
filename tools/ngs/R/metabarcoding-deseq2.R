@@ -55,7 +55,7 @@ sigtab_tidy <- sigtab[, c(
 # Differential abundance plot
 sigtab_plot <- subset(
     sigtab,
-    yaxtax != "NA", !is.na(yaxtax)
+    !is.na(sigtab[, yaxtax]) & sigtab[, yaxtax] != "NA"
 ) # Filter out NA OTUs at lower taxonomic level
 # Higher-level taxonomic groupings
 x <- tapply(sigtab_plot$log2FoldChange, sigtab_plot[, legtax], function(x) max(x))
