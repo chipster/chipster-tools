@@ -38,6 +38,14 @@ if (orditype == "dbrda" &&
     stop("db-RDA phenodata variable 1 not selected - at least one variable is required")
 }
 
+# Stop if db-RDA phenodata variables are not selected in order (e.g. 1 and 3 without 2)
+if (orditype == "dbrda" &&
+    ((cap_variable2 == "EMPTY" && cap_variable3 != "EMPTY") ||
+     (cap_variable3 == "EMPTY" && cap_variable4 != "EMPTY") ||
+     (cap_variable4 == "EMPTY" && cap_variable5 != "EMPTY"))) {
+    stop("db-RDA phenodata variables must be selected in order, without leaving any of them empty in between")
+}
+
 # nMDS or db-RDA
 # Also create two further objects for downstream statistics:
 # 1) a data frame of the ps object sample data
@@ -539,7 +547,7 @@ if (group_colour != "EMPTY" &&
 if (group_colour == "EMPTY" &&
     group_shape != "EMPTY" &&
     samplenames == "no" &&
-    orditype == "nmds") {
+    orditype == "dbrda") {
     ordiplot <- plot_ordination(ps, ps_ordi,
         shape = group_shape
     ) +
@@ -551,7 +559,7 @@ if (group_colour == "EMPTY" &&
         theme(axis.text = element_blank()) +
         theme(legend.title = element_blank()) +
         theme(legend.position = "bottom") +
-        ggtitle("nMDS")
+        ggtitle("db-RDA")
 }
 if (group_colour != "EMPTY" &&
     group_shape != "EMPTY" &&
