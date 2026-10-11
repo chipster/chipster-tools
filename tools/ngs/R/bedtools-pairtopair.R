@@ -20,7 +20,7 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "pairToPair"))
 # optional options
 options <- paste("")
 if (is == "yes") {
-    options <- paste(options, "-si")
+    options <- paste(options, "-is")
 }
 if (rdn == "yes") {
     options <- paste(options, "-rdn")
