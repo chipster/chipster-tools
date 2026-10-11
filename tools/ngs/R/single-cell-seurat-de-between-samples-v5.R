@@ -69,14 +69,14 @@ for (i in 1:length(lvls)) {
     # Note: assay = "SCT" and recorrect_umi = FALSE required for SCTransform
     cluster_response <- FindMarkers(data.combined,
       assay = "SCT", ident.1 = ident1, ident.2 = ident2,
-      verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct,
+      verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct,
       return.thresh = pval.cutoff.de, recorrect_umi = FALSE,
       only.pos = only.positive
     )
   } else {
     cluster_response <- FindMarkers(data.combined,
       ident.1 = ident1, ident.2 = ident2,
-      verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct,
+      verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct,
       return.thresh = pval.cutoff.de, only.pos = only.positive
     )
   }
