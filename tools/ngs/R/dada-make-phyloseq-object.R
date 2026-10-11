@@ -81,8 +81,11 @@ taxabb <- c("ki", "ph", "cl", "or", "fa", "ge", "sp")
 # for loop for replacing NAs
 # when an entry does not have an NA, it is saved as tmptax
 # if the next entry is NA, the previous tmptax is used in paste
+# tmptax is reset for each entry, so that an entry without any classification
+# doesn't get the name of the previous one
 
 for (i in 1:nrow(ps.tax)) {
+    tmptax <- "Unclassified"
     for (j in 1:ncol(ps.tax)) {
         if (is.na(ps.tax[i, j]) == TRUE) {
             ps.tax[i, j] <- paste(tmptax, taxabb[j], sep = "_")
