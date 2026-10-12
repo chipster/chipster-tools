@@ -92,7 +92,7 @@ if (fileOk("genome.txt")) {
         echo.command <- paste("echo Internal genome name:", hisat2.genome, " >> hisat.log")
         runExternal(echo.command)
         # Make tar package from the index
-        if (file.exists(Sys.glob("*.1.ht*"))) {
+        if (length(Sys.glob("*.1.ht*")) > 0) {
             system("tar cf hisat2_index.tar -- *.ht*")
         }
     }
