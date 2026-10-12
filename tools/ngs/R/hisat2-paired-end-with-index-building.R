@@ -186,8 +186,6 @@ command <- paste(
     "sort -T srt -o hisat.sorted.bam -O bam -"
 )
 
-documentCommand(command)
-
 # Run command
 documentCommand(command)
 runExternal(command)
