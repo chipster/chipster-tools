@@ -61,14 +61,20 @@ if (k.vote > k.no) {
 }
 
 if (validation.type == "predict") {
+    if (training == "EMPTY" || !(training %in% colnames(phenodata))) {
+        stop("CHIPSTER-NOTE: Prediction needs a training column in your phenodata: 1 for the training samples and 2 for the test samples.")
+    }
+    if (!all(tr %in% c(1, 2))) {
+        stop("CHIPSTER-NOTE: The training column in your phenodata must contain 1 for the training samples and 2 for the test samples!")
+    }
     # Which parts of the data are training and test sets?
     dat3 <- split(as.data.frame(t(dat2)), tr)
     train <- dat3$"1"
     test <- dat3$"2"
     # Which part of the phenodata are training and test set
-    phenodata_training <- phenodata[tr == unique(tr)[1], ]
+    phenodata_training <- phenodata[tr == 1, ]
     if (knn.type == "predict") {
-        phenodata_test <- phenodata[tr == unique(tr)[2], ]
+        phenodata_test <- phenodata[tr == 2, ]
     }
 } else {
     train <- t(dat2)
