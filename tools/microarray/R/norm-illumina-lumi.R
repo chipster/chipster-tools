@@ -788,7 +788,7 @@ write.table(
     quote = F
 )
 
-if (chiptype != "Illumina") {
+if (chiptype != "Illumina.db") {
     # Including gene names to data
     library(chiptype, character.only = T)
     library(annotate)
