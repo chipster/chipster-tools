@@ -169,8 +169,6 @@ command <- paste(hisat.binary)
 # Add the parameters
 command <- paste(command, hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
 
-documentCommand(command)
-
 # Run command
 documentCommand(command)
 runExternal(command)
