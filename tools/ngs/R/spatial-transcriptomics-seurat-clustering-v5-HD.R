@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-clustering-v5-HD.R: "Seurat v5 HD -Clustering" (This tool performs clustering for a single sample or multiple samples that have been combined into one Seurat object. For the 8 µm assay, sketch-based clustering can be enabled: a representative subset of bins is clustered in memory, and the results are then projected back to all bins. This is recommended for large datasets where standard clustering is slow or memory-intensive.)
+# TOOL spatial-transcriptomics-seurat-clustering-v5-HD.R: "Seurat v5 -Clustering" (This tool performs clustering for a single sample or multiple samples that have been combined into one Seurat object. For the 8 µm assay, sketch-based clustering can be enabled: a representative subset of bins is clustered in memory, and the results are then projected back to all bins. This is recommended for large datasets where standard clustering is slow or memory-intensive.)
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL clustering_plots.pdf

@@ -49,13 +49,13 @@ system("mkdir input_folder; cd input_folder; tar xf ../files.tar --xform='s#^.+/
 
 # rename and move filtered_feature_bc_matrix.h5
 file1 <- list.files("input_folder", pattern = "feature_bc_matrix.h5", full.names = TRUE)
-file1 <- paste("mv", file1, "output_folder/filtered_feature_bc_matrix.h5")
+file1 <- paste("mv", shQuote(file1), "output_folder/filtered_feature_bc_matrix.h5")
 system(file1)
 
 # rename and move tissue_positions_list.csv
 tissue_positions <- list.files("input_folder", pattern = "tissue_positions", full.names = TRUE)
 if (file.exists(tissue_positions)) {
-  tissue_positions <- paste("mv", tissue_positions, "output_folder/spatial/tissue_positions_list.csv")
+  tissue_positions <- paste("mv", shQuote(tissue_positions), "output_folder/spatial/tissue_positions_list.csv")
   system(tissue_positions)
 }
 

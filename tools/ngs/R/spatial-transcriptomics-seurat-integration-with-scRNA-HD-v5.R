@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R: "Seurat v5 HD -Integration with scRNA-seq data" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
+# TOOL spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R: "Seurat v5 -Integration with scRNA-seq data" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
 # OUTPUT spatiaaliplotti.pdf
