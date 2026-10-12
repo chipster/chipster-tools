@@ -93,7 +93,7 @@ if (meth == "ANOVA") {
 if (meth == "Kruskal-Wallis") {
     p <- c()
     for (i in 1:nrow(dat2)) {
-        p <- c(p, kruskal.test(dat2[i, ], groups))
+        p <- c(p, kruskal.test(as.numeric(dat2[i, ]), groups)$p.value)
     }
     p.raw <- p
     if (adj.method %in% c("Bonferroni", "Holm", "Hochberg")) {
