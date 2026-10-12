@@ -50,9 +50,9 @@ if (meth == "blank" & ncol(calls) > 0) {
             append = T
         )
         write(file = "soft.txt", paste("!Sample_table_begin", "", sep = ""), append = T)
-        dat2 <- data.frame(row.names(dat2), dat2[, 1], calls[, i])
-        names(dat2) <- c("ID_REF", "VALUE", "ABS_CALL")
-        write.table(dat2, "soft.txt", sep = "\t", quote = F, row.names = F, col.names = T, append = T)
+        sample.table <- data.frame(row.names(dat2), dat2[, i], calls[, i])
+        names(sample.table) <- c("ID_REF", "VALUE", "ABS_CALL")
+        write.table(sample.table, "soft.txt", sep = "\t", quote = F, row.names = F, col.names = T, append = T)
         write(file = "soft.txt", paste("!Sample_table_end", sep = ""), append = T)
     }
     # Series description
@@ -97,9 +97,9 @@ if (meth == "blank" & ncol(calls) == 0) {
         write(file = "soft.txt", paste("#ID_REF = ", "", sep = ""), append = T)
         write(file = "soft.txt", paste("#VALUE = ", "", sep = ""), append = T)
         write(file = "soft.txt", paste("!Sample_table_begin", "", sep = ""), append = T)
-        dat2 <- data.frame(row.names(dat2), dat2[, 1])
-        names(dat2) <- c("ID_REF", "VALUE")
-        write.table(dat2, "soft.txt", sep = "\t", quote = F, row.names = F, col.names = T, append = T)
+        sample.table <- data.frame(row.names(dat2), dat2[, i])
+        names(sample.table) <- c("ID_REF", "VALUE")
+        write.table(sample.table, "soft.txt", sep = "\t", quote = F, row.names = F, col.names = T, append = T)
         write(file = "soft.txt", paste("!Sample_table_end", sep = ""), append = T)
     }
     # Series description
