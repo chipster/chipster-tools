@@ -60,7 +60,7 @@ for (m in matrices) {
                 ]
             } else {
                 dat.sub[, which(sample.groups == del.groups[i])] <- apply(
-                    da3t[, (del.cols %in% 1 & sample.groups %in% del.groups[i])],
+                    dat3[, (del.cols %in% 1 & sample.groups %in% del.groups[i])],
                     1,
                     mean
                 )
