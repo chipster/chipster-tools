@@ -602,7 +602,7 @@ group <- c(rep("", ncol(dat2)))
 training <- c(rep("", ncol(dat2)))
 write.table(data.frame(sample = sample.names, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
 
-if (chiptype != "Illumina") {
+if (chiptype != "Illumina.db") {
     # Including gene names to data
     library(chiptype, character.only = T)
     library(annotate)
