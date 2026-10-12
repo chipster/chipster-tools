@@ -42,7 +42,7 @@ for (count in 1:number_files) {
 
 # Make a union of all identifiers
 identifiers <- data[[1]][, 1]
-for (count in 2:number_files) {
+for (count in seq(2, length.out = number_files - 1)) {
     identifiers <- (union(identifiers, data[[count]][, 1]))
 }
 identifiers <- as.character(unique(identifiers))
@@ -59,7 +59,7 @@ if (alignment_type == "genome") {
 
 if ("chr" %in% colnames(data[[1]])) {
     identifier_table <- data[[1]]
-    for (count in 2:number_files) {
+    for (count in seq(2, length.out = number_files - 1)) {
         identifier_table <- rbind(identifier_table, data[[count]])
     }
 
@@ -154,7 +154,7 @@ if (experiment_type == "mirna_seq" && alignment_type == "other") {
 # No coordinate information
 if (alignment_type == "other") {
     drops <- c("chr", "start", "end", "length", "sequence")
-    data_table <- data_table[, !(names(data_table) %in% drops)]
+    data_table <- data_table[, !(names(data_table) %in% drops), drop = FALSE]
 }
 
 # Writes out the data and the phenodata table
