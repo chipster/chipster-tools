@@ -42,6 +42,7 @@ readPhenodata <- function(
         file,
         header = header,
         sep = sep,
+        quote = quote,
         as.is = as.is,
         check.names = check.names,
         comment.char = comment.char,
