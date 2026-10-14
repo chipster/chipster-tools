@@ -7,62 +7,56 @@
 
 <body>
 
-    <h2>Seurat Visium HD - Identify spatially defined tissue domains </h2>
+    <h2>Seurat V5 - Identify spatially defined tissue domains with BANKSY</h2>
 
     <h3>Description</h3>
 
     <p>
-
+    This tool uses BANKSY (Building Aggregates with a Neighborhood Kernel and Spatial Yardstick) to incorporate neighborhood information for clustering of Visium HD data.
     </p>
 
     <h3>Parameters</h3>
     <ul>
         <li>Assay to use [Spatial.008um]</li>
-        <li>Resolution [0.8]</li>
-        <li>Dimensions to reduce [30]</li>
         <li>Lazy calculation [TRUE]</li>
-        <li>Features to compute [variable]</li>
+        <li>Which genes to use for computing tissue domains (all, variable only) [variable only]</li>
         <li>Lambda [0.8]</li>
-        <li>Neighbours [50]</li>
-        <li>Determine the label size of the plots [3]</li>
-        <li>Width of the output pdf [10]</li>
-        <li>Height of the output pdf [10]</li>
+        <li>Number of neighbours [50]</li>
+        <li>Resolution value for clustering [0.8]</li>
+        <li>Number of principal components to use for clustering [30]</li>
+        <li>Label size of the plots [3]</li>
+        <li>Width of the output plot [10]</li>
+        <li>Height of the output plot [10]</li>
     </ul>
 
 
     <h3>Details</h3>
 
-    <p>Along default clustering methods, the Seurat developers have integrated BANKSY (Building Aggregates with a Neighborhood Kernel and Spatial Yardstick) 
-       method to run clustering on spatial data. Previous clustering algorithms are mainly used for scRNA-seq data, which ignore spatial information.</p>
+    <p>BANKSY incorporates neighborhood information for clustering by augmenting the expression pattern of a spot with both the mean and the gradient of gene expression levels in a broader neighborhood of a spot.
+        The amount of neighborhood information incorporated is controlled by the lambda parameter, with higher values giving more weight to the neighborhood information during clustering. 
+        It is recommended to use 0.8 for domain segmentation and 0.2 for cell typing.
+         You can define the size of the neigborhood by specifying the number of neighbors. </p>
 
 
-    <p> BANKSY is a method for clustering spatial omics data by augmenting the features of each cell with both an average of the features of its spatial neighbors along with neighborhood feature gradients. 
-        By incorporating neighborhood information for clustering, BANKSY is able to
+    <p>By incorporating neighborhood information for clustering, BANKSY is able to
     
-        <ul>
+    <ul>
     <li>Improve cell-type assignment in noisy data</li>
     <li>Distinguish subtly different cell types stratified by microenvironment</li>
     <li>Identify spatial domains sharing the same microenvironment</li>
     </ul>
-</p>
-
-
-
-
-
-
-    <p>For Visium HD data, we recommend the usual defaults for lambda. For cell typing, use lambda = 0.2, and for domain segmentation, use lambda = 0.8.</p>
+    </p>
 
     <p>For more information, please check <a href="https://github.com/prabhakarlab/Banksy">the BANKSY github repository</a> and 
-        <a href="https://www.nature.com/articles/s41588-024-01664-3"> The BANKSY paper </a>
+        <a href="https://www.nature.com/articles/s41588-024-01664-3"> the BANKSY article</a>.
     </p>
 
     <h3>Output</h3>
 
     <p>{assay} means the spatial assay being used e.g. Spatial.008um</p>
     <ul>
-        <li>BANKSY_plot_Spatial.{assay}.pdf</li>
         <li>seurat_obj_banksy_Spatial.{assay}.Robj</li>
+        <li>BANKSY_plot_Spatial.{assay}.pdf</li>
         <li>BANKSY_plot_Spatial.{assay}.png</li>
         <li>BANKSY_plot_highlight_Spatial.{assay}.png</li>
     </ul>
