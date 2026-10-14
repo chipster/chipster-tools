@@ -9,8 +9,8 @@
 # PARAMETER reduction: "Reduction to use" TYPE [PCA, UMAP] DEFAULT PCA
 # PARAMETER OPTIONAL test.use: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (When this parameter is set to true, only genes with positive log2 fold change are listed in the result file.)
-# PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either group of spots. Withholding infrequently expressed genes will speed up testing.)
-# PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
+# PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either group of spots.)
+# PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold change" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the plot" TYPE INTEGER DEFAULT 10
 # PARAMETER OPTIONAL height: "Height of the plot" TYPE INTEGER DEFAULT 10
