@@ -115,6 +115,11 @@ if (paired == "paired") {
 
   # sample names unique
   unique_samples <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+  # output files are named by the part before the first "_", samples sharing it would overwrite each other
+  if (any(duplicated(unique_samples))) {
+    same_name <- unique_samples %in% unique_samples[duplicated(unique_samples)]
+    stop(paste("CHIPSTER-NOTE: ", "The output files are named by the part of the forward FASTQ file name before the first '_', and these files would get the same name:", paste0(paste(basename(fnFs[same_name]), collapse = ", "), "."), "Please rename the files so that this part is different for each sample."))
+  }
   fnFs.cut <- file.path("output_folder", paste0(unique_samples, "_cut_F.fastq.gz"))
 
   # reverse files:
