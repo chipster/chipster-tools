@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Identify spatially-defined tissue domains" (This tool accurately finds tissue domains rather than cell types of spatial data)
+# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Identify spatially-defined tissue domains with BANKSY" (This tool uses BANKSY to incorporate neighborhood information for clustering of Visium HD data. BANKSY augments the expression pattern of a spot with both the mean and the gradient of gene expression levels in a broader neighborhood of a spot.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.008um.pdf
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.016um.pdf
@@ -9,15 +9,15 @@
 # OUTPUT OPTIONAL BANKSY_plot_highlight_Spatial.008um.png
 # OUTPUT OPTIONAL BANKSY_plot_highlight_Spatial.016um.png
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
-# PARAMETER OPTIONAL resolution: "Resolution" TYPE DECIMAL DEFAULT 0.8
-# PARAMETER OPTIONAL dims.reduction: "Dimensions to reduce" TYPE INTEGER DEFAULT 30
-# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster but no "BANKSY" assay will be created to the seurat object)
-# PARAMETER OPTIONAL features: "Features to compute" TYPE [all: "all", variable: "variable"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled)
-# PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (A parameter to weight the contributions of the cell-transcriptome matrix and the neighbor expression matrices. Smaller lambda emphasizes cell's own transcriptomes and causes cells to cluster according to cell type. Bigger lambda causes cells to cluster according to tissue domain.)
-# PARAMETER OPTIONAL k_geom: "Amount of neighbours" TYPE INTEGER DEFAULT 50 (Local neighborhood size. Larger values will yield larger domains)
-# PARAMETER OPTIONAL label.size: "Determine the label size of the plots" TYPE INTEGER DEFAULT 3
-# PARAMETER OPTIONAL width: "Width of the pdf file" TYPE INTEGER DEFAULT 10
-# PARAMETER OPTIONAL height: "Height of the pdf file" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster, but no "BANKSY" assay will be created to the Seurat object.)
+# PARAMETER OPTIONAL features: "Which genes to use for computing tissue domains" TYPE [all: "all", variable: "variable only"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled.)
+# PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (Influence of the neighbourhood. Bigger lambda causes spots to cluster according to tissue domain, while smaller lambda emphasizes spot's own transcriptomes and causes spots to cluster according to cell type.)
+# PARAMETER OPTIONAL k_geom: "The number of neighbors that defines a cell’s neighborhood" TYPE INTEGER DEFAULT 50 (Local neighborhood size. Larger values will yield larger domains.)
+# PARAMETER OPTIONAL resolution: "Resolution value for clustering" TYPE DECIMAL DEFAULT 0.8
+# PARAMETER OPTIONAL dims.reduction: "Number of principal components to use for clustering" TYPE INTEGER DEFAULT 30
+# PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
+# PARAMETER OPTIONAL width: "Width of the plot file" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL height: "Height of the plot file" TYPE INTEGER DEFAULT 10
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 10
 # TOOLS_BIN ""
@@ -58,13 +58,13 @@ load("seurat_obj_clustering.Robj")
 
 
 
-# We ended up deciding to use only 1 assay per run, because if lazy = FALSE, banksy creates a new assay called BANKSY based on the assay you choose.
-# Thus looping over assays would only take the last assay used likely? Also this is computationally the most expensive step.
+# We ended up deciding to use only 1 assay per run, because if lazy = FALSE, banksy creates a new assay called BANKSY based on the assay you have chosen.
+# Thus looping over assays would only take the last assay used likely? Also, this is computationally the most expensive step.
 
 DefaultAssay(seurat_obj) <- assay
 
 
-# Image is needed for SpatialDimPlot, otherwise an error pops out (spesify the image based on your assay)
+# Image is needed for SpatialDimPlot, otherwise an error pops out (specify the image based on your assay)
 img_name <- Images(seurat_obj, assay = assay)
 
 
@@ -74,7 +74,7 @@ if (lazy) {
                           assay = assay, slot = "data",  features = features,
                           k_geom = k_geom, lazy = TRUE, split.scale = TRUE, parallel = parallel, num_cores = num_cores)
   
-  # If lazy = TRUE, no BANKSY assay is created but a reduction called banksy is, just find new neighbors and clusters and plot that
+  # If lazy = TRUE, no BANKSY assay is created, but a reduction called banksy is, so we find new neighbors and clusters and plot that.
   
   
   seurat_obj <- FindNeighbors(seurat_obj, reduction = "BANKSY", dims = 1:dims.reduction)
