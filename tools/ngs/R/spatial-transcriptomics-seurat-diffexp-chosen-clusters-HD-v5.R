@@ -6,14 +6,14 @@
 # PARAMETER OPTIONAL sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
-# PARAMETER OPTIONAL min_pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either cluster. Withholding infrequently expressed genes will speed up testing.)
-# PARAMETER OPTIONAL logfc_threshold: "Limit testing to genes which show at least this fold difference" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
+# PARAMETER OPTIONAL min_pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either cluster.)
+# PARAMETER OPTIONAL logfc_threshold: "Limit testing to genes which show at least this fold change" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold change between the two clusters. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
-# PARAMETER OPTIONAL only_pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (By default, this tool lists all markers. When this parameter is set to TRUE, only genes with positive log2 fold change are listed in the result file.)
-# PARAMETER OPTIONAL no_of_feats: "Number of spatially variable genes to visualize" TYPE INTEGER DEFAULT 3 (Choose the number of highest variable genes to visualize.)
+# PARAMETER OPTIONAL only_pos: "Report only positive marker genes" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (By default, this tool lists all marker genes. When this parameter is set to TRUE, only genes with positive log2 fold change are listed.)
+# PARAMETER OPTIONAL no_of_feats: "Number of spatially variable genes to visualize" TYPE INTEGER DEFAULT 3 (Number of top variable genes to visualize.)
 # PARAMETER OPTIONAL color.scale: "Determine color scale based on all genes" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes.)
-# PARAMETER OPTIONAL width: "Width of the output pdf" TYPE DECIMAL DEFAULT 10 (Width of the output pdf in inches)
-# PARAMETER OPTIONAL height: "Height of the output pdf" TYPE DECIMAL DEFAULT 10 (Height of the output pdf in inches)
+# PARAMETER OPTIONAL width: "Width of the output plot" TYPE DECIMAL DEFAULT 10 (Width of the output plot in inches)
+# PARAMETER OPTIONAL height: "Height of the output plot" TYPE DECIMAL DEFAULT 10 (Height of the output plot in inches)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
