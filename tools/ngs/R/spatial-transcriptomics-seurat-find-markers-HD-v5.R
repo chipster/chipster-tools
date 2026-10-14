@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find differentially expressed genes for each cluster" (This tool identifies marker genes for clusters using Visium HD data. Each cluster is compared to all the other spots.)
+# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find differentially expressed genes for each cluster" (This tool identifies marker genes for clusters using Visium HD data. Each cluster is compared to all the other spots. The top marker genes for each cluster are visualized as a heatmap.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
