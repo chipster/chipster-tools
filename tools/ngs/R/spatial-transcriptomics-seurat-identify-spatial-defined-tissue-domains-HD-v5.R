@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster, but no "BANKSY" assay will be created to the Seurat object.)
 # PARAMETER OPTIONAL features: "Which genes to use for computing tissue domains" TYPE [all: "all", variable: "variable only"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled.)
 # PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (Influence of the neighbourhood. Bigger lambda causes spots to cluster according to tissue domain, while smaller lambda emphasizes spot's own transcriptomes and causes spots to cluster according to cell type.)
-# PARAMETER OPTIONAL k_geom: "The number of neighbors that defines a cell’s neighborhood" TYPE INTEGER DEFAULT 50 (Local neighborhood size. Larger values will yield larger domains.)
+# PARAMETER OPTIONAL k_geom: "Number of neighbors" TYPE INTEGER DEFAULT 50 (Local neighborhood size. This number of spots defines a spot’s neighborhood. Larger values will yield larger domains.)
 # PARAMETER OPTIONAL resolution: "Resolution value for clustering" TYPE DECIMAL DEFAULT 0.8
 # PARAMETER OPTIONAL dims.reduction: "Number of principal components to use for clustering" TYPE INTEGER DEFAULT 30
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
