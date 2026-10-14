@@ -59,6 +59,11 @@ rfg.value <- paste(rfg.open, rfg.ext, sep = ",")
 # common parameters
 # common.parameters <- paste("-q", "-m", multiread, "-k", alignment.no, "-I", min.insert.size, "-X", max.insert.size)
 
+# The "Fast local" option id has only one dash, kept so that old sessions and workflows still work
+if (strategy == "-fast-local") {
+  strategy <- "--fast-local"
+}
+
 parameters <- paste(strategy, "--mp", mp, "--np", np, "--rdg", rdg.value, "--rfg", rfg.value, "--minins", minins, "--maxins", maxins, pair.order, quality.format, "--no-unal", "-p", chipster.threads.max)
 
 if (alignment.no > 0) {
