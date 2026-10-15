@@ -74,6 +74,7 @@ if(assay == "Spatial.008um") {
 print(DefaultAssay(seurat_obj))
 # Differential expression
 de_markers <- FindMarkers(seurat_obj, assay = assay, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
+de_markers <- de_markers[de_markers$p_val_adj < 0.1,]
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")
