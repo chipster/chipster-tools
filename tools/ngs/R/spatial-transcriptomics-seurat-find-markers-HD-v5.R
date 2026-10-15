@@ -76,6 +76,7 @@ object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = redu
 
 print("Finding markers...")
 markers <- FindAllMarkers(object_subset, assay = assay, only.pos = only.pos, test.use = test.use, min.pct = min.pct, logfc.threshold = logfc.threshold, print.bar = TRUE)
+markers <- markers[markers$p_val_adj < 0.1,]
 
 markers %>%
   group_by(cluster) %>%
