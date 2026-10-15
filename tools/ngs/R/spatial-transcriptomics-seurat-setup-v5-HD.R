@@ -3,14 +3,13 @@
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
-# PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE STRING DEFAULT "8, 16" (List here the bin sizes, separated by comma)
+# PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE [8, 16, (8, 16)] DEFAULT (8, 16) (Choose bin sizes for the analysis.)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
 
 # 2026-02 ML 
 # 2026-10-08 JV Make pdf smaller
-
 
 # RUNTIME R-4.2.3-seurat5 -> R-4-5-1-seurat5 
 
@@ -28,6 +27,8 @@ library(Matrix)
 library(Biobase)
 library("ragg")
 library("magick")
+
+print(bin_sizes)
 
 # Get the Seurat version info for displaying:
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
