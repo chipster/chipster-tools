@@ -334,8 +334,7 @@
 		<tool>spatial-transcriptomics-seurat-subset-regions-HD-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R</tool>
 		<tool>spatial-transcriptomics-seurat-clustering-plots-v5-HD.R</tool>
-
-
+		<tool>single-cell-extract-information-v5.R</tool>
 	</category>
 	
 
