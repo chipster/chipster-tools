@@ -7,13 +7,12 @@
 
 <body>
 
-    <h2>Seurat V5 - Identify spatially variable genes based on clusters </h2>
+    <h2>Seurat V5 - Find differentially expressed genes between two clusters </h2>
 
     <h3>Description</h3>
 
     <p>
-This tool finds differentially expressed genes (DEGs) between two clusters and visualizes them on top of the tissue histology.
-As an input, you can provide the Seurat object after the clustering step.
+    When provided with a Visium HD Seurat object with cluster information, this tool finds differentially expressed genes (DEGs) between two clusters and visualizes them on top of the tissue histology.
     </p>
 
     <h3>Parameters</h3>
@@ -22,7 +21,7 @@ As an input, you can provide the Seurat object after the clustering step.
         <li>Was sketch clustering used for 8 bin assay [yes]</li>
         <li>First cluster [1]</li>
         <li>Second cluster [2]</li>
-        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.01]</li>
+        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.25]</li>
         <li>Limit testing to genes which show at least this fold difference [0.1]</li>
         <li>Test for differential expression (wilcox, MAST)[wilcox]</li>
         <li>Report only positive marker genes [yes]</li>
@@ -35,14 +34,14 @@ As an input, you can provide the Seurat object after the clustering step.
     <h3>Details</h3>
 
     <p>
-    This tool identifies positive and negative marker genes for the clusters of interest. If you set the parameter value for "Report only positive marker genes" to "yes", only genes with positive fold change will be listed. 
+    This tool identifies DEGs between the clusters of interest. If you set the parameter value for "Report only positive marker genes" to "yes", only genes with positive fold change will be listed. 
         You can also select the test used for differential expression testing using the parameter "Test for differential expression" from two options: Wilcoxon Rank Sum Test (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST.
 
 <p>In order to speed up the statistical testing, you can filter out genes prior to testing by requiring that a gene has to be expressed in at least a certain fraction of spots in either of the two clusters.
   You can also filter out genes whose log2 fold change between the two clusters is less than a given value. 
 </p>
 
-    <p>This tool finally visualizes and lists the discovered DEGs between clusters. By default, the color scale is determined for each gene individually and may differ between genes. 
+    <p>This tool lists the discovered DEGs and visualizes them on tissue image. By default, the color scale is determined for each gene individually and may differ between genes. 
         If you wish to compare expression between different genes, it may be useful to set the parameter value for "Determine color scale based on all genes" to "yes" so that the color scale is the same for all genes.
     </p>
 
@@ -51,7 +50,7 @@ As an input, you can provide the Seurat object after the clustering step.
 
     <ul>
         <li>Markerplot.pdf: A plot of the identified top marker genes</li>
-        <li>spatially_variable_genes.tsv: A table of the differentailly expressed genes detected </li>
+        <li>spatially_variable_genes.tsv: A table of the differentially expressed genes</li>
     </ul>
 
 
