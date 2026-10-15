@@ -1,19 +1,18 @@
-# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find marker genes for all clusters" (Given a Seurat object of Visium HD data with cluster information, this tool identifies marker genes for all clusters. It compares each cluster to all the other spots. The top 5 marker genes for each cluster are visualized as a heatmap.)
+# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find all markers" (This tool identifies marker genes for all clusters.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
 # OUTPUT OPTIONAL markers_Spatial.008um.tsv
 # OUTPUT OPTIONAL markers_Spatial.016um.tsv
+# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE
-# PARAMETER reduction: "Reduction to use" TYPE [PCA, UMAP] DEFAULT PCA
+# PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
+# PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL height: "Height of the pdf" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either cluster. Withholding infrequently expressed genes will speed up testing.)
+# PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL test.use: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
-# PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (If yes, only genes with positive log2 fold change are listed in the result file.)
-# PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of spots in either group of spots.)
-# PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold change" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
-# PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
-# PARAMETER OPTIONAL width: "Width of the plot" TYPE INTEGER DEFAULT 10
-# PARAMETER OPTIONAL height: "Height of the plot" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [FALSE, TRUE] DEFAULT FALSE (By default, this tool)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 6
 # TOOLS_BIN ""
@@ -22,6 +21,9 @@
 # This package was installed along the new docker image
 #suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
 
+
+### PARAMETER reduction: "Reduction to use" TYPE [PCA] DEFAULT PCA
+reduction <- as.character("PCA")
 assay <- as.character(assay)
 reduction <- tolower(as.character(reduction))
 test.use <- as.character(test.use)
@@ -76,7 +78,6 @@ object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = redu
 
 print("Finding markers...")
 markers <- FindAllMarkers(object_subset, assay = assay, only.pos = only.pos, test.use = test.use, min.pct = min.pct, logfc.threshold = logfc.threshold, print.bar = TRUE)
-markers <- markers[markers$p_val_adj < 0.1,]
 
 markers %>%
   group_by(cluster) %>%
