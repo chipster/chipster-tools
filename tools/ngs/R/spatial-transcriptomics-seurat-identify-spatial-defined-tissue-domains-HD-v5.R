@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Identify spatially-defined tissue domains with BANKSY" (This tool uses BANKSY to incorporate neighborhood information for clustering of Visium HD data. BANKSY augments the expression pattern of a spot with both the mean and the gradient of gene expression levels in a broader neighborhood of a spot.)
+# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Identify spatially-defined tissue domains with BANKSY" (This tool uses BANKSY to incorporate neighborhood information when clustering Visium HD data. BANKSY augments the expression pattern of a spot with both the mean and the gradient of gene expression levels in a broader neighborhood of a spot.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.008um.pdf
 # OUTPUT OPTIONAL BANKSY_plot_Spatial.016um.pdf
@@ -11,7 +11,7 @@
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
 # PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (Influence of the neighbourhood. Bigger lambda causes spots to cluster according to tissue domain, while smaller lambda emphasizes spot's own transcriptomes and causes spots to cluster according to cell type.)
 # PARAMETER OPTIONAL k_geom: "Number of neighbors" TYPE INTEGER DEFAULT 50 (Local neighborhood size. This number of spots defines a spot’s neighborhood. Larger values will yield larger domains.)
-# PARAMETER OPTIONAL resolution: "Resolution value for clustering" TYPE DECIMAL DEFAULT 0.8
+# PARAMETER OPTIONAL resolution: "Resolution for granularity for clustering" TYPE DECIMAL DEFAULT 0.8 (Higher values lead to greater number of clusters.)
 # PARAMETER OPTIONAL dims.reduction: "Number of principal components to use for clustering" TYPE INTEGER DEFAULT 30
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the plot file" TYPE INTEGER DEFAULT 10
@@ -21,8 +21,8 @@
 # TOOLS_BIN ""
 
 
-
-
+# 2026-07-15 JV
+# 2026-10-15 JV Make lazy = TRUE always & use only variable features
 
 # For png, cairo should be installed in this RUNTIME
 # DONE -- BANKSY also working now
@@ -43,9 +43,6 @@ lazy <- TRUE
 features <- as.character("variable")
 num_cores = as.numeric(chipster.threads.max)
 parallel = TRUE
-
-# 2026-07-15 JV
-# 2026-10-15 JV Make lazy = TRUE always & use only variable features
 
 library("Seurat")
 library("Banksy")
