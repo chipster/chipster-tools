@@ -9,8 +9,6 @@
 # OUTPUT OPTIONAL BANKSY_plot_highlight_Spatial.008um.png
 # OUTPUT OPTIONAL BANKSY_plot_highlight_Spatial.016um.png
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um (Choose between 8 and 16 um bin assays. 8um bin is recommended for analysis)
-# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster, but no "BANKSY" assay will be created to the Seurat object.)
-# PARAMETER OPTIONAL features: "Which genes to use for computing tissue domains" TYPE [all: "all", variable: "variable only"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled.)
 # PARAMETER OPTIONAL lambda: "Lambda" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 (Influence of the neighbourhood. Bigger lambda causes spots to cluster according to tissue domain, while smaller lambda emphasizes spot's own transcriptomes and causes spots to cluster according to cell type.)
 # PARAMETER OPTIONAL k_geom: "Number of neighbors" TYPE INTEGER DEFAULT 50 (Local neighborhood size. This number of spots defines a spot’s neighborhood. Larger values will yield larger domains.)
 # PARAMETER OPTIONAL resolution: "Resolution value for clustering" TYPE DECIMAL DEFAULT 0.8
@@ -34,12 +32,20 @@ dims.reduction <- as.numeric(dims.reduction)
 lambda <- as.numeric(lambda)
 k_geom <- as.numeric(k_geom)
 label.size <- as.numeric(label.size)
-lazy <- as.logical(lazy)
-features <- as.character(features)
+
+# For now, use lazy = TRUE as default
+# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster, but no "BANKSY" assay will be created to the Seurat object.)
+#lazy <- as.logical(lazy)
+lazy <- TRUE
+
+# For now, use only variable features for computing BANKSY clusters. Banksy does allow all genes to be used, but this is computationally expensive and not needed for most cases.
+# PARAMETER OPTIONAL features: "Which genes to use for computing tissue domains" TYPE [all: "all", variable: "variable only"] DEFAULT variable (Select either variable or all genes for computing tissue domains. Only applies if Lazy calculation is enabled.)
+features <- as.character("variable")
 num_cores = as.numeric(chipster.threads.max)
 parallel = TRUE
 
 # 2026-07-15 JV
+# 2026-10-15 JV Make lazy = TRUE always & use only variable features
 
 library("Seurat")
 library("Banksy")
@@ -118,62 +124,65 @@ if (lazy) {
   
   save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
   
-} else {
+} 
+
+# Lazy is being TRUE always for now, this is stored here in case we need to use lazy = FALSE computation in the future.
+# else {
     
-  # Else for lazy = FALSE
-  # The RunBanksy function creates a new BANKSY assay, which can be used for dimensional reduction and clustering:
-  # features parameter only works for lazy=T because RunBanksy() has hardcoded limitations to sizes. "all" features would be too much, at least for this dummy data.
+#   # Else for lazy = FALSE
+#   # The RunBanksy function creates a new BANKSY assay, which can be used for dimensional reduction and clustering:
+#   # features parameter only works for lazy=T because RunBanksy() has hardcoded limitations to sizes. "all" features would be too much, at least for this dummy data.
   
-  seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", features = "variable", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = assay, parallel = TRUE, num_cores = num_cores)
+#   seurat_obj <- RunBanksy(seurat_obj, lambda = lambda, slot = "data", features = "variable", k_geom = k_geom, lazy = FALSE, verbose = TRUE, assay = assay, parallel = TRUE, num_cores = num_cores)
   
-  # Make BANKSY Default assay and run pca, neighboring and clustering
-  DefaultAssay(seurat_obj) <- "BANKSY"
+#   # Make BANKSY Default assay and run pca, neighboring and clustering
+#   DefaultAssay(seurat_obj) <- "BANKSY"
   
-  seurat_obj <- RunPCA(seurat_obj, assay = "BANKSY", reduction.name = "pca.banksy", features = rownames(seurat_obj), npcs = 30)
-  seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca.banksy", dims = 1:dims.reduction)
-  seurat_obj <- FindClusters(seurat_obj, resolution = resolution, cluster.name = "banksy_cluster")
+#   seurat_obj <- RunPCA(seurat_obj, assay = "BANKSY", reduction.name = "pca.banksy", features = rownames(seurat_obj), npcs = 30)
+#   seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca.banksy", dims = 1:dims.reduction)
+#   seurat_obj <- FindClusters(seurat_obj, resolution = resolution, cluster.name = "banksy_cluster")
   
-  # Set banksy_cluster as idents
-  Idents(seurat_obj) <- "banksy_cluster"
+#   # Set banksy_cluster as idents
+#   Idents(seurat_obj) <- "banksy_cluster"
   
-  # Plotting
+#   # Plotting
   
-  pdf(file = paste0("BANKSY_plot_", assay, ".pdf"), width = width, height = height)
+#   pdf(file = paste0("BANKSY_plot_", assay, ".pdf"), width = width, height = height)
   
-  p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
-  print(p)
+#   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
+#   print(p)
   
   
-  banksy_cells <- CellsByIdentities(seurat_obj)
+#   banksy_cells <- CellsByIdentities(seurat_obj)
   
-  p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
-                       facet.highlight = T, combine = T)
+#   p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
+#                        facet.highlight = T, combine = T)
   
-  print(p1)
+#   print(p1)
   
-  dev.off()
+#   dev.off()
   
-  # res has to be spesified and 300 is generally good
-  agg_png(filename = paste0("BANKSY_plot_", assay, ".png"),
-      width = width, height = height, units = "in", res = 300)
-  p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
-  print(p)
-  dev.off()
+#   # res has to be spesified and 300 is generally good
+#   agg_png(filename = paste0("BANKSY_plot_", assay, ".png"),
+#       width = width, height = height, units = "in", res = 300)
+#   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
+#   print(p)
+#   dev.off()
   
-  agg_png(filename = paste0("BANKSY_plot_highlight_", assay, ".png"),
-      width = width, height = height, units = "in", res = 300)
+#   agg_png(filename = paste0("BANKSY_plot_highlight_", assay, ".png"),
+#       width = width, height = height, units = "in", res = 300)
   
-  banksy_cells <- CellsByIdentities(seurat_obj)
+#   banksy_cells <- CellsByIdentities(seurat_obj)
   
-  p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
-                       facet.highlight = T, combine = T)
+#   p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
+#                        facet.highlight = T, combine = T)
   
-  print(p1)
+#   print(p1)
   
-  dev.off()
+#   dev.off()
   
-  save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
+#   save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
   
-}
+# }
 
 # EOF
