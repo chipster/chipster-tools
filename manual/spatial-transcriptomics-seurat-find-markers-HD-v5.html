@@ -7,21 +7,22 @@
 
 <body>
 
-    <h2>Seurat V5 - Find differentially expressed genes for each cluster </h2>
+    <h2>Seurat V5 - Find marker genes for all clusters </h2>
 
     <h3>Description</h3>
 
     <p>
-        This tool identifies marker genes for clusters using Visium HD data. Each cluster is compared to all the other spots. The top 5 marker genes for each cluster are visualized as a heatmap.
+        Given a Seurat object of Visium HD data with cluster information, this tool identifies marker genes for all clusters. Each cluster is compared to all the other spots. 
+        The top 5 marker genes for each cluster are visualized as a heatmap.
     </p>
 
     <h3>Parameters</h3>
     <ul>
-        <li> Assay to use [Spatial.008um]</li>
+        <li>Assay to use [Spatial.008um]</li>
         <li>Was sketch clustering used for 8 bin assay [no]</li>
         <li>Test for differential expression (wilcox, MAST)[wilcox]</li>
         <li>Report only positive marker genes [yes]</li>
-        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.01]</li>
+        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.25]</li>
         <li>Limit testing to genes which show at least this fold change [0.1]</li>
         <li>Label size of the plots [3]</li>
         <li>Width of the plot [10]</li>
@@ -46,8 +47,8 @@
     <h3>Output</h3>
 
     <ul>
-        <li>markers_{assay}.tsv: A table of the identified marker genes for each cluster</li>
-        <li>markers_{assay}.pdf: A heatmap of the identified top marker genes</li>
+        <li>markers_{assay}.tsv: A table containing marker genes for each cluster</li>
+        <li>markers_{assay}.pdf: A heatmap of the top 5 marker genes for each cluster</li>
     </ul>
 
 
