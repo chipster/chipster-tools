@@ -249,6 +249,8 @@ if (coords.file) {
   dev.off()}
 }
 
-save(subset_obj, file = "seurat_obj_subset.Robj")
+seurat_obj <- subset_obj
+
+save(seurat_obj, file = "seurat_obj_subset.Robj")
 
 # EOF
