@@ -1,12 +1,12 @@
-# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 -Subset regions " (This tool subsets regions based on clusters and or coordinates)
+# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 -Subset regions " (Given a Seurat object with clustering information, this tool subsets regions based on selected clusters. Alternatively, you can define the region by providing coordinates.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT OPTIONAL coords.file.csv: "Coordinates file" TYPE GENERIC
-# OUTPUT OPTIONAL spatiaaliplotti_8um.pdf
-# OUTPUT OPTIONAL spatiaaliplotti_8um2.pdf
-# OUTPUT OPTIONAL spatiaaliplotti_8um3.pdf
-# OUTPUT OPTIONAL spatiaaliplotti_16um.pdf
-# OUTPUT OPTIONAL spatiaaliplotti_16um2.pdf
-# OUTPUT OPTIONAL spatiaaliplotti_16um3.pdf
+# OUTPUT OPTIONAL spatial_plot_8um.pdf
+# OUTPUT OPTIONAL spatial_plot_8um2.pdf
+# OUTPUT OPTIONAL spatial_plot_8um3.pdf
+# OUTPUT OPTIONAL spatial_plot_16um.pdf
+# OUTPUT OPTIONAL spatial_plot_16um2.pdf
+# OUTPUT OPTIONAL spatial_plot_16um3.pdf
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL coords.file: "Coordination csv file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
@@ -47,7 +47,7 @@ for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
 
-##Tähän 8um
+##Here 8um
 if (assay == "Spatial.008um") {
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
@@ -66,7 +66,7 @@ subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
 
 # The simplest way to do this
-pdf(file = "spatiaaliplotti_8um.pdf")
+pdf(file = "spatial_plot_8um.pdf")
 p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend() + 
   SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
@@ -78,7 +78,7 @@ dev.off()
 # Maybe add an option to use coords instead or also, then:
 if (coords) {
 
-#If coordinates want to be used, then:
+#If coordinates are used, then:
 
 # Adds x and y axis numbers for coordinate search
 theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
@@ -110,7 +110,7 @@ img_name
 #   )
 # }
 
-pdf(file = "spatiaaliplotti_8um2.pdf")
+pdf(file = "spatial_plot_8um2.pdf")
 
 p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
 
@@ -134,7 +134,7 @@ if (coords.file) {
   subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
   segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
 
-  pdf("spatiaaliplotti_8um3.pdf")
+  pdf("spatial_plot_8um3.pdf")
 
   p<- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
 
@@ -149,7 +149,7 @@ if (coords.file) {
 
 print("Starting 16um")
 
-# #Tähän 16um
+# #Here 16um
 if (assay == "Spatial.016um") {
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
@@ -171,7 +171,7 @@ print("Images of sobj")
 print(names(subset_obj@images))
 
 # The simplest way to do this
-pdf(file = "spatiaaliplotti_16um.pdf")
+pdf(file = "spatial_plot_16um.pdf")
 p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend() + 
   SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
@@ -183,7 +183,7 @@ dev.off()
 # Maybe add an option to use coords instead or also, then:
 if (coords) {
 
-#If coordinates want to be used, then:
+#If coordinates are used, then:
 
 # Adds x and y axis numbers for coordinate search
 theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
@@ -215,7 +215,7 @@ for (img_name in Images(subset_obj)) {
   )
 }
 
-pdf(file = "spatiaaliplotti_16um2.pdf")
+pdf(file = "spatial_plot_16um2.pdf")
 
 p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
 
@@ -239,7 +239,7 @@ if (coords.file) {
   subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
   segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
 
-  pdf("spatiaaliplotti_16um3.pdf")
+  pdf("spatial_plot_16um3.pdf")
 
   p<-SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend() 
 
