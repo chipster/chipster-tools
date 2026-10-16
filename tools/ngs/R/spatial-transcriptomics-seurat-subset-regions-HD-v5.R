@@ -9,29 +9,28 @@
 # OUTPUT OPTIONAL spatial_plot_16um3.pdf
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER OPTIONAL coords.file: "Coordination csv file" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
-# PARAMETER coords: "coords..." TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
+# PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
+# PARAMETER coords: "Subset based on coordinates" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
 # PARAMETER OPTIONAL x_coord_max: "Subset x max coordinate" TYPE INTEGER DEFAULT 9000
 # PARAMETER OPTIONAL y_coord_min: "Subset y min coordinate" TYPE INTEGER DEFAULT 0
 # PARAMETER OPTIONAL y_coord_max: "Subset y max coordinate" TYPE INTEGER DEFAULT 9000
-# PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
-# PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
+# PARAMETER OPTIONAL coords.file: "Use a csv file containing the coordinate information" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
+# PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 6
 # TOOLS_BIN ""
 
 # 2026-07-17 JV
 
-chosen_clusters <- as.character(chosen_clusters) # A parameter
-
-chosen_clusters <- trimws(unlist(strsplit(chosen_clusters, ",")))
-chosen_clusters <- strtoi(chosen_clusters, base = 0L)
-
 library(Seurat)
 library(SeuratObject)
 library(ggplot2)
 library("sf")
+
+chosen_clusters <- as.character(chosen_clusters) # A parameter
+chosen_clusters <- trimws(unlist(strsplit(chosen_clusters, ",")))
+chosen_clusters <- strtoi(chosen_clusters, base = 0L)
 
 load("seurat_obj_clustering.Robj")
 
@@ -39,15 +38,14 @@ load("seurat_obj_clustering.Robj")
 
 # Make graphs empty because it is causing issues
 # seurat_obj <- UpdateSeuratObject(seurat_obj)
-
 #seurat_obj@graphs <- list()
 
-# This loop works, check what causes this graph issue, a possible contact in Meilahti
+# This loop works, check what causes this graph issue
 for (g in Graphs(seurat_obj)) {
 seurat_obj[[g]] <- NULL
 }
 
-##Here 8um
+## Here 8um
 if (assay == "Spatial.008um") {
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
@@ -56,14 +54,11 @@ if (assay == "Spatial.008um") {
 
 DefaultAssay(seurat_obj) <- "Spatial.008um"
 
-
 # Set some clusters as Idents
 seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
 
-
 # Subset 
 subset_obj <- subset(seurat_obj, idents = chosen_clusters)
-
 
 # The simplest way to do this
 pdf(file = "spatial_plot_8um.pdf")
@@ -71,14 +66,11 @@ p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend(
   SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
 print(p)
-
 dev.off()
 
 
-# Maybe add an option to use coords instead or also, then:
+# If coordinates are given, then:
 if (coords) {
-
-#If coordinates are used, then:
 
 # Adds x and y axis numbers for coordinate search
 theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
@@ -98,8 +90,7 @@ coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + 
 img_name <- Images(subset_obj)[1]
 img_name
 
- subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
-
+subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
 
 # # For loop for image cropping, may not work
 # for (img_name in Images(subset_obj)) {
@@ -111,11 +102,8 @@ img_name
 # }
 
 pdf(file = "spatial_plot_8um2.pdf")
-
 p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
-
 print(p1)
-
 dev.off()
 
 }
@@ -135,12 +123,8 @@ if (coords.file) {
   segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
 
   pdf("spatial_plot_8um3.pdf")
-
   p<- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
-
-
   print(p)
-
   dev.off()
 }
 
@@ -149,7 +133,7 @@ if (coords.file) {
 
 print("Starting 16um")
 
-# #Here 16um
+## Here 16um
 if (assay == "Spatial.016um") {
 # Recompute graphs if needed
 #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
@@ -158,10 +142,8 @@ if (assay == "Spatial.016um") {
 
 DefaultAssay(seurat_obj) <- "Spatial.016um"
 
-
 # Set some clusters as Idents
 seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.016um)
-
 
 # Subset 
 subset_obj <- subset(seurat_obj, idents = chosen_clusters)
@@ -176,14 +158,11 @@ p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend(
   SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
 print(p)
-
 dev.off()
 
 
-# Maybe add an option to use coords instead or also, then:
+# If coordinates are given, then:
 if (coords) {
-
-#If coordinates are used, then:
 
 # Adds x and y axis numbers for coordinate search
 theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
@@ -216,11 +195,8 @@ for (img_name in Images(subset_obj)) {
 }
 
 pdf(file = "spatial_plot_16um2.pdf")
-
 p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
-
 print(p1)
-
 dev.off()
 
 }
@@ -240,12 +216,8 @@ if (coords.file) {
   segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
 
   pdf("spatial_plot_16um3.pdf")
-
   p<-SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend() 
-
-
   print(p)
-
   dev.off()}
 }
 
