@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
 # OUTPUT OPTIONAL markers_Spatial.008um.tsv
 # OUTPUT OPTIONAL markers_Spatial.016um.tsv
-# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT YES ()
+# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
