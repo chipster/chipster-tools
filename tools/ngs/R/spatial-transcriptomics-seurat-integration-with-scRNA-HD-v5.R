@@ -1,10 +1,10 @@
-# TOOL spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R: "Seurat v5 -Integration with scRNA-seq data" (This tool identifies differentially expressed genes between two user defined clusters and visualizes these genes on top of the tissue image.)
+# TOOL spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R: "Seurat v5 -Integration with scRNA-seq data" (This tool annotates clustered Visium HD data with reference scRNA-seq data. It uses Robust Cell Type Decomposition, RCTD, to deconvolve spot-level data from spatial datasets, when provided with an scRNA-seq reference.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
-# OUTPUT spatiaaliplotti.pdf
+# OUTPUT spatialPlot.pdf
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um", Spatial.016um: "Spatial.016um"] DEFAULT Spatial.008um
-# PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
+# PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 40
 # TOOLS_BIN ""
@@ -158,7 +158,7 @@ Idents(seurat_obj) <- "full_first_type"
 #seurat_obj[[]][, "full_first_type"] <- "Unknown"
 #seurat_obj$full_first_type[Cells(seurat_obj)] <- seurat_obj$full_first_type[Cells(seurat_obj)]
 
-pdf(file = "spatiaaliplotti.pdf")
+pdf(file = "spatialPlot.pdf")
 
 p <- SpatialDimPlot(seurat_obj)
 print(p)
