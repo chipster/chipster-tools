@@ -4,7 +4,7 @@
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
 # OUTPUT OPTIONAL markers_Spatial.008um.tsv
 # OUTPUT OPTIONAL markers_Spatial.016um.tsv
-# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
+# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT YES ()
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
@@ -21,14 +21,6 @@
 # This package was installed along the new docker image
 #suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
 
-
-### PARAMETER reduction: "Reduction to use" TYPE [PCA] DEFAULT PCA
-reduction <- as.character("PCA")
-assay <- as.character(assay)
-reduction <- tolower(as.character(reduction))
-test.use <- as.character(test.use)
-only.pos <- as.logical(only.pos)
-
 library("ape")
 library(Seurat)
 library(ggplot2)
@@ -36,6 +28,13 @@ library(patchwork)
 library(dplyr)
 library(tidyverse)
 library("presto")
+
+### PARAMETER reduction: "Reduction to use" TYPE [PCA] DEFAULT PCA
+reduction <- as.character("PCA")
+assay <- as.character(assay)
+reduction <- tolower(as.character(reduction))
+test.use <- as.character(test.use)
+only.pos <- as.logical(only.pos)
 
 load("seurat_obj_clustering.Robj")
 
