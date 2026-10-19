@@ -29,6 +29,7 @@
 
 assay <- as.character(assay)
 sketch <- as.logical(sketch)
+banksy <- as.logical(banksy)
 cluster1 <- as.numeric(cluster1)
 cluster2 <- as.numeric(cluster2)
 min_pct <- as.numeric(min_pct)
@@ -54,7 +55,6 @@ load("seurat_obj_clustering.Robj")
 if(banksy) {
   DefaultAssay(seurat_obj) <- "Spatial.008um"
   Idents(seurat_obj) <- "banksy_cluster"
-  reduction <- "BANKSY"
 } else { if(assay == "Spatial.008um") {
   DefaultAssay(seurat_obj) <- "Spatial.008um"
 
