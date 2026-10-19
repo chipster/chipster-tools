@@ -29,8 +29,9 @@ k_geom <- as.numeric(k_geom)
 label.size <- as.numeric(label.size)
 
 # For now, use lazy = TRUE as default
-# PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster, but no "BANKSY" assay will be created to the Seurat object.)
-#lazy <- as.logical(lazy)
+
+## PARAMETER OPTIONAL lazy: "Lazy calculation" TYPE [FALSE, TRUE] DEFAULT TRUE (Makes the analysis faster, but no "BANKSY" assay will be created to the Seurat object.)
+
 lazy <- TRUE
 
 # For now, use only variable features for computing BANKSY clusters. Banksy does allow all genes to be used, but this is computationally expensive and not needed for most cases.
@@ -84,6 +85,8 @@ if (lazy) {
   seurat_obj <- FindNeighbors(seurat_obj, reduction = "BANKSY", dims = 1:dims.reduction)
   seurat_obj <- FindClusters(seurat_obj, cluster.name = "banksy_cluster", resolution = resolution)
   
+  Idents(seurat_obj) <- "banksy_cluster"
+
   
 #   pdf(file = paste0("BANKSY_plot_", assay, ".pdf"), width = width, height = height)
   
@@ -169,9 +172,6 @@ save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
 
 } 
 
-# Lazy is being TRUE always for now, this is stored here in case we need to use lazy = FALSE computation in the future.
-
-
 # else {
     
 #   # Else for lazy = FALSE
@@ -192,40 +192,82 @@ save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
   
 #   # Plotting
   
-#   pdf(file = paste0("BANKSY_plot_", assay, ".pdf"), width = width, height = height)
+#   # pdf(file = paste0("BANKSY_plot_", assay, ".pdf"), width = width, height = height)
   
-#   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
-#   print(p)
+#   # p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
+#   # print(p)
   
   
-#   banksy_cells <- CellsByIdentities(seurat_obj)
+#   # banksy_cells <- CellsByIdentities(seurat_obj)
   
-#   p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
-#                        facet.highlight = T, combine = T)
+#   # p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
+#   #                      facet.highlight = T, combine = T)
   
-#   print(p1)
+#   # print(p1)
   
-#   dev.off()
-  
-#   # res has to be spesified and 300 is generally good
-#   agg_png(filename = paste0("BANKSY_plot_", assay, ".png"),
-#       width = width, height = height, units = "in", res = 300)
-#   p <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
-#   print(p)
-#   dev.off()
-  
-#   agg_png(filename = paste0("BANKSY_plot_highlight_", assay, ".png"),
-#       width = width, height = height, units = "in", res = 300)
+#   # dev.off()
   
 #   banksy_cells <- CellsByIdentities(seurat_obj)
   
+# # Output directory for PNG plots
+
+# output_dir <- paste0(getwd(), "/Banksy_plots")
+# dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+
+# for (i in seq_along(assay)) {
+
+#   assay_bin <- assay[i]
+#   DefaultAssay(seurat_obj) <- assay_bin
+#   just.bin <- sub("Spatial\\.", "", assay_bin)
+
+  
+#   p0 <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster", label = T, repel = T, label.size = label.size)
+
+#   banksy_cells <- CellsByIdentities(seurat_obj)
+
 #   p1 <- SpatialDimPlot(seurat_obj, images = img_name, cells.highlight = banksy_cells[setdiff(names(banksy_cells), "NA")], cols.highlight = c("#FFFF00", "grey50"),
 #                        facet.highlight = T, combine = T)
+
+#   # Put plots into a list
+#   plots <- list(p0, p1)
   
-#   print(p1)
-  
-#   dev.off()
-  
+#   # Loop over the plots and save each as a separate PNG
+#   for (j in seq_along(plots)) {
+    
+#     filename <- file.path(
+#       output_dir,
+#       paste0(just.bin, "_plot_", j, ".png")
+#     )
+    
+#     agg_png(
+#       filename = filename,
+#       width = 10,
+#       height = 10,
+#       res = 300,
+#       bitsize = 16,
+#       units = "in"
+#     )
+    
+#     print(plots[[j]])
+    
+#     dev.off()
+#   }
+# }
+
+# png_files <- list.files(
+#   output_dir,
+#   pattern = "\\.png$",
+#   full.names = TRUE
+# )
+
+# # Sort them so the PDF follows assay -> plot order
+# png_files <- sort(png_files)
+
+# # Read all PNGs
+# images <- image_read(png_files)
+
+# image_write(images, format="pdf", path = "BANKSY_plots.pdf")
+
 #   save(seurat_obj, file = paste0("seurat_obj_banksy_", assay, ".Robj"))
   
 # }
