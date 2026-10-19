@@ -3,6 +3,7 @@
 # OUTPUT OPTIONAL Markerplot.pdf
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
+# PARAMETER banksy: "Do you want to use Banksy clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # PARAMETER OPTIONAL sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
@@ -48,9 +49,13 @@ documentVersion("Seurat", package.version("Seurat"))
 # Load the R-Seurat-object (called seurat_obj)
 load("seurat_obj_clustering.Robj")
 
+#print(Reductions(seurat_obj))
 
-
-if(assay == "Spatial.008um") {
+if(banksy) {
+  DefaultAssay(seurat_obj) <- "Spatial.008um"
+  Idents(seurat_obj) <- "banksy_cluster"
+  reduction <- "BANKSY"
+} else { if(assay == "Spatial.008um") {
   DefaultAssay(seurat_obj) <- "Spatial.008um"
 
   if(sketch) {
@@ -62,6 +67,7 @@ if(assay == "Spatial.008um") {
   DefaultAssay(seurat_obj) <- "Spatial.016um"
 
   Idents(seurat_obj) <- seurat_obj$seurat_cluster.016um
+  }
 }
 
 #print(Idents(seurat_obj))
@@ -69,9 +75,9 @@ if(assay == "Spatial.008um") {
 
 # SCTransform not good for Visium HD
 # Assay Spatial 8bin or 16bin shall be used instead
-#seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
+# seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
-print(DefaultAssay(seurat_obj))
+#print(DefaultAssay(seurat_obj))
 # Differential expression
 de_markers <- FindMarkers(seurat_obj, assay = assay, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
 de_markers <- de_markers[de_markers$p_val_adj < 0.1,]
