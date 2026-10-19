@@ -5,8 +5,13 @@
 # OUTPUT OPTIONAL markers_Spatial.008um.tsv
 # OUTPUT OPTIONAL markers_Spatial.016um.tsv
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
-# PARAMETER reduction: "Reduction to use" TYPE [PCA, UMAP] DEFAULT PCA
+# PARAMETER OPTIONAL sketch: "Was sketching used for 8um bin clustering?" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
+# PARAMETER banksy: "Do you want to use Banksy clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
+# PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
+# PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL height: "Height of the pdf" TYPE INTEGER DEFAULT 10
+# PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either cluster. Withholding infrequently expressed genes will speed up testing.)
+# PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL test.use: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (If yes, only genes with positive log2 fold change are listed in the result file.)
 # PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of spots in either group of spots.)
@@ -18,6 +23,9 @@
 # SLOTS 6
 # TOOLS_BIN ""
 
+
+
+# 2026-10-16 JV Add banksy clustering option
 
 # This package was installed along the new docker image
 #suppressMessages(install.packages("ape", repos = "https://cloud.r-project.org/"))
@@ -39,28 +47,30 @@ only.pos <- as.logical(only.pos)
 
 load("seurat_obj_clustering.Robj")
 
+#print(Reductions(seurat_obj))
 
 # This is the one error still present, this "fixes" it
-for (g in Graphs(seurat_obj)) {
-seurat_obj[[g]] <- NULL
-}
+# for (g in Graphs(seurat_obj)) {
+# seurat_obj[[g]] <- NULL
+# }
 
+# Tämä pitäisi saada toimimaan sitten. joskus oli "banksy.pca" reductioni.
 
-if(assay == "Spatial.008um") {
-  DefaultAssay(seurat_obj) <- "Spatial.008um"
-
-  if(sketch) {
+if (banksy) {
+  assay       <- "Spatial.008um"
+  cluster_col <- "banksy_cluster"
+  reduction   <- "BANKSY"          # check with Reductions(seurat_obj)
+} else if (assay == "Spatial.008um") {
+  if (sketch) {
     cluster_col <- "seurat_cluster.projected"
-    reduction <- paste0("full.", reduction, ".sketch")
+    reduction   <- paste0("full.", reduction, ".sketch")
   } else {
     cluster_col <- "seurat_cluster.008um"
-    reduction <- paste0(reduction, ".008um")
+    reduction   <- paste0(reduction, ".008um")
   }
 } else {
-  DefaultAssay(seurat_obj) <- "Spatial.016um"
-
   cluster_col <- "seurat_cluster.016um"
-  reduction <- paste0(reduction, ".016um")
+  reduction   <- paste0(reduction, ".016um")
 }
 
 
@@ -68,13 +78,20 @@ if(assay == "Spatial.008um") {
 DefaultAssay(seurat_obj) <- assay
 Idents(seurat_obj) <- cluster_col
 
+
+# Downsampling cells may not needed here
 #object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
-object_subset <- seurat_obj
+
+
+# Diet object for the analysis.
+object_subset <- DietSeurat(object = seurat_obj, assays = assay, layers = c("counts", "data"), dimreducs = reduction, graphs = NULL)
+
+object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]))
 
 DefaultAssay(object_subset) <- assay
 Idents(object_subset) <- cluster_col
 
-object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE)
+object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE, dims = 1:30)
 
 print("Finding markers...")
 markers <- FindAllMarkers(object_subset, assay = assay, only.pos = only.pos, test.use = test.use, min.pct = min.pct, logfc.threshold = logfc.threshold, print.bar = TRUE)
