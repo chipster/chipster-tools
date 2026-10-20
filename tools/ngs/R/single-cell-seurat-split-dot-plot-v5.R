@@ -88,8 +88,10 @@ pdf(file = "seurat_multi_sample_plots.pdf", width = width, height = height) # op
 
 # Dot plot:
 # DotPlot(data.combined, features = rev(markers.to.plot), cols = c("blue", "red"), dot.scale = 8, split.by = "stim") + RotatedAxis()
-# Check how many samples there are and choose as many colors:
-number.of.samples <- length(levels(as.factor((data.combined$stim))))
+# Check how many samples there are and choose as many colors.
+# droplevels(): stim can be a factor with levels that have no cells left.
+sample.names <- levels(droplevels(as.factor(data.combined$stim)))
+number.of.samples <- length(sample.names)
 colors.for.samples <- rainbow(number.of.samples)
 DotPlot(data.combined, features = rev(markers.to.plot), cols = colors.for.samples, dot.scale = 8, split.by = "stim", scale = as.logical(scale.data)) + RotatedAxis()
 
@@ -102,9 +104,6 @@ FeaturePlot(data.combined, features = markers.to.plot, min.cutoff = "q9", reduct
 # These plots get squeezed when there are many samples, and are at some point very difficult to read.
 # That is why we subset the object so that only 4 samples are shown on each page.
 
-
-number.of.samples <- length(levels(as.factor((data.combined$stim))))
-sample.names <- levels(as.factor((data.combined$stim)))
 Idents(data.combined) <- "stim"
 
 if (number.of.samples <= 4) {
@@ -112,29 +111,20 @@ if (number.of.samples <= 4) {
 }
 # If there are more than 4 samples, lets split them in multiple pages, using subsetting.
 if (number.of.samples > 4) {
-  # Using i as a bookmark, which sample we are now working with.
-  i <- 1
-  # Looping and printing pages until all samples are printed (rounding always up, last page can have only 1 sample.)
-  for (j in 1:ceiling(number.of.samples / 4)) {
-    # While i hasn't gone past the last sample, keep subsetting and printing.
-    if (i <= number.of.samples) {
-      samples.of.this.round <- as.vector(sample.names[i:(i + 3)])
-      samples.of.this.round <- samples.of.this.round[!is.na(samples.of.this.round)]
-      n.this.round <- length(samples.of.this.round)
-      subset.of.samples <- subset(data.combined, idents = samples.of.this.round)
-      Idents(subset.of.samples) <- "stim"
-      feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale = color.scale, pt.size = point.size)
-      if (n.this.round < 4) {
-        # Pad the right side with blank space so each panel stays the same width
-        # as on full (4-sample) pages. feat.plot takes n.this.round/4 of the width,
-        # the spacer block takes the rest — keeping per-panel size consistent.
-        n.spacer.cols <- 4 - n.this.round
-        spacer.block <- wrap_plots(rep(list(plot_spacer()), length(markers.to.plot) * n.spacer.cols), ncol = n.spacer.cols)
-        print((feat.plot | spacer.block) + plot_layout(widths = c(n.this.round, n.spacer.cols)))
-      } else {
-        print(feat.plot)
-      }
-      i <- i + 4
+  # Pages of 4 samples, the last page can have fewer
+  pages <- split(sample.names, ceiling(seq_along(sample.names) / 4))
+  for (samples.of.this.round in pages) {
+    n.this.round <- length(samples.of.this.round)
+    subset.of.samples <- subset(data.combined, idents = samples.of.this.round)
+    Idents(subset.of.samples) <- "stim"
+    feat.plot <- FeaturePlot(subset.of.samples, features = markers.to.plot, split.by = "stim", max.cutoff = 3, cols = c("grey", "blue"), reduction = reduction.method, order = as.logical(plotting.order.used), keep.scale = color.scale, pt.size = point.size)
+    if (n.this.round < 4) {
+      # Pad the right side with blank space so each panel stays the same width
+      # as on full (4-sample) pages. feat.plot takes n.this.round/4 of the width,
+      # the spacer takes the rest — keeping per-panel size consistent.
+      print(wrap_plots(feat.plot, plot_spacer(), nrow = 1, widths = c(n.this.round, 4 - n.this.round)))
+    } else {
+      print(feat.plot)
     }
   }
 }
