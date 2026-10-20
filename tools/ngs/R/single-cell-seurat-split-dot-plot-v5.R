@@ -66,21 +66,25 @@ if (normalisation.method == "SCT") {
 # Store idents:
 stored_idents <- Idents(data.combined)
 
+# Drop empty entries, e.g. from a trailing comma, and duplicates, which FeaturePlot would plot once
+markers.to.plot <- unique(markers.to.plot[markers.to.plot != ""])
+
 # Sanity check: are the requested genes available in the data:
+if (length(markers.to.plot) == 0) {
+  stop("CHIPSTER-NOTE: No marker genes were given.")
+}
 all.genes <- rownames(x = data.combined)
-match(markers.to.plot, all.genes)
-# if more than one of the genes is not in the list, print error message:
-if (sum(is.na((match(markers.to.plot, all.genes)))) > 1) {
-  not.found <- (markers.to.plot[is.na(match(markers.to.plot, all.genes)) == TRUE])
-  not.found <- paste(not.found, collapse = ",")
+genes.not.found <- is.na(match(markers.to.plot, all.genes))
+# if more than one of the genes is not in the list, or none of them is, print error message:
+if (sum(genes.not.found) > 1 || all(genes.not.found)) {
+  not.found <- paste(markers.to.plot[genes.not.found], collapse = ",")
   stop(paste("CHIPSTER-NOTE: ", "The genes you requested were not found in this dataset:", not.found))
 }
 
 # continue even if one gene is missing
-if (!all(!is.na(match(markers.to.plot, all.genes)))) {
-  not.found <- markers.to.plot[is.na(match(markers.to.plot, all.genes)) == TRUE]
-  print(paste("Continuing the visualization without the one gene not found: ", not.found))
-  markers.to.plot <- markers.to.plot[!is.na(match(markers.to.plot, all.genes))]
+if (any(genes.not.found)) {
+  print(paste("Continuing the visualization without the one gene not found: ", markers.to.plot[genes.not.found]))
+  markers.to.plot <- markers.to.plot[!genes.not.found]
 }
 
 pdf(file = "seurat_multi_sample_plots.pdf", width = width, height = height) # open pdf
