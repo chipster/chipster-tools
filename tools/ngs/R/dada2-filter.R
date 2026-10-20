@@ -63,7 +63,7 @@ if (paired == "paired") {
   if (fileOk("input_list.txt")) {
     txt_filenames <- c() # name of the files in the txt file
     sample.names <- c()
-    input <- readLines("input_list.txt")
+    input <- read_list_file("input_list.txt")
     # take out the file names and sample name and put them to one vector, those are separeted with '\t'
     for (row in input) {
       sample <- strsplit(row, "\t", fixed = TRUE)
@@ -76,6 +76,7 @@ if (paired == "paired") {
     if (length(txt_filenames) != length(filenames)) {
       stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
     } else {
+      safe_file_name(c(sample.names, txt_filenames))
       filenames <- paste0("input_folder/", txt_filenames)
     }
   } else {
@@ -161,7 +162,7 @@ if (paired == "paired") {
   if (fileOk("input_list.txt")) {
     txt_filenames <- c() # name of the files in the txt file
     sample.names <- c()
-    input <- readLines("input_list.txt")
+    input <- read_list_file("input_list.txt")
     # take out the file names and sample name and put them to one vector, those are separeted with '\t'
     for (row in input) {
       sample <- strsplit(row, "\t", fixed = TRUE)
@@ -174,6 +175,7 @@ if (paired == "paired") {
     if (length(txt_filenames) != length(filenames)) {
       stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
     } else {
+      safe_file_name(c(sample.names, txt_filenames))
       filenames <- paste0("input_folder/", txt_filenames)
     }
   } else {
@@ -218,6 +220,6 @@ if (paired == "paired") {
 
 # make a output tar package named filtered.tar and gzip
 system("gzip output_folder/*.fq")
-system("cd output_folder && tar cf ../filtered.fastqs.tar *")
+system("cd output_folder && tar cf ../filtered.fastqs.tar -- *")
 
 # EOF

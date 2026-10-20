@@ -1,0 +1,228 @@
+# TOOL spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R: "Seurat v5 -Integration with scRNA-seq data" (This tool annotates clustered Visium HD data with reference scRNA-seq data. It uses Robust Cell Type Decomposition, RCTD, to deconvolve spot-level data from spatial datasets, when provided with an scRNA-seq reference.)
+# INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
+# INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
+# OUTPUT spatialPlot.pdf
+# OUTPUT OPTIONAL seurat_obj_integrated.Robj
+# PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um", Spatial.016um: "Spatial.016um"] DEFAULT Spatial.008um
+# PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
+# RUNTIME R-4.5.1-visium-hd
+# SLOTS 40
+# TOOLS_BIN ""
+
+assay <- as.character(assay)
+resolution = 0.5
+dims.reduction = 30
+label.size = 2
+num_cores = as.numeric(chipster.threads.max)
+parallel = TRUE
+
+# 2026-07-15 JV
+
+
+# Matrix version 1.8.0 needed for zgeMatrix. Trying to install it on the VM Runtime R-4.5.1-seurat5 through github
+
+library(Seurat)
+library(ggplot2)
+library("dplyr")
+library("tidyverse")
+library("Matrix")
+library("SeuratWrappers")
+library("spacexr")
+
+
+options(future.globals.maxSize = 3000 * 1024^2)  # 3000 MiB
+#print("Session info:")
+#sessionInfo()
+
+load("seurat_obj_clustering.Robj")
+# n_cells <- 20000  # target number of cells
+# set.seed(42)      # for reproducibility
+
+# cells_to_keep <- sample(colnames(seurat_obj), size = n_cells)
+# seurat_obj <- subset(seurat_obj, cells = cells_to_keep)
+
+seurat_obj
+
+
+
+
+print("Loading ref object")
+
+#load("seurat_obj_scrna.Robj")
+
+
+# cells_to_keep <- sample(colnames(data), size = n_cells)
+# data <- subset(data, cells = cells_to_keep)
+
+ref <- readRDS("scRNAseq_ref.Rds")
+#rm(data)
+
+
+# Basic filter to make sure
+ref <- subset(ref, subset = nFeature_RNA > 200 & nFeature_RNA < 2500)
+
+
+
+
+# # Seurat vignette
+
+
+
+#sketch the cortical subset of the Visium HD dataset
+DefaultAssay(seurat_obj) <- assay
+if (!("sketch" %in% Assays(seurat_obj))) {
+
+seurat_obj <- SketchData(
+  object = seurat_obj,
+  ncells = 100000,
+  method = "LeverageScore",
+  sketched.assay = "sketch",
+  features = VariableFeatures(seurat_obj)
+)
+
+DefaultAssay(seurat_obj) <- "sketch"
+seurat_obj <- ScaleData(seurat_obj)
+seurat_obj <- RunPCA(seurat_obj, assay="sketch", reduction.name = "pca.seurat_obj.sketch", verbose = T)
+seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca.seurat_obj.sketch", dims = 1:10)
+seurat_obj <- RunUMAP(seurat_obj, reduction = "pca.seurat_obj.sketch", reduction.name = "umap.seurat_obj.sketch", return.model = T, dims = 1:10, verbose = T)
+
+
+
+gc()
+
+
+
+Idents(ref) <- "subclass_label"
+counts <- ref[["RNA"]]$counts
+cluster <- as.factor(ref$subclass_label)
+nUMI <- ref$nCount_RNA
+levels(cluster) <- gsub("/", "-", levels(cluster))
+cluster <- droplevels(cluster)
+
+# create the RCTD reference object
+reference <- Reference(counts, cluster, nUMI)
+
+counts_hd <- seurat_obj[["sketch"]]$counts
+seurat_obj_cells_hd <- colnames(seurat_obj[["sketch"]])
+
+# Coordinates stored in 1 and 2 cols?
+#coords <- GetTissueCoordinates(seurat_obj)[seurat_obj_cells_hd,1:2]
+
+print("Troubleshoot")
+#Image missmatch 
+
+if (assay == "Spatial.016um") {
+img_16um <-Images(seurat_obj)[[2]]
+coords_raw <- GetTissueCoordinates(seurat_obj, image = img_16um)[seurat_obj_cells_hd,1:2]
+} else {
+  #8um bin
+  coords_raw <- GetTissueCoordinates(seurat_obj)[seurat_obj_cells_hd,1:2]
+}
+
+
+query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
+
+#SpatialDimPlot(seurat_obj)
+
+# run RCTD with min of 1 cell
+RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 1, test_mode = FALSE)
+RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
+# add results back to Seurat object
+seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)
+
+
+gc()
+
+# project RCTD labels from sketched cortical cells to all cortical cells
+seurat_obj$first_type <- as.character(seurat_obj$first_type)
+seurat_obj$first_type[is.na(seurat_obj$first_type)] <- 'Unknown'
+
+seurat_obj <- ProjectData(
+  object = seurat_obj,
+  assay = assay,
+  full.reduction = "pca.seurat_obj.sketch",
+  sketched.assay = "sketch",
+  sketched.reduction = "pca.seurat_obj.sketch",
+  umap.model = "umap.seurat_obj.sketch",
+  dims = 1:10,
+  refdata = list(full_first_type = "first_type")
+)
+
+
+
+DefaultAssay(seurat_obj) <- assay
+Idents(seurat_obj) <- "full_first_type"
+
+# we only ran RCTD on the cortical cells - NOPE ALL
+# set labels to all other cells as "Unknown"
+#seurat_obj[[]][, "full_first_type"] <- "Unknown"
+#seurat_obj$full_first_type[Cells(seurat_obj)] <- seurat_obj$full_first_type[Cells(seurat_obj)]
+
+pdf(file = "spatialPlot.pdf")
+
+p <- SpatialDimPlot(seurat_obj)
+print(p)
+#, cells.highlight = cells[excitatory_names], cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T, 
+
+
+# sanity check plot for cortical data (look that the right cells are in right spot physicall)
+
+# seurat_obj[[]][, "full_first_type"] <- "Unknown"
+# seurat_obj$full_first_type[Cells(seurat_obj)] <- seurat_obj$full_first_type[Cells(seurat_obj)]
+# Idents(seurat_obj) <- "full_first_type"
+
+ cells <- CellsByIdentities(seurat_obj)
+
+# excitatory_names <- sort(grep("^L.* CTX",names(cells),value = TRUE))
+
+
+# p3 <- SpatialDimPlot(seurat_obj, cells.highlight = cells[excitatory_names], cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T, ncol=4)
+# print(p3)
+
+
+# Claude code
+
+
+known_types <- names(sort(table(seurat_obj$full_first_type), decreasing = TRUE))[1:8]
+known_types <- setdiff(known_types, "Unknown")
+ 
+p_highlight <- SpatialDimPlot(
+  seurat_obj,
+  cells.highlight  = cells[known_types],
+  cols.highlight   = c("#FFFF00", "black"),
+  facet.highlight  = TRUE,
+  combine          = TRUE,
+  ncol             = 4,
+  image.alpha = 0
+)
+print(p_highlight)
+
+
+if ("BANKSY" %in% Assays(seurat_obj)) {
+  plot_cell_types <- function(data, label) {
+  p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
+    geom_bar(stat = "identity", position = "stack") +
+    geom_text(aes(label = ifelse(n >= min_count_to_show_label, full_first_type, "")), position = position_stack(vjust = 0.5), size = 2) +
+    xlab(label) +
+    ylab("# of Spots") +
+    ggtitle(paste0("Distribution of Cell Types across ", label)) +
+    theme_minimal()
+}
+
+cell_type_banksy_counts <- seurat_obj[[]] %>%
+  dplyr::filter(full_first_type %in% known_types) %>%
+  dplyr::count(full_first_type, banksy_cluster)
+
+min_count_to_show_label <- 1
+
+p_banksy <- plot_cell_types(cell_type_banksy_counts, "banksy_cluster")
+print(p_banksy)
+}
+
+dev.off()
+
+save(seurat_obj, file = "seurat_obj_integrated.Robj")
+
+}
+
+# EOF

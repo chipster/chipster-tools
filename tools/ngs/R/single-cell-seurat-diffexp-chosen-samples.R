@@ -66,9 +66,9 @@ samples2.cluster <- paste(cluster, "_", samples2.ok, sep = "")
 if (normalisation.method == "SCT") {
   data.combined <- PrepSCTFindMarkers(data.combined)
   # Note: assay = "SCT" and recorrect_umi = FALSE
-  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) 
+  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) 
 } else {
-  cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, log2FC.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+  cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
 }
 
  # Filter based on adj-p-val (no return.thresh parameter):

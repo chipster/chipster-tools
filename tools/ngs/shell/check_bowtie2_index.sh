@@ -69,10 +69,19 @@ then
   index_file_count=$(tar -tf $genome | grep -c -E ".bt2$")
   if [[ index_file_count -gt 4 ]]
   then
-      gen_name=$(tar -tf $genome | grep -E ".rev.1.bt2$")
-      gen_name=$(basename $gen_name .rev.1.bt2 )
-      tar xvf $genome
-      index_path=$(pwd)
+      # Extract to a folder of its own, so that the files of the package can't replace the files of the job.
+      # Take the name from the extracted file, because tar -tf escapes e.g. ä in the C locale.
+      mkdir -p genome_index
+      tar xvf $genome -C genome_index
+      rev_files=( genome_index/*.rev.1.bt2 )
+      if [[ ${#rev_files[@]} -ne 1 || ! -f ${rev_files[0]} ]]
+      then
+         echo "The tar file does not contain bowtie2 index files"
+         echo "wrong_tar_content"
+         exit 1
+      fi
+      gen_name=$(basename "${rev_files[0]}" .rev.1.bt2)
+      index_path=$(pwd)/genome_index
       echo "The location of bowtie2_indexes:"
       echo "$index_path/$gen_name"
       exit 0

@@ -23,7 +23,7 @@
         <li>Anchor identification method [CCA, RPCA]</li>
         <li>Number of CCs to use in the neighbor search [30]</li>
         <li>Number of PCs to use in the integration [30]</li>
-        <li>Number of PCs to use for UMAP or TSNE [30]</li>
+        <li>Number of PCs to use for UMAP or tSNE [30]</li>
         <li>Resolution for granularity [0.8]</li>
         <li>Visualisation of clusters with tSNE, UMAP or PCA [UMAP]</li>
         <li>Point size in cluster plot [0.5]</li>
@@ -34,15 +34,13 @@
     <h3>Details</h3>
 
     <p>
-        As inputs, give the Seurat object generated with <b>Seurat Merge & normalise, detect variable genes and
-            regress</b>. Make sure you indicate which normalisation method
-        was used in that step (the first parameter). <br>
+        As input, give the Seurat object generated with <b>Seurat Merge & normalise, detect variable genes,
+            regress and PCA</b>. <br>
     </p>
 
     <h4>Normalization method: Global scaling normalization vs SCTransform</h4>
     <p>
-        The first parameter asks about the normalisation step performed in the tool: <b>Merge & normalise, detect
-            variable genes and regress</b>.
+        Make sure you indicate which normalisation method was used in the tool <b>Merge & normalise, detect variable genes, regress and PCA</b> (the first parameter).
 
     </p>
 
@@ -50,22 +48,19 @@
 
     <p>
         The <b>"anchor identification method"</b> parameter determines which anchor identification method to use.
-        By default, canonical correlation analysis CCA is used, but user can also decide to use the
-        faster and more conservative reciprocal PCA approach.
-        When determining anchors between any two datasets using RPCA, each dataset is projected into the
-        others PCA space and the anchors are constrained by the same mutual neighborhood requirement.
+        By default, canonical correlation analysis (CCA) is used. The other option is 
+        faster and more conservative reciprocal PCA (RPCA).
     </p>
     <p>
-        By identifying shared sources of variation between datasets, CCA is well-suited for identifying anchors
-        when cell types are conserved, but there are very substantial differences in gene expression
-        across experiments, i.e. when experimental
-        conditions or disease states introduce very strong expression shifts,
-        or when integrating datasets across modalities and species.
-        However, CCA-based integration may also lead to overcorrection,
-        especially when a large proportion of cells are non-overlapping across datasets.
+        CCA is well-suited for identifying anchors when cell types are well conserved, because it identifies shared sources of variation between datasets. However, there can be substantial differences in gene expression
+        across experiments, i.e. when experimental conditions or disease states introduce very strong expression shifts,
+        or when integrating datasets across modalities and species. When a large proportion of cells are non-overlapping across datasets, CCA-based integration may lead to overcorrection. 
+        
     </p>
     <p>
-        RPCA-based integration runs significantly faster, and also represents a more conservative
+        RPCA determines anchors between any two datasets using RPCA, each dataset is projected into the
+        other's PCA space, and the anchors are constrained by the same mutual neighborhood requirement.
+		RPCA-based integration runs significantly faster, and also represents a more conservative
         approach where cells in different biological states are less likely to "align" after integration.
         RPCA is thus recommended during integrative analysis where:
     <ul>
@@ -80,14 +75,14 @@
 
     <p>
         This tool performs data integration of multiple samples (in .Robj).
-        First, Canonical correlation analysis (CCA) is performed to identify common sources of variation between
+        First, canonical correlation analysis (CCA) is performed to identify common sources of variation between
         the datasets.
         The tool then identifies anchors, gives scores (=weights) to these anchors
         and then uses these anchors to integrate the datasets.
     </p>
 
     <p>
-        The third parameter tells which dimensions from the CCA/PCA to use for specifying the neighbor seach space.
+        The third parameter tells which dimensions from the CCA/PCA to use for specifying the neighbor search space.
         The neighbors are used to determine the anchors for the alignment.
     </p>
 

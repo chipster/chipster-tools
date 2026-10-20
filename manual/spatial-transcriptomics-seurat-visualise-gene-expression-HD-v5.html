@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head><title></title></head>
+<body>
+
+<h2>Seurat v5 -Visualize gene expression in spatial transcriptomics data</h2>
+
+<h3>Description</h3>
+
+<p>
+With this tool, you can visualize the expression of selected genes in spatial transcriptomics data. The tool generates a spatial plot for each gene, where the color intensity represents the expression level of the gene in each spatial spot. This allows for the identification of spatial patterns of gene expression across the tissue section.
+</p>
+<p>You can either list your genes of interest as a comma-separated (,) list or upload a tsv file containing genes as a single column without a header</p>
+
+<h3>Parameters</h3>
+
+<ul>
+    <li>Gene name ["Hpca, Ttr"]</li>
+    <li>Point size [1.6]</li>
+    <li>Minimum transparency of the points [1]</li>
+    <li>Maximum transparency of the points [1]</li>
+    <li>Determine color scale based on all genes [no]</li>
+    <li>Width of the plot [10]</li>
+    <li>Height of the plot [10]</li>
+</ul>
+
+ <h3>Details</h3>
+ 
+<p>
+Spatial feature plot shows molecular data overlaid on top of the tissue image. Highly expressed marker genes will be clearly displayed in the image.
+
+Note that you can select whether the color scale is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes. If you wish to compare gene expression between different genes, it is useful to set this parameter to "yes" so that the color scale is the same for all genes.
+</p>
+
+
+<p>
+    More information can be found from the <a href=https://nbisweden.github.io/workshop-scRNAseq/labs/seurat/seurat_08_spatial.html>spatial transciptomics tutorial.</a>
+</p>
+
+<h3>Output</h3>
+
+<ul>
+<li>gene_expression_plot.pdf: Spatial plot of genes' expression in the spatial plot. </li>
+
+</ul>
+
+
+
+</body>
+

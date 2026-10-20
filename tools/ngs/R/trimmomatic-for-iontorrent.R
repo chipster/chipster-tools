@@ -98,20 +98,20 @@ if (isTar) {
     system("mkdir input_folder")
     system("mkdir output_folder")
     system("cd input_folder && tar xf ../reads.tar")
-    system("cd input_folder && gunzip *.gz")
-    filenames <- list.files("input_folder")
+    system("cd input_folder && gunzip -- *.gz")
+    filenames <- safe_name(list.files("input_folder"))
     for (f in filenames) {
         input_fastq <- paste("input_folder/", f, sep = "")
         output_base <- strip_name(f)
         output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
-        trimmomatic.command <- paste("java -jar", trimmomatic.binary, trim.params, input_fastq, output_fastq, step.params)
+        trimmomatic.command <- paste("java -jar", trimmomatic.binary, trim.params, shQuote(input_fastq), shQuote(output_fastq), step.params)
         documentCommand(trimmomatic.command)
         system(trimmomatic.command)
     }
     # gzip all output FASTQ files
     system("gzip output_folder/*.fq")
     # Make a tar package.
-    system("cd output_folder && tar cf ../trimmed.tar *")
+    system("cd output_folder && tar cf ../trimmed.tar -- *")
 } else {
     stop("CHIPSTER-NOTE: Input is not a tar file. For single reads use tool Trim reads with Trimmomatic.")
 }

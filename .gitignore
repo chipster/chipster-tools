@@ -1,6 +1,5 @@
 /.project
 /build/
-.gradle/
 deploy/node_modules
 tools/kielipankki
 deploy/build/tools.tar.gz

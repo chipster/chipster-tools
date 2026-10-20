@@ -59,6 +59,13 @@ if (genome.filetype == "tar") {
   runExternal("tar -tf genome.txt >> bowtie2.log")
   check.command <- paste(bowtie2.index.binary, "genome.txt | tail -1 ")
   bowtie2.genome <- system(check.command, intern = TRUE)
+  # The script prints the tar listing if the index is missing, so check that the index files exist
+  # and use only the checked index name
+  index.name <- basename(bowtie2.genome)
+  if (!file.exists(file.path("genome_index", paste0(index.name, ".rev.1.bt2")))) {
+    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie2 index.")
+  }
+  bowtie2.genome <- file.path(getwd(), "genome_index", safe_name(index.name))
   # system("ls -l >> bowtie2.log")
   # case 2. Fasta file
 } else {

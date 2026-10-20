@@ -5,6 +5,7 @@
 # PARAMETER OPTIONAL minribo: "Filter out spots which have lower ribosomal transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0 (Filter out spots that have lower ribosomal transcript percentage than this.)
 # PARAMETER OPTIONAL hbcutoff: "Filter out spots which have higher hemoglobin transcript percentage" TYPE DECIMAL FROM 0 TO 100 DEFAULT 20 (Filter out spots that have higher percentage of hemoglobin transcripts than this.)
 # RUNTIME R-4.2.3-seurat5
+# SLOTS 3
 # TOOLS_BIN ""
 
 

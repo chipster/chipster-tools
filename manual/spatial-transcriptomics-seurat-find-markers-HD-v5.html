@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+    <h2>Seurat V5 - Find marker genes for all clusters </h2>
+
+    <h3>Description</h3>
+
+    <p>
+        Given a Seurat object of Visium HD data with cluster information, this tool identifies marker genes for all clusters. Each cluster is compared to all the other spots. 
+        The top 5 marker genes for each cluster are visualized as a heatmap.
+    </p>
+
+    <h3>Parameters</h3>
+    <ul>
+        <li>Assay to use [Spatial.008um]</li>
+        <li>Was sketch clustering used for 8 bin assay [no]</li>
+        <li>Test for differential expression (wilcox, MAST)[wilcox]</li>
+        <li>Report only positive marker genes [yes]</li>
+        <li>Limit testing to genes which are expressed in at least this fraction of spots [0.25]</li>
+        <li>Limit testing to genes which show at least this fold change [0.1]</li>
+        <li>Label size of the plots [3]</li>
+        <li>Width of the plot [10]</li>
+        <li>Height of the plot [10]</li>
+        <!--<li>Reduction to use [PCA]</li>-->
+    </ul>
+
+
+    <h3>Details</h3>
+
+    <p>
+        As input, give a Seurat object containing cluster information. Differentially expressed genes are by default detected using a Wilcoxon Rank Sum test. 
+        Alternatively, you can select MAST, which identifies differentially expressed genes between two groups of cells using a hurdle model tailored to scRNA-seq data.
+        By default the tool lists only positive marker genes, in other words those genes that are more highly expressed in the cluster of interest if compared to all other spots.
+    </p>
+
+    <p>
+    In order to speed up testing, you can limit testing to genes which are detected in a minimum fraction of spots in either of the two populations. 
+    You can also limit testing to genes that show a minimum fold change between the two groups. Please note that increasing the threshold can miss weaker signals.
+    </p>
+
+    <h3>Output</h3>
+
+    <ul>
+        <li>markers_{assay}.tsv: A table containing marker genes for each cluster</li>
+        <li>markers_{assay}.pdf: A heatmap of the top 5 marker genes for each cluster</li>
+    </ul>
+
+
+</body>
