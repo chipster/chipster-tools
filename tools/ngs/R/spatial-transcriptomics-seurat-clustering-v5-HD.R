@@ -4,7 +4,6 @@
 # OUTPUT OPTIONAL clustering_plots.pdf
 # PARAMETER OPTIONAL dims.reduction: "Dimensions of reduction to use" TYPE INTEGER DEFAULT 30 (Dimensions of reduction to use for clustering and UMAP.)
 # PARAMETER OPTIONAL res: "Resolution for granularity for clustering" TYPE DECIMAL DEFAULT 0.8 (Resolution parameter that sets the granularity of the clustering. Higher values lead to greater number of clusters.)
-# PARAMETER OPTIONAL use.sketch: "Use sketch-based clustering for 8 µm assay" TYPE [yes: yes, no: no] DEFAULT yes (Use sketch-based clustering for the 8 µm assay. A representative subset of bins is selected using leverage scores, clustered in memory, and the cluster labels and UMAP are then projected back to all bins. Recommended for large datasets. The 16 µm assay is always clustered using the standard method.)
 # PARAMETER OPTIONAL sketch.ncells: "Number of bins to use in sketch" TYPE INTEGER DEFAULT 50000 (Number of bins to include in the sketch for the 8 µm assay. Only used when sketch-based clustering is enabled. The default of 50000 follows the Seurat v5 Visium HD vignette recommendation.)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
@@ -149,6 +148,7 @@ assay_names <- Assays(seurat_obj) # e.g. "Spatial.008um" "Spatial.016um"
 
 # Png to Pdf
 
+## PARAMETER OPTIONAL use.sketch: "Use sketch-based clustering for 8 µm assay" TYPE [yes: yes, no: no] DEFAULT yes (Use sketch-based clustering for the 8 µm assay. A representative subset of bins is selected using leverage scores, clustered in memory, and the cluster labels and UMAP are then projected back to all bins. Recommended for large datasets. The 16 µm assay is always clustered using the standard method.)
 
 
 output_dir <- paste0(getwd(), "/Clustering_plots")
@@ -163,12 +163,16 @@ for (i in seq_along(assay_names)) {
     pca_bin     <- paste("pca.", just.bin, sep = "")
     cluster_bin <- paste("seurat_cluster.", just.bin, sep = "")
     umap_bin    <- paste("umap.", just.bin, sep = "")
- 
+    #use.sketch == "yes"
+
     # Decide whether to use sketch-based clustering for this assay.
     # Sketching is only applied to the 8um assay when the user has enabled it.
-    do.sketch <- (use.sketch == "yes") && grepl("008um", assay_bin)
- 
-    if (do.sketch) {
+    #do.sketch <- (use.sketch == "yes") && grepl("008um", assay_bin)
+
+    # Use sketch clustering for 8um bin assay.
+    
+    if (assay_bin == "Spatial.008um") {
+    #if (do.sketch) {
         # ---- Sketch-based clustering (8um assay only) ----------------------
         # Follows the Seurat v5 Visium HD vignette exactly.
         # The full dataset stays in memory throughout (no BPCells package needed).
