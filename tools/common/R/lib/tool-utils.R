@@ -112,7 +112,8 @@ safe_file_name <- function(names) {
 # Reads the lines of a list file from the user. Removes the byte order mark that e.g. Windows Notepad
 # may add to the beginning of the file, so that it doesn't end up in the first name. Checks the bytes,
 # because the job may run in the C locale. gzfile() reads also uncompressed files, so that gzipped
-# list files keep working like with readLines(filename).
+# list files keep working like with readLines(filename). Skips empty lines and lines with only
+# whitespace, e.g. a blank line at the end of the file.
 #
 read_list_file <- function(filename) {
   lines <- readLines(gzfile(filename))
@@ -122,6 +123,8 @@ read_list_file <- function(filename) {
       lines[1] <- rawToChar(first[-(1:3)])
     }
   }
+  # useBytes, because a line may not be valid in the job's locale
+  lines <- lines[!grepl("^[ \t\r]*$", lines, useBytes = TRUE)]
   return(lines)
 }
 
