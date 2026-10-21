@@ -393,6 +393,62 @@ expect_error(
     info = "make_input_list stops when a listed file isn't selected"
 )
 
+# The notes name all the files once, in one sentence
+note_of <- function(expr) {
+    tryCatch(
+        {
+            expr
+            "no error"
+        },
+        error = function(e) conditionMessage(e)
+    )
+}
+writeLines(c("S1.fq", "S3.fq", "S4.fq"), "list.txt")
+expect_equal(
+    note_of(make_input_list("list.txt")),
+    "CHIPSTER-NOTE:  Input file list includes one or more files that has not been selected: S3.fq, S4.fq",
+    info = "make_input_list names all the files that aren't selected in one note"
+)
+writeLines(c("S1.fq", "S2.fq", "S1.fq", "S2.fq", "S1.fq"), "list.txt")
+expect_equal(
+    note_of(make_input_list("list.txt")),
+    paste(
+        "CHIPSTER-NOTE:  Input file list contains one or more duplicated entries: S1.fq, S2.fq",
+        "\nFilenames must be unique so they can be correctly assigned."
+    ),
+    info = "make_input_list names each duplicated entry once, in one note"
+)
+
+writeBin(raw(0), "list.txt")
+expect_error(
+    make_input_list("list.txt"),
+    "CHIPSTER-NOTE: The input file list list.txt is empty",
+    info = "make_input_list stops with a note for an empty list"
+)
+writeLines(c("", "  ", ""), "list.txt")
+expect_error(
+    make_input_list("list.txt"),
+    "CHIPSTER-NOTE: The input file list list.txt is empty",
+    info = "make_input_list stops with a note for a list with only blank lines"
+)
+write_inputs(c("S1.fq", "my reads.txt"), c("reads001.fq", "list.txt"))
+expect_error(
+    make_input_list("list.txt"),
+    "CHIPSTER-NOTE: The input file list my reads.txt is empty",
+    info = "make_input_list names an empty list by its dataset name"
+)
+write_inputs(c("S1.fq", "S2.fq"))
+
+# read_list_file() does the reading: byte order mark, blank lines and a missing final newline
+writeBin(c(as.raw(c(0xef, 0xbb, 0xbf)), charToRaw("S2.fq\r\n\r\nS1.fq")), "list.txt")
+expect_equal(
+    make_input_list("list.txt"),
+    c("reads002.fq", "reads001.fq"),
+    info = "make_input_list reads a list with a BOM, a blank line and no final newline"
+)
+writeBin(as.raw(c(0xff, 0xfe, 0x53, 0x00, 0x31, 0x00, 0x2e, 0x00, 0x66, 0x00, 0x71, 0x00, 0x0a, 0x00)), "list.txt")
+expect_error(make_input_list("list.txt"), "UTF-16", info = "make_input_list stops with a note for a UTF-16 list")
+
 
 setwd(old.wd)
 if (run.standalone) {
