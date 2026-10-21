@@ -120,6 +120,92 @@ expect_equal(grepl("CHIPSTER-NOTE: File and sample names", msg, useBytes = TRUE)
   info = "safe_name rejects a name that isn't valid UTF-8"
 )
 
+# --- read_list_file ---------------------------------------------------------------------------------
+
+# Writes the given bytes to a file and returns its name
+write_bytes <- function(bytes, name = "list.txt") {
+  writeBin(bytes, name)
+  name
+}
+bom <- as.raw(c(0xef, 0xbb, 0xbf))
+
+expect_equal(read_list_file(write_bytes(c(bom, charToRaw("S2_1.fq\r\n\r\nS2_2.fq\r\n")))), c("S2_1.fq", "S2_2.fq"),
+  info = "read_list_file removes the BOM, accepts CRLF and skips a blank line"
+)
+expect_equal(read_list_file(write_bytes(charToRaw("a.fq\nb.fq\n\n\n"))), c("a.fq", "b.fq"),
+  info = "read_list_file skips blank lines at the end"
+)
+expect_equal(read_list_file(write_bytes(charToRaw("a.fq\n  \n\t\n \r\n\f\nb.fq\n"))), c("a.fq", "b.fq"),
+  info = "read_list_file skips lines with only whitespace"
+)
+nbsp <- as.raw(c(0xc2, 0xa0))
+expect_equal(read_list_file(write_bytes(c(charToRaw("a.fq\n"), nbsp, charToRaw("\n "), nbsp, charToRaw("\nb.fq\n")))),
+  c("a.fq", "b.fq"),
+  info = "read_list_file skips lines with only non-breaking spaces"
+)
+with.nbsp <- read_list_file(write_bytes(c(charToRaw("a"), nbsp, charToRaw("b.fq\n"))))
+expect_equal(charToRaw(with.nbsp[1]), c(charToRaw("a"), nbsp, charToRaw("b.fq")),
+  info = "read_list_file keeps a non-breaking space inside a name"
+)
+expect_equal(read_list_file(write_bytes(c(bom, charToRaw("\na.fq\n")))), "a.fq",
+  info = "read_list_file skips a first line with only the BOM"
+)
+expect_equal(read_list_file(write_bytes(charToRaw(" a b.fq \nc.fq\n"))), c(" a b.fq ", "c.fq"),
+  info = "read_list_file keeps spaces in and around names"
+)
+expect_equal(read_list_file(write_bytes(charToRaw("s1\ts1_1.fq\ts1_2.fq\n\ns2\ts2_1.fq\ts2_2.fq\n"))),
+  c("s1\ts1_1.fq\ts1_2.fq", "s2\ts2_1.fq\ts2_2.fq"),
+  info = "read_list_file keeps tab-separated rows"
+)
+expect_equal(read_list_file(write_bytes(raw(0))), character(0),
+  info = "read_list_file returns character(0) for an empty file"
+)
+expect_equal(read_list_file(write_bytes(charToRaw("\n\n \n"))), character(0),
+  info = "read_list_file returns character(0) for a file with only blank lines"
+)
+# A line that isn't valid UTF-8 (ä in Latin-1) must not stop the function, and comes back as it is
+latin1.name <- as.raw(c(0x6e, 0xe4, 0x2e, 0x66, 0x71))
+latin1 <- read_list_file(write_bytes(c(latin1.name, charToRaw("\n\nb.fq\n"))))
+expect_equal(length(latin1), 2L, info = "read_list_file accepts a line that isn't valid UTF-8")
+expect_equal(charToRaw(latin1[1]), latin1.name, info = "read_list_file returns the invalid line unchanged")
+expect_equal(latin1[2], "b.fq", info = "read_list_file skips the blank line after the invalid line")
+
+# UTF-16, which e.g. Notepad calls "Unicode", can't be read: stop with a note
+utf16le <- as.raw(c(0xff, 0xfe, 0x61, 0x00, 0x2e, 0x00, 0x66, 0x00, 0x71, 0x00, 0x0d, 0x00, 0x0a, 0x00))
+expect_error(read_list_file(write_bytes(utf16le)), "UTF-16",
+  info = "read_list_file stops with a note for a UTF-16LE file"
+)
+utf16be <- as.raw(c(0xfe, 0xff, 0x00, 0x61, 0x00, 0x2e, 0x00, 0x66, 0x00, 0x71, 0x00, 0x0a))
+expect_error(read_list_file(write_bytes(utf16be)), "UTF-16",
+  info = "read_list_file stops with a note for a UTF-16BE file"
+)
+
+# No final newline. In R 3.2.3, readLines(gzfile(filename)) dropped the last line of such a file.
+# The function must not warn about it either, so a warning is returned instead of the lines.
+read_quietly <- function(filename) {
+  tryCatch(read_list_file(filename), warning = function(w) paste("warning:", conditionMessage(w)))
+}
+expect_equal(read_quietly(write_bytes(charToRaw("a.fq\nb.fq"))), c("a.fq", "b.fq"),
+  info = "read_list_file keeps the last line of a file without a final newline, without a warning"
+)
+expect_equal(read_quietly(write_bytes(c(bom, charToRaw("S2_1.fq\r\n\r\nS2_2.fq")))), c("S2_1.fq", "S2_2.fq"),
+  info = "read_list_file keeps the last line after a BOM, CRLF and a blank line"
+)
+
+# Gzipped list files, with and without a final newline
+con <- gzfile("list.txt.gz", "w")
+writeLines(c("a.fq", "", "b.fq"), con)
+close(con)
+expect_equal(read_list_file("list.txt.gz"), c("a.fq", "b.fq"),
+  info = "read_list_file reads a gzipped file"
+)
+con <- gzfile("list.txt.gz", "w")
+cat("a.fq\nb.fq", file = con)
+close(con)
+expect_equal(read_quietly("list.txt.gz"), c("a.fq", "b.fq"),
+  info = "read_list_file keeps the last line of a gzipped file without a final newline"
+)
+
 
 setwd(old.wd)
 if (run.standalone) {
