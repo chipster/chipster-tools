@@ -28,7 +28,7 @@
 # 2026-09-10 JV Update to Visium HD
 
 assay <- as.character(assay)
-sketch <- as.logical(sketch)
+#sketch <- as.logical(sketch)
 banksy <- as.logical(banksy)
 cluster1 <- as.numeric(cluster1)
 cluster2 <- as.numeric(cluster2)
