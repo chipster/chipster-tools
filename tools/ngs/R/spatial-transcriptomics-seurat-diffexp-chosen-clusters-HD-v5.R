@@ -7,6 +7,7 @@
 # PARAMETER OPTIONAL sketch: "Was sketch clustering used for 8 bin assay" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
+# PARAMETER OPTIONAL p_val_adj: "Adjusted p-value cutoff" TYPE DECIMAL DEFAULT 0.1 (Only genes with an adjusted p-value smaller than this are kept in the result table)
 # PARAMETER OPTIONAL min_pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of spots in either cluster.)
 # PARAMETER OPTIONAL logfc_threshold: "Limit testing to genes which show at least this fold change" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold change between the two clusters. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
@@ -44,7 +45,7 @@ library(patchwork)
 library(dplyr)
 library(Biobase)
 
-print(package.version("Seurat"))
+#print(package.version("Seurat"))
 documentVersion("Seurat", package.version("Seurat"))
 
 # Load the R-Seurat-object (called seurat_obj)
@@ -80,7 +81,7 @@ if(banksy) {
 #print(DefaultAssay(seurat_obj))
 # Differential expression
 de_markers <- FindMarkers(seurat_obj, assay = assay, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
-de_markers <- de_markers[de_markers$p_val_adj < 0.1,]
+de_markers <- de_markers[de_markers$p_val_adj < p_val_adj,]
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")
