@@ -15,12 +15,9 @@ read_input_definitions <- function() {
 # column 2, both as character: dataset names can look like numbers, or be "NA".
 #
 read_input_names <- function() {
-  # comp writes comment lines before the names (ToolUtils.writeInputDescription). They are skipped by
-  # count: a dataset name can contain #, so comment.char can't be used. read.table(text = ...) would
-  # change non-ASCII bytes to <c3><a4> in the C locale, so the file is read again.
-  is.comment <- grepl("^#", readLines("chipster-inputs.tsv", warn = FALSE), useBytes = TRUE)
-  skip <- sum(cumprod(is.comment))
-  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", skip = skip, colClasses = "character", na.strings = character(0), quote = "", comment.char = "")
+  # comp writes comment lines before the names (ToolUtils.writeInputDescription). comment.char can
+  # skip them, because comp doesn't allow # in dataset names (ToolUtils.NAME_PATTERN).
+  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "", comment.char = "#")
 }
 
 write_output_definitions <- function(output_names) {
