@@ -5,7 +5,6 @@
 # OUTPUT OPTIONAL markers_Spatial.008um.tsv
 # OUTPUT OPTIONAL markers_Spatial.016um.tsv
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER OPTIONAL sketch: "Was sketching used for 8um bin clustering?" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE ()
 # PARAMETER banksy: "Do you want to use Banksy clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
 # PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
