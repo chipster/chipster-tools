@@ -50,6 +50,22 @@ strip_name <- function(name) {
   return(name)
 }
 
+# Tells which strings are valid UTF-8, like validUTF8(). validUTF8() came in R 3.3.0, but the default
+# runtime R is R 3.2.3. There the strings are checked with utf8ToInt(), which gives NA or an error for
+# invalid UTF-8. It accepts code points above U+10FFFF, so they are rejected separately. Unlike
+# validUTF8(), it rejects the noncharacters U+FFFE and U+FFFF, which are valid UTF-8 but never needed
+# in names. NA is valid, as in validUTF8().
+#
+valid_utf8 <- if (exists("validUTF8", mode = "function", envir = baseenv())) validUTF8 else function(x) {
+  vapply(x, function(s) {
+    if (is.na(s)) {
+      return(TRUE)
+    }
+    code.points <- tryCatch(utf8ToInt(s), error = function(e) NA)
+    !anyNA(code.points) && all(code.points <= 0x10FFFF)
+  }, logical(1), USE.NAMES = FALSE)
+}
+
 # Checks names that come from the user's data, e.g. the file names in a tar package or the
 # lines of a list file, before they are used in commands. Allows only letters (also ä, ö, å etc.),
 # numbers and . _ + -, so that the shell sees each name as one plain word. Stops the job otherwise.
@@ -63,7 +79,7 @@ safe_name <- function(names) {
   # The job may run in the C locale, where R would see the bytes of ä instead of a letter
   utf8 <- names
   Encoding(utf8)[Encoding(utf8) == "unknown"] <- "UTF-8"
-  valid <- !is.na(utf8) & validUTF8(utf8)
+  valid <- !is.na(utf8) & valid_utf8(utf8)
   # \p{M} for the accents of decomposed letters, which e.g. macOS uses in file names
   valid[valid] <- grepl("^[\\p{L}\\p{M}\\p{N}._+][\\p{L}\\p{M}\\p{N}._+-]*\\z", utf8[valid], perl = TRUE)
   unsafe <- names[!valid | names %in% c(".", "..")]
@@ -95,17 +111,31 @@ safe_file_name <- function(names) {
 
 # Reads the lines of a list file from the user. Removes the byte order mark that e.g. Windows Notepad
 # may add to the beginning of the file, so that it doesn't end up in the first name. Checks the bytes,
-# because the job may run in the C locale. gzfile() reads also uncompressed files, so that gzipped
-# list files keep working like with readLines(filename).
+# because the job may run in the C locale. readLines(filename) reads also gzipped files. Don't use
+# gzfile(): in R 3.2.3 it drops the last line if the file doesn't end with a newline. Skips empty
+# lines and lines with only whitespace, e.g. a blank line at the end of the file. Stops with a note
+# if the file is in UTF-16, which e.g. Notepad calls "Unicode". Tests are in tests/test-tool-utils.R.
 #
 read_list_file <- function(filename) {
-  lines <- readLines(gzfile(filename))
+  # warn = FALSE: a list file without a final newline is fine
+  lines <- readLines(filename, warn = FALSE)
   if (length(lines) > 0) {
     first <- charToRaw(lines[1])
+    # readLines() cuts the lines of a UTF-16 file at its nul bytes, so only the byte order mark is
+    # left to recognize it from
+    if (length(first) >= 2 && (all(first[1:2] == as.raw(c(0xff, 0xfe))) || all(first[1:2] == as.raw(c(0xfe, 0xff))))) {
+      stop(paste(
+        "CHIPSTER-NOTE: The list file", filename, "is in UTF-16 encoding. Please save it as UTF-8,",
+        "e.g. in Notepad with Save as, Encoding: UTF-8."
+      ))
+    }
     if (length(first) >= 3 && all(first[1:3] == as.raw(c(0xef, 0xbb, 0xbf)))) {
       lines[1] <- rawToChar(first[-(1:3)])
     }
   }
+  # useBytes, because a line may not be valid in the job's locale. \xc2\xa0 is a non-breaking space in
+  # UTF-8, which e.g. Word may leave on an empty line.
+  lines <- lines[!grepl("^([[:space:]]|\xc2\xa0)*$", lines, useBytes = TRUE)]
   return(lines)
 }
 
