@@ -79,6 +79,25 @@ expect_equal(
   info = "valid_utf8 tells valid UTF-8 from invalid"
 )
 expect_equal(valid_utf8(character(0)), logical(0), info = "valid_utf8 accepts an empty vector")
+expect_equal(
+  valid_utf8(c(
+    utf8_bytes(c(0xef, 0xb7, 0x90)), # U+FDD0, a noncharacter that utf8ToInt() accepts in R 3.2.3
+    utf8_bytes(c(0xf4, 0x8f, 0xbf, 0xbf)), # U+10FFFF, the last code point
+    utf8_bytes(c(0xe0, 0x80, 0xaf)), # 3-byte overlong /
+    utf8_bytes(c(0xf0, 0x80, 0x80, 0xaf)) # 4-byte overlong /
+  )),
+  c(TRUE, TRUE, FALSE, FALSE),
+  info = "valid_utf8 accepts the last code point and rejects longer overlong forms"
+)
+expect_equal(valid_utf8(NA_character_), TRUE, info = "valid_utf8 treats NA as valid, like validUTF8")
+
+# The known difference of the R 3.2.3 fallback: it rejects the noncharacters U+FFFE and U+FFFF
+nonchars <- c(utf8_bytes(c(0xef, 0xbf, 0xbe)), utf8_bytes(c(0xef, 0xbf, 0xbf)))
+if (exists("validUTF8", mode = "function", envir = baseenv())) {
+  expect_equal(valid_utf8(nonchars), c(TRUE, TRUE), info = "valid_utf8 accepts U+FFFE and U+FFFF (validUTF8)")
+} else {
+  expect_equal(valid_utf8(nonchars), c(FALSE, FALSE), info = "valid_utf8 rejects U+FFFE and U+FFFF (R 3.2.3 fallback)")
+}
 
 ok.names <- c("sample_1.fq", "S1+x-2.fastq.gz", utf8_bytes(c(0x6e, 0xc3, 0xa4, 0x2e, 0x66, 0x71)),
   utf8_bytes(c(0x61, 0xcc, 0x88, 0x2e, 0x66, 0x71)))
