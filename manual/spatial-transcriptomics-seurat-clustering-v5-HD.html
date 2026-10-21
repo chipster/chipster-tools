@@ -17,16 +17,14 @@
         Spots are clustered with a graph-based approach and the clusters are visualized with UMAP.
     </p>
     <p>
-        The tool processes both the 8 &mu;m and 16 &mu;m assays. For the 8 &mu;m assay, an optional
-        sketch-based clustering approach is available (see Details).
+        The tool processes both the 8 &mu;m and 16 &mu;m assays. The 16 &mu;m assay is clustered using the standard method, while sketch-based clustering is used for the 8 &mu;m assay (see Details).
     </p>
 
     <h3>Parameters</h3>
     <ul>
-        <li>Dimensions of reduction to use [30]</li>
-        <li>Resolution for granularity for clustering [0.8]</li>
-        <li>Use sketch-based clustering for 8 &mu;m assay [no]</li>
-        <li>Number of bins to use in sketch [50000]</li>
+        <li>Number of principal components to use [30]</li>
+        <li>Resolution for granularity [0.8]</li>
+        <li>Number of bins to use in sketch for 8 &mu;m assay [50,000]</li>
     </ul>
 
     <h3>Details</h3>
@@ -51,16 +49,12 @@
         space using UMAP.
     </p>
 
-    <h4>Sketch-based clustering for the 8 &mu;m assay</h4>
+    <b>Sketch-based clustering for the 8 &mu;m assay</b>
     <p>
-        Visium HD data at 8 &mu;m resolution can contain several hundred thousand bins. While the standard
-        clustering approach works on this data, it can be slow. When sketch-based clustering is enabled, a
-        representative subset of bins is selected from the full dataset using leverage scores, clustered in
-        memory, and the resulting cluster labels and UMAP are then projected back to all bins. This can speed up the clustering step considerably. In addition,
-        leverage-score subsampling ensures that rare and transcriptomically distinct populations are well represented in
-        the sketch, which can improve the identification of rare and spatially restricted cell groups. The approach
-        follows the
-        <a href="https://satijalab.org/seurat/articles/visiumhd_analysis_vignette">Seurat v5 Visium HD vignette</a>.
+        Sketch-based clustering is used for 8 &mu;m data, which typically contains several hundred thousand bins. 
+        According to Seurat developers, sketch clustering workflow improves performance, especially for identifying rare and spatially restricted groups.
+        In addition, it speeds up the clustering step considerably. For more information, please see the
+        <a href="https://satijalab.org/seurat/articles/visiumhd_analysis_vignette#unsupervised-clustering">Seurat v5 Visium HD vignette</a>.
     </p>
     <p>
         The sketch-based workflow proceeds as follows:
@@ -68,15 +62,12 @@
     <ol>
         <li>Variable features are identified and the data is scaled on the full 8 &mu;m assay.</li>
         <li>A sketch of the requested number of bins (default 50,000) is created using leverage-score
-            subsampling (<code>SketchData</code>). Leverage scores ensure that rare and transcriptomically
-            distinct populations are not under-represented in the sketch.</li>
+            subsampling. The leverage-score subsampling ensures that rare and transcriptomically distinct populations are well represented in
+        the sketch.</li>
         <li>Variable features, scaling, PCA, neighbor graph, clustering, and UMAP are computed on the sketch.</li>
-        <li>Cluster labels and the UMAP model are projected from the sketch back to all bins
-            (<code>ProjectData</code>), so that every bin in the full dataset receives a cluster label.</li>
+        <li>Cluster labels and the UMAP model are projected from the sketch back to all bins, so that every bin in the full dataset receives a cluster label.</li>
     </ol>
-    <p>
-        The 16 &mu;m assay is always clustered using the standard method regardless of this setting.
-    </p>
+ 
     <p>
         The tool produces two plots per assay, colored by cluster:
     </p>
