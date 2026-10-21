@@ -62,13 +62,8 @@ if (banksy) {
   cluster_col <- "banksy_cluster"
   reduction   <- "BANKSY"          # check with Reductions(seurat_obj)
 } else if (assay == "Spatial.008um") {
-  if (sketch) {
     cluster_col <- "seurat_cluster.projected"
     reduction   <- paste0("full.", reduction, ".sketch")
-  } else {
-    cluster_col <- "seurat_cluster.008um"
-    reduction   <- paste0(reduction, ".008um")
-  }
 } else {
   cluster_col <- "seurat_cluster.016um"
   reduction   <- paste0(reduction, ".016um")
