@@ -50,6 +50,20 @@ strip_name <- function(name) {
   return(name)
 }
 
+# Tells which strings are valid UTF-8. validUTF8() came in R 3.3.0, but the default runtime R is
+# R 3.2.3. There utf8ToInt() gives NA or an error for invalid UTF-8, except for code points above
+# U+10FFFF.
+#
+valid_utf8 <- function(x) {
+  if (exists("validUTF8", mode = "function", envir = baseenv())) {
+    return(validUTF8(x))
+  }
+  vapply(x, function(s) {
+    code.points <- tryCatch(utf8ToInt(s), error = function(e) NA)
+    !anyNA(code.points) && all(code.points <= 0x10FFFF)
+  }, logical(1), USE.NAMES = FALSE)
+}
+
 # Checks names that come from the user's data, e.g. the file names in a tar package or the
 # lines of a list file, before they are used in commands. Allows only letters (also ä, ö, å etc.),
 # numbers and . _ + -, so that the shell sees each name as one plain word. Stops the job otherwise.
@@ -63,7 +77,7 @@ safe_name <- function(names) {
   # The job may run in the C locale, where R would see the bytes of ä instead of a letter
   utf8 <- names
   Encoding(utf8)[Encoding(utf8) == "unknown"] <- "UTF-8"
-  valid <- !is.na(utf8) & validUTF8(utf8)
+  valid <- !is.na(utf8) & valid_utf8(utf8)
   # \p{M} for the accents of decomposed letters, which e.g. macOS uses in file names
   valid[valid] <- grepl("^[\\p{L}\\p{M}\\p{N}._+][\\p{L}\\p{M}\\p{N}._+-]*\\z", utf8[valid], perl = TRUE)
   unsafe <- names[!valid | names %in% c(".", "..")]
