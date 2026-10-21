@@ -113,10 +113,12 @@ safe_file_name <- function(names) {
 # may add to the beginning of the file, so that it doesn't end up in the first name. Checks the bytes,
 # because the job may run in the C locale. readLines(filename) reads also gzipped files. Don't use
 # gzfile(): in R 3.2.3 it drops the last line if the file doesn't end with a newline. Skips empty
-# lines and lines with only whitespace, e.g. a blank line at the end of the file.
+# lines and lines with only whitespace, e.g. a blank line at the end of the file. Tests are in
+# tests/test-tool-utils.R.
 #
 read_list_file <- function(filename) {
-  lines <- readLines(filename)
+  # warn = FALSE: a list file without a final newline is fine
+  lines <- readLines(filename, warn = FALSE)
   if (length(lines) > 0) {
     first <- charToRaw(lines[1])
     if (length(first) >= 3 && all(first[1:3] == as.raw(c(0xef, 0xbb, 0xbf)))) {
@@ -124,7 +126,7 @@ read_list_file <- function(filename) {
     }
   }
   # useBytes, because a line may not be valid in the job's locale
-  lines <- lines[!grepl("^[ \t\r]*$", lines, useBytes = TRUE)]
+  lines <- lines[!grepl("^[[:space:]]*$", lines, useBytes = TRUE)]
   return(lines)
 }
 
