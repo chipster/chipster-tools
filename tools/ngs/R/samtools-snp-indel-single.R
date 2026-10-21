@@ -64,7 +64,17 @@ if (organism == "other") {
 # mpileup otions
 mpileup.options <- paste("mpileup -u")
 if (mpileup.r != "all") {
-    mpileup.options <- paste(mpileup.options, "-r", mpileup.r)
+    # The region goes into a bash command. Comp allows spaces, parentheses and * in it, but a region
+    # can't have spaces or parentheses, and the quotes keep * from being expanded.
+    if (grepl("[ ()]", mpileup.r) || !nzchar(mpileup.r)) {
+        stop(paste(
+            "CHIPSTER-NOTE: The region",
+            shQuote(mpileup.r),
+            "isn't valid. Give it as chromosome:start-end",
+            "without spaces, e.g. 20:131505-131550, or only the chromosome, e.g. 20."
+        ))
+    }
+    mpileup.options <- paste0(mpileup.options, " -r \"", mpileup.r, "\"")
 }
 if (mpileup.ub == "yes") {
     mpileup.options <- paste(mpileup.options, "-B")
