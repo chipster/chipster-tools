@@ -50,15 +50,17 @@ strip_name <- function(name) {
   return(name)
 }
 
-# Tells which strings are valid UTF-8. validUTF8() came in R 3.3.0, but the default runtime R is
-# R 3.2.3. There utf8ToInt() gives NA or an error for invalid UTF-8, except for code points above
-# U+10FFFF.
+# Tells which strings are valid UTF-8, like validUTF8(). validUTF8() came in R 3.3.0, but the default
+# runtime R is R 3.2.3. There the strings are checked with utf8ToInt(), which gives NA or an error for
+# invalid UTF-8. It accepts code points above U+10FFFF, so they are rejected separately. Unlike
+# validUTF8(), it rejects the noncharacters U+FFFE and U+FFFF, which are valid UTF-8 but never needed
+# in names. NA is valid, as in validUTF8().
 #
-valid_utf8 <- function(x) {
-  if (exists("validUTF8", mode = "function", envir = baseenv())) {
-    return(validUTF8(x))
-  }
+valid_utf8 <- if (exists("validUTF8", mode = "function", envir = baseenv())) validUTF8 else function(x) {
   vapply(x, function(s) {
+    if (is.na(s)) {
+      return(TRUE)
+    }
     code.points <- tryCatch(utf8ToInt(s), error = function(e) NA)
     !anyNA(code.points) && all(code.points <= 0x10FFFF)
   }, logical(1), USE.NAMES = FALSE)
