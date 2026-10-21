@@ -162,19 +162,26 @@ paired_name <- function(name1, name2) {
 
 # Takes as an argument a file name of a list of input names. It Goes through the list and compares
 # it to chipster-inputs.tsv. Returns a vector of internal input names or gives an error message,
-# if a listed input file is missing.
+# if the list is empty or a listed input file is missing.
 #
 make_input_list <- function(listfile) {
-  # read list file
-  # scan also removes the \r of Windows line endings
-  name.list <- scan(listfile, what = "", sep = "\n", na.strings = character(0))
-
   # read input names
   input.names <- read_input_names()
 
+  # read list file, without a byte order mark and blank lines
+  name.list <- read_list_file(listfile)
+  if (length(name.list) == 0) {
+    # The user knows the list by its dataset name
+    list.name <- input.names[match(listfile, input.names[, 1]), 2]
+    if (is.na(list.name)) {
+      list.name <- listfile
+    }
+    stop(paste("CHIPSTER-NOTE: The input file list", list.name, "is empty. List one file name per line."))
+  }
+
   # Check for duplicated etries
   if (anyDuplicated(name.list)) {
-    message <- paste("Input file list contains one or more duplicated entries:\n", name.list[duplicated(name.list)], "\nFilenames must be unique so they can be correctly assigned.")
+    message <- paste("Input file list contains one or more duplicated entries:", paste(unique(name.list[duplicated(name.list)]), collapse = ", "), "\nFilenames must be unique so they can be correctly assigned.")
     stop(paste("CHIPSTER-NOTE: ", message))
   }
 
@@ -191,7 +198,7 @@ make_input_list <- function(listfile) {
     # Exact match, dataset names can contain regex characters like ( ) + .
     input.list <- input.names[match(name.list, dataset.names), 1]
   } else {
-    message <- paste("Input file list includes one or more files that has not been selected:", sdf)
+    message <- paste("Input file list includes one or more files that has not been selected:", paste(sdf, collapse = ", "))
     stop(paste("CHIPSTER-NOTE: ", message))
   }
   return(input.list)
