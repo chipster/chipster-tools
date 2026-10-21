@@ -15,8 +15,12 @@ read_input_definitions <- function() {
 # column 2, both as character: dataset names can look like numbers, or be "NA".
 #
 read_input_names <- function() {
-  # comp writes comment lines before the names (ToolUtils.writeInputDescription)
-  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", colClasses = "character", na.strings = character(0), quote = "", comment.char = "#")
+  # comp writes comment lines before the names (ToolUtils.writeInputDescription). They are skipped by
+  # count: a dataset name can contain #, so comment.char can't be used. read.table(text = ...) would
+  # change non-ASCII bytes to <c3><a4> in the C locale, so the file is read again.
+  is.comment <- grepl("^#", readLines("chipster-inputs.tsv", warn = FALSE), useBytes = TRUE)
+  skip <- sum(cumprod(is.comment))
+  read.table("chipster-inputs.tsv", header = FALSE, sep = "\t", skip = skip, colClasses = "character", na.strings = character(0), quote = "", comment.char = "")
 }
 
 write_output_definitions <- function(output_names) {
@@ -388,18 +392,15 @@ displayNamesToFile <- function(input.file) {
 # display names to aid readability and help spot input assignment errors.
 #
 documentCommand <- function(command.string) {
-  # Substitute input names
-  input.names <- tryCatch(
-    read.table("chipster-inputs.tsv", header = FALSE, sep = "\t"),
-    error = function(e) {
-      print("no inputs")
-      NULL
-    }
-  )
+  # Substitute input names. As text, not as regular expressions: names can contain e.g. . ( ) +
+  input.names <- tryCatch(read_input_names(), error = function(e) {
+    print("no inputs")
+    NULL
+  })
 
   if (!is.null(input.names)) {
-    for (i in 1:nrow(input.names)) {
-      command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string)
+    for (i in seq_len(nrow(input.names))) {
+      command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string, fixed = TRUE)
     }
   }
   cat("##", "COMMAND:", command.string, "\n")
