@@ -452,40 +452,21 @@ expect_error(make_input_list("list.txt"), "UTF-16", info = "make_input_list stop
 
 ## documentCommand
 
-write_inputs(c("it's #2.fq", "#3.fq"))
-expect_equal(
-    read_input_names()[, 2],
-    c("it's #2.fq", "#3.fq"),
-    info = "read_input_names keeps a # and a quote in dataset names"
-)
-writeLines("S1.fq", "list.txt")
-write_inputs(c("S1.fq", "S1.fq #2"))
-expect_equal(
-    make_input_list("list.txt"),
-    "reads001.fq",
-    info = "make_input_list tells a name from the same name with # after it"
-)
-
 command_of <- function(command) {
     out <- capture.output(documentCommand(command))
     out[length(out)]
 }
-write_inputs(c("001", "S1 (1)+x.fq", "it's #2.fq"))
+# Dataset names can have only the characters of comp's ToolUtils.NAME_PATTERN
+write_inputs(c("001", "S1 (1)+x.fq", "NA"))
 expect_equal(
     command_of("bowtie2 -1 reads001.fq -2 reads002.fq -U reads003.fq"),
-    "## COMMAND: bowtie2 -1 001 -2 S1 (1)+x.fq -U it's #2.fq ",
-    info = "documentCommand shows names like numbers, with regex characters, a quote and a #"
+    "## COMMAND: bowtie2 -1 001 -2 S1 (1)+x.fq -U NA ",
+    info = "documentCommand shows names like numbers or NA, and names with regex characters"
 )
 expect_equal(
     command_of("cat reads001Xfq"),
     "## COMMAND: cat reads001Xfq ",
     info = "documentCommand doesn't treat the . of an input name as any character"
-)
-write_inputs(c("a\\1.fq"))
-expect_equal(
-    command_of("cat reads001.fq"),
-    "## COMMAND: cat a\\1.fq ",
-    info = "documentCommand keeps a backslash in a display name"
 )
 unlink("chipster-inputs.tsv")
 expect_equal(
