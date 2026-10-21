@@ -138,6 +138,15 @@ expect_equal(read_list_file(write_bytes(charToRaw("a.fq\nb.fq\n\n\n"))), c("a.fq
 expect_equal(read_list_file(write_bytes(charToRaw("a.fq\n  \n\t\n \r\n\f\nb.fq\n"))), c("a.fq", "b.fq"),
   info = "read_list_file skips lines with only whitespace"
 )
+nbsp <- as.raw(c(0xc2, 0xa0))
+expect_equal(read_list_file(write_bytes(c(charToRaw("a.fq\n"), nbsp, charToRaw("\n "), nbsp, charToRaw("\nb.fq\n")))),
+  c("a.fq", "b.fq"),
+  info = "read_list_file skips lines with only non-breaking spaces"
+)
+with.nbsp <- read_list_file(write_bytes(c(charToRaw("a"), nbsp, charToRaw("b.fq\n"))))
+expect_equal(charToRaw(with.nbsp[1]), c(charToRaw("a"), nbsp, charToRaw("b.fq")),
+  info = "read_list_file keeps a non-breaking space inside a name"
+)
 expect_equal(read_list_file(write_bytes(c(bom, charToRaw("\na.fq\n")))), "a.fq",
   info = "read_list_file skips a first line with only the BOM"
 )
@@ -154,10 +163,21 @@ expect_equal(read_list_file(write_bytes(raw(0))), character(0),
 expect_equal(read_list_file(write_bytes(charToRaw("\n\n \n"))), character(0),
   info = "read_list_file returns character(0) for a file with only blank lines"
 )
-# A line that isn't valid UTF-8 (ä in Latin-1) must not stop the function
-latin1 <- read_list_file(write_bytes(as.raw(c(0x6e, 0xe4, 0x2e, 0x66, 0x71, 0x0a, 0x0a, 0x62, 0x2e, 0x66, 0x71, 0x0a))))
-expect_equal(c(length(latin1), latin1[2]), c("2", "b.fq"),
-  info = "read_list_file accepts a line that isn't valid UTF-8"
+# A line that isn't valid UTF-8 (ä in Latin-1) must not stop the function, and comes back as it is
+latin1.name <- as.raw(c(0x6e, 0xe4, 0x2e, 0x66, 0x71))
+latin1 <- read_list_file(write_bytes(c(latin1.name, charToRaw("\n\nb.fq\n"))))
+expect_equal(length(latin1), 2L, info = "read_list_file accepts a line that isn't valid UTF-8")
+expect_equal(charToRaw(latin1[1]), latin1.name, info = "read_list_file returns the invalid line unchanged")
+expect_equal(latin1[2], "b.fq", info = "read_list_file skips the blank line after the invalid line")
+
+# UTF-16, which e.g. Notepad calls "Unicode", can't be read: stop with a note
+utf16le <- as.raw(c(0xff, 0xfe, 0x61, 0x00, 0x2e, 0x00, 0x66, 0x00, 0x71, 0x00, 0x0d, 0x00, 0x0a, 0x00))
+expect_error(read_list_file(write_bytes(utf16le)), "UTF-16",
+  info = "read_list_file stops with a note for a UTF-16LE file"
+)
+utf16be <- as.raw(c(0xfe, 0xff, 0x00, 0x61, 0x00, 0x2e, 0x00, 0x66, 0x00, 0x71, 0x00, 0x0a))
+expect_error(read_list_file(write_bytes(utf16be)), "UTF-16",
+  info = "read_list_file stops with a note for a UTF-16BE file"
 )
 
 # No final newline. In R 3.2.3, readLines(gzfile(filename)) dropped the last line of such a file.
