@@ -60,6 +60,8 @@ if (organism == "other") {
 
 # mpileup otions
 mpileup.options <- paste("mpileup -u")
+# Neither the web app nor comp trims text parameters, and a region is often pasted with a space
+mpileup.r <- trimws(mpileup.r)
 if (mpileup.r != "all") {
     # The region goes into a bash command. Comp allows spaces, parentheses and * in it, but a region
     # can't have spaces or parentheses, and the quotes keep * from being expanded.
