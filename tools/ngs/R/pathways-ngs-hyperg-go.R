@@ -30,12 +30,12 @@ dat <- read.table("gene-list.tsv", header = TRUE, sep = "\t", as.is = TRUE, row.
 
 # convert list of reference genes from Ensembl to Entrez IDs
 # ensembl.to.entrez <- as.list(org.Hs.egENSEMBL2EG)
-lib <- paste(annotpkg, "ENSEMBL2EG", sep = "")
 if (genome == "org.At.tair.db") {
     # org.At.tair.db uses TAIR locus IDs (the same as Ensembl Plants gene IDs) instead of Entrez IDs,
     # so map Entrez IDs to them instead
     ensembl.to.entrez <- as.list(revmap(org.At.tairENTREZID))
 } else {
+    lib <- paste(annotpkg, "ENSEMBL2EG", sep = "")
     ensembl.to.entrez <- as.list(get(lib))
 }
 reference.genes <- unique(unlist(ensembl.to.entrez))
