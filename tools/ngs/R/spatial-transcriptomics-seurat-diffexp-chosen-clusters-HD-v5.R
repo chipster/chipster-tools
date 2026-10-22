@@ -1,15 +1,15 @@
-# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R: "Seurat v5 -Find differentially expressed genes between clusters" (This tool identifies differentially expressed genes between two user-defined clusters and visualizes these genes on top of the tissue image.)
+# TOOL spatial-transcriptomics-seurat-diffexp-chosen-clusters-HD-v5.R: "Seurat v5 -Find differentially expressed genes between clusters" (Given a Seurat object of Visium HD data with cluster information, this tool identifies differentially expressed genes between two user-defined clusters and visualizes these genes on top of the tissue image.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL Markerplot.pdf
 # OUTPUT OPTIONAL spatially_variable_genes.tsv
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER banksy: "Do you want to use BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
+# PARAMETER banksy: "Find markers for BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # PARAMETER OPTIONAL cluster1: "First cluster" TYPE INTEGER DEFAULT 1 (Cluster you want to identify the differentially expressed for.)
 # PARAMETER OPTIONAL cluster2: "Second cluster" TYPE INTEGER DEFAULT 2 (A second cluster for comparison.)
+# PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL p_val_adj: "Adjusted p-value cutoff" TYPE DECIMAL DEFAULT 0.1 (Only genes with an adjusted p-value smaller than this are kept in the result table)
 # PARAMETER OPTIONAL min_pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of spots in either cluster.)
 # PARAMETER OPTIONAL logfc_threshold: "Limit testing to genes which show at least this fold change" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold change between the two clusters. Increasing the threshold speeds up testing, but can also miss weaker signals.)
-# PARAMETER OPTIONAL test: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only_pos: "Report only positive marker genes" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (By default, this tool lists all marker genes. When this parameter is set to TRUE, only genes with positive log2 fold change are listed.)
 # PARAMETER OPTIONAL no_of_feats: "Number of genes to visualize" TYPE INTEGER DEFAULT 3 (Number of top variable genes to visualize.)
 # PARAMETER OPTIONAL color.scale: "Determine color scale based on all genes" TYPE [all:yes, feature:no] DEFAULT feature (Determine whether the color scale is based on all genes or individual genes. By default, the color scale is determined for each gene individually and may differ between genes.)
