@@ -1,10 +1,10 @@
-# TOOL spatial-transcriptomics-seurat-clustering-v5-HD.R: "Seurat v5 -Clustering" (This tool performs clustering for a single sample or multiple samples that have been combined into one Seurat object. For the 8 µm assay, sketch-based clustering can be enabled: a representative subset of bins is clustered in memory, and the results are then projected back to all bins. This is recommended for large datasets where standard clustering is slow or memory-intensive.)
+# TOOL spatial-transcriptomics-seurat-clustering-v5-HD.R: "Seurat v5 -Clustering" (This tool clusters Visium HD data using graph-based approach and visualizes clusters on UMAP plot. For 8 µm assays, a sketch-based workflow is used: a representative subset of bins is clustered in memory, and the results are then projected back to all bins. This improves performance, especially for identifying rare and spatially restricted groups.)
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_clustering.Robj
 # OUTPUT OPTIONAL clustering_plots.pdf
-# PARAMETER OPTIONAL dims.reduction: "Dimensions of reduction to use" TYPE INTEGER DEFAULT 30 (Dimensions of reduction to use for clustering and UMAP.)
-# PARAMETER OPTIONAL res: "Resolution for granularity for clustering" TYPE DECIMAL DEFAULT 0.8 (Resolution parameter that sets the granularity of the clustering. Higher values lead to greater number of clusters.)
-# PARAMETER OPTIONAL sketch.ncells: "Number of bins to use in sketch" TYPE INTEGER DEFAULT 50000 (Number of bins to include in the sketch for the 8 µm assay. Only used when sketch-based clustering is enabled. The default of 50000 follows the Seurat v5 Visium HD vignette recommendation.)
+# PARAMETER OPTIONAL dims.reduction: "Number of principal components to use" TYPE INTEGER DEFAULT 30 (You can define this based on the PCA elbow plots.)
+# PARAMETER OPTIONAL res: "Resolution for granularity for clustering" TYPE DECIMAL DEFAULT 0.8 (Resolution parameter that sets the granularity of the clustering. Higher values lead to bigger number of clusters.)
+# PARAMETER OPTIONAL sketch.ncells: "Number of bins to use in sketch" TYPE INTEGER DEFAULT 50000 (Number of bins to include in the sketch for the 8 µm assay.)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
