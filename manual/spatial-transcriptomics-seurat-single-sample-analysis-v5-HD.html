@@ -7,7 +7,7 @@
 
 <body>
 
-    <h2>Seurat v5 -Normalization and PCA </h2>
+    <h2>Seurat v5 -Normalize, find variable genes and PCA </h2>
 
     <h3>Description</h3>
 
@@ -16,7 +16,7 @@
         principal component analysis (PCA) on the highly variable genes.
     </p>
     <p>
-        As input, you can give one Seurat object after the <i>Seurat v5 -Filter spots</i> step. 
+        As input, you can give a Seurat object after the <i>Seurat v5 -Filter spots</i> step. 
 		You can also use this tool after subsetting a Seurat object with the <i>Seurat v5 -Subset regions</i> tool in order to renormalize and compute PCA again.
     </p>
 
@@ -33,7 +33,7 @@
     <p>
         This tool first normalizes gene expression values using the log-normalization method. It then detects  
         genes which are highly variable across the spots. These highly variable
-        genes are used for principal component analysis (PCA),  which reduces the dimensionality of the data set (number of genes), while preserving as much variance as possible.
+        genes are used for principal component analysis (PCA),  which reduces the dimensionality (number of genes) of the data, while preserving as much variance as possible.
         When running
         PCA, you can specify the number of principal components (PCs) to compute where each PC essentially represents a
         'metagene'. These
@@ -41,7 +41,7 @@
         amount of variance
         they capture from the data. This means that the first principal component (PC1) captures the maximun possible
         variance in the data
-        set, PC2 the second most and so on. By selecting fewer components, you can reduce the dimensionality of the data
+        set, PC2 the second most, and so on. By selecting fewer components, you can reduce the dimensionality of the data
         set. This makes
         the data easier to analyze and visualize, while still retaining the most important information. By default, 50
         PCs are computed.
@@ -50,13 +50,13 @@
         noise.
     </p>
     <p>
-        This tool also outputs a *.txt file if the parameter "Print loadings in a file" is set to "yes". This file will
-        list the top genes
+        This tool also outputs a .txt file if the parameter "Print loadings in a file" is set to "yes". This file
+        lists the top genes
         (default = 5) associated with each PC that have the largest (positive or negative) PCA loadings for each PC. PCA
         loadings represent
         the weights or coefficients of the original genes in the linear combination corresponding to each PC. Thus, PCA
         loadings show how
-        much each original gene contributes to each PC component or 'metagene'.
+        much each original gene contributes to each PC or 'metagene'.
     </p>
     <p>
         Finally, the tool produces PCA plots which you can use to explore the primary sources of heterogeneity in the

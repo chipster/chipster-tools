@@ -5,15 +5,10 @@
 # OUTPUT OPTIONAL markers_Spatial.008um.tsv
 # OUTPUT OPTIONAL markers_Spatial.016um.tsv
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER banksy: "Do you want to use Banksy clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
-# PARAMETER OPTIONAL label.size: "determine the label size of the plots" TYPE INTEGER DEFAULT 3
-# PARAMETER OPTIONAL width: "Width of the pdf" TYPE INTEGER DEFAULT 10
-# PARAMETER OPTIONAL height: "Height of the pdf" TYPE INTEGER DEFAULT 10
-# PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.01 (Test only genes which are detected in at least this fraction of spots in either cluster. Withholding infrequently expressed genes will speed up testing.)
-# PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
+# PARAMETER banksy: "Find markers for BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # PARAMETER OPTIONAL test.use: "Test for differential expression" TYPE [wilcox: wilcox, MAST: MAST] DEFAULT wilcox
 # PARAMETER OPTIONAL only.pos: "Report only positive marker genes" TYPE [TRUE: yes, FALSE: no] DEFAULT TRUE (If yes, only genes with positive log2 fold change are listed in the result file.)
-# PARAMETER OPTIONAL p_val_adj: "Adjusted p-value cutoff" TYPE DECIMAL DEFAULT 0.1 (Only genes with an adjusted p-value smaller than this are kept in the result table)
+# PARAMETER OPTIONAL p_val_adj: "Adjusted p-value cutoff" TYPE DECIMAL DEFAULT 0.1 (Only genes with an adjusted p-value smaller than this are kept in the result table.)
 # PARAMETER OPTIONAL min.pct: "Limit testing to genes which are expressed in at least this fraction of spots" TYPE DECIMAL DEFAULT 0.25 (Test only genes which are detected in at least this fraction of spots in either group of spots.)
 # PARAMETER OPTIONAL logfc.threshold: "Limit testing to genes which show at least this fold change" TYPE DECIMAL DEFAULT 0.1 (Test only genes which show on average at least this log2 fold difference between the two groups of spots. Increasing the threshold speeds up testing, but can also miss weaker signals.)
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
