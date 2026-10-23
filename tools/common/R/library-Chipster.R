@@ -9,7 +9,7 @@ readData <- function(file, header = TRUE, sep = "\t", quote = "", row.names = 1,
 }
 
 readPhenodata <- function(file, header = TRUE, sep = "\t", quote = "", as.is = TRUE, check.names = FALSE, comment.char = "", ...) {
-  read.table(file, header = header, sep = sep, as.is = as.is, check.names = check.names, comment.char = comment.char, ...)
+  read.table(file, header = header, sep = sep, quote = quote, as.is = as.is, check.names = check.names, comment.char = comment.char, ...)
 }
 
 writeData <- function(x, file, quote = FALSE, sep = "\t", na = "", ...) {
