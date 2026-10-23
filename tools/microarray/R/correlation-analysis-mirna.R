@@ -60,8 +60,9 @@ rownames(mirna.phenodata) <- mirna.phenodata[, order.column]
 rownames(gene.phenodata) <- gene.phenodata[, order.column]
 mirna.phenodata$n <- 1:nrow(mirna.phenodata)
 gene.phenodata$n <- 1:nrow(gene.phenodata)
-mirna.order <- mirna.phenodata[common.samples, "n"]
-gene.order <- gene.phenodata[common.samples, "n"]
+# column positions of the common samples, looked up by row name (the order column may be numeric)
+mirna.order <- mirna.phenodata[as.character(common.samples), "n"]
+gene.order <- gene.phenodata[as.character(common.samples), "n"]
 
 # Read the chiptype that was used for the gene expression data
 if (id.type == "probe_id") {
@@ -86,8 +87,8 @@ if (length(unique(mirna.order)) == 1 | length(unique(gene.order)) == 1) {
 number.conditions <- length(mirna.order)
 
 # Arrange the columns in the two datset so they match
-mirna.data.3 <- mirna.data.2[, order(mirna.order)]
-gene.data.3 <- gene.data.2[, order(gene.order)]
+mirna.data.3 <- mirna.data.2[, mirna.order]
+gene.data.3 <- gene.data.2[, gene.order]
 
 # Create data set appropriate for correlation testing
 mirna.data.4 <- data.frame(mirna = rownames(mirna.data.3), exprs = mirna.data.3[, 1])
