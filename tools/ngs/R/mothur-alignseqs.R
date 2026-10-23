@@ -98,6 +98,12 @@ if (file.exists("template.pcr.fasta")) {
   system("mv template.pcr.fasta custom.reference.fasta")
 } else if (file.exists("reference.pcr.fasta")) {
   system("mv reference.pcr.fasta custom.reference.fasta")
+} else if (reference == "own") {
+  if (file.exists("reference.fasta")) {
+    system("mv reference.fasta custom.reference.fasta")
+  } else {
+    stop("CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!")
+  }
 } else if (file.exists("template.fasta")) {
   system("mv template.fasta custom.reference.fasta")
 }
