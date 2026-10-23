@@ -119,10 +119,10 @@ if (paired == "paired") {
 
   # if maxeer or maxeef not selected
   if (is.na(maxeef)) {
-    maxeef <- "inf"
+    maxeef <- Inf
   }
   if (is.na(maxeer)) {
-    maxeer <- "inf"
+    maxeer <- Inf
   }
   # run filterAndTrim
   out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs,
@@ -187,7 +187,7 @@ if (paired == "paired") {
   filtreads <- file.path("output_folder", paste0(sample.names, "_filt.fastq.gz"))
   # if maxeer or maxeef not selected
   if (is.na(maxeef)) {
-    maxeef <- "inf"
+    maxeef <- Inf
   }
 
   # run filterAndTrim
