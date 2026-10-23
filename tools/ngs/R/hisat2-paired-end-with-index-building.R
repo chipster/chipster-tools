@@ -83,7 +83,7 @@ if (fileOk("genome.txt")) {
     echo.command <- paste("echo Internal genome name:", hisat2.genome, " >> hisat.log")
     runExternal(echo.command)
     # Make tar package from the index
-    if (file.exists(Sys.glob("*.1.ht*"))) {
+    if (length(Sys.glob("*.1.ht*")) > 0) {
       system("tar cf hisat2_index.tar -- *.ht*")
     }
   }
@@ -132,7 +132,7 @@ hisat.parameters <- paste(hisat.parameters, "--max-intronlen", max.intron.length
 # Specify strand-specific information: the default is unstranded
 if (rna.strandness == "FR") {
   hisat.parameters <- paste(hisat.parameters, "--rna-strandness FR")
-} else if (rna.strandness == "fr-secondstrand") {
+} else if (rna.strandness == "RF") {
   hisat.parameters <- paste(hisat.parameters, "--rna-strandness RF")
 }
 # Organism
@@ -168,8 +168,6 @@ command <- paste(hisat.binary)
 
 # Add the parameters
 command <- paste(command, hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
-
-documentCommand(command)
 
 # Run command
 documentCommand(command)
