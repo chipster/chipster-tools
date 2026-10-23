@@ -86,6 +86,8 @@ try:
     if no_first_column_title:
         # the first column title is missing i.e. R rowname
         id_col_index = id_col_index + 1
+        # the rowname column stays among the other columns, give it an empty title
+        other_col_titles.insert(0, "")
         print(
             "the first column does not have title, new column index: "
             + str(id_col_index)
@@ -126,7 +128,7 @@ print("open the results file")
 with open("annotated.tsv", "w") as annotated:
     print("write column titles")
 
-    if no_first_column_title:
+    if id_col_title is None:
         # the first column title is missing i.e. R rowname
         annotated.write("symbol\tdescription\t" + "\t".join(column_titles) + "\n")
     else:
