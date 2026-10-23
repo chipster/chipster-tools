@@ -2,7 +2,7 @@
 # INPUT gene-list.tsv: gene-list.tsv TYPE GENERIC
 # OUTPUT hypergeo-go.tsv: hypergeo-go.tsv
 # OUTPUT hypergeo-go.html: hypergeo-go.html
-# PARAMETER genome: "Genome" TYPE [org.Hs.eg.db: "human", org.Mm.eg.db: "mouse", org.Rn.eg.db: "rat", org.Ag.eg.db: "arabidopsis", org.Dm.eg.db: "fruitfly"] DEFAULT org.Hs.eg.db (Reference organism.)
+# PARAMETER genome: "Genome" TYPE [org.Hs.eg.db: "human", org.Mm.eg.db: "mouse", org.Rn.eg.db: "rat", org.At.tair.db: "arabidopsis", org.Dm.eg.db: "fruitfly"] DEFAULT org.Hs.eg.db (Reference organism.)
 # PARAMETER column: "Identifier column" TYPE COLUMN_SEL DEFAULT entrezgene (Column containing gene identifiers. Identifiers should either be Ensembl or Entrez Gene identifiers. If the identifiers are in the first column and it doesn't have a title, select Untitled.)
 # PARAMETER OPTIONAL ontology: Ontology TYPE [all: all, biological_process: "biological process", molecular_function: "molecular function", cellular_component: "cellular component"] DEFAULT biological_process (The ontology to be analyzed.)
 # PARAMETER OPTIONAL p.value.threshold: "P-value threshold" TYPE DECIMAL DEFAULT 0.05 (P-value threshold.)
@@ -30,8 +30,14 @@ dat <- read.table("gene-list.tsv", header = TRUE, sep = "\t", as.is = TRUE, row.
 
 # convert list of reference genes from Ensembl to Entrez IDs
 # ensembl.to.entrez <- as.list(org.Hs.egENSEMBL2EG)
-lib <- paste(annotpkg, "ENSEMBL2EG", sep = "")
-ensembl.to.entrez <- as.list(get(lib))
+if (genome == "org.At.tair.db") {
+    # org.At.tair.db uses TAIR locus IDs (the same as Ensembl Plants gene IDs) instead of Entrez IDs,
+    # so map Entrez IDs to them instead
+    ensembl.to.entrez <- as.list(revmap(org.At.tairENTREZID))
+} else {
+    lib <- paste(annotpkg, "ENSEMBL2EG", sep = "")
+    ensembl.to.entrez <- as.list(get(lib))
+}
 reference.genes <- unique(unlist(ensembl.to.entrez))
 ens_identifiers <- names(unlist(ensembl.to.entrez))
 
