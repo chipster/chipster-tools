@@ -29,12 +29,14 @@ documentVersion("Seurat", package.version("Seurat"))
 # } else {
 #     selected.reduction <- "pca"
 # }
-print(Assays(seurat_obj))
+#print(Assays(seurat_obj))
 
-assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
-print(Reductions(seurat_obj))
+#assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
+#print(Reductions(seurat_obj))
 
-print(colnames(seurat_obj@meta.data))
+#print(colnames(seurat_obj@meta.data))
+
+# Add png to pdf method here at some point, currently pdf size can be over 0.5Gb...
 
 pdf(file = "clustering_plots.pdf", width = 9, height = 12)
 
@@ -59,7 +61,8 @@ for (i in 1:length(assay_names)) {
     if (just.bin == "sketch") {
         DefaultAssay(seurat_obj) <- "Spatial.008um"
         cluster_bin <- "seurat_cluster.projected"
-        umap_bin <- "full.umap.sketch"
+        full_umap_bin <- "full.umap.sketch"
+        umap_bin <- "umap.sketch"
         pca_bin <- "full.pca.sketch"
     } else{
     cluster_bin <-  paste("seurat_cluster.", just.bin, sep="") #"seurat_cluster.008um"
@@ -73,15 +76,25 @@ for (i in 1:length(assay_names)) {
 
 print("plotting now")
 
-    dim.plot <- DimPlot(seurat_obj, reduction = umap_bin, group.by = cluster_bin, label = TRUE, repel = T) + NoLegend()
+    dim.plot <- DimPlot(seurat_obj, reduction = umap_bin, group.by = "seurat_cluster.sketched", label = TRUE, repel = T, alpha = 0.1) + NoLegend()
+    dim.plot2 <- DimPlot(seurat_obj, reduction = full_umap_bin, group.by = cluster_bin, label = TRUE, repel = T, alpha = 0.1) + NoLegend()
+
     cluster.plot <- SpatialDimPlot(seurat_obj, group.by = cluster_bin, pt.size.factor = 1.2,  label = T, repel = T, label.size = 4) + theme(legend.position = "right")
     print(dim.plot)
+    print(dim.plot2)
     print(cluster.plot)
+
+
+    # Apparently Seurat knows if an Ident string character is found in the columns so no need to use sobj@meta.data[[cluster_bin]]
+    Idents(seurat_obj) <- cluster_bin
+    cells <- CellsByIdentities(seurat_obj)
+    cells <- cells[setdiff(names(cells), "NA")]
+    print(SpatialDimPlot(seurat_obj, cells.highlight = cells,
+                         cols.highlight = c("#FFFF00", "grey"),
+                         facet.highlight = TRUE, combine = TRUE, ncol = 6) + NoLegend())
 
 } 
 
 dev.off()
-
-#save(seurat_obj, file = "seurat_obj_clustering.Robj")
 
 # EOF
