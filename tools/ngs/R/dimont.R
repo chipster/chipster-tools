@@ -27,6 +27,9 @@ if (min(fasta_len) == 0) {
 }
 cat(fasta_file, file = "seqdata.fa", sep = "\n")
 
+# Dimont reads the switch with Java's parseBoolean, which takes "yes" as false
+delete.bs <- ifelse(delete == "yes", "true", "false")
+
 tool <- file.path(chipster.tools.path, "dimont", "Dimont.jar")
 maxMemoryParameter <- paste("-Xmx", chipster.memory.max, "M", sep = "")
 command <- paste(
@@ -55,7 +58,7 @@ command <- paste(
     " ess=",
     ess,
     " delete=",
-    delete,
+    delete.bs,
     " threads=1 > dimont.log",
     sep = "",
     collapse = ""
