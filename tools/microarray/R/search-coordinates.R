@@ -36,7 +36,7 @@ end <- as.integer(items[3])
 # discard data from other chromosomes
 chr_listing <- dat[, chr_string]
 dat <- dat[chr_listing == chromosome, ]
-dat <- dat[-which(is.na(dat[, 1])), ]
+dat <- dat[!is.na(dat[, chr_string]), ]
 
 if (length(which(dat$start >= start & dat$end <= end)) == 0) {
     stop("CHIPSTER-NOTE: Given genomic region yields no matches.")
