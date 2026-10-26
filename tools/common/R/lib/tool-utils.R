@@ -11,6 +11,23 @@ read_input_definitions <- function() {
     return(inputdef)
 }
 
+# Reads chipster-inputs.tsv as a data frame with the input name in column 1 and the dataset name in
+# column 2, both as character: dataset names can look like numbers, or be "NA".
+#
+read_input_names <- function() {
+    # comp writes comment lines before the names (ToolUtils.writeInputDescription). comment.char can
+    # skip them, because comp doesn't allow # in dataset names (ToolUtils.NAME_PATTERN).
+    read.table(
+        "chipster-inputs.tsv",
+        header = FALSE,
+        sep = "\t",
+        colClasses = "character",
+        na.strings = character(0),
+        quote = "",
+        comment.char = "#"
+    )
+}
+
 write_output_definitions <- function(output_names) {
     write.table(
         output_names,
@@ -194,20 +211,28 @@ paired_name <- function(name1, name2) {
 
 # Takes as an argument a file name of a list of input names. It Goes through the list and compares
 # it to chipster-inputs.tsv. Returns a vector of internal input names or gives an error message,
-# if a listed input file is missing.
+# if the list is empty or a listed input file is missing.
 #
 make_input_list <- function(listfile) {
-    # read list file
-    name.list <- scan(listfile, what = "", sep = "\n")
-
     # read input names
-    input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
+    input.names <- read_input_names()
+
+    # read list file, without a byte order mark and blank lines
+    name.list <- read_list_file(listfile)
+    if (length(name.list) == 0) {
+        # The user knows the list by its dataset name
+        list.name <- input.names[match(listfile, input.names[, 1]), 2]
+        if (is.na(list.name)) {
+            list.name <- listfile
+        }
+        stop(paste("CHIPSTER-NOTE: The input file list", list.name, "is empty. List one file name per line."))
+    }
 
     # Check for duplicated etries
     if (anyDuplicated(name.list)) {
         message <- paste(
-            "Input file list contains one or more duplicated entries:\n",
-            name.list[duplicated(name.list)],
+            "Input file list contains one or more duplicated entries:",
+            paste(unique(name.list[duplicated(name.list)]), collapse = ", "),
             "\nFilenames must be unique so they can be correctly assigned."
         )
         stop(paste("CHIPSTER-NOTE: ", message))
@@ -216,15 +241,24 @@ make_input_list <- function(listfile) {
     # Check that inputs exist
     sdf <- setdiff(name.list, input.names[, 2])
     if (identical(sdf, character(0))) {
-        input.list <- vector(mode = "character", length = 0)
-        for (i in 1:length(name.list)) {
-            input.list <- c(
-                input.list,
-                paste(input.names[grep(paste("^", name.list[i], "$", sep = ""), input.names[, 2]), 1])
+        # A listed name must identify one input
+        dataset.names <- input.names[, 2]
+        ambiguous <- intersect(name.list, dataset.names[duplicated(dataset.names)])
+        if (length(ambiguous) > 0) {
+            message <- paste(
+                "Several selected files have the same name:",
+                paste(ambiguous, collapse = ", "),
+                "\nRename them so that they can be told apart in the list file."
             )
+            stop(paste("CHIPSTER-NOTE: ", message))
         }
+        # Exact match, dataset names can contain regex characters like ( ) + .
+        input.list <- input.names[match(name.list, dataset.names), 1]
     } else {
-        message <- paste("Input file list includes one or more files that has not been selected:", sdf)
+        message <- paste(
+            "Input file list includes one or more files that has not been selected:",
+            paste(sdf, collapse = ", ")
+        )
         stop(paste("CHIPSTER-NOTE: ", message))
     }
     return(input.list)
@@ -416,31 +450,31 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
 # Changes the file names in a text file to display names according to chipster-inputs.tsv
 #
 displayNamesToFile <- function(input.file) {
-    # Read input names
-    input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
-    # Go through input names and change names
-    for (i in 1:nrow(input.names)) {
-        sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-        system(paste("sed -i", sed.command, input.file))
-    }
+    input.names <- read_input_names()
+    # Escape the characters that are special in a sed pattern or replacement
+    pattern <- gsub("([][\\\\.*^$/])", "\\\\\\1", input.names[, 1], perl = TRUE)
+    replacement <- gsub("([\\\\&/])", "\\\\\\1", input.names[, 2], perl = TRUE)
+    # The script goes through a file, so that the shell doesn't see the names, which can contain
+    # spaces and parentheses
+    sed.file <- tempfile(fileext = ".sed")
+    on.exit(unlink(sed.file))
+    writeLines(paste("s/", pattern, "/", replacement, "/", sep = ""), sed.file, useBytes = TRUE)
+    runExternal(paste("sed -i -f", sed.file, input.file))
 }
 
 # Formats and prints out the command to stdout. Input names are substituted with
 # display names to aid readability and help spot input assignment errors.
 #
 documentCommand <- function(command.string) {
-    # Substitute input names
-    input.names <- tryCatch(
-        read.table("chipster-inputs.tsv", header = FALSE, sep = "\t"),
-        error = function(e) {
-            print("no inputs")
-            NULL
-        }
-    )
+    # Substitute input names. As text, not as regular expressions: names can contain e.g. . ( ) +
+    input.names <- tryCatch(read_input_names(), error = function(e) {
+        print("no inputs")
+        NULL
+    })
 
     if (!is.null(input.names)) {
-        for (i in 1:nrow(input.names)) {
-            command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string)
+        for (i in seq_len(nrow(input.names))) {
+            command.string <- gsub(input.names[i, 1], input.names[i, 2], command.string, fixed = TRUE)
         }
     }
     cat("##", "COMMAND:", command.string, "\n")

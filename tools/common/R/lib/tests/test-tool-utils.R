@@ -256,6 +256,224 @@ expect_equal(
     info = "read_list_file keeps the last line of a gzipped file without a final newline"
 )
 
+# --- read_input_names, make_input_list and displayNamesToFile -------------------------------------
+
+# Set CHIPSTER_TEST_LARGE=1 to also run the test with a 220 MB file.
+
+# Writes chipster-inputs.tsv like comp does (ToolUtils.writeInputDescription)
+write_inputs <- function(dataset.names, input.names = sprintf("reads%03d.fq", seq_along(dataset.names))) {
+    writeLines(
+        c(
+            "# Chipster dataset description file",
+            "# ",
+            "# INPUT_NAME\tDATASET_NAME",
+            paste(input.names, dataset.names, sep = "\t")
+        ),
+        "chipster-inputs.tsv",
+        useBytes = TRUE
+    )
+}
+
+# Runs displayNamesToFile on the given lines and returns the result
+display_names <- function(lines) {
+    writeLines(lines, "test.txt", useBytes = TRUE)
+    displayNamesToFile("test.txt")
+    readLines("test.txt")
+}
+
+
+## read_input_names
+
+write_inputs(c("001", "010", "NA"))
+expect_equal(read_input_names()[, 2], c("001", "010", "NA"), info = "read_input_names keeps names like numbers and NA")
+
+
+## displayNamesToFile
+
+# Dataset names can contain letters, numbers, space and + - _ : . , ( ) (comp's NAME_PATTERN). The other
+# characters here are escaped too, in case the pattern is extended.
+write_inputs(c("S1 (1)_1.fq", "näyte+x.fq", "a&b/c\\d [x].fq", "two  spaces.fq"))
+expect_equal(
+    display_names(c("cmd -1 reads001.fq,reads002.fq -2 reads003.fq reads004.fq", "not me: reads001Xfq")),
+    c("cmd -1 S1 (1)_1.fq,näyte+x.fq -2 a&b/c\\d [x].fq two  spaces.fq", "not me: reads001Xfq"),
+    info = "displayNamesToFile handles special characters, and doesn't treat . as a regex"
+)
+
+writeBin(c(charToRaw("bad byte: "), as.raw(0xff), charToRaw(" reads001.fq\n")), "test.txt")
+displayNamesToFile("test.txt")
+expect_equal(
+    readBin("test.txt", "raw", 100),
+    c(charToRaw("bad byte: "), as.raw(0xff), charToRaw(" S1 (1)_1.fq\n")),
+    info = "displayNamesToFile keeps bytes that aren't valid UTF-8"
+)
+
+write_inputs(c("001", "010", "NA"))
+expect_equal(
+    display_names("-1 reads001.fq -2 reads002.fq -3 reads003.fq"),
+    "-1 001 -2 010 -3 NA",
+    info = "displayNamesToFile handles names like numbers and NA"
+)
+
+write_inputs(sprintf("S%d.fq", 1:12))
+expect_equal(
+    display_names(paste(sprintf("reads%03d.fq", 1:12), collapse = " ")),
+    paste(sprintf("S%d.fq", 1:12), collapse = " "),
+    info = "displayNamesToFile works with more than 9 inputs"
+)
+
+if (Sys.getenv("CHIPSTER_TEST_LARGE") == "1") {
+    write_inputs(c("S1 (1).bam", "S2.bam"))
+    n <- 5e6
+    writeLines(
+        c(
+            "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\treads001.fq\treads002.fq",
+            paste0("chr1\t", 1:n, "\t.\tA\tG\t50\tPASS\tDP=10\tGT\t0/1\t1/1")
+        ),
+        "large.vcf"
+    )
+    seconds <- system.time(displayNamesToFile("large.vcf"))[["elapsed"]]
+    cat("     ", round(file.size("large.vcf") / 1e6), "MB in", seconds, "s\n")
+    expect_equal(
+        readLines("large.vcf", n = 1),
+        "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tS1 (1).bam\tS2.bam",
+        info = "displayNamesToFile handles a large file"
+    )
+    expect_equal(length(readLines("large.vcf")), n + 1, info = "displayNamesToFile keeps all lines of a large file")
+}
+
+
+## make_input_list
+
+write_inputs(c("S1 (1)_1.fq", "S2_1.fq"))
+writeLines(c("S2_1.fq", "S1 (1)_1.fq"), "list.txt")
+expect_equal(
+    make_input_list("list.txt"),
+    c("reads002.fq", "reads001.fq"),
+    info = "make_input_list finds names with regex characters, in the order of the list"
+)
+
+writeBin(charToRaw("S2_1.fq\r\nS1 (1)_1.fq\r\n"), "list.txt")
+expect_equal(
+    make_input_list("list.txt"),
+    c("reads002.fq", "reads001.fq"),
+    info = "make_input_list reads a list file with Windows line endings"
+)
+
+write_inputs(c("S1 ", "S1"))
+writeLines("S1 ", "list.txt")
+expect_equal(make_input_list("list.txt"), "reads001.fq", info = "make_input_list finds a name that ends with a space")
+
+write_inputs(c("001", "010", "NA"))
+writeLines(c("010", "NA"), "list.txt")
+expect_equal(
+    make_input_list("list.txt"),
+    c("reads002.fq", "reads003.fq"),
+    info = "make_input_list finds names like numbers and NA"
+)
+
+write_inputs(c("S1 (1)_1.fq", "S1 (1)_1.fq", "S2_1.fq"))
+writeLines("S2_1.fq", "list.txt")
+expect_equal(
+    make_input_list("list.txt"),
+    "reads003.fq",
+    info = "make_input_list allows duplicate dataset names that aren't listed"
+)
+writeLines(c("S2_1.fq", "S1 (1)_1.fq"), "list.txt")
+expect_error(
+    make_input_list("list.txt"),
+    "Several selected files have the same name: S1 \\(1\\)_1.fq",
+    info = "make_input_list stops when a listed name matches several datasets"
+)
+
+write_inputs(c("S1.fq", "S2.fq"))
+writeLines(c("S1.fq", "S3.fq"), "list.txt")
+expect_error(
+    make_input_list("list.txt"),
+    "has not been selected: S3.fq",
+    info = "make_input_list stops when a listed file isn't selected"
+)
+
+# The notes name all the files once, in one sentence
+note_of <- function(expr) {
+    tryCatch(
+        {
+            expr
+            "no error"
+        },
+        error = function(e) conditionMessage(e)
+    )
+}
+writeLines(c("S1.fq", "S3.fq", "S4.fq"), "list.txt")
+expect_equal(
+    note_of(make_input_list("list.txt")),
+    "CHIPSTER-NOTE:  Input file list includes one or more files that has not been selected: S3.fq, S4.fq",
+    info = "make_input_list names all the files that aren't selected in one note"
+)
+writeLines(c("S1.fq", "S2.fq", "S1.fq", "S2.fq", "S1.fq"), "list.txt")
+expect_equal(
+    note_of(make_input_list("list.txt")),
+    paste(
+        "CHIPSTER-NOTE:  Input file list contains one or more duplicated entries: S1.fq, S2.fq",
+        "\nFilenames must be unique so they can be correctly assigned."
+    ),
+    info = "make_input_list names each duplicated entry once, in one note"
+)
+
+writeBin(raw(0), "list.txt")
+expect_error(
+    make_input_list("list.txt"),
+    "CHIPSTER-NOTE: The input file list list.txt is empty",
+    info = "make_input_list stops with a note for an empty list"
+)
+writeLines(c("", "  ", ""), "list.txt")
+expect_error(
+    make_input_list("list.txt"),
+    "CHIPSTER-NOTE: The input file list list.txt is empty",
+    info = "make_input_list stops with a note for a list with only blank lines"
+)
+write_inputs(c("S1.fq", "my reads.txt"), c("reads001.fq", "list.txt"))
+expect_error(
+    make_input_list("list.txt"),
+    "CHIPSTER-NOTE: The input file list my reads.txt is empty",
+    info = "make_input_list names an empty list by its dataset name"
+)
+write_inputs(c("S1.fq", "S2.fq"))
+
+# read_list_file() does the reading: byte order mark, blank lines and a missing final newline
+writeBin(c(as.raw(c(0xef, 0xbb, 0xbf)), charToRaw("S2.fq\r\n\r\nS1.fq")), "list.txt")
+expect_equal(
+    make_input_list("list.txt"),
+    c("reads002.fq", "reads001.fq"),
+    info = "make_input_list reads a list with a BOM, a blank line and no final newline"
+)
+writeBin(as.raw(c(0xff, 0xfe, 0x53, 0x00, 0x31, 0x00, 0x2e, 0x00, 0x66, 0x00, 0x71, 0x00, 0x0a, 0x00)), "list.txt")
+expect_error(make_input_list("list.txt"), "UTF-16", info = "make_input_list stops with a note for a UTF-16 list")
+
+
+## documentCommand
+
+command_of <- function(command) {
+    out <- capture.output(documentCommand(command))
+    out[length(out)]
+}
+# Dataset names can have only the characters of comp's ToolUtils.NAME_PATTERN
+write_inputs(c("001", "S1 (1)+x.fq", "NA"))
+expect_equal(
+    command_of("bowtie2 -1 reads001.fq -2 reads002.fq -U reads003.fq"),
+    "## COMMAND: bowtie2 -1 001 -2 S1 (1)+x.fq -U NA ",
+    info = "documentCommand shows names like numbers or NA, and names with regex characters"
+)
+expect_equal(
+    command_of("cat reads001Xfq"),
+    "## COMMAND: cat reads001Xfq ",
+    info = "documentCommand doesn't treat the . of an input name as any character"
+)
+unlink("chipster-inputs.tsv")
+expect_equal(
+    capture.output(documentCommand("ls")),
+    c("[1] \"no inputs\"", "## COMMAND: ls "),
+    info = "documentCommand prints the command as it is without chipster-inputs.tsv"
+)
 
 setwd(old.wd)
 if (run.standalone) {
