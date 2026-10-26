@@ -30,9 +30,8 @@
     <h3>Details</h3>
 
     <p>
-        Spots are clustered using the low-dimensional space computed in the previous step with PCA. The user can
-        reduce the dimensionality of the space for clustering by selecting a lower number for the
-        "Dimensions of reduction to use" parameter. The visualizations produced in the previous step can help
+        Bins are clustered using the principal components (PCs) computed in the previous step. You can
+        reduce the dimensionality for clustering by selecting a lower number of PCs. The Elbow plot produced in the previous step can help
         in selecting an appropriate dimensionality.
     </p>
     <p>
@@ -41,7 +40,7 @@
         k-nearest neighbors graph is constructed using the Euclidean distance in the PCA space. Then, the edge
         weights between any two spots are refined based on the shared overlap in their local neighborhoods
         (Jaccard distance). The graph is then cut into clusters using the Louvain algorithm. The parameter
-        "Resolution for granularity for clustering" sets the granularity, with higher values leading to more
+        "Resolution for granularity" sets the granularity for clustering, with higher values leading to more
         clusters.
     </p>
     <p>
@@ -62,8 +61,7 @@
     <ol>
         <li>Variable features are identified and the data is scaled on the full 8 &mu;m assay.</li>
         <li>A sketch of the requested number of bins (default 50,000) is created using leverage-score
-            subsampling. The leverage-score subsampling ensures that rare and transcriptomically distinct populations are well represented in
-        the sketch.</li>
+            subsampling. The leverage-score subsampling ensures that rare and transcriptomically distinct populations are well represented in the sketch.</li>
         <li>Variable features, scaling, PCA, neighbor graph, clustering, and UMAP are computed on the sketch.</li>
         <li>Cluster labels and the UMAP model are projected from the sketch back to all bins, so that every bin in the full dataset receives a cluster label.</li>
     </ol>
@@ -82,8 +80,7 @@
         For more details on the Visium HD analysis pipeline, please check the
         <a href="https://satijalab.org/seurat/articles/visiumhd_analysis_vignette">Seurat Visium HD vignette</a>.
         For more details on sketch-based analysis, see the
-        <a href="https://satijalab.org/seurat/articles/seurat5_sketch_analysis">Seurat v5 sketch-based analysis
-            vignette</a>.
+        <a href="https://satijalab.org/seurat/articles/seurat5_sketch_analysis">Seurat v5 sketch-based analysis vignette</a>.
     </p>
 
     <h3>Output</h3>
