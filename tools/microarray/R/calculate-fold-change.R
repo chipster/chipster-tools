@@ -24,9 +24,10 @@ dat <- read.table(file, header = T, sep = "\t", row.names = 1)
 phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
 
 # remove rows that are NAs
-na_samples <- phenodata[which(is.na(phenodata[, pmatch(column, colnames(phenodata))])), 1]
-if (length(na_samples) > 0) {
-    dat <- dat[, -(grep(na_samples, colnames(dat)))]
+na_samples <- as.character(phenodata[which(is.na(phenodata[, pmatch(column, colnames(phenodata))])), 1])
+na_columns <- unlist(lapply(na_samples, grep, colnames(dat)))
+if (length(na_columns) > 0) {
+    dat <- dat[, -na_columns]
 }
 
 # Separates expression values and flags
