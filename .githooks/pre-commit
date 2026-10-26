@@ -1,29 +1,47 @@
 #!/bin/bash
-# Checks that the staged R scripts are formatted with Air (settings in air.toml).
+# Checks that the staged R scripts are formatted with Air (settings in air.toml)
+# and the staged Python scripts with Ruff (settings in ruff.toml).
 # Enable with: git config core.hooksPath .githooks
 #
-# Without Air installed the check is skipped, and the Format workflow on GitHub
-# checks the files instead. Air checks the files as they are in the working
-# tree, so with partly staged changes it also sees the unstaged ones.
+# A check is skipped if its formatter isn't installed, and the Format workflow
+# on GitHub checks the files instead. The formatters check the files as they
+# are in the working tree, so with partly staged changes they also see the
+# unstaged ones.
 
 set -euo pipefail
 
-if ! command -v air >/dev/null; then
-    echo "pre-commit: air not installed, skipping the R format check" >&2
-    exit 0
-fi
+# Prints the staged files matching the patterns, separated by NUL.
+staged() {
+    git diff --cached --name-only --diff-filter=ACMR -z -- "$@"
+}
 
-# A read loop rather than mapfile, which macOS's bash 3.2 doesn't have.
-files=()
-while IFS= read -r -d '' f; do
-    files+=("$f")
-done < <(git diff --cached --name-only --diff-filter=ACMR -z -- '*.R' '*.r')
+# Runs "FORMATTER format --check" on the staged files matching the patterns.
+check() {
+    local formatter=$1
+    shift
 
-if [ ${#files[@]} -eq 0 ]; then
-    exit 0
-fi
+    if ! command -v "$formatter" >/dev/null; then
+        echo "pre-commit: $formatter not installed, skipping its format check" >&2
+        return 0
+    fi
 
-if ! air format --check "${files[@]}"; then
-    echo "pre-commit: format these with 'air format FILE...' and stage them again" >&2
-    exit 1
-fi
+    # A read loop rather than mapfile, which macOS's bash 3.2 doesn't have.
+    local files=() f
+    while IFS= read -r -d '' f; do
+        files+=("$f")
+    done < <(staged "$@")
+
+    if [ ${#files[@]} -eq 0 ]; then
+        return 0
+    fi
+
+    if ! "$formatter" format --check "${files[@]}"; then
+        echo "pre-commit: format these with '$formatter format FILE...' and stage them again" >&2
+        return 1
+    fi
+}
+
+status=0
+check air '*.R' '*.r' || status=1
+check ruff '*.py' || status=1
+exit $status

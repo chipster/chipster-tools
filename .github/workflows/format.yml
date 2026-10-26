@@ -34,3 +34,16 @@ jobs:
 
       # Formatting settings are in air.toml.
       - run: air format --check .
+
+  ruff:
+    runs-on: ubuntu-latest
+    # The check takes seconds; this only bounds a hung download.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pinned like Air above. Formatting settings are in ruff.toml.
+      - uses: astral-sh/ruff-action@v4
+        with:
+          version: "0.17.2"
+          args: format --check
