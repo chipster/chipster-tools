@@ -1,0 +1,8 @@
+# Commits that git blame skips: formatting only, no changes in behaviour.
+# GitHub's blame view reads this file automatically. For git blame, run once:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Format the R scripts with Air
+c4ccb897818e8d3982353d5c9fd315a79e9485e3
+# Format the Python scripts with Ruff
+768a2c95441ea878f57f3f7273e80a282359dd07

@@ -23,3 +23,6 @@ workflow on GitHub checks them with the versions pinned in
 - Pre-commit hook: git config core.hooksPath .githooks
   The hook checks the staged R and Python scripts, and skips a check if its
   formatter isn't installed.
+- git blame: git config blame.ignoreRevsFile .git-blame-ignore-revs
+  skips the commits that only reformatted the scripts. GitHub's blame view
+  skips them already.
