@@ -51,7 +51,10 @@ num.queryseq <- as.integer(str.queryseq)
 # round(num.queryseq)
 
 if (num.queryseq > 1000) {
-    stop(paste("CHIPSTER-NOTE: Too many sequences in the alignmnet. Maximun is 1000 but your file contains ", num.queryseq))
+    stop(paste(
+        "CHIPSTER-NOTE: Too many sequences in the alignmnet. Maximun is 1000 but your file contains ",
+        num.queryseq
+    ))
 }
 
 emboss.binary <- file.path(emboss.path, "prettyplot")

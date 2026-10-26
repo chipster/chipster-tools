@@ -57,7 +57,7 @@ options(Seurat.object.assay.version = "v5")
 load("seurat_obj.Robj")
 
 if (exists("data.combined")) {
-  seurat_obj <- data.combined
+    seurat_obj <- data.combined
 }
 
 # Cluster the cells
@@ -88,15 +88,22 @@ dev.off() # close the pdf
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
 if (output_aver_expr == "T") {
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = seurat_obj, slot = "data", assay = "SCT")
-  } else {
-    aver_expr <- AverageExpression(object = seurat_obj)
-  }
+    if (normalisation.method == "SCT") {
+        aver_expr <- AverageExpression(object = seurat_obj, slot = "data", assay = "SCT")
+    } else {
+        aver_expr <- AverageExpression(object = seurat_obj)
+    }
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-  # Write to table
-  write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    aver_expr_in_clusters <- aver_expr[[1]]
+    # Write to table
+    write.table(
+        aver_expr_in_clusters,
+        file = "aver_expr_in_clusters.tsv",
+        sep = "\t",
+        row.names = TRUE,
+        col.names = TRUE,
+        quote = FALSE
+    )
 }
 
 # Save the Robj for the next tool

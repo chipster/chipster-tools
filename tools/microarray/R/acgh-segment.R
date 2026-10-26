@@ -16,13 +16,18 @@ input <- readData("normalized.tsv")
 cgh <- toCgh(input, level = "copynumber")
 
 if (any(is.na(copynumber(cgh)))) {
-  stop("CHIPSTER-NOTE: Data contains missing values. Please first run the tool Normalize copy number data.")
+    stop("CHIPSTER-NOTE: Data contains missing values. Please first run the tool Normalize copy number data.")
 }
 
-cgh <- segmentData(cgh, alpha = significance.level, min.width = as.integer(minimum.number.of.probes.per.segment), undo.SD = minimum.number.of.sds.between.segments)
+cgh <- segmentData(
+    cgh,
+    alpha = significance.level,
+    min.width = as.integer(minimum.number.of.probes.per.segment),
+    undo.SD = minimum.number.of.sds.between.segments
+)
 
 if (reNormalize == "TRUE") {
-  cgh <- postsegnormalize(cgh)
+    cgh <- postsegnormalize(cgh)
 }
 
 output <- fromCgh(cgh)

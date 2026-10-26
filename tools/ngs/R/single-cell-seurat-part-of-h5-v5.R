@@ -21,10 +21,10 @@ options(Seurat.object.assay.version = "v5")
 
 # Load the data:
 if (file.exists("hdf5.h5")) {
-  library(hdf5r)
-  dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
+    library(hdf5r)
+    dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
 } else {
-  stop(paste("CHIPSTER-NOTE: ", "You need to provide a multiomics h5 file as input. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "You need to provide a multiomics h5 file as input. Please check your input file."))
 }
 
 # Choose only the gene expression part:
@@ -34,6 +34,5 @@ data_gene_expr <- dat[["Gene Expression"]]
 # Write to table:
 name.for.output.file <- paste("sample_", sample.name.for.file, ".tsv", sep = "")
 write.table(as.matrix(data_gene_expr), file = name.for.output.file, sep = "\t", row.names = T, col.names = T, quote = F)
-
 
 ## EOF

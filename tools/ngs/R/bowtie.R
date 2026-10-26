@@ -54,7 +54,14 @@ output.parameters <- paste(unaligned.output, multiread.output)
 command.end <- paste("-x", bowtie.index, "reads.txt 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
-bowtie.command <- paste(command.start, common.parameters, quality.parameter, mode.parameters, output.parameters, command.end)
+bowtie.command <- paste(
+    command.start,
+    common.parameters,
+    quality.parameter,
+    mode.parameters,
+    output.parameters,
+    command.end
+)
 # stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal(bowtie.command)
 

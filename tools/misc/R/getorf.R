@@ -12,7 +12,6 @@
 # PARAMETER OPTIONAL flanking: "Number of flanking nucleotides to report" TYPE INTEGER DEFAULT 100 (If you have chosen one of the options of the type of sequence to find that gives the flanking sequence around a STOP or START codon, this allows you to set the number of nucleotides either side of that codon to output. If the region of flanking nucleotides crosses the start or end of the sequence, no output is given for this codon.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-
 # KM 8.11. 2013
 options(scipen = 999)
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")

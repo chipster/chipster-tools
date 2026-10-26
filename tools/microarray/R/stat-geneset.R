@@ -10,7 +10,6 @@
 # PARAMETER OPTIONAL p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (Adjusted P-value cut-off for significant results)
 # PARAMETER OPTIONAL mult.test.cor: "Multiple testing correction method" TYPE [Holm: Holm, BH: BH, BY:BY] DEFAULT BH (Type of multiple testing correction to be used)
 
-
 # JTT 14.6.2006
 # MG 31.12.2009:
 # MG 03.05.2010: to exclude single gene genesets and added group labels in plots. Added more info columns in results table
@@ -73,15 +72,27 @@ if (pathways == "KEGG") {
     path_count <- sapply(env2, length)
 
     gt.options(transpose = TRUE)
-    test.gt <- gtKEGG(groups, as.matrix(dat2), probe2entrez = env, annotation = "org.Hs.eg.db", multtest = mult.test.cor)
+    test.gt <- gtKEGG(
+        groups,
+        as.matrix(dat2),
+        probe2entrez = env,
+        annotation = "org.Hs.eg.db",
+        multtest = mult.test.cor
+    )
 
     if (mult.test.cor == "Holm") {
         mult.test.cor <- "holm"
     }
     table.out <- data.frame(
-        pathwayID = names(test.gt), Genes = path_count[names(test.gt)], Tested = size(test.gt),
-        Statistic = test.gt@result[, "Statistic"], Expected = test.gt@result[, "Expected"], Std.dev = test.gt@result[, "Std.dev"],
-        p.value = p.value(test.gt), p.adjusted = result(test.gt)[, mult.test.cor], Description = alias(test.gt)
+        pathwayID = names(test.gt),
+        Genes = path_count[names(test.gt)],
+        Tested = size(test.gt),
+        Statistic = test.gt@result[, "Statistic"],
+        Expected = test.gt@result[, "Expected"],
+        Std.dev = test.gt@result[, "Std.dev"],
+        p.value = p.value(test.gt),
+        p.adjusted = result(test.gt)[, mult.test.cor],
+        Description = alias(test.gt)
     )
     rownames(table.out) <- paste("KEGG:", rownames(table.out), sep = "")
 }
@@ -100,9 +111,15 @@ if (pathways == "GO") {
         mult.test.cor <- "holm"
     }
     table.out <- data.frame(
-        pathwayID = names(test.gt), Genes = path_count[names(test.gt)], Tested = size(test.gt),
-        Statistic = test.gt@result[, "Statistic"], Expected = test.gt@result[, "Expected"], Std.dev = test.gt@result[, "Std.dev"],
-        p.value = p.value(test.gt), p.adjusted = result(test.gt)[, mult.test.cor], Description = alias(test.gt)
+        pathwayID = names(test.gt),
+        Genes = path_count[names(test.gt)],
+        Tested = size(test.gt),
+        Statistic = test.gt@result[, "Statistic"],
+        Expected = test.gt@result[, "Expected"],
+        Std.dev = test.gt@result[, "Std.dev"],
+        p.value = p.value(test.gt),
+        p.adjusted = result(test.gt)[, mult.test.cor],
+        Description = alias(test.gt)
     )
 }
 
@@ -115,9 +132,15 @@ if (pathways == "current") {
         mult.test.cor <- "holm"
     }
     table.out <- data.frame(
-        pathwayID = column, Genes = nrow(dat2), Tested = size(test.gt),
-        Statistic = test.gt@result[, "Statistic"], Expected = test.gt@result[, "Expected"], Std.dev = test.gt@result[, "Std.dev"],
-        p.value = p.value(test.gt), p.adjusted = p.value(test.gt), Description = "Phenodata column"
+        pathwayID = column,
+        Genes = nrow(dat2),
+        Tested = size(test.gt),
+        Statistic = test.gt@result[, "Statistic"],
+        Expected = test.gt@result[, "Expected"],
+        Std.dev = test.gt@result[, "Std.dev"],
+        p.value = p.value(test.gt),
+        p.adjusted = p.value(test.gt),
+        Description = "Phenodata column"
     )
     rownames(table.out) <- column
 }
@@ -137,7 +160,11 @@ if (nrow(table.out) > 0) {
         ft <- features(test.gt, alias = get(paste(lib2, "SYMBOL", sep = "")), pdf = "multtest.pdf")
     } else {
         path.names <- as.vector(table.out[1:x, "pathwayID"])
-        ft <- features(test.gt[path.names[!is.na(path.names)]], alias = get(paste(lib2, "SYMBOL", sep = "")), pdf = "multtest.pdf")
+        ft <- features(
+            test.gt[path.names[!is.na(path.names)]],
+            alias = get(paste(lib2, "SYMBOL", sep = "")),
+            pdf = "multtest.pdf"
+        )
     }
 } else {
     pdf(file = "multtest.pdf", width = 600 / 72, height = 600 / 72)

@@ -87,14 +87,29 @@ library(MEDIPS)
 
 # saturation analysis
 pdf("saturation.pdf", width = 0, height = 0, paper = "a4r")
-sr.treatment <- MEDIPS.saturation(file = tfile, BSgenome = genome, extend = smoothing.extension, window_size = coverage.resolution)
+sr.treatment <- MEDIPS.saturation(
+    file = tfile,
+    BSgenome = genome,
+    extend = smoothing.extension,
+    window_size = coverage.resolution
+)
 MEDIPS.plotSaturation(sr.treatment, main = "Saturation analysis for treatment")
 if (use.control) {
-    sr.control <- MEDIPS.saturation(file = cfile, BSgenome = genome, extend = smoothing.extension, window_size = coverage.resolution)
+    sr.control <- MEDIPS.saturation(
+        file = cfile,
+        BSgenome = genome,
+        extend = smoothing.extension,
+        window_size = coverage.resolution
+    )
     MEDIPS.plotSaturation(sr.control, main = "Saturation analysis for control")
 }
 if (use.input) {
-    sr.input <- MEDIPS.saturation(file = ifile, BSgenome = genome, extend = smoothing.extension, window_size = coverage.resolution)
+    sr.input <- MEDIPS.saturation(
+        file = ifile,
+        BSgenome = genome,
+        extend = smoothing.extension,
+        window_size = coverage.resolution
+    )
     MEDIPS.plotSaturation(sr.input, main = "Saturation analysis for input")
 }
 dev.off()
@@ -123,12 +138,27 @@ if (use.input) {
 dev.off()
 
 # Reads the data
-treatment <- MEDIPS.createSet(file = tfile, BSgenome = genome, extend = as.numeric(smoothing.extension), window_size = as.numeric(coverage.resolution))
+treatment <- MEDIPS.createSet(
+    file = tfile,
+    BSgenome = genome,
+    extend = as.numeric(smoothing.extension),
+    window_size = as.numeric(coverage.resolution)
+)
 if (use.control) {
-    control <- MEDIPS.createSet(file = cfile, BSgenome = genome, extend = as.numeric(smoothing.extension), window_size = as.numeric(coverage.resolution))
+    control <- MEDIPS.createSet(
+        file = cfile,
+        BSgenome = genome,
+        extend = as.numeric(smoothing.extension),
+        window_size = as.numeric(coverage.resolution)
+    )
 }
 if (use.input) {
-    input <- MEDIPS.createSet(file = ifile, BSgenome = genome, extend = as.numeric(smoothing.extension), window_size = as.numeric(coverage.resolution))
+    input <- MEDIPS.createSet(
+        file = ifile,
+        BSgenome = genome,
+        extend = as.numeric(smoothing.extension),
+        window_size = as.numeric(coverage.resolution)
+    )
 }
 
 # Coupling vector
@@ -139,14 +169,30 @@ library(png)
 tmpfiles <- c(tempfile(), tempfile())
 bitmap(tmpfiles[1], width = 11.7, height = 8.3, units = "in", res = 300)
 if (use.input) {
-    MEDIPS.plotCalibrationPlot(MSet = treatment, ISet = input, CSet = cs, main = paste("Calibration plot for treatment, ", treatment@chr_names[1]), plot_chr = treatment@chr_names[1])
+    MEDIPS.plotCalibrationPlot(
+        MSet = treatment,
+        ISet = input,
+        CSet = cs,
+        main = paste("Calibration plot for treatment, ", treatment@chr_names[1]),
+        plot_chr = treatment@chr_names[1]
+    )
 } else {
-    MEDIPS.plotCalibrationPlot(MSet = treatment, CSet = cs, main = paste("Calibration plot for treatment, ", treatment@chr_names[1]), plot_chr = treatment@chr_names[1])
+    MEDIPS.plotCalibrationPlot(
+        MSet = treatment,
+        CSet = cs,
+        main = paste("Calibration plot for treatment, ", treatment@chr_names[1]),
+        plot_chr = treatment@chr_names[1]
+    )
 }
 dev.off()
 if (use.control) {
     bitmap(tmpfiles[2], width = 11.7, height = 8.3, units = "in", res = 300)
-    MEDIPS.plotCalibrationPlot(MSet = control, CSet = cs, main = paste("Calibration plot for control, ", control@chr_names[1]), plot_chr = control@chr_names[1])
+    MEDIPS.plotCalibrationPlot(
+        MSet = control,
+        CSet = cs,
+        main = paste("Calibration plot for control, ", control@chr_names[1]),
+        plot_chr = control@chr_names[1]
+    )
     dev.off()
 }
 
@@ -187,7 +233,13 @@ if (promoters.only == "yes") {
     sta[minus] <- refGene$txEnd[minus] - promoter.downstream
     sto <- refGene$txStart + promoter.downstream
     sto[minus] <- refGene$txEnd[minus] + promoter.upstream
-    rois <- data.frame(chromosome = as.character(refGene$chrom), start = sta, end = sto, gene = as.character(refGene$name2), stringsAsFactors = FALSE)
+    rois <- data.frame(
+        chromosome = as.character(refGene$chrom),
+        start = sta,
+        end = sto,
+        gene = as.character(refGene$name2),
+        stringsAsFactors = FALSE
+    )
     mr.edgeR <- MEDIPS.selectROIs(results = mr.edgeR, rois = rois)
     colnames(mr.edgeR)[colnames(mr.edgeR) == "ROI"] <- "symbol"
 }
@@ -229,7 +281,15 @@ if (save.bed == "yes") {
     } else {
         gene <- position
     }
-    bed <- data.frame(chromosome = mr.edgeR$chr, start = mr.edgeR$start, end = mr.edgeR$stop, name = gene, score = mr.edgeR$treatment.rpkm, strand = rep("+", nrow(mr.edgeR)), stringsAsFactors = FALSE)
+    bed <- data.frame(
+        chromosome = mr.edgeR$chr,
+        start = mr.edgeR$start,
+        end = mr.edgeR$stop,
+        name = gene,
+        score = mr.edgeR$treatment.rpkm,
+        strand = rep("+", nrow(mr.edgeR)),
+        stringsAsFactors = FALSE
+    )
     bed$start <- bed$start - 1
     write.table(bed, "treatment.bed", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = FALSE)
     if (use.control) {

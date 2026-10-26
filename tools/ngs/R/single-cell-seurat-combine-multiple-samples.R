@@ -10,7 +10,6 @@
 # RUNTIME R-4.2.3-single-cell
 # SLOTS 3
 # TOOLS_BIN ""
- 
 
 # 2021-12-30 ML
 # 2022-02-17 EK increased slots to 4
@@ -20,10 +19,7 @@
 # 2023-02-03 ML Add 5 slots
 # 2023-04-06 LG Remove 5 slots
 # 2023-02-01 ML Return to the original 3 slots
-# 2023-03-01 ML Fix SCT + RPCA 
-
-
-
+# 2023-03-01 ML Fix SCT + RPCA
 
 library(Seurat)
 
@@ -58,16 +54,14 @@ if (normalisation.method == "SCT") {
 # When using RPCA, need to run PCA on each dataset using these features:
 # Reference: https://satijalab.org/seurat/archive/v4.3/integration_rpca
 if (anchor.identification.method == "rpca") {
-       if (normalisation.method == "LogNormalize") {
-            seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
+    if (normalisation.method == "LogNormalize") {
+        seurat.objects.list <- lapply(X = seurat.objects.list, FUN = function(x) {
             x <- ScaleData(x, features = features, verbose = FALSE)
             x <- RunPCA(x, features = features, verbose = FALSE)
-            })
-       }  
-       else if (normalisation.method == "SCT") {
-            seurat.objects.list <- lapply(X = seurat.objects.list, FUN = RunPCA, features = features)
-       } 
-   
+        })
+    } else if (normalisation.method == "SCT") {
+        seurat.objects.list <- lapply(X = seurat.objects.list, FUN = RunPCA, features = features)
+    }
 }
 
 # When using only the user listed samples as references:
@@ -87,10 +81,21 @@ if (ref.sample.names != "No references selected") {
 }
 
 # 1. identify anchors using the FindIntegrationAnchors function
-data.anchors <- FindIntegrationAnchors(object.list = seurat.objects.list, dims = 1:CCstocompute, anchor.features = features, reduction = anchor.identification.method, normalization.method = normalisation.method, reference = ref.sample.numbers) # dims = Which dimensions to use from the CCA to specify the neighbor search space
+data.anchors <- FindIntegrationAnchors(
+    object.list = seurat.objects.list,
+    dims = 1:CCstocompute,
+    anchor.features = features,
+    reduction = anchor.identification.method,
+    normalization.method = normalisation.method,
+    reference = ref.sample.numbers
+) # dims = Which dimensions to use from the CCA to specify the neighbor search space
 
 # 2. use these anchors to integrate the datasets together with IntegrateData.
-data.combined <- IntegrateData(anchorset = data.anchors, dims = 1:PCstocompute, normalization.method = normalisation.method) # dims = Number of PCs to use in the weighting procedure
+data.combined <- IntegrateData(
+    anchorset = data.anchors,
+    dims = 1:PCstocompute,
+    normalization.method = normalisation.method
+) # dims = Number of PCs to use in the weighting procedure
 
 DefaultAssay(data.combined) <- "integrated"
 
@@ -101,8 +106,6 @@ if (normalisation.method != "SCT") {
 
 # Moved to next tool to clarify, there's npcs as a parameter:
 # data.combined <- RunPCA(data.combined, npcs = 30, verbose = FALSE)
-
-
 
 # Save the Robj for the next tool
 save(data.combined, file = "seurat_obj_combined.Robj")

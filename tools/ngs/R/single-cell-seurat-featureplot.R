@@ -8,7 +8,6 @@
 # RUNTIME R-4.2.3-single-cell
 # TOOLS_BIN ""
 
-
 # 09.04.2019 ML
 # 09.07.2019 ML Seurat v3
 # 09.09.2019 ML remove optins for orig.ident, PC1, PC2
@@ -26,7 +25,13 @@ if (exists("data.combined")) {
 
 # Plot tSNE
 pdf(file = "UMAPplot.pdf")
-FeaturePlot(object = seurat_obj, features = feature_to_plot, pt.size = point.size, label = add.labels, order = as.logical(plotting.order.used))
+FeaturePlot(
+    object = seurat_obj,
+    features = feature_to_plot,
+    pt.size = point.size,
+    label = add.labels,
+    order = as.logical(plotting.order.used)
+)
 dev.off() # close the pdf
 
 # EOF

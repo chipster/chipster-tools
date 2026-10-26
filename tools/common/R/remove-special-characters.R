@@ -11,53 +11,53 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
 gzip <- FALSE
 if (isGZipFile("input")) {
-   gzip <- TRUE
-   unzipIfGZipFile("input")
+    gzip <- TRUE
+    unzipIfGZipFile("input")
 }
 file.copy("input", "output")
 
 # Remove characters
 # Exlamation mark "!"
 if (remove == "ex" || remove == "all") {
-   system("sed -i s/\\!//g output")
+    system("sed -i s/\\!//g output")
 }
 # Pipe character "|"
 if (remove == "pi" || remove == "all") {
-   system("sed -i s/\\|//g output")
+    system("sed -i s/\\|//g output")
 }
 # Hyphen "-"
 if (remove == "hy" || remove == "all") {
-   system("sed -i s/-//g output")
+    system("sed -i s/-//g output")
 }
 # Underscore "_"
 if (remove == "us" || remove == "all") {
-   system("sed -i s/_//g output")
+    system("sed -i s/_//g output")
 }
 # Brackets "()"
 if (remove == "br" || remove == "all") {
-   system("cat output | sed s/\\(//g | sed s/\\)//g > output_tmp")
-   file.copy("output_tmp", "output", overwrite = TRUE)
+    system("cat output | sed s/\\(//g | sed s/\\)//g > output_tmp")
+    file.copy("output_tmp", "output", overwrite = TRUE)
 }
 # Curly brackets "{}"
 if (remove == "cb" || remove == "all") {
-   system("cat output | sed s/\\{//g | sed s/\\}//g > output_tmp")
-   file.copy("output_tmp", "output", overwrite = TRUE)
+    system("cat output | sed s/\\{//g | sed s/\\}//g > output_tmp")
+    file.copy("output_tmp", "output", overwrite = TRUE)
 }
 # Square brackets "[]"
 if (remove == "sb" || remove == "all") {
-   # system("cat output | sed s/\\\[//g | sed s/\\\]//g > output_tmp")
-   system("sed -i s/[][]//g output")
+    # system("cat output | sed s/\\\[//g | sed s/\\\]//g > output_tmp")
+    system("sed -i s/[][]//g output")
 }
 # Single quote "'" (sometimes used as "prime" as in "3'", "5'")
 if (remove == "ac" || remove == "all") {
-   system("sed -i s/\\'//g output")
-   # system("sed -i s/\\'//g")
+    system("sed -i s/\\'//g output")
+    # system("sed -i s/\\'//g")
 }
 
 # Gzip output if input was gzipped
 if (gzip) {
-   system("gzip output")
-   system("ls -l")
+    system("gzip output")
+    system("ls -l")
 }
 
 

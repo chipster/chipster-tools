@@ -51,7 +51,12 @@ system("mv a.pick.count picked.count_table")
 system("mv a.pick.fasta picked.fasta")
 
 # run seq.error
-seqerror.options <- paste("seq.error(fasta=picked.fasta, count=picked.count_table, reference=reference.fasta, aligned=", aligned, ")", sep = "")
+seqerror.options <- paste(
+    "seq.error(fasta=picked.fasta, count=picked.count_table, reference=reference.fasta, aligned=",
+    aligned,
+    ")",
+    sep = ""
+)
 documentCommand(seqerror.options)
 write(seqerror.options, "batch2.mth", append = FALSE)
 command2 <- paste(binary, "batch2.mth", "> log2.txt 2>&1")
@@ -69,7 +74,12 @@ system(command2)
 # a.pick.error.ref
 
 # run remove.groups
-removegroups.options <- paste("remove.groups(count=a.count, fasta=a.fasta, taxonomy=taxonomy1.txt, groups=", group, ")", sep = "")
+removegroups.options <- paste(
+    "remove.groups(count=a.count, fasta=a.fasta, taxonomy=taxonomy1.txt, groups=",
+    group,
+    ")",
+    sep = ""
+)
 documentCommand(removegroups.options)
 write(removegroups.options, "batch3.mth", append = FALSE)
 command3 <- paste(binary, "batch3.mth", "> log3.txt 2>&1")

@@ -41,7 +41,10 @@ if (organism == "other") {
     if (file.exists("ownref.fa")) {
         refseq <- paste("ownref.fa")
     } else {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a FASTA file or choose one of the provided reference genomes."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a FASTA file or choose one of the provided reference genomes."
+        ))
     }
 } else {
     # If not, we use the internal one.
@@ -94,12 +97,25 @@ vcfutils.options <- paste("varFilter", "-d", vcfutils.d, "-D", vcfutils.ud)
 
 
 # commands
-command1 <- paste(samtools.binary, mpileup.options, "-f", refseq, "*.bam", "|", bcftools.binary, bcftools.options, "- > var.raw.bcf")
+command1 <- paste(
+    samtools.binary,
+    mpileup.options,
+    "-f",
+    refseq,
+    "*.bam",
+    "|",
+    bcftools.binary,
+    bcftools.options,
+    "- > var.raw.bcf"
+)
 command2 <- paste(bcftools.binary, "view var.raw.bcf |", vcfutils.binary, vcfutils.options, "> variants.raw.vcf")
 if (vcftools.info.all == "yes") {
     command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO-all")
 } else {
-    command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
+    command3 <- paste(
+        vcftools.binary,
+        "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC"
+    )
 }
 
 # run

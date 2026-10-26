@@ -5,9 +5,7 @@
 # OUTPUT all.grp: all.grp
 # OUTPUT META phenodata-merged.tsv: phenodata.tsv
 
-
 # JTT 2012-11-05
-
 
 # Check the file types
 files <- dir()
@@ -43,4 +41,12 @@ pdata <- NULL
 for (i in 1:length(p)) {
     pdata <- rbind(pdata, p[[i]])
 }
-write.table(pdata, file = "phenodata-merged.tsv", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = TRUE)
+write.table(
+    pdata,
+    file = "phenodata-merged.tsv",
+    quote = FALSE,
+    sep = "\t",
+    na = "",
+    row.names = FALSE,
+    col.names = TRUE
+)

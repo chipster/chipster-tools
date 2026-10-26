@@ -8,7 +8,6 @@
 # PARAMETER OPTIONAL rarefy: "Rarefy counts" TYPE [yes, no] DEFAULT no (Should sequence counts be rarefied? Normally your samples have different number of sequences. If you select yes here, the count table will be subsampled so that each sample has the same number of sequences as your smallest sample. Please note that the species, whose counts after rarefying are zero in all samples, are removed.)
 # PARAMETER OPTIONAL binarytable: "Produce binary table instead of counts" TYPE [yes, no] DEFAULT no (Should the actual sequence counts be converted to 0 and 1, indicating the presence and absence of species? This kind of binary table is typically used when studying the co-occurence of species.)
 
-
 # OUTPUT OPTIONAL log.txt
 
 # ML 23.3.2017 detach from mothur-classify.seqs
@@ -36,14 +35,14 @@ dat$V2 <- gsub(".[[:digit:]]{1,}.?[[:digit:]]?)", "", as.character(dat$V2))
 
 # Cutting the taxonomic names
 if (cutlevel == 0) {
-  dat$newnames <- dat$V2
+    dat$newnames <- dat$V2
 } else {
-  sp <- strsplit(dat$V2, ";")
-  sp2 <- rep(NA, nrow(dat))
-  for (i in 1:nrow(dat)) {
-    sp2[i] <- paste(sp[[i]][1:cutlevel], collapse = ";")
-  }
-  dat$newnames <- sp2
+    sp <- strsplit(dat$V2, ";")
+    sp2 <- rep(NA, nrow(dat))
+    for (i in 1:nrow(dat)) {
+        sp2[i] <- paste(sp[[i]][1:cutlevel], collapse = ";")
+    }
+    dat$newnames <- sp2
 }
 
 
@@ -65,33 +64,40 @@ b <- b[, -1]
 # 	nmax <- min(rowSums(b))
 # }
 if (rarefy == "yes") {
-  nmax <- min(rowSums(b))
-  btmp <- apply(b, 1, function(x) rep(colnames(b), times = x))
-  seed <- 1234
-  set.seed(seed)
-  btmp <- lapply(btmp, function(x) sample(x, size = nmax, replace = F))
-  btmp <- lapply(btmp, function(x) table(factor(x, levels = colnames(b))))
-  b <- t(do.call(cbind, btmp))
-  # 	# deleted.columns <- colnames(b)[which(colSums(b)==0)]
-  b <- b[, -which(colSums(b) == 0)]
+    nmax <- min(rowSums(b))
+    btmp <- apply(b, 1, function(x) rep(colnames(b), times = x))
+    seed <- 1234
+    set.seed(seed)
+    btmp <- lapply(btmp, function(x) sample(x, size = nmax, replace = F))
+    btmp <- lapply(btmp, function(x) table(factor(x, levels = colnames(b))))
+    b <- t(do.call(cbind, btmp))
+    # 	# deleted.columns <- colnames(b)[which(colSums(b)==0)]
+    b <- b[, -which(colSums(b) == 0)]
 }
 
 # Produce binary table (0/1) showing only if a specie is present or absent, rather than the actual sequence counts
 if (binarytable == "yes") {
-  b[b > 0] <- 1
+    b[b > 0] <- 1
 }
 
 tab <- b
 
 # Writing the table to disk
 write.table(tab, "counttable.tsv", col.names = T, row.names = T, sep = "\t", quote = FALSE)
-write.table(data.frame(sample = rownames(tab), chiptype = "NGS", group = rep("", length(rownames(tab)))), "phenodata.tsv", col.names = T, row.names = F, sep = "\t", quote = F)
+write.table(
+    data.frame(sample = rownames(tab), chiptype = "NGS", group = rep("", length(rownames(tab)))),
+    "phenodata.tsv",
+    col.names = T,
+    row.names = F,
+    sep = "\t",
+    quote = F
+)
 
 # Transpose the table, add "chip." to column names to make it compatible with DESeq2 and edgeR tools, and write it to disk.
 # Rarefied counts should not be used in DEseq2 and edgeR, so we don't make the transposed table if the rarefy=yes.
 if (rarefy == "no") {
-  oldtable <- read.table("counttable.tsv", header = TRUE, sep = "\t", check.names = FALSE)
-  newtable <- t(oldtable)
-  colnames(newtable) <- paste("chip", colnames(newtable), sep = ".")
-  write.table(newtable, "counttable_transposed.tsv", quote = FALSE, sep = "\t")
+    oldtable <- read.table("counttable.tsv", header = TRUE, sep = "\t", check.names = FALSE)
+    newtable <- t(oldtable)
+    colnames(newtable) <- paste("chip", colnames(newtable), sep = ".")
+    write.table(newtable, "counttable_transposed.tsv", quote = FALSE, sep = "\t")
 }

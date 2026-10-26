@@ -7,7 +7,6 @@
 # RUNTIME R-4.4.3-asv
 # TOOLS_BIN ""
 
-
 # HJ 2025
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
@@ -29,7 +28,12 @@ seqtab.nochim <- mergeSequenceTables(seqtab_nochim1, seqtab_nochim2)
 # write a log/summary file
 sink(file = "summary.txt")
 cat("\nAfter merging, the sequence table consist of:\n")
-cat(length(rownames(seqtab.nochim)), " samples and ", length(colnames(seqtab.nochim)), " amplicon sequence variants\n\n")
+cat(
+    length(rownames(seqtab.nochim)),
+    " samples and ",
+    length(colnames(seqtab.nochim)),
+    " amplicon sequence variants\n\n"
+)
 sink()
 
 # save the object as .Rda
@@ -38,4 +42,3 @@ save(seqtab.nochim, file = "seqtab_merged.Rda")
 # write the merged ASV table
 colnames(seqtab.nochim) <- paste0("ASV", seq(length(colnames(seqtab.nochim))))
 write.table(seqtab.nochim, file = "sequence_table_merged.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
-

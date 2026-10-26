@@ -10,7 +10,6 @@
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
-
 # JTT 3.10.2007: Heatmap
 # MG 21.04.2010: to increase the gene/sample limit and adjust column width to number of genes and have the option to cluster samples only
 # MG 25.11.2010: Increased the gene/sample limit to 20000
@@ -88,16 +87,47 @@ clustc <- as.dendrogram(hcluster(x = t(dat2), method = d, link = "average"))
 pdf(file = "heatmap.pdf", width = w / 72, height = h / 72)
 if (cluster.samples.only == "no") {
     if (hm.scale == "default") {
-        heatmap(x = as.matrix(dat2), Rowv = clustg, Colv = clustc, col = heatcol, margins = c(15, column_margin), labCol = gsub(" ", "", phenodata$description), labRow = )
+        heatmap(
+            x = as.matrix(dat2),
+            Rowv = clustg,
+            Colv = clustc,
+            col = heatcol,
+            margins = c(15, column_margin),
+            labCol = gsub(" ", "", phenodata$description),
+            labRow =
+        )
     } else {
-        heatmap(x = as.matrix(dat2), Rowv = clustg, Colv = clustc, col = heatcol, scale = s, margins = c(15, column_margin), labCol = gsub(" ", "", phenodata$description))
+        heatmap(
+            x = as.matrix(dat2),
+            Rowv = clustg,
+            Colv = clustc,
+            col = heatcol,
+            scale = s,
+            margins = c(15, column_margin),
+            labCol = gsub(" ", "", phenodata$description)
+        )
     }
 }
 if (cluster.samples.only == "yes") {
     if (hm.scale == "default") {
-        heatmap(x = as.matrix(dat2), Rowv = NA, Colv = clustc, col = heatcol, margins = c(15, column_margin), labCol = gsub(" ", "", phenodata$description))
+        heatmap(
+            x = as.matrix(dat2),
+            Rowv = NA,
+            Colv = clustc,
+            col = heatcol,
+            margins = c(15, column_margin),
+            labCol = gsub(" ", "", phenodata$description)
+        )
     } else {
-        heatmap(x = as.matrix(dat2), Rowv = NA, Colv = clustc, col = heatcol, scale = s, margins = c(15, column_margin), labCol = gsub(" ", "", phenodata$description))
+        heatmap(
+            x = as.matrix(dat2),
+            Rowv = NA,
+            Colv = clustc,
+            col = heatcol,
+            scale = s,
+            margins = c(15, column_margin),
+            labCol = gsub(" ", "", phenodata$description)
+        )
     }
 }
 dev.off()

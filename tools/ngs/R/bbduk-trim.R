@@ -27,7 +27,28 @@ trueseq.file <- c(file.path(chipster.tools.path, "bbmap", "resources", "truseq.f
 system(paste(bbduk.binary, "-v 2> version.tmp"))
 version <- system("grep Version version.tmp", intern = TRUE)
 documentVersion("BBDuk", version)
-bbduk.options <- paste("-Xmx154m in=reads.fq ", "out=trimmed.fq ", "ref=", polya.file, ",", trueseq.file, " k=", k, " ktrim=", ktrim, " mink=", mink, " qtrim=", qtrim, " trimq=", trimq, " minlength=", minlength, sep = "", collapse = "")
+bbduk.options <- paste(
+    "-Xmx154m in=reads.fq ",
+    "out=trimmed.fq ",
+    "ref=",
+    polya.file,
+    ",",
+    trueseq.file,
+    " k=",
+    k,
+    " ktrim=",
+    ktrim,
+    " mink=",
+    mink,
+    " qtrim=",
+    qtrim,
+    " trimq=",
+    trimq,
+    " minlength=",
+    minlength,
+    sep = "",
+    collapse = ""
+)
 bbduk.command <- paste(bbduk.binary, bbduk.options, "2> raw.log")
 documentCommand(bbduk.command)
 # system(bbduk.command)

@@ -34,7 +34,6 @@ for (i in 1:nrow(input.names)) {
 }
 
 
-
 # read input names
 inputnames <- read_input_definitions()
 
@@ -73,7 +72,9 @@ if (genome.filetype == "tar") {
     str.filetype <- system(sfcheck.command, intern = TRUE)
 
     if (str.filetype == "Not an EMBOSS compatible sequence file") {
-        stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
+        stop(
+            "CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use"
+        )
     }
     # Do indexing
     runExternal("echo Calculating gemome indexes >> bwa.log")
@@ -89,7 +90,23 @@ runExternal(echo.command)
 # bwa
 command.start <- (bwa.mem.binary)
 
-bwa.parameters <- paste("-M", "-k", minseedlen, "-w", bandwith, "-A", matchscore, "-B", mismatchscore, "-O", gapopen, "-E", gapextension, "-L", clippenalty)
+bwa.parameters <- paste(
+    "-M",
+    "-k",
+    minseedlen,
+    "-w",
+    bandwith,
+    "-A",
+    matchscore,
+    "-B",
+    mismatchscore,
+    "-O",
+    gapopen,
+    "-E",
+    gapextension,
+    "-L",
+    clippenalty
+)
 
 # Read group definition
 if (nchar(rgid) > 0) {

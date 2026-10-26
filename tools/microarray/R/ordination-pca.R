@@ -25,11 +25,7 @@ library(factoextra)
 
 # Load normalized data
 file <- "normalized.tsv"
-dat <- read.table(file,
-  header = TRUE,
-  sep = "\t", quote = "", row.names = 1,
-  check.names = FALSE
-)
+dat <- read.table(file, header = TRUE, sep = "\t", quote = "", row.names = 1, check.names = FALSE)
 
 # Load phenodata
 phenodata <- read.delim("phenodata-normalized.tsv")
@@ -48,22 +44,22 @@ rownames(dat2) <- gsub("chip.", "", rownames(dat2))
 
 # PCA calculations
 if (scaling == "yes" & centering == "yes") {
-  pc <- prcomp(dat2, scale = T, center = T)
+    pc <- prcomp(dat2, scale = T, center = T)
 }
 if (scaling == "yes" & centering == "no") {
-  pc <- prcomp(dat2, scale = T, center = F)
+    pc <- prcomp(dat2, scale = T, center = F)
 }
 if (scaling == "no" & centering == "yes") {
-  pc <- prcomp(dat2, scale = F, center = T)
+    pc <- prcomp(dat2, scale = F, center = T)
 }
 if (scaling == "no" & centering == "no") {
-  pc <- prcomp(dat2, scale = F, center = F)
+    pc <- prcomp(dat2, scale = F, center = F)
 }
 
 # How many PCs to save? If too low, three will be printed at minimum
 no <- as.vector(head(which(summary(pc)$importance[3, ] >= (expvar / 100)), n = 1)[1])
 if (no < 3) {
-  no <- c(3)
+    no <- c(3)
 }
 
 # Convert PCs from matrix format into data frame
@@ -80,7 +76,14 @@ pcs <- round(pcs, digits = 2)
 write.table(data.frame(pcs), "pca.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 
 # Variance explained
-write.table(round(data.frame(summary(pc)$importance[, 1:no]), 3), "variance.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    round(data.frame(summary(pc)$importance[, 1:no]), 3),
+    "variance.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 # Output component loadings. Add ".chip" to column names so that min and max can be easily found with the tool "Calculate descriptive statistics".
 loadings <- round(data.frame(pc$rotation[, 1:no]), 6)
@@ -112,9 +115,7 @@ dat2 <- as.data.frame(dat2)
 # A simpler approach is to use the same df for plotting, but with phenodata
 # variables appended.
 
-dat3 <- transform(merge(dat2, phenodata, by = 0, all = TRUE),
-  row.names = Row.names, Row.names = NULL
-)
+dat3 <- transform(merge(dat2, phenodata, by = 0, all = TRUE), row.names = Row.names, Row.names = NULL)
 
 # Biplot construction
 
@@ -126,32 +127,34 @@ vectors <- as.numeric(vectors)
 
 # plot without vectors
 if (vectors == 0) {
-  pca_biplot <- fviz_pca_ind(pc,
-    label = "none",
-    repel = TRUE,
-    habillage = dat3[, group_column[1]],
-    addEllipses = TRUE,
-    ellipse.level = 0.95
-  ) +
-    theme_minimal() +
-    ggtitle("PCA")
+    pca_biplot <- fviz_pca_ind(
+        pc,
+        label = "none",
+        repel = TRUE,
+        habillage = dat3[, group_column[1]],
+        addEllipses = TRUE,
+        ellipse.level = 0.95
+    ) +
+        theme_minimal() +
+        ggtitle("PCA")
 }
 
 # plot with vectors
 # show top genes explaining differences
 
 if (vectors > 0) {
-  pca_biplot <- fviz_pca_biplot(pc,
-    label = "var",
-    repel = TRUE,
-    select.var = list(contrib = vectors),
-    habillage = dat3[, group_column[1]],
-    addEllipses = TRUE,
-    ellipse.type = "confidence",
-    ellipse.level = 0.95
-  ) +
-    theme_minimal() +
-    ggtitle("PCA (top contributing genes shown as vectors)")
+    pca_biplot <- fviz_pca_biplot(
+        pc,
+        label = "var",
+        repel = TRUE,
+        select.var = list(contrib = vectors),
+        habillage = dat3[, group_column[1]],
+        addEllipses = TRUE,
+        ellipse.type = "confidence",
+        ellipse.level = 0.95
+    ) +
+        theme_minimal() +
+        ggtitle("PCA (top contributing genes shown as vectors)")
 }
 
 # Open a report PDF

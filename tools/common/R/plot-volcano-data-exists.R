@@ -30,13 +30,13 @@ dat <- read.table(file, header = T, sep = "\t", row.names = 1, check.names = FAL
 
 # Sanity checks
 if (fold.change.column == "EMPTY") {
-   stop("CHIPSTER-NOTE: You haven't selected a column for fold change! Tool cannot be executed.")
+    stop("CHIPSTER-NOTE: You haven't selected a column for fold change! Tool cannot be executed.")
 }
 if (p.value.column == "EMPTY") {
-   stop("CHIPSTER-NOTE: You haven't selected a column for p-value! Tool cannot be executed.")
+    stop("CHIPSTER-NOTE: You haven't selected a column for p-value! Tool cannot be executed.")
 }
 if (sum(grep(("p.adjusted|padj|FDR"), colnames(dat))) == 0) {
-   stop("CHIPSTER-NOTE: You don't have any P-value columns in the dataset! Please run some statistical test first.")
+    stop("CHIPSTER-NOTE: You don't have any P-value columns in the dataset! Please run some statistical test first.")
 }
 
 # Extracts the data
@@ -54,12 +54,22 @@ sign.genes <- which(pvalues <= cutoff)
 
 labels <- row.names(dat)[sign.genes]
 if (gene.labels != "EMPTY" && gene.labels != "") {
-   labels <- dat[, grep(gene.labels, colnames(dat))][sign.genes]
+    labels <- dat[, grep(gene.labels, colnames(dat))][sign.genes]
 }
 
 # Plotting
 pdf(file = "volcanoP.pdf", width = w / 72, height = h / 72)
-plot(expression, -log10(pvalues), xlim = c(-max(abs(expression)), max(abs(expression))), main = "Volcano plot", pch = 19, col = dot_colors, xlab = "log2 (fold change)", ylab = "-log10 (p)", cex = 0.25)
+plot(
+    expression,
+    -log10(pvalues),
+    xlim = c(-max(abs(expression)), max(abs(expression))),
+    main = "Volcano plot",
+    pch = 19,
+    col = dot_colors,
+    xlab = "log2 (fold change)",
+    ylab = "-log10 (p)",
+    cex = 0.25
+)
 text(x = expression[sign.genes], y = -log10(pvalues[sign.genes]), label = labels, cex = 0.5, col = "blue")
 abline(h = -log10(p.value.threshold), lty = 2)
 dev.off()

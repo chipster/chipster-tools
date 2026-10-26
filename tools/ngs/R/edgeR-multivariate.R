@@ -17,7 +17,6 @@
 # PARAMETER OPTIONAL h: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted image)
 # PARAMETER OPTIONAL print.out.desing.matrix: "Give as an output the design matrix" TYPE [no: no, yes: yes] DEFAULT no (If you wish to see what the design matrix looks like, you can choose to print that out here.)
 
-
 # JTT 8.7.2012
 # EK 28.4.2013 rounding added, main effect treated as factor by default
 # EK 2.5.2013 updated to BioC2.11
@@ -26,7 +25,6 @@
 # ML & SS 3.3.2015 added the "nested" option to the interactions
 # EK 23.10.2015, moved to R3.2.0
 # ML 18.02.2020, update to using quasi-likelihoods (glmFit -> glmQLFit and glmLRT -> glmQLFTest), option to print out design matrix
-
 
 # Loads the libraries
 library(edgeR)
@@ -101,7 +99,20 @@ if (main.effect3 != "EMPTY" & treat.main.effect3.as.factor == "yes") {
 
 # The "nested" case: if there are interactions between and within the subjects (see edgeR userguide chapter 3.5)
 if (main.effect3 != "EMPTY" & interactions == "nested") {
-    formula <- paste("~as.factor(", main.effect1, ")+as.factor(", main.effect1, "):as.factor(", main.effect2, ")+as.factor(", main.effect1, "):as.factor(", main.effect3, ")", sep = "")
+    formula <- paste(
+        "~as.factor(",
+        main.effect1,
+        ")+as.factor(",
+        main.effect1,
+        "):as.factor(",
+        main.effect2,
+        ")+as.factor(",
+        main.effect1,
+        "):as.factor(",
+        main.effect3,
+        ")",
+        sep = ""
+    )
 
     # Modify the phenodata column for "subject", create a tmp table for this:
     tmp <- phenodata[c(main.effect1, main.effect2, main.effect3)]
@@ -120,7 +131,9 @@ if (main.effect3 != "EMPTY" & interactions == "nested") {
     phenodata <- tmp
 }
 if (main.effect3 == "EMPTY" & interactions == "nested") {
-    stop("CHIPSTER-NOTE: For nested-option, you need to specify all three effects. See manual page for more information!")
+    stop(
+        "CHIPSTER-NOTE: For nested-option, you need to specify all three effects. See manual page for more information!"
+    )
 }
 
 design <- with(phenodata, model.matrix(as.formula(formula)))

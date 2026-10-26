@@ -8,7 +8,6 @@
 # SLOTS 3
 # TOOLS_BIN ""
 
-
 # PARAMETER OPTIONAL genes: "Genes to filter" TYPE [NULL: Null, mt: Mitochondrial, Hb: Hemoglobin, both: Both] DEFAULT NULL (You can choose to remove genes based on the top expressed genes plot for example mitochondrial or hemoglobin genes.)
 
 # 2026-02 ML
@@ -35,6 +34,5 @@ seurat_obj <- subset(seurat_obj, subset = percent.mt <= mitocutoff & percent.hb 
 
 # Save the Robj for the next tool
 save(seurat_obj, file = "seurat_obj_filtered.Robj")
-
 
 ## EOF

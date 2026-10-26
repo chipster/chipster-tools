@@ -37,8 +37,12 @@ system(command.full)
 system("ls -l >> taxonomy.log ")
 if (oformat == "excel") {
     system('curl ftp://ftp.ensemblgenomes.org/pub/current/species.txt | cut -f4 | grep -i -v "[a-z]" > ensembl_taxid')
-    system('curl ftp://ftp.ensembl.org/pub/release-81/mysql/ensembl_stable_ids_81/species.txt.gz | gunzip | cut -f3 | grep -i -v "[a-z]" >> ensembl_taxid')
-    system('printf "%s\t%s\t%s\t%s\t%s\t%s\n" taxid "parent taxid" level species name "available in ensembl" > taxonomy.tsv ')
+    system(
+        'curl ftp://ftp.ensembl.org/pub/release-81/mysql/ensembl_stable_ids_81/species.txt.gz | gunzip | cut -f3 | grep -i -v "[a-z]" >> ensembl_taxid'
+    )
+    system(
+        'printf "%s\t%s\t%s\t%s\t%s\t%s\n" taxid "parent taxid" level species name "available in ensembl" > taxonomy.tsv '
+    )
     system('grep -f ensembl_taxid -w taxonomy.txt | awk \'{print $0"\tYes"}\' > taxonomy2.txt')
     system('grep -v -f ensembl_taxid -w taxonomy.txt | awk \'{print $0"\tNo"}\' >> taxonomy2.txt')
     system("cat taxonomy2.txt >> taxonomy.tsv")

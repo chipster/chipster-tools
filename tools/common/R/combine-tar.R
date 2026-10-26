@@ -9,12 +9,12 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i, 1])
+    unzipIfGZipFile(input.names[i, 1])
 }
 
 # Concatenat tar files. Files need to be concatenated pairwise or the output is corrupted.
 for (i in 1:(nrow(input.names) - 1)) {
-  system(paste("tar --concatenate --file=", input.names[1, 1], " ", input.names[i + 1, 1], sep = "", collapse = ""))
+    system(paste("tar --concatenate --file=", input.names[1, 1], " ", input.names[i + 1, 1], sep = "", collapse = ""))
 }
 
 # Rename output

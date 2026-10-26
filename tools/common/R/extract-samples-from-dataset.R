@@ -29,36 +29,38 @@ extract[extract == ""] <- NA
 
 # If there are samples with missing values, extract the ones that do have values.
 if (sum(is.na(extract)) > 0) {
-  extract <- ifelse(is.na(extract), 0, 1)
+    extract <- ifelse(is.na(extract), 0, 1)
 }
 
 extract <- as.integer(extract)
 
 # Sanity checks
 if (length(unique(extract)) > 2) {
-  stop("CHIPSTER-NOTE: You have specified more than two groups! You need to define exactly two groups.")
+    stop("CHIPSTER-NOTE: You have specified more than two groups! You need to define exactly two groups.")
 }
 if (max(extract) > 1) {
-  stop("CHIPSTER-NOTE: The groups should be defined with values of 0 and 1! You have numbers larger than 1 in the definitions.")
+    stop(
+        "CHIPSTER-NOTE: The groups should be defined with values of 0 and 1! You have numbers larger than 1 in the definitions."
+    )
 }
 
 # identify different matrices (chip, flag, ...) present in the data
 x <- colnames(dat)
 suffix <- sub("^chip\\.", "", x[grep("^chip\\.", x)[1]]) # pick up the name of the first experiment
-matrices <- sub(suffix, "", x[grep(paste("\\.", suffix,  "$", sep = ""), x)]) # remove the suffix and find all columns having the name. $ needed in cases when name of the first sample ends with line ending.
+matrices <- sub(suffix, "", x[grep(paste("\\.", suffix, "$", sep = ""), x)]) # remove the suffix and find all columns having the name. $ needed in cases when name of the first sample ends with line ending.
 annotations <- 1:length(x)
 for (m in matrices) {
-  annotations <- setdiff(annotations, grep(m, x))
+    annotations <- setdiff(annotations, grep(m, x))
 }
 
 
 if (length(annotations) > 0) {
-  dat2 <- dat[, annotations]
+    dat2 <- dat[, annotations]
 } else {
-  dat2 <- data.frame(row.names = rownames(dat))
+    dat2 <- data.frame(row.names = rownames(dat))
 }
 for (m in matrices) {
-  dat2 <- cbind(dat2, dat[, grep(m, x), drop = FALSE][, extract == 1, drop = FALSE])
+    dat2 <- cbind(dat2, dat[, grep(m, x), drop = FALSE][, extract == 1, drop = FALSE])
 }
 
 
@@ -66,20 +68,19 @@ phenodata2 <- phenodata[which(extract == 1), ]
 
 # update aberration frequencies if present
 if ("loss.freq" %in% x) {
-  calls <- dat2[, grep("^flag\\.", colnames(dat2)), drop = FALSE]
-  dat2$loss.freq <- round(rowMeans(calls < 0), digits = 3)
-  dat2$gain.freq <- round(rowMeans(calls == 1), digits = 3)
-  if (2 %in% calls) {
-    dat2$amp.freq <- round(rowMeans(calls == 2), digits = 3)
-  } else {
-    dat2$amp.freq <- NULL
-  }
+    calls <- dat2[, grep("^flag\\.", colnames(dat2)), drop = FALSE]
+    dat2$loss.freq <- round(rowMeans(calls < 0), digits = 3)
+    dat2$gain.freq <- round(rowMeans(calls == 1), digits = 3)
+    if (2 %in% calls) {
+        dat2$amp.freq <- round(rowMeans(calls == 2), digits = 3)
+    } else {
+        dat2$amp.freq <- NULL
+    }
 }
 
 # Writing the data to disk
 options(scipen = 10)
 write.table(dat2, file = "extract.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 write.table(phenodata2, file = "phenodata-extract.tsv", sep = "\t", row.names = F, col.names = T, quote = F, na = "")
-
 
 # EOF

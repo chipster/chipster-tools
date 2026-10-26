@@ -48,7 +48,36 @@ if (total.edit >= 1) {
 }
 
 quality.parameter <- ifelse(quality.format == "solexa1_3", "-I", "")
-mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e", num.extensions, "-d", disallow.gaps, "-i", disallow.indel, "-l", seed.length, "-k", seed.edit, "-O", gap.opening, "-E", gap.extension, "-q", trim.threshold, "-B", barcode.length, "-M", mismatch.penalty, "-n", total.edit, quality.parameter)
+mode.parameters <- paste(
+    "aln",
+    "-t",
+    chipster.threads.max,
+    "-o",
+    num.gaps,
+    "-e",
+    num.extensions,
+    "-d",
+    disallow.gaps,
+    "-i",
+    disallow.indel,
+    "-l",
+    seed.length,
+    "-k",
+    seed.edit,
+    "-O",
+    gap.opening,
+    "-E",
+    gap.extension,
+    "-q",
+    trim.threshold,
+    "-B",
+    barcode.length,
+    "-M",
+    mismatch.penalty,
+    "-n",
+    total.edit,
+    quality.parameter
+)
 
 # Run BWA for each input
 for (i in 1:nrow(input.names)) {

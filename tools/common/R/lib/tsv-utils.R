@@ -4,5 +4,15 @@
 # Numeric names are always considered smaller than non-numeric.
 #
 sort.tsv <- function(input, output, chr) {
-    system(paste("java -cp  '", chipster.java.libs.path, "/*' fi.csc.chipster.tools.ngs.SortTsv ", input, " ", output, " ", chr, sep = ""))
+    system(paste(
+        "java -cp  '",
+        chipster.java.libs.path,
+        "/*' fi.csc.chipster.tools.ngs.SortTsv ",
+        input,
+        " ",
+        output,
+        " ",
+        chr,
+        sep = ""
+    ))
 }

@@ -104,7 +104,14 @@ if (commands == "yes") {
 
 # Write out metadata data frame
 if (meta_data == "yes") {
-    write.table(as.data.frame(as.matrix(seurat_obj@meta.data)), file = "meta_data.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        as.data.frame(as.matrix(seurat_obj@meta.data)),
+        file = "meta_data.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }
 
 # Print the tissue image
@@ -118,9 +125,5 @@ if (spatial_image == "yes") {
         stop(paste("CHIPSTER-NOTE: ", "Object doesn't contain any spatial image information."))
     }
 }
-
-
-
-
 
 # EOF

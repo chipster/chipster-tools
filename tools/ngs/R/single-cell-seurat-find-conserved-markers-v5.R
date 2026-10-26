@@ -13,7 +13,6 @@
 # SLOTS 5
 # TOOLS_BIN ""
 
-
 # 2026-09-21 ML Split off from single-cell-seurat-diffexp-samples-v5.R
 
 library(Seurat)
@@ -24,32 +23,42 @@ options(Seurat.object.assay.version = "v5")
 load("combined_seurat_obj.Robj")
 
 if (exists("seurat_obj")) {
-  data.combined <- seurat_obj
+    data.combined <- seurat_obj
 }
 
 # When SCTransform was used, run the prep step first
 if (normalisation.method == "SCT") {
-  data.combined <- PrepSCTFindMarkers(data.combined)
+    data.combined <- PrepSCTFindMarkers(data.combined)
 }
 
 DefaultAssay(data.combined) <- "RNA"
 
 # Identify conserved cell type markers across conditions
 if (normalisation.method == "SCT") {
-  cluster.markers <- FindConservedMarkers(data.combined,
-    assay = "SCT",
-    ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-    verbose = FALSE, logfc.threshold = logFC.conserved,
-    min.cells.group = mincellsconserved, min.pct = minpct_conserved,
-    return.thresh = pval.cutoff.conserved
-  )
+    cluster.markers <- FindConservedMarkers(
+        data.combined,
+        assay = "SCT",
+        ident.1 = cluster,
+        grouping.var = "stim",
+        only.pos = only.positive,
+        verbose = FALSE,
+        logfc.threshold = logFC.conserved,
+        min.cells.group = mincellsconserved,
+        min.pct = minpct_conserved,
+        return.thresh = pval.cutoff.conserved
+    )
 } else {
-  cluster.markers <- FindConservedMarkers(data.combined,
-    ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-    verbose = FALSE, logfc.threshold = logFC.conserved,
-    min.cells.group = mincellsconserved, min.pct = minpct_conserved,
-    return.thresh = pval.cutoff.conserved
-  )
+    cluster.markers <- FindConservedMarkers(
+        data.combined,
+        ident.1 = cluster,
+        grouping.var = "stim",
+        only.pos = only.positive,
+        verbose = FALSE,
+        logfc.threshold = logFC.conserved,
+        min.cells.group = mincellsconserved,
+        min.pct = minpct_conserved,
+        return.thresh = pval.cutoff.conserved
+    )
 }
 
 # Filter on maximum adjusted p-value across all samples

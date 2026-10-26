@@ -2,7 +2,6 @@
 # INPUT sequence: "Query sequences" TYPE GENERIC
 # OUTPUT outfile.infoseq.tsv
 
-
 # KM 8.11. 2013
 
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
@@ -32,5 +31,8 @@ if (num.queryseq > 300000) {
 
 
 infoseq.binary <- file.path(emboss.path, "infoseq")
-command.full <- paste(infoseq.binary, 'sequence -outfile outfile.infoseq.tsv -nodatabase -nousa -nocolumns -delimiter "\t"')
+command.full <- paste(
+    infoseq.binary,
+    'sequence -outfile outfile.infoseq.tsv -nodatabase -nousa -nocolumns -delimiter "\t"'
+)
 system(command.full)

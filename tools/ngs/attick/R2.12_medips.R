@@ -21,7 +21,6 @@
 # PARAMETER image.width TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER image.height TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
-
 # Parameters for testing purposes only
 # species<-"human"
 # promoters.only<-"no"
@@ -64,13 +63,23 @@ if (analtype == 1 & repltype == 1) {
     dat <- MEDIPS.readAlignedSequences(BSgenome = genome, file = files)
 
     # Creating the genome vector
-    dat <- MEDIPS.genomeVector(data = dat, bin_size = as.numeric(coverage.resolution), extend = as.numeric(smoothing.extension))
+    dat <- MEDIPS.genomeVector(
+        data = dat,
+        bin_size = as.numeric(coverage.resolution),
+        extend = as.numeric(smoothing.extension)
+    )
 
     # Cleaning up to save some memory
     gc()
 
     # Saturation analysis
-    sr <- MEDIPS.saturationAnalysis(data = dat, bin_size = as.numeric(coverage.resolution), extend = as.numeric(smoothing.extension), no_iterations = 10, no_random_iterations = 1)
+    sr <- MEDIPS.saturationAnalysis(
+        data = dat,
+        bin_size = as.numeric(coverage.resolution),
+        extend = as.numeric(smoothing.extension),
+        no_iterations = 10,
+        no_random_iterations = 1
+    )
     pdf(file = "saturationplot.pdf", width = w / 72, height = h / 72)
     par(mar = c(5, 5, 5, 5))
     MEDIPS.plotSaturation(sr)
@@ -132,7 +141,13 @@ if (analtype == 1 & repltype == 1) {
     }
 
     if (promoters.only == "no") {
-        frames <- MEDIPS.methylProfiling(data1 = dat, frame_size = as.numeric(smoothing.extension), step = as.numeric(smoothing.extension) / 2, math = mean, select = 2)
+        frames <- MEDIPS.methylProfiling(
+            data1 = dat,
+            frame_size = as.numeric(smoothing.extension),
+            step = as.numeric(smoothing.extension) / 2,
+            math = mean,
+            select = 2
+        )
         write.table(frames, "output.tsv", sep = "\t", quote = F, col.names = T, row.names = F)
     }
 
@@ -156,9 +171,6 @@ if (analtype == 1 & repltype == 1) {
 }
 
 
-
-
-
 if (analtype == 2 & repltype == 1) {
     library(MEDIPS)
 
@@ -171,8 +183,16 @@ if (analtype == 2 & repltype == 1) {
     treatment <- MEDIPS.readAlignedSequences(BSgenome = genome, file = tfile)
 
     # Creating the genome vector
-    control <- MEDIPS.genomeVector(data = control, bin_size = as.numeric(coverage.resolution), extend = as.numeric(smoothing.extension))
-    treatment <- MEDIPS.genomeVector(data = treatment, bin_size = as.numeric(coverage.resolution), extend = as.numeric(smoothing.extension))
+    control <- MEDIPS.genomeVector(
+        data = control,
+        bin_size = as.numeric(coverage.resolution),
+        extend = as.numeric(smoothing.extension)
+    )
+    treatment <- MEDIPS.genomeVector(
+        data = treatment,
+        bin_size = as.numeric(coverage.resolution),
+        extend = as.numeric(smoothing.extension)
+    )
 
     # Pattern Positions
     control <- MEDIPS.getPositions(data = control, pattern = "CG")
@@ -206,7 +226,13 @@ if (analtype == 2 & repltype == 1) {
         rois <- data.frame(refGene$chrom, sta, sto, make.unique(as.character(refGene$name)))
         rois <- rois[rois[, 1] %in% unique(c(control@genome_chr), treatment@genome_chr), ]
         write.table(rois, "rois.tsv", sep = "\t", quote = F, col.names = F, row.names = F)
-        diff.meth <- MEDIPS.methylProfiling(data1 = control, data2 = treatment, select = 2, frame_size = 400, ROI_file = "rois.tsv")
+        diff.meth <- MEDIPS.methylProfiling(
+            data1 = control,
+            data2 = treatment,
+            select = 2,
+            frame_size = 400,
+            ROI_file = "rois.tsv"
+        )
         write.table(diff.meth, "output.tsv", sep = "\t", quote = F, col.names = T, row.names = F)
     }
 
@@ -217,9 +243,6 @@ if (analtype == 2 & repltype == 1) {
 
     # Do not delete the following curly bracket - it ends the if-clause for analysis and replication types
 }
-
-
-
 
 
 if ((analtype == 1 | analtype == 2) & repltype == 2) {
@@ -244,8 +267,16 @@ if ((analtype == 1 | analtype == 2) & repltype == 2) {
     treatment <- MEDIPS.readAlignedSequences(BSgenome = genome, file = "group2.tsv")
 
     # Creating the genome vector
-    control <- MEDIPS.genomeVector(data = control, bin_size = as.numeric(coverage.resolution), extend = as.numeric(smoothing.extension))
-    treatment <- MEDIPS.genomeVector(data = treatment, bin_size = as.numeric(coverage.resolution), extend = as.numeric(smoothing.extension))
+    control <- MEDIPS.genomeVector(
+        data = control,
+        bin_size = as.numeric(coverage.resolution),
+        extend = as.numeric(smoothing.extension)
+    )
+    treatment <- MEDIPS.genomeVector(
+        data = treatment,
+        bin_size = as.numeric(coverage.resolution),
+        extend = as.numeric(smoothing.extension)
+    )
 
     # Pattern Positions
     control <- MEDIPS.getPositions(data = control, pattern = "CG")
@@ -279,7 +310,13 @@ if ((analtype == 1 | analtype == 2) & repltype == 2) {
         rois <- data.frame(refGene$chrom, sta, sto, make.unique(as.character(refGene$name)))
         rois <- rois[rois[, 1] %in% unique(c(control@genome_chr), treatment@genome_chr), ]
         write.table(rois, "rois.tsv", sep = "\t", quote = F, col.names = F, row.names = F)
-        diff.meth <- MEDIPS.methylProfiling(data1 = control, data2 = treatment, select = 2, frame_size = 400, ROI_file = "rois.tsv")
+        diff.meth <- MEDIPS.methylProfiling(
+            data1 = control,
+            data2 = treatment,
+            select = 2,
+            frame_size = 400,
+            ROI_file = "rois.tsv"
+        )
         write.table(diff.meth, "output.tsv", sep = "\t", quote = F, col.names = T, row.names = F)
     }
 

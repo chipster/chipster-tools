@@ -89,7 +89,8 @@ if (treatment == "deseq2") {
     save(
         list = c(
             "ps0",
-            "group_column1", "diagdds"
+            "group_column1",
+            "diagdds"
         ),
         file = "deseq2.Rda"
     )

@@ -3,7 +3,6 @@
 # INPUT normalized-too.tsv: normalized-too.tsv TYPE GENE_EXPRS
 # OUTPUT normalized2genes.tsv: normalized2genes.tsv
 
-
 # Normalize the data to specific genes
 # JTT 29.1.2009
 
@@ -19,9 +18,9 @@ table2 <- read.table(file = name2, sep = "\t", header = T, row.names = 1)
 
 # Table2 should always hold the genelist specifying the control probes
 if (nrow(table2) > nrow(table1)) {
-   table3 <- table1
-   table1 <- table2
-   table2 <- table3
+    table3 <- table1
+    table1 <- table2
+    table2 <- table3
 }
 
 # Extract the control genes/probes from the whole dataset
@@ -36,7 +35,7 @@ means <- colMeans(table1cd)
 # Performing the normalization
 cols <- grep("chip", names(table1c))
 for (i in 1:length(cols)) {
-   table1[, cols[i]] <- table1[, cols[i]] - means[i]
+    table1[, cols[i]] <- table1[, cols[i]] - means[i]
 }
 
 # Write out data

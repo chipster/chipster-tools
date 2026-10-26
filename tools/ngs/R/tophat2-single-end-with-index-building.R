@@ -29,7 +29,6 @@
 # ML 15.01.2015 Added the library-type parameter
 # AMS 29.01.2015 Removed optional outputs deletions.bed and insertions.bed
 
-
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
@@ -91,7 +90,24 @@ print(paste("Bowtie2 genome name:", bowtie2.genome))
 command.start <- paste("bash -c '", set.path, tophat.binary)
 
 # parameters
-command.parameters <- paste("-p", chipster.threads.max, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
+command.parameters <- paste(
+    "-p",
+    chipster.threads.max,
+    "--read-mismatches",
+    mismatches,
+    "-a",
+    min.anchor.length,
+    "-m",
+    splice.mismatches,
+    "-i",
+    min.intron.length,
+    "-I",
+    max.intron.length,
+    "-g",
+    max.multihits,
+    "--library-type",
+    library.type
+)
 
 if (mismatches > 2) {
     command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)

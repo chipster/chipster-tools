@@ -49,4 +49,11 @@ combat_edata <- ComBat(dat = dat2, batch = batch, mod = NULL)
 
 cols <- grep("chip", names(dat))
 dat[, cols] <- as.matrix(combat_edata)
-write.table(data.frame(dat), file = "batch_corrected.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+write.table(
+    data.frame(dat),
+    file = "batch_corrected.tsv",
+    sep = "\t",
+    row.names = TRUE,
+    col.names = TRUE,
+    quote = FALSE
+)

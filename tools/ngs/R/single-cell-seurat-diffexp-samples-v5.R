@@ -16,7 +16,6 @@
 # SLOTS 5
 # TOOLS_BIN ""
 
-
 # 2018-16-05 ML
 # 11.07.2019 ML Seurat v3
 # 23.09.2019 EK Add only.pos = TRUE
@@ -31,7 +30,6 @@
 # 2023-04-06 LG Remove 5 slots - Discrepancy in number of slots added v. removed
 # 2024-03-14 ML p-value filtering uses adjusted p-values
 
-
 library(Seurat)
 options(Seurat.object.assay.version = "v5")
 
@@ -39,12 +37,12 @@ options(Seurat.object.assay.version = "v5")
 load("combined_seurat_obj.Robj")
 
 if (exists("seurat_obj")) {
-  data.combined <- seurat_obj
+    data.combined <- seurat_obj
 }
 
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
-  data.combined <- PrepSCTFindMarkers(data.combined)
+    data.combined <- PrepSCTFindMarkers(data.combined)
 }
 
 # Check that this cluster is available in data:
@@ -56,16 +54,30 @@ DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 # Identify conserved cell type markers
 if (normalisation.method == "SCT") {
-  cluster.markers <- FindConservedMarkers(data.combined,
-    assay = "SCT",
-    ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved
-  )
+    cluster.markers <- FindConservedMarkers(
+        data.combined,
+        assay = "SCT",
+        ident.1 = cluster,
+        grouping.var = "stim",
+        only.pos = only.positive,
+        verbose = FALSE,
+        logfc.threshold = logFC.conserved,
+        min.cells.group = mincellsconserved,
+        min.pct = minpct_conserved,
+        return.thresh = pval.cutoff.conserved
+    )
 } else {
-  cluster.markers <- FindConservedMarkers(data.combined,
-    ident.1 = cluster, grouping.var = "stim", only.pos = only.positive,
-    verbose = FALSE, logfc.threshold = logFC.conserved, min.cells.group = mincellsconserved, min.pct = minpct_conserved, return.thresh = pval.cutoff.conserved
-  )
+    cluster.markers <- FindConservedMarkers(
+        data.combined,
+        ident.1 = cluster,
+        grouping.var = "stim",
+        only.pos = only.positive,
+        verbose = FALSE,
+        logfc.threshold = logFC.conserved,
+        min.cells.group = mincellsconserved,
+        min.pct = minpct_conserved,
+        return.thresh = pval.cutoff.conserved
+    )
 }
 
 # # Filter based on p_val_adj
@@ -88,47 +100,73 @@ lvls <- levels(as.factor(data.combined$stim))
 
 # Check that there are more than 2 samples:
 if (length(lvls) < 2) {
-  stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
+    stop("CHIPSTER-NOTE: There are fewer than 2 samples in the data.")
 } else {
-  for (i in 1:length(lvls)) {
-    # i:th sample vs all the others (= -i)
-    ident1 <- paste("cluster", cluster, "-", lvls[i], sep = "")
-    ident2 <- paste("cluster", cluster, "-", lvls[-i], sep = "")
-    # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
-    if (normalisation.method == "SCT") {
-      # Note: assay = "SCT" and recorrect_umi = FALSE
-      cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive)
-    } else {
-      cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+    for (i in 1:length(lvls)) {
+        # i:th sample vs all the others (= -i)
+        ident1 <- paste("cluster", cluster, "-", lvls[i], sep = "")
+        ident2 <- paste("cluster", cluster, "-", lvls[-i], sep = "")
+        # cluster_response <- FindMarkers(data.combined, ident.1 = ident1, ident.2 = ident2, verbose = FALSE, logfc.threshold = logFC.de)
+        if (normalisation.method == "SCT") {
+            # Note: assay = "SCT" and recorrect_umi = FALSE
+            cluster_response <- FindMarkers(
+                data.combined,
+                assay = "SCT",
+                ident.1 = ident1,
+                ident.2 = ident2,
+                verbose = FALSE,
+                logfc.threshold = logFC.de,
+                min.pct = minpct,
+                return.thresh = pval.cutoff.de,
+                recorrect_umi = FALSE,
+                only.pos = only.positive
+            )
+        } else {
+            cluster_response <- FindMarkers(
+                data.combined,
+                ident.1 = ident1,
+                ident.2 = ident2,
+                verbose = FALSE,
+                logfc.threshold = logFC.de,
+                min.pct = minpct,
+                return.thresh = pval.cutoff.de,
+                only.pos = only.positive
+            )
+        }
+
+        # Filter based on adj-p-val (no return.thresh parameter):
+        cluster_response_filtered <- cluster_response[cluster_response$p_val_adj < pval.cutoff.de, ]
+
+        # Add average expression to the table:
+        if (normalisation.method == "SCT") {
+            aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+        } else {
+            aver_expr <- AverageExpression(object = data.combined)
+        }
+
+        aver_expr_in_clusters <- aver_expr[[1]]
+        aver_expr_in_clusters[1:2, 1:2]
+
+        # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+        aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident1], digits = 4)
+        aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident2], digits = 4)
+
+        full_table <- cbind(cluster_response_filtered, aver_expr_ident1, aver_expr_ident2)
+
+        # Comparison name for the output file:
+        comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
+        name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
+
+        # Write to table
+        write.table(
+            full_table,
+            file = name.for.output.file,
+            sep = "\t",
+            row.names = TRUE,
+            col.names = TRUE,
+            quote = FALSE
+        )
     }
-
-    # Filter based on adj-p-val (no return.thresh parameter):
-    cluster_response_filtered <- cluster_response[cluster_response$p_val_adj < pval.cutoff.de, ]
-
-    # Add average expression to the table:
-    if (normalisation.method == "SCT") {
-      aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-    } else {
-      aver_expr <- AverageExpression(object = data.combined)
-    }
-
-    aver_expr_in_clusters <- aver_expr[[1]]
-    aver_expr_in_clusters[1:2, 1:2]
-
-    # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-    aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident1], digits = 4)
-    aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(cluster_response_filtered), ident2], digits = 4)
-
-    full_table <- cbind(cluster_response_filtered, aver_expr_ident1, aver_expr_ident2)
-
-
-    # Comparison name for the output file:
-    comparison.name <- paste(lvls[i], "vsAllOthers", sep = "")
-    name.for.output.file <- paste("de-list_", comparison.name, ".tsv", sep = "")
-
-    # Write to table
-    write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
-  }
 }
 # Save the Robj for the next tool
 # save(combined_seurat_obj, file="seurat_obj_combined.Robj")

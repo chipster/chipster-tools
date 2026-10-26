@@ -67,16 +67,34 @@ if (conditional.testing == "no") {
     conditional <- FALSE
 } else {
     if (p.adjust.method != "none") {
-        stop("CHIPSTER-NOTE: Multiple testing correction can be applied only when performing unconditional testing. Please set conditional.testing to no, or p.adjust.method to none. Usually the preferred method is to use conditional testing.")
+        stop(
+            "CHIPSTER-NOTE: Multiple testing correction can be applied only when performing unconditional testing. Please set conditional.testing to no, or p.adjust.method to none. Usually the preferred method is to use conditional testing."
+        )
     }
     conditional <- TRUE
 }
 
 # define the output variable
-output <- data.frame(total = integer(0), expected = numeric(0), observed = integer(0), p.value = numeric(0), description = character(0), ontology = character(0))
+output <- data.frame(
+    total = integer(0),
+    expected = numeric(0),
+    observed = integer(0),
+    p.value = numeric(0),
+    description = character(0),
+    ontology = character(0)
+)
 
 if (ontology == "biological_process" || ontology == "all") {
-    params <- new("GOHyperGParams", geneIds = selected.genes, universeGeneIds = reference.genes, annotation = genome, ontology = "BP", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
+    params <- new(
+        "GOHyperGParams",
+        geneIds = selected.genes,
+        universeGeneIds = reference.genes,
+        annotation = genome,
+        ontology = "BP",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
     go <- hyperGTest(params)
     go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
@@ -88,14 +106,30 @@ if (ontology == "biological_process" || ontology == "all") {
             go.table$ontology <- "biological process"
             colnames(go.table) <- colnames(output)
             output <- rbind(output, go.table)
-            go.table$description <- paste('<a href="http://amigo.geneontology.org/amigo/term/', rownames(go.table), '">', go.table$description, "</a>", sep = "")
+            go.table$description <- paste(
+                '<a href="http://amigo.geneontology.org/amigo/term/',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
             HTML(go.table, file = "hypergeo-go.html", append = TRUE, Border = 0, innerBorder = 1)
         }
     }
 }
 
 if (ontology == "molecular_function" || ontology == "all") {
-    params <- new("GOHyperGParams", geneIds = selected.genes, universeGeneIds = reference.genes, annotation = genome, ontology = "MF", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
+    params <- new(
+        "GOHyperGParams",
+        geneIds = selected.genes,
+        universeGeneIds = reference.genes,
+        annotation = genome,
+        ontology = "MF",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
     go <- hyperGTest(params)
     go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
@@ -107,14 +141,30 @@ if (ontology == "molecular_function" || ontology == "all") {
             go.table$ontology <- "molecular function"
             colnames(go.table) <- colnames(output)
             output <- rbind(output, go.table)
-            go.table$description <- paste('<a href="http://amigo.geneontology.org/amigo/term/', rownames(go.table), '">', go.table$description, "</a>", sep = "")
+            go.table$description <- paste(
+                '<a href="http://amigo.geneontology.org/amigo/term/',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
             HTML(go.table, file = "hypergeo-go.html", append = TRUE, Border = 0, innerBorder = 1)
         }
     }
 }
 
 if (ontology == "cellular_component" || ontology == "all") {
-    params <- new("GOHyperGParams", geneIds = selected.genes, universeGeneIds = reference.genes, annotation = genome, ontology = "CC", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
+    params <- new(
+        "GOHyperGParams",
+        geneIds = selected.genes,
+        universeGeneIds = reference.genes,
+        annotation = genome,
+        ontology = "CC",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
     go <- hyperGTest(params)
     go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
@@ -126,7 +176,14 @@ if (ontology == "cellular_component" || ontology == "all") {
             go.table$ontology <- "cellular component"
             colnames(go.table) <- colnames(output)
             output <- rbind(output, go.table)
-            go.table$description <- paste('<a href="http://amigo.geneontology.org/amigo/term/', rownames(go.table), '">', go.table$description, "</a>", sep = "")
+            go.table$description <- paste(
+                '<a href="http://amigo.geneontology.org/amigo/term/',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
             HTML(go.table, file = "hypergeo-go.html", append = TRUE, Border = 0, innerBorder = 1)
         }
     }

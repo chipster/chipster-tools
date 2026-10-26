@@ -17,26 +17,26 @@ tuned <- toIntCNGEanTuned(input)
 
 # parse what to plot
 if (genes == "" || genes == "empty") {
-  to.plot <- parseSamplesToPlot(gene.ids, input$gene.id)
+    to.plot <- parseSamplesToPlot(gene.ids, input$gene.id)
 } else {
-  items <- strsplit(genes, ",", genes)[[1]]
-  to.plot <- integer()
-  for (item in items) {
-    to.plot <- c(to.plot, input[gsub(" ", "", item), "gene.id"])
-    to.plot <- c(to.plot, input[input$symbol == gsub(" ", "", item), "gene.id"])
-  }
-  to.plot <- unique(to.plot)
+    items <- strsplit(genes, ",", genes)[[1]]
+    to.plot <- integer()
+    for (item in items) {
+        to.plot <- c(to.plot, input[gsub(" ", "", item), "gene.id"])
+        to.plot <- c(to.plot, input[input$symbol == gsub(" ", "", item), "gene.id"])
+    }
+    to.plot <- unique(to.plot)
 }
 
 # check that we have something to plot
 if (length(to.plot) == 0) {
-  stop("CHIPSTER-NOTE: Nothing to plot.")
+    stop("CHIPSTER-NOTE: Nothing to plot.")
 }
 
 # plot
 pdf(file = "cn-induced-expression-plot.pdf", paper = "a4r", width = 0, height = 0)
 for (gene in to.plot) {
-  intCNGEan.plot(gene.id = gene, tuned)
+    intCNGEan.plot(gene.id = gene, tuned)
 }
 dev.off()
 

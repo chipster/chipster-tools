@@ -41,7 +41,9 @@ system("echo >> check.log")
 
 # Check that read and quality lengths match
 system("echo '#Test 2: read lengths and quality lengths match' >> check.log")
-system(paste("cat reads | paste - - - - | awk -F\"\t\" '{ if (length($2) != length($4)) print $0 }' | tr '\t' '\n' > nonmatching"))
+system(paste(
+    "cat reads | paste - - - - | awk -F\"\t\" '{ if (length($2) != length($4)) print $0 }' | tr '\t' '\n' > nonmatching"
+))
 if (fileNotOk("nonmatching", minlines = 1)) {
     system("echo PASS >> check.log")
 } else {
@@ -77,7 +79,9 @@ if (alltests) {
 } else {
     system("echo 'Overall result: FAIL' >> check.log")
     system("echo >> check.log")
-    system("echo 'Failures in test 1 and 2 often result from truncated files. Failure in test 3 can result e.g. from incorrect merging of FASTQ files.' >> check.log")
+    system(
+        "echo 'Failures in test 1 and 2 often result from truncated files. Failure in test 3 can result e.g. from incorrect merging of FASTQ files.' >> check.log"
+    )
     system("mv check.log fail.log")
 }
 

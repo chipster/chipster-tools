@@ -6,7 +6,15 @@
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 sort.gtf <- function(input, output) {
-    runExternal(paste("java -cp  '", chipster.java.libs.path, "/*' fi.csc.chipster.tools.ngs.SortGtf ", input, " ", output, sep = ""))
+    runExternal(paste(
+        "java -cp  '",
+        chipster.java.libs.path,
+        "/*' fi.csc.chipster.tools.ngs.SortGtf ",
+        input,
+        " ",
+        output,
+        sep = ""
+    ))
 }
 
 # Adds "chr" to the beginning of each line that starts with a number or with X, Y, Z, W or M

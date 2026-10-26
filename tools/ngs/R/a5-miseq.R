@@ -20,7 +20,6 @@ unzipIfGZipFile("reads1.fastq")
 unzipIfGZipFile("reads2.fastq")
 
 
-
 ## check sequence file type
 # sfcheck.binary <- file.path(chipster.module.path ,"/shell/sfcheck.sh")
 # sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads1.fastq" )

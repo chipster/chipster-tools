@@ -6,7 +6,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the resampling image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the resampling image)
 
-
 # K-means clustering
 # JTT 22.6.2006
 
@@ -60,14 +59,29 @@ while (counter < 5 && class(a) == "try-error") {
     par(mfrow = c(ceiling(sqrt(k)), ceiling(sqrt(k))))
 
     for (i in 1:k) {
-        a <- try(matplot(t(dat3[qtc@cluster == i, ]), type = "l", main = paste("cluster:", i), ylab = "log expression", col = 1, lty = 1, ylim = c(min.dat2, max.dat2)))
+        a <- try(matplot(
+            t(dat3[qtc@cluster == i, ]),
+            type = "l",
+            main = paste("cluster:", i),
+            ylab = "log expression",
+            col = 1,
+            lty = 1,
+            ylim = c(min.dat2, max.dat2)
+        ))
     }
     dev.off()
     counter <- counter + 1
 }
 
 if (class(a) == "try-error") {
-    stop(paste("CHIPSTER-NOTE: Could not draw cluster images even thought width was set to", w.new, "and height was set to", h.new, ". Please make image area larger", sep = " "))
+    stop(paste(
+        "CHIPSTER-NOTE: Could not draw cluster images even thought width was set to",
+        w.new,
+        "and height was set to",
+        h.new,
+        ". Please make image area larger",
+        sep = " "
+    ))
 }
 
 # Writing a table

@@ -62,7 +62,13 @@ system(command)
 
 # List removed sites
 if (output.filtered == "yes") {
-    command <- paste(vcftools.binary, vcftools.io.options, vcftools.filter.options, "--removed-sites", "2>> vcftools.log")
+    command <- paste(
+        vcftools.binary,
+        vcftools.io.options,
+        vcftools.filter.options,
+        "--removed-sites",
+        "2>> vcftools.log"
+    )
     system(command)
 }
 

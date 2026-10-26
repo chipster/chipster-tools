@@ -17,19 +17,19 @@ regions <- toRegioning(input)
 
 margins <- c(10, 1)
 if (type.of.calls == "hard") {
-  dendrogram <- WECCAhc(regions)
+    dendrogram <- WECCAhc(regions)
 } else if (type.of.calls == "soft") {
-  dendrogram <- WECCAsc(regions)
+    dendrogram <- WECCAsc(regions)
 } else {
-  dendrogram <- NA
-  margins <- c(10, 2)
+    dendrogram <- NA
+    margins <- c(10, 2)
 }
 
 pdf(file = "wecca.pdf", paper = "a4", width = 0, height = 0)
 if (column == "EMPTY") {
-  WECCA.heatmap(regions, dendrogram, margins = margins)
+    WECCA.heatmap(regions, dendrogram, margins = margins)
 } else {
-  WECCA.heatmap(regions, dendrogram, margins = margins, ColSideColors = palette()[as.factor(phenodata[, column])])
+    WECCA.heatmap(regions, dendrogram, margins = margins, ColSideColors = palette()[as.factor(phenodata[, column])])
 }
 dev.off()
 

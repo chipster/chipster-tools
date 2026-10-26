@@ -17,9 +17,7 @@ load("ps.Rda")
 
 # Pairwise PERMANOVA
 set.seed(1)
-ps_pairwise <- pairwise.perm.manova(ps_dist, ps_df[, pheno],
-    nperm = 999, p.method = "BH"
-)
+ps_pairwise <- pairwise.perm.manova(ps_dist, ps_df[, pheno], nperm = 999, p.method = "BH")
 
 # Print results table
 sink("pairwise_permanova.txt")

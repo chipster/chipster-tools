@@ -5,9 +5,7 @@
 # OUTPUT META phenodata.tsv: phenodata.tsv
 # PARAMETER cutlevel: "Cutting level for taxonomic names" TYPE INTEGER FROM 0 TO 9 DEFAULT 0 (Cutting level for taxonomic names. 0 means retain full names, e.g. Bacteria;Actinobacteria;Actinobacteria;Coriobacteridae;Coriobacteriales;Coriobacterineae;Coriobacteriaceae;Slackia;unclassified.)
 
-
 # JTT 2012-11-05
-
 
 # Reads the data and tabulates it
 grp <- read.table("all.grp", header = F, sep = "\t")
@@ -35,4 +33,11 @@ chiptype <- c("metagenomics")
 
 # Writing the table to disk
 write.table(tab, "counttable.tsv", col.names = T, row.names = T, sep = "\t", quote = FALSE)
-write.table(data.frame(sample = rownames(tab2), chiptype = chiptype, group = rep("", length(rownames(tab2)))), "phenodata.tsv", col.names = T, row.names = F, sep = "\t", quote = F)
+write.table(
+    data.frame(sample = rownames(tab2), chiptype = chiptype, group = rep("", length(rownames(tab2)))),
+    "phenodata.tsv",
+    col.names = T,
+    row.names = F,
+    sep = "\t",
+    quote = F
+)

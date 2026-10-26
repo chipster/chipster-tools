@@ -20,7 +20,6 @@
 
 ## PARAMETER gatk.afofalleles: "Allele fraction of alleles not in germline resource" TYPE DECIMAL DEFAULT -1 (Population allele fraction assigned to alleles not found in germline resource. Only applicable if germline resource file is provided. -1 = use default value. Default for case-only calling is 5e-8 and for matched-control calling 1e-5.)
 
-
 source(file.path(chipster.common.lib.path, "gatk-utils.R"))
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
@@ -28,7 +27,6 @@ source(file.path(chipster.common.lib.path, "vcf-utils.R"))
 
 # read input names
 inputnames <- read_input_definitions()
-
 
 
 # binaries
@@ -43,7 +41,10 @@ if (organism == "other") {
         unzipIfGZipFile("reference")
         file.rename("reference", "reference.fasta")
     } else {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a FASTA file or choose one of the provided reference genomes."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a FASTA file or choose one of the provided reference genomes."
+        ))
     }
 } else {
     # If not, we use the internal one.

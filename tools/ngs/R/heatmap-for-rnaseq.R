@@ -11,7 +11,6 @@
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 1000 (Width of the image.)
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 800 (Height of the image.)
 
-
 # 12.04.2018 ML
 # 30.08.2018 ML switch to pheatmap for plotting
 
@@ -62,19 +61,32 @@ col_from <- phenodata[, pmatch(column, colnames(phenodata))] # select the column
 # Use gene symbols as rownames instead of gene IDs
 if (use.genenames == "symbols") {
     if (is.null(merged$symbol)) {
-        stop("CHIPSTER-NOTE: Sorry, there is no symbol column available in the list of differentially expressed genes. Try using the Annotation Ensembl identifiers tool in the Utilities category and use the result file as input!")
+        stop(
+            "CHIPSTER-NOTE: Sorry, there is no symbol column available in the list of differentially expressed genes. Try using the Annotation Ensembl identifiers tool in the Utilities category and use the result file as input!"
+        )
     } else {
         row_from <- merged$symbol
         # version 1:
         # heatmap(data.matrix(dat2), labCol = col_from, labRow = row_from, col = topo.colors(20))
         # Version 2, with pheatmap
-        pheatmap(data.matrix(dat2), labels_col = col_from, labels_row = row_from, cellwidth = image.width / 70, cellheight = image.height / (number_of_genes + 30))
+        pheatmap(
+            data.matrix(dat2),
+            labels_col = col_from,
+            labels_row = row_from,
+            cellwidth = image.width / 70,
+            cellheight = image.height / (number_of_genes + 30)
+        )
     }
 } else {
     # Version 1:
     # heatmap(data.matrix(dat2), labCol = col_from, col = topo.colors(20))
     # Version 2, with pheatmap
-    pheatmap(data.matrix(dat2), labels_col = col_from, cellwidth = image.width / 70, cellheight = image.height / (number_of_genes + 30))
+    pheatmap(
+        data.matrix(dat2),
+        labels_col = col_from,
+        cellwidth = image.width / 70,
+        cellheight = image.height / (number_of_genes + 30)
+    )
 }
 
 dev.off()

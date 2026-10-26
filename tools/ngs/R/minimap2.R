@@ -24,7 +24,6 @@ source(file.path(chipster.common.lib.path, "bam-utils.R"))
 # check out if the file is compressed and if so unzip it
 # above step is not needed as minimap 2 does this automatically
 
-
 # minimap2
 # minimap2.binary <- file.path(chipster.tools.path, "minimap2", "minimap2")
 # minimap2.binary <- file.path("chipster.tools.path,/opt/chipster/tools_local/minimap2-2.9_x64-linux/minimap2")
@@ -47,7 +46,14 @@ if (task.test == "XX") {
 if (!file.exists("genome.fasta")) {
     fasta.genome.path <- c(file.path(chipster.tools.path, "genomes", "fasta"))
     genomecopy.command <- paste("cp ", fasta.genome.path, "/", chipster_genome, ".fa  genome.fasta", sep = "")
-    echo.command <- paste("echo Using genome ", fasta.genome.path, "/", chipster_genome, ".fa >> minimap2.log ", sep = "")
+    echo.command <- paste(
+        "echo Using genome ",
+        fasta.genome.path,
+        "/",
+        chipster_genome,
+        ".fa >> minimap2.log ",
+        sep = ""
+    )
     system(echo.command)
     system(genomecopy.command)
 }

@@ -17,7 +17,6 @@
 # PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely the name is Mock)
 # PARAMETER concatenate: "Should the forward and reverse-compelented reverse reads be concatenated?" TYPE [Yes, No] DEFAULT No (Should the forward and reverse-compelented reverse reads be concatenated rather than merged? If it is set to yes, 10 Ns are being inserted between them. Use this parameter just, if your reads are not overlapping. )
 
-
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
@@ -35,11 +34,14 @@ file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
 if (grepl("/", file.list[1])) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 # Make an input folder
@@ -55,7 +57,7 @@ filenames <- sort(filenames)
 # check if the lenght of files in the input_folder is even (all the fastq files have a pair), else error
 number <- length(filenames) %% 2
 if (number != 0 && length(filenames) < 2) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
+    stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
 }
 
 # put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
@@ -79,13 +81,22 @@ fnRs <- filenames[reverse]
 
 # change the variable to TRUE or FALSE
 if (trimoverhang == "Yes") {
-  trimoverhang <- TRUE
+    trimoverhang <- TRUE
 } else {
-  trimoverhang <- FALSE
+    trimoverhang <- FALSE
 }
 
 # run command mergePairs
-mergers <- mergePairs(dadaFs, fnFs, dadaRs, fnRs, minOverlap = minoverlap, maxMismatch = maxmismatch, trimOverhang = trimoverhang, verbose = TRUE)
+mergers <- mergePairs(
+    dadaFs,
+    fnFs,
+    dadaRs,
+    fnRs,
+    minOverlap = minoverlap,
+    maxMismatch = maxmismatch,
+    trimOverhang = trimoverhang,
+    verbose = TRUE
+)
 # sink()
 save(mergers, file = "contigs.Rda")
 
@@ -95,14 +106,15 @@ sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
 
 # track reads through these tools and make a tsv table
 getN <- function(x) sum(getUniques(x))
-if (length(filenames) < 3) { # If processing a single sample, remove the sapply calls: e.g. replace sapply(dadaFs, getN) with getN(dadaFs)
-  track <- cbind(getN(dadaFs), getN(dadaRs), getN(mergers))
-  colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
-  # rownames(track) <- sample.names
-  write.table(track, file = "contigs_summary.tsv", sep = "\t", row.names = FALSE, col.names = T, quote = F)
+if (length(filenames) < 3) {
+    # If processing a single sample, remove the sapply calls: e.g. replace sapply(dadaFs, getN) with getN(dadaFs)
+    track <- cbind(getN(dadaFs), getN(dadaRs), getN(mergers))
+    colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
+    # rownames(track) <- sample.names
+    write.table(track, file = "contigs_summary.tsv", sep = "\t", row.names = FALSE, col.names = T, quote = F)
 } else {
-  track <- cbind(sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN))
-  colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
-  rownames(track) <- sample.names
-  write.table(track, file = "contigs_summary.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
+    track <- cbind(sapply(dadaFs, getN), sapply(dadaRs, getN), sapply(mergers, getN))
+    colnames(track) <- c("Forward dada object", "Reverse dada object", "After make contigs")
+    rownames(track) <- sample.names
+    write.table(track, file = "contigs_summary.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
 }

@@ -8,7 +8,6 @@
 install.packages("BiocManager")
 BiocManager::install("dada2", version = "3.14")
 
-
 # mkdir dada2-silva-reference
 # cd dada2-silva-reference
 

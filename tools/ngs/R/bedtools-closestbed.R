@@ -16,10 +16,10 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "closestBed"))
 # optional options
 options <- paste("")
 if (s == "yes") {
-  options <- paste(options, "-s")
+    options <- paste(options, "-s")
 }
 if (d == "yes") {
-  options <- paste(options, "-d")
+    options <- paste(options, "-d")
 }
 options <- paste(options, "-t", t)
 
@@ -34,9 +34,9 @@ system(command)
 
 # Generate output/error message
 if (file.info("closestbed.tmp")$size > 0) {
-  system("mv closestbed.tmp closestbed.bed")
+    system("mv closestbed.tmp closestbed.bed")
 } else if (file.info("error.tmp")$size > 0) {
-  system("mv error.tmp error.txt")
+    system("mv error.tmp error.txt")
 } else {
-  system("echo \"# No results found\" > error.txt")
+    system("echo \"# No results found\" > error.txt")
 }

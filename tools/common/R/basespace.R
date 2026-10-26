@@ -22,39 +22,39 @@ bs.binary <- file.path(chipster.tools.path, "basespace/bin/bs")
 bs.command_start <- paste(bs.binary, " --api-server=https://", apiserver, " --access-token=", token, sep = "")
 
 if (action == "list_datasets") {
-  command.full <- paste(bs.command_start, 'list dataset -f csv | tr "," "\t" 1>>bs_data.tsv')
-  runExternal(command.full)
-  outputnames[1, ] <- c("bs_data.tsv", "basespace-datasets.tsv")
+    command.full <- paste(bs.command_start, 'list dataset -f csv | tr "," "\t" 1>>bs_data.tsv')
+    runExternal(command.full)
+    outputnames[1, ] <- c("bs_data.tsv", "basespace-datasets.tsv")
 }
 
 if (action == "list_projects") {
-  command.full <- paste(bs.command_start, 'list project -f csv | tr "," "\t" 1>>bs_data.tsv')
-  runExternal(command.full)
-  outputnames[1, ] <- c("bs_data.tsv", "basespace-projects.tsv")
+    command.full <- paste(bs.command_start, 'list project -f csv | tr "," "\t" 1>>bs_data.tsv')
+    runExternal(command.full)
+    outputnames[1, ] <- c("bs_data.tsv", "basespace-projects.tsv")
 }
 
 if (action == "dir") {
-  command.full <- paste(bs.command_start, "dir dataset -f csv --name", name, '  | tr "," "\t" 1>>bs_data.tsv')
-  runExternal(command.full)
-  outputnames[1, ] <- c("bs_data.tsv", paste(name, "-dir.tsv", sep=""))
+    command.full <- paste(bs.command_start, "dir dataset -f csv --name", name, '  | tr "," "\t" 1>>bs_data.tsv')
+    runExternal(command.full)
+    outputnames[1, ] <- c("bs_data.tsv", paste(name, "-dir.tsv", sep = ""))
 }
 
 if (action == "info") {
-  command.full <- paste(bs.command_start, "get dataset --name", name, " 1>>bs_data.txt")
-  runExternal(command.full)
-  outputnames[1, ] <- c("bs_data.txt", paste(name, "-info.txt", sep=""))
+    command.full <- paste(bs.command_start, "get dataset --name", name, " 1>>bs_data.txt")
+    runExternal(command.full)
+    outputnames[1, ] <- c("bs_data.txt", paste(name, "-info.txt", sep = ""))
 }
 
 if (action == "download_dataset") {
-  command.full <- paste(bs.command_start, "download dataset --name", name, " -z -o bs_download")
-  runExternal(command.full)
-  outputnames[1, ] <- c("bs_data.tar", paste(name, ".tar", sep=""))
+    command.full <- paste(bs.command_start, "download dataset --name", name, " -z -o bs_download")
+    runExternal(command.full)
+    outputnames[1, ] <- c("bs_data.tar", paste(name, ".tar", sep = ""))
 }
 
 if (action == "download_project") {
-  command.full <- paste(bs.command_start, "download project --name", name, " --extension=fastq.gz -z -o bs_download")
-  runExternal(command.full)
-  outputnames[1, ] <- c("bs_data.tar", paste(name, ".tar", sep=""))
+    command.full <- paste(bs.command_start, "download project --name", name, " --extension=fastq.gz -z -o bs_download")
+    runExternal(command.full)
+    outputnames[1, ] <- c("bs_data.tar", paste(name, ".tar", sep = ""))
 }
 
 # if (action == "download_dataset_id") {
@@ -66,26 +66,25 @@ system("ls -lah")
 
 
 if (file.exists("bs_download.tar.gz")) {
+    runExternal("mkdir extracted_files")
+    # extract without path
+    print("extract bs_download.tar.gz")
+    runExternal("tar xzf bs_download.tar.gz --transform='s/.*\\///' -C extracted_files")
 
-  runExternal("mkdir extracted_files")
-  # extract without path
-  print("extract bs_download.tar.gz")
-  runExternal("tar xzf bs_download.tar.gz --transform='s/.*\\///' -C extracted_files")
+    system("ls -lah extracted_files")
 
-  system("ls -lah extracted_files")
+    # add only .fastq.gz files (no .json) to a tar package (without compression, because individual files are compressed already)
+    # use bash to fill in the wildcard '*'
+    print("package fastq files")
 
-  # add only .fastq.gz files (no .json) to a tar package (without compression, because individual files are compressed already)
-  # use bash to fill in the wildcard '*'
-  print("package fastq files")
-
-  fastq.files <- list.files(path = "extracted_files", pattern=".fastq.gz$")
-  if (length(fastq.files) == 0) {
-    stop("No FASTQ files in the project.")
-  } else {
-    joined_files <- paste(fastq.files, collapse=" ")
-    cmd <- paste("tar cf bs_data.tar -C extracted_files", joined_files)
-    runExternal(cmd)
-  }
+    fastq.files <- list.files(path = "extracted_files", pattern = ".fastq.gz$")
+    if (length(fastq.files) == 0) {
+        stop("No FASTQ files in the project.")
+    } else {
+        joined_files <- paste(fastq.files, collapse = " ")
+        cmd <- paste("tar cf bs_data.tar -C extracted_files", joined_files)
+        runExternal(cmd)
+    }
 }
 
 # Write output definitions file
