@@ -1,0 +1,36 @@
+name: Format
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# The check only reads the repository.
+permissions:
+  contents: read
+
+# A new push to a pull request makes an in-progress run redundant. Runs on
+# master are not cancelled, so that every commit on master keeps a result
+# even when merges land in quick succession.
+concurrency:
+  group: format-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  air:
+    runs-on: ubuntu-latest
+    # The check takes seconds; this only bounds a hung download.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      # The Air version is pinned here, because a new release can format
+      # differently. To upgrade, change it and reformat with the new version
+      # in the same pull request.
+      - uses: posit-dev/setup-air@v1
+        with:
+          version: "0.12.0"
+
+      # Formatting settings are in air.toml.
+      - run: air format --check .
