@@ -116,8 +116,8 @@ if (length(unique(groups)) == 2) {
         write.table(
             cbind(
                 sig[, 1:ndat],
-                round(sig[, (ndat + 1):(nmax - 2)], digits = round_pvals),
-                format(sig[, (nmax - 1):nmax], digits = round_others, scientific = T)
+                round(sig[, (ndat + 1):(nmax - 2)], digits = round_others),
+                format(sig[, (nmax - 1):nmax], digits = round_pvals, scientific = T)
             ),
             file = "de-list-deseq2.tsv",
             sep = "\t",
