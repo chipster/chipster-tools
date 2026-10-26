@@ -54,8 +54,8 @@ sample.names <- sapply(strsplit(basename(txt_filenames), "_"), `[`, 1)
 x <- 1
 # run the fastq_filter tool for every file
 for (file in filenames) {
-    # name the input and output file
-    output_fastq <- paste0("output_folder/", sample.names[x])
+    # name the input and output file, .fq for the gzip below
+    output_fastq <- paste0("output_folder/", strip_name(sample.names[x]), ".fq")
     x <- x + 1
     # make the fastq_filter command
     command <- paste(
