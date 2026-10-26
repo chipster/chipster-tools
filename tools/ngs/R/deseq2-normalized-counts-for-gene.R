@@ -37,7 +37,7 @@ condition <- as.character(phenodata[, pmatch("group", colnames(phenodata))])
 if (file.exists("genelist.tsv")) {
     genelist <- read.table("genelist.tsv", header = T, sep = "\t", row.names = 1)
     # Choose first how.many genes or max number of rows of the input table for plotting
-    if (nrow(genelist) < 5) {
+    if (nrow(genelist) < how.many) {
         how.many <- nrow(genelist)
     }
     gene.names.clean <- rownames(genelist)[1:how.many]
