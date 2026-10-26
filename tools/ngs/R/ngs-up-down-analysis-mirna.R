@@ -25,13 +25,19 @@ phenodata_1 <- read.table("phenodata_mirna.tsv", header = T, sep = "\t")
 phenodata_2 <- read.table("phenodata_gene.tsv", header = T, sep = "\t")
 
 # Figure out which is the miRNA data
-if ((("chiptype" %in% colnames(phenodata_1)) && (phenodata_1$chiptype[1] == "miRNA")) || (("experiment" %in% colnames(phenodata_1)) && (phenodata_1$experiment[1] == "mirna_seq"))) {
+if (
+    (("chiptype" %in% colnames(phenodata_1)) && (phenodata_1$chiptype[1] == "miRNA")) ||
+        (("experiment" %in% colnames(phenodata_1)) && (phenodata_1$experiment[1] == "mirna_seq"))
+) {
     mirna.phenodata <- phenodata_1
     mirna.data <- data_1
     gene.phenodata <- phenodata_2
     gene.data <- data_2
 }
-if ((("chiptype" %in% colnames(phenodata_2)) && (phenodata_2$chiptype[1] == "miRNA")) || (("experiment" %in% colnames(phenodata_2)) && (phenodata_2$experiment[1] == "mirna_seq"))) {
+if (
+    (("chiptype" %in% colnames(phenodata_2)) && (phenodata_2$chiptype[1] == "miRNA")) ||
+        (("experiment" %in% colnames(phenodata_2)) && (phenodata_2$experiment[1] == "mirna_seq"))
+) {
     mirna.phenodata <- phenodata_2
     mirna.data <- data_2
     gene.phenodata <- phenodata_1
@@ -44,7 +50,10 @@ if (length(grep("[0-9]+_[0-9]+_[acgt]{5,}", rownames(mirna.data)[1], ignore.case
     mirna_id <- NULL
     for (i in 1:length(mirna_id_list)) {
         # remove last three sections of the id
-        mirna_id <- c(mirna_id, paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_"))
+        mirna_id <- c(
+            mirna_id,
+            paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_")
+        )
     }
 } else {
     mirna_id <- as.character(rownames(mirna.data))
@@ -98,7 +107,9 @@ gene.data.4[, 2] <- as.numeric(gene.data.3[, 2])
 # Check that the gene list actually contain at least one miRNA target
 try(merged.table <- read.mir(gene = gene.data.4, mirna = mirna.data.4, annotation = chip.type), silent = FALSE)
 if (match("merged.table", ls(), nomatch = 0) == 0) {
-    stop("There were no targets found in either TarBase or PicTar databases or the supplied list of miRNA:s in the gene list selected. Try again by selecting a longer list of genes!")
+    stop(
+        "There were no targets found in either TarBase or PicTar databases or the supplied list of miRNA:s in the gene list selected. Try again by selecting a longer list of genes!"
+    )
 }
 
 # Change the symbols that come from the read.mir() function into

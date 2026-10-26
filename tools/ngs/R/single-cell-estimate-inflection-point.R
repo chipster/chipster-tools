@@ -11,8 +11,6 @@
 
 # Example: Rscript /wrk/dawit/dropSeqProjects/estimateInflectionPointNumCells.R /wrk/dawit/dropSeqProjects/Thymus/cell_readcounts.txt.gz /wrk/dawit/dropSeqProjects/inflectionPointTesting/
 
-
-
 #-------------------------------------------------------------------------------
 # read file name arguments :
 args <- commandArgs(trailingOnly = TRUE)
@@ -30,7 +28,6 @@ outputDir <- args[2]
 
 # INSTEAD: install.packages("inflection")  <--- Taavi / Petri!
 
-
 # read in the cellReadCounts File
 a <- read.table(cellReadCountsFile, header = F, stringsAsFactors = F)
 x <- cumsum(a$V1)
@@ -44,9 +41,14 @@ print(infl[1, 2])
 # Plot Cumulative Read proportion of cells
 pdf(file = paste(outputDir, "/CumCellReadCount.pdf", sep = ""))
 cellIds <- 1:length(x)
-plot(cellIds, x,
-    type = "l", col = "blue", xlab = "cell barcodes sorted by number of reads [descending]",
-    ylab = "cumulative fraction of reads", xlim = c(1, length(x))
+plot(
+    cellIds,
+    x,
+    type = "l",
+    col = "blue",
+    xlab = "cell barcodes sorted by number of reads [descending]",
+    ylab = "cumulative fraction of reads",
+    xlim = c(1, length(x))
 )
 
 abline(v = infl[1, 2], col = "red")
@@ -59,4 +61,9 @@ dev.off()
 
 
 # write inflectionPoint.txt
-write.table(infl[1, 2], paste(outputDir, "/inflectionPoint.txt", sep = ""), col.names = c("InflectionPoint"), row.names = F)
+write.table(
+    infl[1, 2],
+    paste(outputDir, "/inflectionPoint.txt", sep = ""),
+    col.names = c("InflectionPoint"),
+    row.names = F
+)

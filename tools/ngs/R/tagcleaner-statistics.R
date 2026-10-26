@@ -34,7 +34,9 @@ if (tag5 != "-") {
     notags <- FALSE
 }
 if (notags) {
-    stop('CHIPSTER-NOTE: No tag sequence specified. If tags are unknow, you can first use the "Predict primers/adaptors" tool.')
+    stop(
+        'CHIPSTER-NOTE: No tag sequence specified. If tags are unknow, you can first use the "Predict primers/adaptors" tool.'
+    )
 }
 # common options
 options <- paste(options, "-64")

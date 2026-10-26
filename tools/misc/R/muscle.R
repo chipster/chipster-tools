@@ -11,7 +11,6 @@
 # PARAMETER OPTIONAL njtree: "Print tree" TYPE [ yes: "yes", no: "no" ] DEFAULT no (Create Neighbor-joining thee based on the alignmnet. Treefile is in Newick format)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
 
-
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
@@ -83,7 +82,12 @@ command.full <- paste(muscle.binary, " -in sequence ", muscle.options, " 2>>alig
 system(command.full)
 
 if (njtree == "yes") {
-    command.full <- paste(muscle.binary, "-maketree -in", outfile, " -out newick_tree.txt -cluster neighborjoining 2>>alignment.log")
+    command.full <- paste(
+        muscle.binary,
+        "-maketree -in",
+        outfile,
+        " -out newick_tree.txt -cluster neighborjoining 2>>alignment.log"
+    )
     system(command.full)
 }
 

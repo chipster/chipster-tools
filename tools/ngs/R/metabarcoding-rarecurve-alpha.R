@@ -51,23 +51,33 @@ if (group_column != "empty") {
 # Open a report PDF
 pdf("ps_rarecurve.pdf")
 
-options(scipen=99)
+options(scipen = 99)
 
 # Plot rarefaction curve
 set.seed(1)
 otu_table <- otu_table(ps)
 class(otu_table) <- "matrix"
 
-if (taxa_are_rows(ps) == FALSE) { 
-rarecurve(otu_table,
-    step = 100,
-    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "ASVs", xlab = "No. of sequences"
-)
+if (taxa_are_rows(ps) == FALSE) {
+    rarecurve(
+        otu_table,
+        step = 100,
+        cex.lab = 1.5,
+        cex.axis = 1.5,
+        label = FALSE,
+        ylab = "ASVs",
+        xlab = "No. of sequences"
+    )
 } else {
-rarecurve(t(otu_table),
-    step = 100,
-    cex.lab = 1.5, cex.axis = 1.5, label = FALSE, ylab = "OTUs", xlab = "No. of sequences"
-)
+    rarecurve(
+        t(otu_table),
+        step = 100,
+        cex.lab = 1.5,
+        cex.axis = 1.5,
+        label = FALSE,
+        ylab = "OTUs",
+        xlab = "No. of sequences"
+    )
 }
 
 # Close the report PDF
@@ -90,13 +100,14 @@ cat("\n\n\n")
 
 # calculate means standard error and Wilcoxon rank sum test by ES
 if (group_column != "empty") {
-    cat("### Means, standard deviations and standard errors from alpha diversity estimates by every group specified with the phenodata parameter")
+    cat(
+        "### Means, standard deviations and standard errors from alpha diversity estimates by every group specified with the phenodata parameter"
+    )
     cat("\n\n")
 
     # Loads phenodata and list all different groups to groupnames
     phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
     groupnames <- unique(phenodata[, group_column])
-
 
     x <- 1
     # calculate means, sd and std.error for every group
@@ -180,7 +191,14 @@ if (group_column != "empty") {
         print(wilcox.test(pielou_a, pielou_b))
     } else {
         if (test1 == FALSE || test2 == FALSE) {
-            cat("###You have more than 2 groups. Couldn't find groups", group1, ",", group2, " from Phenodata file.### \n", sep = " ")
+            cat(
+                "###You have more than 2 groups. Couldn't find groups",
+                group1,
+                ",",
+                group2,
+                " from Phenodata file.### \n",
+                sep = " "
+            )
             cat("Give the correct group names as parameters.")
         } else {
             cat("### Wilcoxon rank sum test between groups:", group1, ",", group2, sep = " ")
@@ -218,16 +236,46 @@ if ((group_column != "empty")) {
     # dev.off()
     # if 2 groups or more and group1 and group2 specified, then calculate wilcox test #c("****", "***", "**", "*", "ns"))
     if (length(groups) == 2) {
-        symnum_args <- list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("p<0.0001  ****", "p<0.001  ***", "p<0.01  **", "p<0.05  *", "p>0.05  ns"))
-        plot1 <- plot_richness(ps, x = group_column, color = group_column, measures = c("Observed", "Chao1", "Shannon")) + geom_boxplot(alpha = 0.7) + geom_point(size = 3, alpha = 0.7) + labs(title = "\t\t\t\tRichness estimates") + stat_compare_means(method = "wilcox.test", comparisons = list(groups), label = "p.signif", symnum.args = symnum_args)
+        symnum_args <- list(
+            cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+            symbols = c("p<0.0001  ****", "p<0.001  ***", "p<0.01  **", "p<0.05  *", "p>0.05  ns")
+        )
+        plot1 <- plot_richness(
+            ps,
+            x = group_column,
+            color = group_column,
+            measures = c("Observed", "Chao1", "Shannon")
+        ) +
+            geom_boxplot(alpha = 0.7) +
+            geom_point(size = 3, alpha = 0.7) +
+            labs(title = "\t\t\t\tRichness estimates") +
+            stat_compare_means(
+                method = "wilcox.test",
+                comparisons = list(groups),
+                label = "p.signif",
+                symnum.args = symnum_args
+            )
         plot2 <- ggplot(richness, aes(group, Pielou, colour = group)) +
             geom_boxplot(alpha = 0.7) +
             geom_point(size = 3, alpha = 0.7) +
             labs(title = "\t\t\t\tPielou's evenness") +
-            stat_compare_means(method = "wilcox.test", comparisons = list(groups), label = "p.signif", symnum.args = symnum_args)
+            stat_compare_means(
+                method = "wilcox.test",
+                comparisons = list(groups),
+                label = "p.signif",
+                symnum.args = symnum_args
+            )
         # sample names + geom_text_repel(aes(label = rownames(richness)))
     } else {
-        plot1 <- plot_richness(ps, x = group_column, color = group_column, measures = c("Observed", "Chao1", "Shannon")) + geom_boxplot(alpha = 0.7) + geom_point(size = 3, alpha = 0.7) + labs(title = "\t\t\t\tRichness estimates")
+        plot1 <- plot_richness(
+            ps,
+            x = group_column,
+            color = group_column,
+            measures = c("Observed", "Chao1", "Shannon")
+        ) +
+            geom_boxplot(alpha = 0.7) +
+            geom_point(size = 3, alpha = 0.7) +
+            labs(title = "\t\t\t\tRichness estimates")
         plot2 <- ggplot(richness, aes(group, Pielou, colour = group)) +
             geom_boxplot(alpha = 0.3) +
             geom_point(size = 3, alpha = 0.7) +

@@ -26,7 +26,13 @@ rename.parameter <- ifelse(rename.identifiers == "no", "", "-r")
 quality.scale <- "-Q 33"
 
 # command
-command <- paste(binary, remove.parameter, rename.parameter, quality.scale, "-v -i reads.fastq -o reads.fasta > fasta.log")
+command <- paste(
+    binary,
+    remove.parameter,
+    rename.parameter,
+    quality.scale,
+    "-v -i reads.fastq -o reads.fasta > fasta.log"
+)
 
 # run
 system(command)

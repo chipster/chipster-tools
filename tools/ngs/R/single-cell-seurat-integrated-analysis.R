@@ -18,7 +18,6 @@
 # To enable this option, please copy-paste this line above the #RUNTIME parameter:
 # PARAMETER OPTIONAL output_norm_table: "Give a table of log-normalized values with cluster and sample information" TYPE [T: yes, F: no] DEFAULT F (Returns a table with the log-normalised UMI counts for all cells and all genes, along with the information on which sample and which cluster the cell belongs to.)
 
-
 # 2018-16-05 ML
 # 2019-02-18 ML add heatmap plotting & number of cells in each cluster
 # 2019-04-08 ML number of cells in each cluster in each sample
@@ -29,7 +28,6 @@
 # 2021-10-04 ML Update to Seurat v4
 # 2922-02-21 EK Increase slots to 2 so that the average expression table is produced also with larger datasets
 # 2022-07-21 ML Tune for SCTransform data
-
 
 # for UMAP:
 library(reticulate)
@@ -89,17 +87,24 @@ dev.off()
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
 if (output_aver_expr == "T") {
-  aver_expr <- AverageExpression(object = data.combined)
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-  } else {
     aver_expr <- AverageExpression(object = data.combined)
-  }
+    if (normalisation.method == "SCT") {
+        aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+    } else {
+        aver_expr <- AverageExpression(object = data.combined)
+    }
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-  # aver_expr_in_clusters <- aver_expr[["integrated"]]
-  # Write to table
-  write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    aver_expr_in_clusters <- aver_expr[[1]]
+    # aver_expr_in_clusters <- aver_expr[["integrated"]]
+    # Write to table
+    write.table(
+        aver_expr_in_clusters,
+        file = "aver_expr_in_clusters.tsv",
+        sep = "\t",
+        row.names = TRUE,
+        col.names = TRUE,
+        quote = FALSE
+    )
 }
 
 # Normalised data + cluster + sample information table
@@ -114,7 +119,6 @@ if (output_aver_expr == "T") {
 #  # Write to table
 #  write.table(norm_data_table, file = "log_normalized.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 # }
-
 
 # Save the Robj for the next tool
 save(data.combined, file = "seurat_obj_combined_integrated.Robj")

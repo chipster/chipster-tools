@@ -36,8 +36,8 @@ seqs <- retreive_promoters(species, promoter.size, multiple.promoters, "normaliz
 
 # Write sequences on disk
 for (i in 1:length(seqs$seq.names)) {
-   write(file = "seqs.txt", seqs$seq.names[i], append = T)
-   write(file = "seqs.txt", seqs$seq[i], append = T)
+    write(file = "seqs.txt", seqs$seq.names[i], append = T)
+    write(file = "seqs.txt", seqs$seq[i], append = T)
 }
 
 # Weeder needs frequency files - copying those in place
@@ -47,57 +47,57 @@ system(paste("ln -s ", file.path(path.weeder.freq, "*"), " ", file.path("FreqFil
 # Assembling Weeder arguments
 arg <- c()
 if (percentage != 50) {
-   arg <- paste(arg, " -R ", percentage, sep = "")
+    arg <- paste(arg, " -R ", percentage, sep = "")
 } else {
-   arg <- paste(arg, " -R ", 50, sep = "")
+    arg <- paste(arg, " -R ", 50, sep = "")
 }
 if (strands == "both") {
-   arg <- paste(arg, " -S ", sep = "")
+    arg <- paste(arg, " -S ", sep = "")
 }
 if (once == "yes") {
-   arg <- paste(arg, "-M ", sep = "")
+    arg <- paste(arg, "-M ", sep = "")
 }
 if (no != 10) {
-   arg <- paste(arg, "-T ", no, sep = "")
+    arg <- paste(arg, "-T ", no, sep = "")
 }
 
 # Running Weeder to find tentative TFBSs
 
 if (species == "human") {
-   weeder.org <- "HS"
+    weeder.org <- "HS"
 }
 if (species == "mouse") {
-   weeder.org <- "MM"
+    weeder.org <- "MM"
 }
 if (species == "rat") {
-   weeder.org <- "RN"
+    weeder.org <- "RN"
 }
 if (species == "yeast") {
-   weeder.org <- "SC"
+    weeder.org <- "SC"
 }
 
 if (tfsize == "small") {
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 6 -e 1", arg, sep = ""))
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 8 -e 2", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 6 -e 1", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 8 -e 2", arg, sep = ""))
 }
 if (tfsize == "medium") {
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 6 -e 1", arg, sep = ""))
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 8 -e 2", arg, sep = ""))
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 10 -e 3", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 6 -e 1", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 8 -e 2", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 10 -e 3", arg, sep = ""))
 }
 if (tfsize == "large") {
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 12 -e 4", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 12 -e 4", arg, sep = ""))
 }
 if (tfsize == "extra") {
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 6 -e 1", arg, sep = ""))
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 8 -e 3", arg, sep = ""))
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 10 -e 4", arg, sep = ""))
-   system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 12 -e 4", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 6 -e 1", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 8 -e 3", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 10 -e 4", arg, sep = ""))
+    system(paste(path.weeder.tfbs, " -f seqs.txt -O ", weeder.org, " -W 12 -e 4", arg, sep = ""))
 }
 if (strands == "both") {
-   system(paste(path.weeder.advicer, "  seqs.txt S", sep = ""))
+    system(paste(path.weeder.advicer, "  seqs.txt S", sep = ""))
 } else {
-   system(paste(path.weeder.advicer, "  seqs.txt", sep = ""))
+    system(paste(path.weeder.advicer, "  seqs.txt", sep = ""))
 }
 
 # fix a broken HTML markup

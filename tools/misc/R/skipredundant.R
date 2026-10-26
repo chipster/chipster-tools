@@ -11,7 +11,6 @@
 # PARAMETER gapextend: "Gap extension penalty" TYPE DECIMAL FROM 0.0 TO 10.0 DEFAULT 0.5 (The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low\) and using the gap extension penalty to control gap scoring.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-
 # KM 23.1. 2014
 options(scipen = 999)
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
@@ -50,13 +49,11 @@ emboss.parameters <- paste(emboss.parameters, "-gapopen", gapopen)
 emboss.parameters <- paste(emboss.parameters, "-gapextend", gapextend)
 
 
-
 command.full <- paste(emboss.binary, emboss.parameters, " >> skipredundant.log 2>&1")
 echo.command <- paste('echo "', command.full, ' "> skipredundant.log')
 system(echo.command)
 
 system(command.full)
-
 
 
 if (save_log == "no") {

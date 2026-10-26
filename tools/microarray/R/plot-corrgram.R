@@ -7,7 +7,6 @@
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 # PARAMETER OPTIONAL image.type: "Image type" TYPE [PNG: PNG, PDF: PDF] DEFAULT PNG (Format of the output image. Please note that if you choose the PDF format, it will take a lot of time to draw it, and thus it is advisable to export the PDF for closer examination.)
 
-
 # Correlogram
 # JTT 18.10.2007
 # ML 22.1.2016, added option to print image either as png or pdf

@@ -5,7 +5,6 @@
 # PARAMETER OPTIONAL image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER OPTIONAL image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
-
 # Histogram
 # JTT 4.10.2007
 
@@ -33,19 +32,19 @@ s <- ceiling(sqrt(ncol(dat2)))
 titles <- gsub(" ", "", phenodata$description)
 
 if (length(titles) == ncol(dat2)) {
-   pdf(file = "histogram.pdf", width = w / 72, height = h / 72)
-   par(mfrow = c(s, s))
-   for (i in 1:ncol(dat2)) {
-      par(mar = c(2, 2, 3, 0))
-      hist(dat2[, i], main = titles[i], cex.main = 0.80, br = 100, col = 1, border = 1)
-   }
-   dev.off()
+    pdf(file = "histogram.pdf", width = w / 72, height = h / 72)
+    par(mfrow = c(s, s))
+    for (i in 1:ncol(dat2)) {
+        par(mar = c(2, 2, 3, 0))
+        hist(dat2[, i], main = titles[i], cex.main = 0.80, br = 100, col = 1, border = 1)
+    }
+    dev.off()
 } else {
-   pdf(file = "histogram.pdf", width = w / 72, height = h / 72)
-   par(mfrow = c(s, s))
-   for (i in 1:ncol(dat2)) {
-      par(mar = c(2, 2, 3, 0))
-      hist(dat2[, i], cex.main = 0.80, br = 100, col = 1, border = 1)
-   }
-   dev.off()
+    pdf(file = "histogram.pdf", width = w / 72, height = h / 72)
+    par(mfrow = c(s, s))
+    for (i in 1:ncol(dat2)) {
+        par(mar = c(2, 2, 3, 0))
+        hist(dat2[, i], cex.main = 0.80, br = 100, col = 1, border = 1)
+    }
+    dev.off()
 }

@@ -45,36 +45,48 @@ version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
 if (reference == "own") {
-  if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")) {
-    stop("CHIPSTER-NOTE: Provide your own reference and taxonomy files or select the Silva reference.")
-  }
-  reference.path <- "own_reference.fasta"
-  taxonomy.path <- "own_reference.tax"
+    if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")) {
+        stop("CHIPSTER-NOTE: Provide your own reference and taxonomy files or select the Silva reference.")
+    }
+    reference.path <- "own_reference.fasta"
+    taxonomy.path <- "own_reference.tax"
 } else if (reference == "silva_138_2") {
-  # Silva in tools-bin, in path /opt/chipster/tools-bin
-  data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "v138.2"))
-  # template.path <- c(file.path(data.path,"silva.nr_v132.align"))
-  # taxonomy.path <- c(file.path(data.path,"silva.nr_v132.tax"))
-  template.path <- c(file.path(data.path, "silva.nr_v138_2.align"))
-  taxonomy.path <- c(file.path(data.path, "silva.nr_v138_2.tax"))
-  # copy to working dir because mothur generates more files to the same directory
-  # system(paste("ln -s ",template.path," silva.nr_v132.align"))
-  # system(paste("ln -s ",taxonomy.path," silva.nr_v132.tax"))
-  system(paste("ln -s ", template.path, " silva.nr_v138_2.align"))
-  system(paste("ln -s ", taxonomy.path, " silva.nr_v138_2.tax"))
-  # template.path <- "silva.nr_v132.align"
-  # taxonomy.path <- "silva.nr_v132.tax"
-  template.path <- "silva.nr_v138_2.align"
-  taxonomy.path <- "silva.nr_v138_2.tax"
+    # Silva in tools-bin, in path /opt/chipster/tools-bin
+    data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "v138.2"))
+    # template.path <- c(file.path(data.path,"silva.nr_v132.align"))
+    # taxonomy.path <- c(file.path(data.path,"silva.nr_v132.tax"))
+    template.path <- c(file.path(data.path, "silva.nr_v138_2.align"))
+    taxonomy.path <- c(file.path(data.path, "silva.nr_v138_2.tax"))
+    # copy to working dir because mothur generates more files to the same directory
+    # system(paste("ln -s ",template.path," silva.nr_v132.align"))
+    # system(paste("ln -s ",taxonomy.path," silva.nr_v132.tax"))
+    system(paste("ln -s ", template.path, " silva.nr_v138_2.align"))
+    system(paste("ln -s ", taxonomy.path, " silva.nr_v138_2.tax"))
+    # template.path <- "silva.nr_v132.align"
+    # taxonomy.path <- "silva.nr_v132.tax"
+    template.path <- "silva.nr_v138_2.align"
+    taxonomy.path <- "silva.nr_v138_2.tax"
 }
 
 # batch file
 # write(paste("classify.seqs(fasta=a.fasta, iters=1000, template=", template.path, ", taxonomy=", taxonomy.path, ")", sep=""), "batch.mth", append=F)
 classifyseqs.options <- paste("classify.seqs(fasta=a.fasta")
 if (file.exists("a.count_table")) {
-  classifyseqs.options <- paste(classifyseqs.options, ", count=a.count_table")
+    classifyseqs.options <- paste(classifyseqs.options, ", count=a.count_table")
 }
-classifyseqs.options <- paste(classifyseqs.options, ", iters=", iters, ", template=", template.path, ", taxonomy=", taxonomy.path, ", processors=", chipster.threads.max, ")", sep = "")
+classifyseqs.options <- paste(
+    classifyseqs.options,
+    ", iters=",
+    iters,
+    ", template=",
+    template.path,
+    ", taxonomy=",
+    taxonomy.path,
+    ", processors=",
+    chipster.threads.max,
+    ")",
+    sep = ""
+)
 documentCommand(classifyseqs.options)
 write(classifyseqs.options, "batch.mth", append = FALSE)
 # command
@@ -86,7 +98,6 @@ system(command)
 # Output File Names:
 # a.silva.wang.taxonomy
 # a.silva.wang.tax.summary
-
 
 ## test
 write("get.current()", "batch2.mth", append = FALSE)
@@ -145,8 +156,6 @@ system("find . -type f -name a.*.summary -exec mv {} classification-summary.tsv 
 # run
 #  system(command)
 
-
-
 # Rename output files
 # system("mv a.pick.fasta picked.fasta")
 # if (file.exists("a.pick.count_table")) {
@@ -171,7 +180,6 @@ system("find . -type f -name a.*.summary -exec mv {} classification-summary.tsv 
 ## test
 # write("get.current()","batch2.mth",append = FALSE)
 # system(paste(binary,"batch2.mth",">> log.txt 2>&1"))
-
 
 # Postprocess output
 # if (reference == "silva") {

@@ -47,7 +47,6 @@ system(command)
 system("mv a.unique.fasta unique.fasta")
 
 
-
 # batch file 2 count.seqs -creates a new count_table
 countseqs.options <- paste("count.seqs(count=a.count_table, compress=f)", sep = "")
 # countseqs.options <- paste("count.seqs(name=a.names, group=a.groups, compress=f)",sep = "")
@@ -62,7 +61,7 @@ system(command)
 
 # Post process output -note, same name as with the input file, thus inside the "if"!
 if (file.exists("a.full.count_table")) {
-  system("mv a.full.count_table unique.count_table")
+    system("mv a.full.count_table unique.count_table")
 }
 
 

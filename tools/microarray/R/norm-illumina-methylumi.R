@@ -55,7 +55,7 @@ library(annotate)
 # 	chiptype<-paste(chiptype, ".db", sep="")
 # }
 if (chiptype == "FDb.InfiniumMethylation.hg19") {
-   chiptype <- "FDb.InfiniumMethylation.hg19"
+    chiptype <- "FDb.InfiniumMethylation.hg19"
 }
 
 # Loading data files.
@@ -73,9 +73,9 @@ dat2 <- lumiMethyC(methyLumiM, method = color.balance.adjustment)
 
 # Background adjustment
 if (color.balance.adjustment != "none") {
-   dat3 <- lumiMethyB(dat2, method = background.correction, separateColor = FALSE)
+    dat3 <- lumiMethyB(dat2, method = background.correction, separateColor = FALSE)
 } else {
-   dat3 <- lumiMethyB(dat2, method = background.correction, separateColor = TRUE)
+    dat3 <- lumiMethyB(dat2, method = background.correction, separateColor = TRUE)
 }
 
 # Normalization
@@ -84,13 +84,13 @@ dat4 <- lumiMethyN(dat3, method = normalization)
 
 # QC plots
 if (QCplots == "yes") {
-   pdf(file = "QC-plot.pdf", width = w / 72, height = h / 72)
-   par(mfrow = c(2, 2))
-   plotColorBias1D(dat, main = "Unpreprocessed")
-   plotColorBias1D(dat4, main = "Preprocessed")
-   boxplotColorBias(dat, main = "Unpreprocessed")
-   boxplotColorBias(dat4, main = "Preprocessed")
-   dev.off()
+    pdf(file = "QC-plot.pdf", width = w / 72, height = h / 72)
+    par(mfrow = c(2, 2))
+    plotColorBias1D(dat, main = "Unpreprocessed")
+    plotColorBias1D(dat4, main = "Preprocessed")
+    boxplotColorBias(dat, main = "Unpreprocessed")
+    boxplotColorBias(dat4, main = "Preprocessed")
+    dev.off()
 }
 
 # Convert sample names to Chipster style
@@ -125,7 +125,14 @@ colnames(dat7) <- sample.names
 # Write out a phenodata
 group <- c(rep("", ncol(dat5)))
 training <- c(rep("", ncol(dat5)))
-write.table(data.frame(sample = sample.names, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample.names, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Write out expression data
 write.table(data.frame(dat5), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)

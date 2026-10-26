@@ -33,7 +33,10 @@ if (length(file.list) == 0) {
 }
 # Check if tar packa contains folders
 if (any(grepl("/", file.list))) {
-    stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 
@@ -71,8 +74,13 @@ if (fileOk("input_list.txt")) {
     # if the input list has a different amount of files than the tar package
     if (length(txt_filenames) != length(filenames)) {
         line1 <- paste(c("Filenames from the given txt file:\n", txt_filenames), collapse = "\n")
-        stop(paste0("CHIPSTER-NOTE: ", "It seems that the list of the FASTQ files (.txt file) has different amount of filenames than the .tar package. Please check the manual\n\n", line1))
-    } else { # add the full name
+        stop(paste0(
+            "CHIPSTER-NOTE: ",
+            "It seems that the list of the FASTQ files (.txt file) has different amount of filenames than the .tar package. Please check the manual\n\n",
+            line1
+        ))
+    } else {
+        # add the full name
         safe_name(c(sample.names, txt_filenames))
         filenames <- paste0("input_folder/", txt_filenames)
     }
@@ -110,18 +118,44 @@ for (name in sample.names) {
     # for  samples.fastqs.txt
     line2 <- paste(name, "\t", txt_filenames[y], "\t", txt_filenames[y + 1])
     # if maxns is selected
-    if (!is.na(maxns)) { # command with maxns parameter
+    if (!is.na(maxns)) {
+        # command with maxns parameter
         command <- paste(
-            binary, "--fastq_mergepairs", shQuote(fnFs[x]), "--reverse", shQuote(fnRs[x]), "--eeout",
-            "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct, "--fastq_maxns", maxns,
-            "--fastqout", shQuote(output_fastq), "--label_suffix", shQuote(name)
+            binary,
+            "--fastq_mergepairs",
+            shQuote(fnFs[x]),
+            "--reverse",
+            shQuote(fnRs[x]),
+            "--eeout",
+            "--fastq_maxdiffs",
+            maxdiff,
+            "--fastq_maxdiffpct",
+            maxdiffpct,
+            "--fastq_maxns",
+            maxns,
+            "--fastqout",
+            shQuote(output_fastq),
+            "--label_suffix",
+            shQuote(name)
         )
-    } else { # else without --fastq_maxns
+    } else {
+        # else without --fastq_maxns
         # command without maxns parameter
         command <- paste(
-            binary, "--fastq_mergepairs", shQuote(fnFs[x]), "--reverse", shQuote(fnRs[x]), "--eeout",
-            "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct,
-            "--fastqout", shQuote(output_fastq), "--label_suffix", shQuote(name)
+            binary,
+            "--fastq_mergepairs",
+            shQuote(fnFs[x]),
+            "--reverse",
+            shQuote(fnRs[x]),
+            "--eeout",
+            "--fastq_maxdiffs",
+            maxdiff,
+            "--fastq_maxdiffpct",
+            maxdiffpct,
+            "--fastqout",
+            shQuote(output_fastq),
+            "--label_suffix",
+            shQuote(name)
         )
     }
     x <- x + 1
@@ -184,7 +218,14 @@ for (row in summary_data) {
 }
 
 # make a data.frame and summary.tsv file, where are the sample IDs and not_merged info
-summ.data <- data.frame("Sample" = sample.names, "Pairs" = vector_pairs, "Merged" = vector_merged, "Not_merged" = vector_notmerged, "Percentage_not_merged" = vector_info, "Mean_expected_error" = vector_mergeinfo)
+summ.data <- data.frame(
+    "Sample" = sample.names,
+    "Pairs" = vector_pairs,
+    "Merged" = vector_merged,
+    "Not_merged" = vector_notmerged,
+    "Percentage_not_merged" = vector_info,
+    "Mean_expected_error" = vector_mergeinfo
+)
 write.table(summ.data, file = "summary_stats.tsv", row.names = FALSE)
 
 # make a output tar package named contigs.tar and qzip

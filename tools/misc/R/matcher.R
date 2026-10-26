@@ -68,9 +68,6 @@ if (num.queryseq > 1) {
 }
 
 
-
-
-
 outfile <- paste("alignment", aformat, "txt", sep = ".")
 
 if (aformat == "fasta") {
@@ -81,7 +78,16 @@ if (aformat == "fasta") {
 ecommand <- ("matcher")
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 emboss.binary <- file.path(emboss.path, ecommand)
-emboss.options <- paste("-asequence asequence.fa -bsequence bsequence.fa -gapopen", gapopen, "-gapextend", gapextend, "-awidth", awidth, "-aformat", aformat)
+emboss.options <- paste(
+    "-asequence asequence.fa -bsequence bsequence.fa -gapopen",
+    gapopen,
+    "-gapextend",
+    gapextend,
+    "-awidth",
+    awidth,
+    "-aformat",
+    aformat
+)
 emboss.options <- paste(emboss.options, "-alternatives", alternatives)
 emboss.options <- paste(emboss.options, "-outfile", outfile, "-auto")
 if (datafile != "def") {
@@ -106,7 +112,6 @@ if (aformat == "pair") {
     system("echo '</html>' >> alignment.pair.html")
     system("rm -f alignment.pair.txt")
 }
-
 
 
 if (save_log == "no") {

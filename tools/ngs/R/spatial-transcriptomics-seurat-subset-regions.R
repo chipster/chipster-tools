@@ -29,8 +29,9 @@ subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
 
 pdf(file = "Spatial_plot.pdf")
-p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend() + 
-  SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
+p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+    NoLegend() +
+    SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
 print(p)
 

@@ -4,7 +4,6 @@
 # PARAMETER column: Column TYPE COLUMN_SEL DEFAULT EMPTY (Data file column containing the data to sort)
 # PARAMETER method: Method TYPE [ascending: ascending, descending: descending] DEFAULT ascending (Sort the genes from largest to smallest or vice versa)
 
-
 # Sort genes
 # JTT 29.1.2009
 # Loads the libraries
@@ -22,10 +21,10 @@ tosort <- dat[, grep(column, colnames(dat))]
 
 # Sorting
 if (method == "ascending") {
-   dat <- dat[order(tosort, decreasing = F), ]
+    dat <- dat[order(tosort, decreasing = F), ]
 }
 if (method == "descending") {
-   dat <- dat[order(tosort, decreasing = T), ]
+    dat <- dat[order(tosort, decreasing = T), ]
 }
 
 # Writing out data

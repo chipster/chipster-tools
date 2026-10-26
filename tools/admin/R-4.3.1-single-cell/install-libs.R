@@ -16,7 +16,7 @@ install.packages("remotes")
 # install from github, because seurat5 is still in beta
 remotes::install_github("satijalab/seurat", "seurat5", quiet = TRUE)
 #install.packages("Seurat")
-# 15:58 - 
+# 15:58 -
 # 25 min
 install.packages("Rfast2")
 # 3 min

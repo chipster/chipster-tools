@@ -38,11 +38,17 @@ matches <- (unlist(lapply(genes, function(g) grep(paste0("^", g, "$"), all.genes
 
 # If none of the requested genes are in the Seurat object
 if (identical(matches, character(0))) {
-  stop(paste("CHIPSTER-NOTE: ", "None of the genes you requested were not found in the Seurat object."))
+    stop(paste("CHIPSTER-NOTE: ", "None of the genes you requested were not found in the Seurat object."))
 }
 
 # Spatial feature plot:
-SpatialFeaturePlot(seurat_obj, features = matches, keep.scale = color.scale, pt.size.factor = point.size, alpha = c(min_transparency, max_transparency))
+SpatialFeaturePlot(
+    seurat_obj,
+    features = matches,
+    keep.scale = color.scale,
+    pt.size.factor = point.size,
+    alpha = c(min_transparency, max_transparency)
+)
 # Close the pdf
 dev.off()
 

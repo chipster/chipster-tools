@@ -59,7 +59,12 @@ if (method == "merge") {
         },
         warning = function(w) {
             print(w)
-            return(suppressWarnings(SCTransform(seurat_objects[[1]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+            return(suppressWarnings(SCTransform(
+                seurat_objects[[1]],
+                variable.features.n = num.features,
+                assay = "Spatial",
+                verbose = FALSE
+            )))
         }
     )
     # sample 2
@@ -69,7 +74,12 @@ if (method == "merge") {
         },
         warning = function(w) {
             print(w)
-            return(suppressWarnings(SCTransform(seurat_objects[[2]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+            return(suppressWarnings(SCTransform(
+                seurat_objects[[2]],
+                variable.features.n = num.features,
+                assay = "Spatial",
+                verbose = FALSE
+            )))
         }
     )
     sctransformed_objects <- c(sctransformed_obj_1, sctransformed_obj_2)
@@ -81,11 +91,21 @@ if (method == "merge") {
         for (i in 3:length(seurat_objects)) {
             sctransformed_obj <- tryCatch(
                 {
-                    SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)
+                    SCTransform(
+                        seurat_objects[[i]],
+                        variable.features.n = num.features,
+                        assay = "Spatial",
+                        verbose = FALSE
+                    )
                 },
                 warning = function(w) {
                     print(w)
-                    return(suppressWarnings(SCTransform(seurat_objects[[i]], variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+                    return(suppressWarnings(SCTransform(
+                        seurat_objects[[i]],
+                        variable.features.n = num.features,
+                        assay = "Spatial",
+                        verbose = FALSE
+                    )))
                 }
             )
             sctransformed_objects <- append(sctransformed_objects, sctransformed_obj)
@@ -97,7 +117,10 @@ if (method == "merge") {
     if (length(seurat_objects) == 2) {
         seurat_obj <- merge(sctransformed_objects[[1]], sctransformed_objects[[2]])
     } else {
-        seurat_obj <- merge(sctransformed_objects[[1]], y = c(sctransformed_objects[c(2:(length(sctransformed_objects)))]))
+        seurat_obj <- merge(
+            sctransformed_objects[[1]],
+            y = c(sctransformed_objects[c(2:(length(sctransformed_objects)))])
+        )
     }
 
     # print(unique(seurat_obj@meta.data$orig.ident))
@@ -108,9 +131,16 @@ if (method == "merge") {
 
     # Select variable features using SelectIntegrationFeatures() as explained in https://github.com/satijalab/seurat/issues/5761
     if (number_of_var_feats > num.features) {
-        stop(paste("CHIPSTER-NOTE: ", "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform."
+        ))
     } else {
-        variable_feats <- SelectIntegrationFeatures(sctransformed_objects, nfeatures = number_of_var_feats, verbose = FALSE)
+        variable_feats <- SelectIntegrationFeatures(
+            sctransformed_objects,
+            nfeatures = number_of_var_feats,
+            verbose = FALSE
+        )
     }
 
     # Variable genes that are not in all data sets (scale.data) need to be removed from the list before downstream analyses.
@@ -120,12 +150,18 @@ if (method == "merge") {
     variable_feats_in_all_objects <- intersect(variable_feats, rownames(seurat_obj[["SCT"]]$scale.data))
     if (length(variable_feats_in_all_objects) < length(variable_feats)) {
         sink("logfile.txt")
-        warning_message <- paste("
+        warning_message <- paste(
+            "
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool,
+        all data sets after SCTransform. PCA is only run with",
+            length(variable_feats_in_all_objects),
+            "variable genes. If you want to rerun the tool,
         you can try to select a higher number of returned variable genes in SCTransform to see if the number
         of deemed variable genes across all data sets increases. You can also run the tool again with less
-        than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
+        than",
+            length(variable_feats_in_all_objects),
+            "selected variable genes for the combined object."
+        )
         cat(warning_message)
 
         # Close the log file
@@ -138,7 +174,6 @@ if (method == "merge") {
 
     # print(unique(seurat_obj@meta.data$orig.ident))
     # print(levels(as.factor(seurat_obj@meta.data$orig.ident)))
-
 
     # PCA genes in txt file
     if (loadings == TRUE) {
@@ -181,7 +216,12 @@ if (method == "integration") {
         },
         warning = function(w) {
             print(w)
-            return(suppressWarnings(SCTransform(seurat_obj, variable.features.n = num.features, assay = "Spatial", verbose = FALSE)))
+            return(suppressWarnings(SCTransform(
+                seurat_obj,
+                variable.features.n = num.features,
+                assay = "Spatial",
+                verbose = FALSE
+            )))
         }
     )
 
@@ -206,7 +246,10 @@ if (method == "integration") {
 
     # Select variable features for combined object from combined object after SCTransform
     if (number_of_var_feats > num.features) {
-        stop(paste("CHIPSTER-NOTE: ", "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform."
+        ))
     } else {
         variable_feats <- VariableFeatures(seurat_obj)[1:number_of_var_feats]
     }
@@ -218,12 +261,18 @@ if (method == "integration") {
     variable_feats_in_all_objects <- intersect(variable_feats, rownames(seurat_obj[["SCT"]]$scale.data))
     if (length(variable_feats_in_all_objects) < length(variable_feats)) {
         sink("logfile.txt")
-        warning_message <- paste("
+        warning_message <- paste(
+            "
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets after SCTransform. PCA is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool,
+        all data sets after SCTransform. PCA is only run with",
+            length(variable_feats_in_all_objects),
+            "variable genes. If you want to rerun the tool,
         you can try to select a higher number of returned variable genes in SCTransform to see if the number
         of deemed variable genes across all data sets increases. You can also run the tool again with less
-        than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
+        than",
+            length(variable_feats_in_all_objects),
+            "selected variable genes for the combined object."
+        )
         cat(warning_message)
         # Close the log file
         sink()
@@ -254,8 +303,14 @@ if (method == "integration") {
 
     # Integration
     seurat_obj <- IntegrateLayers(
-        object = seurat_obj, method = "CCAIntegration", normalization.method = "SCT", new.reduction = new.reduction,
-        dims = 1:PCstocompute, assay = "SCT", features = variable_feats_in_all_objects, verbose = FALSE
+        object = seurat_obj,
+        method = "CCAIntegration",
+        normalization.method = "SCT",
+        new.reduction = new.reduction,
+        dims = 1:PCstocompute,
+        assay = "SCT",
+        features = variable_feats_in_all_objects,
+        verbose = FALSE
     )
 }
 

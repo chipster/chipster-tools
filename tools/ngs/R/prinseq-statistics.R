@@ -33,10 +33,18 @@ binary.stats <- c(file.path(chipster.tools.path, "prinseq", "prinseq-lite.pl"))
 
 # commands to generate graph file
 if (input.mode == "fq") {
-   command.graph <- paste("perl", binary.stats, " -fastq fastqfile -out_good null -out_bad null -graph_stats ld,gc,qd,ns,pt,ts,de -graph_data tmp_graph_file ")
+    command.graph <- paste(
+        "perl",
+        binary.stats,
+        " -fastq fastqfile -out_good null -out_bad null -graph_stats ld,gc,qd,ns,pt,ts,de -graph_data tmp_graph_file "
+    )
 }
 if (input.mode == "fa") {
-   command.graph <- paste("perl", binary.stats, " -fasta fastqfile -out_good null -out_bad null -graph_stats ld,gc,qd,ns,pt,ts,de -graph_data tmp_graph_file ")
+    command.graph <- paste(
+        "perl",
+        binary.stats,
+        " -fasta fastqfile -out_good null -out_bad null -graph_stats ld,gc,qd,ns,pt,ts,de -graph_data tmp_graph_file "
+    )
 }
 system(command.graph)
 

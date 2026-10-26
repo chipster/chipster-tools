@@ -103,7 +103,9 @@ if (datatype == "its") {
 # mothur classify.otu
 
 if (datatype == "other") {
-    classifyotu.options <- paste("classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
+    classifyotu.options <- paste(
+        "classify.otu(list=file.opti_mcc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt"
+    )
     classifyotu.options <- paste(classifyotu.options, ", label=", cutoff, ")", sep = "")
     documentCommand(classifyotu.options)
     write(classifyotu.options, "classifyotu.mth", append = FALSE)
@@ -112,7 +114,9 @@ if (datatype == "other") {
 }
 
 if (datatype == "its") {
-    classifyotu.options <- paste("classify.otu(list=file.agc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt")
+    classifyotu.options <- paste(
+        "classify.otu(list=file.agc.list, count=picked.count_table, taxonomy=sequences-taxonomy-assignment.txt"
+    )
     classifyotu.options <- paste(classifyotu.options, ", label=", cutoff, ")", sep = "")
     documentCommand(classifyotu.options)
     write(classifyotu.options, "classifyotu.mth", append = FALSE)

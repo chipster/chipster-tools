@@ -19,7 +19,6 @@
 # PARAMETER OPTIONAL description: "Display 'description' column" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT Y (Display 'description' column)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 

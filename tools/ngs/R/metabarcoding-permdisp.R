@@ -24,9 +24,13 @@ beta1 <- betadisper(ps_dist, ps_df[, pheno1])
 set.seed(1)
 permutest_beta1 <- permutest(beta1)
 
-if (pheno2 == "EMPTY" &&
-    pheno3 != "EMPTY") {
-    stop("3rd phenodata variable specified without specifying 2nd; if running two analyses, specify phenodata variables 1 and 2.")
+if (
+    pheno2 == "EMPTY" &&
+        pheno3 != "EMPTY"
+) {
+    stop(
+        "3rd phenodata variable specified without specifying 2nd; if running two analyses, specify phenodata variables 1 and 2."
+    )
 }
 
 if (pheno2 != "EMPTY") {
@@ -43,8 +47,10 @@ if (pheno3 != "EMPTY") {
 }
 
 # Print results table
-if (pheno2 == "EMPTY" &&
-    pheno3 == "EMPTY") {
+if (
+    pheno2 == "EMPTY" &&
+        pheno3 == "EMPTY"
+) {
     sink("permdisp.txt")
     cat("\n\n\n")
     cat("### PERMDISP summary ###\n")
@@ -53,8 +59,10 @@ if (pheno2 == "EMPTY" &&
     cat("\n\n\n")
     sink()
 }
-if (pheno2 != "EMPTY" &&
-    pheno3 == "EMPTY") {
+if (
+    pheno2 != "EMPTY" &&
+        pheno3 == "EMPTY"
+) {
     sink("permdisp.txt")
     cat("\n\n\n")
     cat("### PERMDISP summary ###\n")
@@ -69,8 +77,10 @@ if (pheno2 != "EMPTY" &&
     cat("\n\n\n")
     sink()
 }
-if (pheno2 != "EMPTY" &&
-    pheno3 != "EMPTY") {
+if (
+    pheno2 != "EMPTY" &&
+        pheno3 != "EMPTY"
+) {
     sink("permdisp.txt")
     cat("\n\n\n")
     cat("### PERMDISP summary ###\n")
@@ -91,12 +101,16 @@ if (pheno2 != "EMPTY" &&
 }
 
 # Save the dispersion and test data as Rda
-if (pheno2 == "EMPTY" &&
-    pheno3 == "EMPTY") {
+if (
+    pheno2 == "EMPTY" &&
+        pheno3 == "EMPTY"
+) {
     save(
         list = c(
             "ps_df",
-            "pheno1", "beta1", "permutest_beta1"
+            "pheno1",
+            "beta1",
+            "permutest_beta1"
         ),
         file = "ps_disp.Rda"
     )
@@ -105,8 +119,12 @@ if (pheno2 != "EMPTY") {
     save(
         list = c(
             "ps_df",
-            "pheno1", "beta1", "permutest_beta1",
-            "pheno2", "beta2", "permutest_beta2"
+            "pheno1",
+            "beta1",
+            "permutest_beta1",
+            "pheno2",
+            "beta2",
+            "permutest_beta2"
         ),
         file = "ps_disp.Rda"
     )
@@ -115,9 +133,15 @@ if (pheno3 != "EMPTY") {
     save(
         list = c(
             "ps_df",
-            "pheno1", "beta1", "permutest_beta1",
-            "pheno2", "beta2", "permutest_beta2",
-            "pheno3", "beta3", "permutest_beta3"
+            "pheno1",
+            "beta1",
+            "permutest_beta1",
+            "pheno2",
+            "beta2",
+            "permutest_beta2",
+            "pheno3",
+            "beta3",
+            "permutest_beta3"
         ),
         file = "ps_disp.Rda"
     )

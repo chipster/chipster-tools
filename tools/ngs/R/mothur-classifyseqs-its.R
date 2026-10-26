@@ -24,7 +24,6 @@
 # OUTPUT OPTIONAL picked.count_table
 # OUTPUT OPTIONAL picked-summary.tsv
 
-
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
@@ -38,27 +37,38 @@ version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
 if (reference == "own") {
-  if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")) {
-    stop("CHIPSTER-NOTE: Provide your own reference and taxonomy files or select one of the provided ones.")
-  }
-  reference.path <- "own_reference.fasta"
-  taxonomy.path <- "own_reference.tax"
+    if (fileNotOk("own_reference.fasta") || fileNotOk("own_reference.tax")) {
+        stop("CHIPSTER-NOTE: Provide your own reference and taxonomy files or select one of the provided ones.")
+    }
+    reference.path <- "own_reference.fasta"
+    taxonomy.path <- "own_reference.tax"
 } else {
-  # Check data path when new tools-bin ready
-  data.path <- c(file.path(chipster.tools.path, "mothur-unite-reference"))
-  reference.file <- paste(reference, ".fasta", sep = "")
-  taxonomy.file <- paste(reference, ".tax", sep = "")
-  reference.path <- c(file.path(data.path, reference.file))
-  taxonomy.path <- c(file.path(data.path, taxonomy.file))
-  # copy to working dir because mothur generates more files to the same directory
-  system(paste("ln -s ", reference.path, reference.file))
-  system(paste("ln -s ", taxonomy.path, taxonomy.file))
-  reference.path <- reference.file
-  taxonomy.path <- taxonomy.file
+    # Check data path when new tools-bin ready
+    data.path <- c(file.path(chipster.tools.path, "mothur-unite-reference"))
+    reference.file <- paste(reference, ".fasta", sep = "")
+    taxonomy.file <- paste(reference, ".tax", sep = "")
+    reference.path <- c(file.path(data.path, reference.file))
+    taxonomy.path <- c(file.path(data.path, taxonomy.file))
+    # copy to working dir because mothur generates more files to the same directory
+    system(paste("ln -s ", reference.path, reference.file))
+    system(paste("ln -s ", taxonomy.path, taxonomy.file))
+    reference.path <- reference.file
+    taxonomy.path <- taxonomy.file
 }
 
 # batch file
-classifyseqs.options <- paste("classify.seqs(fasta=a.fasta, count=a.count_table, iters=", iters, ", reference=", reference.path, ", taxonomy=", taxonomy.path, ", processors=", chipster.threads.max, ")", sep = "")
+classifyseqs.options <- paste(
+    "classify.seqs(fasta=a.fasta, count=a.count_table, iters=",
+    iters,
+    ", reference=",
+    reference.path,
+    ", taxonomy=",
+    taxonomy.path,
+    ", processors=",
+    chipster.threads.max,
+    ")",
+    sep = ""
+)
 documentCommand(classifyseqs.options)
 write(classifyseqs.options, "batch.mth", append = FALSE)
 # command

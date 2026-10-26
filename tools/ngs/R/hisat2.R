@@ -51,32 +51,32 @@ hisat.parameters <- paste(hisat.parameters, "-U", reads.parsed)
 hisat.parameters <- paste(hisat.parameters, "-x", organism)
 # Quality score format
 if (quality.format == "phred64") {
-  hisat.parameters <- paste(hisat.parameters, "--phred64")
+    hisat.parameters <- paste(hisat.parameters, "--phred64")
 } else {
-  hisat.parameters <- paste(hisat.parameters, "--phred33")
+    hisat.parameters <- paste(hisat.parameters, "--phred33")
 }
 # Intron length, defaluts are 20 and 500 000
 hisat.parameters <- paste(hisat.parameters, "--min-intronlen", min.intron.length)
 hisat.parameters <- paste(hisat.parameters, "--max-intronlen", max.intron.length)
 # Specify strand-specific information: the default is unstranded
 if (rna.strandness == "F") {
-  hisat.parameters <- paste(hisat.parameters, "--rna-strandness F")
+    hisat.parameters <- paste(hisat.parameters, "--rna-strandness F")
 } else if (rna.strandness == "R") {
-  hisat.parameters <- paste(hisat.parameters, "--rna-strandness R")
+    hisat.parameters <- paste(hisat.parameters, "--rna-strandness R")
 }
 # Known splice sites
 if (file.exists("splicesites.txt")) {
-  hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
+    hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
 }
 # How many hits is a read allowed to have
 hisat.parameters <- paste(hisat.parameters, "-k", max.multihits)
 # Allow soft-clipping, by default soft-clipping is used
 if (no.softclip == "nosoft") {
-  hisat.parameters <- paste(hisat.parameters, "--no-softclip")
+    hisat.parameters <- paste(hisat.parameters, "--no-softclip")
 }
 # Is longer anchor lengths required
 if (dta == "yesdta") {
-  hisat.parameters <- paste(hisat.parameters, "--dta")
+    hisat.parameters <- paste(hisat.parameters, "--dta")
 }
 
 ## Set parameters that are not mutable via Chipster
@@ -91,7 +91,13 @@ hisat.parameters <- paste(hisat.parameters, "--no-unal")
 command <- paste(hisat.binary)
 
 # Add the parameters
-command <- paste(command, hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
+command <- paste(
+    command,
+    hisat.parameters,
+    "2> hisat.log |",
+    samtools.binary,
+    "sort -T srt -o hisat.sorted.bam -O bam -"
+)
 
 documentCommand(command)
 
@@ -102,14 +108,14 @@ runExternal(command, hisat2.index)
 
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam", minsize = 100)) {
-  # Rename result files
-  runExternal("mv hisat.sorted.bam hisat.bam")
-  # Change file names in BAM header to display names
-  displayNamesToBAM("hisat.bam")
-  # Index BAM (optional)
-  if (bai == "yes") {
-    system(paste(samtools.binary, "index hisat.bam > hisat.bam.bai"))
-  }
+    # Rename result files
+    runExternal("mv hisat.sorted.bam hisat.bam")
+    # Change file names in BAM header to display names
+    displayNamesToBAM("hisat.bam")
+    # Index BAM (optional)
+    if (bai == "yes") {
+        system(paste(samtools.binary, "index hisat.bam > hisat.bam.bai"))
+    }
 }
 
 # Substitute display names to log for clarity

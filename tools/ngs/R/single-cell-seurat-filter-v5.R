@@ -9,7 +9,6 @@
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
-
 library(Seurat)
 library(dplyr)
 library(Matrix)
@@ -20,7 +19,13 @@ options(Seurat.object.assay.version = "v5")
 load("seurat_obj.Robj")
 
 # Subset: remove potential empties, multiplets and broken cells based on parameters.
-seurat_obj <- subset(seurat_obj, subset = nFeature_RNA >= mingenes & nFeature_RNA <= genecountcutoff & percent.mt <= mitocutoff & percent.rb >= minribo)
+seurat_obj <- subset(
+    seurat_obj,
+    subset = nFeature_RNA >= mingenes &
+        nFeature_RNA <= genecountcutoff &
+        percent.mt <= mitocutoff &
+        percent.rb >= minribo
+)
 
 
 # Re-do the QC plots from the setup tool, for comparison:
@@ -32,17 +37,22 @@ pdf(file = "QCplots.pdf", , width = 13, height = 7)
 
 # Violinplot
 if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
 } else if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 } else if ((sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
 } else {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 }
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
+textplot(
+    paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 
 dev.off() # close the pdf
 

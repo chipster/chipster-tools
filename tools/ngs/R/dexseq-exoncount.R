@@ -24,7 +24,12 @@ if (paired == "yes") {
 }
 
 # If chromosome names in BAM have chr, we make a temporary copy of gtf with chr names
-annotation.gtf <- file.path(chipster.tools.path, "genomes", "dexseq", paste(organism, ".DEXSeq.gtf", sep = "", collapse = ""))
+annotation.gtf <- file.path(
+    chipster.tools.path,
+    "genomes",
+    "dexseq",
+    paste(organism, ".DEXSeq.gtf", sep = "", collapse = "")
+)
 
 if (chr == "chr1") {
     source(file.path(chipster.common.lib.path, "gtf-utils.R"))
@@ -39,7 +44,17 @@ if (chr == "1") {
 # counts reads per non-overlapping exonic regions
 dexseq.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_count.py")
 python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
-dexseq.command <- paste(python.binary, dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, gtf, bam, "exon-counts-out.tsv")
+dexseq.command <- paste(
+    python.binary,
+    dexseq.binary,
+    "-f bam -r name -s",
+    stranded,
+    "-p",
+    paired,
+    gtf,
+    bam,
+    "exon-counts-out.tsv"
+)
 system(dexseq.command)
 
 # separate result file
@@ -67,6 +82,5 @@ outputnames[1, ] <- c("exon-counts.tsv", paste(strip_name(inputnames$alignment.b
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
 
 # EOF

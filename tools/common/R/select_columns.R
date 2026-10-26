@@ -38,7 +38,6 @@ if (nchar(colnames) > 0) {
 
 # AWK command to create the datarows
 
-
 # replace tabs with spaces if other separators are used
 if (sep != "tab") {
     system('cat input | tr "\t" " " > input.tmp ')
@@ -99,7 +98,14 @@ command.full <- paste(command.full, "}' input >> converted.tsv1  2>&1")
 
 if (nchar(colnames) > 0) {
     if (ncols != nnames) {
-        stop(paste("CHIPSTER-NOTE:", "Number of column names (", nnames, ") does not match with the number of selected columns (", ncols, ")"))
+        stop(paste(
+            "CHIPSTER-NOTE:",
+            "Number of column names (",
+            nnames,
+            ") does not match with the number of selected columns (",
+            ncols,
+            ")"
+        ))
     }
 }
 system(command.full)

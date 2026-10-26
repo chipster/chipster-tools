@@ -44,8 +44,6 @@ emboss.parameters <- paste(emboss.parameters, '-start "', start, '"')
 emboss.parameters <- paste(emboss.parameters, '-stop "', stop, '"')
 
 
-
-
 command.full <- paste(emboss.binary, emboss.parameters, " >> plotorf.log 2>&1")
 echo.command <- paste('echo "', command.full, ' "> plotorf.log')
 system(echo.command)

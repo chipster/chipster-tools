@@ -21,7 +21,7 @@ documentVersion("Mothur", version)
 sffinfo.options <- ""
 sffinfo.options <- paste(sffinfo.options, "sffinfo(sff=reads.sff")
 if (trim == "no") {
-  sffinfo.options <- paste(sffinfo.options, ", trim=F", sep = ",")
+    sffinfo.options <- paste(sffinfo.options, ", trim=F", sep = ",")
 }
 sffinfo.options <- paste(sffinfo.options, ")", sep = "")
 

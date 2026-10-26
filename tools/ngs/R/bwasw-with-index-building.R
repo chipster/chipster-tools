@@ -45,7 +45,31 @@ if (bwa.genome == "wrong_tar_content") {
 safe_name(basename(bwa.genome))
 
 # algorithm parameters
-mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty, "-q", gap.opening, "-r", gap.extension, "-a", match.score, "-w", band.width, "-T", min.score, "-c", threshold.coeff, "-z", z.best, "-s", sa.interval, "-N", min.support)
+mode.parameters <- paste(
+    "bwasw",
+    "-t",
+    chipster.threads.max,
+    "-b",
+    mismatch.penalty,
+    "-q",
+    gap.opening,
+    "-r",
+    gap.extension,
+    "-a",
+    match.score,
+    "-w",
+    band.width,
+    "-T",
+    min.score,
+    "-c",
+    threshold.coeff,
+    "-z",
+    z.best,
+    "-s",
+    sa.interval,
+    "-N",
+    min.support
+)
 
 # command ending
 command.end <- paste(bwa.genome, "reads.txt 1> alignment.sai 2>> bwa.log'")

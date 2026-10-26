@@ -48,7 +48,11 @@ if (ad_factor != "EMPTY") {
 
 # Create a counts data object
 if (ad_factor == "EMPTY") {
-    counts_data <- DESeqDataSetFromMatrix(countData = dat2, colData = data.frame(condition = groups), design = ~condition)
+    counts_data <- DESeqDataSetFromMatrix(
+        countData = dat2,
+        colData = data.frame(condition = groups),
+        design = ~condition
+    )
 } else if (ad_factor != "EMPTY") {
     counts_data <- DESeqDataSetFromMatrix(countData = dat2, colData = design, design = ~ exp_factor + condition)
 }
@@ -83,7 +87,11 @@ if (length(unique(groups)) > 2) {
         for (j in levels(colData(test_results)$condition)[-(1:i)]) {
             pairwise_results <- as.data.frame(results(test_results, contrast = c("condition", i, j)))
             pairwise_results$padj <- p.adjust(pairwise_results$pval, method = p.value.adjustment.method)
-            if (is.null(results_table)) results_table <- pairwise_results else results_table <- cbind(results_table, pairwise_results)
+            if (is.null(results_table)) {
+                results_table <- pairwise_results
+            } else {
+                results_table <- cbind(results_table, pairwise_results)
+            }
             results_name <- c(results_name, paste(i, "_vs_", j, sep = ""))
         }
     }
@@ -114,7 +122,18 @@ if (length(unique(groups)) == 2) {
 if (dim(significant_table)[1] > 0) {
     ndat <- ncol(dat)
     nmax <- ncol(significant_table)
-    write.table(cbind(significant_table[, 1:ndat], round(significant_table[, (ndat + 1):(nmax - 2)], digits = 2), format(significant_table[, (nmax - 1):nmax], digits = 4, scientific = T)), file = "de-list-deseq2.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        cbind(
+            significant_table[, 1:ndat],
+            round(significant_table[, (ndat + 1):(nmax - 2)], digits = 2),
+            format(significant_table[, (nmax - 1):nmax], digits = 4, scientific = T)
+        ),
+        file = "de-list-deseq2.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }
 
 # Create a template output table for plotting. If having N genes and 3 comparisons, this conversion results in a data matrix that has Nx3 rows
@@ -124,7 +143,10 @@ for (i in grep("baseMean$", colnames(results_table))) {
     col_size <- grep("padj", colnames(results_table))[1] - grep("baseMean", colnames(results_table))[1]
     output_table <- rbind(output_table, cbind(dat, results_table[, (i:(i + col_size))]))
 }
-rownames(output_table) <- make.names(rep(rownames(results_table), length(grep("baseMean$", colnames(results_table)))), unique = T)
+rownames(output_table) <- make.names(
+    rep(rownames(results_table), length(grep("baseMean$", colnames(results_table)))),
+    unique = T
+)
 
 # If genomic coordinates are present, output a sorted BED file for region matching tools
 if ("chr" %in% colnames(dat)) {
@@ -154,18 +176,40 @@ dev.off()
 
 # Make histogram of p-values with overlaid significance cutoff and uniform distribution. When more than two groups, min.pvalue is taken over all comparisons for genes
 pdf(file = "p-value-plot-deseq2.pdf")
-hist(output_table$pval, breaks = 100, col = "blue", border = "slateblue", freq = FALSE, main = "P-value distribution", xlab = "p-value", ylab = "proportion (%)")
+hist(
+    output_table$pval,
+    breaks = 100,
+    col = "blue",
+    border = "slateblue",
+    freq = FALSE,
+    main = "P-value distribution",
+    xlab = "p-value",
+    ylab = "proportion (%)"
+)
 hist(output_table$padj, breaks = 100, col = "red", border = "slateblue", add = TRUE, freq = FALSE)
 abline(h = 1, lwd = 2, lty = 2, col = "black")
 abline(v = p.value.cutoff, lwd = 2, lty = 2, col = "green")
-legend(x = "topright", legend = c("p-values", "adjusted p-values", "uniform distribution", "significance cutoff"), col = c("blue", "red", "black", "green"), cex = 1, pch = 15)
+legend(
+    x = "topright",
+    legend = c("p-values", "adjusted p-values", "uniform distribution", "significance cutoff"),
+    col = c("blue", "red", "black", "green"),
+    cex = 1,
+    pch = 15
+)
 dev.off()
 
 # Define function for making MA-plot of significant findings
 plotDE <- function(res) {
-    plot(res$baseMean, res$log2FoldChange,
-        log = "x", pch = 20, cex = .25, col = ifelse(res$padj < p.value.cutoff, "red", "black"),
-        main = "MA plot", xlab = "mean counts", ylab = "log2(fold change)"
+    plot(
+        res$baseMean,
+        res$log2FoldChange,
+        log = "x",
+        pch = 20,
+        cex = .25,
+        col = ifelse(res$padj < p.value.cutoff, "red", "black"),
+        main = "MA plot",
+        xlab = "mean counts",
+        ylab = "log2(fold change)"
     )
 }
 

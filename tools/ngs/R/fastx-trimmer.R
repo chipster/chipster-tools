@@ -7,14 +7,11 @@
 # RUNTIME R-4.5.1-fastx
 # TOOLS_BIN ""
 
-
 # EK 17.6.2011
 # AMS 11.3.2014, gzip fastq outputs
 
-
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
-
 
 
 # Binary
@@ -26,48 +23,59 @@ documentVersion("fastx_trimmer", version)
 isTar <- grepl("POSIX tar", system("file input.file", intern = TRUE))
 
 if (isTar) {
-  # Input is a tar file
-  system("mkdir input_folder")
-  system("mkdir output_folder")
-  system("cd input_folder && tar xf ../input.file")
-  system("cd input_folder && gunzip -- *.gz")
-  filenames <- safe_name(list.files("input_folder"))
-  for (f in filenames) {
-    input_fastq <- paste("input_folder/", f, sep = "")
-    output_base <- strip_name(f)
-    output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
+    # Input is a tar file
+    system("mkdir input_folder")
+    system("mkdir output_folder")
+    system("cd input_folder && tar xf ../input.file")
+    system("cd input_folder && gunzip -- *.gz")
+    filenames <- safe_name(list.files("input_folder"))
+    for (f in filenames) {
+        input_fastq <- paste("input_folder/", f, sep = "")
+        output_base <- strip_name(f)
+        output_fastq <- paste("output_folder/", output_base, "_trimmed.fq", sep = "")
+
+        # Command
+        command <- paste(
+            binary,
+            "-f",
+            first,
+            "-l",
+            last,
+            "-Q 33",
+            "-i",
+            shQuote(input_fastq),
+            "-o",
+            shQuote(output_fastq)
+        )
+        # documentCommand(command)
+        system(command)
+    }
+    # gzip all output FASTQ files
+    system("gzip output_folder/*.fq")
+    # Make a tar package.
+    system("cd output_folder && tar cf ../trimmed.tar -- *")
+} else {
+    # Input is FASTQ file
+
+    # Check out if the file is compressed and if so unzip it
+    unzipIfGZipFile("input.file")
 
     # Command
-    command <- paste(binary, "-f", first, "-l", last, "-Q 33", "-i", shQuote(input_fastq), "-o", shQuote(output_fastq))
-    # documentCommand(command)
+    command <- paste(binary, "-f", first, "-l", last, "-Q 33 -i input.file -o trimmed.fq")
+    documentCommand(command)
+
+    # Run
     system(command)
-  }
-  # gzip all output FASTQ files
-  system("gzip output_folder/*.fq")
-  # Make a tar package.
-  system("cd output_folder && tar cf ../trimmed.tar -- *")
-} else {
-  # Input is FASTQ file
+    system("gzip *.fq")
 
-  # Check out if the file is compressed and if so unzip it
-  unzipIfGZipFile("input.file")
+    # Determine base name
+    inputnames <- read_input_definitions()
+    basename <- strip_name(inputnames$input.file)
 
-  # Command
-  command <- paste(binary, "-f", first, "-l", last, "-Q 33 -i input.file -o trimmed.fq")
-  documentCommand(command)
+    # Make a matrix of output names
+    outputnames <- matrix(NA, nrow = 1, ncol = 2)
+    outputnames[1, ] <- c("trimmed.fq.gz", paste(basename, "_trimmed.fq.gz", sep = ""))
 
-  # Run
-  system(command)
-  system("gzip *.fq")
-
-  # Determine base name
-  inputnames <- read_input_definitions()
-  basename <- strip_name(inputnames$input.file)
-
-  # Make a matrix of output names
-  outputnames <- matrix(NA, nrow = 1, ncol = 2)
-  outputnames[1, ] <- c("trimmed.fq.gz", paste(basename, "_trimmed.fq.gz", sep = ""))
-
-  # Write output definitions file
-  write_output_definitions(outputnames)
+    # Write output definitions file
+    write_output_definitions(outputnames)
 }

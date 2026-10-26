@@ -30,8 +30,23 @@ if (outformat == "auto") {
     # check if all files have same name extension
     for (i in 1:nrow(input.names)) {
         outformat2 <- file_ext(input.names[i, 2])
-        if (outformat2 == "aln" || outformat == "bai" || outformat == "bam" || outformat == "gifasta" || outformat == "gz" || outformat == "pdf" || outformat == "phylip" || outformat == "png" || outformat == "qual" || outformat == "svg") {
-            stop("CHIPSTER-NOTE:", outformat2, " Formatted files should not be concatenated with this tool. If you are sure you want to do the concatenation, please select explicit output file name extension.")
+        if (
+            outformat2 == "aln" ||
+                outformat == "bai" ||
+                outformat == "bam" ||
+                outformat == "gifasta" ||
+                outformat == "gz" ||
+                outformat == "pdf" ||
+                outformat == "phylip" ||
+                outformat == "png" ||
+                outformat == "qual" ||
+                outformat == "svg"
+        ) {
+            stop(
+                "CHIPSTER-NOTE:",
+                outformat2,
+                " Formatted files should not be concatenated with this tool. If you are sure you want to do the concatenation, please select explicit output file name extension."
+            )
         }
 
         if (outformat != outformat2) {
@@ -39,15 +54,25 @@ if (outformat == "auto") {
         }
     }
     if (fcheck != 0) {
-        stop("CHIPSTER-NOTE: Input files contain different file name extensions! If you are sure you want to do the concatenation, please select explicit output file name extension.")
+        stop(
+            "CHIPSTER-NOTE: Input files contain different file name extensions! If you are sure you want to do the concatenation, please select explicit output file name extension."
+        )
     }
 }
 
 
-
-
-if (outformat == "txt" || outformat == "html" || outformat == "tsv" || outformat == "csv" || outformat == "fasta" || outformat == "fastq" || outformat == "xml" || outformat == "bed" || outformat == "gff3" || outformat == "text") {
-} else {
+if (
+    outformat == "txt" ||
+        outformat == "html" ||
+        outformat == "tsv" ||
+        outformat == "csv" ||
+        outformat == "fasta" ||
+        outformat == "fastq" ||
+        outformat == "xml" ||
+        outformat == "bed" ||
+        outformat == "gff3" ||
+        outformat == "text"
+) {} else {
     outformat <- "txt"
 }
 

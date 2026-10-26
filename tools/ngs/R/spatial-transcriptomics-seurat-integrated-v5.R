@@ -29,7 +29,12 @@ load("seurat_obj_subset.Robj")
 allen_reference <- readRDS("sc_reference")
 
 # Normalise the scRNA-seq reference
-allen_reference <- SCTransform(allen_reference, ncells = num.cells, variable.features.n = num.features, verbose = FALSE) %>%
+allen_reference <- SCTransform(
+    allen_reference,
+    ncells = num.cells,
+    variable.features.n = num.features,
+    verbose = FALSE
+) %>%
     RunPCA(verbose = FALSE) %>%
     RunUMAP(dims = 1:dims.reduction)
 
@@ -44,8 +49,11 @@ DimPlot(allen_reference, group.by = "subclass", label = TRUE)
 anchors <- FindTransferAnchors(reference = allen_reference, query = seurat_obj, normalization.method = "SCT")
 
 predictions.assay <- TransferData(
-    anchorset = anchors, refdata = allen_reference$subclass, prediction.assay = TRUE,
-    weight.reduction = seurat_obj[["pca"]], dims = 1:dims.reduction
+    anchorset = anchors,
+    refdata = allen_reference$subclass,
+    prediction.assay = TRUE,
+    weight.reduction = seurat_obj[["pca"]],
+    dims = 1:dims.reduction
 )
 
 # Add the predictions to the seurat object as a new assay

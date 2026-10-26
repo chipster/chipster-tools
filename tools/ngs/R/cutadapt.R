@@ -26,8 +26,8 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # activate it, like shown in https://stackoverflow.com/questions/20337202/using-python-virtual-env-in-r/53585703#53585703
 python.venv <- "/opt/chipster/tools/cutadapt/venv"
 Sys.setenv(
-  PATH = paste(file.path(python.venv, "bin"), Sys.getenv("PATH"), sep = .Platform$path.sep),
-  VIRTUAL_ENV = python.venv
+    PATH = paste(file.path(python.venv, "bin"), Sys.getenv("PATH"), sep = .Platform$path.sep),
+    VIRTUAL_ENV = python.venv
 )
 
 # binary
@@ -37,7 +37,7 @@ version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Cutadapt", version)
 
 if (adapter3 == "" && adapter5 == "") {
-  stop(paste("CHIPSTER-NOTE: ", "You need to give at least one adapter sequence to be removed"))
+    stop(paste("CHIPSTER-NOTE: ", "You need to give at least one adapter sequence to be removed"))
 }
 
 # check out if the file is compressed and if so unzip it
@@ -49,11 +49,14 @@ file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar package contains folders
 if (any(grepl("/", file.list))) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 # Make input and output folders
@@ -77,54 +80,58 @@ sample.names <- sapply(strsplit(basename(filenames), "_"), `[`, 1)
 #########################
 # if paired end reads, put the forward and reverse files to separate folders
 if (paired == "paired") {
-  # check if the lenght of files in the input_folder is even, else error
-  number <- length(filenames) %% 2
-  if (number != 0) {
-    stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
-  }
-
-  # Use input_list if provided. Else use the sorted filenames from the tar package
-  if (fileOk("input_list.txt")) {
-    txt_filenames <- c() # name of the files in the txt file
-    sample.names <- c() # sample names
-    input <- read_list_file("input_list.txt") # read the file
-
-    # take out the filenames and sample name and put them to one vector, those are separeted with '\t'
-    for (row in input) {
-      sample <- strsplit(row, "\t", fixed = TRUE)
-      sample_name <- trimws(sample[[1]][1])
-      sample.names <- c(sample.names, sample_name) # sample names first row
-      txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
-      txt_filenames <- c(txt_filenames, trimws(sample[[1]][3])) # reverse read
+    # check if the lenght of files in the input_folder is even, else error
+    number <- length(filenames) %% 2
+    if (number != 0) {
+        stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
     }
-    # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
-    if (length(txt_filenames) != length(filenames)) {
-      print(txt_filenames)
-      print(filenames)
-      stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
-    } else {
-      safe_name(txt_filenames)
-      filenames <- paste0("input_folder/", txt_filenames) # now the input files in correct order
+
+    # Use input_list if provided. Else use the sorted filenames from the tar package
+    if (fileOk("input_list.txt")) {
+        txt_filenames <- c() # name of the files in the txt file
+        sample.names <- c() # sample names
+        input <- read_list_file("input_list.txt") # read the file
+
+        # take out the filenames and sample name and put them to one vector, those are separeted with '\t'
+        for (row in input) {
+            sample <- strsplit(row, "\t", fixed = TRUE)
+            sample_name <- trimws(sample[[1]][1])
+            sample.names <- c(sample.names, sample_name) # sample names first row
+            txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
+            txt_filenames <- c(txt_filenames, trimws(sample[[1]][3])) # reverse read
+        }
+        # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
+        if (length(txt_filenames) != length(filenames)) {
+            print(txt_filenames)
+            print(filenames)
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"
+            ))
+        } else {
+            safe_name(txt_filenames)
+            filenames <- paste0("input_folder/", txt_filenames) # now the input files in correct order
+        }
     }
-  }
 
-  # put filenames with full paths to separate folders
-  # forward files:
-  forward <- seq(1, length(filenames), by = 2)
-  fnFs <- filenames[forward]
+    # put filenames with full paths to separate folders
+    # forward files:
+    forward <- seq(1, length(filenames), by = 2)
+    fnFs <- filenames[forward]
 
-  # sample names unique
-  unique_samples <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
-  fnFs.cut <- file.path("output_folder", paste0(unique_samples, "_cut_F.fastq.gz"))
+    # sample names unique
+    unique_samples <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+    fnFs.cut <- file.path("output_folder", paste0(unique_samples, "_cut_F.fastq.gz"))
 
-  # reverse files:
-  reverse <- seq(2, length(filenames), by = 2)
-  fnRs <- filenames[reverse]
-  fnRs.cut <- file.path("output_folder", paste0(unique_samples, "_cut_R.fastq.gz"))
-} else { # single end reads
-  # fnFs <- filenames
-  cutreads <- file.path("output_folder", paste0(sample.names, "_cut.fastq.gz"))
-  # Make output files to output_folder for every input file
+    # reverse files:
+    reverse <- seq(2, length(filenames), by = 2)
+    fnRs <- filenames[reverse]
+    fnRs.cut <- file.path("output_folder", paste0(unique_samples, "_cut_R.fastq.gz"))
+} else {
+    # single end reads
+    # fnFs <- filenames
+    cutreads <- file.path("output_folder", paste0(sample.names, "_cut.fastq.gz"))
+    # Make output files to output_folder for every input file
 }
 ######################## lets run cutadapt
 
@@ -134,61 +141,98 @@ if (paired == "paired") {
 file.create("report.txt")
 
 if (adapter3 == "") {
-  R1.flags <- paste("-g", adapter5)
-  if (paired == "paired") { # for reverse reads make a reverse complement
-    R2.flags <- paste("-A", dada2:::rc(adapter5))
-  }
+    R1.flags <- paste("-g", adapter5)
+    if (paired == "paired") {
+        # for reverse reads make a reverse complement
+        R2.flags <- paste("-A", dada2:::rc(adapter5))
+    }
 } else if (adapter5 == "") {
-  R1.flags <- paste("-a", adapter3)
-  if (paired == "paired") { # for reverse reads make a reverse complement
-    R2.flags <- paste("-G", dada2:::rc(adapter3))
-  } # s
+    R1.flags <- paste("-a", adapter3)
+    if (paired == "paired") {
+        # for reverse reads make a reverse complement
+        R2.flags <- paste("-G", dada2:::rc(adapter3))
+    } # s
 } else {
-  R1.flags <- paste("-g", adapter5, "-a", adapter3) # dada2:::rc()
-  if (paired == "paired") { # for reverse reads make a reverse complement and other way around
-    # R2.flags <- paste("-G", dada2:::rc(adapter5), "-A", dada2:::rc(adapter3))
-    R2.flags <- paste("-G", dada2:::rc(adapter3), "-A", dada2:::rc(adapter5))
-  }
+    R1.flags <- paste("-g", adapter5, "-a", adapter3) # dada2:::rc()
+    if (paired == "paired") {
+        # for reverse reads make a reverse complement and other way around
+        # R2.flags <- paste("-G", dada2:::rc(adapter5), "-A", dada2:::rc(adapter3))
+        R2.flags <- paste("-G", dada2:::rc(adapter3), "-A", dada2:::rc(adapter5))
+    }
 }
 
 if (discarduntrimmed == "yes") {
-  dut <- ("--discard-untrimmed")
+    dut <- ("--discard-untrimmed")
 } else {
-  dut <- ""
+    dut <- ""
 }
 
 # sink(file="report.txt")
 # if paired use also R2.flags and 2 input files at once
 if (paired == "single") {
-  x <- 1
-  for (file in filenames) {
-    command <- paste(binary, dut, R1.flags, "--rc", "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", shQuote(cutreads[x]), shQuote(file), "> report2.txt")
-    x <- x + 1
-    system(command)
-    system("cat report2.txt >> report.txt")
-  }
-} else { # paired
-  x <- 1
-  for (file in fnFs) {
-    command <- paste(binary, dut, R1.flags, R2.flags, "-n", 2, "-j", as.integer(chipster.threads.max), "-O", overlap, "-o", shQuote(fnFs.cut[x]), "-p", shQuote(fnRs.cut[x]), shQuote(file), shQuote(fnRs[x]), "> report2.txt")
-    x <- x + 1
-    system(command)
-    # rows <- readLines("report2.txt")
-    # for (row in rows) {
-    # write(row, file = "report.txt", append=TRUE)
-    # }
-    # write("\n", file = "report.txt", append=TRUE)
-    system("cat report2.txt >> report.txt")
-  }
+    x <- 1
+    for (file in filenames) {
+        command <- paste(
+            binary,
+            dut,
+            R1.flags,
+            "--rc",
+            "-n",
+            2,
+            "-j",
+            as.integer(chipster.threads.max),
+            "-O",
+            overlap,
+            "-o",
+            shQuote(cutreads[x]),
+            shQuote(file),
+            "> report2.txt"
+        )
+        x <- x + 1
+        system(command)
+        system("cat report2.txt >> report.txt")
+    }
+} else {
+    # paired
+    x <- 1
+    for (file in fnFs) {
+        command <- paste(
+            binary,
+            dut,
+            R1.flags,
+            R2.flags,
+            "-n",
+            2,
+            "-j",
+            as.integer(chipster.threads.max),
+            "-O",
+            overlap,
+            "-o",
+            shQuote(fnFs.cut[x]),
+            "-p",
+            shQuote(fnRs.cut[x]),
+            shQuote(file),
+            shQuote(fnRs[x]),
+            "> report2.txt"
+        )
+        x <- x + 1
+        system(command)
+        # rows <- readLines("report2.txt")
+        # for (row in rows) {
+        # write(row, file = "report.txt", append=TRUE)
+        # }
+        # write("\n", file = "report.txt", append=TRUE)
+        system("cat report2.txt >> report.txt")
+    }
 
-  # make samples.fastqs.txt file to show how FASTQ files were assigned to samples, every second file forward if paired end reads
-  file.create("samples.fastqs.txt")
-  x <- 1
-  for (name in unique_samples) {
-    line <- paste(name, "\t", txt_filenames[x], "\t", txt_filenames[x + 1])
-    x <- x + 2
-    write(line, file = "samples.fastqs.txt", append = TRUE)
-  }
+    # make samples.fastqs.txt file to show how FASTQ files were assigned to samples, every second file forward if paired end reads
+    file.create("samples.fastqs.txt")
+    x <- 1
+    for (name in unique_samples) {
+        line <- paste(name, "\t", txt_filenames[x], "\t", txt_filenames[x + 1])
+        x <- x + 2
+        write(line, file = "samples.fastqs.txt", append = TRUE)
+    }
 }
 # sink()
 

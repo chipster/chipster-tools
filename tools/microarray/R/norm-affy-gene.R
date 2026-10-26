@@ -248,7 +248,14 @@ training <- c(rep("", ncol(dat2)))
 time <- c(rep("", ncol(dat2)))
 random <- c(rep("", ncol(dat2)))
 chiptype <- chiptype
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Writing out data
 a <- try(library(chiptype, character.only = T))
@@ -267,7 +274,14 @@ if (chiptype != "empty" & class(a) != "try-error") {
     genename <- gsub("\'|#|\"|\n|\t", "", genename, perl = T)
 
     # Writes the results into a file
-    write.table(data.frame(symbol, description = genename, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(
+        data.frame(symbol, description = genename, dat2),
+        file = "normalized.tsv",
+        col.names = T,
+        quote = F,
+        sep = "\t",
+        row.names = T
+    )
 }
 
 #
@@ -276,7 +290,13 @@ if (chiptype == "empty" | class(a) == "try-error") {
     gene_id <- gsub("_at", "", rownames(dat2))
     if (length(gene_id) > 0 && biomart == "yes") {
         biom <- useMart(usemart, dataset = dataset)
-        annotated_genes <- getBM(mart = biom, attributes = c(filt, "ensembl_gene_id", "external_gene_id", "description"), filters = filt, values = gene_id, uniqueRows = TRUE)
+        annotated_genes <- getBM(
+            mart = biom,
+            attributes = c(filt, "ensembl_gene_id", "external_gene_id", "description"),
+            filters = filt,
+            values = gene_id,
+            uniqueRows = TRUE
+        )
         annotated_genes <- annotated_genes[!duplicated(annotated_genes[, 1]), ]
 
         annotated_dataf <- data.frame(annotated_genes)
@@ -286,7 +306,14 @@ if (chiptype == "empty" | class(a) == "try-error") {
         symbol <- gsub("\'|#|\"|\n|\t", "", annotated_dataf[gene_id, "external_gene_id"], perl = T)
         genename <- gsub("\'|#|\"|\n|\t", "", annotated_dataf[gene_id, "description"], perl = T)
 
-        write.table(data.frame(symbol = symbol, description = genename, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+        write.table(
+            data.frame(symbol = symbol, description = genename, dat2),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
     } else {
         write.table(data.frame(dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
     }

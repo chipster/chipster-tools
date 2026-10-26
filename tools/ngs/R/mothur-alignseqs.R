@@ -56,74 +56,92 @@ system(paste("ln -s ", template.path, " template.fasta", sep = ""))
 # batch file 1 -pcr.seqs -only if user determined end or start
 
 if (!is.na(start) | !is.na(end)) {
-  pcrseqs.options <- ""
-  if (reference == "own") {
-    if (file.exists("reference.fasta")) {
-      pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=reference.fasta, processors=", chipster.threads.max, ", keepdots=F", sep = "")
+    pcrseqs.options <- ""
+    if (reference == "own") {
+        if (file.exists("reference.fasta")) {
+            pcrseqs.options <- paste(
+                pcrseqs.options,
+                "pcr.seqs(fasta=reference.fasta, processors=",
+                chipster.threads.max,
+                ", keepdots=F",
+                sep = ""
+            )
+        } else {
+            stop(
+                "CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!"
+            )
+        }
     } else {
-      stop("CHIPSTER-NOTE: If you choose to use your own reference, you need to give the fasta file for that as input!")
+        # if using silva reference on the server:
+        # pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=", template.path, sep="")
+        pcrseqs.options <- paste(
+            pcrseqs.options,
+            "pcr.seqs(fasta=template.fasta, processors=",
+            chipster.threads.max,
+            ", keepdots=F",
+            sep = ""
+        )
     }
-  } else {
-    # if using silva reference on the server:
-    # pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=", template.path, sep="")
-    pcrseqs.options <- paste(pcrseqs.options, "pcr.seqs(fasta=template.fasta, processors=", chipster.threads.max, ", keepdots=F", sep = "")
-  }
 
-  if (!is.na(start)) {
-    pcrseqs.options <- paste(pcrseqs.options, ", start=", start, sep = "")
-  }
-  if (!is.na(end)) {
-    pcrseqs.options <- paste(pcrseqs.options, ", end=", end, sep = "")
-  }
-  # 	if (keepdots=="yes"){
-  # 		pcrseqs.options <- paste(pcrseqs.options, ", keepdots=F", sep="")
-  # 	}
-  # 	if (keepdots=="no"){
-  # 		pcrseqs.options <- paste(pcrseqs.options, ", keepdots=T", sep="")
-  # 	}
-  pcrseqs.options <- paste(pcrseqs.options, ", processors=", chipster.threads.max, sep = "")
-  pcrseqs.options <- paste(pcrseqs.options, ")", sep = "")
+    if (!is.na(start)) {
+        pcrseqs.options <- paste(pcrseqs.options, ", start=", start, sep = "")
+    }
+    if (!is.na(end)) {
+        pcrseqs.options <- paste(pcrseqs.options, ", end=", end, sep = "")
+    }
+    # 	if (keepdots=="yes"){
+    # 		pcrseqs.options <- paste(pcrseqs.options, ", keepdots=F", sep="")
+    # 	}
+    # 	if (keepdots=="no"){
+    # 		pcrseqs.options <- paste(pcrseqs.options, ", keepdots=T", sep="")
+    # 	}
+    pcrseqs.options <- paste(pcrseqs.options, ", processors=", chipster.threads.max, sep = "")
+    pcrseqs.options <- paste(pcrseqs.options, ")", sep = "")
 
-  # Write batch file
-  documentCommand(pcrseqs.options)
-  write(pcrseqs.options, "pcrseq.mth", append = FALSE)
-  # command
-  command <- paste(binary, "pcrseq.mth", "> log.txt 2>&1")
-  # run
-  system(command)
+    # Write batch file
+    documentCommand(pcrseqs.options)
+    write(pcrseqs.options, "pcrseq.mth", append = FALSE)
+    # command
+    command <- paste(binary, "pcrseq.mth", "> log.txt 2>&1")
+    # run
+    system(command)
 }
 
 # rename the reference file as custom.reference.fasta
 if (file.exists("template.pcr.fasta")) {
-  system("mv template.pcr.fasta custom.reference.fasta")
+    system("mv template.pcr.fasta custom.reference.fasta")
 } else if (file.exists("reference.pcr.fasta")) {
-  system("mv reference.pcr.fasta custom.reference.fasta")
+    system("mv reference.pcr.fasta custom.reference.fasta")
 } else if (file.exists("template.fasta")) {
-  system("mv template.fasta custom.reference.fasta")
+    system("mv template.fasta custom.reference.fasta")
 }
-
 
 
 #  summary file from this step:
 if (file.exists("custom.reference.fasta")) {
-  # batch file 2
-  summaryseqs.options <- paste("summary.seqs(fasta=custom.reference.fasta")
-  summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
-  documentCommand(summaryseqs.options)
-  write(summaryseqs.options, "summary.mth", append = FALSE)
-  # command
-  command2 <- paste(binary, "summary.mth", "> log_raw.txt")
-  # run
-  system(command2)
-  # Post process output
-  system("grep -A 10 Start log_raw.txt > custom.reference.summary2.tsv")
-  # Remove one tab to get the column naming look nice:
-  system("sed 's/^		/	/' custom.reference.summary2.tsv > custom.reference.summary.tsv")
+    # batch file 2
+    summaryseqs.options <- paste("summary.seqs(fasta=custom.reference.fasta")
+    summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
+    documentCommand(summaryseqs.options)
+    write(summaryseqs.options, "summary.mth", append = FALSE)
+    # command
+    command2 <- paste(binary, "summary.mth", "> log_raw.txt")
+    # run
+    system(command2)
+    # Post process output
+    system("grep -A 10 Start log_raw.txt > custom.reference.summary2.tsv")
+    # Remove one tab to get the column naming look nice:
+    system("sed 's/^		/	/' custom.reference.summary2.tsv > custom.reference.summary.tsv")
 }
 
 
 # batch file 2 -align.seqs
-alignseqs.options <- paste("align.seqs(fasta=reads.fasta, processors=", chipster.threads.max, ", reference=custom.reference.fasta)", sep = "")
+alignseqs.options <- paste(
+    "align.seqs(fasta=reads.fasta, processors=",
+    chipster.threads.max,
+    ", reference=custom.reference.fasta)",
+    sep = ""
+)
 documentCommand(alignseqs.options)
 write(alignseqs.options, "batch.mth", append = FALSE)
 # write(paste("align.seqs(fasta=reads.fasta, template=", template.path, ")", sep=""), "batch.mth", append=F)
@@ -139,7 +157,7 @@ system("mv reads.align aligned.fasta")
 # batch file 3 -summary.seqs
 summaryseqs.options <- paste("summary.seqs(fasta=aligned.fasta")
 if (file.exists("a.count_table")) {
-  summaryseqs.options <- paste(summaryseqs.options, ", count=a.count_table")
+    summaryseqs.options <- paste(summaryseqs.options, ", count=a.count_table")
 }
 summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)

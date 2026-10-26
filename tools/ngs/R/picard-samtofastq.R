@@ -2,7 +2,6 @@
 # INPUT input.bam: "BAM file" TYPE GENERIC
 # OUTPUT OPTIONAL sam_to_fastq.fastq
 
-
 # OUTPUT OPTIONAL log.txt
 
 # 2016-10-31 ML

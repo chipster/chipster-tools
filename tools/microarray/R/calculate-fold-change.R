@@ -16,7 +16,6 @@
 # PARAMETER OPTIONAL scale: Scale TYPE [log2, linear] DEFAULT log2 (What scale to use for expressing the results. Log2 yields a symmetric distribution around zero with no change being equal to 0, up-regulation taking positive values and down-regulation negative values. Conversely, in linear scale
 # up-regulation is represented by values greater than 1 and down-regulation values being between 0 and 1.)
 
-
 geometric <- "yes"
 scale <- "log2"
 # Loads the normalized data and phenodata
@@ -74,7 +73,6 @@ if (geometric == "yes") {
     FC <- dat3[, 2] - dat3[, 1]
 } # else {
 # FC <- dat3[,2] / dat3 [,}
-
 
 # If arithmetic mean and log2 scale, then transform values back to log2 scale, arithmetic mean removed
 # if (geometric == "no" && scale == "log2") {

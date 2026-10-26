@@ -51,7 +51,6 @@ genes <- trimws(genes)
 
 # Match the gene names in the given list and seurat object. Get indexes and find the wanted genes from seurat object
 match_genes <- function(gene_list, seurat_names) {
-
     gene_list_upper <- toupper(gene_list)
     seurat_names_upper <- toupper(seurat_names)
 
@@ -73,17 +72,24 @@ print(genes)
 
 # Check if any genes were found
 if (length(genes) == 0) {
-  stop("CHIPSTER-NOTE: None of the given genes were found in the Seurat object")
+    stop("CHIPSTER-NOTE: None of the given genes were found in the Seurat object")
 }
 
 # Plots
 pdf(file = "gene_expression_plot.pdf", width = width, height = height)
 
-plot_chunks <- split(genes, ceiling(seq_along(genes)/4))
+plot_chunks <- split(genes, ceiling(seq_along(genes) / 4))
 
 # NCOL = 2 ensure only 2 columns so basically 2x2 grid of plots
 for (i in plot_chunks) {
-    p1 <- SpatialFeaturePlot(seurat_obj, features = i, keep.scale = color.scale, pt.size.factor = point.size, ncol = 2, alpha = c(min_transparency, max_transparency))
+    p1 <- SpatialFeaturePlot(
+        seurat_obj,
+        features = i,
+        keep.scale = color.scale,
+        pt.size.factor = point.size,
+        ncol = 2,
+        alpha = c(min_transparency, max_transparency)
+    )
     print(p1)
 }
 

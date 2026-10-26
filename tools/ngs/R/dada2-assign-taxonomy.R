@@ -41,7 +41,13 @@ if (tryrc == "yes") {
 
 set.seed(100) # Initialize random number generator for reproducibility
 # run command assignTaxonomy verbose not important
-taxa <- assignTaxonomy(seqtab.nochim, path1, minBoot = boot, multithread = as.integer(chipster.threads.max), tryRC = tryrc)
+taxa <- assignTaxonomy(
+    seqtab.nochim,
+    path1,
+    minBoot = boot,
+    multithread = as.integer(chipster.threads.max),
+    tryRC = tryrc
+)
 
 
 # check if parameter species yes, otherwise skip species level assignment. Use reference file if selected otherwise Silva v.138.2
@@ -50,8 +56,11 @@ if (species == "yes") {
         path2 <- "species_reference.fasta"
     } else {
         if (file.exists("taxa_reference.fasta")) {
-            stop(paste("CHIPSTER-NOTE: ", "You didn't give a reference file for exact Species level assignment, but you wanted to use your own
-            reference file for assignTaxonomy and selected the addSpecies parameter yes. Run the tool again by selecting addSpecies no."))
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "You didn't give a reference file for exact Species level assignment, but you wanted to use your own
+            reference file for assignTaxonomy and selected the addSpecies parameter yes. Run the tool again by selecting addSpecies no."
+            ))
         } else {
             path2 <- c(file.path(chipster.tools.path, "dada2-silva-reference", "silva_v138.2_assignSpecies.fa"))
         }
@@ -66,7 +75,6 @@ save(taxa, file = "taxonomy-assignment-matrix.Rda")
 # rename seqtab.nochim colnames to asv1, asv2 instead of long sequences...
 colnames(seqtab.nochim) <- paste0("ASV", seq(length(colnames(seqtab.nochim))))
 # rename taxa rownames to asv1, asv2...
-
 
 rownames(taxa) <- paste0("ASV", seq(length(rownames(taxa))))
 if (combine_tables == "yes") {
