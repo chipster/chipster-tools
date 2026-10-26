@@ -112,6 +112,11 @@ command.start <- paste("bash -c '", bowtie.binary)
 rdg.value <- paste(rdg.open, rdg.ext, sep = ",")
 rfg.value <- paste(rfg.open, rfg.ext, sep = ",")
 
+# The "Fast local" option id has only one dash, kept so that old sessions and workflows still work
+if (strategy == "-fast-local") {
+    strategy <- "--fast-local"
+}
+
 parameters <- paste(
     strategy,
     "--mp",
