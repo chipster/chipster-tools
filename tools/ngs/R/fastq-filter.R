@@ -101,7 +101,7 @@ summ.data <- data.frame(
     "Sequences_discarded" = vector_discard,
     "Percentage_of_discarded" = vector_proportion
 )
-write.table(summ.data, file = "summary.tsv", row.names = FALSE)
+write.table(summ.data, file = "summary.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 # make a output tar package named contigs.tar and qzip all the files
 system("gzip output_folder/*.fq")
 system("cd output_folder && tar cf ../filtered_contigs.tar -- *")
