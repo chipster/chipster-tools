@@ -23,6 +23,7 @@ from subprocess import Popen, PIPE
 import xml.etree.ElementTree as ET
 # cannot use tool_utils in python2
 
+
 def main():
     edirect_path = "/opt/chipster/tools/edirect/"
     esearch_path = edirect_path + "esearch"

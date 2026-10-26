@@ -61,17 +61,15 @@ def main():
         # .ebwt or .ebwtl
         if ".ebwt" in file:
             index_files.append(file)
-            
+
     run_process(["tar", "-cf", "output.tar"] + index_files)
 
-    tool_utils.write_output_definitions({
-        "output.tar": fasta_basename + ".tar"
-    })
-    
+    tool_utils.write_output_definitions({"output.tar": fasta_basename + ".tar"})
+
     # save version information
     version = subprocess.check_output([bowtie_build, "--version"])
     version_number = str(version).split("\\n")[0].split(" ")[2]
-    
+
     version_utils.document_version("Bowtie", version_number)
 
 
