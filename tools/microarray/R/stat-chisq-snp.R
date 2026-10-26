@@ -42,7 +42,9 @@ if (test.for == "Hardy-Weinberg") {
             fb <- (BB * 2 + AB) / (2 * s)
             o <- c(AA, AB, BB)
             e <- c(fa^2 * s, 2 * fa * fb * s, fb^2 * s)
-            p[i] <- chisq.test(x = o, y = e, simulate.p.value = T)$p.value
+            # Goodness-of-fit chi-square, df = 3 genotypes - 1 - 1 estimated allele frequency
+            chisq <- sum((o - e)^2 / e)
+            p[i] <- pchisq(chisq, df = 1, lower.tail = F)
         }
     }
     # Saving the p-values
