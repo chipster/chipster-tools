@@ -73,18 +73,18 @@ if (pe) {
 bowtie.command <- paste(bowtie.command, "-S alignment.sam 2>> bowtie2.log'")
 system(bowtie.command)
 
-if (organism != "other") {
+if (fileOk("user_bed")) {
+    # Own BED used with one of the provided reference genomes
+    if (organism != "other") {
+        # Remove chr prefix from chromosome names if present to match internal genomes
+        system(paste("sed -i \"s/^chr//I\" user_bed"))
+    }
+    bed <- paste("user_bed")
+} else {
     # bed file is named after the gtf file and includes the Ensembl release: Mus_musculus.GRCm38.102
     # Bowtie2 index is named after the fasta file without the Ensembl release: Mus_musculus.GRCm38
     # search the bed file with the Bowtie2 index name
     bed <- Sys.glob(file.path(chipster.tools.path, "genomes", "bed", paste(organism, "*.bed", sep = "", collapse = "")))
-} else {
-    # Only BED provided
-    if (fileNotOk("user_genome")) {
-        # Remove chr prefix from chromosome names if present to match internal genomes
-        system(paste("sed -i /\"^chr\"//I user_bed"))
-    }
-    bed <- paste("user_bed")
 }
 # Infer experiment
 # tools-bin RSeQC
