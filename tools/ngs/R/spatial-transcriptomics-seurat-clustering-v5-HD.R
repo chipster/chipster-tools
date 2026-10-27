@@ -222,17 +222,27 @@ for (i in seq_along(assay_names)) {
         )
         # Copy projected labels into the standard per-assay cluster column so
         # the rest of the loop (SpatialDimPlot) works the same as the non-sketch path.
-        seurat_obj[[cluster_bin]] <- seurat_obj[["seurat_cluster.projected"]]
+        seurat_obj[[cluster_bin]] <- seurat_obj$seurat_cluster.projected
  
         # Switch to the full assay for plotting
         DefaultAssay(seurat_obj) <- assay_bin
  
         # Visualisation: UMAP of all bins (projected) + spatial map
-        dim.plot <- DimPlot(seurat_obj, reduction = "full.umap.sketch", group.by = cluster_bin,
+
+        umap_bin <- "full.umap.sketch"
+
+        dim.plot <- DimPlot(seurat_obj, reduction = umap_bin, group.by = cluster_bin,
                             label = TRUE, repel = TRUE, alpha = 0.1) +
             NoLegend() +
-            ggtitle(paste0(just.bin, " (sketch-based, n=", sketch.ncells, ")"))
- 
+            ggtitle(paste0("Spatial.008um", " Projected UMAP"))
+
+        sketch_plot <- DimPlot(seurat_obj, reduction = "umap.sketch", group.by = cluster_bin,
+                            label = TRUE, repel = TRUE, alpha = 0.1) +
+            NoLegend() +
+            ggtitle(paste0(just.bin, " (UMAP of sketch cells, n=", sketch.ncells, ")"))
+        
+        plots[[paste0(just.bin, "_0_sketch_only")]] <- sketch_plot
+
     } else {
         print("Finding neighbors")
         # ---- Standard clustering -------------------------------------------
@@ -255,10 +265,23 @@ for (i in seq_along(assay_names)) {
                                    repel = TRUE, label.size = 4) +
         theme(legend.position = "right")
 
-    Idents(seurat_obj) <- cluster_bin
+    Idents(seurat_obj) <- seurat_obj@meta.data[[cluster_bin]]
+
+    # Take the cells of the seurat object
+    cells <- CellsByIdentities(seurat_obj)
+    
+    highlight.plot <- SpatialDimPlot(seurat_obj, cells.highlight = cells[setdiff(names(cells), "NA")], 
+                    cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T) + NoLegend()
+
+    highlight.plot <- highlight.plot + plot_annotation(title = paste(just.bin, "Each cluster highlighted"))
+
+
+
+    # Plotting begins
 
     plots[[paste0(just.bin, "_p0")]] <- dim.plot
     plots[[paste0(just.bin, "_p1")]] <- cluster.plot
+    plots[[paste0(just.bin, "_p2")]] <- highlight.plot
 }
   
   # Loop over the plots and save each as a separate PNG
@@ -268,7 +291,7 @@ for (nm in names(plots)) {
     print(plots[[nm]])
     dev.off()
 }
-    
+
 png_files <- list.files(
   output_dir,
   pattern = "\\.png$",
