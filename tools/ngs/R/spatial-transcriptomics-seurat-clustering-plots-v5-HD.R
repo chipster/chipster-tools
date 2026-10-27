@@ -31,12 +31,18 @@ documentVersion("Seurat", package.version("Seurat"))
 # }
 #print(Assays(seurat_obj))
 
-#assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
 #print(Reductions(seurat_obj))
 
 #print(colnames(seurat_obj@meta.data))
 
 # Add png to pdf method here at some point, currently pdf size can be over 0.5Gb...
+
+assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um" "sketch"
+
+
+# Add also a banksy param that decides which plots are drawn -> Makes this tool more efficient
+
+# if (banksy) {}
 
 pdf(file = "clustering_plots.pdf", width = 9, height = 12)
 
@@ -48,43 +54,23 @@ for (i in 1:length(assay_names)) {
     nFeature_bin <- paste("nFeature_", assay_names[i], sep = "")
     just.bin <- sub("Spatial\\.", "", assay_names[i])
     umap_bin <- paste0("umap.", just.bin)
+    cluster_bin <- paste0("seurat_cluster.", just.bin)
+    
 
-    if (!(umap_bin %in% Reductions(seurat_obj))) {
+    if (DefaultAssay(seurat_obj) == "sketch") {
         next
     }
 
-    pca_bin <- paste("pca.", just.bin, sep = "")
-
-    if (just.bin == "sketch") {
-        DefaultAssay(seurat_obj) <- "Spatial.008um"
+    if (DefaultAssay(seurat_obj) == "Spatial.008um") {
+        umap_bin <- "full.umap.sketch"
         cluster_bin <- "seurat_cluster.projected"
-        full_umap_bin <- "full.umap.sketch"
-        umap_bin <- "umap.sketch"
-        pca_bin <- "full.pca.sketch"
-    } else {
-        cluster_bin <- paste("seurat_cluster.", just.bin, sep = "") #"seurat_cluster.008um"
     }
 
-    # Visualization
-
-    # print(DimPlot(seurat_obj, reduction = "umap", group.by = "ident"))
-    # print(DimPlot(seurat_obj, reduction = "umap", group.by = "orig.ident"))
-    # print(SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3, ncol = 2))
-
-    print("plotting now")
+    
 
     dim.plot <- DimPlot(
         seurat_obj,
         reduction = umap_bin,
-        group.by = "seurat_cluster.sketched",
-        label = TRUE,
-        repel = T,
-        alpha = 0.1
-    ) +
-        NoLegend()
-    dim.plot2 <- DimPlot(
-        seurat_obj,
-        reduction = full_umap_bin,
         group.by = cluster_bin,
         label = TRUE,
         repel = T,
@@ -102,26 +88,50 @@ for (i in 1:length(assay_names)) {
     ) +
         theme(legend.position = "right")
     print(dim.plot)
-    print(dim.plot2)
     print(cluster.plot)
 
     # Apparently Seurat knows if an Ident string character is found in the columns so no need to use sobj@meta.data[[cluster_bin]]
     Idents(seurat_obj) <- cluster_bin
     cells <- CellsByIdentities(seurat_obj)
     cells <- cells[setdiff(names(cells), "NA")]
+
     print(
         SpatialDimPlot(
             seurat_obj,
             cells.highlight = cells,
-            cols.highlight = c("#FFFF00", "grey"),
+            cols.highlight = c("#FFFF00", "#aaaaaa"),
             facet.highlight = TRUE,
             combine = TRUE,
             ncol = 6
         ) +
             NoLegend()
     )
-}
+    
+    if ("BANKSY" %in% Reductions(seurat_obj) &&
+        "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
 
+        bk_cells <- rownames(seurat_obj@meta.data)[!is.na(seurat_obj$banksy_cluster)]
+        banksy_assay <- if (any(grepl("s_008um", bk_cells))) "Spatial.008um" else "Spatial.016um"
+
+        DefaultAssay(seurat_obj) <- banksy_assay
+        img_name <- Images(seurat_obj, assay = banksy_assay)
+        Idents(seurat_obj) <- "banksy_cluster"
+
+        p0 <- SpatialDimPlot(seurat_obj, images = img_name, group.by = "banksy_cluster",
+                            label = TRUE, repel = TRUE, label.size = 4)
+
+        banksy_cells <- CellsByIdentities(seurat_obj, cells = bk_cells)
+        banksy_cells <- banksy_cells[setdiff(names(banksy_cells), "NA")]
+
+        p1 <- SpatialDimPlot(seurat_obj, images = img_name,
+                            cells.highlight = banksy_cells,
+                            cols.highlight = c("#FFFF00", "grey50"),
+                            facet.highlight = TRUE, combine = TRUE)
+        print(p0)
+        print(p1)
+    }
+  
+}
 dev.off()
 
 # EOF
