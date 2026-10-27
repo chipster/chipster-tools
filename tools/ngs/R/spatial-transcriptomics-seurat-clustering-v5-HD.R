@@ -239,7 +239,7 @@ for (i in seq_along(assay_names)) {
         # Copy projected labels into the standard per-assay cluster column so
         # the rest of the loop (SpatialDimPlot) works the same as the non-sketch path.
         seurat_obj[[cluster_bin]] <- seurat_obj$seurat_cluster.projected
- 
+
         # Switch to the full assay for plotting
         DefaultAssay(seurat_obj) <- assay_bin
 
@@ -247,18 +247,29 @@ for (i in seq_along(assay_names)) {
 
         umap_bin <- "full.umap.sketch"
 
-        dim.plot <- DimPlot(seurat_obj, reduction = umap_bin, group.by = cluster_bin,
-                            label = TRUE, repel = TRUE, alpha = 0.3) +
+        dim.plot <- DimPlot(
+            seurat_obj,
+            reduction = umap_bin,
+            group.by = cluster_bin,
+            label = TRUE,
+            repel = TRUE,
+            alpha = 0.3
+        ) +
             NoLegend() +
             ggtitle(paste0("Spatial.008um", "Projected clustering (full dataset)"))
 
-        sketch_plot <- DimPlot(seurat_obj, reduction = "umap.sketch", group.by = cluster_bin,
-                            label = TRUE, repel = TRUE, alpha = 0.3) +
+        sketch_plot <- DimPlot(
+            seurat_obj,
+            reduction = "umap.sketch",
+            group.by = cluster_bin,
+            label = TRUE,
+            repel = TRUE,
+            alpha = 0.3
+        ) +
             NoLegend() +
             ggtitle(paste0(just.bin, " (UMAP of sketch cells, n=", sketch.ncells, ")"))
-        
-        plots[[paste0(just.bin, "_0_sketch_only")]] <- sketch_plot
 
+        plots[[paste0(just.bin, "_0_sketch_only")]] <- sketch_plot
     } else {
         print("Finding neighbors")
         # ---- Standard clustering -------------------------------------------
@@ -295,13 +306,17 @@ for (i in seq_along(assay_names)) {
 
     # Take the cells of the seurat object
     cells <- CellsByIdentities(seurat_obj)
-    
-    highlight.plot <- SpatialDimPlot(seurat_obj, cells.highlight = cells[setdiff(names(cells), "NA")], 
-                    cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T) + NoLegend()
+
+    highlight.plot <- SpatialDimPlot(
+        seurat_obj,
+        cells.highlight = cells[setdiff(names(cells), "NA")],
+        cols.highlight = c("#FFFF00", "grey50"),
+        facet.highlight = T,
+        combine = T
+    ) +
+        NoLegend()
 
     highlight.plot <- highlight.plot + plot_annotation(title = paste(just.bin, "Each cluster highlighted"))
-
-
 
     # Plotting begins
 
