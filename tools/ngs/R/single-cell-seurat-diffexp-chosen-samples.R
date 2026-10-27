@@ -32,7 +32,7 @@ library(Seurat)
 load("combined_seurat_obj.Robj")
 
 if (exists("seurat_obj")) {
-  data.combined <- seurat_obj
+    data.combined <- seurat_obj
 }
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
@@ -47,14 +47,22 @@ samples1.ok <- unlist(strsplit(samples1, ", "))
 samples2.ok <- unlist(strsplit(samples2, ", "))
 
 # Check that the listed sample names are indeed in the data!
- if(sum(is.na(match(samples1.ok, data.combined$stim))) > 0) {
-   which_one_missing <- samples1.ok[is.na(match(samples1.ok, data.combined$stim))]
-   stop(print(paste("CHIPSTER-NOTE: Check the sample names given as parameter, sample name: '", which_one_missing, "' not found in the Seurat object.")))
- }
+if (sum(is.na(match(samples1.ok, data.combined$stim))) > 0) {
+    which_one_missing <- samples1.ok[is.na(match(samples1.ok, data.combined$stim))]
+    stop(print(paste(
+        "CHIPSTER-NOTE: Check the sample names given as parameter, sample name: '",
+        which_one_missing,
+        "' not found in the Seurat object."
+    )))
+}
 
-if(sum(is.na(match(samples2.ok, data.combined$stim))) > 0) {
-  which_one_missing <- samples2.ok[is.na(match(samples2.ok, data.combined$stim))]
-   stop(print(paste("CHIPSTER-NOTE: Check the sample names given as parameter, sample name: '", which_one_missing, "' not found in the Seurat object.")))
+if (sum(is.na(match(samples2.ok, data.combined$stim))) > 0) {
+    which_one_missing <- samples2.ok[is.na(match(samples2.ok, data.combined$stim))]
+    stop(print(paste(
+        "CHIPSTER-NOTE: Check the sample names given as parameter, sample name: '",
+        which_one_missing,
+        "' not found in the Seurat object."
+    )))
 }
 
 
@@ -64,21 +72,41 @@ samples2.cluster <- paste(cluster, "_", samples2.ok, sep = "")
 
 # When SCTransform was used to normalise the data, do a prep step:
 if (normalisation.method == "SCT") {
-  data.combined <- PrepSCTFindMarkers(data.combined)
-  # Note: assay = "SCT" and recorrect_umi = FALSE
-  cluster_response <- FindMarkers(data.combined, assay = "SCT", ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) 
+    data.combined <- PrepSCTFindMarkers(data.combined)
+    # Note: assay = "SCT" and recorrect_umi = FALSE
+    cluster_response <- FindMarkers(
+        data.combined,
+        assay = "SCT",
+        ident.1 = samples1.cluster,
+        ident.2 = samples2.cluster,
+        verbose = FALSE,
+        logfc.threshold = logFC.de,
+        min.pct = minpct,
+        return.thresh = pval.cutoff.de,
+        recorrect_umi = FALSE,
+        only.pos = only.positive
+    )
 } else {
-  cluster_response <- FindMarkers(data.combined, ident.1 = samples1.cluster, ident.2 = samples2.cluster, verbose = FALSE, logfc.threshold = logFC.de, min.pct = minpct, return.thresh = pval.cutoff.de, only.pos = only.positive)
+    cluster_response <- FindMarkers(
+        data.combined,
+        ident.1 = samples1.cluster,
+        ident.2 = samples2.cluster,
+        verbose = FALSE,
+        logfc.threshold = logFC.de,
+        min.pct = minpct,
+        return.thresh = pval.cutoff.de,
+        only.pos = only.positive
+    )
 }
 
- # Filter based on adj-p-val (no return.thresh parameter):
-  cluster_response_filtered <- cluster_response[cluster_response$p_val_adj<pval.cutoff.de, ]
+# Filter based on adj-p-val (no return.thresh parameter):
+cluster_response_filtered <- cluster_response[cluster_response$p_val_adj < pval.cutoff.de, ]
 
 # Add average expression to the table:
 if (normalisation.method == "SCT") {
-  aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
 } else {
-  aver_expr <- AverageExpression(object = data.combined)
+    aver_expr <- AverageExpression(object = data.combined)
 }
 
 aver_expr_in_clusters <- aver_expr[[1]]

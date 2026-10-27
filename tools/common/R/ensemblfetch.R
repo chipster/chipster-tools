@@ -38,7 +38,14 @@ if (names == "yes" || names == "nonbac" || nchar(species) < 3) {
         system(command.to_run)
     }
 } else {
-    command.to_run <- paste(ensemblfetch.binary, " -type ", type, " -out ensemblfetch.fasta ", species, " > ensemblfetch.log")
+    command.to_run <- paste(
+        ensemblfetch.binary,
+        " -type ",
+        type,
+        " -out ensemblfetch.fasta ",
+        species,
+        " > ensemblfetch.log"
+    )
     system(command.to_run)
     if (type == "gtf") {
         system("mv ensemblfetch.fasta ensemblfetch.gtf")
@@ -58,7 +65,6 @@ if (names == "yes" || names == "nonbac" || nchar(species) < 3) {
         write_output_definitions(outputnames)
     }
 }
-
 
 
 system("ls -l >> ensemblfetch.log")

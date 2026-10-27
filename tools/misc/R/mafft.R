@@ -8,7 +8,6 @@
 # PARAMETER OPTIONAL outformat: "Output format" TYPE [ aln: "Clustal", fasta: "Fasta" ] DEFAULT aln (Multiple sequence alingment file format)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
 
-
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 

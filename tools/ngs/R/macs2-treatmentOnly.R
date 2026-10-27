@@ -27,7 +27,6 @@
 # 10.07.2014 AMS, Updated genome sizes, added parameter userspecified.size
 # 12.09.2014 EK, Made a separate script for MACS2 in order to cope with new parameters, added the broad option and outputs, polished the script and output
 
-
 # run python explicitly, because the shebang line in macs2 uses now defunct /mnt/tools
 python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
 
@@ -38,7 +37,10 @@ macs.binary <- file.path(chipster.tools.path, "macs", "macs2")
 # Use user-specified genome size if given
 if (precalculated.size == "user_specified") {
     if (nchar(userspecified.size) < 1) {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a value for mappable genome size or select one of the precalculated values."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a value for mappable genome size or select one of the precalculated values."
+        ))
     }
     genome.size <- userspecified.size
 } else {

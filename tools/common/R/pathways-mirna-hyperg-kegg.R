@@ -49,7 +49,6 @@ if (species == "rat") {
 #        dataset <- "rnorvegicus_transcript_ensembl"
 # }
 
-
 # Read in the CORNA library, which contains the functions to map miRNA:s to targets
 # and performs hypergeometric test for enrichment of GO terms
 library(CORNA)

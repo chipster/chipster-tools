@@ -16,7 +16,7 @@ source(file.path(chipster.common.path, "library-Chipster.R"))
 # check for valid platform accession
 platform.accession <- toupper(platform.accession)
 if (length(grep("^CG-PLM-[0-9]+$", platform.accession)) == 0) {
-  stop("CHIPSTER-NOTE: Not a valid platform accession: ", platform.accession)
+    stop("CHIPSTER-NOTE: Not a valid platform accession: ", platform.accession)
 }
 
 dat <- readData("normalized.tsv")
@@ -29,15 +29,20 @@ dat$cytoband <- NULL
 
 # construct the string used in authenticating
 if (session != "empty" && session != "") {
-  auth <- paste("&PHPSESSID=", session, sep = "")
+    auth <- paste("&PHPSESSID=", session, sep = "")
 } else if (username != "empty" && username != "" && password != "empty" && password != "") {
-  auth <- paste("&username=", username, "&password=", password, sep = "")
+    auth <- paste("&username=", username, "&password=", password, sep = "")
 } else {
-  auth <- ""
+    auth <- ""
 }
 
 # load platform
-plat <- read.table(paste("http://www.cangem.org/download.php?platform=", platform.accession, "&flag=", genome.build, auth, sep = ""), sep = "\t", header = TRUE, as.is = TRUE)
+plat <- read.table(
+    paste("http://www.cangem.org/download.php?platform=", platform.accession, "&flag=", genome.build, auth, sep = ""),
+    sep = "\t",
+    header = TRUE,
+    as.is = TRUE
+)
 colnames(plat) <- tolower(colnames(plat))
 colnames(plat)[colnames(plat) == "chr"] <- "chromosome"
 rownames(plat) <- plat[, 1]

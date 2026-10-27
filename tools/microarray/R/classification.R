@@ -39,7 +39,9 @@ file <- c("normalized.tsv")
 dat <- read.table(file, sep = "\t", header = T, row.names = 1)
 
 if (nrow(dat) > max.genes) {
-   stop("CHIPSTER-NOTE: The MLearn function is not meant for and can unintentionally crash when processing very large dataset. If you still wish to proceed, please reset max.genes parameter to a number which higher than the number of rows in your data matrix")
+    stop(
+        "CHIPSTER-NOTE: The MLearn function is not meant for and can unintentionally crash when processing very large dataset. If you still wish to proceed, please reset max.genes parameter to a number which higher than the number of rows in your data matrix"
+    )
 }
 
 # Reads the phenodata table
@@ -52,7 +54,7 @@ dat2 <- dat[, grep("chip", names(dat))]
 date()
 # Standardization
 if (standardize == "yes") {
-   dat2 <- genescale(dat2, axis = 1, method = c("Z"))
+    dat2 <- genescale(dat2, axis = 1, method = c("Z"))
 }
 date()
 
@@ -61,134 +63,146 @@ dat3 <- data.frame(group = phenodata[, which(group.column == colnames(phenodata)
 
 # Assessory function from MLInterfaces
 fsFun.rowtQ3 <- function(formula, data) {
-   mf <- model.frame(formula, data)
-   mm <- model.matrix(formula, data)
-   respind <- attr(terms(formula, data = data), "response")
-   x <- mm
-   if ("(Intercept)" %in% colnames(x)) x <- x[, -which(colnames(x) == "(Intercept)")]
-   y <- mf[, respind]
-   respname <- names(mf)[respind]
-   nuy <- length(unique(y))
-   if (nuy > 2) warning("number of unique values of response exceeds 2")
-   ans <- abs(rowttests(t(x), factor(y), tstatOnly = TRUE)[[1]])
-   names(ans) <- colnames(x)
-   ans <- names(ans[which(ans > quantile(ans, feature.selection.threshold))])
-   btick <- function(x) paste("`", x, "`", sep = "") # support for nonsyntactic varnames
-   as.formula(paste(respname, paste(btick(ans), collapse = "+"), sep = "~"))
+    mf <- model.frame(formula, data)
+    mm <- model.matrix(formula, data)
+    respind <- attr(terms(formula, data = data), "response")
+    x <- mm
+    if ("(Intercept)" %in% colnames(x)) {
+        x <- x[, -which(colnames(x) == "(Intercept)")]
+    }
+    y <- mf[, respind]
+    respname <- names(mf)[respind]
+    nuy <- length(unique(y))
+    if (nuy > 2) {
+        warning("number of unique values of response exceeds 2")
+    }
+    ans <- abs(rowttests(t(x), factor(y), tstatOnly = TRUE)[[1]])
+    names(ans) <- colnames(x)
+    ans <- names(ans[which(ans > quantile(ans, feature.selection.threshold))])
+    btick <- function(x) paste("`", x, "`", sep = "") # support for nonsyntactic varnames
+    as.formula(paste(respname, paste(btick(ans), collapse = "+"), sep = "~"))
 }
 
 # Performing the analysis
 if (method == "knn") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, knnI(k = 5, l = 1), xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, knnI(k = 5, l = 1), xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, knnI(k = 5, l = 1), xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, knnI(k = 5, l = 1), xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "lda") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, ldaI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, ldaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, ldaI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, ldaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "dlda") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, dldaI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, dldaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, dldaI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, dldaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "slda") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, sldaI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, sldaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, sldaI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, sldaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "qda") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, qdaI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, qdaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, qdaI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, qdaI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "rpart") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, rpartI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, rpartI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, rpartI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, rpartI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "svm") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, svmI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, svmI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, svmI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, svmI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "lvq") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, lvqI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, lvqI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, lvqI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, lvqI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "naiveBayes") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, naiveBayesI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, naiveBayesI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, naiveBayesI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, naiveBayesI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "nnet") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, nnetI, size = 1, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, nnetI, size = 1, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, nnetI, size = 1, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, nnetI, size = 1, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 if (method == "bagging") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, baggingI, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, baggingI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, baggingI, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, baggingI, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
+    }
 }
 
 # not implemented
 if (method == "rf") {
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, randomForestI, ntree = 500, xvalSpec("LOO")))
-   }
-   if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
-      fit <- try(MLearn(as.factor(group) ~ ., data = dat3, randomForestI, ntree = 500, xvalSpec("LOO", fsFun = fsFun.rowtQ3)))
-   }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "no") {
+        fit <- try(MLearn(as.factor(group) ~ ., data = dat3, randomForestI, ntree = 500, xvalSpec("LOO")))
+    }
+    if (validation.type == "crossvalidate" & feature.sel.in.crossval == "yes") {
+        fit <- try(MLearn(
+            as.factor(group) ~ .,
+            data = dat3,
+            randomForestI,
+            ntree = 500,
+            xvalSpec("LOO", fsFun = fsFun.rowtQ3)
+        ))
+    }
 }
 
 if (class(fit) == "try-error") {
-   stop("CHIPSTER-NOTE: MLearn has terminated unintentionally. Please consider using another classifier and/or redo the analysis after discarding some genes")
+    stop(
+        "CHIPSTER-NOTE: MLearn has terminated unintentionally. Please consider using another classifier and/or redo the analysis after discarding some genes"
+    )
 }
 
 # Writing output

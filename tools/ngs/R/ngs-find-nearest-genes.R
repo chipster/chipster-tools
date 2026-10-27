@@ -68,7 +68,11 @@ if (species == "Zebrafish_Zv9") {
 }
 
 # Read in data from BED or tsv file and convert it to BED format
-if (length(grep("^column\\d+$", chr_column)) == 1 && length(grep("^column\\d+$", start_column)) == 1 && length(grep("^column\\d+$", end_column)) == 1) {
+if (
+    length(grep("^column\\d+$", chr_column)) == 1 &&
+        length(grep("^column\\d+$", start_column)) == 1 &&
+        length(grep("^column\\d+$", end_column)) == 1
+) {
     results_file <- read.table(file = "regions-list.tsv", sep = "\t", header = F)
     chr_column <- as.numeric(gsub("^column", "", chr_column)) + 1
     start_column <- as.numeric(gsub("^column", "", start_column)) + 1
@@ -82,7 +86,11 @@ if (length(grep("^column\\d+$", chr_column)) == 1 && length(grep("^column\\d+$",
 
 results_bed <- results_file[, c(chr_column, start_column, end_column)]
 if (length(grep("chr", levels(results_bed[, 1]), invert = T)) > 0) {
-    levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)] <- paste("chr", levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)], sep = "")
+    levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)] <- paste(
+        "chr",
+        levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)],
+        sep = ""
+    )
 }
 
 # Convert to Ranged data
@@ -95,7 +103,19 @@ results_annotated <- annotatePeakInBatch(results_ranged, AnnotationData = annota
 results_table <- as.data.frame(results_annotated)
 # rownames(results_table) <- sub (" ", "_", results_table$name)
 results_table <- results_table[, c(-5, -13, -14)]
-table_header <- c("chromosome", "region_start", "region_end", "region_width", "region_id", "ensembl_id", "gene_start", "gene_end", "strand", "location", "distance")
+table_header <- c(
+    "chromosome",
+    "region_start",
+    "region_end",
+    "region_width",
+    "region_id",
+    "ensembl_id",
+    "gene_start",
+    "gene_end",
+    "strand",
+    "location",
+    "distance"
+)
 names(results_table) <- table_header
 
 # Write output

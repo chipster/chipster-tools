@@ -18,10 +18,16 @@ input <- readData("normalized-counts.tsv")
 phenodata <- readPhenodata("phenodata.tsv")
 copyNumbers <- toQDNAseqCopyNumbers(input, chiptype = phenodata$chiptype, level = "copynumber")
 
-copyNumbers <- segmentBins(copyNumbers, smoothBy = smoothBy, alpha = significance.level, min.width = as.integer(minimum.number.of.probes.per.segment), undo.SD = minimum.number.of.sds.between.segments)
+copyNumbers <- segmentBins(
+    copyNumbers,
+    smoothBy = smoothBy,
+    alpha = significance.level,
+    min.width = as.integer(minimum.number.of.probes.per.segment),
+    undo.SD = minimum.number.of.sds.between.segments
+)
 
 if (reNormalize == "TRUE") {
-  copyNumbers <- normalizeSegmentedBins(copyNumbers)
+    copyNumbers <- normalizeSegmentedBins(copyNumbers)
 }
 
 output <- fromQDNAseqCopyNumbers(copyNumbers)

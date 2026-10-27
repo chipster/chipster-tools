@@ -4,9 +4,7 @@
 # RUNTIME R-4.5.1
 # TOOLS_BIN ""
 
-
 # MG, 1.11.2011
-
 
 file <- "bedfile.bed"
 dat <- read.table(file = file, header = TRUE, sep = "\t")
@@ -15,6 +13,13 @@ unique_ids <- unique(list_ids)
 output_table <- as.data.frame(unique_ids)
 rownames(output_table) <- unique_ids
 colnames(output_table) <- "id"
-write.table(output_table, file = "extracted-features.tsv", row.names = TRUE, col.names = TRUE, sep = "\t", quote = FALSE)
+write.table(
+    output_table,
+    file = "extracted-features.tsv",
+    row.names = TRUE,
+    col.names = TRUE,
+    sep = "\t",
+    quote = FALSE
+)
 
 # EOF

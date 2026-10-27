@@ -15,7 +15,6 @@
 # OUTPUT OPTIONAL final.asv.asv.cons.taxonomy
 # OUTPUT OPTIONAL final.asv.asv.cons.tax.summary
 
-
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
@@ -37,8 +36,6 @@ library(reshape2)
 # system(command)
 # runExternal(command, checkexit = TRUE)
 
-
-
 cluster.options <- paste("cluster(fasta=file.fasta, count=final.count_table, method=unique)") # column=file.dist
 documentCommand(cluster.options)
 write(cluster.options, "cluster.mth", append = FALSE)
@@ -54,7 +51,9 @@ write(makeshared.options, "makeshared.mth", append = FALSE)
 command <- paste(binary, "makeshared.mth", "> log_makeshared.txt")
 system(command)
 
-classifyotu.options <- paste("classify.otu(list=final.asv.list, count=final.count_table, taxonomy=sequences-taxonomy-assignment.txt, label=asv)")
+classifyotu.options <- paste(
+    "classify.otu(list=final.asv.list, count=final.count_table, taxonomy=sequences-taxonomy-assignment.txt, label=asv)"
+)
 documentCommand(classifyotu.options)
 write(classifyotu.options, "classifyotu.mth", append = FALSE)
 command <- paste(binary, "classifyotu.mth", "> log_classifyotu.txt")

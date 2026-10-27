@@ -8,14 +8,24 @@
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # Read input names
-input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t", quote = "", comment.char = "#", colClasses = "character", na.strings = character(0))
+input.names <- read.table(
+    "chipster-inputs.tsv",
+    header = F,
+    sep = "\t",
+    quote = "",
+    comment.char = "#",
+    colClasses = "character",
+    na.strings = character(0)
+)
 
 # Check that the file names don't point outside the job folder
 safe_file_name(input.names[, 2])
 
 # Check for duplicate file names
 if (anyDuplicated(input.names[2])) {
-    message <- paste("You have selected files with duplicated file names. File names must be unique. Please rename the files.")
+    message <- paste(
+        "You have selected files with duplicated file names. File names must be unique. Please rename the files."
+    )
     stop(paste("CHIPSTER-NOTE: ", message))
 }
 

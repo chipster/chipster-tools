@@ -43,7 +43,12 @@ if (exists("data.combined")) {
 
 # Number of cells left, pdf plot:
 pdf(file = "subset_plot.pdf", , width = 13, height = 7)
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = data.subset))), halign = "center", valign = "center", cex = 2)
+textplot(
+    paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = data.subset))),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 # FeaturePlot(data.subset, gene) # would only work for data after clustering step
 dev.off() # close the pdf
 

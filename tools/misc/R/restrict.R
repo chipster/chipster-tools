@@ -22,7 +22,6 @@
 # PARAMETER OPTIONAL name: "Show sequence name" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (Show sequence name)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-
 # KM 8.11. 2013
 # KM 8.11. 2013
 source(file.path(chipster.common.lib.path, "zip-utils.R"))

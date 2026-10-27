@@ -8,7 +8,6 @@
 # PARAMETER beeta: "beta" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.8 ()
 # PARAMETER group.size: "Group size" TYPE INTEGER FROM 1 TO 1000 DEFAULT 4 (Sample size)
 
-
 # JTT 15.12.2006
 
 # Parameter settings (default) for testing purposes

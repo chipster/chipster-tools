@@ -14,12 +14,19 @@ dat <- readData("aberrations.tsv")
 
 pos <- c("chromosome", "start", "end")
 if (length(setdiff(pos, colnames(dat))) != 0) {
-  stop("CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome, start, end.")
+    stop("CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome, start, end.")
 }
 
 # Load transcripts into data frame
 txhs <- transcripts(Homo.sapiens, columns = c("TXNAME", "SYMBOL", "GENENAME", "ENTREZID"))
-all.genes <- data.frame(sub("chr", "", as.character(seqnames(txhs))), start(txhs), end(txhs), as.character(mcols(txhs)$SYMBOL), as.character(mcols(txhs)$GENENAME), as.character(mcols(txhs)$ENTREZID))
+all.genes <- data.frame(
+    sub("chr", "", as.character(seqnames(txhs))),
+    start(txhs),
+    end(txhs),
+    as.character(mcols(txhs)$SYMBOL),
+    as.character(mcols(txhs)$GENENAME),
+    as.character(mcols(txhs)$ENTREZID)
+)
 # Omit lines with missing values
 all.genes[all.genes == ""] <- NA
 all.genes <- na.omit(all.genes)
@@ -33,12 +40,12 @@ ambiguous <- unique(all.genes$entrez.chr[duplicated(all.genes$entrez.chr)])
 unambiguous.positions <- all.genes[!all.genes$entrez.chr %in% ambiguous, ]
 positions <- vector("list", length(ambiguous))
 for (i in seq_along(ambiguous)) {
-  entries <- all.genes[all.genes$entrez.chr == ambiguous[i], ]
-  entries$start <- min(entries$start)
-  entries$end <- max(entries$end)
-  # entries <- unique(entries)
-  # if (nrow(entries) > 1) stop("PERKELE!")
-  positions[[i]] <- entries[1, ]
+    entries <- all.genes[all.genes$entrez.chr == ambiguous[i], ]
+    entries$start <- min(entries$start)
+    entries$end <- max(entries$end)
+    # entries <- unique(entries)
+    # if (nrow(entries) > 1) stop("PERKELE!")
+    positions[[i]] <- entries[1, ]
 }
 genes <- do.call(rbind, positions)
 genes[(nrow(genes) + 1):(nrow(genes) + nrow(unambiguous.positions)), ] <- unambiguous.positions
@@ -50,30 +57,30 @@ all.genes <- rm(list = c("all.genes", "ambiguous", "unambiguous.positions", "pos
 
 # define the functions for calculating gene copy numbers from probe/bin copy numbers
 unambiguous <- function(values) {
-  values <- values[!is.na(values)]
-  uniques <- unique(values)
-  if (length(uniques) == 1) {
-    return(uniques)
-  }
-  return(0)
+    values <- values[!is.na(values)]
+    uniques <- unique(values)
+    if (length(uniques) == 1) {
+        return(uniques)
+    }
+    return(0)
 }
 majority <- function(values) {
-  values <- values[!is.na(values)]
-  amps <- mean(values == 2)
-  if (amps > 0.5) {
-    return(2)
-  }
-  # treat amplifications as gains
-  values[values == 2] <- 1
-  gains <- mean(values == 1)
-  if (gains > 0.5) {
-    return(1)
-  }
-  losses <- mean(values == -1)
-  if (losses > 0.5) {
-    return(-1)
-  }
-  return(0)
+    values <- values[!is.na(values)]
+    amps <- mean(values == 2)
+    if (amps > 0.5) {
+        return(2)
+    }
+    # treat amplifications as gains
+    values[values == 2] <- 1
+    gains <- mean(values == 1)
+    if (gains > 0.5) {
+        return(1)
+    }
+    losses <- mean(values == -1)
+    if (losses > 0.5) {
+        return(-1)
+    }
+    return(0)
 }
 
 calls <- dat[, grep("^flag\\.", colnames(dat))]
@@ -86,68 +93,76 @@ matrices <- sub(suffix, "", x[grep(suffix, x)])
 matrices <- matrices[matrices != "flag."]
 matrices <- matrices[matrices != "chip."]
 for (m in matrices) {
-  logratios <- cbind(logratios, dat[, grep(m, colnames(dat))])
+    logratios <- cbind(logratios, dat[, grep(m, colnames(dat))])
 }
 
 get.gene.data <- function(x) {
-  chr <- x["chromosome"]
-  start <- as.integer(x["start"])
-  end <- as.integer(x["end"])
-  # are there probes/bins overlapping with the position of the gene
-  overlapping.probes <- which(dat$chromosome == chr &
-    dat$end >= start &
-    dat$start <= end)
-  if (length(overlapping.probes) > 0) {
-    # if yes, use those probes/bins to calculate the copy number
-    gene.calls <- apply(calls[overlapping.probes, ], 2, method.for.calls)
-    gene.logratios <- apply(logratios[overlapping.probes, ], 2, method.for.others, na.rm = TRUE)
-  } else {
-    # if not, use the last preceding and the first tailing probe/bin
-    preceding.probes <- which(dat$chromosome == chr &
-      dat$end < start)
-    tailing.probes <- which(dat$chromosome == chr &
-      dat$start > end)
-    adjacent.probes <- preceding.probes[length(preceding.probes)]
-    if (length(tailing.probes) > 0) {
-      adjacent.probes <- c(adjacent.probes, tailing.probes[1])
-    }
-    if (length(adjacent.probes) > 0) {
-      gene.calls <- apply(calls[adjacent.probes, ], 2, method.for.calls)
-      gene.logratios <- apply(logratios[adjacent.probes, ], 2, method.for.others, na.rm = TRUE)
+    chr <- x["chromosome"]
+    start <- as.integer(x["start"])
+    end <- as.integer(x["end"])
+    # are there probes/bins overlapping with the position of the gene
+    overlapping.probes <- which(
+        dat$chromosome == chr &
+            dat$end >= start &
+            dat$start <= end
+    )
+    if (length(overlapping.probes) > 0) {
+        # if yes, use those probes/bins to calculate the copy number
+        gene.calls <- apply(calls[overlapping.probes, ], 2, method.for.calls)
+        gene.logratios <- apply(logratios[overlapping.probes, ], 2, method.for.others, na.rm = TRUE)
     } else {
-      gene.calls <- 0
-      gene.logratios <- 0
+        # if not, use the last preceding and the first tailing probe/bin
+        preceding.probes <- which(
+            dat$chromosome == chr &
+                dat$end < start
+        )
+        tailing.probes <- which(
+            dat$chromosome == chr &
+                dat$start > end
+        )
+        adjacent.probes <- preceding.probes[length(preceding.probes)]
+        if (length(tailing.probes) > 0) {
+            adjacent.probes <- c(adjacent.probes, tailing.probes[1])
+        }
+        if (length(adjacent.probes) > 0) {
+            gene.calls <- apply(calls[adjacent.probes, ], 2, method.for.calls)
+            gene.logratios <- apply(logratios[adjacent.probes, ], 2, method.for.others, na.rm = TRUE)
+        } else {
+            gene.calls <- 0
+            gene.logratios <- 0
+        }
     }
-  }
-  c(gene.calls, gene.logratios)
+    c(gene.calls, gene.logratios)
 }
 
 # first try parallel computing
 prob <- TRUE
 try(
-  {
-    library(snowfall)
-    sfInit(parallel = TRUE, cpus = chipster.threads.max)
-    sfExport(list = c("dat", "calls", "logratios", "method.for.calls", "method.for.others", "unambiguous", "majority"))
-    gene.calls.and.logratios <- t(sfApply(genes, 1, get.gene.data))
-    sfStop()
-    prob <- FALSE
-  },
-  silent = TRUE
+    {
+        library(snowfall)
+        sfInit(parallel = TRUE, cpus = chipster.threads.max)
+        sfExport(
+            list = c("dat", "calls", "logratios", "method.for.calls", "method.for.others", "unambiguous", "majority")
+        )
+        gene.calls.and.logratios <- t(sfApply(genes, 1, get.gene.data))
+        sfStop()
+        prob <- FALSE
+    },
+    silent = TRUE
 )
 # if problems, fall back to sequential computing
 if (prob) {
-  gene.calls.and.logratios <- t(apply(genes, 1, get.gene.data))
+    gene.calls.and.logratios <- t(apply(genes, 1, get.gene.data))
 }
 
 calls.bygene <- gene.calls.and.logratios[, 1:ncol(calls)]
 if (-2 %in% calls.bygene) {
-  genes$del.freq <- round(rowMeans(calls.bygene == -2), digits = 3)
+    genes$del.freq <- round(rowMeans(calls.bygene == -2), digits = 3)
 }
 genes$loss.freq <- round(rowMeans(calls.bygene == -1), digits = 3)
 genes$gain.freq <- round(rowMeans(calls.bygene == 1), digits = 3)
 if (2 %in% calls.bygene) {
-  genes$amp.freq <- round(rowMeans(calls.bygene == 2), digits = 3)
+    genes$amp.freq <- round(rowMeans(calls.bygene == 2), digits = 3)
 }
 genes <- cbind(genes, gene.calls.and.logratios)
 

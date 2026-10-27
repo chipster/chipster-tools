@@ -29,8 +29,6 @@ unzipIfGZipFile("reads.txt")
 unzipIfGZipFile("genome.txt")
 
 
-
-
 # bowtie
 bowtie.binary <- c(file.path(chipster.tools.path, "bowtie", "bowtie"))
 version <- system(paste(bowtie.binary, "--version | head -1 | cut -d ' ' -f 3"), intern = TRUE)
@@ -42,41 +40,43 @@ print(paste("echo Host genome file type", genome.filetype))
 
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  print("Extracting tar formatted gemome index file")
-  # Extract to a folder of its own, so that the files of the package can't replace the files of the job
-  dir.create("genome_index")
-  runExternal("tar xf genome.txt -C genome_index")
-  # Check index base name
-  if (length(Sys.glob("genome_index/*.1.ebwt")) != 0) {
-    f <- list.files("genome_index", pattern = "\\.1.ebwt$")
-    bowtie.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
-  } else {
-    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie index.")
-  }
+    print("Extracting tar formatted gemome index file")
+    # Extract to a folder of its own, so that the files of the package can't replace the files of the job
+    dir.create("genome_index")
+    runExternal("tar xf genome.txt -C genome_index")
+    # Check index base name
+    if (length(Sys.glob("genome_index/*.1.ebwt")) != 0) {
+        f <- list.files("genome_index", pattern = "\\.1.ebwt$")
+        bowtie.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
+    } else {
+        stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie index.")
+    }
 
-  runExternal("ls -l")
-  # case 2. Fasta file
+    runExternal("ls -l")
+    # case 2. Fasta file
 } else {
-  # Do indexing
-  # check sequence file type
-  emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
-  options(scipen = 999)
-  inputfile.to.check <- ("genome.txt")
-  sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
-  str.filetype <- system(sfcheck.command, intern = TRUE)
+    # Do indexing
+    # check sequence file type
+    emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
+    options(scipen = 999)
+    inputfile.to.check <- ("genome.txt")
+    sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
+    sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+    str.filetype <- system(sfcheck.command, intern = TRUE)
 
-  if (str.filetype == "Not an EMBOSS compatible sequence file") {
-    stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
-  }
+    if (str.filetype == "Not an EMBOSS compatible sequence file") {
+        stop(
+            "CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use"
+        )
+    }
 
-  # bowtie index building
-  print("Indexing the genome...")
-  bowtie.genome <- "genome"
+    # bowtie index building
+    print("Indexing the genome...")
+    bowtie.genome <- "genome"
 
-  command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", bowtie.genome)
-  runExternal(command.indexing)
-  runExternal("ls -l")
+    command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", bowtie.genome)
+    runExternal(command.indexing)
+    runExternal("ls -l")
 }
 print(paste("Internal genome name:", bowtie.genome))
 
@@ -100,7 +100,14 @@ output.parameters <- paste(unaligned.output, multiread.output)
 command.end <- paste("-x", bowtie.genome, "reads.txt 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
-bowtie.command <- paste(command.start, common.parameters, quality.parameter, mode.parameters, output.parameters, command.end)
+bowtie.command <- paste(
+    command.start,
+    common.parameters,
+    quality.parameter,
+    mode.parameters,
+    output.parameters,
+    command.end
+)
 # stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal(bowtie.command)
 

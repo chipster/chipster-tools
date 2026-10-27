@@ -24,19 +24,31 @@ uni.chrom <- unique(chrom)
 
 # bitmap('correlations.png', width=297, height=210, units="mm", res=150)
 pdf("correlations.pdf", width = 11.69, height = 8.27)
-image(x = 1:(nrow(m) + 1), y = 1:(nrow(m) + 1), z = m, zlim = c(-1, 1), col = brewer.pal(10, "RdBu"), xlab = NA, ylab = NA, useRaster = TRUE, main = "Correlation Matrix", xaxt = "n", yaxt = "n")
+image(
+    x = 1:(nrow(m) + 1),
+    y = 1:(nrow(m) + 1),
+    z = m,
+    zlim = c(-1, 1),
+    col = brewer.pal(10, "RdBu"),
+    xlab = NA,
+    ylab = NA,
+    useRaster = TRUE,
+    main = "Correlation Matrix",
+    xaxt = "n",
+    yaxt = "n"
+)
 chr.change <- chrom != c(chrom[-1], 0)
 chr.change <- which(chr.change) + 1
 abline(h = chr.change[-length(chr.change)], v = chr.change[-length(chr.change)], lty = "dashed")
 if (nrow(m) < 100 && "cytoband" %in% colnames(dat)) {
-  axis(side = 1, at = 1:nrow(m) + .5, labels = dat$cytoband, las = 2, line = -.5, tick = FALSE, cex.axis = .4)
-  axis(side = 2, at = 1:nrow(m) + .5, labels = dat$cytoband, las = 2, line = -.5, tick = FALSE, cex.axis = .1)
-  axis(side = 4, at = 1:nrow(m) + .5, labels = dat$cytoband, las = 2, line = -.5, tick = FALSE, cex.axis = .4)
+    axis(side = 1, at = 1:nrow(m) + .5, labels = dat$cytoband, las = 2, line = -.5, tick = FALSE, cex.axis = .4)
+    axis(side = 2, at = 1:nrow(m) + .5, labels = dat$cytoband, las = 2, line = -.5, tick = FALSE, cex.axis = .1)
+    axis(side = 4, at = 1:nrow(m) + .5, labels = dat$cytoband, las = 2, line = -.5, tick = FALSE, cex.axis = .4)
 } else {
-  ax <- (chr.change + c(0, chr.change[-length(chr.change)])) / 2
-  axis(side = 1, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = 1)
-  axis(side = 2, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = .5)
-  axis(side = 4, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = .5)
+    ax <- (chr.change + c(0, chr.change[-length(chr.change)])) / 2
+    axis(side = 1, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = 1)
+    axis(side = 2, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = .5)
+    axis(side = 4, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = .5)
 }
 dev.off()
 
@@ -48,13 +60,24 @@ chrom.lengths <- CGHbase:::.getChromosomeLengths(genome.build)[as.character(uni.
 chrom.ends <- integer()
 cumul <- 0
 for (j in uni.chrom) {
-  pos[chrom > j] <- pos[chrom > j] + chrom.lengths[as.character(j)]
-  pos2[chrom > j] <- pos2[chrom > j] + chrom.lengths[as.character(j)]
-  cumul <- cumul + chrom.lengths[as.character(j)]
-  chrom.ends <- c(chrom.ends, cumul)
+    pos[chrom > j] <- pos[chrom > j] + chrom.lengths[as.character(j)]
+    pos2[chrom > j] <- pos2[chrom > j] + chrom.lengths[as.character(j)]
+    cumul <- cumul + chrom.lengths[as.character(j)]
+    chrom.ends <- c(chrom.ends, cumul)
 }
 names(chrom.ends) <- names(chrom.lengths)
-image(x = c(pos, pos2[length(pos2)]), y = c(pos, pos2[length(pos2)]), z = m, zlim = c(-1, 1), col = brewer.pal(10, "RdBu"), xlab = NA, ylab = NA, main = "Correlation Matrix", xaxt = "n", yaxt = "n")
+image(
+    x = c(pos, pos2[length(pos2)]),
+    y = c(pos, pos2[length(pos2)]),
+    z = m,
+    zlim = c(-1, 1),
+    col = brewer.pal(10, "RdBu"),
+    xlab = NA,
+    ylab = NA,
+    main = "Correlation Matrix",
+    xaxt = "n",
+    yaxt = "n"
+)
 abline(h = chrom.ends[-length(chrom.ends)], v = chrom.ends[-length(chrom.ends)], lty = "dashed")
 ax <- (chrom.ends + c(0, chrom.ends[-length(chrom.ends)])) / 2
 axis(side = 1, at = ax, labels = uni.chrom, lwd = .5, las = 1, cex.axis = 1)

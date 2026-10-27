@@ -4,7 +4,6 @@
 # PARAMETER filter.by.flag: "Filter by flag" TYPE [P: P, M: M, A: A, A.or.M: "A or M", M.or.P: "M or P"] DEFAULT P (Which flag to filter by)
 # PARAMETER number.of.chips: "Number of chips" TYPE INTEGER FROM 1 TO 10000 DEFAULT 2 (How many samples the should have the specified call value)
 
-
 # Filtering using flags (calls)
 # JTT 29.6.2006
 #

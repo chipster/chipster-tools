@@ -35,14 +35,14 @@ options(Seurat.object.assay.version = "v5")
 load("combined_seurat_obj.Robj")
 
 if (exists("seurat_obj")) {
-  data.combined <- seurat_obj
+    data.combined <- seurat_obj
 }
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 if (normalisation.method == "SCT") {
-  # When SCTransform was used to normalise the data, do a prep step:
-  data.combined <- PrepSCTFindMarkers(data.combined)
+    # When SCTransform was used to normalise the data, do a prep step:
+    data.combined <- PrepSCTFindMarkers(data.combined)
 }
 
 # Set the identity as clusters:
@@ -53,7 +53,10 @@ data.combined <- SetIdent(data.combined, value = sel.clust)
 # Select all cells in cluster X (determined by user)
 # NOTE: this could also be done using the subset.ident = "2" parameter in FindMarkers:
 # # DGE_cell_selection <- FindMarkers(data.combined, ident.1 = samples1, ident.2 = samples2, group.by = 'type', subset.ident = cluster)
-cell_selection <- subset(data.combined, cells = colnames(data.combined)[data.combined@meta.data[, sel.clust] == cluster])
+cell_selection <- subset(
+    data.combined,
+    cells = colnames(data.combined)[data.combined@meta.data[, sel.clust] == cluster]
+)
 
 # Set identity as "type" (this is where the sample group info is stored in setup tool)
 cell_selection <- SetIdent(cell_selection, value = "type")
@@ -61,30 +64,53 @@ cell_selection <- SetIdent(cell_selection, value = "type")
 
 # Compute differential expression
 if (normalisation.method == "SCT") {
-  DGE_cell_selection <- FindMarkers(cell_selection, assay = "SCT", ident.1 = samples1, ident.2 = samples2, group.by = "type", logfc.threshold = logFC.de, min.pct = minpct, verbose = FALSE, return.thresh = pval.cutoff.de, recorrect_umi = FALSE, only.pos = only.positive) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+    DGE_cell_selection <- FindMarkers(
+        cell_selection,
+        assay = "SCT",
+        ident.1 = samples1,
+        ident.2 = samples2,
+        group.by = "type",
+        logfc.threshold = logFC.de,
+        min.pct = minpct,
+        verbose = FALSE,
+        return.thresh = pval.cutoff.de,
+        recorrect_umi = FALSE,
+        only.pos = only.positive
+    ) #, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 } else {
-  DGE_cell_selection <- FindMarkers(cell_selection, assay = "RNA", ident.1 = samples1, ident.2 = samples2, group.by = "type", logfc.threshold = logFC.de, min.pct = minpct,  verbose = FALSE, return.thresh = pval.cutoff.de, only.pos = only.positive) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
+    DGE_cell_selection <- FindMarkers(
+        cell_selection,
+        assay = "RNA",
+        ident.1 = samples1,
+        ident.2 = samples2,
+        group.by = "type",
+        logfc.threshold = logFC.de,
+        min.pct = minpct,
+        verbose = FALSE,
+        return.thresh = pval.cutoff.de,
+        only.pos = only.positive
+    ) # min.diff.pct = 0.2, max.cells.per.ident = 50, test.use = "wilcox",
 }
- 
+
 # Filter based on adj-p-val (no return.thresh parameter):
-DGE_cell_selection_filtered <- DGE_cell_selection[DGE_cell_selection$p_val_adj<pval.cutoff.de, ]
+DGE_cell_selection_filtered <- DGE_cell_selection[DGE_cell_selection$p_val_adj < pval.cutoff.de, ]
 
 
 # Add average expression to the table:
-  if (normalisation.method == "SCT") {
+if (normalisation.method == "SCT") {
     aver_expr <- AverageExpression(object = cell_selection, slot = "data", assay = "SCT")
-  } else {
+} else {
     aver_expr <- AverageExpression(object = cell_selection)
-  }
+}
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-    
-  # select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
-  aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered),samples1 ], digits = 4)
-  aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered),samples2 ], digits = 4)
-  
-  full_table <- cbind(DGE_cell_selection_filtered, aver_expr_ident1 , aver_expr_ident2)
-  
+aver_expr_in_clusters <- aver_expr[[1]]
+
+# select the wanted columns (based on samples1.cluster and samples2.cluster ) and rows (DEGs):
+aver_expr_ident1 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered), samples1], digits = 4)
+aver_expr_ident2 <- round(aver_expr_in_clusters[row.names(DGE_cell_selection_filtered), samples2], digits = 4)
+
+full_table <- cbind(DGE_cell_selection_filtered, aver_expr_ident1, aver_expr_ident2)
+
 
 # Comparison name for the output file:
 comparison.name <- paste(samples1, "vs", samples2, "in_cluster", cluster, sep = "_")
@@ -100,15 +126,29 @@ pdf(file = "expressionPlots.pdf")
 # Plot the expression across the “type”.
 
 DGE_cell_selection %>%
-  # group_by(cluster) %>%
-  top_n(-5, p_val) -> top5_cell_selection
+    # group_by(cluster) %>%
+    top_n(-5, p_val) -> top5_cell_selection
 
 # VlnPlot(cell_selection, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1)
-VlnPlot(cell_selection, features = as.character(rownames(top5_cell_selection)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1)
+VlnPlot(
+    cell_selection,
+    features = as.character(rownames(top5_cell_selection)),
+    ncol = 3,
+    group.by = "type",
+    assay = "RNA",
+    pt.size = 0.1
+)
 
 # Plot these genes across all clusters, but split by “type”
 # VlnPlot(data.combined, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
-VlnPlot(data.combined, features = as.character(rownames(top5_cell_selection)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0)
+VlnPlot(
+    data.combined,
+    features = as.character(rownames(top5_cell_selection)),
+    ncol = 3,
+    split.by = "type",
+    assay = "RNA",
+    pt.size = 0
+)
 
 dev.off() # close the pdf
 

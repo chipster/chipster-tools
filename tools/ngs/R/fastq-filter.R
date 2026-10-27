@@ -29,7 +29,10 @@ if (length(file.list) == 0) {
 }
 # Check if tar packa contains folders
 if (any(grepl("/", file.list))) {
-    stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 # Input is a tar file: make input and output folder and create file samples.fastq.txt
 system("mkdir input_folder")
@@ -55,7 +58,17 @@ for (file in filenames) {
     output_fastq <- paste0("output_folder/", sample.names[x])
     x <- x + 1
     # make the fastq_filter command
-    command <- paste(binary, "--fastq_filter", shQuote(file), "--fastq_maxee", maxee, "--fastq_qmax", qmax, "--fastqout", shQuote(output_fastq))
+    command <- paste(
+        binary,
+        "--fastq_filter",
+        shQuote(file),
+        "--fastq_maxee",
+        maxee,
+        "--fastq_qmax",
+        qmax,
+        "--fastqout",
+        shQuote(output_fastq)
+    )
     # run command
     runExternal(command)
     documentCommand(command)
@@ -82,7 +95,12 @@ sample.names <- append(sample.names, "All", 0)
 vector_sequences <- append(vector_sequences, all, 0)
 vector_discard <- append(vector_discard, disc, 0)
 vector_proportion <- append(vector_proportion, "", 0)
-summ.data <- data.frame("Sample" = sample.names, "Sequences_kept" = vector_sequences, "Sequences_discarded" = vector_discard, "Percentage_of_discarded" = vector_proportion)
+summ.data <- data.frame(
+    "Sample" = sample.names,
+    "Sequences_kept" = vector_sequences,
+    "Sequences_discarded" = vector_discard,
+    "Percentage_of_discarded" = vector_proportion
+)
 write.table(summ.data, file = "summary.tsv", row.names = FALSE)
 # make a output tar package named contigs.tar and qzip all the files
 system("gzip output_folder/*.fq")

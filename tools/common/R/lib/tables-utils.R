@@ -28,7 +28,9 @@ merge_tables <- function(input.names, include.everything) {
         }
         # Combine tables using row names
         include <- FALSE
-        if (include.everything == "yes") include <- TRUE
+        if (include.everything == "yes") {
+            include <- TRUE
+        }
         merged <- merge(merged, table, by.x = "row.names", by.y = "row.names", all = include)
         row.names(merged) <- merged$Row.names
         merged <- merged[-1]

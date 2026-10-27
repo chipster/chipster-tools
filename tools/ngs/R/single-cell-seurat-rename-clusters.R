@@ -7,7 +7,6 @@
 # RUNTIME R-4.2.3-single-cell
 # TOOLS_BIN ""
 
-
 # OUTPUT OPTIONAL log.txt
 
 # 2021-12-27 ML
@@ -22,7 +21,7 @@ library(ggplot2)
 load("seurat_obj.Robj")
 
 if (exists("data.combined")) {
-  seurat_obj <- data.combined
+    seurat_obj <- data.combined
 }
 
 # Load the tsv with new cluster names:
@@ -33,13 +32,15 @@ new.cluster.ids <- clusternames[, 1]
 
 # Some checks:
 if (is.null(seurat_obj@commands$FindClusters)) {
-  stop("CHIPSTER-NOTE: No cluster information in the Seurat object! Make sure you select an object that has gone through either Clustering or Integrated analysis of multiple samples tool.")
+    stop(
+        "CHIPSTER-NOTE: No cluster information in the Seurat object! Make sure you select an object that has gone through either Clustering or Integrated analysis of multiple samples tool."
+    )
 }
 if (length(new.cluster.ids) != length(levels(seurat_obj))) {
-  stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
+    stop("CHIPSTER-NOTE: You need to give as input as many cluster names as there are clusters.")
 }
 if (!identical(row.names(clusternames), levels(seurat_obj))) {
-  stop("CHIPSTER-NOTE: The cluster names = numbers in the input table need to be the same as in the Seurat object.")
+    stop("CHIPSTER-NOTE: The cluster names = numbers in the input table need to be the same as in the Seurat object.")
 }
 
 # new.cluster.ids <- c("Naive CD4 T", "CD14+ Mono", "Memory CD4 T", "B", "CD8 T", "FCGR3A+ Mono",  "NK", "DC", "Platelet")

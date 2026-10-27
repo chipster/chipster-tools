@@ -15,7 +15,6 @@
 # PARAMETER OPTIONAL image_width: "Plot width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image.)
 # PARAMETER OPTIONAL image_height: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image.)
 
-
 # MG 7.2.2012
 # EK 6.5.2012, clarified texts
 # EK 12.5.2012, fixed the fitting method parameter
@@ -42,7 +41,11 @@ number_samples <- length(groups)
 
 # If the library_size column of phenodata contains data, then use that to estimate size factors
 lib_size <- as.numeric(phenodata$library_size)
-if (is.na(lib_size[1])) estimate_lib_size <- "TRUE" else estimate_lib_size <- "FALSE"
+if (is.na(lib_size[1])) {
+    estimate_lib_size <- "TRUE"
+} else {
+    estimate_lib_size <- "FALSE"
+}
 lib_size <- lib_size / mean(lib_size)
 
 # Sanity check: only 2 group comparison is supported
@@ -75,16 +78,31 @@ if (normalization == "yes") {
 # Estimate dispersion values for each gene and replace with fitted values always or only when the fitted value is higher
 # Use fitType to control for parametric or local fit
 if (number_samples == 2) {
-    counts_data <- estimateDispersions(counts_data, method = "blind", sharingMode = "fit-only", fitType = dispersion_estimate)
+    counts_data <- estimateDispersions(
+        counts_data,
+        method = "blind",
+        sharingMode = "fit-only",
+        fitType = dispersion_estimate
+    )
 } else {
-    counts_data <- estimateDispersions(counts_data, method = "pooled", sharingMode = fitting_method, fitType = dispersion_estimate)
+    counts_data <- estimateDispersions(
+        counts_data,
+        method = "pooled",
+        sharingMode = fitting_method,
+        fitType = dispersion_estimate
+    )
 }
 
 # Function that produces a dispersion plot
 plotDispEsts <- function(cds) {
-    plot(rowMeans(counts(cds, normalized = TRUE)), fitInfo(cds)$perGeneDispEsts,
+    plot(
+        rowMeans(counts(cds, normalized = TRUE)),
+        fitInfo(cds)$perGeneDispEsts,
         pch = ".",
-        log = "xy", main = "Dispersion plot", xlab = "normalized counts", ylab = "dispersion"
+        log = "xy",
+        main = "Dispersion plot",
+        xlab = "normalized counts",
+        ylab = "dispersion"
     )
     xg <- 10^seq(-.5, 5, length.out = 300)
     lines(xg, fitInfo(cds)$dispFun(xg), col = "red")
@@ -118,7 +136,6 @@ significant_table <- significant_table[order(significant_table$pval), ]
 
 #############################
 
-
 # significant_indices <- rownames (significant_table)
 
 # If significant results are found, create an output table with the original counts per sample together with the statistical tests results
@@ -140,12 +157,22 @@ significant_table <- significant_table[order(significant_table$pval), ]
 
 #############################
 
-
 # Output the table
 if (dim(significant_table)[1] > 0) {
     ndat <- ncol(dat)
     nmax <- ncol(significant_table)
-    write.table(cbind(significant_table[, 1:ndat], round(significant_table[, (ndat + 1):(nmax - 2)], digits = 2), format(significant_table[, (nmax - 1):nmax], digits = 4, scientific = T)), file = "de-list-deseq.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        cbind(
+            significant_table[, 1:ndat],
+            round(significant_table[, (ndat + 1):(nmax - 2)], digits = 2),
+            format(significant_table[, (nmax - 1):nmax], digits = 4, scientific = T)
+        ),
+        file = "de-list-deseq.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 
     # write.table(significant_table, file="de-list-deseq.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 }
@@ -167,28 +194,40 @@ if ("chr" %in% these.colnames) {
 
 # Make histogram of p-values with overlaid significance cutoff and uniform distribution
 pdf(file = "p-value-plot-deseq.pdf")
-hist(output_table$pval,
-    breaks = 100, col = "blue",
-    border = "slateblue", freq = FALSE,
-    main = "P-value distribution", xlab = "p-value", ylab = "proportion (%)"
+hist(
+    output_table$pval,
+    breaks = 100,
+    col = "blue",
+    border = "slateblue",
+    freq = FALSE,
+    main = "P-value distribution",
+    xlab = "p-value",
+    ylab = "proportion (%)"
 )
-hist(output_table$padj,
-    breaks = 100, col = "red",
-    border = "slateblue", add = TRUE, freq = FALSE
-)
+hist(output_table$padj, breaks = 100, col = "red", border = "slateblue", add = TRUE, freq = FALSE)
 abline(h = 1, lwd = 2, lty = 2, col = "black")
 abline(v = p.value.cutoff, lwd = 2, lty = 2, col = "green")
 legend(
-    x = "topright", legend = c("p-values", "adjusted p-values", "uniform distribution", "significance cutoff"), col = c("blue", "red", "black", "green"),
-    cex = 1, pch = 15
+    x = "topright",
+    legend = c("p-values", "adjusted p-values", "uniform distribution", "significance cutoff"),
+    col = c("blue", "red", "black", "green"),
+    cex = 1,
+    pch = 15
 )
 dev.off()
 
 # Define function for making MA-plot of significant findings
 plotDE <- function(res) {
-    plot(res$baseMean, res$log2FoldChange,
-        log = "x", pch = 20, cex = .25, col = ifelse(res$padj < p.value.cutoff, "red", "black"),
-        main = "MA plot", xlab = "mean counts", ylab = "log2(fold change)"
+    plot(
+        res$baseMean,
+        res$log2FoldChange,
+        log = "x",
+        pch = 20,
+        cex = .25,
+        col = ifelse(res$padj < p.value.cutoff, "red", "black"),
+        main = "MA plot",
+        xlab = "mean counts",
+        ylab = "log2(fold change)"
     )
 }
 
@@ -196,8 +235,11 @@ plotDE <- function(res) {
 pdf(file = "ma-plot-deseq.pdf")
 plotDE(output_table)
 legend(
-    x = "topleft", legend = c("significant", "not significant"), col = c("red", "black"),
-    cex = 1, pch = 19
+    x = "topleft",
+    legend = c("significant", "not significant"),
+    col = c("red", "black"),
+    cex = 1,
+    pch = 19
 )
 abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2)
 dev.off()

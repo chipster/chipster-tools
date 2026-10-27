@@ -11,7 +11,6 @@
 # PARAMETER OPTIONAL id.attribute: "Feature ID to use" TYPE [gene_id, ID, GeneID, transcript_id, gene_name, transcript_name, protein_name, proteinId] DEFAULT gene_id (GFF attribute to be used as feature ID. Several GFF lines with the same feature ID will be considered as parts of the same feature. The feature ID is used to identity the counts in the output table.)
 # PARAMETER OPTIONAL print.coord: "Add chromosomal coordinates to the count table" TYPE [yes, no] DEFAULT yes (If you select yes, chromosomal coordinates are added to the output file. Given are the minimum and maximum coordinates of features, e.g. exons, associated with a given identifier)
 
-
 # 22.8.2011	TH and EK
 # 6.5.2013	MK added chr-location information to the output
 # 21.5.2014	EK updated to use HTSeq 0.6.1
@@ -44,14 +43,33 @@ if (print.coord == "no") {
 python.binary <- file.path(chipster.tools.path, "Python-2.7.12", "bin", "python")
 
 # parse version number from last line "Public License v3. Part of the 'HTSeq' framework, version 0.6.0."
-htseq.version.command <- paste(python.binary, htseq.binary, " --help | tail -n 1 | rev | cut -d '.' -f 2- | cut -d ' ' -f 1 | rev")
+htseq.version.command <- paste(
+    python.binary,
+    htseq.binary,
+    " --help | tail -n 1 | rev | cut -d '.' -f 2- | cut -d ' ' -f 1 | rev"
+)
 version <- system(htseq.version.command, intern = TRUE)
 documentVersion("HTSeq", version)
 samtools.version.command <- paste(samtools.binary, " 2>&1 | grep Version | cut -d ' ' -f 2")
 version <- system(samtools.version.command, intern = TRUE)
 documentVersion("Samtools", version)
 
-htseq <- paste(python.binary, htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, "features.gtf > htseq-counts-out.txt")
+htseq <- paste(
+    python.binary,
+    htseq.binary,
+    "-f bam -q -m",
+    mode,
+    "-s",
+    stranded,
+    "-a",
+    minaqual,
+    "-t",
+    feature.type,
+    "-i",
+    id.attribute,
+    bam,
+    "features.gtf > htseq-counts-out.txt"
+)
 
 # run
 system(htseq)

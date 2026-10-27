@@ -21,7 +21,7 @@ dat <- read.table(file, header = TRUE, sep = "\t", quote = "", row.names = 1, ch
 
 # Sanity checks
 if (ncol(dat) == 1) {
-   stop("You need to have at least two chips to apply filtering by genes!")
+    stop("You need to have at least two chips to apply filtering by genes!")
 }
 
 # Separates expression values and flags

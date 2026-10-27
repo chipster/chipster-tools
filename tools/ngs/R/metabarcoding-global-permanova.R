@@ -20,32 +20,42 @@ library(vegan)
 load("ps.Rda")
 
 # Global PERMANOVA
-if (pheno2 == "EMPTY" &&
-    pheno3 == "EMPTY") {
+if (
+    pheno2 == "EMPTY" &&
+        pheno3 == "EMPTY"
+) {
     set.seed(1)
     ps_adonis <- adonis2(ps_dist ~ get(pheno1), by = "margin", data = ps_df)
 }
-if (pheno2 != "EMPTY" &&
-    pheno3 == "EMPTY" &&
-    type == "main") {
+if (
+    pheno2 != "EMPTY" &&
+        pheno3 == "EMPTY" &&
+        type == "main"
+) {
     set.seed(1)
     ps_adonis <- adonis2(ps_dist ~ get(pheno1) + get(pheno2), by = "margin", data = ps_df)
 }
-if (pheno2 != "EMPTY" &&
-    pheno3 == "EMPTY" &&
-    type == "all") {
+if (
+    pheno2 != "EMPTY" &&
+        pheno3 == "EMPTY" &&
+        type == "all"
+) {
     set.seed(1)
     ps_adonis <- adonis2(ps_dist ~ get(pheno1) * get(pheno2), by = "terms", data = ps_df)
 }
-if (pheno2 != "EMPTY" &&
-    pheno3 != "EMPTY" &&
-    type == "main") {
+if (
+    pheno2 != "EMPTY" &&
+        pheno3 != "EMPTY" &&
+        type == "main"
+) {
     set.seed(1)
     ps_adonis <- adonis2(ps_dist ~ get(pheno1) + get(pheno2) + get(pheno3), by = "margin", data = ps_df)
 }
-if (pheno2 != "EMPTY" &&
-    pheno3 != "EMPTY" &&
-    type == "all") {
+if (
+    pheno2 != "EMPTY" &&
+        pheno3 != "EMPTY" &&
+        type == "all"
+) {
     set.seed(1)
     ps_adonis <- adonis2(ps_dist ~ get(pheno1) * get(pheno2) * get(pheno3), by = "terms", data = ps_df)
 }

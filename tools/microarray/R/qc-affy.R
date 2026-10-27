@@ -53,7 +53,9 @@ if (number_samples < 8) {
 
 aqc <- try(qc(dat))
 if (class(aqc) == "try-error") {
-    stop("CHIPSTER-NOTE: Your array type is not supported by the simpleaffy quality analysis tool. Please use another quality assessment method")
+    stop(
+        "CHIPSTER-NOTE: Your array type is not supported by the simpleaffy quality analysis tool. Please use another quality assessment method"
+    )
 }
 
 # Plotting the QC-values
@@ -65,12 +67,17 @@ dev.off()
 deg <- AffyRNAdeg(dat)
 
 # Define modified function for plotting RNA degradation plot
-plot_RNA_deg <- function(rna.deg.obj, transform = "shift.scale", cols = NULL,
-                         line_type = 1, ...) {
-    if (!is.element(transform, c(
-        "shift.scale", "shift.only",
-        "neither"
-    ))) {
+plot_RNA_deg <- function(rna.deg.obj, transform = "shift.scale", cols = NULL, line_type = 1, ...) {
+    if (
+        !is.element(
+            transform,
+            c(
+                "shift.scale",
+                "shift.only",
+                "neither"
+            )
+        )
+    ) {
         stop("Tranform must be 'shift.scale','shift.only', or 'neither'")
     }
     mns <- rna.deg.obj$means.by.number
@@ -91,22 +98,38 @@ plot_RNA_deg <- function(rna.deg.obj, transform = "shift.scale", cols = NULL,
         mns <- sweep(mns, 1, 1:(dim(mns)[1]), "+")
         ylab <- paste(ylab, ": shifted")
     }
-    plot(-2, -1,
-        pch = "", xlim = range(-1, (dim(mns)[2])), ylim = range(min(as.vector(mns)) -
-            1, max(as.vector(mns)) + 1), xlab = "5' <-----> 3'\n Probe Number ",
-        ylab = ylab, axes = FALSE, main = "RNA degradation plot",
+    plot(
+        -2,
+        -1,
+        pch = "",
+        xlim = range(-1, (dim(mns)[2])),
+        ylim = range(
+            min(as.vector(mns)) -
+                1,
+            max(as.vector(mns)) + 1
+        ),
+        xlab = "5' <-----> 3'\n Probe Number ",
+        ylab = ylab,
+        axes = FALSE,
+        main = "RNA degradation plot",
         ...
     )
     axis(1)
     axis(2)
-    for (i in 1:dim(mns)[1]) lines(0:((dim(mns)[2] - 1)), mns[i, ], col = cols[i], lty = line_type[i])
+    for (i in 1:dim(mns)[1]) {
+        lines(0:((dim(mns)[2] - 1)), mns[i, ], col = cols[i], lty = line_type[i])
+    }
 }
 # Saving the degradation result into a file
 pdf(file = "RNA-degradation-plot.pdf", width = w / 72, height = h / 72)
 plot_RNA_deg(deg, col = color_array, line_type = line_type)
 legend(
-    legend = sampleNames(dat), x = "topleft", lty = line_type, cex = 0.75,
-    col = color_array, ncol = number_columns
+    legend = sampleNames(dat),
+    x = "topleft",
+    lty = line_type,
+    cex = 0.75,
+    col = color_array,
+    ncol = number_columns
 )
 dev.off()
 
@@ -117,19 +140,27 @@ x_values <- array(concentration, c(4, number_samples))
 x_values <- t(x_values)
 y_values <- spikeInProbes(aqc)
 pdf(file = "spike-in-plot.pdf", width = w / 72, height = h / 72)
-plot(x_values, y_values,
-    col = color_array, main = "Spike-in performance",
-    xlab = "log10 (concentration in pM)", ylab = "log2 (expression)",
-    pch = plot_symbol, type = "p"
+plot(
+    x_values,
+    y_values,
+    col = color_array,
+    main = "Spike-in performance",
+    xlab = "log10 (concentration in pM)",
+    ylab = "log2 (expression)",
+    pch = plot_symbol,
+    type = "p"
 )
 legend(
-    legend = sampleNames(dat), x = "topleft",
-    col = color_array, lty = line_type, ncol = number_columns, cex = 0.75,
+    legend = sampleNames(dat),
+    x = "topleft",
+    col = color_array,
+    lty = line_type,
+    ncol = number_columns,
+    cex = 0.75,
     pch = plot_symbol
 )
 
-for (loop_count in 1:length(dat))
-{
+for (loop_count in 1:length(dat)) {
     y_values <- spikeInProbes(aqc)[loop_count, ]
     lm_spike <- lm(y_values ~ concentration)
     slope <- coef(lm_spike)[2]

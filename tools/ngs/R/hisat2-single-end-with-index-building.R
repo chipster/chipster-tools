@@ -47,46 +47,57 @@ input.display.names <- read_input_definitions()
 unzipIfGZipFile("genome.txt")
 
 if (fileOk("genome.txt")) {
-  genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE)
-  hg_ifn <- ("")
-  echo.command <- paste("echo Host genome file type", genome.filetype, " > hisat.log")
-  runExternal(echo.command)
-  new_index_created <- ("no")
-  # case 1. Ready calculated indexes in tar format
-  if (genome.filetype == "tar") {
-    runExternal("echo Extracting tar formatted gemome index file >> hisat.log")
-    # Untar. Folders are flattened
-    # Extract to a folder of its own, so that the files of the package can't replace the files of the job
-    dir.create("genome_index")
-    runExternal("tar xf genome.txt -C genome_index --xform='s#^.+/##x' 2>> hisat.log")
-    # Check index base name
-    if (length(Sys.glob("genome_index/*.1.ht2")) != 0) {
-      f <- list.files("genome_index", pattern = "\\.1.ht2$")
-      hisat2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
-    } else if (length(Sys.glob("genome_index/*.1.ht2l")) != 0) {
-      f <- list.files("genome_index", pattern = "\\.1.ht2l$")
-      hisat2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
-    } else {
-      stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Hisat2 index.")
-    }
-    # case 2. Fasta file
-  } else {
-    # Do indexing
-    runExternal("echo Indexing the genome... >> hisat.log")
-    runExternal("echo >> hisat.log")
-    hisat2.genome <- strip_name(input.display.names$genome.txt)
-    index.command <- paste("bash -c '", hisat.index.binary, "-p", chipster.threads.max, "genome.txt", hisat2.genome, "2>>hisat.log", "'")
-    runExternal(paste("echo ", index.command, " >> hisat.log"))
-    runExternal(index.command)
-    echo.command <- paste("echo Internal genome name:", hisat2.genome, " >> hisat.log")
+    genome.filetype <- system("file -b genome.txt | cut -d ' ' -f2", intern = TRUE)
+    hg_ifn <- ("")
+    echo.command <- paste("echo Host genome file type", genome.filetype, " > hisat.log")
     runExternal(echo.command)
-    # Make tar package from the index
-    if (file.exists(Sys.glob("*.1.ht*"))) {
-      runExternal("tar cf hisat2_index.tar -- *.ht*")
+    new_index_created <- ("no")
+    # case 1. Ready calculated indexes in tar format
+    if (genome.filetype == "tar") {
+        runExternal("echo Extracting tar formatted gemome index file >> hisat.log")
+        # Untar. Folders are flattened
+        # Extract to a folder of its own, so that the files of the package can't replace the files of the job
+        dir.create("genome_index")
+        runExternal("tar xf genome.txt -C genome_index --xform='s#^.+/##x' 2>> hisat.log")
+        # Check index base name
+        if (length(Sys.glob("genome_index/*.1.ht2")) != 0) {
+            f <- list.files("genome_index", pattern = "\\.1.ht2$")
+            hisat2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
+        } else if (length(Sys.glob("genome_index/*.1.ht2l")) != 0) {
+            f <- list.files("genome_index", pattern = "\\.1.ht2l$")
+            hisat2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
+        } else {
+            stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Hisat2 index.")
+        }
+        # case 2. Fasta file
+    } else {
+        # Do indexing
+        runExternal("echo Indexing the genome... >> hisat.log")
+        runExternal("echo >> hisat.log")
+        hisat2.genome <- strip_name(input.display.names$genome.txt)
+        index.command <- paste(
+            "bash -c '",
+            hisat.index.binary,
+            "-p",
+            chipster.threads.max,
+            "genome.txt",
+            hisat2.genome,
+            "2>>hisat.log",
+            "'"
+        )
+        runExternal(paste("echo ", index.command, " >> hisat.log"))
+        runExternal(index.command)
+        echo.command <- paste("echo Internal genome name:", hisat2.genome, " >> hisat.log")
+        runExternal(echo.command)
+        # Make tar package from the index
+        if (file.exists(Sys.glob("*.1.ht*"))) {
+            runExternal("tar cf hisat2_index.tar -- *.ht*")
+        }
     }
-  }
 } else {
-  stop("CHIPSTER-NOTE: Genome file not provided. Please make sure genome file is selcted and assigned to the correct input.")
+    stop(
+        "CHIPSTER-NOTE: Genome file not provided. Please make sure genome file is selcted and assigned to the correct input."
+    )
 }
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
@@ -96,18 +107,18 @@ reads.parsed <- paste(grep("reads", input.names[, 1], value = TRUE), sep = "", c
 hisat.parameters <- paste(hisat.parameters, "-U", reads.parsed)
 # Quality score format
 if (quality.format == "phred64") {
-  hisat.parameters <- paste(hisat.parameters, "--phred64")
+    hisat.parameters <- paste(hisat.parameters, "--phred64")
 } else {
-  hisat.parameters <- paste(hisat.parameters, "--phred33")
+    hisat.parameters <- paste(hisat.parameters, "--phred33")
 }
 # Intron length, defaults are 20 and 500 000
 hisat.parameters <- paste(hisat.parameters, "--min-intronlen", min.intron.length)
 hisat.parameters <- paste(hisat.parameters, "--max-intronlen", max.intron.length)
 # Specify strand-specific information: the default is unstranded
 if (rna.strandness == "F") {
-  hisat.parameters <- paste(hisat.parameters, "--rna-strandness F")
+    hisat.parameters <- paste(hisat.parameters, "--rna-strandness F")
 } else if (rna.strandness == "R") {
-  hisat.parameters <- paste(hisat.parameters, "--rna-strandness R")
+    hisat.parameters <- paste(hisat.parameters, "--rna-strandness R")
 }
 # Organism
 # -x declares the basename of the index for reference genome
@@ -117,17 +128,17 @@ hisat.parameters <- paste(hisat.parameters, "-x", hisat2.genome)
 # We have created own genome -> no need fot environment variable
 # Known splice sites
 if (file.exists("splicesites.txt")) {
-  hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
+    hisat.parameters <- paste(hisat.parameters, "--known-splicesite-infile", "splicesites.txt")
 }
 # How many hits is a read allowed to have
 hisat.parameters <- paste(hisat.parameters, "-k", max.multihits)
 # Allow soft-clipping, by default soft-clipping is used
 if (no.softclip == "nosoft") {
-  hisat.parameters <- paste(hisat.parameters, "--no-softclip")
+    hisat.parameters <- paste(hisat.parameters, "--no-softclip")
 }
 # Is longer anchor lengths required
 if (dta == "yesdta") {
-  hisat.parameters <- paste(hisat.parameters, "--dta")
+    hisat.parameters <- paste(hisat.parameters, "--dta")
 }
 
 ## Set parameters that are not mutable via Chipster
@@ -141,7 +152,13 @@ hisat.parameters <- paste(hisat.parameters, "--no-unal")
 command <- paste(hisat.binary)
 
 # Add the parameters
-command <- paste(command, hisat.parameters, "2> hisat.log |", samtools.binary, "sort -T srt -o hisat.sorted.bam -O bam -")
+command <- paste(
+    command,
+    hisat.parameters,
+    "2> hisat.log |",
+    samtools.binary,
+    "sort -T srt -o hisat.sorted.bam -O bam -"
+)
 
 documentCommand(command)
 
@@ -151,14 +168,14 @@ runExternal(command)
 
 # Do not return empty BAM files
 if (fileOk("hisat.sorted.bam", minsize = 100)) {
-  # Rename result files
-  runExternal("mv hisat.sorted.bam hisat.bam")
-  # Change file names in BAM header to display names
-  displayNamesToBAM("hisat.bam")
-  # Index BAM
-  if (bai == "yes") {
-    system(paste(samtools.binary, "index hisat.bam > hisat.bam.bai"))
-  }
+    # Rename result files
+    runExternal("mv hisat.sorted.bam hisat.bam")
+    # Change file names in BAM header to display names
+    displayNamesToBAM("hisat.bam")
+    # Index BAM
+    if (bai == "yes") {
+        system(paste(samtools.binary, "index hisat.bam > hisat.bam.bai"))
+    }
 }
 
 # Substitute display names to log for clarity

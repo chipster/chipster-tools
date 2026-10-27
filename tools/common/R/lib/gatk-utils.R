@@ -49,5 +49,11 @@ formatGatkFasta <- function(fasta) {
     # Index
     system(paste(samtools.binary, "faidx", fasta))
     # Create dictionary file
-    system(paste("java -jar", picard.binary, "CreateSequenceDictionary", paste("R=", fasta, sep = "", collapse = ""), paste("O=", fasta, ".dict", sep = "", collapse = "")))
+    system(paste(
+        "java -jar",
+        picard.binary,
+        "CreateSequenceDictionary",
+        paste("R=", fasta, sep = "", collapse = ""),
+        paste("O=", fasta, ".dict", sep = "", collapse = "")
+    ))
 }

@@ -46,7 +46,14 @@ random <- c(rep("", length(sample)))
 if (chiptype == "empty" || chiptype == "null" || gsub(" ", "", chiptype) == "") {
     chiptype <- c("cDNA")
 }
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Preparing data for export
 M <- data.frame(dat2)
@@ -87,11 +94,21 @@ if (class(a) != "try-error") {
 }
 
 if (length(grep("description", tolower(colnames(dat2)))) > 0) {
-    dat2[, grep("description", tolower(colnames(dat2)))] <- gsub("\'|#|\"|\n|\t", "", dat2[, grep("description", tolower(colnames(dat2)))], perl = T)
+    dat2[, grep("description", tolower(colnames(dat2)))] <- gsub(
+        "\'|#|\"|\n|\t",
+        "",
+        dat2[, grep("description", tolower(colnames(dat2)))],
+        perl = T
+    )
 }
 
 if (length(grep("symbol", tolower(colnames(dat2)))) > 0) {
-    dat2[, grep("symbol", tolower(colnames(dat2)))] <- gsub("\'|#|\"|\n|\t", "", dat2[, grep("symbol", tolower(colnames(dat2)))], perl = T)
+    dat2[, grep("symbol", tolower(colnames(dat2)))] <- gsub(
+        "\'|#|\"|\n|\t",
+        "",
+        dat2[, grep("symbol", tolower(colnames(dat2)))],
+        perl = T
+    )
 }
 
 # Write data out

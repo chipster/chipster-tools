@@ -28,7 +28,7 @@ file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 
 # make an output folder
@@ -55,8 +55,8 @@ system(file1)
 # rename and move tissue_positions_list.csv
 tissue_positions <- list.files("input_folder", pattern = "tissue_positions", full.names = TRUE)
 if (file.exists(tissue_positions)) {
-  tissue_positions <- paste("mv", shQuote(tissue_positions), "output_folder/spatial/tissue_positions_list.csv")
-  system(tissue_positions)
+    tissue_positions <- paste("mv", shQuote(tissue_positions), "output_folder/spatial/tissue_positions_list.csv")
+    system(tissue_positions)
 }
 
 # copy image files to spatial subdir
@@ -72,11 +72,21 @@ seurat_obj <- Load10X_Spatial(data.dir = "output_folder", assay = "Spatial", sli
 # Sometimes the coordinates of the spatial image are characters instead of integers.
 # Check this and switch them to intergers if need be:
 if (class(seurat_obj@images[[sample_name]]@coordinates[["tissue"]]) == "character") {
-  seurat_obj@images[[sample_name]]@coordinates[["tissue"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["tissue"]])
-  seurat_obj@images[[sample_name]]@coordinates[["row"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["row"]])
-  seurat_obj@images[[sample_name]]@coordinates[["col"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["col"]])
-  seurat_obj@images[[sample_name]]@coordinates[["imagerow"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagerow"]])
-  seurat_obj@images[[sample_name]]@coordinates[["imagecol"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[["imagecol"]])
+    seurat_obj@images[[sample_name]]@coordinates[["tissue"]] <- as.integer(seurat_obj@images[[
+        sample_name
+    ]]@coordinates[["tissue"]])
+    seurat_obj@images[[sample_name]]@coordinates[["row"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[[
+        "row"
+    ]])
+    seurat_obj@images[[sample_name]]@coordinates[["col"]] <- as.integer(seurat_obj@images[[sample_name]]@coordinates[[
+        "col"
+    ]])
+    seurat_obj@images[[sample_name]]@coordinates[["imagerow"]] <- as.integer(seurat_obj@images[[
+        sample_name
+    ]]@coordinates[["imagerow"]])
+    seurat_obj@images[[sample_name]]@coordinates[["imagecol"]] <- as.integer(seurat_obj@images[[
+        sample_name
+    ]]@coordinates[["imagecol"]])
 }
 
 # Add samplename to metadata field (for plotting)
@@ -100,9 +110,13 @@ SpatialFeaturePlot(seurat_obj, c("nCount_Spatial", "nFeature_Spatial", "percent.
 C <- seurat_obj@assays$Spatial@counts
 C@x <- C@x / rep.int(colSums(C), diff(C@p))
 most_expressed <- order(Matrix::rowSums(C), decreasing = T)[20:1]
-boxplot(as.matrix(t(C[most_expressed, ])),
-  cex = 0.1, las = 1, xlab = "% total count per spot",
-  col = (scales::hue_pal())(20)[20:1], horizontal = TRUE
+boxplot(
+    as.matrix(t(C[most_expressed, ])),
+    cex = 0.1,
+    las = 1,
+    xlab = "% total count per spot",
+    col = (scales::hue_pal())(20)[20:1],
+    horizontal = TRUE
 )
 
 # close the pdf

@@ -39,7 +39,6 @@ command.start <- paste(pb.binary, "blastn")
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
 
-
 # check sequece file type
 inputfile.to.check <- ("query.fa")
 sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
@@ -71,7 +70,9 @@ if (num.queryseq > 10) {
 outfmt.is.table <- paste("no")
 
 if (outfmt == 6) {
-    outfmt.string <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')
+    outfmt.string <- paste(
+        '"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"'
+    )
     outfmt.is.table <- paste("yes")
 }
 # These parameters have allways some value
@@ -90,7 +91,13 @@ if (nchar(entrez_query) > 4) {
 
 
 if (outfmt < 5) {
-    optional.parameters <- paste(optional.parameters, " -html -num_descriptions ", num_hits, "-num_alignments", num_hits)
+    optional.parameters <- paste(
+        optional.parameters,
+        " -html -num_descriptions ",
+        num_hits,
+        "-num_alignments",
+        num_hits
+    )
 }
 
 if (outfmt > 5) {
@@ -186,7 +193,9 @@ if (outfmt == 5) {
 }
 
 if (outfmt.is.table == "yes") {
-    system('printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv ')
+    system(
+        'printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv '
+    )
     system("cat blast_results >> blast_results.tsv")
 }
 

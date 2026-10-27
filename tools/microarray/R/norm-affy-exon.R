@@ -91,7 +91,14 @@ training <- c(rep("", ncol(dat2)))
 time <- c(rep("", ncol(dat2)))
 random <- c(rep("", ncol(dat2)))
 chiptype <- chiptype
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Writing out data
 a <- try(library(chiptype, character.only = T))
@@ -104,7 +111,11 @@ if (chiptype != "empty" & class(a) != "try-error") {
         # Including gene names to data
         lib2 <- sub(".db", "", chiptype)
         symbol <- gsub("\'", "", data.frame(unlist(as.list(get(paste(lib2, "SYMBOL", sep = "")))))[rownames(dat2), ])
-        genename <- gsub("\'", "", data.frame(unlist(as.list(get(paste(lib2, "GENENAME", sep = "")))))[rownames(dat2), ])
+        genename <- gsub(
+            "\'",
+            "",
+            data.frame(unlist(as.list(get(paste(lib2, "GENENAME", sep = "")))))[rownames(dat2), ]
+        )
 
         # Fixes an issue introduced in BioC2.4 where the "#" character is introduced in some gene names
         genename <- gsub("#", "", genename)
@@ -112,7 +123,14 @@ if (chiptype != "empty" & class(a) != "try-error") {
         genename <- gsub("'", "", genename)
 
         # Writes the results into a file
-        write.table(data.frame(symbol, description = genename, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+        write.table(
+            data.frame(symbol, description = genename, dat2),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
     }
 } else {
     write.table(data.frame(dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)

@@ -7,7 +7,6 @@
 # PARAMETER db: "Database" TYPE [uniprotkb: "UniProt", embl: "EMBL", ensemblgene: "Ensembl Gene", ensemblgenomesgene: "Ensembl Genomes Gene", ensemblgenomesranscrip: "Ensembl Genomes Transcript", ensemblranscrip: "Ensembl Transcript", interpro: "InterPro", medline: "MEDLINE", pdb: "PDB", refseqn : "RefSeq nucleoide",refseqp : "RefSeq protein", taxonomy: "Taxonomy", tracearchive: "Trace Archive" ] DEFAULT uniprotkb (Database to be used.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file.)
 
-
 # KM 8.11. 2013
 
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")

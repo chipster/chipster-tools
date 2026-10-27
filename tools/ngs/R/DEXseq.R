@@ -50,7 +50,12 @@ sampleTable <- data.frame(
     condition = as.factor(phenodata$group)
 )
 
-ecs <- DEXSeqDataSetFromHTSeq(countfiles = dir(pattern = "jtt"), sampleData = sampleTable, design = ~ sample + exon + condition:exon, flattenedfile = gtf)
+ecs <- DEXSeqDataSetFromHTSeq(
+    countfiles = dir(pattern = "jtt"),
+    sampleData = sampleTable,
+    design = ~ sample + exon + condition:exon,
+    flattenedfile = gtf
+)
 
 
 # Normalization
@@ -68,7 +73,14 @@ res <- DEXSeqResults(ecs)
 siggenes <- as.character(unique(res$groupID[res$padj < pvalue]))
 res2 <- res[as.character(res$groupID) %in% siggenes, ]
 
-write.table(res2, "dexseq-genes-with-significant-exons.tsv", col.names = TRUE, row.names = TRUE, sep = "\t", quote = FALSE)
+write.table(
+    res2,
+    "dexseq-genes-with-significant-exons.tsv",
+    col.names = TRUE,
+    row.names = TRUE,
+    sep = "\t",
+    quote = FALSE
+)
 
 # Visualization
 # Note: as many pages of PDF as there are DEgenes.
@@ -76,7 +88,15 @@ if (nrow(res2) > 0) {
     genes <- unique(as.character(res[which(res$padj <= pvalue), ]$groupID))
     pdf("dexseq-exons.pdf", width = 297 / 25.4, height = 210 / 25.4)
     for (i in 1:length(genes)) {
-        plottry <- try(plotDEXSeq(res, genes[i], displayTranscripts = FALSE, cex.axis = 1.2, cex = 1.3, lwd = 2, legend = TRUE))
+        plottry <- try(plotDEXSeq(
+            res,
+            genes[i],
+            displayTranscripts = FALSE,
+            cex.axis = 1.2,
+            cex = 1.3,
+            lwd = 2,
+            legend = TRUE
+        ))
         if (class(plottry) == "try-error") {
             plot(x = 1, y = 1, xlab = "", ylab = "", axes = F, type = "")
             title(main = genes[i])

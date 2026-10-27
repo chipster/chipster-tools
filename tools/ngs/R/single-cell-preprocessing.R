@@ -46,7 +46,6 @@ outputnames[4, ] <- c("unaligned_tagged.bam", paste(input1namestripped, "_unalig
 write_output_definitions(outputnames)
 
 
-
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 trimmomatic.binary <- c(file.path(chipster.tools.path, "trimmomatic", "trimmomatic-0.33.jar"))
@@ -55,12 +54,20 @@ trimmomatic.binary <- c(file.path(chipster.tools.path, "trimmomatic", "trimmomat
 # run
 # single end:
 if (file.exists("input2.fastq.gz") == FALSE) {
-    command <- paste("java -Xmx2g -jar", picard.binary, "FastqToSam F1=input.fastq.gz O=fastq_to_bam.bam SM=something  2>> log.txt")
+    command <- paste(
+        "java -Xmx2g -jar",
+        picard.binary,
+        "FastqToSam F1=input.fastq.gz O=fastq_to_bam.bam SM=something  2>> log.txt"
+    )
 }
 
 # paired end:
 if (file.exists("input2.fastq.gz") == TRUE) {
-    command <- paste("java -Xmx2g -jar", picard.binary, "FastqToSam F1=input.fastq.gz F2=input2.fastq.gz O=fastq_to_bam.bam SM=something  2>> log.txt")
+    command <- paste(
+        "java -Xmx2g -jar",
+        picard.binary,
+        "FastqToSam F1=input.fastq.gz F2=input2.fastq.gz O=fastq_to_bam.bam SM=something  2>> log.txt"
+    )
 }
 
 # stop(paste('CHIPSTER-NOTE: ', command))
@@ -70,9 +77,19 @@ system(command)
 # STEP 2: Tag BAM
 # First round: cell barcode
 # command start
-command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=fastq_to_bam.bam OUTPUT=unaligned_tagged_cell.bam SUMMARY=summary_cell.txt", sep = "")
+command.start <- paste(
+    path.dropseq,
+    "/TagBamWithReadSequenceExtended INPUT=fastq_to_bam.bam OUTPUT=unaligned_tagged_cell.bam SUMMARY=summary_cell.txt",
+    sep = ""
+)
 # parameters
-command.parameters <- paste("BASE_RANGE=", base_range_cell, " BASE_QUALITY=", base_quality, " BARCODED_READ=1 DISCARD_READ=False TAG_NAME=XC NUM_BASES_BELOW_QUALITY=1")
+command.parameters <- paste(
+    "BASE_RANGE=",
+    base_range_cell,
+    " BASE_QUALITY=",
+    base_quality,
+    " BARCODED_READ=1 DISCARD_READ=False TAG_NAME=XC NUM_BASES_BELOW_QUALITY=1"
+)
 # run the tool
 command <- paste(command.start, command.parameters, " 2>> log.txt")
 system(command)
@@ -85,9 +102,19 @@ plot(cell_summary2, type = "h", col = "blue", lwd = 10, main = "Number of failed
 
 # Second round: molecule barcode
 # command start
-command.start <- paste(path.dropseq, "/TagBamWithReadSequenceExtended INPUT=unaligned_tagged_cell.bam OUTPUT=unaligned_tagged.bam SUMMARY=summary_molecular.txt", sep = "")
+command.start <- paste(
+    path.dropseq,
+    "/TagBamWithReadSequenceExtended INPUT=unaligned_tagged_cell.bam OUTPUT=unaligned_tagged.bam SUMMARY=summary_molecular.txt",
+    sep = ""
+)
 # parameters
-command.parameters <- paste("BASE_RANGE=", base_range_mol, "BASE_QUALITY=", base_quality, " BARCODED_READ=1 DISCARD_READ=True TAG_NAME=XM NUM_BASES_BELOW_QUALITY=1")
+command.parameters <- paste(
+    "BASE_RANGE=",
+    base_range_mol,
+    "BASE_QUALITY=",
+    base_quality,
+    " BARCODED_READ=1 DISCARD_READ=True TAG_NAME=XM NUM_BASES_BELOW_QUALITY=1"
+)
 # run the tool
 command <- paste(command.start, command.parameters, " 2>> log.txt")
 system(command)
@@ -106,12 +133,20 @@ system("cat summary_cell.txt summary_molecular.txt > tagging_summary.txt")
 
 # STEP 3: Filter & trim
 # FilterBAM:
-command <- paste(path.dropseq, "/FilterBAM TAG_REJECT=XQ INPUT=unaligned_tagged.bam OUTPUT=unaligned_tagged_filtered.bam  2>> log.txt", sep = "")
+command <- paste(
+    path.dropseq,
+    "/FilterBAM TAG_REJECT=XQ INPUT=unaligned_tagged.bam OUTPUT=unaligned_tagged_filtered.bam  2>> log.txt",
+    sep = ""
+)
 system(command)
 
 # TrimStartingSequence:
 # command start
-command.start <- paste(path.dropseq, "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=adapter_trim_summary.txt", sep = "")
+command.start <- paste(
+    path.dropseq,
+    "/TrimStartingSequence INPUT=unaligned_tagged_filtered.bam OUTPUT=unaligned_tagged_trimmed.bam OUTPUT_SUMMARY=adapter_trim_summary.txt",
+    sep = ""
+)
 # parameters
 command.parameters <- paste("SEQUENCE=", sequence, "MISMATCHES=", mismatches, "NUM_BASES=", num_bases)
 # run the tool
@@ -121,11 +156,23 @@ system(command)
 # pdf(file="Trimming_histogram.pdf")
 adapter_trim_summary <- read.table("adapter_trim_summary.txt", header = TRUE, "\t", skip = 6)
 adapter_trim_summary2 <- data.matrix(adapter_trim_summary)
-plot(adapter_trim_summary2, type = "h", col = "red", lwd = 10, main = "Adapter trimming", xlab = "Location where the adapter sequence is found (from beginning towards the end)", ylab = "Number of reads")
+plot(
+    adapter_trim_summary2,
+    type = "h",
+    col = "red",
+    lwd = 10,
+    main = "Adapter trimming",
+    xlab = "Location where the adapter sequence is found (from beginning towards the end)",
+    ylab = "Number of reads"
+)
 
 # PolyATrimmer:
 # command start
-command.start <- paste(path.dropseq, "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt", sep = "")
+command.start <- paste(
+    path.dropseq,
+    "/PolyATrimmer INPUT=unaligned_tagged_trimmed.bam OUTPUT=unaligned_tagged_polyA_filtered.bam OUTPUT_SUMMARY=polyA_trimming_report.txt",
+    sep = ""
+)
 # parameters
 command.parameters <- paste("MISMATCHES=", mismatches_polyA, "NUM_BASES=", num_bases_polyA)
 # run the tool
@@ -134,13 +181,25 @@ system(command)
 # make a plot:
 polyA_trim_summary <- read.table("polyA_trimming_report.txt", header = TRUE, "\t", skip = 6)
 polyA_trim_summary2 <- data.matrix(polyA_trim_summary)
-plot(polyA_trim_summary2, type = "h", col = "red", lwd = 5, main = "polyA trimming", xlab = "Location where the polyA sequence is found (from the end towards the beginning)", ylab = "Number of reads")
+plot(
+    polyA_trim_summary2,
+    type = "h",
+    col = "red",
+    lwd = 5,
+    main = "polyA trimming",
+    xlab = "Location where the polyA sequence is found (from the end towards the beginning)",
+    ylab = "Number of reads"
+)
 dev.off() # close the pdf
 
 # STEP 4: BAM to FASTQ
 picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 # run
-command <- paste("java -Xmx4g -jar", picard.binary, "SamToFastq INPUT=unaligned_tagged_polyA_filtered.bam FASTQ=preprocessed.fastq 2>> log.txt")
+command <- paste(
+    "java -Xmx4g -jar",
+    picard.binary,
+    "SamToFastq INPUT=unaligned_tagged_polyA_filtered.bam FASTQ=preprocessed.fastq 2>> log.txt"
+)
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 system(command)

@@ -35,15 +35,15 @@ options(Seurat.object.assay.version = "v5")
 load("combined_seurat_obj.Robj")
 
 if (exists("seurat_obj")) {
-  data.combined <- seurat_obj
+    data.combined <- seurat_obj
 }
 
 DefaultAssay(data.combined) <- "RNA" # this is very crucial.
 
 # do this later?
 if (normalisation.method == "SCT") {
-  # When SCTransform was used to normalise the data, do a prep step:
-  data.combined <- PrepSCTFindMarkers(data.combined)
+    # When SCTransform was used to normalise the data, do a prep step:
+    data.combined <- PrepSCTFindMarkers(data.combined)
 }
 
 
@@ -66,7 +66,12 @@ data.combined <- SetIdent(data.combined, value = sel.clust)
 # Aggregate
 # bulk <- AggregateExpression(data.combined,  return.seurat = T, assays = "RNA",  group.by = c("seurat_clusters", "stim", "type"), verbose = F)
 # Note: not assays = "RNA", so that it works also for sct
-bulk <- AggregateExpression(data.combined, return.seurat = T, group.by = c("seurat_clusters", "stim", "type"), verbose = F)
+bulk <- AggregateExpression(
+    data.combined,
+    return.seurat = T,
+    group.by = c("seurat_clusters", "stim", "type"),
+    verbose = F
+)
 
 # Subset based on cluster number
 cluster.bulk <- subset(bulk, seurat_clusters == paste("cluster", cluster, sep = ""))
@@ -88,16 +93,41 @@ Idents(cluster.bulk) <- "type"
 # Compute differential expression
 # For SCTransformed data:
 if (normalisation.method == "SCT") {
-  #  save(cluster.bulk, file = "data_combined_pseudobulk.Robj")
-  pseudobulk_markers <- FindMarkers(cluster.bulk, assay = "SCT", ident.1 = samples1, ident.2 = samples2, slot = "counts", , test.use = test.type, verbose = F, logfc.threshold = logFC.de, min.pct = minpct, recorrect_umi = FALSE, only.pos = only.positive)
-  # Currently, it is unsure how to (best) use SCTransformed data with DESeq2:
-  # https://github.com/satijalab/seurat/issues/7659
-  if (test.type == "DESeq2") {
-    stop("CHIPSTER-NOTE: Apologies, but currently in Seurat, DESeq2 won't work with SCTransformed data. Try with another method.")
-  }
-  # For normalised data:
+    #  save(cluster.bulk, file = "data_combined_pseudobulk.Robj")
+    pseudobulk_markers <- FindMarkers(
+        cluster.bulk,
+        assay = "SCT",
+        ident.1 = samples1,
+        ident.2 = samples2,
+        slot = "counts",
+        ,
+        test.use = test.type,
+        verbose = F,
+        logfc.threshold = logFC.de,
+        min.pct = minpct,
+        recorrect_umi = FALSE,
+        only.pos = only.positive
+    )
+    # Currently, it is unsure how to (best) use SCTransformed data with DESeq2:
+    # https://github.com/satijalab/seurat/issues/7659
+    if (test.type == "DESeq2") {
+        stop(
+            "CHIPSTER-NOTE: Apologies, but currently in Seurat, DESeq2 won't work with SCTransformed data. Try with another method."
+        )
+    }
+    # For normalised data:
 } else {
-  pseudobulk_markers <- FindMarkers(cluster.bulk, ident.1 = samples1, ident.2 = samples2, slot = "counts", test.use = test.type, verbose = F, min.pct = minpct, only.pos = only.positive, logfc.threshold = logFC.de)
+    pseudobulk_markers <- FindMarkers(
+        cluster.bulk,
+        ident.1 = samples1,
+        ident.2 = samples2,
+        slot = "counts",
+        test.use = test.type,
+        verbose = F,
+        min.pct = minpct,
+        only.pos = only.positive,
+        logfc.threshold = logFC.de
+    )
 }
 
 # FindMarkers function gives NAs to some "outlier" genes when using DESeq.
@@ -107,15 +137,22 @@ if (normalisation.method == "SCT") {
 # Sepate NAs to another table for user:
 pseudobulk_markers_NAs <- pseudobulk_markers[is.na(pseudobulk_markers$p_val_adj), ]
 if (nrow(pseudobulk_markers_NAs) != 0) {
-  write.table(pseudobulk_markers_NAs, file = "pseudobulk_markers_NAs.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    write.table(
+        pseudobulk_markers_NAs,
+        file = "pseudobulk_markers_NAs.tsv",
+        sep = "\t",
+        row.names = TRUE,
+        col.names = TRUE,
+        quote = FALSE
+    )
 }
 
 # Remove or eplace NAs with 0.0, so that it doesn't cause problems later on.
 if (replace.NAs == "replace") {
-  pseudobulk_markers$p_val <- replace_na(pseudobulk_markers$p_val, 0.0)
-  pseudobulk_markers$p_val_adj <- replace_na(pseudobulk_markers$p_val_adj, 0.0)
+    pseudobulk_markers$p_val <- replace_na(pseudobulk_markers$p_val, 0.0)
+    pseudobulk_markers$p_val_adj <- replace_na(pseudobulk_markers$p_val_adj, 0.0)
 } else if (replace.NAs == "remove") {
-  pseudobulk_markers <- pseudobulk_markers[!is.na(pseudobulk_markers$p_val_adj), ]
+    pseudobulk_markers <- pseudobulk_markers[!is.na(pseudobulk_markers$p_val_adj), ]
 }
 
 # Filter based on adj-p-val :
@@ -127,36 +164,58 @@ pdf(file = "expressionPlots.pdf")
 
 pseudobulk_markers$gene <- rownames(pseudobulk_markers)
 ggplot(pseudobulk_markers, aes(avg_log2FC, -log10(p_val))) +
-  geom_point(size = 0.5, alpha = 0.5) +
-  theme_bw() +
-  ylab("-log10(unadjusted p-value)") +
-  geom_text_repel(aes(label = ifelse(p_val_adj < 0.01, gene, "")),
-    colour = "red", size = 3
-  ) +
-  ggtitle("Volcano plot of pseudobulk results (p_val_adj < 0.01 in red)")
+    geom_point(size = 0.5, alpha = 0.5) +
+    theme_bw() +
+    ylab("-log10(unadjusted p-value)") +
+    geom_text_repel(aes(label = ifelse(p_val_adj < 0.01, gene, "")), colour = "red", size = 3) +
+    ggtitle("Volcano plot of pseudobulk results (p_val_adj < 0.01 in red)")
 
 # Choose top 6, use head in case of ties
 pseudobulk_markers %>%
-  # group_by(cluster) %>%
-  top_n(-6, p_val) %>%
-  head(6) -> top5_cell_selection
+    # group_by(cluster) %>%
+    top_n(-6, p_val) %>%
+    head(6) -> top5_cell_selection
 
 
 # VlnPlot(cell_selection, features = as.character(unique(top5_cell_selection$gene)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1)
-plotlist <- VlnPlot(cluster.bulk, features = as.character(rownames(top5_cell_selection)), ncol = 3, group.by = "type", assay = "RNA", pt.size = 0.1, combine = FALSE)
+plotlist <- VlnPlot(
+    cluster.bulk,
+    features = as.character(rownames(top5_cell_selection)),
+    ncol = 3,
+    group.by = "type",
+    assay = "RNA",
+    pt.size = 0.1,
+    combine = FALSE
+)
 p1 <- cowplot::plot_grid(plotlist = plotlist, ncol = 2, label_size = 10)
 title <- ggdraw() + draw_label("top genes, pseudobulk", fontface = "bold")
 cowplot::plot_grid(title, p1, ncol = 1, rel_heights = c(0.1, 1))
 
 
 # Plot these genes across all clusters, but split by “type”
-plotlist2 <- VlnPlot(data.combined, features = as.character(rownames(top5_cell_selection)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0.1, combine = FALSE)
+plotlist2 <- VlnPlot(
+    data.combined,
+    features = as.character(rownames(top5_cell_selection)),
+    ncol = 3,
+    split.by = "type",
+    assay = "RNA",
+    pt.size = 0.1,
+    combine = FALSE
+)
 p2 <- cowplot::plot_grid(plotlist = plotlist2, ncol = 2, label_size = 10)
 title <- ggdraw() + draw_label("all cells top genes, clusters", fontface = "bold")
 cowplot::plot_grid(title, p2, ncol = 1, rel_heights = c(0.1, 1))
 
 Idents(data.combined) <- "stim"
-plotlist3 <- VlnPlot(data.combined, features = as.character(rownames(top5_cell_selection)), ncol = 3, split.by = "type", assay = "RNA", pt.size = 0.1, combine = FALSE)
+plotlist3 <- VlnPlot(
+    data.combined,
+    features = as.character(rownames(top5_cell_selection)),
+    ncol = 3,
+    split.by = "type",
+    assay = "RNA",
+    pt.size = 0.1,
+    combine = FALSE
+)
 p3 <- cowplot::plot_grid(plotlist = plotlist3, ncol = 2, label_size = 10)
 title <- ggdraw() + draw_label("all cells top genes, samples", fontface = "bold")
 cowplot::plot_grid(title, p3, ncol = 1, rel_heights = c(0.1, 1))
@@ -164,9 +223,9 @@ cowplot::plot_grid(title, p3, ncol = 1, rel_heights = c(0.1, 1))
 # According: https://nbisweden.github.io/workshop-scRNAseq/labs/seurat/seurat_05_dge.html#pseudobulk
 # Choose top 10, use head in case of ties
 pseudobulk_markers %>%
-  # group_by(cluster) %>%
-  top_n(-10, p_val) %>%
-  head(10) -> top10_cell_selection
+    # group_by(cluster) %>%
+    top_n(-10, p_val) %>%
+    head(10) -> top10_cell_selection
 
 
 # DotPlot(cluster.bulk,
@@ -181,21 +240,20 @@ dot_plot$data$id <- factor(x = dot_plot$data$id, levels = levels_in_data) # chan
 dot_plot + coord_flip() + ggtitle("Expression, pseudobulk") + RotatedAxis() # print again the plot
 
 
-DotPlot(data.combined,
-  features = rownames(top10_cell_selection), group.by = "stim",
-  assay = "RNA"
-) + coord_flip() + ggtitle("Expression, all cells") + RotatedAxis()
+DotPlot(data.combined, features = rownames(top10_cell_selection), group.by = "stim", assay = "RNA") +
+    coord_flip() +
+    ggtitle("Expression, all cells") +
+    RotatedAxis()
 
 dev.off() # close the pdf
 
 
-
 # Add average expression to the table:
 if (normalisation.method == "SCT") {
-  # to be tested:
-  aver_expr <- AverageExpression(object = cluster.bulk, slot = "data", assay = "SCT")
+    # to be tested:
+    aver_expr <- AverageExpression(object = cluster.bulk, slot = "data", assay = "SCT")
 } else {
-  aver_expr <- AverageExpression(object = cluster.bulk)
+    aver_expr <- AverageExpression(object = cluster.bulk)
 }
 
 aver_expr_in_clusters <- aver_expr[[1]]
@@ -214,7 +272,5 @@ name.for.output.file <- paste("pseudobulk_de-list_", comparison.name, ".tsv", se
 
 # Write to table
 write.table(full_table, file = name.for.output.file, sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
-
-
 
 ## EOF

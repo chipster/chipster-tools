@@ -20,7 +20,6 @@
 
 # PARAMETER OPTIONAL test: "Test" TYPE [empiricalBayes: "empirical Bayes", fast-t-test: "fast t-test", t-test: t-test, F-test: F-test, Mann-Whitney: Mann-Whitney, LPE: LPE, RankProd: RankProd] DEFAULT empiricalBayes (Test type. LPE only works, if the whole normalized data is used, i.e., the data should not be filtered.)
 
-
 # Loads the libraries
 library(multtest)
 
@@ -48,7 +47,9 @@ groups <- phenodata[, pmatch(column, colnames(phenodata))]
 
 if (exists("pairing")) {
     if (column == pairing) {
-        stop("CHIPSTER-NOTE: Phenodata column describing the groups to test cannot be the same that contains pairing information")
+        stop(
+            "CHIPSTER-NOTE: Phenodata column describing the groups to test cannot be the same that contains pairing information"
+        )
     }
     if (pairing != "EMPTY") {
         pairs <- phenodata[, pmatch(pairing, colnames(phenodata))]
@@ -162,8 +163,11 @@ if (meth == "t-test") {
     p <- rep(as.numeric(NA), nrow(dat2))
     if (pairing == "EMPTY") {
         for (i in 1:nrow(dat2)) {
-            if ((sum(!is.na(dat2.1[i, ])) > 1) & (sum(!is.na(dat2.2[i, ])) > 1) &&
-                (length(which(!dat2.1[i, ] == mean(dat2.1[i, ]))) > 0 || length(which(!dat2.2[i, ] == mean(dat2.2[i, ]))) > 0)
+            if (
+                (sum(!is.na(dat2.1[i, ])) > 1) &
+                    (sum(!is.na(dat2.2[i, ])) > 1) &&
+                    (length(which(!dat2.1[i, ] == mean(dat2.1[i, ]))) > 0 ||
+                        length(which(!dat2.2[i, ] == mean(dat2.2[i, ]))) > 0)
             ) {
                 p[i] <- t.test(x = dat2.1[i, ], y = dat2.2[i, ])$p.value
             }
@@ -195,8 +199,12 @@ if (meth == "t-test") {
             print(dat2.1[i, ])
             print(dat2.2[i, ])
 
-            if ((sum(!is.na(dat2.1[i, ])) > 1) & (sum(!is.na(dat2.2[i, ])) > 1) && length(unique(round(dat2.1[i, ] - dat2.2[i, ], digits = 10))) > 1 &&
-                (length(which(!dat2.1[i, ] == mean(dat2.1[i, ]))) > 0 || length(which(!dat2.2[i, ] == mean(dat2.2[i, ]))) > 0)
+            if (
+                (sum(!is.na(dat2.1[i, ])) > 1) &
+                    (sum(!is.na(dat2.2[i, ])) > 1) &&
+                    length(unique(round(dat2.1[i, ] - dat2.2[i, ], digits = 10))) > 1 &&
+                    (length(which(!dat2.1[i, ] == mean(dat2.1[i, ]))) > 0 ||
+                        length(which(!dat2.2[i, ] == mean(dat2.2[i, ]))) > 0)
             ) {
                 print(dat2.1[i, ])
                 print(dat2.2[i, ])
@@ -283,9 +291,13 @@ if (meth %in% c("Mann-Whitney", "fast-t-test", "t-test", "F-test")) {
         dat <- dat[which(p.adjusted <= p.cut), ]
         p.adjusted <- p.adjusted[which(p.adjusted <= p.cut)]
     }
-    write.table(data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)),
-        file = "two-sample.tsv", sep = "\t", row.names = TRUE,
-        col.names = TRUE, quote = FALSE
+    write.table(
+        data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)),
+        file = "two-sample.tsv",
+        sep = "\t",
+        row.names = TRUE,
+        col.names = TRUE,
+        quote = FALSE
     )
 }
 
@@ -346,7 +358,9 @@ if (meth == "LPE") {
         }
     }
     if (adj.method == "Hochberg") {
-        stop("CHIPSTER-NOTE: LPE function does not support Hochberg's correction. Please rerun the function again after choosing another p.value.adjustment.method")
+        stop(
+            "CHIPSTER-NOTE: LPE function does not support Hochberg's correction. Please rerun the function again after choosing another p.value.adjustment.method"
+        )
     }
     if (adj.method == "Bonferroni" | adj.method == "BH" | adj.method == "BY") {
         p.adjusted <- fdr.adjust(lp, adjp = adj.method)
@@ -364,7 +378,14 @@ if (meth == "LPE") {
         dat <- dat[which(p.adjusted <= p.cut), ]
         p.adjusted <- p.adjusted[which(p.adjusted <= p.cut)]
     }
-    write.table(data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)), file = "two-sample.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)),
+        file = "two-sample.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }
 
 # EOF

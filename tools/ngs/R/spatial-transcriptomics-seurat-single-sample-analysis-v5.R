@@ -32,21 +32,21 @@ load("seurat_object.Robj")
 seurat_obj <- SCTransform(seurat_obj, assay = "Spatial", variable.features.n = num.features, verbose = FALSE)
 
 # The following makes sure that all "umi.assay" slots are called "Spatial" after SCTransform
-# This is not an issue with one sample. It is an issue, when using this tool after subsetting out anatomical 
-# regions based on clusters from a Seurat object that has been merged/integrated. Issue is explained by StepahieHowe 
-# in issue https://github.com/satijalab/seurat/issues/8235. If the user is trying to normalize a Seurat object 
+# This is not an issue with one sample. It is an issue, when using this tool after subsetting out anatomical
+# regions based on clusters from a Seurat object that has been merged/integrated. Issue is explained by StepahieHowe
+# in issue https://github.com/satijalab/seurat/issues/8235. If the user is trying to normalize a Seurat object
 # that has been merged or integrated, there will be an error in the "Seurat v5 -Integration with scRNA-seq
 # data" tool. This solution does not solve issues with FindSpatiallyVariableFeatures() but it allows to
 # perform integration with scRNA-seq data without any errors. FindSpatiallyVariableFeatures() must still be
-# run for each object individually in the next tool because otherwise it will result in 'please provide the 
+# run for each object individually in the next tool because otherwise it will result in 'please provide the
 # same number of observations as spatial locations' error as explained by tingchiafelix
 print(length(seurat_obj@assays$SCT@SCTModel.list))
 for (i in 1:length(seurat_obj@assays$SCT@SCTModel.list)) {
-    slot(object = seurat_obj@assays$SCT@SCTModel.list[[i]], name="umi.assay")<-"Spatial"
+    slot(object = seurat_obj@assays$SCT@SCTModel.list[[i]], name = "umi.assay") <- "Spatial"
 }
-    
+
 # You can use this to check that all "umi.assay" slots are called "Spatial"
-print(SCTResults(object=seurat_obj, slot="umi.assay"))
+print(SCTResults(object = seurat_obj, slot = "umi.assay"))
 
 seurat_obj <- RunPCA(seurat_obj, assay = "SCT", npcs = PCstocompute, verbose = FALSE)
 

@@ -9,12 +9,10 @@
 # PARAMETER OPTIONAL outformat: "Output format" TYPE [ aln: "Clustal", fasta: "Fasta", html: "HTML" ] DEFAULT fasta (Multiple sequence alingment file format)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file.)
 
-
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("sequence")
 
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
-
 
 
 conda_otf.binary <- file.path(chipster.module.path, "../admin/shell/conda_otf.sh ")
@@ -99,8 +97,15 @@ if (outformat == "html") {
 }
 
 
-
-command.full <- paste(conda.path, conda.def, " -profile -in1 sequence1 -in2 sequence2 ", muscle.options, " -out", outfile, "2>alignment.log")
+command.full <- paste(
+    conda.path,
+    conda.def,
+    " -profile -in1 sequence1 -in2 sequence2 ",
+    muscle.options,
+    " -out",
+    outfile,
+    "2>alignment.log"
+)
 system(command.full)
 
 if (save_log == "no") {

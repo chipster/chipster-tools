@@ -23,9 +23,13 @@ pdf(file = "top_genes.pdf", width = 13, height = 7)
 C <- seurat_obj@assays$Spatial@counts
 C@x <- C@x / rep.int(colSums(C), diff(C@p))
 most_expressed <- order(Matrix::rowSums(C), decreasing = T)[20:1]
-boxplot(as.matrix(t(C[most_expressed, ])),
-    cex = 0.1, las = 1, xlab = "% total count per cell",
-    col = (scales::hue_pal())(20)[20:1], horizontal = TRUE
+boxplot(
+    as.matrix(t(C[most_expressed, ])),
+    cex = 0.1,
+    las = 1,
+    xlab = "% total count per cell",
+    col = (scales::hue_pal())(20)[20:1],
+    horizontal = TRUE
 )
 
 # close the pdf

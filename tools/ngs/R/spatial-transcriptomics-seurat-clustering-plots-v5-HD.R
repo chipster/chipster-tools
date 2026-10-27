@@ -6,7 +6,7 @@
 # SLOTS 3
 # TOOLS_BIN ""
 
-# 2026-02 ML 
+# 2026-02 ML
 
 # Load seurat object (called seurat_obj)
 load("seurat_object.Robj")
@@ -42,21 +42,18 @@ pdf(file = "clustering_plots.pdf", width = 9, height = 12)
 
 
 for (i in 1:length(assay_names)) {
-
-
-  
     DefaultAssay(seurat_obj) <- assay_names[i] # "Spatial.008um"
     assay_bin <- assay_names[i]
-    nCount_bin <- paste("nCount_",assay_names[i], sep="")
-    nFeature_bin <- paste("nFeature_",assay_names[i], sep="")
+    nCount_bin <- paste("nCount_", assay_names[i], sep = "")
+    nFeature_bin <- paste("nFeature_", assay_names[i], sep = "")
     just.bin <- sub("Spatial\\.", "", assay_names[i])
     umap_bin <- paste0("umap.", just.bin)
 
-        if (!(umap_bin %in% Reductions(seurat_obj))) {
+    if (!(umap_bin %in% Reductions(seurat_obj))) {
         next
-    } 
+    }
 
-    pca_bin <- paste("pca.", just.bin, sep="")
+    pca_bin <- paste("pca.", just.bin, sep = "")
 
     if (just.bin == "sketch") {
         DefaultAssay(seurat_obj) <- "Spatial.008um"
@@ -64,36 +61,66 @@ for (i in 1:length(assay_names)) {
         full_umap_bin <- "full.umap.sketch"
         umap_bin <- "umap.sketch"
         pca_bin <- "full.pca.sketch"
-    } else{
-    cluster_bin <-  paste("seurat_cluster.", just.bin, sep="") #"seurat_cluster.008um"
+    } else {
+        cluster_bin <- paste("seurat_cluster.", just.bin, sep = "") #"seurat_cluster.008um"
     }
 
     # Visualization
-  
+
     # print(DimPlot(seurat_obj, reduction = "umap", group.by = "ident"))
     # print(DimPlot(seurat_obj, reduction = "umap", group.by = "orig.ident"))
     # print(SpatialDimPlot(seurat_obj, label = TRUE, label.size = 3, ncol = 2))
 
-print("plotting now")
+    print("plotting now")
 
-    dim.plot <- DimPlot(seurat_obj, reduction = umap_bin, group.by = "seurat_cluster.sketched", label = TRUE, repel = T, alpha = 0.1) + NoLegend()
-    dim.plot2 <- DimPlot(seurat_obj, reduction = full_umap_bin, group.by = cluster_bin, label = TRUE, repel = T, alpha = 0.1) + NoLegend()
+    dim.plot <- DimPlot(
+        seurat_obj,
+        reduction = umap_bin,
+        group.by = "seurat_cluster.sketched",
+        label = TRUE,
+        repel = T,
+        alpha = 0.1
+    ) +
+        NoLegend()
+    dim.plot2 <- DimPlot(
+        seurat_obj,
+        reduction = full_umap_bin,
+        group.by = cluster_bin,
+        label = TRUE,
+        repel = T,
+        alpha = 0.1
+    ) +
+        NoLegend()
 
-    cluster.plot <- SpatialDimPlot(seurat_obj, group.by = cluster_bin, pt.size.factor = 1.2,  label = T, repel = T, label.size = 4) + theme(legend.position = "right")
+    cluster.plot <- SpatialDimPlot(
+        seurat_obj,
+        group.by = cluster_bin,
+        pt.size.factor = 1.2,
+        label = T,
+        repel = T,
+        label.size = 4
+    ) +
+        theme(legend.position = "right")
     print(dim.plot)
     print(dim.plot2)
     print(cluster.plot)
-
 
     # Apparently Seurat knows if an Ident string character is found in the columns so no need to use sobj@meta.data[[cluster_bin]]
     Idents(seurat_obj) <- cluster_bin
     cells <- CellsByIdentities(seurat_obj)
     cells <- cells[setdiff(names(cells), "NA")]
-    print(SpatialDimPlot(seurat_obj, cells.highlight = cells,
-                         cols.highlight = c("#FFFF00", "grey"),
-                         facet.highlight = TRUE, combine = TRUE, ncol = 6) + NoLegend())
-
-} 
+    print(
+        SpatialDimPlot(
+            seurat_obj,
+            cells.highlight = cells,
+            cols.highlight = c("#FFFF00", "grey"),
+            facet.highlight = TRUE,
+            combine = TRUE,
+            ncol = 6
+        ) +
+            NoLegend()
+    )
+}
 
 dev.off()
 

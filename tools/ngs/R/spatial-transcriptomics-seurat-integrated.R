@@ -37,8 +37,11 @@ DimPlot(allen_reference, group.by = "subclass", label = TRUE)
 anchors <- FindTransferAnchors(reference = allen_reference, query = seurat_obj, normalization.method = "SCT")
 
 predictions.assay <- TransferData(
-    anchorset = anchors, refdata = allen_reference$subclass, prediction.assay = TRUE,
-    weight.reduction = seurat_obj[["pca"]], dims = 1:30
+    anchorset = anchors,
+    refdata = allen_reference$subclass,
+    prediction.assay = TRUE,
+    weight.reduction = seurat_obj[["pca"]],
+    dims = 1:30
 )
 
 # add the predictions to the seurat object as a new assay

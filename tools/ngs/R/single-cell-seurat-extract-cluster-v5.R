@@ -7,7 +7,6 @@
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
-
 # 03.10.2019 ML
 # 2021-10-04 ML Update to Seurat v4
 # 2023-12-12 IH Seurat v5
@@ -55,7 +54,12 @@ if (exists("data.combined")) {
 
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
+textplot(
+    paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 
 dev.off() # close the pdf
 

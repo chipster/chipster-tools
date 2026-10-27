@@ -29,21 +29,36 @@ cat(fasta_file, file = "seqdata.fa", sep = "\n")
 
 tool <- file.path(chipster.tools.path, "dimont", "Dimont.jar")
 maxMemoryParameter <- paste("-Xmx", chipster.memory.max, "M", sep = "")
-command <- paste("java -Xms512M ", maxMemoryParameter, " -Djava.awt.headless=true -jar ", tool,
+command <- paste(
+    "java -Xms512M ",
+    maxMemoryParameter,
+    " -Djava.awt.headless=true -jar ",
+    tool,
     " data=seqdata.fa",
     " infix=dimont",
-    " position=", postag,
-    " value=", valtag,
-    " sd=", std,
-    " weightingFactor=", wf,
-    " starts=", starts,
-    " motifWidth=", motifwidth,
-    " motifOrder=", fgOrder,
-    " bgOrder=", bgOrder,
-    " ess=", ess,
-    " delete=", delete,
+    " position=",
+    postag,
+    " value=",
+    valtag,
+    " sd=",
+    std,
+    " weightingFactor=",
+    wf,
+    " starts=",
+    starts,
+    " motifWidth=",
+    motifwidth,
+    " motifOrder=",
+    fgOrder,
+    " bgOrder=",
+    bgOrder,
+    " ess=",
+    ess,
+    " delete=",
+    delete,
     " threads=1 > dimont.log",
-    sep = "", collapse = ""
+    sep = "",
+    collapse = ""
 )
 
 system(command)

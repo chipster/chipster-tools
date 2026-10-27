@@ -32,7 +32,6 @@
 # PARAMETER OPTIONAL sn_tag: "Use input names in output file names" TYPE [yes: Yes, no: No] DEFAULT yes (Name the output files according to the input sequence file.)
 # PARAMETER OPTIONAL save_tar: "Return results in one archive file" TYPE [yes: Yes, no: No] DEFAULT yes (Collect all the output files into a single tar formatted file.)
 
-
 # 13.11.2016 KM, created
 # 17.8.2017 KM, option to use input file names for output files
 
@@ -50,7 +49,18 @@ inputnames <- read_input_definitions()
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools"))
 vd.binary <- c(file.path(chipster.tools.path, "virusdetect", "virus_detect.pl"))
 # vd.binary <- c(file.path("/opt/chipster/tools_local/virusdetect", "virus_detect.pl"))
-vd.parameters <- paste("--reference", reference, "--thread_num", chipster.threads.max, "--coverage_cutoff", coverage_cutoff, "--depth_cutoff", depth_cutoff, "--hsp_cover", hsp_cover)
+vd.parameters <- paste(
+    "--reference",
+    reference,
+    "--thread_num",
+    chipster.threads.max,
+    "--coverage_cutoff",
+    coverage_cutoff,
+    "--depth_cutoff",
+    depth_cutoff,
+    "--hsp_cover",
+    hsp_cover
+)
 
 system("date > vd.log")
 
@@ -61,8 +71,6 @@ system("date > vd.log")
 #  }
 # }
 
-
-
 if (hostorg != "none") {
     # If host sequence subtraction is used, then we need to create a temporary copy of virus detect
     # vdpath <-  c(file.path("/opt/chipster/tools_local", "virusdetect"))
@@ -70,7 +78,6 @@ if (hostorg != "none") {
     # cp.command <- paste("cp -r ",  vdpath , "./")
     # system(cp.command)
     # vd.binary <- c(file.path("./virusdetect", "virus_detect.pl"))
-
 
     # Using pre-calculated indexes
     bwa.genome <- file.path(chipster.tools.path, "genomes", "indexes", "bwa", hostorg)
@@ -116,28 +123,48 @@ if (sn_tag == "yes") {
 # virusdetect_contigs.fa
 if (file.exists("result_inputseq/contig_sequences.fa")) {
     system("mv result_inputseq/contig_sequences.fa  ./virusdetect_contigs.fa ")
-    echo.command <- paste("echo ", nprefix, "virusdetect_contigs.fa'\t'Sequences of non-redundant contigs derived through reference-guided and de novo assemblies.>> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "virusdetect_contigs.fa'\t'Sequences of non-redundant contigs derived through reference-guided and de novo assemblies.>> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
 }
 
 # contigs_with_blastn_matches.fa
 if (file.exists("result_inputseq/contig_sequences.blastn.fa")) {
     system("mv result_inputseq/contig_sequences.blastn.fa  ./contigs_with_blastn_matches.fa")
-    echo.command <- paste("echo ", nprefix, "contigs_with_blastn_matches.fa'\t'Sequences of contigs that match to virus references by BLASTN. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "contigs_with_blastn_matches.fa'\t'Sequences of contigs that match to virus references by BLASTN. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
 }
 
 # contigs_with_blastx_matches.fa
 if (file.exists("result_inputseq/contig_sequences.blastx.fa")) {
     system("mv result_inputseq/contig_sequences.blastx.fa  ./contigs_with_blastx_matches.fa")
-    echo.command <- paste("echo ", nprefix, "contigs_with_blastx_matches.fa'\t'Sequences of contigs that match to virus references by BLASTX. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "contigs_with_blastx_matches.fa'\t'Sequences of contigs that match to virus references by BLASTX. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
 }
 
 # undetermined_contigs.fa
 if (file.exists("result_inputseq/contig_sequences.undetermined.fa")) {
     system("mv result_inputseq/contig_sequences.undetermined.fa  ./undetermined_contigs.fa")
-    echo.command <- paste("echo ", nprefix, "undetermined_contigs.fa'\t'Sequences of contigs that do not match to virus references. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "undetermined_contigs.fa'\t'Sequences of contigs that do not match to virus references. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
 }
 
@@ -146,10 +173,20 @@ if (file.exists("result_inputseq/blastn.html")) {
     system("echo '<html>' > blastn_matching_references.html")
     system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/blastn.html >> blastn_matching_references.html")
     system("echo '</html>' >> blastn_matching_references.html")
-    echo.command <- paste("echo ", nprefix, "blastn_matching_references.html '\t'Table listing reference viruses that have corresponding virus contigs identified by BLASTN.  >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "blastn_matching_references.html '\t'Table listing reference viruses that have corresponding virus contigs identified by BLASTN.  >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
     system("echo '\t\t\t\t'In addition, a pdf formatted report file is returned for each match. >> vd.log 2>&1")
-    for.command <- paste("for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); ", chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bn.pdf >> vd.log 2>&1; done;", sep = "")
+    for.command <- paste(
+        "for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); ",
+        chipster.tools.path,
+        "/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bn.pdf >> vd.log 2>&1; done;",
+        sep = ""
+    )
     system(for.command)
     # system(" for file in $(ls result_inputseq/blastn_references/*.html); do bln=$(basename $file .html); /opt/chipster/tools/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bn.pdf >> vd.log 2>&1; done;")
 }
@@ -159,10 +196,20 @@ if (file.exists("result_inputseq/blastx.html")) {
     system("echo '<html>' > blastx_matching_references.html")
     system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/blastx.html >> blastx_matching_references.html")
     system("echo '</html>' >> blastx_matching_references.html")
-    echo.command <- paste("echo ", nprefix, "blastx_matching_references.html '\t'Table listing reference viruses that have corresponding virus contigs identified by BLASTX. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "blastx_matching_references.html '\t'Table listing reference viruses that have corresponding virus contigs identified by BLASTX. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
     system("echo '\t\t\t\t'In addition, a pdf formatted report file is returned for each match. >> vd.log 2>&1")
-    for.command <- paste(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); ", chipster.tools.path, "/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bx.pdf; done;", sep = "")
+    for.command <- paste(
+        " for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); ",
+        chipster.tools.path,
+        "/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bx.pdf; done;",
+        sep = ""
+    )
     system(for.command)
     # system(" for file in $(ls result_inputseq/blastx_references/*.html); do bln=$(basename $file .html); /opt/chipster/tools/miniconda3/envs/chipster_tools/bin/weasyprint $file ${bln}.bx.pdf; done;")
 }
@@ -173,16 +220,25 @@ if (blast_ref == "yes") {
     if (file.exists("result_inputseq/blastn.reference.fa")) {
         system("mv result_inputseq/blastn.reference.fa blastn_matching_references.fa")
         system(paste(samtools.binary, "faidx blastn_matching_references.fa"))
-        echo.command <- paste("echo ", nprefix, "blastn_matching_references.fa and .fai.'\t'Virus reference sequences that produced hits for BLASTN search with the potential virus contigs. >> vd.log 2>&1", sep = "")
+        echo.command <- paste(
+            "echo ",
+            nprefix,
+            "blastn_matching_references.fa and .fai.'\t'Virus reference sequences that produced hits for BLASTN search with the potential virus contigs. >> vd.log 2>&1",
+            sep = ""
+        )
         system(echo.command)
     }
-
 
     # blastx.reference.fa
     if (file.exists("result_inputseq/blastx.reference.fa")) {
         system("mv result_inputseq/blastx.reference.fa blastx_matching_references.fa")
         system(paste(samtools.binary, "faidx blastx_matching_references.fa"))
-        echo.command <- paste("echo ", nprefix, "blastx_matching_references.fa and .fai.'\t'Virus reference sequences that produced hits for BLASTX search with the potential virus contigs. >> vd.log 2>&1", sep = "")
+        echo.command <- paste(
+            "echo ",
+            nprefix,
+            "blastx_matching_references.fa and .fai.'\t'Virus reference sequences that produced hits for BLASTX search with the potential virus contigs. >> vd.log 2>&1",
+            sep = ""
+        )
         system(echo.command)
     }
 }
@@ -196,7 +252,12 @@ if (blast_bam == "yes") {
         system(paste(samtools.binary, "view -bS blastn.sam -o blastn.bam"))
         system(paste(samtools.binary, "sort blastn.bam blastn_matches"))
         system(paste(samtools.binary, "index blastn_matches.bam"))
-        echo.command <- paste("echo ", nprefix, "blastn_matches.bam and .bai. '\t'BAM file containing the BLASTN alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1", sep = "")
+        echo.command <- paste(
+            "echo ",
+            nprefix,
+            "blastn_matches.bam and .bai. '\t'BAM file containing the BLASTN alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1",
+            sep = ""
+        )
         system(echo.command)
     }
 
@@ -207,7 +268,12 @@ if (blast_bam == "yes") {
         system(paste(samtools.binary, "view -bS blastx.sam -o blastx.bam"))
         system(paste(samtools.binary, "sort blastx.bam blastx_matches"))
         system(paste(samtools.binary, "index blastx_matches.bam"))
-        echo.command <- paste("echo ", nprefix, "blastnx_matches.bam and .bai. '\t'BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1", sep = "")
+        echo.command <- paste(
+            "echo ",
+            nprefix,
+            "blastnx_matches.bam and .bai. '\t'BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1",
+            sep = ""
+        )
         system(echo.command)
     }
 }
@@ -215,14 +281,24 @@ if (blast_bam == "yes") {
 # blastn_matches.tsv
 if (file.exists("result_inputseq/inputseq.blastn.xls")) {
     system("mv result_inputseq/inputseq.blastn.xls blastn_matches.tsv")
-    echo.command <- paste("echo ", nprefix, "blastn_matches.tsv '\t\t'Table of BLASTN matches to the reference virus database. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "blastn_matches.tsv '\t\t'Table of BLASTN matches to the reference virus database. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
 }
 
 # blastx_matches.tsv
 if (file.exists("result_inputseq/inputseq.blastx.xls")) {
     system("mv result_inputseq/inputseq.blastx.xls blastx_matches.tsv")
-    echo.command <- paste("echo ", nprefix, "blastx_matches.tsv '\t\t'Table of BLASTX matches to the reference virus database. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "blastx_matches.tsv '\t\t'Table of BLASTX matches to the reference virus database. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
 }
 
@@ -231,7 +307,12 @@ if (file.exists("result_inputseq/undetermined.html")) {
     system("echo '<html>' > undetermined.html")
     system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/undetermined.html >> undetermined.html")
     system("echo '</html>' >> undetermined.html")
-    echo.command <- paste("echo ", nprefix, "undetermined.html '\t\t'Table listing the length, siRNA size distribution and 21-22nt percentage of undetermined contigs. >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "undetermined.html '\t\t'Table listing the length, siRNA size distribution and 21-22nt percentage of undetermined contigs. >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
     system("echo  '\t\t\t\t'Potential virus contigs are indicated in green. >> vd.log 2>&1")
 }
@@ -240,15 +321,21 @@ if (file.exists("result_inputseq/undetermined_blast.html")) {
     system("echo '<html>' > undetermined_blast.html")
     system("awk '{ if ( NR > 6 ) print $0 }' result_inputseq/undetermined_blast.html >> undetermined_blast.html")
     system("echo '</html>' >> undetermined_blast.html")
-    echo.command <- paste("echo ", nprefix, "undetermined_blast.html '\t'Table listing contigs having hits in the virus reference database but not assigned to >> vd.log 2>&1", sep = "")
+    echo.command <- paste(
+        "echo ",
+        nprefix,
+        "undetermined_blast.html '\t'Table listing contigs having hits in the virus reference database but not assigned to >> vd.log 2>&1",
+        sep = ""
+    )
     system(echo.command)
-    system("echo '\t\t\t\t'any reference viruses because they did not meet the coverage or depth criteria. >> vd.log 2>&1")
+    system(
+        "echo '\t\t\t\t'any reference viruses because they did not meet the coverage or depth criteria. >> vd.log 2>&1"
+    )
 }
 
 
 # system ("ls -l >> vd.log")
 # system ("ls -l result_inputseq >> vd.log")
-
 
 if (save_tar == "yes") {
     if (sn_tag == "yes") {
@@ -294,7 +381,9 @@ if (save_tar == "yes") {
     write_output_definitions(outputnames)
     system("echo ------------------------------------------------------------- >> vd.log")
     system("echo Results have been collected to a single tar formatted archive file. >> vd.log")
-    system("echo You can use tool: Extract .tar or .tar.gz file in Utilities folder to extract result files from the tar archive. >> vd.log")
+    system(
+        "echo You can use tool: Extract .tar or .tar.gz file in Utilities folder to extract result files from the tar archive. >> vd.log"
+    )
     # system ("ls -l >> vd.log")
 }
 
@@ -313,11 +402,23 @@ if (sn_tag == "yes") {
     outputnames[3, ] <- c("contigs_with_blastx_matches.fa", paste(seq_ifn, "contigs_with_blastx_matches.fa", sep = "_"))
     outputnames[4, ] <- c("undetermined_contigs.fa", paste(seq_ifn, "undetermined_contigs.fa", sep = "_"))
     outputnames[5, ] <- c("blastn_matching_references.fa", paste(seq_ifn, "blastn_matching_references.fa", sep = "_"))
-    outputnames[6, ] <- c("blastn_matching_references.fa.fai", paste(seq_ifn, "blastn_matching_references.fa.fai", sep = "_"))
-    outputnames[7, ] <- c("blastn_matching_references.html", paste(seq_ifn, "blastn_matching_references.html", sep = "_"))
+    outputnames[6, ] <- c(
+        "blastn_matching_references.fa.fai",
+        paste(seq_ifn, "blastn_matching_references.fa.fai", sep = "_")
+    )
+    outputnames[7, ] <- c(
+        "blastn_matching_references.html",
+        paste(seq_ifn, "blastn_matching_references.html", sep = "_")
+    )
     outputnames[8, ] <- c("blastx_matching_references.fa", paste(seq_ifn, "blastx_matching_references.fa", sep = "_"))
-    outputnames[9, ] <- c("blastx_matching_references.fa.fai", paste(seq_ifn, "blastx_matching_references.fa.fai", sep = "_"))
-    outputnames[10, ] <- c("blastx_matching_references.html", paste(seq_ifn, "blastx_matching_references.html", sep = "_"))
+    outputnames[9, ] <- c(
+        "blastx_matching_references.fa.fai",
+        paste(seq_ifn, "blastx_matching_references.fa.fai", sep = "_")
+    )
+    outputnames[10, ] <- c(
+        "blastx_matching_references.html",
+        paste(seq_ifn, "blastx_matching_references.html", sep = "_")
+    )
     outputnames[11, ] <- c("blastn_matches.bam.bai", paste(seq_ifn, "blastn_matches.bam.bai", sep = "_"))
     outputnames[12, ] <- c("blastn_matches.bam", paste(seq_ifn, "blastn_matches.bam", sep = "_"))
     outputnames[13, ] <- c("blastx_matches.bam", paste(seq_ifn, "blastx_matches.bam", sep = "_"))

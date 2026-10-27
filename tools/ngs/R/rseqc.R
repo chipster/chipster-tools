@@ -9,9 +9,7 @@
 # PARAMETER OPTIONAL paired: "Generate inner distance plot" TYPE [yes, no] DEFAULT no (Calculate the inner distance between two paired RNA reads. The distance is the mRNA length between two paired reads.)
 # RUNTIME R-4.1.1
 
-
 # PARAMETER OPTIONAL strandedness: "Strandedness of reads" TYPE [none, 1++1--,2+-2-+: "1++,1--,2+-,2-+", 1+-1-+2++2--: "1+-,1-+,2++,2--", ++--: "++,--", +--+: "+-,-+"] DEFAULT none (How reads were stranded during sequencing. This only needed for RPKM saturation plot. If unsure, use tool RNA-seq strandedness inference and inner distance estimation using RseQC.)
-
 
 # AMS 09.01.2014
 # AMS 23.05.2014 added inner distance plot
@@ -35,7 +33,12 @@ if (file.exists("reference_file")) {
         stop(paste("CHIPSTER-NOTE: ", "Choose one of the reference organisms or provide your own BED file."))
     } else {
         # If not, we use the internal one.
-        internal.bed <- file.path(chipster.tools.path, "genomes", "bed", paste(organism, ".bed", sep = "", collapse = ""))
+        internal.bed <- file.path(
+            chipster.tools.path,
+            "genomes",
+            "bed",
+            paste(organism, ".bed", sep = "", collapse = "")
+        )
         # If chromosome names in BAM have chr, we make a temporary copy of BED with chr names, otherwise we use it as is.
         if (chr == "chr1") {
             source(file.path(chipster.common.lib.path, "gtf-utils.R"))

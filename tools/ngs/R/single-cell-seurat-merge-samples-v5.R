@@ -55,7 +55,15 @@ pdf(file = "Dispersion_plot.pdf", width = 13, height = 7)
 
 # Normalisation
 if (normalisation.method == "SCT") {
-    seurat_obj <- SCTransform(seurat_obj, assay = "RNA", new.assay.name = "SCT", vars.to.regress = c("percent.mt"), variable.features.n = num.features, verbose = FALSE,  ncells = 5000)
+    seurat_obj <- SCTransform(
+        seurat_obj,
+        assay = "RNA",
+        new.assay.name = "SCT",
+        vars.to.regress = c("percent.mt"),
+        variable.features.n = num.features,
+        verbose = FALSE,
+        ncells = 5000
+    )
     # to be added
     # Dispersion plot:
     # Not plotted for SCT. There are as many models as there are samples, and VariableFeaturePlot doesn't seem to support this currently.
@@ -67,7 +75,12 @@ if (normalisation.method == "SCT") {
     #plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
     #plot_grid(plot1, plot2)
 } else if (normalisation.method == "LogNormalize") {
-    seurat_obj <- NormalizeData(object = seurat_obj, normalization.method = "LogNormalize", scale.factor = totalexpr, verbose = FALSE)
+    seurat_obj <- NormalizeData(
+        object = seurat_obj,
+        normalization.method = "LogNormalize",
+        scale.factor = totalexpr,
+        verbose = FALSE
+    )
     # Detection of variable genes across the single cells
     # FindVariableFeatures function identifies features that are outliers on a 'mean variability plot'.
     seurat_obj <- FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = num.features, verbose = FALSE)
@@ -86,18 +99,43 @@ if (normalisation.method == "SCT") {
 }
 
 
-textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
+textplot(
+    paste(
+        "\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v",
+        length(VariableFeatures(object = seurat_obj)),
+        " \n  \n \v \v Number of \n \v \v cells: \n \v \v",
+        length(colnames(x = seurat_obj))
+    ),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 
 # Cell cycle stage scoring & PCA plot:
 # Note: in the very beginning we read in the table and set s.genes and gm2.genes
 # http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
 
-textplot(paste("Number of found cell cycle genes \n \v \v among the variable genes:  \n \v \v S genes: ", length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]), "/", length(s.genes), 
-    "\n \v \v G2M genes: ", length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(seurat_obj)))]), "/", length(g2m.genes) ),
-    halign = "center", valign = "center", cex = 2 )
+textplot(
+    paste(
+        "Number of found cell cycle genes \n \v \v among the variable genes:  \n \v \v S genes: ",
+        length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]),
+        "/",
+        length(s.genes),
+        "\n \v \v G2M genes: ",
+        length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(seurat_obj)))]),
+        "/",
+        length(g2m.genes)
+    ),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 
 # Check that there were some S or G2M genes in the list of variable genes:
-if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(seurat_obj)))]) < 1) {
+if (
+    length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
+        length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(seurat_obj)))]) < 1
+) {
     # stop(paste('CHIPSTER-NOTE: ', "There were not enough cell cycle genes for correction in the list of variable genes."))
     # Write a log file (instead of ending with a Chipster-note, because we want the tool to finish and give the plot, when possible.)
     fileConn <- file("log.txt")
@@ -110,7 +148,12 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
         DefaultAssay(seurat_obj) <- "joined"
     }
 
-    seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+    seurat_obj <- CellCycleScoring(
+        object = seurat_obj,
+        s.features = s.genes,
+        g2m.features = g2m.genes,
+        set.ident = TRUE
+    )
 
     # Visualize in PCA:
     # PCA plot 1: without/before filtering cell cycle effect
@@ -125,30 +168,43 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
         # Option 1: remove all the difference:
         if (filter.cell.cycle == "all.diff") {
             # Scale again, but this time including also the cell cycle scores
-            seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), verbose = FALSE)
+            seurat_obj <- ScaleData(
+                object = seurat_obj,
+                vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"),
+                verbose = FALSE
+            )
             # PCA plot 2A: after filtering, all:
-            seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE, verbose = FALSE)
+            seurat_obj <- RunPCA(
+                object = seurat_obj,
+                features = c(s.genes, g2m.genes),
+                do.print = FALSE,
+                verbose = FALSE
+            )
             ggtitle("After cell cycle correction (method: remove all)")
             plot2 <- DimPlot(seurat_obj) + ggtitle("After cell cycle correction (method: remove all)")
             # CombinePlots(plots = list(plot1, plot2))
             print(plot_grid(plot1, plot2))
-        # Option 2: regressing out the difference between the G2M and S phase scores:
+            # Option 2: regressing out the difference between the G2M and S phase scores:
         } else if (filter.cell.cycle == "diff.phases") {
             seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
-            seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), verbose = FALSE)
+            seurat_obj <- ScaleData(
+                object = seurat_obj,
+                vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"),
+                verbose = FALSE
+            )
             # PCA plot 2B: after filtering, difference:
             seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
             plot2 <- DimPlot(seurat_obj) + ggtitle("After cell cycle correction (method: G2M / S difference)")
             # CombinePlots(plots = list(plot1, plot2))
             print(plot_grid(plot1, plot2))
         }
-    
-    # Just plot the 1 PCA plot, if no filtering:
+
+        # Just plot the 1 PCA plot, if no filtering:
     } else {
         print(DimPlot(seurat_obj)) # , plot.title = "PCA on cell cycle genes")
     }
 
-    # Return to the normal assays: 
+    # Return to the normal assays:
     if (normalisation.method == "LogNormalize") {
         DefaultAssay(seurat_obj) <- "RNA"
     } else if (normalisation.method == "SCT") {
@@ -156,7 +212,7 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(seurat_obj)))]) < 1 &&
     }
 }
 
- dev.off() # close the pdf
+dev.off() # close the pdf
 
 # Run PCA
 # The variable genes are used as input
@@ -187,7 +243,12 @@ if (cells_left > 500) {
 ElbowPlot(seurat_obj, ndims = num.of.pcas) + ggtitle("Amount of variation in the data explained by each PC")
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2) # , cex=0.8
+textplot(
+    paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))),
+    halign = "center",
+    valign = "center",
+    cex = 2
+) # , cex=0.8
 
 dev.off() # close the pdf
 

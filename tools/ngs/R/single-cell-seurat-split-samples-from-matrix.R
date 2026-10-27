@@ -6,9 +6,7 @@
 # SLOTS 2
 # TOOLS_BIN ""
 
-
 # 2023-08-24 ML
-
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 # version <- system(paste(bowtie.binary,"--version | head -1 | cut -d ' ' -f 3"),intern = TRUE)
@@ -18,7 +16,7 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
 # If input is matrix:
 if (file.exists("matrix.tsv")) {
-  dat <- read.table("matrix.tsv", header = TRUE, sep = "\t", row.names = 1)
+    dat <- read.table("matrix.tsv", header = TRUE, sep = "\t", row.names = 1)
 }
 
 # Remove empty spaces from user typed name:
@@ -33,7 +31,5 @@ name.for.output.file <- paste("sample_", sample.name.to.look.for, ".tsv", sep = 
 
 # Write to table
 write.table(as.matrix(dat_sample), file = name.for.output.file, sep = "\t", row.names = T, col.names = T, quote = F)
-
-
 
 ## EOF

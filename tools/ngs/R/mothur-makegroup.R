@@ -8,7 +8,6 @@
 # HJ 4.8.2025 This script is not in use in the current tools.
 # OUTPUT log1.txt
 
-
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 
@@ -22,69 +21,77 @@ fastx.binary <- c(file.path(chipster.tools.path, "fastx", "bin", "fastq_to_fasta
 fasta_names <- ""
 group_names <- ""
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i, 1])
-  # Check if input is tar package
-  isTar <- grepl("POSIX tar", system(paste("file", input.names[i, 1]), intern = TRUE))
-  # Input is a tar file
-  if (isTar) {
-    # Check the extracted names, because tar escapes some characters in the listing
-    untar(paste(input.names[i, 1]), exdir = "input_folder")
-    tarlist <- list.files("input_folder", all.files = TRUE, no.. = TRUE)
-    if (any(dir.exists(file.path("input_folder", tarlist)))) {
-      stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
-    }
-    if (length(tarlist) == 0) {
-      stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package is empty."))
-    }
-    tarlist <- safe_name(tarlist)
-    # Mothur uses - to separate the files in the fasta= and groups= lists
-    if (any(grepl("-", tarlist, fixed = TRUE))) {
-      stop(paste("CHIPSTER-NOTE: File names can't contain - in this tool. Please rename these:", paste(tarlist[grepl("-", tarlist, fixed = TRUE)], collapse = ", ")))
-    }
-    # Don't let the tar package replace the input files of the job or the files of an earlier tar package
-    if (any(file.exists(tarlist))) {
-      stop(paste("CHIPSTER-NOTE: The tar package can't contain files with the same names as the other inputs of this tool. Please rename these:", paste(tarlist[file.exists(tarlist)], collapse = ", ")))
-    }
-    if (!all(file.rename(file.path("input_folder", tarlist), tarlist))) {
-      stop("Moving the files of the tar package failed")
-    }
-    # go throug list
-    for (j in 1:length(tarlist)) {
-      unzipIfGZipFile(tarlist[j])
-      basename <- paste(strip_name(paste(tarlist[j])))
-      fastaname <- paste(basename, ".fasta", sep = "")
-      # If input is FASTQ file, convert to FASTA
-      if (isFastq(paste(tarlist[j]))) {
-        command <- paste(fastx.binary, "-n -i", shQuote(tarlist[j]), "-o", shQuote(fastaname))
-        runExternal(command)
-        # If input is FASTA file, just make sure file name ends with .fasta
-      } else if (isFasta(paste(tarlist[j]))) {
-        file.rename(paste(tarlist[j]), fastaname)
-      } else {
-        stop(paste("CHIPSTER-NOTE: Input not a FASTA or FASTQ sequence file"))
-      }
-      fasta_names <- paste(fasta_names, fastaname, sep = "-")
-      group_names <- paste(group_names, basename, sep = "-")
-    }
-  }
-  # Input file is a sequence file
-  else {
-    basename <- paste(strip_name(paste(input.names[i, 1])))
-    fastaname <- paste(basename, ".fasta", sep = "")
-    groupname <- paste(strip_name(paste(input.names[i, 2])))
-    # Input is a FASTQ file, convert to FASTA
-    if (isFastq(paste(input.names[i, 1]))) {
-      command <- paste(fastx.binary, "-n -i", input.names[i, 1], "-o", fastaname)
-      runExternal(command)
-      # Input is FASTA file, just make sure file name ends with .fasta
-    } else if (isFasta(paste(input.names[i, 1]))) {
-      file.rename(paste(input.names[i, 1]), fastaname)
+    unzipIfGZipFile(input.names[i, 1])
+    # Check if input is tar package
+    isTar <- grepl("POSIX tar", system(paste("file", input.names[i, 1]), intern = TRUE))
+    # Input is a tar file
+    if (isTar) {
+        # Check the extracted names, because tar escapes some characters in the listing
+        untar(paste(input.names[i, 1]), exdir = "input_folder")
+        tarlist <- list.files("input_folder", all.files = TRUE, no.. = TRUE)
+        if (any(dir.exists(file.path("input_folder", tarlist)))) {
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+            ))
+        }
+        if (length(tarlist) == 0) {
+            stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package is empty."))
+        }
+        tarlist <- safe_name(tarlist)
+        # Mothur uses - to separate the files in the fasta= and groups= lists
+        if (any(grepl("-", tarlist, fixed = TRUE))) {
+            stop(paste(
+                "CHIPSTER-NOTE: File names can't contain - in this tool. Please rename these:",
+                paste(tarlist[grepl("-", tarlist, fixed = TRUE)], collapse = ", ")
+            ))
+        }
+        # Don't let the tar package replace the input files of the job or the files of an earlier tar package
+        if (any(file.exists(tarlist))) {
+            stop(paste(
+                "CHIPSTER-NOTE: The tar package can't contain files with the same names as the other inputs of this tool. Please rename these:",
+                paste(tarlist[file.exists(tarlist)], collapse = ", ")
+            ))
+        }
+        if (!all(file.rename(file.path("input_folder", tarlist), tarlist))) {
+            stop("Moving the files of the tar package failed")
+        }
+        # go throug list
+        for (j in 1:length(tarlist)) {
+            unzipIfGZipFile(tarlist[j])
+            basename <- paste(strip_name(paste(tarlist[j])))
+            fastaname <- paste(basename, ".fasta", sep = "")
+            # If input is FASTQ file, convert to FASTA
+            if (isFastq(paste(tarlist[j]))) {
+                command <- paste(fastx.binary, "-n -i", shQuote(tarlist[j]), "-o", shQuote(fastaname))
+                runExternal(command)
+                # If input is FASTA file, just make sure file name ends with .fasta
+            } else if (isFasta(paste(tarlist[j]))) {
+                file.rename(paste(tarlist[j]), fastaname)
+            } else {
+                stop(paste("CHIPSTER-NOTE: Input not a FASTA or FASTQ sequence file"))
+            }
+            fasta_names <- paste(fasta_names, fastaname, sep = "-")
+            group_names <- paste(group_names, basename, sep = "-")
+        }
     } else {
-      stop(paste("CHIPSTER-NOTE: Input not a FASTA or FASTQ sequence file"))
+        # Input file is a sequence file
+        basename <- paste(strip_name(paste(input.names[i, 1])))
+        fastaname <- paste(basename, ".fasta", sep = "")
+        groupname <- paste(strip_name(paste(input.names[i, 2])))
+        # Input is a FASTQ file, convert to FASTA
+        if (isFastq(paste(input.names[i, 1]))) {
+            command <- paste(fastx.binary, "-n -i", input.names[i, 1], "-o", fastaname)
+            runExternal(command)
+            # Input is FASTA file, just make sure file name ends with .fasta
+        } else if (isFasta(paste(input.names[i, 1]))) {
+            file.rename(paste(input.names[i, 1]), fastaname)
+        } else {
+            stop(paste("CHIPSTER-NOTE: Input not a FASTA or FASTQ sequence file"))
+        }
+        fasta_names <- paste(fasta_names, fastaname, sep = "-")
+        group_names <- paste(group_names, groupname, sep = "-")
     }
-    fasta_names <- paste(fasta_names, fastaname, sep = "-")
-    group_names <- paste(group_names, groupname, sep = "-")
-  }
 }
 # List files now have extra "-" at beginning that has to be removed
 fasta_names <- sub(".", "", fasta_names)

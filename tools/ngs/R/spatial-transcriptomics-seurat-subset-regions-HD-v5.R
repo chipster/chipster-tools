@@ -35,190 +35,192 @@ chosen_clusters <- strtoi(chosen_clusters, base = 0L)
 load("seurat_obj_clustering.Robj")
 
 
-
 # Make graphs empty because it is causing issues
 # seurat_obj <- UpdateSeuratObject(seurat_obj)
 #seurat_obj@graphs <- list()
 
 # This loop works, check what causes this graph issue
 for (g in Graphs(seurat_obj)) {
-seurat_obj[[g]] <- NULL
+    seurat_obj[[g]] <- NULL
 }
 
 ## Here 8um
 if (assay == "Spatial.008um") {
-# Recompute graphs if needed
-#subset_obj <- RunPCA(seurat_obj, dims = 1:10)
-#subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
-#subset_obj <- FindClusters(subset_obj)
+    # Recompute graphs if needed
+    #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
+    #subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
+    #subset_obj <- FindClusters(subset_obj)
 
-DefaultAssay(seurat_obj) <- "Spatial.008um"
+    DefaultAssay(seurat_obj) <- "Spatial.008um"
 
-# Set some clusters as Idents
-seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
+    # Set some clusters as Idents
+    seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
 
-# Subset 
-subset_obj <- subset(seurat_obj, idents = chosen_clusters)
+    # Subset
+    subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
-# The simplest way to do this
-pdf(file = "spatial_plot_8um.pdf")
-p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend() + 
-  SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
+    # The simplest way to do this
+    pdf(file = "spatial_plot_8um.pdf")
+    p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+        NoLegend() +
+        SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
-print(p)
-dev.off()
+    print(p)
+    dev.off()
 
+    # If coordinates are given, then:
+    if (coords) {
+        # Adds x and y axis numbers for coordinate search
+        theme_axis_labels <- theme(
+            axis.text.x = element_text(size = 10),
+            axis.text.y = element_text(size = 10),
+            axis.title.x = element_text(size = 10),
+            axis.title.y = element_text(size = 10)
+        )
 
-# If coordinates are given, then:
-if (coords) {
+        coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
 
-# Adds x and y axis numbers for coordinate search
-theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
-                           axis.text.y = element_text(size = 10),
-                           axis.title.x = element_text(size = 10),
-                           axis.title.y = element_text(size = 10))
+        # x_coord_min # a param that has range: start-end for x axis
+        # x_coord_max # a param that has range: start-end for y axis
 
-coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
+        # y_coord_min
+        # y_coord_max
 
-# x_coord_min # a param that has range: start-end for x axis
-# x_coord_max # a param that has range: start-end for y axis
+        # select 8um image
+        img_name <- Images(subset_obj)[1]
+        img_name
 
-# y_coord_min
-# y_coord_max
+        subset_obj[[img_name]] <- Crop(
+            subset_obj[[img_name]],
+            x = c(x_coord_min, x_coord_max),
+            y = c(y_coord_min, y_coord_max)
+        )
 
-# select 8um image
-img_name <- Images(subset_obj)[1]
-img_name
+        # # For loop for image cropping, may not work
+        # for (img_name in Images(subset_obj)) {
+        #   subset_obj[[img_name]] <- Crop(
+        #     subset_obj[[img_name]],
+        #     x = c(x_coord_min, x_coord_max),
+        #     y = c(y_coord_min, y_coord_max)
+        #   )
+        # }
 
-subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
+        pdf(file = "spatial_plot_8um2.pdf")
+        p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
+        print(p1)
+        dev.off()
+    }
 
-# # For loop for image cropping, may not work
-# for (img_name in Images(subset_obj)) {
-#   subset_obj[[img_name]] <- Crop(
-#     subset_obj[[img_name]],
-#     x = c(x_coord_min, x_coord_max),
-#     y = c(y_coord_min, y_coord_max)
-#   )
-# }
+    if (coords.file) {
+        img_name <- Images(subset_obj)["slice.008um"]
 
-pdf(file = "spatial_plot_8um2.pdf")
-p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
-print(p1)
-dev.off()
+        coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
-}
+        head(coordinates)
 
-if (coords.file) {
+        segment <- CreateSegmentation(coordinates)
 
-  img_name <- Images(subset_obj)["slice.008um"]
+        # Overlay function wants an "sf" package
+        subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
+        segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
 
-  coordinates <- as.data.frame(read.csv("coords.file.csv"))
+        pdf("spatial_plot_8um3.pdf")
+        p <- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
+        print(p)
+        dev.off()
+    }
 
-  head(coordinates)
-
-  segment <- CreateSegmentation(coordinates)
-
-  # Overlay function wants an "sf" package
-  subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
-  segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
-
-  pdf("spatial_plot_8um3.pdf")
-  p<- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
-  print(p)
-  dev.off()
-}
-
-# }
+    # }
 }
 
 print("Starting 16um")
 
 ## Here 16um
 if (assay == "Spatial.016um") {
-# Recompute graphs if needed
-#subset_obj <- RunPCA(seurat_obj, dims = 1:10)
-#subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
-#subset_obj <- FindClusters(subset_obj)
+    # Recompute graphs if needed
+    #subset_obj <- RunPCA(seurat_obj, dims = 1:10)
+    #subset_obj <- FindNeighbors(subset_obj, dims = 1:10)
+    #subset_obj <- FindClusters(subset_obj)
 
-DefaultAssay(seurat_obj) <- "Spatial.016um"
+    DefaultAssay(seurat_obj) <- "Spatial.016um"
 
-# Set some clusters as Idents
-seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.016um)
+    # Set some clusters as Idents
+    seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.016um)
 
-# Subset 
-subset_obj <- subset(seurat_obj, idents = chosen_clusters)
+    # Subset
+    subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
-# Check amount of images -> Message sent to Meilahti
-print("Images of sobj")
-print(names(subset_obj@images))
+    # Check amount of images -> Message sent to Meilahti
+    print("Images of sobj")
+    print(names(subset_obj@images))
 
-# The simplest way to do this
-pdf(file = "spatial_plot_16um.pdf")
-p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend() + 
-  SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
+    # The simplest way to do this
+    pdf(file = "spatial_plot_16um.pdf")
+    p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+        NoLegend() +
+        SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
-print(p)
-dev.off()
+    print(p)
+    dev.off()
 
+    # If coordinates are given, then:
+    if (coords) {
+        # Adds x and y axis numbers for coordinate search
+        theme_axis_labels <- theme(
+            axis.text.x = element_text(size = 10),
+            axis.text.y = element_text(size = 10),
+            axis.title.x = element_text(size = 10),
+            axis.title.y = element_text(size = 10)
+        )
 
-# If coordinates are given, then:
-if (coords) {
+        coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
 
-# Adds x and y axis numbers for coordinate search
-theme_axis_labels <- theme(axis.text.x = element_text(size = 10), 
-                           axis.text.y = element_text(size = 10),
-                           axis.title.x = element_text(size = 10),
-                           axis.title.y = element_text(size = 10))
+        x_coord_min # a param that has range: start-end for x axis
+        x_coord_max # a param that has range: start-end for y axis
 
-coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
+        y_coord_min
+        y_coord_max
 
-x_coord_min # a param that has range: start-end for x axis
-x_coord_max # a param that has range: start-end for y axis
+        # Original
+        img_name <- Images(subset_obj)["slice.016um"]
+        img_name
 
-y_coord_min
-y_coord_max
+        # subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
+        # }
 
-# Original
-img_name <- Images(subset_obj)["slice.016um"]
-img_name
+        # For loop for image cropping, may not work
+        for (img_name in Images(subset_obj)) {
+            subset_obj[[img_name]] <- Crop(
+                subset_obj[[img_name]],
+                x = c(x_coord_min, x_coord_max),
+                y = c(y_coord_min, y_coord_max)
+            )
+        }
 
-# subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
-# }
+        pdf(file = "spatial_plot_16um2.pdf")
+        p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
+        print(p1)
+        dev.off()
+    }
 
-# For loop for image cropping, may not work
-for (img_name in Images(subset_obj)) {
-  subset_obj[[img_name]] <- Crop(
-    subset_obj[[img_name]],
-    x = c(x_coord_min, x_coord_max),
-    y = c(y_coord_min, y_coord_max)
-  )
-}
+    if (coords.file) {
+        img_name <- Images(subset_obj)[1]
 
-pdf(file = "spatial_plot_16um2.pdf")
-p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
-print(p1)
-dev.off()
+        coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
-}
+        head(coordinates)
 
-if (coords.file) {
+        segment <- CreateSegmentation(coordinates)
 
-  img_name <- Images(subset_obj)[1]
+        # Overlay function wants an "sf" package
+        subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
+        segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
 
-  coordinates <- as.data.frame(read.csv("coords.file.csv"))
-
-  head(coordinates)
-
-  segment <- CreateSegmentation(coordinates)
-
-  # Overlay function wants an "sf" package
-  subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
-  segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
-
-  pdf("spatial_plot_16um3.pdf")
-  p<-SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend() 
-  print(p)
-  dev.off()}
+        pdf("spatial_plot_16um3.pdf")
+        p <- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
+        print(p)
+        dev.off()
+    }
 }
 
 seurat_obj <- subset_obj
