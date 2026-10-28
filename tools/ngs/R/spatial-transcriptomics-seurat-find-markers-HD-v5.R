@@ -30,8 +30,10 @@ library(patchwork)
 library(dplyr)
 library(tidyverse)
 library("presto")
+library("ragg")
 
 ### PARAMETER reduction: "Reduction to use" TYPE [PCA] DEFAULT PCA
+
 reduction <- as.character("PCA")
 assay <- as.character(assay)
 reduction <- tolower(as.character(reduction))
@@ -67,25 +69,27 @@ Idents(seurat_obj) <- cluster_col
 
 
 # Downsampling cells may not needed here
-#object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
+object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
 
 # Diet object for the analysis.
-object_subset <- DietSeurat(
-    object = seurat_obj,
-    assays = assay,
-    layers = c("counts", "data"),
-    dimreducs = reduction,
-    graphs = NULL
-)
+# object_subset <- DietSeurat(
+#     object = seurat_obj,
+#     assays = assay,
+#     layers = c("counts", "data"),
+#     dimreducs = reduction,
+#     graphs = NULL,
+#     downsample = 1000
+# )
 
-object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]))
+#  object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]))
 
 DefaultAssay(object_subset) <- assay
 Idents(object_subset) <- cluster_col
 
-object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE, dims = 1:30)
+object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE)
 
-print("Finding markers.")
+print("Finding markers...")
+
 markers <- FindAllMarkers(
     object_subset,
     assay = assay,
@@ -93,13 +97,13 @@ markers <- FindAllMarkers(
     test.use = test.use,
     min.pct = min.pct,
     logfc.threshold = logfc.threshold,
-    print.bar = TRUE
+    print.bar = FALSE
 )
-markers <- markers[markers$p_val_adj < p_val_adj, ]
 
+# Hardcoded avg_log2FC > 1, because then we get good colors and its done like that in the Seurat vignette. Makes visualization better
 markers %>%
     group_by(cluster) %>%
-    dplyr::filter(avg_log2FC > logfc.threshold) %>%
+    dplyr::filter(avg_log2FC > 1) %>% #logfc.threshold) %>%
     slice_head(n = 5) %>%
     ungroup() -> top5
 
@@ -115,7 +119,29 @@ print(p)
 
 dev.off()
 
+
+# agg_png(
+#     filename = paste0("markers_", assay, ".png"),
+#     width = width,
+#     height = height,
+#     units = "in",
+#     res = 300
+# )
+
+# p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) +
+#     theme(axis.text = element_text(size = 5.5)) +
+#     NoLegend()
+
+# print(p)
+
+# dev.off()
+
 save(markers, file = paste0("markers_", assay, ".tsv"))
+
+
+# For the tsv file, we want to filter the results table with the p_val_adj parameter
+markers <- markers[markers$p_val_adj < p_val_adj, ]
+
 write.table(
     as.matrix(markers),
     file = paste0("markers_", assay, ".tsv"),
