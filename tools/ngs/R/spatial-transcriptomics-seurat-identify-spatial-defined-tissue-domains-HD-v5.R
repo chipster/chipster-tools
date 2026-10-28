@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Identify spatially-defined tissue domains with BANKSY" (This tool uses BANKSY to incorporate neighborhood information for clustering of Visium HD data. BANKSY augments the expression pattern of a spot with both the mean and the gradient of gene expression levels in a broader neighborhood of a spot.)
+# TOOL spatial-transcriptomics-seurat-identify-spatial-defined-tissue-domains-HD-v5.R: "Seurat v5 -Clustering with BANKSY" (This tool uses BANKSY to incorporate neighborhood information for clustering of Visium HD data, resulting in spatially defined tissue domains. BANKSY augments the expression pattern of a spot with both the mean and the gradient of gene expression levels in a broader neighborhood of a spot.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL seurat_obj_banksy_Spatial.008um.Robj
 # OUTPUT OPTIONAL seurat_obj_banksy_Spatial.016um.Robj
