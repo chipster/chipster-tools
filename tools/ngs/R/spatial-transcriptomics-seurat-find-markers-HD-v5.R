@@ -69,19 +69,21 @@ Idents(seurat_obj) <- cluster_col
 
 
 # Downsampling cells may not needed here
-object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
+#object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
 
-# Diet object for the analysis.
-# object_subset <- DietSeurat(
-#     object = seurat_obj,
-#     assays = assay,
-#     layers = c("counts", "data"),
-#     dimreducs = reduction,
-#     graphs = NULL,
-#     downsample = 1000
-# )
+# Diet object for the analysis. Get rid of graphs, which cause issues later on.
+object_subset <- DietSeurat(
+    object = seurat_obj,
+    assays = assay,
+    layers = c("counts", "data"),
+    dimreducs = reduction,
+    graphs = NULL
+)
 
-#  object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]))
+#seurat_obj@graphs <- list()
+
+#object_subset <- seurat_obj
+object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]), downsample = 1000)
 
 DefaultAssay(object_subset) <- assay
 Idents(object_subset) <- cluster_col
