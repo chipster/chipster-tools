@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
-# PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE [8, 16, (8, 16)] DEFAULT (8, 16) (Choose bin sizes for the analysis.)
+# PARAMETER OPTIONAL bin_sizes: "Bin size" TYPE [8, 16, (8, 16)] DEFAULT (8) (Resolution for analysis. 10x recommends the use of 8um binned data.)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
