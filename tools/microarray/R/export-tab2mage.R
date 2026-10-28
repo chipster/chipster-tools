@@ -3,7 +3,6 @@
 # INPUT META phenodata.tsv: phenodata.tsv TYPE GENERIC
 # OUTPUT tab2mage.txt: tab2mage.txt
 
-
 # Writes out a blank tab2mage description of the experiment
 # JTT 7.8.2007
 
@@ -38,15 +37,47 @@ write(file = "tab2mage.txt", paste("pubmed_id", "", sep = "\t"), append = T)
 write(file = "tab2mage.txt", paste("\n"), append = T)
 
 # Protocol section
-write(file = "tab2mage.txt", "# This section may be deleted, if all the protocols are already described in Arrayexpress", append = T)
+write(
+    file = "tab2mage.txt",
+    "# This section may be deleted, if all the protocols are already described in Arrayexpress",
+    append = T
+)
 write(file = "tab2mage.txt", "Protocol section", append = T)
 write(file = "tab2mage.txt", paste("accession", "text", "name", "parameters", sep = "\t"), append = T)
 write(file = "tab2mage.txt", paste("\n"), append = T)
 
 # Hybridization section
 write(file = "tab2mage.txt", "Hybridization section", append = T)
-write(file = "tab2mage.txt", paste("File[raw]", "Array[accession]", "Array[serial]", "Protocol[treatment]", "Protocol[extraction]", "Protocol[labeling]", "Protocol[hybridization]", "Protocol[scanning]", "BioSource", "Sample", "Extract", "LabeledExtract", "Hybridization", "BioSourceMaterial", "SampleMaterial", "ExtractMaterial", "LabeledExtractMaterial", "Dye", "FactorValue[StrainOrLine]", "BioMaterialCharacteristics[Organism]", "BioMaterialCharacteristics[StrainOrLine]", "BioMaterialCharacteristics[Sex]", sep = "\t"), append = T)
+write(
+    file = "tab2mage.txt",
+    paste(
+        "File[raw]",
+        "Array[accession]",
+        "Array[serial]",
+        "Protocol[treatment]",
+        "Protocol[extraction]",
+        "Protocol[labeling]",
+        "Protocol[hybridization]",
+        "Protocol[scanning]",
+        "BioSource",
+        "Sample",
+        "Extract",
+        "LabeledExtract",
+        "Hybridization",
+        "BioSourceMaterial",
+        "SampleMaterial",
+        "ExtractMaterial",
+        "LabeledExtractMaterial",
+        "Dye",
+        "FactorValue[StrainOrLine]",
+        "BioMaterialCharacteristics[Organism]",
+        "BioMaterialCharacteristics[StrainOrLine]",
+        "BioMaterialCharacteristics[Sex]",
+        sep = "\t"
+    ),
+    append = T
+)
 r <- c("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t")
 for (i in 1:length(phenodata$sample)) {
-   write(file = "tab2mage.txt", paste(phenodata$sample[i], r, sep = ""), append = T)
+    write(file = "tab2mage.txt", paste(phenodata$sample[i], r, sep = ""), append = T)
 }

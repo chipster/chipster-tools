@@ -9,8 +9,6 @@
 # PARAMETER OPTIONAL clean: "Change all *'s to X's" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (This changes all STOP codon positions from the '*' character to 'X' (an unknown residue\). This is useful because some programs will not accept protein sequences with '*' characters in them.)
 # PARAMETER OPTIONAL alternative: "Define frame '-1' as starting in the last codon" TYPE [Y: Yes, N: No] DEFAULT N (The default definition of frame '-1' is the reverse-complement of the set of codons used in frame 1. (Frame -2 is the set of codons used by frame 2, similarly frames -3 and 3\). This is a common standard, used by the Staden package and other programs. If you prefer to define frame '-1' as using the set of codons starting with the last codon of the sequence, then set this to be true.)
 
-
-
 # KM 8.11. 2013
 
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
@@ -38,7 +36,18 @@ if (num.queryseq > 50000) {
     stop(paste("CHIPSTER-NOTE: Too many query sequences. Maximun is 50000 but your file contains ", num.queryseq))
 }
 
-emboss.parameters <- paste("sequence -outseq transeq.fasta -frame", frame, "-table", table, "-trim", trim, "-clean", clean, "-alternative", alternative)
+emboss.parameters <- paste(
+    "sequence -outseq transeq.fasta -frame",
+    frame,
+    "-table",
+    table,
+    "-trim",
+    trim,
+    "-clean",
+    clean,
+    "-alternative",
+    alternative
+)
 
 emboss.binary <- file.path(emboss.path, "transeq")
 if (regions != "full length") {

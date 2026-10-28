@@ -44,7 +44,23 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools
 # command.start <- paste("bash -c '", bwa.mem.binary)
 command.start <- (bwa.mem.binary)
 
-bwa.parameters <- paste("-M", "-k", minseedlen, "-w", bandwith, "-A", matchscore, "-B", mismatchscore, "-O", gapopen, "-E", gapextension, "-L", clippenalty)
+bwa.parameters <- paste(
+    "-M",
+    "-k",
+    minseedlen,
+    "-w",
+    bandwith,
+    "-A",
+    matchscore,
+    "-B",
+    mismatchscore,
+    "-O",
+    gapopen,
+    "-E",
+    gapextension,
+    "-L",
+    clippenalty
+)
 
 # Read group definition
 if (nchar(rgid) > 0) {

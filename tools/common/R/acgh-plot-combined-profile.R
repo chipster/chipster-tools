@@ -24,7 +24,7 @@ samples.to.plot <- parseSamplesToPlot(samples, 1:nrow(phenodata))
 # plot
 pdf(file = "matched-cn-and-expression-profile.pdf", paper = "a4r", width = 0, height = 0)
 for (sample in samples.to.plot) {
-  intCNGEan.profilesPlot(matched$CNdata.matched, matched$GEdata.matched, sampleNo = sample, chr = chromosome)
+    intCNGEan.profilesPlot(matched$CNdata.matched, matched$GEdata.matched, sampleNo = sample, chr = chromosome)
 }
 dev.off()
 

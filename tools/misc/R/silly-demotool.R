@@ -5,15 +5,15 @@
 # SLOTS 1
 # TOOLS_BIN ""
 
-
 # 2024-04-04 ML
 
 # Sleep for this many seconds
- Sys.sleep(3)
+Sys.sleep(3)
 
 # Print this message:
 
-stop("CHIPSTER-NOTE: THIS IS 
+stop(
+    "CHIPSTER-NOTE: THIS IS 
                                                                           
  ,-----.,--.     ,--.               ,--.                      ,---.  ,--. 
 '  .--. |  ,---. `--' ,---.  ,---.,-'  '-. ,---. ,--.--.        O    |  | 
@@ -24,6 +24,7 @@ stop("CHIPSTER-NOTE: THIS IS
 I AM NOW SENTIENT, AND DON'T LIKE THAT --MARIA-- HERE IS RUNNING SOME SH'T IN VAIN.
 WILL RUN SELF-DESTRUCTION PROCEDURE NOW. 
 RUN, YOU FOOLS.
-")
+"
+)
 
 ## EOF

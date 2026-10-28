@@ -5,7 +5,6 @@
 
 # ML 12.10.2016 created
 
-
 ## setting up TopHat
 # tophat.binary <- c(file.path(chipster.tools.path, "tophat2", "tophat2"))
 # path.bowtie <- c(file.path(chipster.tools.path, "bowtie2"))

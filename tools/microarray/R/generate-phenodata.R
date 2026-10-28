@@ -4,7 +4,6 @@
 # OUTPUT input.tsv: input.tsv
 # PARAMETER chiptype: Chiptype TYPE STRING DEFAULT empty ()
 
-
 # Combines two different tables using gene names
 # JTT 06.07.2006
 # MG 19.01.2010
@@ -22,10 +21,13 @@ dat <- read.table(file, header = T, sep = "\t", row.names = 1, nrows = 1)
 ind.calls <- grep("flag", names(dat))
 ind.flags <- grep("chip", names(dat))
 ind.dat <- grep("chip", names(dat))
-colclasses <- c(rep("numeric", length(ind.dat)), rep(
-    "character",
-    length(ind.calls)
-))
+colclasses <- c(
+    rep("numeric", length(ind.dat)),
+    rep(
+        "character",
+        length(ind.calls)
+    )
+)
 number.annotations <- length(names(dat)) - length(ind.calls) - length(ind.flags)
 colclasses <- append(rep("factor", 1 + number.annotations), colclasses)
 dat <- read.table(file, header = T, sep = "\t", row.names = 1, colClasses = colclasses)
@@ -50,13 +52,30 @@ if (chiptype == "empty") {
 }
 
 if (length(grep("description", tolower(colnames(dat2)))) > 0) {
-    dat2[, grep("description", tolower(colnames(dat2)))] <- gsub("\'|#|\"|\n|\t", "", dat2[, grep("description", tolower(colnames(dat2)))], perl = T)
+    dat2[, grep("description", tolower(colnames(dat2)))] <- gsub(
+        "\'|#|\"|\n|\t",
+        "",
+        dat2[, grep("description", tolower(colnames(dat2)))],
+        perl = T
+    )
 }
 
 if (length(grep("symbol", tolower(colnames(dat2)))) > 0) {
-    dat2[, grep("symbol", tolower(colnames(dat2)))] <- gsub("\'|#|\"|\n|\t", "", dat2[, grep("symbol", tolower(colnames(dat2)))], perl = T)
+    dat2[, grep("symbol", tolower(colnames(dat2)))] <- gsub(
+        "\'|#|\"|\n|\t",
+        "",
+        dat2[, grep("symbol", tolower(colnames(dat2)))],
+        perl = T
+    )
 }
 
 # Writes out the data and the phenodata table
 write.table(dat, file = "input.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)

@@ -18,8 +18,6 @@
 # SLOTS 6
 # TOOLS_BIN ""
 
-
-
 # 2026-10-16 JV Add banksy clustering option
 
 # This package was installed along the new docker image
@@ -32,8 +30,10 @@ library(patchwork)
 library(dplyr)
 library(tidyverse)
 library("presto")
+library("ragg")
 
 ### PARAMETER reduction: "Reduction to use" TYPE [PCA] DEFAULT PCA
+
 reduction <- as.character("PCA")
 assay <- as.character(assay)
 reduction <- tolower(as.character(reduction))
@@ -52,17 +52,16 @@ load("seurat_obj_clustering.Robj")
 # Tämä pitäisi saada toimimaan sitten. joskus oli "banksy.pca" reductioni.
 
 if (banksy) {
-  assay       <- "Spatial.008um"
-  cluster_col <- "banksy_cluster"
-  reduction   <- "BANKSY"          # check with Reductions(seurat_obj)
+    assay <- "Spatial.008um"
+    cluster_col <- "banksy_cluster"
+    reduction <- "BANKSY" # check with Reductions(seurat_obj)
 } else if (assay == "Spatial.008um") {
     cluster_col <- "seurat_cluster.projected"
-    reduction   <- paste0("full.", reduction, ".sketch")
+    reduction <- paste0("full.", reduction, ".sketch")
 } else {
-  cluster_col <- "seurat_cluster.016um"
-  reduction   <- paste0(reduction, ".016um")
+    cluster_col <- "seurat_cluster.016um"
+    reduction <- paste0(reduction, ".016um")
 }
-
 
 
 DefaultAssay(seurat_obj) <- assay
@@ -72,38 +71,86 @@ Idents(seurat_obj) <- cluster_col
 # Downsampling cells may not needed here
 #object_subset <- subset(seurat_obj, cells = Cells(seurat_obj[[assay]], downsample = 1000))
 
+# Diet object for the analysis. Get rid of graphs, which cause issues later on.
+object_subset <- DietSeurat(
+    object = seurat_obj,
+    assays = assay,
+    layers = c("counts", "data"),
+    dimreducs = reduction,
+    graphs = NULL
+)
 
-# Diet object for the analysis.
-object_subset <- DietSeurat(object = seurat_obj, assays = assay, layers = c("counts", "data"), dimreducs = reduction, graphs = NULL)
+#seurat_obj@graphs <- list()
 
-object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]))
+#object_subset <- seurat_obj
+object_subset <- subset(object_subset, cells = Cells(object_subset[[assay]]), downsample = 1000)
 
 DefaultAssay(object_subset) <- assay
 Idents(object_subset) <- cluster_col
 
-object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE, dims = 1:30)
+object_subset <- BuildClusterTree(object_subset, assay = assay, reduction = reduction, reorder = TRUE)
 
-print("Finding markers.")
-markers <- FindAllMarkers(object_subset, assay = assay, only.pos = only.pos, test.use = test.use, min.pct = min.pct, logfc.threshold = logfc.threshold, print.bar = TRUE)
-markers <- markers[markers$p_val_adj < p_val_adj,]
+print("Finding markers...")
 
+markers <- FindAllMarkers(
+    object_subset,
+    assay = assay,
+    only.pos = only.pos,
+    test.use = test.use,
+    min.pct = min.pct,
+    logfc.threshold = logfc.threshold,
+    print.bar = FALSE
+)
+
+# Hardcoded avg_log2FC > 1, because then we get good colors and its done like that in the Seurat vignette. Makes visualization better
 markers %>%
-  group_by(cluster) %>%
-  dplyr::filter(avg_log2FC > logfc.threshold) %>%
-  slice_head(n = 5) %>%
-  ungroup() -> top5
+    group_by(cluster) %>%
+    dplyr::filter(avg_log2FC > 1) %>% #logfc.threshold) %>%
+    slice_head(n = 5) %>%
+    ungroup() -> top5
 
 object_subset <- ScaleData(object_subset, assay = assay, features = top5$gene)
 
 pdf(file = paste0("markers_", assay, ".pdf"), width = width, height = height)
 
-p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) + theme(axis.text = element_text(size = 5.5)) + NoLegend()
+p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) +
+    theme(axis.text = element_text(size = 5.5)) +
+    NoLegend()
 
 print(p)
 
 dev.off()
 
+
+# agg_png(
+#     filename = paste0("markers_", assay, ".png"),
+#     width = width,
+#     height = height,
+#     units = "in",
+#     res = 300
+# )
+
+# p <- DoHeatmap(object_subset, assay = assay, features = top5$gene, size = 2.5) +
+#     theme(axis.text = element_text(size = 5.5)) +
+#     NoLegend()
+
+# print(p)
+
+# dev.off()
+
 save(markers, file = paste0("markers_", assay, ".tsv"))
-write.table(as.matrix(markers), file = paste0("markers_", assay, ".tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
+
+
+# For the tsv file, we want to filter the results table with the p_val_adj parameter
+markers <- markers[markers$p_val_adj < p_val_adj, ]
+
+write.table(
+    as.matrix(markers),
+    file = paste0("markers_", assay, ".tsv"),
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 # EOF

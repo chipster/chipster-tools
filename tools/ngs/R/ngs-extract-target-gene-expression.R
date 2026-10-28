@@ -35,7 +35,22 @@ detach(gene.data)
 gene.data.2 <- gene.data[match(mirna.symbols, gene.symbols, nomatch = 0), ]
 
 # write files
-write.table(gene.data.2, file = "target-gene-expression.tsv", quote = FALSE, sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(phenodata, file = "phenodata-target-gene.tsv", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = TRUE)
+write.table(
+    gene.data.2,
+    file = "target-gene-expression.tsv",
+    quote = FALSE,
+    sep = "\t",
+    row.names = TRUE,
+    col.names = TRUE
+)
+write.table(
+    phenodata,
+    file = "phenodata-target-gene.tsv",
+    quote = FALSE,
+    sep = "\t",
+    na = "",
+    row.names = FALSE,
+    col.names = TRUE
+)
 
 # EOF

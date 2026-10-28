@@ -25,6 +25,8 @@
 
 # To be added later PARAMETER OPTIONAL mpileup.us: "Output per sample strand bias P-value" TYPE [yes, no] DEFAULT no (Output per-sample Phred-scaled strand bias P-value.)
 
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
+
 # check out if the file is compressed and if so unzip it
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("ownref.fa")
@@ -41,7 +43,10 @@ if (organism == "other") {
     if (file.exists("ownref.fa")) {
         refseq <- paste("ownref.fa")
     } else {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a FASTA file or choose one of the provided reference genomes."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a FASTA file or choose one of the provided reference genomes."
+        ))
     }
 } else {
     # If not, we use the internal one.
@@ -58,8 +63,20 @@ if (organism == "other") {
 
 # mpileup otions
 mpileup.options <- paste("mpileup -u")
+# Neither the web app nor comp trims text parameters, and a region is often pasted with a space
+mpileup.r <- trimws(mpileup.r)
 if (mpileup.r != "all") {
-    mpileup.options <- paste(mpileup.options, "-r", mpileup.r)
+    # The region goes into a bash command. Comp allows spaces, parentheses and * in it, but a region
+    # can't have spaces or parentheses, and the quotes keep * from being expanded.
+    if (grepl("[ ()]", mpileup.r) || !nzchar(mpileup.r)) {
+        stop(paste(
+            "CHIPSTER-NOTE: The region",
+            shQuote(mpileup.r),
+            "isn't valid. Give it as chromosome:start-end",
+            "without spaces, e.g. 20:131505-131550, or only the chromosome, e.g. 20."
+        ))
+    }
+    mpileup.options <- paste0(mpileup.options, " -r \"", mpileup.r, "\"")
 }
 if (mpileup.ub == "yes") {
     mpileup.options <- paste(mpileup.options, "-B")
@@ -94,24 +111,41 @@ vcfutils.options <- paste("varFilter", "-d", vcfutils.d, "-D", vcfutils.ud)
 
 
 # commands
-command1 <- paste(samtools.binary, mpileup.options, "-f", refseq, "*.bam", "|", bcftools.binary, bcftools.options, "- > var.raw.bcf")
+command1 <- paste(
+    samtools.binary,
+    mpileup.options,
+    "-f",
+    refseq,
+    "*.bam",
+    "|",
+    bcftools.binary,
+    bcftools.options,
+    "- > var.raw.bcf"
+)
 command2 <- paste(bcftools.binary, "view var.raw.bcf |", vcfutils.binary, vcfutils.options, "> variants.raw.vcf")
 if (vcftools.info.all == "yes") {
     command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO-all")
 } else {
-    command3 <- paste(vcftools.binary, "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC")
+    command3 <- paste(
+        vcftools.binary,
+        "--vcf variants.raw.vcf --out vcftools --recode --recode-INFO DP --recode-INFO DP4 --recode-INFO IDV --recode-INFO INDEL --recode-INFO AC"
+    )
 }
 
-# run
+# mpileup needs an index to read only a region of the BAMs
+if (mpileup.r != "all") {
+    for (bam in Sys.glob("alignment*.bam")) {
+        runExternal(paste(samtools.binary, "index", bam))
+    }
+}
+
+# run. The exit status of a pipeline is that of its last command, so pipefail is needed
+# to notice that e.g. samtools failed.
 # stop(paste('CHIPSTER-NOTE: ', command1))
-system(command1)
-system(command2)
-system(command3)
-system("mv vcftools.recode.vcf variants.vcf")
+runExternal(paste("bash -c 'set -o pipefail;", command1, "'"))
+runExternal(paste("bash -c 'set -o pipefail;", command2, "'"))
+runExternal(command3)
+runExternal("mv vcftools.recode.vcf variants.vcf")
 
 # Change bam names in VCF to original names
-input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
-for (i in 1:nrow(input.names)) {
-    sed.command <- paste("s/", input.names[i, 1], "/", input.names[i, 2], "/", sep = "")
-    system(paste("sed -i", sed.command, "variants.vcf"))
-}
+displayNamesToFile("variants.vcf")

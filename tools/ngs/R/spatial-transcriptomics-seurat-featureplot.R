@@ -29,20 +29,25 @@ all.genes <- rownames(x = seurat_obj)
 match(genes, all.genes)
 # if more than one of the genes is not in the list, print error message:
 if (sum(is.na((match(genes, all.genes)))) > 1) {
-  not.found <- (genes[is.na(match(genes, all.genes)) == TRUE])
-  not.found <- paste(not.found, collapse = ",")
-  stop(paste("CHIPSTER-NOTE: ", "The genes you requested were not found in this dataset:", not.found))
+    not.found <- (genes[is.na(match(genes, all.genes)) == TRUE])
+    not.found <- paste(not.found, collapse = ",")
+    stop(paste("CHIPSTER-NOTE: ", "The genes you requested were not found in this dataset:", not.found))
 }
 
 # continue even if one gene is missing
 if (!all(!is.na(match(genes, all.genes)))) {
-  not.found <- genes[is.na(match(genes, all.genes)) == TRUE]
-  print(paste("Continuing the visualization without the one gene not found: ", not.found))
-  genes <- genes[!is.na(match(genes, all.genes))]
+    not.found <- genes[is.na(match(genes, all.genes)) == TRUE]
+    print(paste("Continuing the visualization without the one gene not found: ", not.found))
+    genes <- genes[!is.na(match(genes, all.genes))]
 }
 
 # Spatial feature plot:
-SpatialFeaturePlot(seurat_obj, features = genes, pt.size.factor = point.size, alpha = c(min_transparency, max_transparency))
+SpatialFeaturePlot(
+    seurat_obj,
+    features = genes,
+    pt.size.factor = point.size,
+    alpha = c(min_transparency, max_transparency)
+)
 
 # close the pdf
 dev.off()

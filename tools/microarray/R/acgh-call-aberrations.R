@@ -19,22 +19,29 @@ cgh <- toCgh(input, level = "segmented")
 
 organism <- "human"
 if (genome.build == "other") {
-  organism <- "other"
+    organism <- "other"
 }
 
 cellularity <- rep(1, ncol(cgh))
 if (column %in% colnames(phenodata)) {
-  cellularity <- phenodata[, column]
+    cellularity <- phenodata[, column]
 }
 if (max(cellularity, na.rm = TRUE) > 1) {
-  cellularity <- cellularity / 100
+    cellularity <- cellularity / 100
 }
 cellularity[is.na(cellularity)] <- mean(cellularity, na.rm = TRUE)
 if (all(is.na(cellularity))) {
-  cellularity <- rep(1, ncol(cgh))
+    cellularity <- rep(1, ncol(cgh))
 }
 
-cgh.cal <- CGHcall(cgh, nclass = as.integer(number.of.copy.number.states), organism = organism, cellularity = cellularity, build = genome.build, ncpus = 4)
+cgh.cal <- CGHcall(
+    cgh,
+    nclass = as.integer(number.of.copy.number.states),
+    organism = organism,
+    cellularity = cellularity,
+    build = genome.build,
+    ncpus = 4
+)
 cgh <- ExpandCGHcall(cgh.cal, cgh)
 
 output <- fromCgh(cgh)

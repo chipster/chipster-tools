@@ -4,14 +4,13 @@
 # PARAMETER name: "File name for list" TYPE STRING DEFAULT "files.txt" (File name for the list.)
 # PARAMETER sort: "Sort file" TYPE [yes, no] DEFAULT yes (Sort the list alphabetically.)
 
-# Read input names
-input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
+source(file.path(chipster.common.lib.path, "tool-utils.R"))
 
-# Add original names to a vector
-input.list <- vector(mode = "character", length = 0)
-for (i in 1:nrow(input.names)) {
-    input.list <- c(input.list, paste(input.names[i, 2]))
-}
+# Read input names
+input.names <- read_input_names()
+
+# Original names
+input.list <- input.names[, 2]
 
 # Sort
 if (sort == "yes") {
@@ -23,8 +22,6 @@ write.table(input.list, "files.txt", quote = FALSE, row.names = FALSE, col.names
 
 # Handle output names
 #
-source(file.path(chipster.common.lib.path, "tool-utils.R"))
-
 # Define output name
 if (nchar(name) > 0) {
     filename <- name

@@ -31,43 +31,52 @@ system("tar tf reads.tar > tar.contents")
 file.list <- scan("tar.contents", what = "", sep = "\n")
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
 if (any(grepl("/", file.list))) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 # Open tar package. Check the extracted names, because tar escapes some characters in the listing
 untar("reads.tar", exdir = "input_folder")
 file.list <- safe_name(list.files("input_folder"))
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains no FASTQ files. Files whose name starts with a dot are not used."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains no FASTQ files. Files whose name starts with a dot are not used."
+    ))
 }
 # Don't let the tar package replace the input files of the job, or stand in for the optional input_list
 reserved <- file.list[file.exists(file.list) | file.list == "input_list"]
 if (length(reserved) > 0) {
-  stop(paste("CHIPSTER-NOTE: The tar package can't contain files with the same names as the inputs of this tool (reads.tar, input_list). Please rename these:", paste(reserved, collapse = ", ")))
+    stop(paste(
+        "CHIPSTER-NOTE: The tar package can't contain files with the same names as the inputs of this tool (reads.tar, input_list). Please rename these:",
+        paste(reserved, collapse = ", ")
+    ))
 }
 if (!all(file.rename(file.path("input_folder", file.list), file.list))) {
-  stop("Moving the files of the tar package failed")
+    stop("Moving the files of the tar package failed")
 }
 
 # Go through the file list and gzip. Files that are already gzipped will be skipped
 for (i in 1:length(file.list)) {
-  system(paste("gzip", shQuote(file.list[i])))
+    system(paste("gzip", shQuote(file.list[i])))
 }
 
 # Use input_list if provided. Else use Mothur make.file tool to generate the input list
 if (fileOk("input_list")) {
-  system("mv input_list fastq.files")
+    system("mv input_list fastq.files")
 } else {
-  write("make.file(inputdir=., type=gz, prefix=fastq)", "makefile.mth", append = FALSE)
-  command <- paste(binary, "makefile.mth")
-  system(command)
-  system("cat *.logfile > log.tmp")
-  # Remove full paths from the Mothur-generated input list to make it more readable
-  system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples.fastqs.txt")
+    write("make.file(inputdir=., type=gz, prefix=fastq)", "makefile.mth", append = FALSE)
+    command <- paste(binary, "makefile.mth")
+    system(command)
+    system("cat *.logfile > log.tmp")
+    # Remove full paths from the Mothur-generated input list to make it more readable
+    system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples.fastqs.txt")
 }
 
 # Run Mothur make.contigs
@@ -111,9 +120,9 @@ system("sed 's/^		/	/' fastq-summary2.tsv > contigs.summary.tsv.tmp")
 
 # If contigs.summary.tsv is empty, return the log instead
 if (fileOk("contigs.summary.tsv.tmp", minlines = 1)) {
-  system("mv contigs.summary.tsv.tmp contigs.summary.tsv")
+    system("mv contigs.summary.tsv.tmp contigs.summary.tsv")
 } else {
-  system("mv log.tmp log.txt")
+    system("mv log.tmp log.txt")
 }
 
 # Gzip output fasta

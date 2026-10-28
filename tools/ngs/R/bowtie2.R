@@ -32,7 +32,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i, 1])
+    unzipIfGZipFile(input.names[i, 1])
 }
 
 # bowtie
@@ -45,24 +45,43 @@ rdg.value <- paste(rdg.open, rdg.ext, sep = ",")
 rfg.value <- paste(rfg.open, rfg.ext, sep = ",")
 
 
-parameters <- paste(strategy, "--mp", mp, "--np", np, "--rdg", rdg.value, "--rfg", rfg.value, quality.format, "--no-unal", "-p", chipster.threads.max)
+parameters <- paste(
+    strategy,
+    "--mp",
+    mp,
+    "--np",
+    np,
+    "--rdg",
+    rdg.value,
+    "--rfg",
+    rfg.value,
+    quality.format,
+    "--no-unal",
+    "-p",
+    chipster.threads.max
+)
 
 if (alignment.no > 0) {
-  if (alignment.no == 6) {
-    parameters <- paste(parameters, "-a")
-  }
-  if (alignment.no < 6) {
-    parameters <- paste(parameters, "-k", alignment.no)
-  }
+    if (alignment.no == 6) {
+        parameters <- paste(parameters, "-a")
+    }
+    if (alignment.no < 6) {
+        parameters <- paste(parameters, "-k", alignment.no)
+    }
 }
 
 # Local alignment specific parameters
-if (strategy == "--very-fast-local" || strategy == "--fast-local" || strategy == "--sensitive-local" || strategy == "--very-sensitive-local") {
-  parameters <- paste(parameters, "--local --ma", ma)
+if (
+    strategy == "--very-fast-local" ||
+        strategy == "--fast-local" ||
+        strategy == "--sensitive-local" ||
+        strategy == "--very-sensitive-local"
+) {
+    parameters <- paste(parameters, "--local --ma", ma)
 }
 
 if (unaligned.file == "yes") {
-  parameters <- paste(parameters, "--un unaligned")
+    parameters <- paste(parameters, "--un unaligned")
 }
 
 # Check if reads are in FASTA forma
@@ -110,11 +129,11 @@ displayNamesToBAM("alignment.sorted.bam")
 # rename result files according to the index parameter
 runExternal("mv alignment.sorted.bam bowtie2.bam")
 if (index.file == "index_file") {
-  runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+    runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 }
 
 if (unaligned.file == "yes") {
-  runExternal("mv unaligned unaligned_1.fq")
+    runExternal("mv unaligned unaligned_1.fq")
 }
 
 # Substitute display names to log for clarity

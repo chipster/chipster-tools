@@ -9,7 +9,6 @@
 # seems to work in this tools, but check other phyloseq tools
 # RUNTIME R-4.4.3-phyloseq
 
-
 # ES 18.8.2022
 # RUNTIME R-4.1.1-asv  no need for dada2
 # PARAMETER OPTIONAL mock: "Name of the mock community if you have co-sequenced a mock community" TYPE STRING (If you have co-sequenced a mock community, you can remove it from the phyloseq object by giving the name of the community as a parameter. Most likely to be named as Mock)
@@ -30,8 +29,8 @@ load("assignment.Rda", verbose = TRUE)
 
 # make a phyloseq object
 ps <- phyloseq(
-  otu_table(seqtab.nochim, taxa_are_rows = FALSE),
-  tax_table(taxa)
+    otu_table(seqtab.nochim, taxa_are_rows = FALSE),
+    tax_table(taxa)
 ) # sample_data(phenodata),
 
 # Remove mock sample if it's selected
@@ -66,10 +65,10 @@ sink()
 taxlength <- length(colnames(tax_table(ps)))
 
 if (taxlength == "6") {
-  colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+    colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
 }
 if (taxlength == "7") {
-  colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+    colnames(tax_table(ps)) <- c("Domain_Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
 }
 
 # Replacing NAs in taxonomy table with the best available classification:
@@ -84,13 +83,13 @@ taxabb <- c("ki", "ph", "cl", "or", "fa", "ge")
 # if the next entry is NA, the previous tmptax is used in paste
 
 for (i in 1:nrow(ps.tax)) {
-  for (j in 1:ncol(ps.tax)) {
-    if (is.na(ps.tax[i, j]) == TRUE) {
-      ps.tax[i, j] <- paste(tmptax, taxabb[j], sep = "_")
-    } else {
-      tmptax <- ps.tax[i, j]
+    for (j in 1:ncol(ps.tax)) {
+        if (is.na(ps.tax[i, j]) == TRUE) {
+            ps.tax[i, j] <- paste(tmptax, taxabb[j], sep = "_")
+        } else {
+            tmptax <- ps.tax[i, j]
+        }
     }
-  }
 }
 # returning the modified taxonomy table to the phyloseq object
 tax_table(ps) <- ps.tax
@@ -99,18 +98,17 @@ tax_table(ps) <- ps.tax
 samples.out <- sample_names(ps)
 # write phenodata.tsv
 write.table(
-  data.frame(
-    sample = samples.out,
-    chiptype = "NGS",
-    group = rep("", length(samples.out))
-  ),
-  "phenodata.tsv",
-  col.names = T,
-  row.names = F,
-  sep = "\t",
-  quote = F
+    data.frame(
+        sample = samples.out,
+        chiptype = "NGS",
+        group = rep("", length(samples.out))
+    ),
+    "phenodata.tsv",
+    col.names = T,
+    row.names = F,
+    sep = "\t",
+    quote = F
 )
-
 
 
 save(ps, file = "ps_nophe.Rda")

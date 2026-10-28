@@ -17,17 +17,17 @@ query <- query
 # Loads libraries
 phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
 if (phenodata$chiptype[1] != "cDNA" & phenodata$chiptype[1] != "Illumina" & phenodata$chiptype[1] != "miRNA") {
-   lib <- phenodata$chiptype[1]
-   lib <- as.character(lib)
+    lib <- phenodata$chiptype[1]
+    lib <- as.character(lib)
 
-   # Account for the fact that annotation packages are from version 2.3 of Bioconductor
-   # named with an ".db" suffix. Add the suffix when missing to support data files
-   # from Chipster 1.3 and earlier.
-   if (length(grep(".db", lib)) == 0 & length(grep("pmcdf", lib)) == 0) {
-      lib <- paste(lib, ".db", sep = "")
-   }
+    # Account for the fact that annotation packages are from version 2.3 of Bioconductor
+    # named with an ".db" suffix. Add the suffix when missing to support data files
+    # from Chipster 1.3 and earlier.
+    if (length(grep(".db", lib)) == 0 & length(grep("pmcdf", lib)) == 0) {
+        lib <- paste(lib, ".db", sep = "")
+    }
 
-   library(package = lib, character.only = T)
+    library(package = lib, character.only = T)
 }
 
 # Loads data (which file to search)
@@ -37,56 +37,76 @@ dat <- read.table(file, header = TRUE, sep = "\t", quote = "", row.names = 1, ch
 options(scipen = 10)
 
 if (meth == "rowname") {
-   if (mode == "include") dat2 <- dat[grep(query, row.names(dat), invert = FALSE), ]
-   if (mode == "exclude") dat2 <- dat[grep(query, row.names(dat), invert = TRUE), ]
-   write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
+    if (mode == "include") {
+        dat2 <- dat[grep(query, row.names(dat), invert = FALSE), ]
+    }
+    if (mode == "exclude") {
+        dat2 <- dat[grep(query, row.names(dat), invert = TRUE), ]
+    }
+    write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
 }
 
 if (meth == "symbol") {
-   if (length(grep("symbol", colnames(dat))) == 1) {
-      if (mode == "include") dat2 <- dat[grep(query, dat[, "symbol"], invert = FALSE), ]
-      if (mode == "exclude") dat2 <- dat[grep(query, dat[, "symbol"], invert = TRUE), ]
-      write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
-   } else {
-      stop("CHIPSTER-NOTE: Your data does not have symbol filed")
-   }
+    if (length(grep("symbol", colnames(dat))) == 1) {
+        if (mode == "include") {
+            dat2 <- dat[grep(query, dat[, "symbol"], invert = FALSE), ]
+        }
+        if (mode == "exclude") {
+            dat2 <- dat[grep(query, dat[, "symbol"], invert = TRUE), ]
+        }
+        write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
+    } else {
+        stop("CHIPSTER-NOTE: Your data does not have symbol filed")
+    }
 }
 
 if (meth == "description") {
-   if (length(grep("description", colnames(dat))) == 1) {
-      if (mode == "include") dat2 <- dat[grep(query, dat[, "description"], invert = FALSE), ]
-      if (mode == "exclude") dat2 <- dat[grep(query, dat[, "description"], invert = TRUE), ]
-      write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
-   } else {
-      stop("CHIPSTER-NOTE: Your data does not have description filed")
-   }
+    if (length(grep("description", colnames(dat))) == 1) {
+        if (mode == "include") {
+            dat2 <- dat[grep(query, dat[, "description"], invert = FALSE), ]
+        }
+        if (mode == "exclude") {
+            dat2 <- dat[grep(query, dat[, "description"], invert = TRUE), ]
+        }
+        write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
+    } else {
+        stop("CHIPSTER-NOTE: Your data does not have description filed")
+    }
 }
 
 
 if (meth == "Genename") {
-   query <- paste("^", query, sep = "")
-   lib2 <- sub(".db", "", lib)
-   env <- paste(lib2, "SYMBOL", sep = "")
-   env2 <- get(env)
-   list <- unlist(as.list(env2))[grep(query, unlist(as.list(env2)), invert = FALSE)]
-   affyid <- names(list)
-   matching_indices <- match(affyid, rownames(dat))
-   if (mode == "include") dat2 <- dat[matching_indices, ]
-   if (mode == "exclude") dat2 <- dat[-matching_indices, ]
-   write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
+    query <- paste("^", query, sep = "")
+    lib2 <- sub(".db", "", lib)
+    env <- paste(lib2, "SYMBOL", sep = "")
+    env2 <- get(env)
+    list <- unlist(as.list(env2))[grep(query, unlist(as.list(env2)), invert = FALSE)]
+    affyid <- names(list)
+    matching_indices <- match(affyid, rownames(dat))
+    if (mode == "include") {
+        dat2 <- dat[matching_indices, ]
+    }
+    if (mode == "exclude") {
+        dat2 <- dat[-matching_indices, ]
+    }
+    write.table(dat2, file = ("search.tsv"), sep = "\t", row.names = T, col.names = T, quote = F)
 }
 
 if (meth == "ChromosomeLocation") {
-   lib2 <- sub(".db", "", lib)
-   env <- paste(lib2, "CHR", sep = "")
-   # env<-paste(lib2, "CHRLOC", sep="")
-   env2 <- get(env)
-   if (mode == "include") affyids <- data.frame(id = names(as.list(env2))[grep(query, as.list(env2), invert = FALSE)])
-   if (mode == "exclude") affyids <- data.frame(id = names(as.list(env2))[grep(query, as.list(env2), invert = TRUE)])
-   dat2 <- merge(dat, affyids, by.x = "row.names", by.y = "id")
-   row.names(dat2) <- dat2$Row.names
-   dat2 <- dat2[, -1]
-   write.table(dat2, file = "search.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    lib2 <- sub(".db", "", lib)
+    env <- paste(lib2, "CHR", sep = "")
+    # env<-paste(lib2, "CHRLOC", sep="")
+    env2 <- get(env)
+    if (mode == "include") {
+        affyids <- data.frame(id = names(as.list(env2))[grep(query, as.list(env2), invert = FALSE)])
+    }
+    if (mode == "exclude") {
+        affyids <- data.frame(id = names(as.list(env2))[grep(query, as.list(env2), invert = TRUE)])
+    }
+    dat2 <- merge(dat, affyids, by.x = "row.names", by.y = "id")
+    row.names(dat2) <- dat2$Row.names
+    dat2 <- dat2[, -1]
+    write.table(dat2, file = "search.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
 
 # EOF

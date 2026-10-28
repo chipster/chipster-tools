@@ -18,7 +18,15 @@ unzipIfGZipFile("reads.fastq")
 binary <- c(file.path("/opt/chipster/tools", "fastx", "bin", "fastq_quality_filter"))
 
 # command
-command <- paste(binary, "-v", "-q", quality, "-p", percentage, "-Q 33 -i reads.fastq -o quality-filtered.fastq > quality-filtered.log")
+command <- paste(
+    binary,
+    "-v",
+    "-q",
+    quality,
+    "-p",
+    percentage,
+    "-Q 33 -i reads.fastq -o quality-filtered.fastq > quality-filtered.log"
+)
 
 # run
 system(command)

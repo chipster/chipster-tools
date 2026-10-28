@@ -3,7 +3,6 @@
 # OUTPUT change-interpretation.tsv: change-interpretation.tsv
 # PARAMETER transform: Transform TYPE [log2-linear: log2-linear, linear-log2: linear-log2, log10-linear: log10-linear, linear-log10: linear-log10, ln-linear: ln-linear, linear-ln: linear-ln] DEFAULT log2-linear (From which to transform to what)
 
-
 # Change interpretation
 # JTT 26.4.2008
 

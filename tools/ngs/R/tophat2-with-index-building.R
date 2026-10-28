@@ -21,7 +21,6 @@
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (TopHat2 will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
 # PARAMETER OPTIONAL no.mixed: "Report only paired alignments" TYPE [yes, no] DEFAULT yes (Only report read alignments if both reads in a pair can be mapped.)
 
-
 # EK 17.4.2012 added -G and -g options
 # MG 24.4.2012 added ability to use gtf files from Chipster server
 # AMS 19.6.2012 added unzipping
@@ -45,7 +44,6 @@ input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")
 for (i in 1:nrow(input.names)) {
     unzipIfGZipFile(input.names[i, 1])
 }
-
 
 
 options(scipen = 10)
@@ -99,7 +97,28 @@ command.start <- paste("bash -c '", set.path, tophat.binary)
 # parameters
 # command.parameters <- paste("--bowtie1 -r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
 # command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
-command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
+command.parameters <- paste(
+    "-p",
+    chipster.threads.max,
+    "-r",
+    mate.inner.distance,
+    "--mate-std-dev",
+    mate.std.dev,
+    "--read-mismatches",
+    mismatches,
+    "-a",
+    min.anchor.length,
+    "-m",
+    splice.mismatches,
+    "-i",
+    min.intron.length,
+    "-I",
+    max.intron.length,
+    "-g",
+    max.multihits,
+    "--library-type",
+    library.type
+)
 
 if (mismatches > 2) {
     command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
@@ -145,7 +164,10 @@ if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
     reads2 <- reads[2]
 } else {
     # Case: no list files, more than two fastq inputs
-    stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "List file is missing. You need to provide a list of read files for both directions."
+    ))
 }
 
 # command ending

@@ -17,7 +17,6 @@
 # SLOTS 2
 # TOOLS_BIN ""
 
-
 # ES 15.07.2022
 # OUTPUT OPTIONAL summary.txt
 
@@ -38,11 +37,14 @@ file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
 if (grepl("/", file.list[1])) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 # Make input and output folders
@@ -56,162 +58,183 @@ untar("reads.tar", exdir = "input_folder")
 filenames <- list.files("input_folder", full.names = TRUE)
 
 
-
 ## ---------------------------------
 if (paired == "paired") {
-  # Use input_list if provided. Else use tar package file names tool to generate the input list
-  if (fileOk("input_list.txt")) {
-    txt_filenames <- c() # name of the files in the txt file
-    sample.names <- c()
-    input <- read_list_file("input_list.txt")
-    # take out the file names and sample name and put them to one vector, those are separeted with '\t'
-    for (row in input) {
-      sample <- strsplit(row, "\t", fixed = TRUE)
-      sample_name <- trimws(sample[[1]][1])
-      sample.names <- c(sample.names, sample_name) # sample names first row
-      txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
-      txt_filenames <- c(txt_filenames, trimws(sample[[1]][3])) # reverse read
-    }
-    # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
-    if (length(txt_filenames) != length(filenames)) {
-      stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
+    # Use input_list if provided. Else use tar package file names tool to generate the input list
+    if (fileOk("input_list.txt")) {
+        txt_filenames <- c() # name of the files in the txt file
+        sample.names <- c()
+        input <- read_list_file("input_list.txt")
+        # take out the file names and sample name and put them to one vector, those are separeted with '\t'
+        for (row in input) {
+            sample <- strsplit(row, "\t", fixed = TRUE)
+            sample_name <- trimws(sample[[1]][1])
+            sample.names <- c(sample.names, sample_name) # sample names first row
+            txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
+            txt_filenames <- c(txt_filenames, trimws(sample[[1]][3])) # reverse read
+        }
+        # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
+        if (length(txt_filenames) != length(filenames)) {
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"
+            ))
+        } else {
+            safe_file_name(c(sample.names, txt_filenames))
+            filenames <- paste0("input_folder/", txt_filenames)
+        }
     } else {
-      safe_file_name(c(sample.names, txt_filenames))
-      filenames <- paste0("input_folder/", txt_filenames)
-    }
-  } else {
-    # Sort the filenames from tar package, samples have different names
-    filenames <- sort(filenames)
-    txt_filenames <- list.files("input_folder")
-  }
-
-  # check if the lenght of files in the input_folder is even, else error
-  number <- length(filenames) %% 2
-  if (number != 0) {
-    stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
-  }
-
-  # put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
-  # forward reads should be before reverse reads after sort() function
-  forward <- seq(1, length(filenames), by = 2)
-  fnFs <- filenames[forward]
-
-  reverse <- seq(2, length(filenames), by = 2)
-  fnRs <- filenames[reverse]
-
-
-  # take out the sample names splitting with _ if no input_file
-  if (!fileOk("input_list.txt")) {
-    sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
-  }
-
-  # put the reverse and forward reads to own folders  problem with pattern
-  # fnFs <- sort(list.files("input_folder", pattern="_R1_001.fastq", full.names = TRUE))
-  # fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
-
-
-  # make a folder for the reverse and forward reads for the filterandtrim function. Rename output files with F=forward and R=reverse
-  filtFs <- file.path("output_folder", paste0(sample.names, "_F_filt.fastq.gz"))
-  filtRs <- file.path("output_folder", paste0(sample.names, "_R_filt.fastq.gz"))
-  names(filtRs) <- sample.names
-  names(filtFs) <- sample.names
-
-
-  # if maxeer or maxeef not selected
-  if (is.na(maxeef)) {
-    maxeef <- "inf"
-  }
-  if (is.na(maxeer)) {
-    maxeer <- "inf"
-  }
-  # run filterAndTrim
-  out <- filterAndTrim(fnFs, filtFs, fnRs, filtRs,
-    truncLen = c(truncf, truncr),
-    maxN = maxns, maxEE = c(maxeef, maxeer), truncQ = truncq, minLen = minlen, rm.phix = TRUE,
-    compress = TRUE, multithread = as.integer(chipster.threads.max), verbose = TRUE
-  )
-
-  if (length(filenames) > 2) {
-    # print(length("double_many",filenames)
-    rownames(out) <- sample.names
-    write.table(out, file = "summary.tsv", sep = "\t")
-  } else {
-    # print(length("pair",filenames))
-    write.table(out, file = "summary.tsv", sep = "\t", row.names = FALSE)
-    print(out)
-  }
-  # make a summary file
-  # sink("summary.txt")
-  # 	cat("\n\n\n")
-  #  print(out)
-  # 	cat("\n\n\n")
-  # sink()
-
-  # make a samples.fastqs.txt file to show how fastq files were assigned to samples, every second file forward
-  file.create("samples.fastqs.txt")
-  x <- 1
-  for (name in sample.names) {
-    line <- paste(name, "\t", txt_filenames[x], "\t", txt_filenames[x + 1])
-    x <- x + 2
-    write(line, file = "samples.fastqs.txt", append = TRUE)
-  }
-  ## ----------------------------------------------------------------------------------
-} else { # single reads, otherwise is the same. Has just forward reads.
-  # Use input_list if provided. Else use tar package file names tool to generate the input list
-
-  if (fileOk("input_list.txt")) {
-    txt_filenames <- c() # name of the files in the txt file
-    sample.names <- c()
-    input <- read_list_file("input_list.txt")
-    # take out the file names and sample name and put them to one vector, those are separeted with '\t'
-    for (row in input) {
-      sample <- strsplit(row, "\t", fixed = TRUE)
-      sample_name <- trimws(sample[[1]][1])
-      sample.names <- c(sample.names, sample_name) # sample names first row
-      txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
+        # Sort the filenames from tar package, samples have different names
+        filenames <- sort(filenames)
+        txt_filenames <- list.files("input_folder")
     }
 
-    # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
-    if (length(txt_filenames) != length(filenames)) {
-      stop(paste("CHIPSTER-NOTE: ", "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"))
+    # check if the lenght of files in the input_folder is even, else error
+    number <- length(filenames) %% 2
+    if (number != 0) {
+        stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
+    }
+
+    # put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
+    # forward reads should be before reverse reads after sort() function
+    forward <- seq(1, length(filenames), by = 2)
+    fnFs <- filenames[forward]
+
+    reverse <- seq(2, length(filenames), by = 2)
+    fnRs <- filenames[reverse]
+
+    # take out the sample names splitting with _ if no input_file
+    if (!fileOk("input_list.txt")) {
+        sample.names <- sapply(strsplit(basename(fnFs), "_"), `[`, 1)
+    }
+
+    # put the reverse and forward reads to own folders  problem with pattern
+    # fnFs <- sort(list.files("input_folder", pattern="_R1_001.fastq", full.names = TRUE))
+    # fnRs <- sort(list.files("input_folder", pattern="_R2_001.fastq", full.names = TRUE))
+
+    # make a folder for the reverse and forward reads for the filterandtrim function. Rename output files with F=forward and R=reverse
+    filtFs <- file.path("output_folder", paste0(sample.names, "_F_filt.fastq.gz"))
+    filtRs <- file.path("output_folder", paste0(sample.names, "_R_filt.fastq.gz"))
+    names(filtRs) <- sample.names
+    names(filtFs) <- sample.names
+
+    # if maxeer or maxeef not selected
+    if (is.na(maxeef)) {
+        maxeef <- "inf"
+    }
+    if (is.na(maxeer)) {
+        maxeer <- "inf"
+    }
+    # run filterAndTrim
+    out <- filterAndTrim(
+        fnFs,
+        filtFs,
+        fnRs,
+        filtRs,
+        truncLen = c(truncf, truncr),
+        maxN = maxns,
+        maxEE = c(maxeef, maxeer),
+        truncQ = truncq,
+        minLen = minlen,
+        rm.phix = TRUE,
+        compress = TRUE,
+        multithread = as.integer(chipster.threads.max),
+        verbose = TRUE
+    )
+
+    if (length(filenames) > 2) {
+        # print(length("double_many",filenames)
+        rownames(out) <- sample.names
+        write.table(out, file = "summary.tsv", sep = "\t")
     } else {
-      safe_file_name(c(sample.names, txt_filenames))
-      filenames <- paste0("input_folder/", txt_filenames)
+        # print(length("pair",filenames))
+        write.table(out, file = "summary.tsv", sep = "\t", row.names = FALSE)
+        print(out)
     }
-  } else {
-    # Sort the filenames from tar package, samples have different names, take put sample names _
-    filenames <- sort(filenames)
-    txt_filenames <- list.files("input_folder")
-    sample.names <- sapply(strsplit(basename(filenames), "_"), `[`, 1)
-  }
-  filtreads <- file.path("output_folder", paste0(sample.names, "_filt.fastq.gz"))
-  # if maxeer or maxeef not selected
-  if (is.na(maxeef)) {
-    maxeef <- "inf"
-  }
+    # make a summary file
+    # sink("summary.txt")
+    # 	cat("\n\n\n")
+    #  print(out)
+    # 	cat("\n\n\n")
+    # sink()
 
-  # run filterAndTrim
-  out <- filterAndTrim(filenames, filtreads,
-    truncLen = truncf,
-    maxN = maxns, maxEE = maxeef, truncQ = truncq, minLen = minlen, rm.phix = TRUE,
-    compress = TRUE, multithread = as.integer(chipster.threads.max), verbose = TRUE
-  )
+    # make a samples.fastqs.txt file to show how fastq files were assigned to samples, every second file forward
+    file.create("samples.fastqs.txt")
+    x <- 1
+    for (name in sample.names) {
+        line <- paste(name, "\t", txt_filenames[x], "\t", txt_filenames[x + 1])
+        x <- x + 2
+        write(line, file = "samples.fastqs.txt", append = TRUE)
+    }
+    ## ----------------------------------------------------------------------------------
+} else {
+    # single reads, otherwise is the same. Has just forward reads.
+    # Use input_list if provided. Else use tar package file names tool to generate the input list
 
-  if (length(filenames) > 1) {
-    # print(length("sing_many",filenames))
-    rownames(out) <- sample.names
-    write.table(out, file = "summary.tsv", sep = "\t")
-  } else {
-    # print(length(filenames))
-    write.table(out, file = "summary.tsv", sep = "\t", row.names = FALSE)
-  }
-  x <- 1
-  file.create("samples.fastqs.txt")
-  for (name in sample.names) {
-    line <- paste(name, "\t", txt_filenames[x], "\t")
-    x <- x + 1
-    write(line, file = "samples.fastqs.txt", append = TRUE)
-  }
+    if (fileOk("input_list.txt")) {
+        txt_filenames <- c() # name of the files in the txt file
+        sample.names <- c()
+        input <- read_list_file("input_list.txt")
+        # take out the file names and sample name and put them to one vector, those are separeted with '\t'
+        for (row in input) {
+            sample <- strsplit(row, "\t", fixed = TRUE)
+            sample_name <- trimws(sample[[1]][1])
+            sample.names <- c(sample.names, sample_name) # sample names first row
+            txt_filenames <- c(txt_filenames, trimws(sample[[1]][2])) # forward read
+        }
+
+        # if everything fine change the filenames variable and use it, add also the folder name: input_folder/
+        if (length(txt_filenames) != length(filenames)) {
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "It seems that the list of FASTQ files .txt file has different amount of filenames than the .tar package"
+            ))
+        } else {
+            safe_file_name(c(sample.names, txt_filenames))
+            filenames <- paste0("input_folder/", txt_filenames)
+        }
+    } else {
+        # Sort the filenames from tar package, samples have different names, take put sample names _
+        filenames <- sort(filenames)
+        txt_filenames <- list.files("input_folder")
+        sample.names <- sapply(strsplit(basename(filenames), "_"), `[`, 1)
+    }
+    filtreads <- file.path("output_folder", paste0(sample.names, "_filt.fastq.gz"))
+    # if maxeer or maxeef not selected
+    if (is.na(maxeef)) {
+        maxeef <- "inf"
+    }
+
+    # run filterAndTrim
+    out <- filterAndTrim(
+        filenames,
+        filtreads,
+        truncLen = truncf,
+        maxN = maxns,
+        maxEE = maxeef,
+        truncQ = truncq,
+        minLen = minlen,
+        rm.phix = TRUE,
+        compress = TRUE,
+        multithread = as.integer(chipster.threads.max),
+        verbose = TRUE
+    )
+
+    if (length(filenames) > 1) {
+        # print(length("sing_many",filenames))
+        rownames(out) <- sample.names
+        write.table(out, file = "summary.tsv", sep = "\t")
+    } else {
+        # print(length(filenames))
+        write.table(out, file = "summary.tsv", sep = "\t", row.names = FALSE)
+    }
+    x <- 1
+    file.create("samples.fastqs.txt")
+    for (name in sample.names) {
+        line <- paste(name, "\t", txt_filenames[x], "\t")
+        x <- x + 1
+        write(line, file = "samples.fastqs.txt", append = TRUE)
+    }
 }
 
 # make summary.tsv table

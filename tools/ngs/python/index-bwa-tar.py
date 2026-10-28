@@ -47,18 +47,16 @@ def main():
     for fe in index_file_extensions:
         index_file = fasta_basename + fe
         index_files.append(index_file)
-            
+
     run_process(["tar", "-cf", "output.tar"] + index_files)
 
-    tool_utils.write_output_definitions({
-        "output.tar": fasta_basename + ".tar"
-    })
-    
+    tool_utils.write_output_definitions({"output.tar": fasta_basename + ".tar"})
+
     # save version information
     # bwa prints version to stderr when arguments are not given, but also uses exit code 1
     version = subprocess.check_output([bwa + " 2>&1 || true"], shell=True)
     version_number = str(version).split("\\n")[2].split(" ")[1]
-    
+
     version_utils.document_version("BWA", version_number)
 
 

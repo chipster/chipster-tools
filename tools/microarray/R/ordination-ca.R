@@ -5,7 +5,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
-
 # Non-metric multidimensional scaling
 # JTT 30.1.2009
 
@@ -34,8 +33,8 @@ phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
 
 # Decorana can't handle negative values
 if (any(dat2 < 0)) {
-   dat2 <- na.omit(dat2)
-   dat2 <- dat2 + abs(min(dat2))
+    dat2 <- na.omit(dat2)
+    dat2 <- dat2 + abs(min(dat2))
 }
 
 # Detrended correspondence analysis

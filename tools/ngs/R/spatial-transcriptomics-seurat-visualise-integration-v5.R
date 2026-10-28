@@ -29,44 +29,59 @@ DefaultAssay(seurat_obj) <- "predictions"
 genes <- trimws(unlist(strsplit(genes, ",")))
 
 if (multi_analysis) {
-    # Split obejct and analyze find spatially variable features separately 
+    # Split obejct and analyze find spatially variable features separately
     # Samples are analyzed seperately because of error 'please provide the same number of observations as spatial locations'
-    # in FindSpatiallyVariableFeatures() that is similar as explained by tingchiafelix in issue 
-    # https://github.com/satijalab/seurat/issues/4611 as well as issue raised in 
+    # in FindSpatiallyVariableFeatures() that is similar as explained by tingchiafelix in issue
+    # https://github.com/satijalab/seurat/issues/4611 as well as issue raised in
     # https://github.com/satijalab/seurat/issues/8754
     experiment.slices <- SplitObject(seurat_obj, split.by = "orig.ident")
 
     # Remove extra images
     experiment.slices <- lapply(experiment.slices, function(sce) {
-    sce@images[names(sce@images) != sce$orig.ident[1]] = NULL
-    sce
+        sce@images[names(sce@images) != sce$orig.ident[1]] <- NULL
+        sce
     })
 
     # Open the pdf file for plotting
     pdf(file = "integration_plot.pdf", width = 13, height = 7)
 
-  for (i in 1:length(experiment.slices)) {
-    seurat_obj <- FindSpatiallyVariableFeatures(experiment.slices[[i]], 
-        assay = "predictions", selection.method = method.to.use, 
-        features = rownames(experiment.slices[[i]]), r.metric=5, slot = "data")
+    for (i in 1:length(experiment.slices)) {
+        seurat_obj <- FindSpatiallyVariableFeatures(
+            experiment.slices[[i]],
+            assay = "predictions",
+            selection.method = method.to.use,
+            features = rownames(experiment.slices[[i]]),
+            r.metric = 5,
+            slot = "data"
+        )
 
-    top.clusters <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
+        top.clusters <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
 
-    # Visualise chosen features
-    print(SpatialFeaturePlot(seurat_obj, features = c(genes), keep.scale = color.scale, pt.size.factor = 1.6, ncol = 2, crop = TRUE))
+        # Visualise chosen features
+        print(SpatialFeaturePlot(
+            seurat_obj,
+            features = c(genes),
+            keep.scale = color.scale,
+            pt.size.factor = 1.6,
+            ncol = 2,
+            crop = TRUE
+        ))
 
-    # Visualise spatially variable features
-    print(SpatialPlot(object = seurat_obj, features = top.clusters, keep.scale = color.scale, ncol = 2))
-  }
+        # Visualise spatially variable features
+        print(SpatialPlot(object = seurat_obj, features = top.clusters, keep.scale = color.scale, ncol = 2))
+    }
 
     # Close the pdf
     dev.off()
-
 } else {
     # Identify spatially variable features with the cell type prediction scores calculated in the integration
-    seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj,
-        assay = "predictions", selection.method = method.to.use,
-        features = rownames(seurat_obj), r.metric = 5, slot = "data", 
+    seurat_obj <- FindSpatiallyVariableFeatures(
+        seurat_obj,
+        assay = "predictions",
+        selection.method = method.to.use,
+        features = rownames(seurat_obj),
+        r.metric = 5,
+        slot = "data",
     )
     top.clusters <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
 
@@ -74,8 +89,15 @@ if (multi_analysis) {
     pdf(file = "integration_plot.pdf", width = 13, height = 7)
 
     # Visualise chosen features
-    print(SpatialFeaturePlot(seurat_obj, features = c(genes), keep.scale = color.scale, pt.size.factor = 1.6, ncol = 2, crop = TRUE))
-    
+    print(SpatialFeaturePlot(
+        seurat_obj,
+        features = c(genes),
+        keep.scale = color.scale,
+        pt.size.factor = 1.6,
+        ncol = 2,
+        crop = TRUE
+    ))
+
     # Visualise spatially variable features
     print(SpatialPlot(object = seurat_obj, features = top.clusters, keep.scale = color.scale, ncol = 2))
 

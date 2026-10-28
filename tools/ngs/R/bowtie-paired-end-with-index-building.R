@@ -23,7 +23,6 @@
 # PARAMETER OPTIONAL unaligned.file: "Put unaligned reads to a separate file" TYPE [yes, no] DEFAULT no (Would you like to store unaligned reads to a new fastq file? Note that also multireads will be added to this file, unless you asked them to be put to a separate file.)
 # RUNTIME R-4.1.1
 
-
 # EK 12.7.2011
 # AMS 19.6.2012 Added unzipping
 # EK 1.11.2012 fixed genome parameter and SAM output
@@ -49,47 +48,62 @@ print(paste("Host genome file type", genome.filetype))
 
 # case 1. Ready calculated indexes in tar format
 if (genome.filetype == "tar") {
-  print("Extracting tar formatted gemome index file")
-  # Extract to a folder of its own, so that the files of the package can't replace the files of the job
-  dir.create("genome_index")
-  runExternal("tar xf genome.txt -C genome_index")
-  # Check index base name
-  if (length(Sys.glob("genome_index/*.1.ebwt")) != 0) {
-    f <- list.files("genome_index", pattern = "\\.1.ebwt$")
-    bowtie.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
-  } else {
-    stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie index.")
-  }
+    print("Extracting tar formatted gemome index file")
+    # Extract to a folder of its own, so that the files of the package can't replace the files of the job
+    dir.create("genome_index")
+    runExternal("tar xf genome.txt -C genome_index")
+    # Check index base name
+    if (length(Sys.glob("genome_index/*.1.ebwt")) != 0) {
+        f <- list.files("genome_index", pattern = "\\.1.ebwt$")
+        bowtie.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 7)))
+    } else {
+        stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid Bowtie index.")
+    }
 
-  runExternal("ls -l")
-  # case 2. Fasta file
+    runExternal("ls -l")
+    # case 2. Fasta file
 } else {
-  # Do indexing
-  # check sequence file type
-  emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
-  options(scipen = 999)
-  inputfile.to.check <- ("genome.txt")
-  sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
-  str.filetype <- system(sfcheck.command, intern = TRUE)
+    # Do indexing
+    # check sequence file type
+    emboss.path <- file.path(chipster.tools.path, "emboss-20.04", "bin")
+    options(scipen = 999)
+    inputfile.to.check <- ("genome.txt")
+    sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
+    sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+    str.filetype <- system(sfcheck.command, intern = TRUE)
 
-  if (str.filetype == "Not an EMBOSS compatible sequence file") {
-    stop("CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use")
-  }
+    if (str.filetype == "Not an EMBOSS compatible sequence file") {
+        stop(
+            "CHIPSTER-NOTE: Your reference genome is not a sequence file that is compatible with the tool you try to use"
+        )
+    }
 
-  # bowtie index building
-  print("Indexing the genome...")
-  bowtie.genome <- "genome"
+    # bowtie index building
+    print("Indexing the genome...")
+    bowtie.genome <- "genome"
 
-  command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", bowtie.genome)
-  runExternal(command.indexing)
-  runExternal("ls -l")
+    command.indexing <- paste(bowtie.index.binary, "-f", "genome.txt", bowtie.genome)
+    runExternal(command.indexing)
+    runExternal("ls -l")
 }
 print(paste("Internal genome name:", bowtie.genome))
 command.start <- paste("bash -c '", bowtie.binary)
 
 # common parameters
-common.parameters <- paste("-p", chipster.threads.max, "-S", "-q", "-m", multiread, "-k", alignment.no, "-I", min.insert.size, "-X", max.insert.size)
+common.parameters <- paste(
+    "-p",
+    chipster.threads.max,
+    "-S",
+    "-q",
+    "-m",
+    multiread,
+    "-k",
+    alignment.no,
+    "-I",
+    min.insert.size,
+    "-X",
+    max.insert.size
+)
 
 # mode specific parameters
 quality.parameter <- ifelse(quality.format == "solexa1_3", "--solexa1.3-quals", "")
@@ -107,7 +121,15 @@ output.parameters <- paste(unaligned.output, multiread.output)
 command.end <- paste("-x", bowtie.genome, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
-bowtie.command <- paste(command.start, common.parameters, quality.parameter, orientation.parameter, mode.parameters, output.parameters, command.end)
+bowtie.command <- paste(
+    command.start,
+    common.parameters,
+    quality.parameter,
+    orientation.parameter,
+    mode.parameters,
+    output.parameters,
+    command.end
+)
 # stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal(bowtie.command)
 

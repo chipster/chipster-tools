@@ -25,7 +25,10 @@ if (organism == "other") {
         unzipIfGZipFile("reference")
         file.rename("reference", "reference.fasta")
     } else {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a FASTA file or choose one of the provided reference genomes."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a FASTA file or choose one of the provided reference genomes."
+        ))
     }
 } else {
     # If not, we use the internal one.
@@ -65,8 +68,14 @@ outputnames <- matrix(NA, nrow = 5, ncol = 2)
 outputnames[1, ] <- c("metrics.bait_bias_detail_metrics", paste(basename, "", sep = ".bait_bias_detail_metrics.txt"))
 outputnames[2, ] <- c("metrics.bait_bias_summary_metrics", paste(basename, ".bait_bias_summary_metrics.txt", sep = ""))
 outputnames[3, ] <- c("metrics.error_summary_metrics", paste(basename, ".error_summary_metrics.txt", sep = ""))
-outputnames[4, ] <- c("metrics.pre_adapter_detail_metrics", paste(basename, ".pre_adapter_detail_metrics.txt", sep = ""))
-outputnames[5, ] <- c("metrics.pre_adapter_summary_metrics", paste(basename, ".pre_adapter_summary_metrics.txt", sep = ""))
+outputnames[4, ] <- c(
+    "metrics.pre_adapter_detail_metrics",
+    paste(basename, ".pre_adapter_detail_metrics.txt", sep = "")
+)
+outputnames[5, ] <- c(
+    "metrics.pre_adapter_summary_metrics",
+    paste(basename, ".pre_adapter_summary_metrics.txt", sep = "")
+)
 
 # Write output definitions file
 write_output_definitions(outputnames)

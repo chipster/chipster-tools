@@ -38,7 +38,6 @@
 # STORAGE 10
 # TOOLS_BIN ""
 
-
 # Extra header directives
 # ------------------------------------------------------------------------------
 # Beyond TOOL / INPUT / OUTPUT / PARAMETER, the SADL header supports the five
@@ -67,9 +66,8 @@
 #
 # TOOLS_BIN ""      Opt out of mounting the chipster-tools binaries into the
 #                   job. Pure R/Python tools that don't shell out to external
-#                   binaries set this to "". In practice, the directive is never 
+#                   binaries set this to "". In practice, the directive is never
 #                   used to point at an alternate path.
-
 
 # Chipster variables
 # ------------------------------------------------------------------------------
@@ -79,18 +77,18 @@
 # values shown.
 
 # Path to pre-installed binaries:
-chipster.tools.path     # "/opt/chipster-web-server/tools"
+chipster.tools.path # "/opt/chipster-web-server/tools"
 
 # Paths to library script directories:
-chipster.common.path     # "../toolbox/tools/common/R"
+chipster.common.path # "../toolbox/tools/common/R"
 chipster.common.lib.path # "../toolbox/tools/common/R/lib"
-chipster.module.path     # "../toolbox/tools/misc"
+chipster.module.path # "../toolbox/tools/misc"
 chipster.module.lib.path # "../toolbox/tools/misc/lib"
-chipster.java.libs.path  # "/opt/chipster-web-server/lib"
+chipster.java.libs.path # "/opt/chipster-web-server/lib"
 
 # Resources allocated to this job:
-chipster.threads.max     # "2"      CPU cores
-chipster.memory.max      # "8192"   memory in MB
+chipster.threads.max # "2"      CPU cores
+chipster.memory.max # "8192"   memory in MB
 
 
 # Use a library script file
@@ -126,8 +124,8 @@ suppressPackageStartupMessages(library(ggplot2))
 # exists and optionally meets a minimum size or line count. fileCheck() halts
 # the job with a CHIPSTER-NOTE on failure; the other two return TRUE / FALSE
 # so the script can branch on the result.
-fileCheck("input.tsv")                  # required, must exist
-fileCheck("input.tsv", minsize = 100)   # must be at least 100 bytes
+fileCheck("input.tsv") # required, must exist
+fileCheck("input.tsv", minsize = 100) # must be at least 100 bytes
 if (fileNotOk("optional.tsv")) {
     stop(paste("CHIPSTER-NOTE:", "Optional input is empty or missing"))
 }
@@ -210,8 +208,7 @@ write_output_definitions(outputnames)
 #                           names substituted for user-visible display names,
 #                           useful for the job log
 samtools.binary <- file.path(chipster.tools.path, "samtools", "bin", "samtools")
-command <- paste(samtools.binary, "sort", "-@", chipster.threads.max,
-                 "-o", "output.bam", "input.bam")
+command <- paste(samtools.binary, "sort", "-@", chipster.threads.max, "-o", "output.bam", "input.bam")
 documentCommand(command)
 runExternal(command)
 
@@ -237,5 +234,3 @@ documentVersion("samtools", version)
 # the rest of the script can use the declared input name without change).
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("input.tsv")
-
-

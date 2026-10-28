@@ -11,7 +11,6 @@
 # KM 8.2.2015
 # KM 17.4.2015 Added support for rownames
 
-
 # Load the data
 file <- c("results.tsv")
 

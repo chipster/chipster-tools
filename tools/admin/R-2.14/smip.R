@@ -15,7 +15,6 @@
 # smart.install.packages(package="Matrix", bioconductor.package="biopökäle") # should fail
 # smart.install.packages(url.package="http://cran.r-project.org/src/contrib/00Archive/hdrcde/hdrcde_2.15.tar.gz")
 
-
 smart.install.bioconductor.group <- function(groupName = "lite", mirror = NA) {
     for (package in biocinstallPkgGroups(groupName)) {
         smart.install.packages(bioconductor.package = package, mirror = mirror)

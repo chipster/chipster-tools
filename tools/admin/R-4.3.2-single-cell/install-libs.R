@@ -1,5 +1,5 @@
 # wget https://cran.r-project.org/src/base/R-4/R-4.3.2.tar.gz
-# tar -xzf R-4.3.2.tar.gz 
+# tar -xzf R-4.3.2.tar.gz
 # cd R-4.3.2
 # ./configure --with-x=no --with-pcre1 --prefix=/opt/chipster/tools/R-4.3.2-single-cell
 # make
@@ -7,7 +7,7 @@
 
 # First, install all apt package in chipster-openshift/kustomize/builds/comp-r-4-3-2-single-cell!
 
-# you can run R commands from bash to track time usage, but you have to provide the repo for install.packages() 
+# you can run R commands from bash to track time usage, but you have to provide the repo for install.packages()
 # time ./R -e 'install.packages("Seurat", repos = "https://ftp.acc.umu.se/mirror/CRAN/")'
 
 # these are needed to install some packages
@@ -96,11 +96,8 @@ install.packages("hdf5r")
 # now apparent installed as dependecy, but install explicitly next time
 # BiocManager::install('limma')
 
-
-
 install.packages("devtools")
 # apt install git
 devtools::install_github("cellgeni/schard")
 
 install.packages("ggrepel")
-

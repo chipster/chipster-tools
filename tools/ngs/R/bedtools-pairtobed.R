@@ -32,35 +32,35 @@ binary <- c(file.path(chipster.tools.path, "bedtools", "bin", "pairToBed"))
 options <- paste("")
 
 if (abam == "yes") {
-  if (bedpe == "yes") {
-    outputfiletype <- "bedpe"
-    options <- paste(options, "-bedpe")
-  } else {
-    outputfiletype <- "bam"
-    if (ubam == "yes") {
-      options <- paste(options, "-ubam")
+    if (bedpe == "yes") {
+        outputfiletype <- "bedpe"
+        options <- paste(options, "-bedpe")
+    } else {
+        outputfiletype <- "bam"
+        if (ubam == "yes") {
+            options <- paste(options, "-ubam")
+        }
     }
-  }
 } else {
-  outputfiletype <- "bed"
+    outputfiletype <- "bed"
 }
 
 if (ed == "yes") {
-  options <- paste(options, "-ed")
+    options <- paste(options, "-ed")
 }
 options <- paste(options, "-f", f)
 if (s == "yes") {
-  options <- paste(options, "-s")
+    options <- paste(options, "-s")
 }
 options <- paste(options, "-type", type)
 
 # input files
 
 if (abam == "yes") {
-  options <- paste(options, "-abam file.a -b file.b")
+    options <- paste(options, "-abam file.a -b file.b")
 }
 if (abam == "no") {
-  options <- paste(options, "-a file.a -b file.b")
+    options <- paste(options, "-a file.a -b file.b")
 }
 
 
@@ -72,17 +72,17 @@ system(command)
 
 # Generate output/error message
 if (file.info("pairtobed.tmp")$size > 0) {
-  if (outputfiletype == "bed") {
-    system("mv pairtobed.tmp pairtobed.bed")
-  }
-  if (outputfiletype == "bedpe") {
-    system("mv pairtobed.tmp pairtobed.bedpe")
-  }
-  if (outputfiletype == "bam") {
-    system("mv pairtobed.tmp pairtobed.bam")
-  }
+    if (outputfiletype == "bed") {
+        system("mv pairtobed.tmp pairtobed.bed")
+    }
+    if (outputfiletype == "bedpe") {
+        system("mv pairtobed.tmp pairtobed.bedpe")
+    }
+    if (outputfiletype == "bam") {
+        system("mv pairtobed.tmp pairtobed.bam")
+    }
 } else if (file.info("error.tmp")$size > 0) {
-  system("mv error.tmp error.txt")
+    system("mv error.tmp error.txt")
 } else {
-  system("echo \"# No results found\" > error.txt")
+    system("echo \"# No results found\" > error.txt")
 }

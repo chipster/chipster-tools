@@ -2,7 +2,6 @@
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS
 # OUTPUT combined.tsv: combined.tsv
 
-
 # Combine probes or probeset to genes
 # 18.12.2008 JTT
 # modified 3.3.2010, MG, to include symbol and description columns in the output
@@ -11,8 +10,6 @@
 # modified 15.4.2010 MG to make the script compatible with output from "Add annotations to data" tool
 # 25.2.2016 ML removed produce identifiers -option
 # PARAMETER produce.identifiers: "Produce identifiers" TYPE [no: no, yes: yes] DEFAULT no (Should approximate identifiers for the gene be returned)
-
-
 
 # Parameter settings (default) for testing purposes
 # produce.identifiers<-"no"
@@ -30,7 +27,9 @@ colnames(dat)[colnames(dat) == "Description"] <- "description"
 symbols <- dat[, grep("symbol", names(dat))]
 descriptions <- dat[, grep("description", names(dat))]
 if (length(symbols) == 0) {
-    stop("CHIPSTER-NOTE: You must provide gene symbols for this tool to work! Try first to add these using the \"Add annotations to data\" tool.")
+    stop(
+        "CHIPSTER-NOTE: You must provide gene symbols for this tool to work! Try first to add these using the \"Add annotations to data\" tool."
+    )
 }
 
 # Remove data rows where the there is no symbol information

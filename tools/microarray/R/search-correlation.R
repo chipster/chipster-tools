@@ -5,7 +5,6 @@
 # PARAMETER correlation.cutoff: "Correlation cutoff" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.95 (Correlation cut-off for similar expression)
 # PARAMETER correlation.method: "Correlation method" TYPE [pearson: Pearson, spearman: Spearman] DEFAULT pearson (Correlation method)
 
-
 # JTT 20.6.2006: Search genes with correlation to another gene
 # MK 25.10.2013: Modified to search also symbols
 

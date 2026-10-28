@@ -13,9 +13,16 @@ picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 
 if (paired == "yes") {
     # List of IDs having mapping quality >= 4 and having proper pairing (0x0002). Uniq command make sure that both pairs must fulfill filtering criteria
-    keep_id.command <- paste(samtools.binary, "view -q4 -F4 -f2 alignment.bam | cut -f1 | sort | uniq -d > alignment_id_keep.txt")
+    keep_id.command <- paste(
+        samtools.binary,
+        "view -q4 -F4 -f2 alignment.bam | cut -f1 | sort | uniq -d > alignment_id_keep.txt"
+    )
     system(keep_id.command)
-    filtersamreads.command <- paste("java -Xmx4096m -jar", picard.binary, "FilterSamReads INPUT=alignment.bam OUTPUT=alignment_keep.bam FILTER=includeReadList READ_LIST_FILE=alignment_id_keep.txt  VALIDATION_STRINGENCY=LENIENT")
+    filtersamreads.command <- paste(
+        "java -Xmx4096m -jar",
+        picard.binary,
+        "FilterSamReads INPUT=alignment.bam OUTPUT=alignment_keep.bam FILTER=includeReadList READ_LIST_FILE=alignment_id_keep.txt  VALIDATION_STRINGENCY=LENIENT"
+    )
     system(filtersamreads.command)
     if (nhtag == "yes") {
         samtools.view <- paste(samtools.binary, "view -h alignment_keep.bam | perl -p -e 's/\n$/\tNH:i:1\n/g'")

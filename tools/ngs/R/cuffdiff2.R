@@ -73,7 +73,12 @@ if (bias == "yes") {
         }
     } else {
         # If not, we use the internal one.
-        internal.fa <- file.path(chipster.tools.path, "genomes", "fasta", paste(organism, ".fa", sep = "", collapse = ""))
+        internal.fa <- file.path(
+            chipster.tools.path,
+            "genomes",
+            "fasta",
+            paste(organism, ".fa", sep = "", collapse = "")
+        )
         # If chromosome names in BAM have chr, we make a temporary copy of fasta with chr names, otherwise we use it as is.
         if (chr == "chr1") {
             source(file.path(chipster.common.lib.path, "seq-utils.R"))
@@ -155,7 +160,14 @@ if (file.exists("tmp/gene_exp.diff") && file.info("tmp/gene_exp.diff")$size > 0)
         number_genes <- dim(results_list)[1]
         row_names <- 1:number_genes
         rownames(results_list) <- row_names
-        write.table(results_list, file = "de-genes-cufflinks.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
+        write.table(
+            results_list,
+            file = "de-genes-cufflinks.tsv",
+            sep = "\t",
+            row.names = TRUE,
+            col.names = T,
+            quote = F
+        )
 
         # Also output a BED file for visualization and region matching tools
         bed_output <- results_list[, c("chr", "start", "end", "gene_id", "log2_FC")]
@@ -175,11 +187,19 @@ if (file.exists("tmp/gene_exp.diff") && file.info("tmp/gene_exp.diff")$size > 0)
         number_significant <- dim(results_list)[1]
         cat("GENE TEST SUMMARY\n")
         cat("In total,", number_genes_tested, "genes were tested for differential expression.\n")
-        cat("Of these,", number_filtered, "didn't fulfill the technical criteria for testing or the significance cut-off specified.\n")
+        cat(
+            "Of these,",
+            number_filtered,
+            "didn't fulfill the technical criteria for testing or the significance cut-off specified.\n"
+        )
         cat(number_significant, "genes were found to be statistically significantly differentially expressed.\n")
     } else {
         cat("GENE TEST SUMMARY\n")
-        cat("Out of the", number_genes_tested, "genes tested, there were no statistically significantly differentially expressed ones found.")
+        cat(
+            "Out of the",
+            number_genes_tested,
+            "genes tested, there were no statistically significantly differentially expressed ones found."
+        )
     }
     sink()
 } else {
@@ -221,7 +241,14 @@ if (file.exists("tmp/isoform_exp.diff") && file.info("tmp/isoform_exp.diff")$siz
         number_genes <- dim(results_list)[1]
         row_names <- 1:number_genes
         rownames(results_list) <- row_names
-        write.table(results_list, file = "de-isoforms-cufflinks.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
+        write.table(
+            results_list,
+            file = "de-isoforms-cufflinks.tsv",
+            sep = "\t",
+            row.names = TRUE,
+            col.names = T,
+            quote = F
+        )
 
         # Also output a BED file for visualization and region matching tools
         bed_output <- results_list[, c("chr", "start", "end", "gene_id", "log2_FC")]
@@ -242,11 +269,19 @@ if (file.exists("tmp/isoform_exp.diff") && file.info("tmp/isoform_exp.diff")$siz
         number_significant <- dim(results_list)[1]
         cat("\n\nTRANSCRIPT ISOFORMS TEST SUMMARY\n")
         cat("In total,", number_genes_tested, "transcript isoforms were tested for differential expression.\n")
-        cat("Of these,", number_filtered, "didn't fulfill the technical criteria for testing or the significance cut-off specified.\n")
+        cat(
+            "Of these,",
+            number_filtered,
+            "didn't fulfill the technical criteria for testing or the significance cut-off specified.\n"
+        )
         cat(number_significant, "transcripts were found to be statistically significantly differentially expressed.\n")
     } else {
         cat("\n\nTRANSCRIPT ISOFORMS TEST SUMMARY\n")
-        cat("Out of the", number_genes_tested, "transcripts tested, there were no statistically significantly differentially expressed ones found.\n")
+        cat(
+            "Out of the",
+            number_genes_tested,
+            "transcripts tested, there were no statistically significantly differentially expressed ones found.\n"
+        )
     }
     sink()
 }
@@ -314,7 +349,9 @@ if (output.type == "complete") {
     if (file.exists("tmp/tss_groups.fpkm_tracking") && file.info("tmp/tss_groups.fpkm_tracking")$size > 91) {
         system("mv tmp/tss_groups.fpkm_tracking tss_groups.fpkm_tracking.tsv")
     }
-    if (file.exists("tmp/tss_groups.read_group_tracking") && file.info("tmp/tss_groups.read_group_tracking")$size > 115) {
+    if (
+        file.exists("tmp/tss_groups.read_group_tracking") && file.info("tmp/tss_groups.read_group_tracking")$size > 115
+    ) {
         system("mv tmp/tss_groups.read_group_tracking tss_groups.read_group_tracking.tsv")
     }
 }

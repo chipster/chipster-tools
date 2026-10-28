@@ -47,45 +47,51 @@ documentVersion("Mothur", version)
 screenseqs.options <- ""
 screenseqs.options <- paste(screenseqs.options, "screen.seqs(fasta=a.fasta")
 if (file.exists("a.names")) {
-  screenseqs.options <- paste(screenseqs.options, " name=a.names", sep = ",")
+    screenseqs.options <- paste(screenseqs.options, " name=a.names", sep = ",")
 }
 if (file.exists("a.groups")) {
-  screenseqs.options <- paste(screenseqs.options, " group=a.groups", sep = ",")
+    screenseqs.options <- paste(screenseqs.options, " group=a.groups", sep = ",")
 }
 if (file.exists("a.summary")) {
-  screenseqs.options <- paste(screenseqs.options, " summary=a.summary", sep = ",")
+    screenseqs.options <- paste(screenseqs.options, " summary=a.summary", sep = ",")
 }
 if (file.exists("a.count")) {
-  screenseqs.options <- paste(screenseqs.options, " count=a.count", sep = ",")
+    screenseqs.options <- paste(screenseqs.options, " count=a.count", sep = ",")
 }
 # Sanity check (User can't optimize by minlength and specify a minlength at the same time)
 if (optimize != "empty") {
-  if ((optimize == "minlength" && !is.na(minlength)) || (optimize == "start" && !is.na(start)) || (optimize == "end" && !is.na(end))) {
-    stop("CHIPSTER-NOTE: You cant determine minlenght and choose to optimize according the same criteria: choose only one of these!")
-  }
+    if (
+        (optimize == "minlength" && !is.na(minlength)) ||
+            (optimize == "start" && !is.na(start)) ||
+            (optimize == "end" && !is.na(end))
+    ) {
+        stop(
+            "CHIPSTER-NOTE: You cant determine minlenght and choose to optimize according the same criteria: choose only one of these!"
+        )
+    }
 }
 
 if (!is.na(minlength)) {
-  screenseqs.options <- paste(screenseqs.options, ", minlength=", minlength, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", minlength=", minlength, sep = "")
 }
 if (!is.na(maxlength)) {
-  screenseqs.options <- paste(screenseqs.options, ", maxlength=", maxlength, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", maxlength=", maxlength, sep = "")
 }
 if (!is.na(end)) {
-  screenseqs.options <- paste(screenseqs.options, ", end=", end, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", end=", end, sep = "")
 }
 if (!is.na(start)) {
-  screenseqs.options <- paste(screenseqs.options, ", start=", start, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", start=", start, sep = "")
 }
 if (!is.na(maxambig)) {
-  screenseqs.options <- paste(screenseqs.options, ", maxambig=", maxambig, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", maxambig=", maxambig, sep = "")
 }
 if (!is.na(maxhomop)) {
-  screenseqs.options <- paste(screenseqs.options, ", maxhomop=", maxhomop, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", maxhomop=", maxhomop, sep = "")
 }
 if (optimize != "empty") {
-  screenseqs.options <- paste(screenseqs.options, ", optimize=", optimize, sep = "")
-  screenseqs.options <- paste(screenseqs.options, ", criteria=", criteria, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", optimize=", optimize, sep = "")
+    screenseqs.options <- paste(screenseqs.options, ", criteria=", criteria, sep = "")
 }
 screenseqs.options <- paste(screenseqs.options, ", processors=", chipster.threads.max, sep = "")
 screenseqs.options <- paste(screenseqs.options, ")", sep = "")
@@ -105,10 +111,10 @@ system(command)
 # rename the result files
 system("mv a.good.fasta screened.fasta")
 if (file.exists("a.good.count")) {
-  system("mv a.good.count screened.count_table")
+    system("mv a.good.count screened.count_table")
 }
 if (file.exists("a.good.groups")) {
-  system("mv a.good.groups screened.groups")
+    system("mv a.good.groups screened.groups")
 }
 
 # batch file
@@ -116,7 +122,7 @@ if (file.exists("a.good.groups")) {
 # write("summary.seqs(fasta=screened.fasta)", "summary.mth", append=F)
 summaryseqs.options <- paste("summary.seqs(fasta=screened.fasta")
 if (file.exists("screened.count_table")) {
-  summaryseqs.options <- paste(summaryseqs.options, ", count=screened.count_table")
+    summaryseqs.options <- paste(summaryseqs.options, ", count=screened.count_table")
 }
 summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)

@@ -21,15 +21,18 @@ chrs.to.plot <- parseChromosomesToPlot(chromosomes, chromosomes(cgh))
 # plot
 pdf(file = "group-frequencies.pdf", paper = "a4r", width = 0, height = 0)
 if (column == "EMPTY") {
-  frequencyPlot(cgh[chrs.to.plot, ])
+    frequencyPlot(cgh[chrs.to.plot, ])
 } else {
-  for (group in sort(unique(phenodata[, column]))) {
-    if (is.na(group)) {
-      frequencyPlot(cgh[chrs.to.plot, is.na(phenodata[, column])], main = paste(column, " = ", group, sep = ""))
-    } else {
-      frequencyPlot(cgh[chrs.to.plot, !is.na(phenodata[, column]) & phenodata[, column] == group], main = paste(column, " = ", group, sep = ""))
+    for (group in sort(unique(phenodata[, column]))) {
+        if (is.na(group)) {
+            frequencyPlot(cgh[chrs.to.plot, is.na(phenodata[, column])], main = paste(column, " = ", group, sep = ""))
+        } else {
+            frequencyPlot(
+                cgh[chrs.to.plot, !is.na(phenodata[, column]) & phenodata[, column] == group],
+                main = paste(column, " = ", group, sep = "")
+            )
+        }
     }
-  }
 }
 dev.off()
 

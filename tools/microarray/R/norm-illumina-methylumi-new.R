@@ -20,7 +20,6 @@
 # PARAMETER signala: "Signal_A/Grn pattern" TYPE STRING DEFAULT Signal_A (Pattern identifying and common to all unmethylated data columns)
 # PARAMETER signalb: "Signal_B/Red pattern" TYPE STRING DEFAULT Signal_B (Pattern identifying and common to all methylated data columns)
 
-
 # ML: 17.5.2017: Update norm-illumina-methyllumi.R according to this: https://www.bioconductor.org/packages/devel/bioc/vignettes/methylumi/inst/doc/methylumi.pdf
 
 # Loading libraries
@@ -88,7 +87,14 @@ symbols <- mldat.norm@featureData@data$SYMBOL
 
 # Write out a phenodata
 group <- c(rep("", ncol(dat5)))
-write.table(data.frame(sample = sample.names, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample.names, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Write out expression data
 if (isEmpty(symbols)) {
@@ -96,7 +102,28 @@ if (isEmpty(symbols)) {
     write.table(data.frame(dat6), file = "methylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
     write.table(data.frame(dat7), file = "unmethylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
 } else {
-    write.table(data.frame(symbol = symbols, dat5), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
-    write.table(data.frame(symbol = symbols, dat6), file = "methylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
-    write.table(data.frame(symbol = symbols, dat7), file = "unmethylated.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(
+        data.frame(symbol = symbols, dat5),
+        file = "normalized.tsv",
+        col.names = T,
+        quote = F,
+        sep = "\t",
+        row.names = T
+    )
+    write.table(
+        data.frame(symbol = symbols, dat6),
+        file = "methylated.tsv",
+        col.names = T,
+        quote = F,
+        sep = "\t",
+        row.names = T
+    )
+    write.table(
+        data.frame(symbol = symbols, dat7),
+        file = "unmethylated.tsv",
+        col.names = T,
+        quote = F,
+        sep = "\t",
+        row.names = T
+    )
 }

@@ -14,7 +14,6 @@
 # RUNTIME R-4.2.3-single-cell
 # TOOLS_BIN ""
 
-
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
 # 2018-01-11 ML update Seurat version to 2.2.0
@@ -54,7 +53,13 @@ s.genes <- cc.genes[1:43]
 g2m.genes <- cc.genes[44:97]
 
 # Subset: remove potential empties, multiplets and broken cells based on parameters.
-seurat_obj <- subset(seurat_obj, subset = nFeature_RNA >= mingenes & nFeature_RNA <= genecountcutoff & percent.mt <= mitocutoff & percent.rb >= minribo)
+seurat_obj <- subset(
+    seurat_obj,
+    subset = nFeature_RNA >= mingenes &
+        nFeature_RNA <= genecountcutoff &
+        percent.mt <= mitocutoff &
+        percent.rb >= minribo
+)
 
 # Normalisation, scaling & finding variables genes:
 
@@ -74,7 +79,17 @@ plot1 <- VariableFeaturePlot(seurat_obj)
 plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
 CombinePlots(plots = list(plot1, plot2))
 
-textplot(paste("\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v", length(VariableFeatures(object = seurat_obj)), " \n  \n \v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
+textplot(
+    paste(
+        "\v \v Number of \n \v \v variable \n \v \v genes: \n \v \v",
+        length(VariableFeatures(object = seurat_obj)),
+        " \n  \n \v \v Number of \n \v \v cells: \n \v \v",
+        length(colnames(x = seurat_obj))
+    ),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 
 ## Scaling:
 seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "percent.mt"), verbose = FALSE)
@@ -84,14 +99,22 @@ seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("nCount_RNA", "
 # http://satijalab.org/seurat/cell_cycle_vignette.html#regress-out-cell-cycle-scores-during-data-scaling
 
 # Check that there were some S or G2M genes in the list of variable genes:
-if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) < 1 && length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) < 1) {
+if (
+    length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))]) < 1 &&
+        length(g2m.genes[!is.na(match(g2m.genes, VariableFeatures(object = seurat_obj)))]) < 1
+) {
     # stop(paste('CHIPSTER-NOTE: ', "There were not enough cell cycle genes for correction in the list of variable genes."))
     # Write a log file (instead of ending with a Chipster-note, because we want the tool to finish and give the plot, when possible.)
     fileConn <- file("log.txt")
     writeLines(c("There are not enough cell cycle genes for correction in the list of variable genes."), fileConn)
     close(fileConn)
 } else {
-    seurat_obj <- CellCycleScoring(object = seurat_obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+    seurat_obj <- CellCycleScoring(
+        object = seurat_obj,
+        s.features = s.genes,
+        g2m.features = g2m.genes,
+        set.ident = TRUE
+    )
 
     # Visualize in PCA:
     # PCA plot 1: without/before filtering cell cycle effect
@@ -105,7 +128,11 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
         # Option 1: remove all the difference:
         if (filter.cell.cycle == "all.diff") {
             # Scale again, but this time including also the cell cycle scores
-            seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"), verbose = FALSE)
+            seurat_obj <- ScaleData(
+                object = seurat_obj,
+                vars.to.regress = c("S.Score", "G2M.Score", "nCount_RNA", "percent.mt"),
+                verbose = FALSE
+            )
 
             # PCA plot 2A: after filtering, all:
             seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
@@ -115,7 +142,11 @@ if (length(s.genes[!is.na(match(s.genes, VariableFeatures(object = seurat_obj)))
             # Option 2: regressing out the difference between the G2M and S phase scores:
         } else if (filter.cell.cycle == "diff.phases") {
             seurat_obj$CC.Difference <- seurat_obj$S.Score - seurat_obj$G2M.Score
-            seurat_obj <- ScaleData(object = seurat_obj, vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"), verbose = FALSE)
+            seurat_obj <- ScaleData(
+                object = seurat_obj,
+                vars.to.regress = c("CC.Difference", "nCount_RNA", "percent.mt"),
+                verbose = FALSE
+            )
             # PCA plot 2B: after filtering, difference:
             seurat_obj <- RunPCA(object = seurat_obj, features = c(s.genes, g2m.genes), do.print = FALSE)
             plot2 <- DimPlot(seurat_obj) + ggtitle("After cell cycle correction (method: G2M / S difference)")
@@ -134,13 +165,13 @@ Idents(object = seurat_obj) <- "orig.ident"
 
 # Violinplot
 if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
 } else if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 } else if ((sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
 } else {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 }
 
 

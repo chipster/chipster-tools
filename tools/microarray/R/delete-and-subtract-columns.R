@@ -55,9 +55,15 @@ for (m in matrices) {
         dat.sub <- matrix(0, ncol = ncol(dat3), nrow(dat3))
         for (i in 1:length(del.groups)) {
             if (length(which(del.cols %in% 1 & sample.groups %in% del.groups[i] == TRUE)) == 1) {
-                dat.sub[, which(sample.groups == del.groups[i])] <- dat3[, (del.cols %in% 1 & sample.groups %in% del.groups[i])]
+                dat.sub[, which(sample.groups == del.groups[i])] <- dat3[,
+                    (del.cols %in% 1 & sample.groups %in% del.groups[i])
+                ]
             } else {
-                dat.sub[, which(sample.groups == del.groups[i])] <- apply(da3t[, (del.cols %in% 1 & sample.groups %in% del.groups[i])], 1, mean)
+                dat.sub[, which(sample.groups == del.groups[i])] <- apply(
+                    da3t[, (del.cols %in% 1 & sample.groups %in% del.groups[i])],
+                    1,
+                    mean
+                )
             }
         }
         dat4 <- dat3 - dat.sub

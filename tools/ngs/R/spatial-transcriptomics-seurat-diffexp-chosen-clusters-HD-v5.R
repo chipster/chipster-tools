@@ -19,8 +19,6 @@
 # SLOTS 4
 # TOOLS_BIN ""
 
-
-
 # 2022-07-29 IH
 # 2022-10-20 ML Add output for spatially_variable_genes.tsv
 # 2023-02-23 LG Add parameters min.pct, logfc.threshold, and only.pos
@@ -52,20 +50,20 @@ load("seurat_obj_clustering.Robj")
 
 #print(Reductions(seurat_obj))
 
-if(banksy) {
-  DefaultAssay(seurat_obj) <- "Spatial.008um"
-  Idents(seurat_obj) <- "banksy_cluster"
-} else { if(assay == "Spatial.008um") {
-  DefaultAssay(seurat_obj) <- "Spatial.008um"
-  Idents(seurat_obj) <- seurat_obj$seurat_cluster.projected
+if (banksy) {
+    DefaultAssay(seurat_obj) <- "Spatial.008um"
+    Idents(seurat_obj) <- "banksy_cluster"
 } else {
-  DefaultAssay(seurat_obj) <- "Spatial.016um"
-  Idents(seurat_obj) <- seurat_obj$seurat_cluster.016um
-  }
+    if (assay == "Spatial.008um") {
+        DefaultAssay(seurat_obj) <- "Spatial.008um"
+        Idents(seurat_obj) <- seurat_obj$seurat_cluster.projected
+    } else {
+        DefaultAssay(seurat_obj) <- "Spatial.016um"
+        Idents(seurat_obj) <- seurat_obj$seurat_cluster.016um
+    }
 }
 
 #print(Idents(seurat_obj))
-
 
 # SCTransform not good for Visium HD
 # Assay Spatial 8bin or 16bin shall be used instead
@@ -73,17 +71,38 @@ if(banksy) {
 
 #print(DefaultAssay(seurat_obj))
 # Differential expression
-de_markers <- FindMarkers(seurat_obj, assay = assay, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
-de_markers <- de_markers[de_markers$p_val_adj < p_val_adj,]
+de_markers <- FindMarkers(
+    seurat_obj,
+    assay = assay,
+    ident.1 = cluster1,
+    ident.2 = cluster2,
+    test.use = test,
+    logfc.threshold = logfc_threshold,
+    min.pct = min_pct,
+    only.pos = only_pos
+)
+de_markers <- de_markers[de_markers$p_val_adj < p_val_adj, ]
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")
-write.table(as.matrix(de_markers), file = "spatially_variable_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    as.matrix(de_markers),
+    file = "spatially_variable_genes.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 # Open the pdf file for plotting
 pdf(file = "Markerplot.pdf", , width = width, height = height)
 
-SpatialFeaturePlot(object = seurat_obj, features = rownames(de_markers)[1:no_of_feats], keep.scale = color.scale, alpha = c(0.1, 1))
+SpatialFeaturePlot(
+    object = seurat_obj,
+    features = rownames(de_markers)[1:no_of_feats],
+    keep.scale = color.scale,
+    alpha = c(0.1, 1)
+)
 
 dev.off() # close the pdf
 

@@ -3,7 +3,7 @@
 # OUTPUT OPTIONAL seurat_spatial_setup.Robj
 # OUTPUT OPTIONAL QC_plots.pdf
 # PARAMETER OPTIONAL sample_name: "Name for the sample" TYPE STRING DEFAULT "slice1" (Name for the sample. Make sure the samples are named differently if you have multiple samples.)
-# PARAMETER OPTIONAL bin_sizes: "Bin sizes" TYPE [8, 16, (8, 16)] DEFAULT (8, 16) (Choose bin sizes for the analysis.)
+# PARAMETER OPTIONAL bin_sizes: "Bin size" TYPE [8, 16, (8, 16)] DEFAULT (8) (Resolution for analysis. 10x recommends the use of 8um binned data.)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
@@ -28,7 +28,7 @@ library(Biobase)
 library("ragg")
 library("magick")
 
-print(bin_sizes)
+# print(bin_sizes)
 
 # Get the Seurat version info for displaying:
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
@@ -144,61 +144,63 @@ dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
 
 for (i in seq_along(assay_names)) {
-
+  
   assay_bin <- assay_names[i]
   DefaultAssay(seurat_obj) <- assay_bin
   
   nCount_bin <- paste0("nCount_", assay_bin)
   nFeature_bin <- paste0("nFeature_", assay_bin)
   just.bin <- sub("Spatial\\.", "", assay_bin)
-
+  
   seurat_obj[["percent.mt"]] <- PercentageFeatureSet(seurat_obj, pattern = "^MT-|^mt-|^Mt-", assay = assay_bin)
   seurat_obj[["percent.hb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^HB[^(P)]|^Hb[^(p)]", assay = assay_bin)
   seurat_obj[["percent.rb"]] <- PercentageFeatureSet(seurat_obj, pattern = "^RPS|^RPL|^rps|^rpl|^Rps|^Rpl", assay = assay_bin)
-
-
+  
+  
   vln.plot <- VlnPlot(seurat_obj, features = nCount_bin, pt.size = 0) + theme(axis.text = element_text(size = 4)) + NoLegend()
-  count.plot <- SpatialFeaturePlot(seurat_obj, features = nCount_bin) + theme(legend.position = "right")
-
-  p0 <- print(vln.plot | count.plot)
-
+  #count.plot <- SpatialFeaturePlot(seurat_obj, features = nCount_bin) + theme(legend.position = "right")
+  
+  #p0 <- print(vln.plot | count.plot)
+  
   # Create the four plots
-  p1 <- (VlnPlot(seurat_obj, features = c(nCount_bin, nFeature_bin), pt.size = 0.1, ncol = 2) + NoLegend())
+  p1 <- (VlnPlot(seurat_obj, features = c(nCount_bin, nFeature_bin), pt.size = 0, ncol = 2) + NoLegend())
+  
+  
+  p2 <- (VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb"), pt.size = 0, ncol = 2) + NoLegend()) # , "percent.rb"
+  
+  plot1 <- p1 / p2
 
   
-  p2 <- (VlnPlot(seurat_obj, features = c("percent.mt", "percent.hb"), pt.size = 0.1, ncol = 2) + NoLegend()) # , "percent.rb"
-
-  
-  p3 <- (SpatialFeaturePlot(seurat_obj, c(nCount_bin, nFeature_bin, "percent.mt", "percent.hb"))) # + theme(legend.position = "right") , "percent.rb"
-
+  plot2 <- (SpatialFeaturePlot(seurat_obj, c(nCount_bin, nFeature_bin, "percent.mt", "percent.hb"))) # + theme(legend.position = "right") , "percent.rb"
+    
   C <- LayerData(seurat_obj, assay = assay_bin, layer = "counts")
   C@x <- C@x / rep.int(colSums(C), diff(C@p))
   most_expressed <- order(Matrix::rowSums(C), decreasing = T)[20:1]
   top_genes <- rownames(C)[most_expressed]
-
-
-#  p4 <- (boxplot(as.matrix(t(C[most_expressed, ])),
-#      cex = 0.1, las = 1, xlab = "% total count per spot",
-#      col = (scales::hue_pal())(20)[20:1], horizontal = TRUE
-#    ))
+  
+  
+  #  p4 <- (boxplot(as.matrix(t(C[most_expressed, ])),
+  #      cex = 0.1, las = 1, xlab = "% total count per spot",
+  #      col = (scales::hue_pal())(20)[20:1], horizontal = TRUE
+  #    ))
   # ggplot version of p4, this needs to be rechecked, so far looks good.
-
+  
   top_df <- data.frame(
     gene = factor(rep(top_genes, each = ncol(C)), levels = top_genes),
     pct  = as.vector(t(as.matrix(C[most_expressed, ])))
   )
   rm(C)
   
-  p4 <- ggplot(top_df, aes(x = pct, y = gene, fill = gene)) +
-  geom_boxplot(outlier.size = 0.1) +
-  scale_fill_manual(values = rev(scales::hue_pal()(20))) +
-  labs(x = "% total count per bin", y = NULL,
-    title = paste("Top 20 expressed genes,", just.bin)) +
-  theme_classic() +
-  NoLegend()
+  plot3 <- ggplot(top_df, aes(x = pct, y = gene, fill = gene)) +
+    geom_boxplot(outlier.size = 0.1) +
+    scale_fill_manual(values = rev(scales::hue_pal()(20))) +
+    labs(x = "% total count per bin", y = NULL,
+         title = paste("Top 20 expressed genes,", just.bin)) +
+    theme_classic() +
+    NoLegend()
   
   # Put plots into a list
-  plots <- list(p0, p1, p2, p3, p4)
+  plots <- list(plot1, plot2, plot3)
   
   # Loop over the plots and save each as a separate PNG
   for (j in seq_along(plots)) {

@@ -33,7 +33,6 @@ if (file.exists("md5file")) {
     #
     filename <- paste(input.names[1, 2], ".md5", sep = "")
 
-
     # And finally change Chipster display name to match original file name
     outputnames <- matrix(NA, nrow = 1, ncol = 2)
     outputnames[1, ] <- c("file.md5", filename)

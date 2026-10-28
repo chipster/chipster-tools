@@ -79,7 +79,14 @@ if (meth == "ANOVA") {
     }
     dat <- dat[p.adjusted <= p.cut, ]
     p.adjusted <- p.adjusted[p.adjusted <= p.cut]
-    write.table(data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)), file = "multiple-sample.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)),
+        file = "multiple-sample.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }
 
 # Kruskal-Wallis test
@@ -97,5 +104,12 @@ if (meth == "Kruskal-Wallis") {
 
     dat <- dat[p.adjusted <= p.cut, ]
     p.adjusted <- p.adjusted[p.adjusted <= p.cut]
-    write.table(data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)), file = "multiple-sample.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)),
+        file = "multiple-sample.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }

@@ -22,7 +22,12 @@ system(samtools.command)
 # length of sequence
 input.file <- "sam_file"
 output.file <- "sam_file_extracted"
-extract.command <- paste("awk '{print $10\"\t\"$3\"\t\"$4\"\t\"length($10)+$4-1\"\t\"length($10)}'", input.file, ">", output.file)
+extract.command <- paste(
+    "awk '{print $10\"\t\"$3\"\t\"$4\"\t\"length($10)+$4-1\"\t\"length($10)}'",
+    input.file,
+    ">",
+    output.file
+)
 system(extract.command)
 
 # Sort sequence reads according to chromosome and start position
@@ -46,7 +51,12 @@ system(output.command)
 # Creat sequence read ID composed of chromosome name, start position and end position
 input.file <- output.file
 output.file <- "sam_file_id"
-id.command <- paste("awk '{print $2\"_\"$3\"_\"$4\"_\"$1\"\t\"$1\"\t\"$2\"\t\"$3\"\t\"$4\"\t\"$5\"\t\"$6}'", input.file, ">", output.file)
+id.command <- paste(
+    "awk '{print $2\"_\"$3\"_\"$4\"_\"$1\"\t\"$1\"\t\"$2\"\t\"$3\"\t\"$4\"\t\"$5\"\t\"$6}'",
+    input.file,
+    ">",
+    output.file
+)
 system(id.command)
 
 # Remove sequence reads that were not mapped
@@ -170,6 +180,13 @@ if (merge_overlapping == "end" || merge_overlapping == "both") {
 
 results_table <- results_table[results_table$count >= count_limit, ]
 # Writing data to disk
-write.table(data.frame(id = rownames(results_table), results_table), file = "counts.tsv", col.names = T, quote = F, sep = "\t", row.names = F)
+write.table(
+    data.frame(id = rownames(results_table), results_table),
+    file = "counts.tsv",
+    col.names = T,
+    quote = F,
+    sep = "\t",
+    row.names = F
+)
 
 # EOF

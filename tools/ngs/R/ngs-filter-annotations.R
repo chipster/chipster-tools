@@ -18,7 +18,15 @@ file <- c("annotations.tsv")
 
 if (has.rownames == "yes") {
     # dat <- read.table(file, header=TRUE, sep="\t", row.names=NULL, quote = "", comment.char="")
-    dat <- read.table(file, header = TRUE, sep = "\t", row.names = 1, check.names = FALSE, quote = "", comment.char = "")
+    dat <- read.table(
+        file,
+        header = TRUE,
+        sep = "\t",
+        row.names = 1,
+        check.names = FALSE,
+        quote = "",
+        comment.char = ""
+    )
 }
 if (has.rownames == "no") {
     dat <- read.table(file, header = TRUE, sep = "\t", row.names = NULL, quote = "", comment.char = "")
@@ -26,8 +34,6 @@ if (has.rownames == "no") {
 }
 
 dat <- read.table(file, header = T, sep = "\t", check.names = FALSE, quote = "", comment.char = "")
-
-
 
 
 # Input query terms:

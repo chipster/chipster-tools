@@ -24,39 +24,44 @@ unzipIfGZipFile("sequences")
 
 # check sequece file type
 if (inputtype == "clustal" || inputtype == "fasta") {
-  inputfile.to.check <- ("sequences")
-  sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
-  sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
-  str.filetype <- system(sfcheck.command, intern = TRUE)
+    inputfile.to.check <- ("sequences")
+    sfcheck.binary <- file.path(chipster.module.path, "/shell/sfcheck.sh")
+    sfcheck.command <- paste(sfcheck.binary, emboss.path, inputfile.to.check)
+    str.filetype <- system(sfcheck.command, intern = TRUE)
 
-  if (str.filetype == "Not an EMBOSS compatible sequence file") {
-    stop("CHIPSTER-NOTE: The input file does not match the selected input format.")
-  }
-  if (inputtype == "clustal" && str.filetype != "clustal") {
-    stop("CHIPSTER-NOTE: The input file does not match the selected input format: clustal")
-  }
+    if (str.filetype == "Not an EMBOSS compatible sequence file") {
+        stop("CHIPSTER-NOTE: The input file does not match the selected input format.")
+    }
+    if (inputtype == "clustal" && str.filetype != "clustal") {
+        stop("CHIPSTER-NOTE: The input file does not match the selected input format: clustal")
+    }
 
+    # count the query sequeces
+    seqcount.exe <- file.path(emboss.path, "seqcount sequences -filter")
+    str.queryseq <- system(seqcount.exe, intern = TRUE)
+    num.queryseq <- as.integer(str.queryseq)
 
-  # count the query sequeces
-  seqcount.exe <- file.path(emboss.path, "seqcount sequences -filter")
-  str.queryseq <- system(seqcount.exe, intern = TRUE)
-  num.queryseq <- as.integer(str.queryseq)
+    # round(num.queryseq)
 
-  # round(num.queryseq)
-
-  if (num.queryseq > 1000) {
-    stop(paste("CHIPSTER-NOTE: Too many sequences in the alignmnet. Maximun is 1000 but your file contains ", num.queryseq))
-  }
-  if (num.queryseq < 1) {
-    stop(paste("CHIPSTER-NOTE: No sequences in the alignmnet. Maximun is 1000 but your file contains ", num.queryseq))
-  }
+    if (num.queryseq > 1000) {
+        stop(paste(
+            "CHIPSTER-NOTE: Too many sequences in the alignmnet. Maximun is 1000 but your file contains ",
+            num.queryseq
+        ))
+    }
+    if (num.queryseq < 1) {
+        stop(paste(
+            "CHIPSTER-NOTE: No sequences in the alignmnet. Maximun is 1000 but your file contains ",
+            num.queryseq
+        ))
+    }
 }
 
 if (inputtype == "blast") {
-  nohtml.binary <- file.path(emboss.path, "nohtml")
-  system("mv sequences sequences_blast ")
-  nohtml.command <- paste(nohtml.binary, "sequences_blast", "sequences")
-  system(nohtml.command)
+    nohtml.binary <- file.path(emboss.path, "nohtml")
+    system("mv sequences sequences_blast ")
+    nohtml.command <- paste(nohtml.binary, "sequences_blast", "sequences")
+    system(nohtml.command)
 }
 
 
@@ -74,7 +79,6 @@ mview.parameters <- paste(mview.parameters, "-width", width)
 mview.parameters <- paste(mview.parameters, "-css", css)
 
 
-
 command.full <- paste(mview.binary, mview.parameters, " < sequences > alignment.html 2>> mview.log")
 echo.command <- paste('echo "', command.full, ' "> mview.log')
 system(echo.command)
@@ -83,5 +87,5 @@ system(command.full)
 system("ls -l >> mview.log")
 
 if (save_log == "no") {
-  system("rm -f mview.log")
+    system("rm -f mview.log")
 }

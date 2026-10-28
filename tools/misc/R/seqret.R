@@ -54,6 +54,13 @@ emboss.binary <- file.path(emboss.path, ecommand)
 if (offormat == "gff3") {
     emboss.binary <- paste(emboss.binary, "-feature -offormat gff3")
 }
-command.full <- paste(emboss.binary, "-sequence input.txt -osformat", osformat, "-auto -outseq ", outfile, " 2> log.txt")
+command.full <- paste(
+    emboss.binary,
+    "-sequence input.txt -osformat",
+    osformat,
+    "-auto -outseq ",
+    outfile,
+    " 2> log.txt"
+)
 system(command.full)
 system("ls -l > log.txt")
