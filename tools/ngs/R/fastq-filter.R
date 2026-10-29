@@ -50,12 +50,23 @@ filenames <- list.files("input_folder", full.names = TRUE)
 txt_filenames <- safe_name(list.files("input_folder"))
 # file names
 sample.names <- sapply(strsplit(basename(txt_filenames), "_"), `[`, 1)
+# output files are named by the part before the first "_" without the extension, files sharing it would overwrite each other
+output_names <- sapply(sample.names, strip_name, USE.NAMES = FALSE)
+if (any(duplicated(output_names))) {
+    same_name <- output_names %in% output_names[duplicated(output_names)]
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "The output files are named by the part of the FASTQ file name before the first '_' or the file extension, and these files would get the same name:",
+        paste0(paste(txt_filenames[same_name], collapse = ", "), "."),
+        "Please rename the files so that this part is different for each file."
+    ))
+}
 
 x <- 1
 # run the fastq_filter tool for every file
 for (file in filenames) {
-    # name the input and output file
-    output_fastq <- paste0("output_folder/", sample.names[x])
+    # name the input and output file, .fq for the gzip below
+    output_fastq <- paste0("output_folder/", output_names[x], ".fq")
     x <- x + 1
     # make the fastq_filter command
     command <- paste(
@@ -101,7 +112,7 @@ summ.data <- data.frame(
     "Sequences_discarded" = vector_discard,
     "Percentage_of_discarded" = vector_proportion
 )
-write.table(summ.data, file = "summary.tsv", row.names = FALSE)
+write.table(summ.data, file = "summary.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 # make a output tar package named contigs.tar and qzip all the files
 system("gzip output_folder/*.fq")
 system("cd output_folder && tar cf ../filtered_contigs.tar -- *")
