@@ -21,7 +21,7 @@
 
 # load packages
 library(genome, character.only = T)
-annotpkg <- gsub(".db", "", genome)
+annotpkg <- sub("\\.db$", "", genome)
 library(GOstats)
 library(R2HTML)
 
