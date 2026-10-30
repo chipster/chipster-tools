@@ -17,6 +17,7 @@
 # 25.06.2014 EK, Clarified parameters.
 # 03.06.2020 ML, fix broken url (http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:004352 =>  http://amigo.geneontology.org/amigo/term/GO:0043524)
 # 20.06.2023 ML, fix case when the first column in original data has column name
+# 26.10.2026 ML, fix arabidopsis (TAIR IDs), clarify ID mapping variables and comments
 
 # load packages
 library(genome, character.only = T)
@@ -28,18 +29,21 @@ library(R2HTML)
 dat <- read.table("gene-list.tsv", header = TRUE, sep = "\t", as.is = TRUE, row.names = 1)
 # Note: the colname of the first column (if there is one) is lost here.
 
-# convert list of reference genes from Ensembl to Entrez IDs
-# ensembl.to.entrez <- as.list(org.Hs.egENSEMBL2EG)
+# GOstats needs gene IDs in the annotation package's main ID type, which differs per organism:
+#  - org.*.eg.db packages (human, mouse, rat, fruitfly): Entrez Gene IDs
+#  - org.At.tair.db (arabidopsis): TAIR locus IDs, e.g. AT1G01010
+#    (TAIR IDs are also the Ensembl Plants gene IDs for Arabidopsis, so Ensembl input
+#    needs no conversion)
+# id.map maps the "other" supported ID type to the main ID type:
+#  - eg packages: Ensembl -> Entrez
+#  - arabidopsis: Entrez -> TAIR (the package only provides TAIR -> Entrez, so it is reversed)
 if (genome == "org.At.tair.db") {
-    # org.At.tair.db uses TAIR locus IDs (the same as Ensembl Plants gene IDs) instead of Entrez IDs,
-    # so map Entrez IDs to them instead
-    ensembl.to.entrez <- as.list(revmap(org.At.tairENTREZID))
+    id.map <- as.list(revmap(org.At.tairENTREZID))
 } else {
-    lib <- paste(annotpkg, "ENSEMBL2EG", sep = "")
-    ensembl.to.entrez <- as.list(get(lib))
+    id.map <- as.list(get(paste(annotpkg, "ENSEMBL2EG", sep = "")))
 }
-reference.genes <- unique(unlist(ensembl.to.entrez))
-ens_identifiers <- names(unlist(ensembl.to.entrez))
+reference.genes <- unique(unlist(id.map)) # universe: all genes (main ID type) that have a mapping
+other.ids <- names(id.map) # all genes in the other ID type
 
 # See if "column" is the first "empty" element, indicating that the user wishes to use row.names
 # = user has selected the "untitled" column. It can look like one of these in R:
@@ -61,9 +65,9 @@ if (length(column) == 0 || column == " " || column == "") {
     selected.genes[1:10]
 }
 
-# check if IDs match more EnsEMBL or Entrez genes
-if (length(intersect(selected.genes, reference.genes)) < length(intersect(selected.genes, ens_identifiers))) {
-    selected.genes <- unique(unlist(ensembl.to.entrez[selected.genes]))
+# If the input matches the other ID type better than the main type, convert it to the main type
+if (length(intersect(selected.genes, reference.genes)) < length(intersect(selected.genes, other.ids))) {
+    selected.genes <- unique(unlist(id.map[selected.genes]))
     length(selected.genes)
     selected.genes[1:10]
 }
