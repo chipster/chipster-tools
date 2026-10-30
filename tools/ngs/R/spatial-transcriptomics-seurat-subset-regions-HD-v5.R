@@ -9,6 +9,7 @@
 # OUTPUT OPTIONAL spatial_plot_16um3.pdf
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
+# PARAMETER OPTIONAL banksy: "Subset BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
 # PARAMETER coords: "Subset based on coordinates" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
 # PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
@@ -37,12 +38,10 @@ load("seurat_obj_clustering.Robj")
 
 # Make graphs empty because it is causing issues
 # seurat_obj <- UpdateSeuratObject(seurat_obj)
-#seurat_obj@graphs <- list()
 
-# This loop works, check what causes this graph issue
-for (g in Graphs(seurat_obj)) {
-    seurat_obj[[g]] <- NULL
-}
+# Graphs causing issues, remove them by replacing with empty list
+seurat_obj@graphs <- list()
+
 
 ## Here 8um
 if (assay == "Spatial.008um") {
@@ -54,7 +53,11 @@ if (assay == "Spatial.008um") {
     DefaultAssay(seurat_obj) <- "Spatial.008um"
 
     # Set some clusters as Idents
-    seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
+    if (banksy) {
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$banksy_cluster)
+    } else {
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
+    }
 
     # Subset
     subset_obj <- subset(seurat_obj, idents = chosen_clusters)
@@ -145,7 +148,11 @@ if (assay == "Spatial.016um") {
     DefaultAssay(seurat_obj) <- "Spatial.016um"
 
     # Set some clusters as Idents
-    seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.016um)
+    if (banksy) {
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$banksy_cluster)
+    } else {
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
+    }
 
     # Subset
     subset_obj <- subset(seurat_obj, idents = chosen_clusters)
