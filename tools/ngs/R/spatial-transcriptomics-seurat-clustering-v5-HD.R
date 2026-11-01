@@ -15,8 +15,6 @@
 
 # Load seurat object (called seurat_obj)
 
-
-
 load("seurat_object.Robj")
 library(Seurat)
 library(dplyr)
@@ -30,7 +28,7 @@ library("magick")
 library(future)
 
 # An error occurring with bigger data, this will fix it
-options(future.globals.maxSize = 4 * 1024^3)  # 4 GiB
+options(future.globals.maxSize = 4 * 1024^3) # 4 GiB
 
 
 source(file.path(chipster.common.lib.path, "tool-utils.R"))
