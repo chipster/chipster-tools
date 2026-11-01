@@ -40,7 +40,7 @@ def main():
     bowtie2_cmd = [bowtie2_build, "--threads", chipster_threads_max, input_fa, "bowtie2/" + genome_basename]
     # make output less verbose be removing all indented lines (also from stderr)
     run_process(
-        ["bash", "-c", " ".join(bowtie2_cmd) + " 2>&1 | grep -v '^  '"]
+        ["bash", "-c", "set -o pipefail; " + " ".join(bowtie2_cmd) + " 2>&1 | grep -v '^  '"]
     )
           
     # tophat2 will generate the fasta from index if it doesn't find it
