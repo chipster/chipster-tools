@@ -143,7 +143,7 @@ def run_process(cmd, env=None, cwd="."):
     if returncode != 0:
         raise RuntimeError(
             "process failed with return code: "
-            + str(process.returncode)
+            + str(returncode)
             + ", command: "
             + str(cmd)
         )
