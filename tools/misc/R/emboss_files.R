@@ -22,7 +22,7 @@ if (
     command.full <- paste(emboss.binary, " input.txt -filter -auto > output.txt 2>&1")
     system(command.full)
 }
-if (ecommand == "semicolom") {
+if (ecommand == "semicolon") {
     system("tr -d ';' <  input.txt  > output.txt ")
 }
 
