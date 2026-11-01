@@ -226,7 +226,7 @@ summ.data <- data.frame(
     "Percentage_not_merged" = vector_info,
     "Mean_expected_error" = vector_mergeinfo
 )
-write.table(summ.data, file = "summary_stats.tsv", row.names = FALSE)
+write.table(summ.data, file = "summary_stats.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
 # make a output tar package named contigs.tar and qzip
 system("gzip output_folder/*.fq")
