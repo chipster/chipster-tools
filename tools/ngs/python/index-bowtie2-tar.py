@@ -6,6 +6,7 @@
 
 import tool_utils
 import subprocess
+import shlex
 from typing import Iterable
 import os
 
@@ -25,7 +26,10 @@ def main():
 
     print("inspect index")
     inspect_output = "inspect_output.txt"
-    run_bash(bowtie2_inspect + " -n " + fasta_basename + " > " + inspect_output)
+    # fasta_basename comes from the dataset name and may contain spaces or parentheses
+    run_bash(
+        bowtie2_inspect + " -n " + shlex.quote(fasta_basename) + " > " + inspect_output
+    )
 
     fasta_chr = 0
     index_chr = 0

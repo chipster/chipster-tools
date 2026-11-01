@@ -11,6 +11,7 @@ import tool_utils_python2 as tool_utils
 import subprocess
 import os
 import os.path
+import pipes
 
 def main():
     input_fa = "input.fa"
@@ -39,8 +40,9 @@ def main():
     
     bowtie2_cmd = [bowtie2_build, "--threads", chipster_threads_max, input_fa, "bowtie2/" + genome_basename]
     # make output less verbose be removing all indented lines (also from stderr)
+    # genome_basename comes from the dataset name and may contain spaces or parentheses
     run_process(
-        ["bash", "-c", "set -o pipefail; " + " ".join(bowtie2_cmd) + " 2>&1 | grep -v '^  '"]
+        ["bash", "-c", "set -o pipefail; " + " ".join(map(pipes.quote, bowtie2_cmd)) + " 2>&1 | grep -v '^  '"]
     )
           
     # tophat2 will generate the fasta from index if it doesn't find it
@@ -58,7 +60,7 @@ def main():
     
     print("inspect bowtie2 index")
     inspect_output = "inspect_output.txt"
-    run_bash(bowtie2_inspect + " -n " + "bowtie2/" + genome_basename + " > " + inspect_output)
+    run_bash(bowtie2_inspect + " -n " + pipes.quote("bowtie2/" + genome_basename) + " > " + inspect_output)
 
     fasta_chr = 0
     index_chr = 0
