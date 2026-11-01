@@ -59,11 +59,11 @@ if (ecommand == "dollar") {
 }
 
 if (ecommand == "dq") {
-    system('tr -d \" <  input.txt  > output.txt ')
+    system("tr -d '\"' <  input.txt  > output.txt ")
 }
 
 if (ecommand == "sq") {
-    system("tr -d \' <  input.txt  > output.txt ")
+    system("tr -d \"'\" <  input.txt  > output.txt ")
 }
 
 if (ecommand == "vb") {
