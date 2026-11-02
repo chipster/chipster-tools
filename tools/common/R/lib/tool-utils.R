@@ -422,8 +422,9 @@ runExternal <- function(command, env = NULL, capture = TRUE, checkexit = TRUE) {
     if (checkexit) {
         if (exitcode != 0) {
             error <- scan("stderr.tmp", what = " ", sep = "\n")
-            # Exit code 128+n is typically caused by sending termination signal to process
-            if (exitcode > 128) {
+            # Exit code 128+n is typically caused by sending termination signal n (1-64) to process.
+            # Programs that call exit(-1) exit with 255.
+            if (exitcode > 128 && exitcode <= 192) {
                 msg <- paste("External program was terminated by the system.\n")
                 msg <- paste(msg, "This is usually caused by the system running out of memory.\n\n")
                 msg <- paste(msg, "Failed command:\n")

@@ -475,6 +475,25 @@ expect_equal(
     info = "documentCommand prints the command as it is without chipster-inputs.tsv"
 )
 
+
+## runExternal
+
+# Only a program killed by a signal (exit status 129-192) gets the note about memory
+writeLines("exit 1", "exit1.sh")
+expect_error(runExternal("sh exit1.sh"), "did not complete", info = "runExternal reports exit status 1 as a failure")
+writeLines("exit 255", "exit255.sh")
+expect_error(
+    runExternal("sh exit255.sh"),
+    "did not complete",
+    info = "runExternal doesn't blame memory for exit status 255"
+)
+writeLines("kill -9 $$", "kill9.sh")
+expect_error(
+    runExternal("sh kill9.sh"),
+    "running out of memory",
+    info = "runExternal blames memory for a program killed by a signal"
+)
+
 setwd(old.wd)
 if (run.standalone) {
     cat(if (failures == 0) "all tests passed" else paste(failures, "test(s) FAILED"), "\n")
