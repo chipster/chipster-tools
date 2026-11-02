@@ -12,7 +12,7 @@
 # PARAMETER OPTIONAL freqsfrom: "Use empirical base frequencies from seqeunce input" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT Y (Use empirical base frequencies from seqeunce input)
 # PARAMETER OPTIONAL basefreq: "Base frequencies for A C G T/U (use blanks to separate\)" TYPE STRING FROM 0.0 TO 1.0 DEFAULT "0.25 0.25 0.25 0.25" (Base frequencies for A C G T/U (use blanks to separate\))
 # PARAMETER OPTIONAL lower: "Output as a lower triangular distance matrix" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (Output as a lower triangular distance matrix)
-# PARAMETER OPTIONAL humanreadable: "Output as a human-readable distance matrix" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT <undefined> (Output as a human-readable distance matrix)
+# PARAMETER OPTIONAL humanreadable: "Output as a human-readable distance matrix" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (Output as a human-readable distance matrix)
 # PARAMETER OPTIONAL printdata: "Print data at start of run" TYPE [<undefined>: " ", Y: Yes, N: No] DEFAULT N (Print data at start of run)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
