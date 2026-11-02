@@ -136,7 +136,7 @@ if (nchar(penalty) > 2) {
 }
 
 if (nchar(query_loc) < 3) {
-    penalty <- paste("full length")
+    query_loc <- paste("full length")
 }
 
 # set up more parameters if applied
