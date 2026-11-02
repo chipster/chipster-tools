@@ -45,7 +45,7 @@ if (num.queryseq > 100000) {
 
 emboss.binary <- file.path(emboss.path, "fdnadist")
 emboss.parameters <- paste("-auto")
-emboss.parameters <- paste(emboss.parameters, "-sequence", sequence)
+emboss.parameters <- paste(emboss.parameters, "-sequence sequence")
 emboss.parameters <- paste(emboss.parameters, "-outfile dnadist.txt")
 emboss.parameters <- paste(emboss.parameters, "-method", method)
 emboss.parameters <- paste(emboss.parameters, "-gammatype", gammatype)
