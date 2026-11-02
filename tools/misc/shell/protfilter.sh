@@ -174,7 +174,7 @@ then
      (( minmass100 = minmass * 100 ))
      if [[ $mass -ge $minmass100 ]] 
      then
-         echo $seq >>! outfile_"$$"_list
+         echo $seq >> outfile_"$$"_list
      fi
   done
   if [[ ! -e outfile_"$$"_list  ]] 
@@ -199,7 +199,7 @@ then
      (( maxmass100 = maxmass * 100 ))
      if [[ $mass -le $maxmass100 ]] 
      then
-         echo $seq >>! outfile_"$$"_list
+         echo $seq >> outfile_"$$"_list
      fi
   done
   if [[ ! -e outfile_"$$"_list  ]] 
