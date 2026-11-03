@@ -35,7 +35,7 @@ if (any(as.vector(table(phenodata$group)) < 2)) {
 gtf <- file.path(chipster.tools.path, "genomes", "dexseq", paste(organism, ".DEXSeq.gtf", sep = "", collapse = ""))
 
 # Reads the data
-d <- read.table("countfile.tsv", header = TRUE, sep = "\t")
+d <- read.table("countfile.tsv", header = TRUE, sep = "\t", check.names = FALSE)
 d2 <- d[, grep("chip", colnames(d))]
 cn <- substr(colnames(d2), 6, nchar(colnames(d2)))
 for (i in 1:ncol(d2)) {
@@ -50,8 +50,17 @@ sampleTable <- data.frame(
     condition = as.factor(phenodata$group)
 )
 
+# Count files in the order of sampleTable, which DEXSeq expects
+countfiles <- paste(phenodata$sample, ".jtt", sep = "")
+if (!all(file.exists(countfiles))) {
+    stop(paste(
+        "CHIPSTER-NOTE: These samples of the phenodata have no column in the count table:",
+        paste(phenodata$sample[!file.exists(countfiles)], collapse = ", ")
+    ))
+}
+
 ecs <- DEXSeqDataSetFromHTSeq(
-    countfiles = dir(pattern = "jtt"),
+    countfiles = countfiles,
     sampleData = sampleTable,
     design = ~ sample + exon + condition:exon,
     flattenedfile = gtf
