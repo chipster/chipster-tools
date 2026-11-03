@@ -43,6 +43,38 @@ documentVersion("Samtools", version)
 
 # Get input name
 input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
+
+# Reads to align
+# Parse the read names from input files
+# Remove list files from the code
+# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE TEXT_STRICT
+# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE TEXT_STRICT
+# if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
+# Case: list files exist
+#   reads1.list <- make_input_list("reads1.txt")
+#   reads2.list <- make_input_list("reads2.txt")
+#   if (identical(intersect(reads1.list, reads2.list), character(0))) {
+#     reads1 <- paste(reads1.list, sep = "", collapse = ",")
+#     reads2 <- paste(reads2.list, sep = "", collapse = ",")
+#   } else {
+#     stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
+#   }
+# } else if (file.exists("reads002.fq.gz") && !file.exists("reads003.fq.gz")) {
+# Case: no list file, but only two fastq inputs
+in.sorted <- input.names[order(input.names[, 2]), ]
+reads <- grep("reads", in.sorted[, 1], value = TRUE)
+reads1 <- reads[1]
+reads2 <- reads[2]
+if (length(reads) != 2) {
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "This tool aligns one sample, given as two FASTQ files (R1 and R2). Number of selected FASTQ files:",
+        paste0(length(reads), "."),
+        "To align several samples, define the samples and use Run for Each Sample.",
+        "If a sample has more than two FASTQ files, first merge its R1 files and its R2 files with the tool Utilities / Merge FASTQ."
+    ))
+}
+
 input.display.names <- read_input_definitions()
 
 # check out if the file is compressed and if so unzip it
@@ -103,32 +135,6 @@ if (fileOk("genome.txt")) {
 }
 ## Parse parameters and store them into hisat.parameters
 hisat.parameters <- ""
-
-# Reads to align
-# Parse the read names from input files
-# Remove list files from the code
-# INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE TEXT_STRICT
-# INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE TEXT_STRICT
-# if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
-# Case: list files exist
-#   reads1.list <- make_input_list("reads1.txt")
-#   reads2.list <- make_input_list("reads2.txt")
-#   if (identical(intersect(reads1.list, reads2.list), character(0))) {
-#     reads1 <- paste(reads1.list, sep = "", collapse = ",")
-#     reads2 <- paste(reads2.list, sep = "", collapse = ",")
-#   } else {
-#     stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
-#   }
-# } else if (file.exists("reads002.fq.gz") && !file.exists("reads003.fq.gz")) {
-# Case: no list file, but only two fastq inputs
-in.sorted <- input.names[order(input.names[, 2]), ]
-reads <- grep("reads", in.sorted[, 1], value = TRUE)
-reads1 <- reads[1]
-reads2 <- reads[2]
-# } else {
-# Case: no list files, more than two fastq inputs
-#   stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
-# }
 
 hisat.parameters <- paste(hisat.parameters, "-1", reads1, "-2", reads2)
 # Quality score format
