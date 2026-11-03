@@ -155,6 +155,12 @@ if (
         set.ident = TRUE
     )
 
+    # The scores are in the metadata. Regress them out in the RNA assay, which the final PCA and the next tools use.
+    if (normalisation.method == "LogNormalize") {
+        DefaultAssay(seurat_obj) <- "RNA"
+        seurat_obj[["joined"]] <- NULL
+    }
+
     # Visualize in PCA:
     # PCA plot 1: without/before filtering cell cycle effect
     seurat_obj <- RunPCA(seurat_obj, features = c(s.genes, g2m.genes), verbose = FALSE)
