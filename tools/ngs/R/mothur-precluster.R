@@ -56,8 +56,8 @@ system(command)
 
 # Post process output
 system("mv a.precluster.fasta preclustered.fasta")
-if (file.exists("a.names")) {
-    system("mv a.names preclustered.names")
+if (file.exists("a.precluster.names")) {
+    system("mv a.precluster.names preclustered.names")
 }
 if (file.exists("a.precluster.count_table")) {
     system("mv a.precluster.count_table preclustered.count_table")
@@ -73,7 +73,7 @@ if (file.exists("preclustered.count_table")) {
 }
 summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)
-write("summary.seqs(fasta=preclustered.fasta)", "summary.mth", append = FALSE)
+write(summaryseqs.options, "summary.mth", append = FALSE)
 
 # command 2
 command2 <- paste(binary, "summary.mth", "> log_raw.txt")
