@@ -77,12 +77,14 @@ system("mv RSeQC.splice_events.pdf 03.pdf")
 system("mv RSeQC.splice_junction.pdf 04.pdf")
 
 # RPKM_saturation
-binary <- c(file.path(rseqc.path, "RPKM_saturation.py"))
-command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
-system(command)
-try(source("RSeQC.saturation.r"), silent = TRUE)
-# Outputs are renamed to control their order in the joined PDF
-system("mv RSeQC.saturation.pdf 05.pdf")
+if (rpkm == "yes") {
+    binary <- c(file.path(rseqc.path, "RPKM_saturation.py"))
+    command <- paste(binary, "-i alignment.bam -r", bed.file, "-o RSeQC")
+    system(command)
+    try(source("RSeQC.saturation.r"), silent = TRUE)
+    # Outputs are renamed to control their order in the joined PDF
+    system("mv RSeQC.saturation.pdf 05.pdf")
+}
 
 # bam_stat
 system("echo 'bam_stats:' > RSeQC.txt")
