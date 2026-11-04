@@ -39,7 +39,7 @@ dat_0 <- matrix(nrow = nrow(dat_2), ncol = length(group_levels), NA)
 dat_1 <- matrix(nrow = nrow(dat_2), ncol = length(group_levels), NA)
 for (group_count in 1:length(group_levels)) {
     dat_0[, group_count] <- rowSums(data.frame(dat_2[, which(groups == group_levels[group_count])]))
-    dat_1[, group_count] <- ncol(dat_2) - dat_0[, group_count]
+    dat_1[, group_count] <- sum(groups == group_levels[group_count]) - dat_0[, group_count]
 }
 
 # Perform test of equal proportions per row of data
