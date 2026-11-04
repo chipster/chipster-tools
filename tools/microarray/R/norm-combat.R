@@ -37,7 +37,8 @@ if (batch3 != "EMPTY") {
     batch <- cbind(batch, phenodata[, pmatch(batch3, colnames(phenodata))])
 }
 
-batch <- as.numeric(batch)
+# ComBat accepts only one batch variable, so combine the batch columns into one factor
+batch <- interaction(as.data.frame(batch), drop = TRUE)
 dat2 <- as.matrix(dat[, grep("chip", names(dat))])
 combat_edata <- ComBat(dat = dat2, batch = batch, mod = NULL)
 
