@@ -75,9 +75,9 @@ if (fileOk("input_list")) {
     command <- paste(binary, "makefile.mth")
     system(command)
     system("cat *.logfile > log.tmp")
-    # Remove full paths from the Mothur-generated input list to make it more readable
-    system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples.fastqs.txt")
 }
+# Remove full paths from the input list to make it more readable
+system("for line in $( cat fastq.files ); do echo `basename $line`; done | paste - - - > samples.fastqs.txt")
 
 # Run Mothur make.contigs
 makecontigs.options <- paste("make.contigs(file=fastq.files")
