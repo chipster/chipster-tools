@@ -47,7 +47,7 @@ if (method == "mean" | method == "median") {
         # gene wise = row
         dat.impute <- t(impute(t(dat2), method))
     }
-    dat.impute <- data.frame(dat.impute, calls)
+    dat.impute <- data.frame(dat.impute)
 }
 if (method == "knn") {
     library(impute)
@@ -63,7 +63,7 @@ if (method == "knn") {
     }
 
     dat.impute <- impute.knn(as.matrix(dat2), k = K, rowmax = rmax, colmax = cmax, maxp = "p")
-    dat.impute <- data.frame(dat.impute$data, calls)
+    dat.impute <- data.frame(dat.impute$data)
 }
 if (ncol(A) > 0) {
     dat.impute <- data.frame(dat.impute, A)
