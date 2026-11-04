@@ -32,12 +32,9 @@ if (split == "yes") {
 }
 
 # input files
-if (abam == "yes") {
-    options <- paste(options, "-abam file.a -b file.b")
-}
-if (abam == "no") {
-    options <- paste(options, "-a file.a -b file.b")
-}
+# Since bedtools 2.24 coverage is reported for the intervals in -a, so B is given as -a and A as -b.
+# BAM is detected automatically in -b, so abam doesn't need a separate option.
+options <- paste(options, "-a file.b -b file.a")
 
 # command
 command <- paste(binary, options, "> coveragebed.tmp 2> error.tmp")
