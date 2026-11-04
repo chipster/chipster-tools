@@ -72,7 +72,7 @@ m <- matrix(nrow = nrow(fit$coef), ncol = ncol(fit$coef))
 mm <- matrix(nrow = nrow(fit$coef), ncol = ncol(fit$coef))
 for (i in 1:ncol(fit$coef)) {
     pp <- toptable(fit, coef = i, number = nrow(dat2), adjust.method = p.value.adjustment.method, sort.by = "none")
-    m[, (i)] <- pp$P.Value
+    m[, (i)] <- pp$adj.P.Val
     mm[, (i)] <- pp$logFC
 }
 
