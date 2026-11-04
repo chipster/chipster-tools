@@ -53,11 +53,15 @@ if (meth == "empiricalBayes") {
     fit <- lmFit(dat2, design)
     fit <- eBayes(fit)
 
-    tab <- toptable(fit, coef = 2, number = nrow(fit), adjust.method = adj.method, sort.by = "none")
+    # F-test over all group coefficients (a moderated t-test with two groups)
+    tab <- topTable(fit, coef = 2:ncol(design), number = nrow(fit), adjust.method = adj.method, sort.by = "none")
     rows <- which(tab$adj.P.Val <= p.cut)
     p <- tab$adj.P.Val[rows]
-    M <- tab$logFC[rows]
-    dat <- data.frame(dat[rows, ], p.adjusted = round(p, digits = 6), FC = M)
+    dat <- data.frame(dat[rows, ], p.adjusted = round(p, digits = 6))
+    # A single fold change exists only with two groups
+    if (ncol(design) == 2) {
+        dat$FC <- tab$logFC[rows]
+    }
     dat <- dat[order(dat$p.adjusted, decreasing = F), ]
 
     write.table(dat, file = "multiple-sample.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
@@ -93,7 +97,7 @@ if (meth == "ANOVA") {
 if (meth == "Kruskal-Wallis") {
     p <- c()
     for (i in 1:nrow(dat2)) {
-        p <- c(p, kruskal.test(dat2[i, ], groups))
+        p <- c(p, kruskal.test(as.numeric(dat2[i, ]), groups)$p.value)
     }
     p.raw <- p
     if (adj.method %in% c("Bonferroni", "Holm", "Hochberg")) {
