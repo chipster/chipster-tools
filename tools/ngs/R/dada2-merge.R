@@ -56,7 +56,7 @@ filenames <- sort(filenames)
 
 # check if the lenght of files in the input_folder is even (all the fastq files have a pair), else error
 number <- length(filenames) %% 2
-if (number != 0 && length(filenames) < 2) {
+if (number != 0) {
     stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
 }
 
