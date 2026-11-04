@@ -64,34 +64,42 @@ for (i in 1:length(gene.names.clean)) {
     gene.name.to.print <- gene.names.clean[i]
     d <- plotCounts(dds, gene = gene.name.to.print, intgroup = "condition", returnData = TRUE)
     if (plot.type == "box") {
-        print(ggplot(d, aes(x = condition, y = count, log = "y")) +
-            geom_boxplot(color = "blue") +
-            ylab("normalized counts") +
-            xlab("group") +
-            ggtitle(gene.name.to.print))
+        print(
+            ggplot(d, aes(x = condition, y = count, log = "y")) +
+                geom_boxplot(color = "blue") +
+                ylab("normalized counts") +
+                xlab("group") +
+                ggtitle(gene.name.to.print)
+        )
     } else if (show.names == "yes") {
         # Check that there are descriptions in phenodata file that can be used in plotting:
         if (is.na(pmatch("description", colnames(phenodata)))) {
-            stop("CHIPSTER-NOTE: To plot sample names, you need to determine them in the description column in phenodata file!")
+            stop(
+                "CHIPSTER-NOTE: To plot sample names, you need to determine them in the description column in phenodata file!"
+            )
         } else {
             desc <- phenodata[, "description"]
             # Plotting:
             # Note: as we are using ggplot within a for loop, we need to use "print"!
-            print(ggplot(d, aes(x = condition, y = count, log = "y")) +
-                # geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
-                geom_point(color = "blue", size = 3, shape = 5) +
-                geom_text(aes(label = desc), hjust = -0.5, vjust = 0, color = "black", size = 4) +
-                ylab("normalized counts") +
-                xlab("group") +
-                ggtitle(gene.name.to.print))
+            print(
+                ggplot(d, aes(x = condition, y = count, log = "y")) +
+                    # geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
+                    geom_point(color = "blue", size = 3, shape = 5) +
+                    geom_text(aes(label = desc), hjust = -0.5, vjust = 0, color = "black", size = 4) +
+                    ylab("normalized counts") +
+                    xlab("group") +
+                    ggtitle(gene.name.to.print)
+            )
         }
     } else {
-        print(ggplot(d, aes(x = condition, y = count, log = "y")) +
-            # geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
-            geom_point(color = "blue", size = 3, shape = 5) +
-            ylab("normalized counts") +
-            xlab("group") +
-            ggtitle(gene.name.to.print))
+        print(
+            ggplot(d, aes(x = condition, y = count, log = "y")) +
+                # geom_point(color="blue", size=3, shape=5, position=position_jitter(w=0.1,h=0)) +
+                geom_point(color = "blue", size = 3, shape = 5) +
+                ylab("normalized counts") +
+                xlab("group") +
+                ggtitle(gene.name.to.print)
+        )
     }
 }
 dev.off()

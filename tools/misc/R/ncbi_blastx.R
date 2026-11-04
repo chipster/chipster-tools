@@ -67,11 +67,30 @@ if (num.queryseq > 10) {
 outfmt.is.table <- paste("no")
 
 if (outfmt == 6) {
-    outfmt.sting <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')
+    outfmt.sting <- paste(
+        '"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"'
+    )
     outfmt.is.table <- paste("yes")
 }
 # These parameters have allways some value
-general.parameters <- paste("-chipster_path /opt/chipster -remote -no_slurm -query query.fa -out blast_results -db ", db, "-query_gencode", query_gencode, "-evalue ", evalue, "-matrix", matrix, "-word_size", word_size, "-seg", seg, "-outfmt", outfmt.string, "-max_intron_length", max_intron_length)
+general.parameters <- paste(
+    "-chipster_path /opt/chipster -remote -no_slurm -query query.fa -out blast_results -db ",
+    db,
+    "-query_gencode",
+    query_gencode,
+    "-evalue ",
+    evalue,
+    "-matrix",
+    matrix,
+    "-word_size",
+    word_size,
+    "-seg",
+    seg,
+    "-outfmt",
+    outfmt.string,
+    "-max_intron_length",
+    max_intron_length
+)
 
 optional.parameters <- paste(" ")
 
@@ -81,7 +100,13 @@ if (nchar(entrez_query) > 4) {
 
 
 if (outfmt < 5) {
-    optional.parameters <- paste(optional.parameters, " -html -num_descriptions ", num_hits, "-num_alignments", num_hits)
+    optional.parameters <- paste(
+        optional.parameters,
+        " -html -num_descriptions ",
+        num_hits,
+        "-num_alignments",
+        num_hits
+    )
 }
 
 if (outfmt > 5) {
@@ -130,7 +155,6 @@ if (query_loc != "full length") {
 }
 
 
-
 command.end <- (paste(" >>", "blast.log 2>&1"))
 
 # run the task
@@ -153,7 +177,9 @@ if (outfmt == 5) {
 }
 
 if (outfmt.is.table == "yes") {
-    system('printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv ')
+    system(
+        'printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv '
+    )
     system("cat blast_results >> blast_results.tsv")
 }
 

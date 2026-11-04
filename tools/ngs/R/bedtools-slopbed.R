@@ -32,7 +32,6 @@ if (s == "yes") {
 options <- paste(options, "-i bed.file", "-g gen.file")
 
 
-
 # command
 command <- paste(binary, options, "> slopbed.tmp 2> error.tmp")
 

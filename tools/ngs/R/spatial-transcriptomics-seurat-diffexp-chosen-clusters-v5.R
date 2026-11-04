@@ -33,17 +33,37 @@ load("seurat_spatial_obj_pca.Robj")
 seurat_obj <- PrepSCTFindMarkers(object = seurat_obj, assay = "SCT")
 
 # Differential expression
-de_markers <- FindMarkers(seurat_obj, ident.1 = cluster1, ident.2 = cluster2, test.use = test, logfc.threshold = logfc_threshold, min.pct = min_pct, only.pos = only_pos)
+de_markers <- FindMarkers(
+    seurat_obj,
+    ident.1 = cluster1,
+    ident.2 = cluster2,
+    test.use = test,
+    logfc.threshold = logfc_threshold,
+    min.pct = min_pct,
+    only.pos = only_pos
+)
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")
-write.table(as.matrix(de_markers), file = "spatially_variable_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    as.matrix(de_markers),
+    file = "spatially_variable_genes.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 
 # Open the pdf file for plotting
 pdf(file = "Markerplot.pdf", , width = 9, height = 12)
 #, ncol = 3
-SpatialFeaturePlot(object = seurat_obj, features = rownames(de_markers)[1:no_of_feats], keep.scale = color.scale, alpha = c(0.1, 1))
+SpatialFeaturePlot(
+    object = seurat_obj,
+    features = rownames(de_markers)[1:no_of_feats],
+    keep.scale = color.scale,
+    alpha = c(0.1, 1)
+)
 
 dev.off() # close the pdf
 

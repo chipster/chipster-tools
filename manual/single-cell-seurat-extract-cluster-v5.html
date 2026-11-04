@@ -12,7 +12,7 @@
     <h3>Description</h3>
 
     <p>
-        This tool gives you a subset of the data: only those cells of a user defined cluster.
+        This tool gives you a subset of the data: only those cells of the selected cluster.
 
     </p>
 
@@ -27,8 +27,8 @@
     <p>
         As inputs, give the Seurat object created AFTER clustering step: either after
     <ul>
-        <li><b>Seurat v5 -Clustering</b> tool,</li>
-        <li>or after <b>Seurat v5 -Integrate multiple samples</b> tool in case of multiple sample analysis. </li>
+        <li><b>Seurat v5 -Clustering</b> tool, or</li>
+        <li><b>Seurat v5 -Integrate multiple samples</b> tool in case of multiple sample analysis. </li>
     </ul>
     </p>
 
@@ -40,17 +40,17 @@
     <p>
         You can continue analysing this subsetted R-object by running the Seurat tools again;
         in the case you started with a single sample
-        (subsetting after <b>Seurat v5 -Clustering</b> tool),
-        you can start with the filtering and finding variable genes, and continue from there.
+        (subsetting after Seurat v5 -Clustering tool),
+        you can start with filtering and finding variable genes, and continue from there.
         <br>
-        If you started with a combined Seurat object of two samples
-        (subsetting after <b>Seurat v5 -Integrated analysis of two samples</b> tool),
-        you can continue by running the after <b>Seurat v5 -Integrate multiple samples</b> tool again.
+        If you started with a combined Seurat object of multiple samples
+        (subsetting after Seurat v5 -Integrate multiple samples tool),
+        you can continue by running the Seurat v5 -Integrate multiple samples tool again.
     </p>
 
     <p>
         Note that cell filtering (based on the number of genes per cell, mito%) done for the original dataset
-        affect this object as well.
+        affects this object as well.
     </p>
 
 

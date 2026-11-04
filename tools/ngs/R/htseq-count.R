@@ -42,7 +42,11 @@ if (print.coord == "no") {
 }
 
 # parse version number from last line "Public License v3. Part of the 'HTSeq' framework, version 0.6.0."
-htseq.version.command <- paste(python.binary, htseq.binary, " --help | tail -n 1 | rev | cut -d '.' -f 2- | cut -d ' ' -f 1 | rev")
+htseq.version.command <- paste(
+    python.binary,
+    htseq.binary,
+    " --help | tail -n 1 | rev | cut -d '.' -f 2- | cut -d ' ' -f 1 | rev"
+)
 version <- system(htseq.version.command, intern = TRUE)
 documentVersion("HTSeq", version)
 samtools.version.command <- paste(samtools.binary, " 2>&1 | grep Version | cut -d ' ' -f 2")
@@ -60,7 +64,23 @@ if (chr == "1") {
 }
 
 
-htseq <- paste(python.binary, htseq.binary, "-f bam -q -m", mode, "-s", stranded, "-a", minaqual, "-t", feature.type, "-i", id.attribute, bam, annotation.file, " > htseq-counts-out.txt")
+htseq <- paste(
+    python.binary,
+    htseq.binary,
+    "-f bam -q -m",
+    mode,
+    "-s",
+    stranded,
+    "-a",
+    minaqual,
+    "-t",
+    feature.type,
+    "-i",
+    id.attribute,
+    bam,
+    annotation.file,
+    " > htseq-counts-out.txt"
+)
 
 # run
 system(htseq)

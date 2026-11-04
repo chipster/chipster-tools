@@ -51,7 +51,10 @@ options <- paste(options, "-f", file.format)
 # mappable genome size
 if (precalculated.size == "user_specified") {
     if (nchar(userspecified.size) < 1) {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a value for mappable genome size or select one of the precalculated values."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a value for mappable genome size or select one of the precalculated values."
+        ))
     }
     genome.size <- userspecified.size
 } else {

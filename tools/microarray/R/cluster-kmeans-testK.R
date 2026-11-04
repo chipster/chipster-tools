@@ -4,7 +4,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the resampling image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the resampling image)
 
-
 # K-means clustering
 # JTT 6.6.2008
 
@@ -27,20 +26,28 @@ dat2 <- dat[, grep("chip", names(dat))]
 # Calculates the K-means clustering result with a number of different K
 kmax <- c(100)
 if (nrow(dat2) < 100) {
-   kmax <- nrow(dat2)
+    kmax <- nrow(dat2)
 }
 km <- rep(NA, (kmax - 1))
 i <- c(2)
 while (i < kmax) {
-   km[i] <- sum(kmeans(dat2, i, iter.max = 20000, nstart = 10)$withinss)
-   if (i >= 3 & km[i - 1] / km[i] <= 1.01) {
-      i <- kmax
-   } else {
-      i <- i + 1
-   }
+    km[i] <- sum(kmeans(dat2, i, iter.max = 20000, nstart = 10)$withinss)
+    if (i >= 3 & km[i - 1] / km[i] <= 1.01) {
+        i <- kmax
+    } else {
+        i <- i + 1
+    }
 }
 
 # Plotting the clustering
 pdf(file = "kmeans-test.pdf", width = w / 72, height = h / 72)
-plot(2:kmax, km, xlab = "K", ylab = "sum(withinss)", type = "b", pch = "+", main = "Terminated when change less than 1%")
+plot(
+    2:kmax,
+    km,
+    xlab = "K",
+    ylab = "sum(withinss)",
+    type = "b",
+    pch = "+",
+    main = "Terminated when change less than 1%"
+)
 dev.off()

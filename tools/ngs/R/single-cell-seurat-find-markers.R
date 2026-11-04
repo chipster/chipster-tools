@@ -31,7 +31,6 @@
 # PARAMETER OPTIONAL mincellsfeat: "Minimum number of cells expressing the feature" TYPE INTEGER DEFAULT 3 (Minimum number of cells expressing the feature in at least one of the two groups, currently only used for poisson and negative binomial tests.)
 # PARAMETER OPTIONAL mincellsgroup: "Minimum number of cells" TYPE INTEGER DEFAULT 3 (Minimum number of cells in one of the groups.)
 
-
 library(Seurat)
 library(dplyr)
 library(Matrix)
@@ -42,44 +41,84 @@ library(ggplot2)
 load("seurat_obj.Robj")
 
 if (exists("data.combined")) {
-  seurat_obj <- data.combined
+    seurat_obj <- data.combined
 }
 
 # If FindAllMarkers:
 if (find.all.markers == TRUE) {
-  markers <- FindAllMarkers(seurat_obj, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, return.thresh = returnthresh, only.pos = as.logical(only.positive)) # min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup,
+    markers <- FindAllMarkers(
+        seurat_obj,
+        min.pct = minpct,
+        logfc.threshold = threshuse,
+        test.use = test.type,
+        return.thresh = returnthresh,
+        only.pos = as.logical(only.positive)
+    ) # min.cells.feature = mincellsfeat, min.cells.group = mincellsgroup,
 
-  if (length(warnings()) > 0) {
-    # or !is.null(warnings())
-    stop("CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!")
-  }
+    if (length(warnings()) > 0) {
+        # or !is.null(warnings())
+        stop(
+            "CHIPSTER-NOTE: There was issue with FindAllMarkers functions with the selected test type, try another test!"
+        )
+    }
 
-  # Filter based on adj-p-val (return.thresh parameter looks at the p_val column, not p_val_adj):
-  markers_filtered <- markers[markers$p_val_adj<returnthresh, ]
+    # Filter based on adj-p-val (return.thresh parameter looks at the p_val column, not p_val_adj):
+    markers_filtered <- markers[markers$p_val_adj < returnthresh, ]
 
-  write.table(as.matrix(markers_filtered), file = "all_markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        as.matrix(markers_filtered),
+        file = "all_markers.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 
-  # Plot top10 genes of each cluster as a heatmap
-  top10 <- markers %>%
-    group_by(cluster) %>%
-    top_n(n = 10, wt = avg_log2FC)
+    # Plot top10 genes of each cluster as a heatmap
+    top10 <- markers %>%
+        group_by(cluster) %>%
+        top_n(n = 10, wt = avg_log2FC)
 
-  plot_heatmap <- DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust = 0.5) #+ NoLegend()
-  ggplot2::ggsave(filename = "Top10Heatmap.pdf", plot = plot_heatmap)
-} else { # Comparing only one cluster to all others or
-  # Comparing to all other cells (default):
-  if (cluster2 == "all others") {
-    cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
-  } else {
-    # comparing to another user determined cluster(s):
-    cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
-    cluster_markers <- FindMarkers(seurat_obj, ident.1 = cluster, ident.2 = cluster2_fixed, min.pct = minpct, logfc.threshold = threshuse, test.use = test.type, only.pos = only.positive, return.thresh = returnthresh)
-  }
-  # Filter based on adj-p-val (no return.thresh parameter):
-    cluster_markers_filtered <- cluster_markers[cluster_markers$p_val_adj<returnthresh, ]
+    plot_heatmap <- DoHeatmap(object = seurat_obj, features = top10$gene, angle = 0, size = 2, hjust = 0.5) #+ NoLegend()
+    ggplot2::ggsave(filename = "Top10Heatmap.pdf", plot = plot_heatmap)
+} else {
+    # Comparing only one cluster to all others or
+    # Comparing to all other cells (default):
+    if (cluster2 == "all others") {
+        cluster_markers <- FindMarkers(
+            seurat_obj,
+            ident.1 = cluster,
+            min.pct = minpct,
+            logfc.threshold = threshuse,
+            test.use = test.type,
+            only.pos = only.positive,
+            return.thresh = returnthresh
+        )
+    } else {
+        # comparing to another user determined cluster(s):
+        cluster2_fixed <- as.numeric(unlist(strsplit(cluster2, ",")))
+        cluster_markers <- FindMarkers(
+            seurat_obj,
+            ident.1 = cluster,
+            ident.2 = cluster2_fixed,
+            min.pct = minpct,
+            logfc.threshold = threshuse,
+            test.use = test.type,
+            only.pos = only.positive,
+            return.thresh = returnthresh
+        )
+    }
+    # Filter based on adj-p-val (no return.thresh parameter):
+    cluster_markers_filtered <- cluster_markers[cluster_markers$p_val_adj < returnthresh, ]
 
-  write.table(as.matrix(cluster_markers_filtered), file = "markers.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-
+    write.table(
+        as.matrix(cluster_markers_filtered),
+        file = "markers.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }
 # Save the Robj for the next tool -not necessary here
 # save(seurat_obj, file = "seurat_obj_markers.Robj")

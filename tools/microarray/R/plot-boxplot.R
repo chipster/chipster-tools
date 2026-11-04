@@ -36,7 +36,9 @@ if (length(levels(as.factor(phenodata_col))) > 0) {
     group_identity <- as.character(phenodata_col)
     for (count_levels in 1:length(group_levels)) {
         for (count_samples in 1:length(phenodata_col)) {
-            if (group_identity[count_samples] == group_levels[count_levels]) sample_colors[count_samples] <- 1 + count_levels
+            if (group_identity[count_samples] == group_levels[count_levels]) {
+                sample_colors[count_samples] <- 1 + count_levels
+            }
         }
     }
     level_colors <- levels(as.factor(sample_colors))

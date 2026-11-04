@@ -40,7 +40,12 @@ if (num.queryseq > 50000) {
 }
 
 command.path <- file.path(chipster.module.path, "/shell/protfilter.sh")
-protfilter.command <- paste(command.path, "-emboss_path ", emboss.path, " -sequence sequence -outfile filtered_prot.fasta")
+protfilter.command <- paste(
+    command.path,
+    "-emboss_path ",
+    emboss.path,
+    " -sequence sequence -outfile filtered_prot.fasta"
+)
 emboss.parameters <- paste("-casesensitive", casesensitive)
 if (nchar(desctext) > 0) {
     emboss.parameters <- paste(emboss.parameters, '-desctext "', desctext, '"')

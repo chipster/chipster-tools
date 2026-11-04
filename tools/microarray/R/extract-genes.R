@@ -3,7 +3,6 @@
 # OUTPUT extract-genes.tsv: extract-genes.tsv
 # PARAMETER number.of.genes: "Number of genes" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 50 (Number of genes to extract)
 
-
 # Extracts genes
 # JTT 29.1.2009
 

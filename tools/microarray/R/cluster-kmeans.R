@@ -6,7 +6,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the resampling image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the resampling image)
 
-
 # K-means clustering
 # JTT 22.6.2006
 
@@ -30,7 +29,7 @@ dat2 <- dat[, grep("chip", names(dat))]
 
 # Sanity checks
 if (k >= nrow(dat2)) {
-   stop("You have specified as many clusters as there are genes! Use a smaller number of clusters.")
+    stop("You have specified as many clusters as there are genes! Use a smaller number of clusters.")
 }
 
 # Calculates the K-means clustering result
@@ -44,7 +43,15 @@ min.dat2 <- min(dat2)
 pdf(file = "kmeans.pdf", width = w / 72, height = h / 72)
 par(mfrow = c(ceiling(sqrt(k)), ceiling(sqrt(k))))
 for (i in 1:k) {
-   matplot(t(dat2[km$cluster == i, ]), type = "l", main = paste("cluster:", i), ylab = "log expression", col = 1, lty = 1, ylim = c(min.dat2, max.dat2))
+    matplot(
+        t(dat2[km$cluster == i, ]),
+        type = "l",
+        main = paste("cluster:", i),
+        ylab = "log expression",
+        col = 1,
+        lty = 1,
+        ylim = c(min.dat2, max.dat2)
+    )
 }
 dev.off()
 

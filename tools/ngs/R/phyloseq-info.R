@@ -12,7 +12,6 @@
 # PARAMETER sample: "Extract sample information" TYPE [yes,no] DEFAULT no
 # RUNTIME R-4.4.3-phyloseq
 
-
 # ES 15.8.2022 phyloseq from 1.30 -> 1.40
 # HJ 25.2.2025 add export to fasta
 # Load phyloseq
@@ -38,8 +37,13 @@ if (fasta == "yes") {
         stop(paste("CHIPSTER-NOTE: ", "The refseq object is empty"))
     } else {
         refseq(ps) |>
-                Biostrings::writeXStringSet("dna_sequences.fasta", append=FALSE,
-                        compress=FALSE, compression_level=NA, format="fasta")
+            Biostrings::writeXStringSet(
+                "dna_sequences.fasta",
+                append = FALSE,
+                compress = FALSE,
+                compression_level = NA,
+                format = "fasta"
+            )
     }
 }
 if (ref == "yes") {
@@ -48,7 +52,14 @@ if (ref == "yes") {
     } else {
         refseq <- refseq(ps)
         print(refseq)
-        write.table(refseq, file = "dna_sequences.tsv", sep = "\t", row.names = TRUE, col.names = "DNA Sequences", quote = F)
+        write.table(
+            refseq,
+            file = "dna_sequences.tsv",
+            sep = "\t",
+            row.names = TRUE,
+            col.names = "DNA Sequences",
+            quote = F
+        )
     }
 }
 if (sample == "yes") {

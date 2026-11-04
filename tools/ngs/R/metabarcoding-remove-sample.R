@@ -40,12 +40,12 @@ if (nchar(samplex5) > 0) {
 # check that the samples to be removed exist in the phyloseq object and give warning if not
 #if (removeSamples %in% sample_names(ps) == FALSE) {
 if (length(intersect(removeSamples, sample_names(ps))) != length(removeSamples)) {
-        stop("CHIPSTER-NOTE: A sample to be removed is not found in the Phyloseq object. Please check the sample names.")
-    }
+    stop("CHIPSTER-NOTE: A sample to be removed is not found in the Phyloseq object. Please check the sample names.")
+}
 
 # remove the given samples from the phyloseq object
 #ps = subset_samples(ps, sample != removeSamples)
-ps = subset_samples(ps, !sample %in% removeSamples)
+ps <- subset_samples(ps, !sample %in% removeSamples)
 
 sink("ps_subset.txt")
 cat("\n\n\n")

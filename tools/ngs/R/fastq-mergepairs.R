@@ -32,8 +32,11 @@ if (length(file.list) == 0) {
     stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
-if (grepl("/", file.list[1])) {
-    stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+if (any(grepl("/", file.list))) {
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 
@@ -55,10 +58,11 @@ vector_notmerged <- c()
 
 # list the files full names with input_folder/
 filenames <- list.files("input_folder", full.names = TRUE)
+safe_name(basename(filenames))
 # if input list selected use it, and make a new list of filenames
 if (fileOk("input_list.txt")) {
     txt_filenames <- c()
-    input <- readLines("input_list.txt")
+    input <- read_list_file("input_list.txt")
     for (row in input) {
         sample <- strsplit(row, "\t", fixed = TRUE)
         sample.names <- c(sample.names, trimws(sample[[1]][1]))
@@ -70,8 +74,14 @@ if (fileOk("input_list.txt")) {
     # if the input list has a different amount of files than the tar package
     if (length(txt_filenames) != length(filenames)) {
         line1 <- paste(c("Filenames from the given txt file:\n", txt_filenames), collapse = "\n")
-        stop(paste0("CHIPSTER-NOTE: ", "It seems that the list of the FASTQ files (.txt file) has different amount of filenames than the .tar package. Please check the manual\n\n", line1))
-    } else { # add the full name
+        stop(paste0(
+            "CHIPSTER-NOTE: ",
+            "It seems that the list of the FASTQ files (.txt file) has different amount of filenames than the .tar package. Please check the manual\n\n",
+            line1
+        ))
+    } else {
+        # add the full name
+        safe_name(c(sample.names, txt_filenames))
         filenames <- paste0("input_folder/", txt_filenames)
     }
 } else {
@@ -108,18 +118,44 @@ for (name in sample.names) {
     # for  samples.fastqs.txt
     line2 <- paste(name, "\t", txt_filenames[y], "\t", txt_filenames[y + 1])
     # if maxns is selected
-    if (!is.na(maxns)) { # command with maxns parameter
+    if (!is.na(maxns)) {
+        # command with maxns parameter
         command <- paste(
-            binary, "--fastq_mergepairs", fnFs[x], "--reverse", fnRs[x], "--eeout",
-            "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct, "--fastq_maxns", maxns,
-            "--fastqout", output_fastq, "--label_suffix", name, ">>summary.txt 2>&1"
+            binary,
+            "--fastq_mergepairs",
+            shQuote(fnFs[x]),
+            "--reverse",
+            shQuote(fnRs[x]),
+            "--eeout",
+            "--fastq_maxdiffs",
+            maxdiff,
+            "--fastq_maxdiffpct",
+            maxdiffpct,
+            "--fastq_maxns",
+            maxns,
+            "--fastqout",
+            shQuote(output_fastq),
+            "--label_suffix",
+            shQuote(name)
         )
-    } else { # else without --fastq_maxns
+    } else {
+        # else without --fastq_maxns
         # command without maxns parameter
         command <- paste(
-            binary, "--fastq_mergepairs", fnFs[x], "--reverse", fnRs[x], "--eeout",
-            "--fastq_maxdiffs", maxdiff, "--fastq_maxdiffpct", maxdiffpct,
-            "--fastqout", output_fastq, "--label_suffix", name, ">>summary.txt 2>&1"
+            binary,
+            "--fastq_mergepairs",
+            shQuote(fnFs[x]),
+            "--reverse",
+            shQuote(fnRs[x]),
+            "--eeout",
+            "--fastq_maxdiffs",
+            maxdiff,
+            "--fastq_maxdiffpct",
+            maxdiffpct,
+            "--fastqout",
+            shQuote(output_fastq),
+            "--label_suffix",
+            shQuote(name)
         )
     }
     x <- x + 1
@@ -136,7 +172,8 @@ for (name in sample.names) {
     # run command
     runExternal(command)
     documentCommand(command)
-    system(command)
+    # vsearch writes the merging stats to stderr, which runExternal captures to stderr.tmp
+    file.append("summary.txt", "stderr.tmp")
     write("--------------------------------------------------------------", file = "summary.txt", append = TRUE)
 }
 
@@ -181,9 +218,16 @@ for (row in summary_data) {
 }
 
 # make a data.frame and summary.tsv file, where are the sample IDs and not_merged info
-summ.data <- data.frame("Sample" = sample.names, "Pairs" = vector_pairs, "Merged" = vector_merged, "Not_merged" = vector_notmerged, "Percentage_not_merged" = vector_info, "Mean_expected_error" = vector_mergeinfo)
-write.table(summ.data, file = "summary_stats.tsv", row.names = FALSE)
+summ.data <- data.frame(
+    "Sample" = sample.names,
+    "Pairs" = vector_pairs,
+    "Merged" = vector_merged,
+    "Not_merged" = vector_notmerged,
+    "Percentage_not_merged" = vector_info,
+    "Mean_expected_error" = vector_mergeinfo
+)
+write.table(summ.data, file = "summary_stats.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
 # make a output tar package named contigs.tar and qzip
 system("gzip output_folder/*.fq")
-system("cd output_folder && tar cf ../contigs.tar *")
+system("cd output_folder && tar cf ../contigs.tar -- *")

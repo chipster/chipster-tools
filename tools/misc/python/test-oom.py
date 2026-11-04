@@ -13,7 +13,7 @@ arrays = []
 for i in range(size):
     print("reserve memory " + str(i))
     for j in range(1024):
-        arrays.append(array.array('b', [0])*1024*1024)
+        arrays.append(array.array("b", [0]) * 1024 * 1024)
 
 print("sleep to wait for memory monitoring")
 time.sleep(10)

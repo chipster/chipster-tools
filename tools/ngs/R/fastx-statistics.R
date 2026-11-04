@@ -4,7 +4,6 @@
 # RUNTIME R-4.5.1-fastx
 # TOOLS_BIN ""
 
-
 # EK 17.6.2011
 
 # check out if the file is compressed and if so unzip it

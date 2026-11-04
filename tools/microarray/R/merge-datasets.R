@@ -32,34 +32,34 @@ calls <- cbind(calls, dat2[, grep("flag", colnames(dat2))])
 microarrays <- sprintf("microarray%.3i", 1:ncol(ratios))
 colnames(ratios) <- paste("chip.", microarrays, sep = "")
 if (ncol(ratios) == ncol(calls)) {
-  colnames(calls) <- paste("flag.", microarrays, sep = "")
+    colnames(calls) <- paste("flag.", microarrays, sep = "")
 }
 
 # remove old matrices from data set 1
 dat <- dat[, -grep("chip", colnames(dat))]
 if (length(grep("flag", colnames(dat))) > 0) {
-  dat <- dat[, -grep("flag", colnames(dat))]
+    dat <- dat[, -grep("flag", colnames(dat))]
 }
 
 # calculate new frequencies
 if ("loss.freq" %in% colnames(dat) && ncol(ratios) == ncol(calls)) {
-  dat$loss.freq <- round(mean(as.data.frame(t(calls == -1))), digits = 3)
-  dat$gain.freq <- round(mean(as.data.frame(t(calls == 1))), digits = 3)
-  if (2 %in% calls) {
-    dat$amp.freq <- round(mean(as.data.frame(t(calls == 2))), digits = 3)
-  } else {
-    dat$amp.freq <- NULL
-  }
+    dat$loss.freq <- round(mean(as.data.frame(t(calls == -1))), digits = 3)
+    dat$gain.freq <- round(mean(as.data.frame(t(calls == 1))), digits = 3)
+    if (2 %in% calls) {
+        dat$amp.freq <- round(mean(as.data.frame(t(calls == 2))), digits = 3)
+    } else {
+        dat$amp.freq <- NULL
+    }
 } else {
-  dat$loss.freq <- NULL
-  dat$gain.freq <- NULL
-  dat$amp.freq <- NULL
+    dat$loss.freq <- NULL
+    dat$gain.freq <- NULL
+    dat$amp.freq <- NULL
 }
 
 # generate new table
 dat <- cbind(dat, ratios)
 if (ncol(ratios) == ncol(calls)) {
-  dat <- cbind(dat, calls)
+    dat <- cbind(dat, calls)
 }
 
 # process phenodata
@@ -68,10 +68,10 @@ phenodata2 <- read.table("phenodata_2.tsv", header = TRUE, sep = "\t", as.is = T
 
 # fill in columns present only in one phenodata table
 for (col in setdiff(colnames(phenodata1), colnames(phenodata2))) {
-  phenodata2[, col] <- NA
+    phenodata2[, col] <- NA
 }
 for (col in setdiff(colnames(phenodata2), colnames(phenodata1))) {
-  phenodata1[, col] <- NA
+    phenodata1[, col] <- NA
 }
 
 # combine phenodata tables and update sample identifiers
@@ -81,6 +81,14 @@ phenodata$sample <- microarrays
 # write files
 options(scipen = 10)
 write.table(dat, file = "merged.tsv", quote = FALSE, sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(phenodata, file = "phenodata-merged.tsv", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = TRUE)
+write.table(
+    phenodata,
+    file = "phenodata-merged.tsv",
+    quote = FALSE,
+    sep = "\t",
+    na = "",
+    row.names = FALSE,
+    col.names = TRUE
+)
 
 # EOF

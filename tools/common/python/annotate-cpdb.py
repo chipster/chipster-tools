@@ -12,6 +12,7 @@ import sys
 import csv
 # cannot use tool_utils in python2
 
+
 def main():
     global input_type, p_value_threshold, species
 
@@ -163,7 +164,7 @@ def create_links(pathway_name, db):
         reactome_species = {
             "human": "Homo+sapiens",
             "mouse": "Mus+musculus",
-            "yeast": "Saccharomyces+cerevisiae"
+            "yeast": "Saccharomyces+cerevisiae",
         }
 
         if species in reactome_species:
@@ -173,7 +174,7 @@ def create_links(pathway_name, db):
             linked_name = (
                 '<a href="https://reactome.org/content/query?species=Homo+sapiens&cluster=true&types=Pathway&species='
                 + reactome_species[species]
-                + '&q='
+                + "&q="
                 + encodedPathway
                 + '">'
                 + pathway_name
@@ -193,7 +194,6 @@ def create_links(pathway_name, db):
         )
 
     elif db == "PID":
-
         linked_name = (
             '<a href="https://www.ndexbio.org/index.html#/search?searchType=All&searchTermExpansion=false&searchString='
             + encodedPathway

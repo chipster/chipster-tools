@@ -15,11 +15,11 @@ seqs <- retreive_promoters(species, promoter.size, multiple.promoters, "normaliz
 
 # Retrieving the sequences
 for (i in 1:length(seqs$seq.names)) {
-      write(file = "seqs.txt", seqs$seq.names[i], append = T)
-      write(file = "seqs.txt", seqs$seq[i], append = T)
+    write(file = "seqs.txt", seqs$seq.names[i], append = T)
+    write(file = "seqs.txt", seqs$seq[i], append = T)
 }
 
 for (i in 1:length(seqs$nos.names)) {
-      write(file = "seqs.txt", seqs$nos.names[i], append = T)
-      write(file = "seqs.txt", paste("", sep = ""), append = T)
+    write(file = "seqs.txt", seqs$nos.names[i], append = T)
+    write(file = "seqs.txt", paste("", sep = ""), append = T)
 }

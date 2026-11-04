@@ -50,7 +50,7 @@ syrunExternalstem(paste(samtools.binary, "index alignment.sorted.bam"))
 # rename result files
 runExternal("mv alignment.sorted.bam bwa.bam")
 if (index.file == "index_file") {
-  runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
+    runExternal("mv alignment.sorted.bam.bai bwa.bam.bai")
 }
 
 # Handle output names

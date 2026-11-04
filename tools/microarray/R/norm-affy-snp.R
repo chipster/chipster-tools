@@ -50,7 +50,9 @@ if (version == "oligo") {
     } else {
         this.cdfName <- gsub("_", "", tolower(read.celfile.header(fullFilenames[1])$cdfName))
         if (this.cdfName != "genomewidesnp5" && this.cdfName != "genomewidesnp6") {
-            stop("CHIPSTER-NOTE: Chip type not supported by CRLMM. Please choose a suitable description file from the drop-down box or use another pre-processing method")
+            stop(
+                "CHIPSTER-NOTE: Chip type not supported by CRLMM. Please choose a suitable description file from the drop-down box or use another pre-processing method"
+            )
         }
 
         crlmmOut <- try(crlmm::crlmm(fullFilenames, verbose = FALSE, SNRMin = SNRMin))
@@ -78,7 +80,14 @@ colnames(flags2) <- paste("flags.", colnames(flags), sep = "")
 chiptype <- c(rep("affy-SNP", ncol(genotypes)))
 sample <- colnames(genotypes)
 group <- c(rep("", ncol(genotypes)))
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Writing the results into files
 write.table(data.frame(genotypes, flags2), "normalized.tsv", row.names = T, col.names = T, quote = F, sep = "\t")

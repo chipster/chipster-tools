@@ -35,7 +35,17 @@ system(prepare.command)
 
 # counts reads per non-overlapping exonic regions
 dexseq.binary <- file.path(chipster.tools.path, "dexseq-exoncounts", "dexseq_count.py")
-dexseq.command <- paste(python.binary, dexseq.binary, "-f bam -r name -s", stranded, "-p", paired, "annotation.dexseq.gtf", bam, "exon-counts-out.tsv")
+dexseq.command <- paste(
+    python.binary,
+    dexseq.binary,
+    "-f bam -r name -s",
+    stranded,
+    "-p",
+    paired,
+    "annotation.dexseq.gtf",
+    bam,
+    "exon-counts-out.tsv"
+)
 system(dexseq.command)
 
 # separate result file
@@ -62,6 +72,5 @@ outputnames[1, ] <- c("exon-counts.tsv", paste(strip_name(inputnames$alignment.b
 
 # Write output definitions file
 write_output_definitions(outputnames)
-
 
 # EOF

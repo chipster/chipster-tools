@@ -57,16 +57,27 @@ unzipIfGZipFile("matepair_fastqfile")
 
 # Check whether input files are fastq
 if (input.mode == "fq") {
-    first_four_rows <- read.table(file = "fastqfile", nrow = 4, header = FALSE, sep = "\t", check.names = FALSE, comment.char = "")
+    first_four_rows <- read.table(
+        file = "fastqfile",
+        nrow = 4,
+        header = FALSE,
+        sep = "\t",
+        check.names = FALSE,
+        comment.char = ""
+    )
     ## compare sequence ID with quality score id, but discard first character
     # name_length <- nchar(as.character(first_four_rows[1,1]))
     seq_char <- substr(as.character(first_four_rows[1, 1]), start = 1, stop = 1)
     quality_char <- substr(as.character(first_four_rows[3, 1]), start = 1, stop = 1)
     if (seq_char != "@") {
-        stop("CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'.")
+        stop(
+            "CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'."
+        )
     }
     if (quality_char != "+") {
-        stop("CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'.")
+        stop(
+            "CHIPSTER-NOTE: It appears as though the input file(s) are not in fastq format. Please check input files or rerun the tool but with the 'Input file format' parameter set to 'FASTA'."
+        )
     }
 }
 

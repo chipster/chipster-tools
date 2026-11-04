@@ -11,7 +11,6 @@
 # RUNTIME R-4.5.1-fastx
 # TOOLS_BIN ""
 
-
 # EK 27.6.2011
 # AMS 01.11.2012: Added minimum.alignement and output.options options
 # AMS 11.3.2014, gzip fastq outputs

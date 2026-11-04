@@ -11,7 +11,11 @@ picard.binary <- file.path(chipster.tools.path, "picard-tools", "picard.jar")
 samtools.binary <- c(file.path(chipster.tools.path, "samtools-1.2", "samtools"))
 
 # run
-picard.command <- paste("java -Xmx2g -jar", picard.binary, "MarkDuplicates INPUT=alignment.bam OUTPUT=marked.bam METRICS_FILE=duplicateMetrics.txt VALIDATION_STRINGENCY=LENIENT")
+picard.command <- paste(
+    "java -Xmx2g -jar",
+    picard.binary,
+    "MarkDuplicates INPUT=alignment.bam OUTPUT=marked.bam METRICS_FILE=duplicateMetrics.txt VALIDATION_STRINGENCY=LENIENT"
+)
 system(picard.command)
 
 system(paste(samtools.binary, "index marked.bam > marked.bam.bai"))

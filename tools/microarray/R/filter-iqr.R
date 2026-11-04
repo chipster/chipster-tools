@@ -3,7 +3,6 @@
 # OUTPUT iqr-filter.tsv: iqr-filter.tsv
 # PARAMETER iqr.threshold: "Interquartile range threshold" TYPE DECIMAL FROM 0 TO 10 DEFAULT 0.5 (Interquartile range)
 
-
 # JTT, 24.10.2007
 
 # Parameter settings (default) for testing purposes
@@ -28,13 +27,13 @@ dat2 <- data.frame(dat2)
 
 # Sanity checks
 if (ncol(dat2) == 1) {
-   stop("You need to have at least two chips to apply filtering by genes!")
+    stop("You need to have at least two chips to apply filtering by genes!")
 }
 
 # Filter
 
 f <- function(x) {
-   (IQR(x) >= iqrt)
+    (IQR(x) >= iqrt)
 }
 ff <- filterfun(f)
 sel <- genefilter(dat2, ff)

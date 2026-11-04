@@ -34,10 +34,10 @@ documentVersion("Mothur", version)
 preclust.options <- ""
 preclust.options <- paste(preclust.options, "pre.cluster(fasta=a.fasta")
 if (file.exists("a.names")) {
-  preclust.options <- paste(preclust.options, " name=a.names", sep = ",")
+    preclust.options <- paste(preclust.options, " name=a.names", sep = ",")
 }
 if (file.exists("a.count_table")) {
-  preclust.options <- paste(preclust.options, " count=a.count_table", sep = ",")
+    preclust.options <- paste(preclust.options, " count=a.count_table", sep = ",")
 }
 preclust.options <- paste(preclust.options, ", diffs=", diffs, sep = "")
 preclust.options <- paste(preclust.options, ", processors=", chipster.threads.max, ")", sep = "")
@@ -57,10 +57,10 @@ system(command)
 # Post process output
 system("mv a.precluster.fasta preclustered.fasta")
 if (file.exists("a.names")) {
-  system("mv a.names preclustered.names")
+    system("mv a.names preclustered.names")
 }
 if (file.exists("a.precluster.count_table")) {
-  system("mv a.precluster.count_table preclustered.count_table")
+    system("mv a.precluster.count_table preclustered.count_table")
 }
 
 # stool.trim.unique.good.filter.unique.precluster.map
@@ -69,7 +69,7 @@ if (file.exists("a.precluster.count_table")) {
 # write("summary.seqs(fasta=preclustered.fasta, count=preclustered.count_table)", "summary.mth", append=F)
 summaryseqs.options <- paste("summary.seqs(fasta=preclustered.fasta")
 if (file.exists("preclustered.count_table")) {
-  summaryseqs.options <- paste(summaryseqs.options, ", count=preclustered.count_table", sep = "")
+    summaryseqs.options <- paste(summaryseqs.options, ", count=preclustered.count_table", sep = "")
 }
 summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)

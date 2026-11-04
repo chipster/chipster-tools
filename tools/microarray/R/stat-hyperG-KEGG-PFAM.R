@@ -36,16 +36,16 @@ dat2 <- dat[, grep("chip", names(dat))]
 # Reading phenodata for chiptype
 phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
 if (phenodata$chiptype[1] != "cDNA" | phenodata$chiptype[1] != "Illumina") {
-   # Saves the chiptype into object lib
-   lib <- phenodata$chiptype[1]
-   lib <- as.character(lib)
+    # Saves the chiptype into object lib
+    lib <- phenodata$chiptype[1]
+    lib <- as.character(lib)
 }
 
 # Account for the fact that annotation packages are from version 2.3 of Bioconductor
 # named with an ".db" suffix. Add the suffix when missing to support data files
 # from Chipster 1.3 and earlier.
 if (length(grep(".db", lib)) == 0 & length(grep("pmcdf", lib)) == 0) {
-   lib <- paste(lib, ".db", sep = "")
+    lib <- paste(lib, ".db", sep = "")
 }
 
 # Loads the correct Affymetrix annotation library
@@ -65,65 +65,154 @@ annotpkg <- lib
 
 # Runs the tests
 if (ontology == "KEGG") {
-   params <- new("KEGGHyperGParams", geneIds = myids, annotation = annotpkg, pvalueCutoff = pcut, testDirection = choisedirec)
-   result <- hyperGTest(params)
+    params <- new(
+        "KEGGHyperGParams",
+        geneIds = myids,
+        annotation = annotpkg,
+        pvalueCutoff = pcut,
+        testDirection = choisedirec
+    )
+    result <- hyperGTest(params)
 }
 
 if (ontology == "PFAM") {
-   params <- new("PFAMHyperGParams", geneIds = myids, annotation = annotpkg, pvalueCutoff = pcut, testDirection = choisedirec)
-   result <- hyperGTest(params)
+    params <- new(
+        "PFAMHyperGParams",
+        geneIds = myids,
+        annotation = annotpkg,
+        pvalueCutoff = pcut,
+        testDirection = choisedirec
+    )
+    result <- hyperGTest(params)
 }
 
 # Writes the results to an HTML file
 if (ontology == "KEGG" & sum(pvalues(result) < pcut) >= 1) {
-   ID <- names(pvalues(result)[pvalues(result) <= pcut])
-   Pvalue <- pvalues(result)[pvalues(result) <= pcut]
-   OddsRatio <- oddsRatios(result)[pvalues(result) <= pcut]
-   ExpCount <- expectedCounts(result)[pvalues(result) <= pcut]
-   Count <- geneCounts(result)[pvalues(result) <= pcut]
-   Size <- universeCounts(result)[pvalues(result) <= pcut]
-   Term <- as.vector(t(as.data.frame(mget(names(result@oddsRatios[result@pvalues <= pcut]), KEGGPATHID2NAME)))[, 1])
-   write(x = "<HTML>", file = "hypergeo.html", append = T)
-   write(x = "<BODY>", file = "hypergeo.html", append = T)
-   write(x = "<TABLE border=1>", file = "hypergeo.html", append = T)
-   write(x = paste("<CAPTION> ", ontology, " - test for ", choisedirec, "-representation </CAPTION>", sep = ""), file = "hypergeo.html", append = T)
-   write(x = "<TR> <TH>  </TH> <TH> ID </TH> <TH> Pvalue </TH> <TH> OddsRatio </TH> <TH> ExpCount </TH> <TH> Count </TH> <TH> Size </TH> <TH> Term </TH>  </TR>", file = "hypergeo.html", append = T)
-   for (i in 1:length(ID)) {
-      write(x = paste("<TR> <TD> ", i, " </TD> <TD> ", ID[i], " </TD> <TD> ", round(Pvalue[i], digits = 6), " </TD> <TD> ", round(OddsRatio[i], digits = 2), " </TD> <TD> ", round(ExpCount[i], digits = 2), " </TD> <TD> ", Count[i], " </TD> <TD> ", Size[i], " </TD> <TD> ", "<a href=", cat("\""), "http://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=pathway&keywords=", ID[i], "&page1", cat("\""), ">", Term[i], "</a>", "</TD> </TR>", sep = ""), file = "hypergeo.html", append = T)
-   }
-   write(x = "</BODY>", file = "hypergeo.html", append = T)
-   write(x = "</HTML>", file = "hypergeo.html", append = T)
+    ID <- names(pvalues(result)[pvalues(result) <= pcut])
+    Pvalue <- pvalues(result)[pvalues(result) <= pcut]
+    OddsRatio <- oddsRatios(result)[pvalues(result) <= pcut]
+    ExpCount <- expectedCounts(result)[pvalues(result) <= pcut]
+    Count <- geneCounts(result)[pvalues(result) <= pcut]
+    Size <- universeCounts(result)[pvalues(result) <= pcut]
+    Term <- as.vector(t(as.data.frame(mget(names(result@oddsRatios[result@pvalues <= pcut]), KEGGPATHID2NAME)))[, 1])
+    write(x = "<HTML>", file = "hypergeo.html", append = T)
+    write(x = "<BODY>", file = "hypergeo.html", append = T)
+    write(x = "<TABLE border=1>", file = "hypergeo.html", append = T)
+    write(
+        x = paste("<CAPTION> ", ontology, " - test for ", choisedirec, "-representation </CAPTION>", sep = ""),
+        file = "hypergeo.html",
+        append = T
+    )
+    write(
+        x = "<TR> <TH>  </TH> <TH> ID </TH> <TH> Pvalue </TH> <TH> OddsRatio </TH> <TH> ExpCount </TH> <TH> Count </TH> <TH> Size </TH> <TH> Term </TH>  </TR>",
+        file = "hypergeo.html",
+        append = T
+    )
+    for (i in 1:length(ID)) {
+        write(
+            x = paste(
+                "<TR> <TD> ",
+                i,
+                " </TD> <TD> ",
+                ID[i],
+                " </TD> <TD> ",
+                round(Pvalue[i], digits = 6),
+                " </TD> <TD> ",
+                round(OddsRatio[i], digits = 2),
+                " </TD> <TD> ",
+                round(ExpCount[i], digits = 2),
+                " </TD> <TD> ",
+                Count[i],
+                " </TD> <TD> ",
+                Size[i],
+                " </TD> <TD> ",
+                "<a href=",
+                cat("\""),
+                "http://www.genome.jp/dbget-bin/www_bfind_sub?mode=bfind&max_hit=1000&locale=en&serv=gn&dbkey=pathway&keywords=",
+                ID[i],
+                "&page1",
+                cat("\""),
+                ">",
+                Term[i],
+                "</a>",
+                "</TD> </TR>",
+                sep = ""
+            ),
+            file = "hypergeo.html",
+            append = T
+        )
+    }
+    write(x = "</BODY>", file = "hypergeo.html", append = T)
+    write(x = "</HTML>", file = "hypergeo.html", append = T)
 }
 if (ontology == "KEGG" & sum(pvalues(result) < pcut) < 1) {
-   write(x = "<HTML>", file = "hypergeo.html", append = T)
-   write(x = "<BODY>", file = "hypergeo.html", append = T)
-   write(x = "No significant results found! <br>", file = "hypergeo.html", append = T)
-   write(x = "</BODY>", file = "hypergeo.html", append = T)
-   write(x = "</HTML>", file = "hypergeo.html", append = T)
+    write(x = "<HTML>", file = "hypergeo.html", append = T)
+    write(x = "<BODY>", file = "hypergeo.html", append = T)
+    write(x = "No significant results found! <br>", file = "hypergeo.html", append = T)
+    write(x = "</BODY>", file = "hypergeo.html", append = T)
+    write(x = "</HTML>", file = "hypergeo.html", append = T)
 }
 
 if (ontology == "PFAM" & sum(pvalues(result) < pcut) >= 1) {
-   ID <- names(pvalues(result)[pvalues(result) <= pcut])
-   Pvalue <- pvalues(result)[pvalues(result) <= pcut]
-   OddsRatio <- oddsRatios(result)[pvalues(result) <= pcut]
-   ExpCount <- expectedCounts(result)[pvalues(result) <= pcut]
-   Count <- geneCounts(result)[pvalues(result) <= pcut]
-   Size <- universeCounts(result)[pvalues(result) <= pcut]
-   write(x = "<HTML>", file = "hypergeo.html", append = T)
-   write(x = "<BODY>", file = "hypergeo.html", append = T)
-   write(x = "<TABLE border=1>", file = "hypergeo.html", append = T)
-   write(x = paste("<CAPTION> ", ontology, " - test for ", choisedirec, "-representation </CAPTION>", sep = ""), file = "hypergeo.html", append = T)
-   write(x = "<TR> <TH>  </TH> <TH> ID </TH> <TH> Pvalue </TH> <TH> OddsRatio </TH> <TH> ExpCount </TH> <TH> Count </TH> <TH> Size </TH> <TH> Term </TH>  </TR>", file = "hypergeo.html", append = T)
-   for (i in 1:length(ID)) {
-      write(x = paste("<TR> <TD> ", i, " </TD> <TD> ", ID[i], " </TD> <TD> ", round(Pvalue[i], digits = 2), " </TD> <TD> ", round(OddsRatio[i], digits = 2), " </TD> <TD> ", round(ExpCount[i], digits = 2), " </TD> <TD> ", Count[i], " </TD> <TD> ", Size[i], " </TD> <TD> ", "<a href=", cat("\""), "http://www.sanger.ac.uk/cgi-bin/Pfam/qquerypfam.pl?terms=", ID[i], cat("\""), ">", ID[i], "</a>", "</TD> </TR>", sep = ""), file = "hypergeo.html", append = T)
-   }
-   write(x = "</BODY>", file = "hypergeo.html", append = T)
-   write(x = "</HTML>", file = "hypergeo.html", append = T)
+    ID <- names(pvalues(result)[pvalues(result) <= pcut])
+    Pvalue <- pvalues(result)[pvalues(result) <= pcut]
+    OddsRatio <- oddsRatios(result)[pvalues(result) <= pcut]
+    ExpCount <- expectedCounts(result)[pvalues(result) <= pcut]
+    Count <- geneCounts(result)[pvalues(result) <= pcut]
+    Size <- universeCounts(result)[pvalues(result) <= pcut]
+    write(x = "<HTML>", file = "hypergeo.html", append = T)
+    write(x = "<BODY>", file = "hypergeo.html", append = T)
+    write(x = "<TABLE border=1>", file = "hypergeo.html", append = T)
+    write(
+        x = paste("<CAPTION> ", ontology, " - test for ", choisedirec, "-representation </CAPTION>", sep = ""),
+        file = "hypergeo.html",
+        append = T
+    )
+    write(
+        x = "<TR> <TH>  </TH> <TH> ID </TH> <TH> Pvalue </TH> <TH> OddsRatio </TH> <TH> ExpCount </TH> <TH> Count </TH> <TH> Size </TH> <TH> Term </TH>  </TR>",
+        file = "hypergeo.html",
+        append = T
+    )
+    for (i in 1:length(ID)) {
+        write(
+            x = paste(
+                "<TR> <TD> ",
+                i,
+                " </TD> <TD> ",
+                ID[i],
+                " </TD> <TD> ",
+                round(Pvalue[i], digits = 2),
+                " </TD> <TD> ",
+                round(OddsRatio[i], digits = 2),
+                " </TD> <TD> ",
+                round(ExpCount[i], digits = 2),
+                " </TD> <TD> ",
+                Count[i],
+                " </TD> <TD> ",
+                Size[i],
+                " </TD> <TD> ",
+                "<a href=",
+                cat("\""),
+                "http://www.sanger.ac.uk/cgi-bin/Pfam/qquerypfam.pl?terms=",
+                ID[i],
+                cat("\""),
+                ">",
+                ID[i],
+                "</a>",
+                "</TD> </TR>",
+                sep = ""
+            ),
+            file = "hypergeo.html",
+            append = T
+        )
+    }
+    write(x = "</BODY>", file = "hypergeo.html", append = T)
+    write(x = "</HTML>", file = "hypergeo.html", append = T)
 }
 if (ontology == "PFAM" & sum(pvalues(result) < pcut) < 1) {
-   write(x = "<HTML>", file = "hypergeo.html", append = T)
-   write(x = "<BODY>", file = "hypergeo.html", append = T)
-   write(x = "No significant results found! <br>", file = "hypergeo.html", append = T)
-   write(x = "</BODY>", file = "hypergeo.html", append = T)
-   write(x = "</HTML>", file = "hypergeo.html", append = T)
+    write(x = "<HTML>", file = "hypergeo.html", append = T)
+    write(x = "<BODY>", file = "hypergeo.html", append = T)
+    write(x = "No significant results found! <br>", file = "hypergeo.html", append = T)
+    write(x = "</BODY>", file = "hypergeo.html", append = T)
+    write(x = "</HTML>", file = "hypergeo.html", append = T)
 }

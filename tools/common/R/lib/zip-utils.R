@@ -8,14 +8,14 @@ unzipIfGZipFile <- function(file.name) {
     # if gzip, unzip it
     if (isGZipFile(file.name)) {
         zipfile.name <- paste(file.name, ".gz", sep = "")
-        runExternal(paste("mv", file.name, zipfile.name, "; gzip -df", zipfile.name))
+        runExternal(paste("mv", shQuote(file.name), shQuote(zipfile.name), "; gzip -df", shQuote(zipfile.name)))
     }
 }
 
 
 isGZipFile <- function(file.name) {
     # get file type with the unix file command
-    file.type <- system(paste("file -Lb --mime", file.name), intern = TRUE)
+    file.type <- system2("file", c("-Lb", "--mime", shQuote(file.name)), stdout = TRUE)
 
     # method 1, something wrong
     # return (charmatch(file.type,c("application/x-gzip","application/gzip"), nomatch=0) > 0)

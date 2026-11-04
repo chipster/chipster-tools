@@ -14,7 +14,9 @@ if (column1 == "EMPTY" & column2 == "EMPTY") {
     stop("CHIPSTER-NOTE: You need to select at least one column!")
 }
 if ((column1 == "EMPTY" & deletion.type == "between") | (column2 == "EMPTY" & deletion.type == "between")) {
-    stop("CHIPSTER-NOTE: Check the settings! Can't delete all column in between two columns, when only one column has been selected.")
+    stop(
+        "CHIPSTER-NOTE: Check the settings! Can't delete all column in between two columns, when only one column has been selected."
+    )
 }
 
 # Loads the data

@@ -2,7 +2,7 @@
 
 # First, install all apt package in chipster-openshift/kustomize/builds/comp-r-4-2-3-single-cell!
 
-# you can run R commands from bash to track time usage, but you have to provide the repo for install.packages() 
+# you can run R commands from bash to track time usage, but you have to provide the repo for install.packages()
 # time ./R -e 'install.packages("Seurat", repos = "https://ftp.acc.umu.se/mirror/CRAN/")'
 
 # these are needed to install some packages
@@ -90,7 +90,7 @@ install.packages("hdf5r")
 BiocManager::install('limma')
 
 # 2024-02-29: latest version 1.2.0 fails in spatial-transcriptomics-seurat-sctransform-v5.R with "Error: useNames = NA is defunct. Instead, specify either useNames = TRUE or useNames = FALSE."
-remotes::install_version("matrixStats", version="1.1.0", repos = "https://ftp.acc.umu.se/mirror/CRAN/")
+remotes::install_version("matrixStats", version = "1.1.0", repos = "https://ftp.acc.umu.se/mirror/CRAN/")
 
 install.packages("devtools")
 # apt install git
@@ -99,6 +99,3 @@ devtools::install_github("cellgeni/schard")
 install.packages("ggrepel")
 
 install.packages("tidyverse")
-
-
-

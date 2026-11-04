@@ -17,14 +17,18 @@ library(dada2)
 load("object.Rda", verbose = TRUE)
 # 2 possible names either mergers or dadaFs
 
-if (exists("dadaFs")) { # single reads, rename
+if (exists("dadaFs")) {
+    # single reads, rename
     object <- dadaFs
     name <- "After sample inference"
 } else if (exists("mergers")) {
     object <- mergers
     name <- "After make contigs"
 } else {
-    stop(paste("CHIPSTER-NOTE: ", "The given .Rda object is not correct. If you are having single reads, use the output file from the tool Sample inference as the input and otherwise the output from the tool Combine paired reads to contigs with Dada2 "))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "The given .Rda object is not correct. If you are having single reads, use the output file from the tool Sample inference as the input and otherwise the output from the tool Combine paired reads to contigs with Dada2 "
+    ))
 }
 # Construct sequence table from given .Rda object -> ASV-table Construct a sample-by-sequence observation matrix.
 seqtab <- makeSequenceTable(object)
@@ -52,7 +56,12 @@ print(data)
 cat("\n###Removing Chimeras:###\n")
 
 # run isbimeradenovo / remove chimeras
-seqtab.nochim <- removeBimeraDenovo(seqtab, method = method1, multithread = as.integer(chipster.threads.max), verbose = TRUE)
+seqtab.nochim <- removeBimeraDenovo(
+    seqtab,
+    method = method1,
+    multithread = as.integer(chipster.threads.max),
+    verbose = TRUE
+)
 num <- length(colnames(seqtab)) - length(colnames(seqtab.nochim))
 cat("Identified ", num, " bimeras out of ", length(colnames(seqtab)), " input sequences\n")
 cat("Total amount of ASVs after chimera removal is: ")
@@ -71,14 +80,22 @@ sink()
 getN <- function(x) sum(getUniques(x))
 seqtab.nochim2 <- seqtab.nochim
 
-if (names(object)[1] != "sequence" && names(object)[1] != "denoised") { # If processing a single sample, remove the sapply calls: e.g. replace sapply(object, getN) with getN(dadaFs)
+if (names(object)[1] != "sequence" && names(object)[1] != "denoised") {
+    # If processing a single sample, remove the sapply calls: e.g. replace sapply(object, getN) with getN(dadaFs)
     track <- cbind(sapply(object, getN), rowSums(seqtab.nochim))
     rownames(track) <- sample.names
     colnames(track) <- c(name, "After chimera removal")
     write.table(track, file = "reads_summary.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
 
     colnames(seqtab.nochim2) <- paste0("ASV", seq(length(colnames(seqtab.nochim2))))
-    write.table(seqtab.nochim2, file = "sequence_table_nochim.tsv", sep = "\t", row.names = TRUE, col.names = T, quote = F)
+    write.table(
+        seqtab.nochim2,
+        file = "sequence_table_nochim.tsv",
+        sep = "\t",
+        row.names = TRUE,
+        col.names = T,
+        quote = F
+    )
 } else {
     track <- cbind(getN(object), rowSums(seqtab.nochim))
     # sample.names="Sample1" # rename to sample 1 if only one sample
@@ -86,16 +103,20 @@ if (names(object)[1] != "sequence" && names(object)[1] != "denoised") { # If pro
     write.table(track, file = "reads_summary.tsv", sep = "\t", row.names = FALSE, col.names = T, quote = F)
 
     colnames(seqtab.nochim2) <- paste0("ASV", seq(length(colnames(seqtab.nochim2))))
-    write.table(seqtab.nochim2, file = "sequence_table_nochim.tsv", sep = "\t", row.names = FALSE, col.names = T, quote = F)
+    write.table(
+        seqtab.nochim2,
+        file = "sequence_table_nochim.tsv",
+        sep = "\t",
+        row.names = FALSE,
+        col.names = T,
+        quote = F
+    )
 }
-
-
 
 
 # print out asv sequence table rename asv:s
 # rename sequences to asv1, asv2... makes it easier just for visualisation
 # seqtab.nochim2 <- seqtab.nochim
-
 
 # save the object as .Rda
 save(seqtab.nochim, file = "seqtab_nochim.Rda")

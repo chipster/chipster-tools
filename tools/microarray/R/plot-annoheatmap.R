@@ -65,9 +65,15 @@ if (distance == "euclidean" || distance == "manhattan" || distance == "binary") 
 hclust.met <- function(x) hclust(x, method = clu.method)
 
 if (cluster.samples.only == "yes" || coloring.scheme == "None") {
-    dend.met <- list(Col = list(status = "yes", clustfun = hclust.met, distfun = corrdist), Row = list(status = "no", clustfun = hclust.met, distfun = corrdist))
+    dend.met <- list(
+        Col = list(status = "yes", clustfun = hclust.met, distfun = corrdist),
+        Row = list(status = "no", clustfun = hclust.met, distfun = corrdist)
+    )
 } else {
-    dend.met <- list(Col = list(status = "yes", clustfun = hclust.met, distfun = corrdist), Row = list(status = "yes", clustfun = hclust.met, distfun = corrdist))
+    dend.met <- list(
+        Col = list(status = "yes", clustfun = hclust.met, distfun = corrdist),
+        Row = list(status = "yes", clustfun = hclust.met, distfun = corrdist)
+    )
 }
 
 # Tree cutting
@@ -122,7 +128,17 @@ temp.width <- floor(strwidth(longest.name, unit = "in", cex = (0.2 + 1 / log10(n
 
 # Pseudo-plot to find par("csi") value
 pdf(file = "heatmap.pdf", width = image.width / 72, height = image.height / 72)
-ann1 <- annHeatmap2(as.matrix(dat2), col = colmap, breaks = niceBreaks(plot.range, num.breaks), scale = "none", dendrogram = dend.met, annotation = feat, cluster = cuth.info, labels = list(Col = list(nrow = temp.width + 1)), legend = T)
+ann1 <- annHeatmap2(
+    as.matrix(dat2),
+    col = colmap,
+    breaks = niceBreaks(plot.range, num.breaks),
+    scale = "none",
+    dendrogram = dend.met,
+    annotation = feat,
+    cluster = cuth.info,
+    labels = list(Col = list(nrow = temp.width + 1)),
+    legend = T
+)
 try_plot <- try(plot(ann1), silent = T)
 if (class(try_plot) == "try-error") {
     stop("CHIPSTER-NOTE: Your plot area is too small. Please consider increasing the width and height of the plot")
@@ -134,7 +150,17 @@ dev.off()
 # Create plot
 if (coloring.scheme != "None") {
     pdf(file = "heatmap.pdf", width = image.width / 72, height = image.height / 72)
-    ann1 <- annHeatmap2(as.matrix(dat2), col = colmap, breaks = niceBreaks(plot.range, num.breaks), scale = "none", dendrogram = dend.met, ann = feat, cluster = cuth.info, labels = list(Col = list(nrow = temp.width + 1)), legend = T)
+    ann1 <- annHeatmap2(
+        as.matrix(dat2),
+        col = colmap,
+        breaks = niceBreaks(plot.range, num.breaks),
+        scale = "none",
+        dendrogram = dend.met,
+        ann = feat,
+        cluster = cuth.info,
+        labels = list(Col = list(nrow = temp.width + 1)),
+        legend = T
+    )
     # done like this, as no idea how to otherwise visualise values beyond plot.range
     ann1$data$x2 <- dat3[match(rownames(ann1$data$x2), rownames(dat3)), match(colnames(ann1$data$x2), colnames(dat3))]
     plot(ann1)
@@ -143,7 +169,17 @@ if (coloring.scheme != "None") {
     # values above and below plot.range are white
     pdf(file = "heatmap.pdf", width = image.width / 72, height = image.height / 72)
     # ann1 = annHeatmap2(as.matrix(dat2), col = colmap, breaks = niceBreaks(plot.range, num.breaks), scale="none", dendrogram=dend.met, annotation=feat, cluster=cuth.info, labels=list(Col=list(nrow=temp.width + 1), Row=list(labels=rep(" ", nrow(dat2)))), legend=F)
-    ann1 <- annHeatmap2(as.matrix(dat2), col = colmap, breaks = niceBreaks(plot.range, num.breaks), scale = "none", dendrogram = dend.met, ann = feat, cluster = cuth.info, labels = list(Col = list(nrow = temp.width + 1), Row = list(labels = rep(" ", nrow(dat2)))), legend = F)
+    ann1 <- annHeatmap2(
+        as.matrix(dat2),
+        col = colmap,
+        breaks = niceBreaks(plot.range, num.breaks),
+        scale = "none",
+        dendrogram = dend.met,
+        ann = feat,
+        cluster = cuth.info,
+        labels = list(Col = list(nrow = temp.width + 1), Row = list(labels = rep(" ", nrow(dat2)))),
+        legend = F
+    )
 
     ann1$data$x2[ann1$data$x2 < max(plot.range)] <- max(plot.range) + 1
     plot(ann1, widths = c(2, 5, 1), heights = c(2, 0.75, 1))

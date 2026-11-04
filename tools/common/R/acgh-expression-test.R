@@ -20,14 +20,19 @@ matched <- toIntCNGEanMatched(input)
 
 # tune and test
 tuned <- intCNGEan.tune(matched$CNdata.matched, matched$GEdata.matched, test.statistic = test.statistic)
-result <- intCNGEan.test(tuned, analysis.type = analysis.type, test.statistic = test.statistic, nperm = number.of.permutations)
+result <- intCNGEan.test(
+    tuned,
+    analysis.type = analysis.type,
+    test.statistic = test.statistic,
+    nperm = number.of.permutations
+)
 
 # for some reason, columns in the data.frame appear as lists in R-2.12.
 # convert back to vectors
 if (class(result[, 1]) == "list") {
-  for (i in 1:ncol(result)) {
-    result[, i] <- unlist(result[, i])
-  }
+    for (i in 1:ncol(result)) {
+        result[, i] <- unlist(result[, i])
+    }
 }
 
 # format and write result table
@@ -36,7 +41,12 @@ colnames(result)[1:3] <- tolower(colnames(result)[1:3])
 result$chromosome <- chromosomeToCharacter(result$chromosome)
 result$probes <- rownames(tuned$datafortest)
 
-result <- addAnnotationColumns(input, result, rows = result$probes, exclude = c("cn.start", "cn.end", "exp.probe", "exp.start", "exp.end"))
+result <- addAnnotationColumns(
+    input,
+    result,
+    rows = result$probes,
+    exclude = c("cn.start", "cn.end", "exp.probe", "exp.start", "exp.end")
+)
 
 arrays <- colnames(tuned$datafortest)[(2 * tuned$nosamp + 1):(3 * tuned$nosamp)]
 colnames(tuned$datafortest) <- c(paste0("prob1.", arrays), paste0("prob2.", arrays), paste0("chip.", arrays))

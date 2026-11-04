@@ -80,13 +80,35 @@ retreive_promoters <- function(species, promoter.size, multiple.promoters, norm.
     if (multiple.promoters == "no") {
         for (i in 1:length(promoter)) {
             ret.values$seq <- c(ret.values$seq, toString(promoter[[i]][1]))
-            ret.values$seq.names <- c(ret.values$seq.names, paste(">", rownames(dat)[which(refseq == names(promoter)[i])], " (Refseq ID: ", names(promoter)[i], ")", sep = ""))
+            ret.values$seq.names <- c(
+                ret.values$seq.names,
+                paste(
+                    ">",
+                    rownames(dat)[which(refseq == names(promoter)[i])],
+                    " (Refseq ID: ",
+                    names(promoter)[i],
+                    ")",
+                    sep = ""
+                )
+            )
         }
     } else {
         for (i in 1:length(promoter)) {
             for (j in 1:length(promoter[[i]])) {
                 ret.values$seq <- c(ret.values$seq, toString(promoter[[i]][j]))
-                ret.values$seq.names <- c(ret.values$seq.names, paste(">", rownames(dat)[which(refseq == names(promoter)[i])], ".", j, " (Refseq ID: ", names(promoter)[i], ")", sep = ""))
+                ret.values$seq.names <- c(
+                    ret.values$seq.names,
+                    paste(
+                        ">",
+                        rownames(dat)[which(refseq == names(promoter)[i])],
+                        ".",
+                        j,
+                        " (Refseq ID: ",
+                        names(promoter)[i],
+                        ")",
+                        sep = ""
+                    )
+                )
             }
         }
     }

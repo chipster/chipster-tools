@@ -4,7 +4,6 @@
 # OUTPUT normalized2samples.tsv: normalized2samples.tsv
 # PARAMETER column.to.normalize.by: "Column to normalize by" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column containing the samples to be normalized)
 
-
 # Normalize the data to specific samples
 # JTT 5.12.2008
 
@@ -23,10 +22,10 @@ extract <- phenodata[, which(column.to.normalize.by == colnames(phenodata))]
 
 # Sanity checks
 if (length(unique(extract)) > 2) {
-   stop("You have specified more than two groups! You need to define exactly two groups.")
+    stop("You have specified more than two groups! You need to define exactly two groups.")
 }
 if (max(extract > 1)) {
-   stop("The groups should be defined with 0s and 1s! You have numbers larger than 1 in the definitions.")
+    stop("The groups should be defined with 0s and 1s! You have numbers larger than 1 in the definitions.")
 }
 
 # Extracting the samples
@@ -38,13 +37,13 @@ nv <- (rowSums(dat0) / ncol(dat0))
 
 # Normalization
 for (i in 1:ncol(dat2)) {
-   dat2[, i] <- dat2[, i] - nv
+    dat2[, i] <- dat2[, i] - nv
 }
 
 # Replace the data in the original object with normalized values
 datacols <- grep("chip.", colnames(dat))
 for (i in 1:length(datacols)) {
-   dat[, (datacols[i])] <- dat2[, i]
+    dat[, (datacols[i])] <- dat2[, i]
 }
 
 # Write out data

@@ -49,7 +49,6 @@ if (species == "rat") {
 #        dataset <- "rnorvegicus_transcript_ensembl"
 # }
 
-
 # Read in the CORNA library, which contains the functions to map miRNA:s to targets
 # and performs hypergeometric test for enrichment of GO terms
 library(CORNA)
@@ -75,7 +74,7 @@ if (species == "mouse") {
     targets <- read.table(file.path(path.mappings, "mirna_mappings_mmusculus.txt"), sep = "\t")
 }
 if (species == "rat") {
-    targets <- read.table(file.path(path.mappings, "mirna_mappings_rnorvegious.txt"), sep = "\t")
+    targets <- read.table(file.path(path.mappings, "mirna_mappings_rnorvegicus.txt"), sep = "\t")
 }
 
 # obtain a link from transcript to gene from BiomaRt

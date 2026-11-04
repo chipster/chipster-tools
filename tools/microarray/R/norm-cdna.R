@@ -7,7 +7,6 @@
 # PARAMETER normalize.arrays: "Normalize arrays" TYPE [none: none, median: median, loess: loess] DEFAULT loess (Within array normalization method)
 # PARAMETER normalize.genes: "Normalize genes" TYPE [none: none, scale: scale, quantile: quantile, Aquantile: Aquantile, vsn: vsn] DEFAULT none (Between arrays normalization method)
 
-
 # cDNA chip normalization
 # JTT 9.6.2006
 
@@ -37,9 +36,9 @@ dat2 <- normalizeWithinArrays(dat, method = normwa, bc.method = bg, offset = as.
 
 # Normalization across arrays
 if (normba == "vsn") {
-   dat3 <- normalizeVSN(dat)
+    dat3 <- normalizeVSN(dat)
 } else {
-   dat3 <- normalizeBetweenArrays(dat2, method = normba)
+    dat3 <- normalizeBetweenArrays(dat2, method = normba)
 }
 
 # Modifies the phenodata table by writing one more row to it ((Affymetrix) chip type)
@@ -49,7 +48,14 @@ training <- c(rep("", length(sample)))
 time <- c(rep("", length(sample)))
 random <- c(rep("", length(sample)))
 chiptype <- c("cDNA")
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Constructs and writes out a table of data
 M <- dat3$M
@@ -64,11 +70,11 @@ genes <- rownames(M)
 M <- M[, -1]
 A <- A[, -1]
 if (length(dat$other$flag) != 0) {
-   flags <- as.data.frame(dat$other$flag)
-   names(flags) <- paste("flag.", names(flags), sep = "")
+    flags <- as.data.frame(dat$other$flag)
+    names(flags) <- paste("flag.", names(flags), sep = "")
 }
 if (length(dat$other$flag) == 0) {
-   flags <- matrix(nrow = 0, ncol = 0)
+    flags <- matrix(nrow = 0, ncol = 0)
 }
 names(M) <- paste("chip.", names(M), sep = "")
 names(A) <- paste("average.", names(A), sep = "")
@@ -77,9 +83,9 @@ A <- data.frame(round(A, digits = 2))
 M <- data.frame(round(M, digits = 2))
 
 if (nrow(flags) != nrow(A) | nrow(flags) != nrow(M)) {
-   D <- data.frame(M, A)
+    D <- data.frame(M, A)
 } else {
-   D <- data.frame(M, A, flags)
+    D <- data.frame(M, A, flags)
 }
 rownames(D) <- genes
 

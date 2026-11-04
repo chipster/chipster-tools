@@ -232,7 +232,6 @@ for (package in illuminaAnnotationBioconductorPackages) {
 }
 
 
-
 # Non-repo packages
 nonRepoPackages <- c(
     "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/NoWaves_0.4.tar.gz",
@@ -260,7 +259,6 @@ for (package in nonRepoPackages) {
 }
 
 
-
 # Illumina annotation packages
 illuminaAnnotationPackages <- c(
     "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1BeadID.db_1.8.0.tar.gz",
@@ -280,23 +278,58 @@ for (package in illuminaAnnotationPackages) {
 }
 
 
-
-
 # Install the whole annotation repository from Bioconductor
 smart.install.bioconductor.repo(repo.index = 3, mirror = repo.bioc) # for R 3.0.0, repo number 3 is annotations (might change)
 
 # Install BrainArray custom CDF's.
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp", update = 1)
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp", update = 1)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp",
+    update = 1
+)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp",
+    update = 1
+)
 
 # Install exon arrays from BrainArray. Parameter chiptype can be used to grep files with a certain substring.
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "ex", update = 1)
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "hta", update = 1)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+    chiptype = "ex",
+    update = 1
+)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+    chiptype = "hta",
+    update = 1
+)
 
 # Test if R.script has been linked to appropriate custom_cdf packages. Not perfect, but better than nothing.
 # NOTE: below commands should match those listed above
-db.custom.packages <- smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp", list.only = 1)
-db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp", list.only = 1))
-db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "ex", list.only = 1))
-db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "hta", list.only = 1))
+db.custom.packages <- smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp",
+    list.only = 1
+)
+db.custom.packages <- c(
+    db.custom.packages,
+    smart.install.scavenge.web.packages(
+        "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp",
+        list.only = 1
+    )
+)
+db.custom.packages <- c(
+    db.custom.packages,
+    smart.install.scavenge.web.packages(
+        "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+        chiptype = "ex",
+        list.only = 1
+    )
+)
+db.custom.packages <- c(
+    db.custom.packages,
+    smart.install.scavenge.web.packages(
+        "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+        chiptype = "hta",
+        list.only = 1
+    )
+)
 # check.affy.customnames(script.basename, db.custom.packages)

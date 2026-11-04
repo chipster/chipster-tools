@@ -32,7 +32,11 @@ dat <- read.maimages(files = files, columns = columns, annotation = annotation, 
 annotation.info <- NULL
 if (keep.annotations == "yes") {
     if (length(grep("^annotation$", unlist(attributes(dat$other)), ignore.case = T))) {
-        annotation.col <- unlist(attributes(dat$other))[grep("^annotation$", unlist(attributes(dat$other)), ignore.case = T)]
+        annotation.col <- unlist(attributes(dat$other))[grep(
+            "^annotation$",
+            unlist(attributes(dat$other)),
+            ignore.case = T
+        )]
         annotation.info <- dat$other[[annotation.col]]
         annotation.info <- as.character(annotation.info[, 1])
     }
@@ -61,7 +65,14 @@ random <- c(rep("", length(sample)))
 if (chiptype == "empty") {
     chiptype <- "Affy"
 }
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group, description = sample), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group, description = sample),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Writing out data
 a <- try(library(chiptype, character.only = T))

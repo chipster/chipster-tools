@@ -9,7 +9,6 @@
 # PARAMETER OPTIONAL produce.flags: "Produce flags" TYPE [yes: yes, no: no] DEFAULT no (Automatic recording of Detection-value as flags)
 # PARAMETER OPTIONAL annotations: "Include original annotations" TYPE [yes: yes, no: no] DEFAULT no (Include the original probe annotations. Note that these might be very outdated.)
 
-
 # 10.4.2015 ML
 # 24.6.2015 ML small adjustments
 
@@ -125,36 +124,103 @@ if (id.type == "ProbeID") {
 }
 lib <- paste(chiptype, ".db", sep = "")
 
-write.table(data.frame(sample = sample.names, chiptype = lib, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample.names, chiptype = lib, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 
 if (chiptype != "Illumina") {
     # Including gene names to data
     library(lib, character.only = T)
     symbol <- gsub("\'", "", data.frame(unlist(as.list(get(paste(chiptype, "SYMBOL", sep = "")))))[rownames(dat2), ])
-    genename <- gsub("\'", "", data.frame(unlist(as.list(get(paste(chiptype, "GENENAME", sep = "")))))[rownames(dat2), ])
+    genename <- gsub(
+        "\'",
+        "",
+        data.frame(unlist(as.list(get(paste(chiptype, "GENENAME", sep = "")))))[rownames(dat2), ]
+    )
     symbol <- gsub("#", "", symbol)
     genename <- gsub("#", "", genename)
     symbol <- gsub("'", "", symbol)
     genename <- gsub("'", "", genename)
 
     if (produce.flags == "yes" && annotations == "no") {
-        write.table(data.frame(symbol, description = genename, dat2, flags), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(symbol, description = genename, dat2, flags),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     } else if (produce.flags == "yes" && annotations == "yes") {
-        write.table(data.frame(symbol, description = genename, orig_annotations, dat2, flags), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(symbol, description = genename, orig_annotations, dat2, flags),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     } else if (produce.flags == "no" && annotations == "yes") {
-        write.table(data.frame(symbol, description = genename, orig_annotations, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(symbol, description = genename, orig_annotations, dat2),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     } else {
-        write.table(data.frame(symbol, description = genename, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(symbol, description = genename, dat2),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     }
 } else {
     if (produce.flags == "yes" && annotations == "no") {
-        write.table(data.frame(dat2, flags), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(dat2, flags),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     } else if (produce.flags == "yes" && annotations == "yes") {
-        write.table(data.frame(orig_annotations, dat2, flags), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(orig_annotations, dat2, flags),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     } else if (produce.flags == "no" && annotations == "yes") {
-        write.table(data.frame(orig_annotations, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(orig_annotations, dat2),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     } else {
-        write.table(data.frame(dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = rownames(dat2))
+        write.table(
+            data.frame(dat2),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = rownames(dat2)
+        )
     }
 }

@@ -87,11 +87,30 @@ if (id.type == "entrez_id") {
 }
 
 # Check that the gene list actually contains at least one miRNA target
-try(merged.table <- read.mir(gene = gene.data.4, mirna = mirna.data.4, annotation = chip.type, org = organism, id = id_type), silent = FALSE)
+try(
+    merged.table <- read.mir(
+        gene = gene.data.4,
+        mirna = mirna.data.4,
+        annotation = chip.type,
+        org = organism,
+        id = id_type
+    ),
+    silent = FALSE
+)
 if (match("merged.table", ls(), nomatch = 0) == 0) {
-    stop("CHIPSTER-NOTE: There were no targets found in either TarBase or PicTar databases for the supplied list of miRNAs in the gene list selected. Try again by selecting a longer list of genes!")
+    stop(
+        "CHIPSTER-NOTE: There were no targets found in either TarBase or PicTar databases for the supplied list of miRNAs in the gene list selected. Try again by selecting a longer list of genes!"
+    )
 }
-merged.table <- read.mir(gene = gene.data.4, mirna = mirna.data.4, annotation = chip.type, , org = organism, id = id_type, verbose = TRUE)
+merged.table <- read.mir(
+    gene = gene.data.4,
+    mirna = mirna.data.4,
+    annotation = chip.type,
+    ,
+    org = organism,
+    id = id_type,
+    verbose = TRUE
+)
 
 # Change the symbols that come from the read.mir() function into
 # the ones that come from the org.Hs.eg.db package

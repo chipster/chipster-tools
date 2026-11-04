@@ -7,7 +7,6 @@
 # PARAMETER missing.row.max: "Missing values row max" TYPE INTEGER FROM 0 TO 100 DEFAULT 20 (Maximum number of missing values on a row, as a  percentage 0-100)
 # PARAMETER missing.column.max: "Missing values column max" TYPE INTEGER FROM 0 TO 100 DEFAULT 20 (Maximum number of missing values on a column, as a percentage 0-100)
 
-
 # JTT 22.06.2006: Imputation of missing values by mean or median
 # IS  12.10.2012: to cope with tables with gene descriptions (that typically contain 's)
 # ML 9.12.2016: Add option to impute also row wise
@@ -44,9 +43,8 @@ if (method == "mean" | method == "median") {
     # sample/array wise = column
     if (row.or.col == "column") {
         dat.impute <- impute(dat2, method)
-    }
-    # gene wise = row
-    else {
+    } else {
+        # gene wise = row
         dat.impute <- t(impute(t(dat2), method))
     }
     dat.impute <- data.frame(dat.impute, calls)
@@ -56,7 +54,12 @@ if (method == "knn") {
 
     if (max(apply(dat2, 2, function(z) sum(is.na(z))) / nrow(dat2)) > cmax) {
         namax <- max(apply(dat2, 2, function(z) sum(is.na(z))) / nrow(dat2))
-        stop(paste("CHIPSTER-NOTE: One of your columns has more NAs than anticipated. Please choose another imputation method or set Missing values column max to ", round(namax, 2) * 100, "%", sep = ""))
+        stop(paste(
+            "CHIPSTER-NOTE: One of your columns has more NAs than anticipated. Please choose another imputation method or set Missing values column max to ",
+            round(namax, 2) * 100,
+            "%",
+            sep = ""
+        ))
     }
 
     dat.impute <- impute.knn(as.matrix(dat2), k = K, rowmax = rmax, colmax = cmax, maxp = "p")

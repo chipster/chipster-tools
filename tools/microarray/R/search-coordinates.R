@@ -7,22 +7,23 @@
 # Ilari Scheinin <firstname.lastname@gmail.com>: 2012-12-13
 # MK, 25-10-2013, modified to accept also chr-columns. Modified so that rows without chr-information are removed
 
-
 # load inputs
 file <- "normalized.tsv"
 dat <- read.table(file, header = TRUE, sep = "\t", quote = "", row.names = 1, check.names = FALSE)
 
 if (length(grep("^chromosome$", colnames(dat))) == 1) {
-  chr_string <- "chromosome"
+    chr_string <- "chromosome"
 } else if (length(grep("^chr$", colnames(dat))) == 1) {
-  chr_string <- "chr"
+    chr_string <- "chr"
 } else {
-  chr_string <- "chromosome"
+    chr_string <- "chromosome"
 }
 
 pos <- c(chr_string, "start", "end")
 if (length(setdiff(pos, colnames(dat))) != 0) {
-  stop("CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome (or chr), start, end.")
+    stop(
+        "CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome (or chr), start, end."
+    )
 }
 
 # parse coordinates
@@ -38,13 +39,13 @@ dat <- dat[chr_listing == chromosome, ]
 dat <- dat[-which(is.na(dat[, 1])), ]
 
 if (length(which(dat$start >= start & dat$end <= end)) == 0) {
-  stop("CHIPSTER-NOTE: Given genomic region yields no matches.")
+    stop("CHIPSTER-NOTE: Given genomic region yields no matches.")
 }
 
 if (include.partial.overlaps == "no") {
-  dat <- dat[dat$start >= start & dat$end <= end, ]
+    dat <- dat[dat$start >= start & dat$end <= end, ]
 } else {
-  dat <- dat[dat$end > start & dat$start < end, ]
+    dat <- dat[dat$end > start & dat$start < end, ]
 }
 
 # write output

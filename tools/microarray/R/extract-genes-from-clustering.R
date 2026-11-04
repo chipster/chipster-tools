@@ -3,7 +3,6 @@
 # OUTPUT extract.tsv: extract.tsv
 # PARAMETER cluster.number: "Cluster number" TYPE INTEGER FROM 1 TO 1000 DEFAULT 1 (Cluster number to extract genes from.)
 
-
 # Extracts genes from the clustering result for a specific cluster
 # JTT 15.10.2007
 
@@ -13,10 +12,10 @@ dat <- read.table(file, header = T, sep = "\t", row.names = 1)
 
 # Sanity checks
 if (is.null(dat$cluster) == TRUE) {
-   stop("You haven't clustered your data, so there are no genes to extract! Cluster the data first.")
+    stop("You haven't clustered your data, so there are no genes to extract! Cluster the data first.")
 }
 if (cluster.number > max(dat$cluster)) {
-   stop("The cluster number is larger than the number of cluster in the current data! Use a smaller cluster number.")
+    stop("The cluster number is larger than the number of cluster in the current data! Use a smaller cluster number.")
 }
 
 # Extracting the genes

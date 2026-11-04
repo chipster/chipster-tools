@@ -48,10 +48,16 @@ gene.data.2 <- gene.data[, grep("chip", names(gene.data))]
 
 # check for unambiguity of sample identifiers
 if (nrow(mirna.phenodata) != length(unique(mirna.phenodata[, order.column]))) {
-    stop("CHIPSTER-NOTE: Unambigous sample identifiers in miRNA expression phenodata file: ", paste(mirna.phenodata[, order.column], collapse = ", "))
+    stop(
+        "CHIPSTER-NOTE: Unambigous sample identifiers in miRNA expression phenodata file: ",
+        paste(mirna.phenodata[, order.column], collapse = ", ")
+    )
 }
 if (nrow(gene.phenodata) != length(unique(gene.phenodata[, order.column]))) {
-    stop("CHIPSTER-NOTE: Unambigous sample identifiers in gene expression phenodata file: ", paste(gene.phenodata[, order.column], collapse = ", "))
+    stop(
+        "CHIPSTER-NOTE: Unambigous sample identifiers in gene expression phenodata file: ",
+        paste(gene.phenodata[, order.column], collapse = ", ")
+    )
 }
 
 # pick those samples that do have a matching pair
@@ -94,18 +100,43 @@ mirna.data.4 <- data.frame(mirna = rownames(mirna.data.3), exprs = mirna.data.3[
 gene.data.4 <- data.frame(gene = rownames(gene.data.3), exprs = gene.data.3[, 1])
 
 # check that the gene list actually contain at least one miRNA target
-try(merged.table <- read.mir(gene = gene.data.4, mirna = mirna.data.4, annotation = chip.type, org = organism, id = id_type), silent = TRUE)
+try(
+    merged.table <- read.mir(
+        gene = gene.data.4,
+        mirna = mirna.data.4,
+        annotation = chip.type,
+        org = organism,
+        id = id_type
+    ),
+    silent = TRUE
+)
 
 if (match("merged.table", ls(), nomatch = 0) == 0) {
-    stop("CHIPSTER-NOTE: There were no targets found in either TarBase or PicTar databases for the supplied list of miRNA:s in the gene list selected. Try again by selecting a longer list of genes!")
+    stop(
+        "CHIPSTER-NOTE: There were no targets found in either TarBase or PicTar databases for the supplied list of miRNA:s in the gene list selected. Try again by selecting a longer list of genes!"
+    )
 }
 
 # read.mir does something funny. Difficult to puzzle out which rows are selected why the function is applied separately for each sample
-merged.table <- read.mir(gene = gene.data.4, mirna = mirna.data.4, annotation = chip.type, verbose = TRUE, org = organism, id = id_type)
+merged.table <- read.mir(
+    gene = gene.data.4,
+    mirna = mirna.data.4,
+    annotation = chip.type,
+    verbose = TRUE,
+    org = organism,
+    id = id_type
+)
 for (count in 2:number.conditions) {
     mirna.data.4 <- data.frame(mirna = rownames(mirna.data.3), exprs = mirna.data.3[, count])
     gene.data.4 <- data.frame(gene = rownames(gene.data.3), exprs = gene.data.3[, count])
-    temp.table <- read.mir(gene = gene.data.4, mirna = mirna.data.4, annotation = chip.type, verbose = TRUE, org = organism, id = id_type)
+    temp.table <- read.mir(
+        gene = gene.data.4,
+        mirna = mirna.data.4,
+        annotation = chip.type,
+        verbose = TRUE,
+        org = organism,
+        id = id_type
+    )
     merged.table <- cbind(merged.table, temp.table)
 }
 
@@ -124,12 +155,26 @@ mirna.expression <- merged.table[, grep("mirExpr", names(merged.table))]
 gene.expression <- merged.table[, grep("geneExpr", names(merged.table))]
 
 # Calculate the pearson correlation value for each mirna-gene pair
-results.table <- data.frame(merged.table$mature_miRNA, merged.table$gene_id, merged.table$symbol, correlation.coefficient = NA, correlation.p.value = NA)
+results.table <- data.frame(
+    merged.table$mature_miRNA,
+    merged.table$gene_id,
+    merged.table$symbol,
+    correlation.coefficient = NA,
+    correlation.p.value = NA
+)
 names(results.table) <- c("miRNA", "entrez_id", "symbol", "correlation_coefficient", "p-value")
 number.mirna <- dim(merged.table)[1]
 for (mirna.count in 1:number.mirna) {
-    correlation.coefficient <- cor(as.numeric(mirna.expression[mirna.count, ]), as.numeric(gene.expression[mirna.count, ]), method = correlation.method)
-    correlation.p.value <- cor.test(as.numeric(mirna.expression[mirna.count, ]), as.numeric(gene.expression[mirna.count, ]), method = correlation.method)
+    correlation.coefficient <- cor(
+        as.numeric(mirna.expression[mirna.count, ]),
+        as.numeric(gene.expression[mirna.count, ]),
+        method = correlation.method
+    )
+    correlation.p.value <- cor.test(
+        as.numeric(mirna.expression[mirna.count, ]),
+        as.numeric(gene.expression[mirna.count, ]),
+        method = correlation.method
+    )
     correlation.p.value <- correlation.p.value$p.value
     results.table[mirna.count, 4] <- correlation.coefficient
     results.table[mirna.count, 5] <- correlation.p.value
@@ -149,7 +194,19 @@ results.negative <- results.table[results.table[, 4] <= 0, ]
 results.negative.significant <- results.negative[results.negative[, 5] <= p.value.threshold, ]
 
 # Write the results to tables to be read into Chipster
-write.table(results.positive.significant, file = "mirna-gene-positive-correlation.tsv", sep = "\t", quote = FALSE, row.names = TRUE)
-write.table(results.negative.significant, file = "mirna-gene-negative-correlation.tsv", sep = "\t", quote = FALSE, row.names = TRUE)
+write.table(
+    results.positive.significant,
+    file = "mirna-gene-positive-correlation.tsv",
+    sep = "\t",
+    quote = FALSE,
+    row.names = TRUE
+)
+write.table(
+    results.negative.significant,
+    file = "mirna-gene-negative-correlation.tsv",
+    sep = "\t",
+    quote = FALSE,
+    row.names = TRUE
+)
 
 # EOF

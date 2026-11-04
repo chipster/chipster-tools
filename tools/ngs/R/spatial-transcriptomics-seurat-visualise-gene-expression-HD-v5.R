@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 HD -Visualize gene expression" (Visualize the expression of selected genes in spatial transcriptomics data. This allows to observe spatial patterns of gene expression and correlate them with histological features.)
+# TOOL spatial-transcriptomics-seurat-visualise-gene-expression-HD-v5.R: "Seurat v5 -Visualize gene expression" (Given normalized Visium HD data, this tool visualizes the expression of selected genes on top of the tissue image. This allows to observe spatial patterns of gene expression and correlate them with histological features.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC (A Seurat object containing spatial transcriptomics data. This object has to be pre-processed and PCA has to be run)
 # INPUT OPTIONAL genes.txt: "Gene list in txt format" TYPE GENERIC (A tab-separated file with a list of genes)
 # OUTPUT OPTIONAL gene_expression_plot.pdf
@@ -51,7 +51,6 @@ genes <- trimws(genes)
 
 # Match the gene names in the given list and seurat object. Get indexes and find the wanted genes from seurat object
 match_genes <- function(gene_list, seurat_names) {
-
     gene_list_upper <- toupper(gene_list)
     seurat_names_upper <- toupper(seurat_names)
 
@@ -73,17 +72,24 @@ print(genes)
 
 # Check if any genes were found
 if (length(genes) == 0) {
-  stop("CHIPSTER-NOTE: None of the given genes were found in the Seurat object")
+    stop("CHIPSTER-NOTE: None of the given genes were found in the Seurat object")
 }
 
 # Plots
 pdf(file = "gene_expression_plot.pdf", width = width, height = height)
 
-plot_chunks <- split(genes, ceiling(seq_along(genes)/4))
+plot_chunks <- split(genes, ceiling(seq_along(genes) / 4))
 
 # NCOL = 2 ensure only 2 columns so basically 2x2 grid of plots
 for (i in plot_chunks) {
-    p1 <- SpatialFeaturePlot(seurat_obj, features = i, keep.scale = color.scale, pt.size.factor = point.size, ncol = 2, alpha = c(min_transparency, max_transparency))
+    p1 <- SpatialFeaturePlot(
+        seurat_obj,
+        features = i,
+        keep.scale = color.scale,
+        pt.size.factor = point.size,
+        ncol = 2,
+        alpha = c(min_transparency, max_transparency)
+    )
     print(p1)
 }
 

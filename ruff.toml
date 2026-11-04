@@ -1,0 +1,18 @@
+# Ruff formats the Python scripts. The Format workflow checks them with the
+# Ruff version pinned in .github/workflows/format.yml.
+
+# The python3 runtime runs the system Python of Ubuntu 20.04, 3.8, so Ruff
+# must not write newer syntax.
+target-version = "py38"
+
+# Ruff writes Python 3 syntax, so the Python 2 code (the old "python" runtime
+# and the match-mate-pairs scripts) isn't formatted.
+extend-exclude = [
+    "tools/common/python/lib/tool_utils_python2.py",
+    "tools/ngs/python/index-tophat2-tar.py",
+    "tools/ngs/shell/match-mate-pairs/",
+]
+
+# Applies the excludes also to files given by name, as the pre-commit hook
+# and editors do.
+force-exclude = true

@@ -61,7 +61,9 @@ if (conditional == "yes") {
     for (count in 1:length(probes.query)) {
         # merge GO id and term definition
         go.list <- unique(probes.2.go[[count]])
-        if (is.null(go.list)) go.list <- ""
+        if (is.null(go.list)) {
+            go.list <- ""
+        }
         go.list <- paste(go.list, Term(go.list))
         # concatenate GO list into single character vector
         go.list <- paste(go.list, collapse = "; ")
@@ -83,6 +85,13 @@ datannot[datannot == ""] <- NA
 # datannot <- cbind(datannot, row.index=rownames(datannot))
 
 # Writing out the annotated data
-write.table(data.frame(datannot), file = "data-with-annotations.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    data.frame(datannot),
+    file = "data-with-annotations.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 # EOF

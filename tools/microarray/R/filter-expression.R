@@ -7,14 +7,12 @@
 # PARAMETER scale.to.same.mean: "Scale to same mean" TYPE [yes: yes, no: no] DEFAULT no (Scale the data to the same mean before filtering. Scaling to the mean is only recommended for 2-color arrays, where this filtering tool can be used to filter out invariant genes.)
 # PARAMETER included.genes: "Included genes" TYPE [outside-the-range: outside-the-range, inside-the-range: inside-the-range] DEFAULT inside-the-range (Filtering method)
 
-
 # Parameter settings (default) for testing purposes
 # over.expressed.cutoff <-1
 # under.expressed.cutoff <--1
 # number.of.chips <-9
 # scale.to.same.mean <-"yes"
 # included.genes <-"outside-the-range"
-
 
 # Filtering by expression
 # JTT 9.6.2006
@@ -40,19 +38,19 @@ dat2 <- dat[, grep("chip", names(dat))]
 
 # Scaling the data to the same mean
 if (scale.to.same.mean == "yes") {
-   scaled.dat <- genescale(dat2)
+    scaled.dat <- genescale(dat2)
 } else {
-   scaled.dat <- dat2
+    scaled.dat <- dat2
 }
 
 # Filter
 # If a data value is smaller than up AND larger than down, recode it with 0, otherwise with 1
 if (meth == "outside-the-range") {
-   scaled.dat2 <- ifelse(scaled.dat <= up & scaled.dat >= down, 0, 1)
+    scaled.dat2 <- ifelse(scaled.dat <= up & scaled.dat >= down, 0, 1)
 }
 # If a data value is smaller than up AND larger than down, recode it with 0, otherwise with 1
 if (meth == "inside-the-range") {
-   scaled.dat2 <- ifelse(scaled.dat <= up & scaled.dat >= down, 1, 0)
+    scaled.dat2 <- ifelse(scaled.dat <= up & scaled.dat >= down, 1, 0)
 }
 
 # Calculate a sum of the number of chips the filtering criterion is fulfilled

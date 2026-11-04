@@ -38,7 +38,10 @@ if ("sequence" %in% colnames(dat) && (length(grep(dat$sequence[1], mirna_ids[1])
     mirna_ids <- NULL
     for (i in 1:length(mirna_id_list)) {
         # remove last three sections of the id
-        mirna_ids <- c(mirna_ids, paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_"))
+        mirna_ids <- c(
+            mirna_ids,
+            paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_")
+        )
     }
 }
 
@@ -49,7 +52,9 @@ if (conditional.testing == "no") {
     conditional <- FALSE
 } else {
     if (p.adjust.method != "none") {
-        stop("CHIPSTER-NOTE: Multiple testing correction can be applied only when performing unconditional testing. Please set conditional.testing to no, or p.adjust.method to none. Usually the preferred method is to use conditional testing.")
+        stop(
+            "CHIPSTER-NOTE: Multiple testing correction can be applied only when performing unconditional testing. Please set conditional.testing to no, or p.adjust.method to none. Usually the preferred method is to use conditional testing."
+        )
     }
     conditional <- TRUE
 }
@@ -82,13 +87,18 @@ if (species == "mouse") {
     # selected.genes <- unique(selected.genes)
 
     if (length(selected.genes) == 0) {
-        stop("CHIPSTER-NOTE: No target genes were found for the input list of miRNA names. Please make sure that you are using official miRNA names.")
+        stop(
+            "CHIPSTER-NOTE: No target genes were found for the input list of miRNA names. Please make sure that you are using official miRNA names."
+        )
     }
     annotpkg <- "org.Mm.eg.db"
 } else if (species == "rat") {
     library(org.Rn.eg.db)
     # targets <- miRBase2df.fun(url="ftp://ftp.sanger.ac.uk/pub/mirbase/targets/v5/arch.v5.txt.rattus_norvegicus.zip")
-    targets <- read.table(file.path(chipster.tools.path, "miRNA_mappings", "mirna_mappings_rnorvegicus.txt"), sep = "\t")
+    targets <- read.table(
+        file.path(chipster.tools.path, "miRNA_mappings", "mirna_mappings_rnorvegicus.txt"),
+        sep = "\t"
+    )
 
     ensembl.to.entrez <- as.list(org.Rn.egENSEMBLTRANS2EG)
     reference.genes <- unique(unlist(ensembl.to.entrez[unique(targets$tran)]))
@@ -96,7 +106,9 @@ if (species == "mouse") {
 
     # check that it was indeed possible to identify targets for the input list of miRNA names
     if (length(selected.genes) == 0) {
-        stop("CHIPSTER-NOTE: No target genes were found for the input list of miRNA names. Please make sure that you are using official miRNA names.")
+        stop(
+            "CHIPSTER-NOTE: No target genes were found for the input list of miRNA names. Please make sure that you are using official miRNA names."
+        )
     }
     annotpkg <- "org.Rn.eg.db"
 } else {
@@ -123,16 +135,34 @@ if (species == "mouse") {
 
     # check that it was indeed possible to identify targets for the input list of miRNA names
     if (length(selected.genes) == 0) {
-        stop("CHIPSTER-NOTE: No target genes were found for the input list of miRNA names. Please make sure that you are using official miRNA names.")
+        stop(
+            "CHIPSTER-NOTE: No target genes were found for the input list of miRNA names. Please make sure that you are using official miRNA names."
+        )
     }
     annotpkg <- "org.Hs.eg.db"
 }
 
 # define the output variable
-output <- data.frame(total = integer(0), expected = numeric(0), observed = integer(0), p.value = numeric(0), description = character(0), ontology = character(0))
+output <- data.frame(
+    total = integer(0),
+    expected = numeric(0),
+    observed = integer(0),
+    p.value = numeric(0),
+    description = character(0),
+    ontology = character(0)
+)
 
 if (ontology == "biological_process" || ontology == "all") {
-    params <- new("GOHyperGParams", geneIds = selected.genes, universeGeneIds = reference.genes, annotation = annotpkg, ontology = "BP", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
+    params <- new(
+        "GOHyperGParams",
+        geneIds = selected.genes,
+        universeGeneIds = reference.genes,
+        annotation = annotpkg,
+        ontology = "BP",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
     go <- hyperGTest(params)
     go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
@@ -144,14 +174,30 @@ if (ontology == "biological_process" || ontology == "all") {
             go.table$ontology <- "biological process"
             colnames(go.table) <- colnames(output)
             output <- rbind(output, go.table)
-            go.table$description <- paste('<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=', rownames(go.table), '">', go.table$description, "</a>", sep = "")
+            go.table$description <- paste(
+                '<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
             HTML(go.table, file = "hyperg_go.html", append = TRUE, Border = 0, innerBorder = 1)
         }
     }
 }
 
 if (ontology == "molecular_function" || ontology == "all") {
-    params <- new("GOHyperGParams", geneIds = selected.genes, universeGeneIds = reference.genes, annotation = annotpkg, ontology = "MF", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
+    params <- new(
+        "GOHyperGParams",
+        geneIds = selected.genes,
+        universeGeneIds = reference.genes,
+        annotation = annotpkg,
+        ontology = "MF",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
     go <- hyperGTest(params)
     go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
@@ -163,14 +209,30 @@ if (ontology == "molecular_function" || ontology == "all") {
             go.table$ontology <- "molecular function"
             colnames(go.table) <- colnames(output)
             output <- rbind(output, go.table)
-            go.table$description <- paste('<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=', rownames(go.table), '">', go.table$description, "</a>", sep = "")
+            go.table$description <- paste(
+                '<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
             HTML(go.table, file = "hyperg_go.html", append = TRUE, Border = 0, innerBorder = 1)
         }
     }
 }
 
 if (ontology == "cellular_component" || ontology == "all") {
-    params <- new("GOHyperGParams", geneIds = selected.genes, universeGeneIds = reference.genes, annotation = annotpkg, ontology = "CC", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
+    params <- new(
+        "GOHyperGParams",
+        geneIds = selected.genes,
+        universeGeneIds = reference.genes,
+        annotation = annotpkg,
+        ontology = "CC",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
     go <- hyperGTest(params)
     go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
@@ -182,7 +244,14 @@ if (ontology == "cellular_component" || ontology == "all") {
             go.table$ontology <- "cellular component"
             colnames(go.table) <- colnames(output)
             output <- rbind(output, go.table)
-            go.table$description <- paste('<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=', rownames(go.table), '">', go.table$description, "</a>", sep = "")
+            go.table$description <- paste(
+                '<a href="http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
             HTML(go.table, file = "hyperg_go.html", append = TRUE, Border = 0, innerBorder = 1)
         }
     }

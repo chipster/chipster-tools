@@ -5,7 +5,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
-
 # Non-metric multidimensional scaling
 # JTT 14.1.2008
 
@@ -48,7 +47,9 @@ if (length(levels(as.factor(phenodata$group))) > 0) {
     group_identity <- as.character(phenodata$group)
     for (count_levels in 1:length(group_levels)) {
         for (count_samples in 1:length(phenodata$group)) {
-            if (group_identity[count_samples] == group_levels[count_levels]) sample_colors[count_samples] <- 1 + count_levels
+            if (group_identity[count_samples] == group_levels[count_levels]) {
+                sample_colors[count_samples] <- 1 + count_levels
+            }
         }
     }
     level_colors <- levels(as.factor(sample_colors))

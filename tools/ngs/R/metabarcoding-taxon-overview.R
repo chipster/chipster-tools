@@ -18,8 +18,10 @@ taxano <- ntaxa(ps)
 
 # if "Species" selected for taxon tabulation, check that using 7-level classification
 taxlength <- length(colnames(tax_table(ps)))
-if (type == "species" &&
-    taxlength == "6") {
+if (
+    type == "species" &&
+        taxlength == "6"
+) {
     stop("Data set lacks species-level assignments; please choose another level of organization.")
 }
 

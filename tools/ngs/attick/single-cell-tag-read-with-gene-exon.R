@@ -5,7 +5,6 @@
 # OUTPUT OPTIONAL merged_tagged.bam.bai
 # PARAMETER OPTIONAL organism: "GTF" TYPE [other, "FILES genomes/gtf .gtf"] DEFAULT other (GTF file to be used in tagging. No need to select anything here if you are using your own GTF file.)
 
-
 # OUTPUT OPTIONAL log.txt
 
 # ML 12.10.2016 created
@@ -27,12 +26,25 @@ if (file.exists("own.gtf")) {
     library(tools)
     dir <- getwd()
     dir <- file_path_as_absolute(dir)
-    command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", dir, "/own.gtf TAG=GE  2>> log.txt", sep = "")
+    command <- paste(
+        path.dropseq,
+        "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=",
+        dir,
+        "/own.gtf TAG=GE  2>> log.txt",
+        sep = ""
+    )
 
     # if using one of the GTFs available on Chipster:
 } else {
     gtf.path <- "/opt/chipster/genomes/gtf/"
-    command <- paste(path.dropseq, "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=", gtf.path, organism, ".gtf TAG=GE  2>> log.txt", sep = "")
+    command <- paste(
+        path.dropseq,
+        "/TagReadWithGeneExon I=merged.bam O=merged_tagged.bam ANNOTATIONS_FILE=",
+        gtf.path,
+        organism,
+        ".gtf TAG=GE  2>> log.txt",
+        sep = ""
+    )
 }
 
 # run the tool

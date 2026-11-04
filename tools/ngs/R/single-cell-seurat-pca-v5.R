@@ -67,7 +67,12 @@ if (cells_left > 500) {
 ElbowPlot(seurat_obj, ndims = num.of.pcas) + ggtitle("Amount of variation in the data explained by each PC")
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2) # , cex=0.8
+textplot(
+    paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))),
+    halign = "center",
+    valign = "center",
+    cex = 2
+) # , cex=0.8
 
 dev.off() # close the pdf
 

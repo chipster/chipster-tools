@@ -22,7 +22,6 @@ unzipIfGZipFile("fastqfile")
 binary.prinseq <- c(file.path(chipster.tools.path, "prinseq", "prinseq-lite.pl"))
 
 
-
 filter.params <- paste("")
 filter.params <- paste(filter.params, "-max_len", max.len)
 

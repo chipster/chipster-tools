@@ -33,10 +33,16 @@ clusters <- trimws(unlist(strsplit(clusters, ",")))
 
 reference@active.assay <- "RNA"
 
-markers_sc <- FindAllMarkers(reference,
-    only.pos = TRUE, logfc.threshold = 0.1,
-    test.use = "wilcox", min.pct = 0.05, min.diff.pct = 0.1, max.cells.per.ident = 200,
-    return.thresh = 0.05, assay = "RNA"
+markers_sc <- FindAllMarkers(
+    reference,
+    only.pos = TRUE,
+    logfc.threshold = 0.1,
+    test.use = "wilcox",
+    min.pct = 0.05,
+    min.diff.pct = 0.1,
+    max.cells.per.ident = 200,
+    return.thresh = 0.05,
+    assay = "RNA"
 )
 
 markers_sc <- markers_sc[markers_sc$gene %in% rownames(seurat_obj), ] # NEW 21.03
@@ -44,8 +50,7 @@ markers_sc <- markers_sc[markers_sc$gene %in% rownames(seurat_obj), ] # NEW 21.0
 # Select top 20 genes per cluster, select top by first p-value, then absolute
 # diff in pct, then quota of pct.
 markers_sc$pct.diff <- markers_sc$pct.1 - markers_sc$pct.2
-markers_sc$log.pct.diff <- log2((markers_sc$pct.1 * 99 + 1) / (markers_sc$pct.2 * 99 +
-    1))
+markers_sc$log.pct.diff <- log2((markers_sc$pct.1 * 99 + 1) / (markers_sc$pct.2 * 99 + 1))
 markers_sc %>%
     group_by(cluster) %>%
     top_n(-100, p_val) %>%
@@ -54,13 +59,21 @@ markers_sc %>%
 m_feats <- unique(as.character(top_num_genes$gene))
 
 
-eset_SC <- ExpressionSet(assayData = as.matrix(reference@assays$RNA@counts[m_feats, ]), phenoData = AnnotatedDataFrame(reference@meta.data))
-eset_ST <- ExpressionSet(assayData = as.matrix(seurat_obj@assays$Spatial@counts[m_feats, ]), phenoData = AnnotatedDataFrame(seurat_obj@meta.data))
+eset_SC <- ExpressionSet(
+    assayData = as.matrix(reference@assays$RNA@counts[m_feats, ]),
+    phenoData = AnnotatedDataFrame(reference@meta.data)
+)
+eset_ST <- ExpressionSet(
+    assayData = as.matrix(seurat_obj@assays$Spatial@counts[m_feats, ]),
+    phenoData = AnnotatedDataFrame(seurat_obj@meta.data)
+)
 
 # Deconvolve
 
 deconvolution_crc <- suppressMessages(SCDC::SCDC_prop(
-    bulk.eset = eset_ST, sc.eset = eset_SC, ct.varname = "subclass",
+    bulk.eset = eset_ST,
+    sc.eset = eset_SC,
+    ct.varname = "subclass",
     ct.sub = as.character(unique(eset_SC$subclass))
 ))
 
@@ -85,26 +98,24 @@ save(seurat_obj, file = "seurat_obj_deconv.Robj")
 pdf(file = "SpatialFeaturePlot.pdf")
 
 DefaultAssay(seurat_obj) <- "SCDC"
-SpatialFeaturePlot(seurat_obj,
-    features = clusters, pt.size.factor = 1.6, ncol = 2,
-    crop = TRUE
-)
+SpatialFeaturePlot(seurat_obj, features = clusters, pt.size.factor = 1.6, ncol = 2, crop = TRUE)
 
 dev.off()
 
 
 pdf(file = "spatially_variable_cell_types.pdf")
 
-seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj,
-    assay = "SCDC", selection.method = "markvariogram",
-    features = rownames(seurat_obj), r.metric = 5, slot = "data"
+seurat_obj <- FindSpatiallyVariableFeatures(
+    seurat_obj,
+    assay = "SCDC",
+    selection.method = "markvariogram",
+    features = rownames(seurat_obj),
+    r.metric = 5,
+    slot = "data"
 )
 top.clusters <- head(SpatiallyVariableFeatures(seurat_obj), top_num_cluster)
 SpatialPlot(object = seurat_obj, features = top.clusters, ncol = 2)
 # dev.off()
 # pdf(file="VlnPlot.pdf")
-VlnPlot(seurat_obj,
-    group.by = "seurat_clusters", features = top.clusters, pt.size = 0,
-    ncol = 2
-)
+VlnPlot(seurat_obj, group.by = "seurat_clusters", features = top.clusters, pt.size = 0, ncol = 2)
 dev.off()

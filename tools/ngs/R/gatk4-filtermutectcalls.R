@@ -18,7 +18,14 @@ gatk.binary <- c(file.path(chipster.tools.path, "GATK4", "gatk"))
 formatGatkVcf("input.vcf")
 
 # Run FilterMutectCalls
-command <- paste(gatk.binary, "FilterMutectCalls", "-V input.vcf.gz", "-contamination-table contaminationtable", "--stats statistics.tsv", "-O mutect2_filtered.vcf")
+command <- paste(
+    gatk.binary,
+    "FilterMutectCalls",
+    "-V input.vcf.gz",
+    "-contamination-table contaminationtable",
+    "--stats statistics.tsv",
+    "-O mutect2_filtered.vcf"
+)
 runExternal(command)
 
 # Return error message if no result

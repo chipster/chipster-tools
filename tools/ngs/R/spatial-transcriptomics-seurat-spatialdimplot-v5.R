@@ -26,7 +26,12 @@ pdf(file = "spatialdimplot.pdf", width = 13, height = 7)
 # Run SpatialDimPlot with the chosen clusters
 clusters <- trimws(unlist(strsplit(clusters, ",")))
 clusters <- strtoi(clusters, base = 0L)
-SpatialDimPlot(seurat_obj, cells.highlight = CellsByIdentities(seurat_obj, idents = c(clusters)), facet.highlight = TRUE, ncol = 3)
+SpatialDimPlot(
+    seurat_obj,
+    cells.highlight = CellsByIdentities(seurat_obj, idents = c(clusters)),
+    facet.highlight = TRUE,
+    ncol = 3
+)
 
 # Close the pdf
 dev.off()

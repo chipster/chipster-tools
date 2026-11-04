@@ -6,7 +6,6 @@
 # OUTPUT OPTIONAL data.html
 # OUTPUT OPTIONAL log.txt
 
-
 # KM 8.11. 2013
 
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")

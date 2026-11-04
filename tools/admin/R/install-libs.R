@@ -198,23 +198,51 @@ smart.install.packages(bioconductor.package = "humanomniexpress12v1bCrlmm", mirr
 
 
 # Install non-repo packages
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/NoWaves_0.4.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/FruitFlyAgilent.db.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/hgug4851a.db.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtest_1.1.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtestpar_0.0.tar.gz")
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/NoWaves_0.4.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/FruitFlyAgilent.db.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/hgug4851a.db.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtest_1.1.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CGHtestpar_0.0.tar.gz"
+)
 smart.install.packages(url.package = "http://addictedtor.free.fr/packages/fpc_1.1-5.tar.gz")
 smart.install.packages(url.package = "http://www.math.utu.fi/projects/software/bio/ROTS_1.1.1.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/A2R_0.0-4.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/exon.pmcdf_1.1.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mouseexonpmcdf_1.1.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/ratexonpmcdf_1.1.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/intCNGEan_0.55.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CORNA_1.2.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/WECCA_0.40.tar.gz")
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/zinba_2.02.03.tar.gz")
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/A2R_0.0-4.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/exon.pmcdf_1.1.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mouseexonpmcdf_1.1.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/ratexonpmcdf_1.1.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/intCNGEan_0.55.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/CORNA_1.2.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/WECCA_0.40.tar.gz"
+)
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/zinba_2.02.03.tar.gz"
+)
 smart.install.packages("QDNAseq", mirror = "http://www.bioconductor.org/packages/2.14/bioc", update = 1) # This package is in Bioconductor only since version 2.14 (which is for R-3.1), hence the "forced" install instead of regular Bioconductor installation (which for R-3.0 uses Bioconductor 2.13).
-smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mgug4852a.db_1.0.0.tar.gz")
+smart.install.packages(
+    url.package = "http://www.nic.funet.fi/pub/sci/molbio/chipster/dist/tools_extras/R_libraries/mgug4852a.db_1.0.0.tar.gz"
+)
 
 
 # affy_20 for R-2.12"
@@ -252,28 +280,81 @@ smart.install.packages(url.package = "http://www.nic.funet.fi/pub/sci/molbio/chi
 # smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv2BeadID.db_1.8.0.tar.gz");
 # smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv3BeadID.db_1.8.0.tar.gz");
 # smart.install.packages(url.package="ftp://ftp.au.freebsd.org/pub/bioconductor/packages/2.8/data/annotation/src/contrib/illuminaHumanv4BeadID.db_1.8.0.tar.gz");
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev2BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1p1BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaRatv1BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv1BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv2BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv3BeadID.db_1.8.0.tar.gz")
-smart.install.packages(url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv4BeadID.db_1.8.0.tar.gz")
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev2BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaMousev1p1BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaRatv1BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv1BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv2BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv3BeadID.db_1.8.0.tar.gz"
+)
+smart.install.packages(
+    url.package = "ftp://ctan.uib.no/pub/bioconductor/2.7/data/annotation/src/contrib/illuminaHumanv4BeadID.db_1.8.0.tar.gz"
+)
 # Install the whole annotation repository from Bioconductor
 smart.install.bioconductor.repo(repo.index = 3, mirror = repo.bioc) # for R 3.0.0, repo number 3 is annotations (might change)
 
 # Install BrainArray custom CDF's.
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp", update = 1)
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp", update = 1)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp",
+    update = 1
+)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp",
+    update = 1
+)
 # Install exon arrays from BrainArray. Parameter chiptype can be used to grep files with a certain substring.
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "ex", update = 1)
-smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "hta", update = 1)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+    chiptype = "ex",
+    update = 1
+)
+smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+    chiptype = "hta",
+    update = 1
+)
 
 # Test if R.script has been linked to appropriate custom_cdf packages. Not perfect, but better than nothing.
 # NOTE: below commands should match those listed above
-db.custom.packages <- smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp", list.only = 1)
-db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp", list.only = 1))
-db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "ex", list.only = 1))
-db.custom.packages <- c(db.custom.packages, smart.install.scavenge.web.packages("http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp", chiptype = "hta", list.only = 1))
+db.custom.packages <- smart.install.scavenge.web.packages(
+    "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/entrezg.asp",
+    list.only = 1
+)
+db.custom.packages <- c(
+    db.custom.packages,
+    smart.install.scavenge.web.packages(
+        "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/tairg.asp",
+        list.only = 1
+    )
+)
+db.custom.packages <- c(
+    db.custom.packages,
+    smart.install.scavenge.web.packages(
+        "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+        chiptype = "ex",
+        list.only = 1
+    )
+)
+db.custom.packages <- c(
+    db.custom.packages,
+    smart.install.scavenge.web.packages(
+        "http://brainarray.mbni.med.umich.edu/Brainarray/Database/CustomCDF/latest/ense.asp",
+        chiptype = "hta",
+        list.only = 1
+    )
+)
 check.affy.customnames(script.basename, db.custom.packages)

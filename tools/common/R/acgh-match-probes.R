@@ -27,10 +27,16 @@ phenodata_exp <- readPhenodata("phenodata_exp.tsv")
 
 # check for unambiguity of sample identifiers
 if (nrow(phenodata_cgh) != length(unique(phenodata_cgh[, samples_cgh]))) {
-  stop("CHIPSTER-NOTE: Unambigous copy number sample identifiers: ", paste(phenodata_cgh[duplicated(phenodata_cgh[, samples_cgh]), samples_cgh], collapse = ", "))
+    stop(
+        "CHIPSTER-NOTE: Unambigous copy number sample identifiers: ",
+        paste(phenodata_cgh[duplicated(phenodata_cgh[, samples_cgh]), samples_cgh], collapse = ", ")
+    )
 }
 if (nrow(phenodata_exp) != length(unique(phenodata_exp[, samples_exp]))) {
-  stop("CHIPSTER-NOTE: Unambigous expression sample identifiers: ", paste(phenodata_exp[duplicated(phenodata_exp[, samples_exp]), samples_exp], collapse = ", "))
+    stop(
+        "CHIPSTER-NOTE: Unambigous expression sample identifiers: ",
+        paste(phenodata_exp[duplicated(phenodata_exp[, samples_exp]), samples_exp], collapse = ", ")
+    )
 }
 
 common.samples <- intersect(phenodata_cgh[, samples_cgh], phenodata_exp[, samples_exp])
@@ -58,7 +64,7 @@ phenodata_cgh <- phenodata_cgh[index_cgh, ]
 phenodata_exp <- phenodata_exp[index_exp, ]
 phenodata_exp$description_cgh <- phenodata_cgh$description
 for (col in setdiff(colnames(phenodata_cgh), colnames(phenodata_exp))) {
-  phenodata_exp[, col] <- phenodata_cgh[, col]
+    phenodata_exp[, col] <- phenodata_cgh[, col]
 }
 phenodata_exp$sample <- sprintf("microarray%.3i", 1:row(phenodata_exp))
 phenodata_exp$n <- NULL

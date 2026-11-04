@@ -49,7 +49,17 @@ for (i in 1:how_many_samples) {
         print(VlnPlot(a_sample, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2))
     }
     # Number of cells:
-    textplot(paste("\v \v Number of \n \v \v cells: \n \v \v in sample ", a_sample_name, ": ", length(colnames(x = a_sample))), halign = "center", valign = "center", cex = 2)
+    textplot(
+        paste(
+            "\v \v Number of \n \v \v cells: \n \v \v in sample ",
+            a_sample_name,
+            ": ",
+            length(colnames(x = a_sample))
+        ),
+        halign = "center",
+        valign = "center",
+        cex = 2
+    )
     dev.off() # close the pdf
 
     # Save the subsetted Robj

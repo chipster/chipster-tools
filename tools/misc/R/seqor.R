@@ -57,7 +57,12 @@ if (num.queryseq > 100000) {
 
 
 emboss.binary <- file.path(emboss.path, "listor")
-command.full <- paste(emboss.binary, " -firstsequences sequences1.txt -secondsequences sequences2.txt -outfile resultlist.txt -operator", operator, "  > log.txt 2>&1")
+command.full <- paste(
+    emboss.binary,
+    " -firstsequences sequences1.txt -secondsequences sequences2.txt -outfile resultlist.txt -operator",
+    operator,
+    "  > log.txt 2>&1"
+)
 system(command.full)
 
 system("ls -l >> log.txt")

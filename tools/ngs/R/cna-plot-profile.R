@@ -24,18 +24,18 @@ chrs.to.plot <- parseChromosomesToPlot(chromosomes, fData(signals)$chromosome)
 library(png)
 tmpfiles <- character(length(samples.to.plot))
 for (i in 1:length(samples.to.plot)) {
-  tmpfiles[i] <- tempfile()
-  bitmap(tmpfiles[i], width = 11.7, height = 8.3, units = "in", res = 300)
-  plot(signals[chrs.to.plot, samples.to.plot[i]])
-  dev.off()
+    tmpfiles[i] <- tempfile()
+    bitmap(tmpfiles[i], width = 11.7, height = 8.3, units = "in", res = 300)
+    plot(signals[chrs.to.plot, samples.to.plot[i]])
+    dev.off()
 }
 
 pdf(file = "cna-profile.pdf", paper = "a4r", width = 0, height = 0)
 par(mai = c(0, 0, 0, 0))
 for (i in 1:length(samples.to.plot)) {
-  plotPNG <- readPNG(tmpfiles[i])
-  plot.new()
-  rasterImage(plotPNG, 0, 0, 1, 1)
+    plotPNG <- readPNG(tmpfiles[i])
+    plot.new()
+    rasterImage(plotPNG, 0, 0, 1, 1)
 }
 dev.off()
 

@@ -49,7 +49,15 @@ x.lumi <- lumiR("chip.tsv", lib.mapping = mapping)
 # Correct for the problems with Array_Address_IDs
 if (probe.identifier == "Array_Address_ID") {
     `getChipInfo` <-
-        function(x, lib.mapping = NULL, species = c("Human", "Mouse", "Rat", "Unknown"), chipVersion = NULL, idMapping = FALSE, returnAllMatches = FALSE, verbose = TRUE) {
+        function(
+            x,
+            lib.mapping = NULL,
+            species = c("Human", "Mouse", "Rat", "Unknown"),
+            chipVersion = NULL,
+            idMapping = FALSE,
+            returnAllMatches = FALSE,
+            verbose = TRUE
+        ) {
             ## Function to make sure the output mapping matches the inputID.bak
             matchInputID <- function(mapping, inputID.bak) {
                 ## We assume mapping IDs are a subset of the names of inputID.bak
@@ -92,7 +100,6 @@ if (probe.identifier == "Array_Address_ID") {
                 return(mapping.new)
             }
 
-
             if (is(x, "ExpressionSet")) {
                 inputID <- featureNames(x)
             } else if (is(x, "matrix") || is(x, "data.frame")) {
@@ -104,25 +111,46 @@ if (probe.identifier == "Array_Address_ID") {
             inputID <- unique(inputID)
             species <- match.arg(species)
             if (species == "Unknown" && is.null(lib.mapping)) {
-                human.match <- getChipInfo(inputID, species = "Human", idMapping = idMapping, returnAllMatches = returnAllMatches, verbose = FALSE)
-                mouse.match <- getChipInfo(inputID, species = "Mouse", idMapping = idMapping, returnAllMatches = returnAllMatches, verbose = FALSE)
-                rat.match <- getChipInfo(inputID, species = "Rat", idMapping = idMapping, returnAllMatches = returnAllMatches, verbose = FALSE)
-                bestChip <- which.max(c(length(human.match$matchedProbeNumber), length(mouse.match$matchedProbeNumber), length(rat.match$matchedProbeNumber)))
-                best.match <- switch(bestChip,
-                    human.match,
-                    mouse.match,
-                    rat.match
+                human.match <- getChipInfo(
+                    inputID,
+                    species = "Human",
+                    idMapping = idMapping,
+                    returnAllMatches = returnAllMatches,
+                    verbose = FALSE
                 )
+                mouse.match <- getChipInfo(
+                    inputID,
+                    species = "Mouse",
+                    idMapping = idMapping,
+                    returnAllMatches = returnAllMatches,
+                    verbose = FALSE
+                )
+                rat.match <- getChipInfo(
+                    inputID,
+                    species = "Rat",
+                    idMapping = idMapping,
+                    returnAllMatches = returnAllMatches,
+                    verbose = FALSE
+                )
+                bestChip <- which.max(c(
+                    length(human.match$matchedProbeNumber),
+                    length(mouse.match$matchedProbeNumber),
+                    length(rat.match$matchedProbeNumber)
+                ))
+                best.match <- switch(bestChip, human.match, mouse.match, rat.match)
                 return(best.match)
             } else {
                 if (is.null(lib.mapping)) {
-                    lib.mapping <- switch(species,
+                    lib.mapping <- switch(
+                        species,
                         "Rat" = "lumiRatIDMapping",
                         "Human" = "lumiHumanIDMapping",
                         "Mouse" = "lumiMouseIDMapping"
                     )
                 }
-                if (!require(lib.mapping, character = TRUE)) stop(paste(lib.mapping, "is required!"))
+                if (!require(lib.mapping, character = TRUE)) {
+                    stop(paste(lib.mapping, "is required!"))
+                }
                 # dbconn <- sub("\\.db", "_dbconn", lib.mapping)
                 dbconn <- paste(lib.mapping, "_dbconn", sep = "")
                 conn <- do.call(dbconn, list())
@@ -144,8 +172,12 @@ if (probe.identifier == "Array_Address_ID") {
                     ## return the entire table based on chipVersion
                     mapping <- dbReadTable(conn, chipVersion)
                     returnList <- list(
-                        chipVersion = chipVersion, species = species, IDType = NA, chipProbeNumber = nrow(mapping),
-                        inputProbeNumber = 0, matchedProbeNumber = NA
+                        chipVersion = chipVersion,
+                        species = species,
+                        IDType = NA,
+                        chipProbeNumber = nrow(mapping),
+                        inputProbeNumber = 0,
+                        matchedProbeNumber = NA
                     )
                 } else {
                     matchLen <- NULL
@@ -178,11 +210,19 @@ if (probe.identifier == "Array_Address_ID") {
                     }
                     bestMatchLen <- max(matchLen)
                     if (bestMatchLen == 0) {
-                        if (verbose) warning("No matches were found!\n")
-                        return(c(list(
-                            chipVersion = NULL, species = species, IDType = NULL, chipProbeNumber = NULL,
-                            matchedProbeNumber = bestMatchLen
-                        ), idMapping = NULL))
+                        if (verbose) {
+                            warning("No matches were found!\n")
+                        }
+                        return(c(
+                            list(
+                                chipVersion = NULL,
+                                species = species,
+                                IDType = NULL,
+                                chipProbeNumber = NULL,
+                                matchedProbeNumber = bestMatchLen
+                            ),
+                            idMapping = NULL
+                        ))
                     } else if (bestMatchLen < lenID && verbose) {
                         warning("Some input IDs can not be matched!\n")
                     }
@@ -229,7 +269,9 @@ if (probe.identifier == "Array_Address_ID") {
                         fieldName.match <- matchField[matchInd]
                         matchLen.match <- matchLen[matchInd]
                         probeNumber <- NULL
-                        if (idMapping) mapping <- NULL
+                        if (idMapping) {
+                            mapping <- NULL
+                        }
                         for (i in seq(matchInd)) {
                             table.i <- dbReadTable(conn, tableName.match[i])
                             if (idMapping) {
@@ -277,29 +319,46 @@ if (probe.identifier == "Array_Address_ID") {
                         }
                     }
                     returnList <- list(
-                        chipVersion = tableName.match, species = species, IDType = fieldName.match, chipProbeNumber = probeNumber,
-                        inputProbeNumber = length(inputID), matchedProbeNumber = matchLen.match
+                        chipVersion = tableName.match,
+                        species = species,
+                        IDType = fieldName.match,
+                        chipProbeNumber = probeNumber,
+                        inputProbeNumber = length(inputID),
+                        matchedProbeNumber = matchLen.match
                     )
                 }
-                if (idMapping) returnList <- c(returnList, list(idMapping = mapping))
+                if (idMapping) {
+                    returnList <- c(returnList, list(idMapping = mapping))
+                }
 
                 return(returnList)
             }
         }
 
     `addNuID2lumi` <-
-        function(x.lumi, annotationFile = NULL, sep = NULL, lib.mapping = NULL, annotationColName = c(sequence = "Probe_Sequence", target = "ILMN_Gene", probe = "Probe_Id"), verbose = TRUE) {
+        function(
+            x.lumi,
+            annotationFile = NULL,
+            sep = NULL,
+            lib.mapping = NULL,
+            annotationColName = c(sequence = "Probe_Sequence", target = "ILMN_Gene", probe = "Probe_Id"),
+            verbose = TRUE
+        ) {
             history.submitted <- as.character(Sys.time())
 
             ## check whether the object is nuID annotated.
             exprs <- exprs(x.lumi)
             id <- rownames(exprs)
             if (all(sapply(id[1:50], is.nuID))) {
-                if (verbose) cat("The lumiBatch object is already nuID annotated!\n")
+                if (verbose) {
+                    cat("The lumiBatch object is already nuID annotated!\n")
+                }
                 return(x.lumi)
             }
             if (!is.null(lib.mapping)) {
-                if (length(grep("lumi.*\\.db", lib.mapping)) == 0 && length(grep("lumi.*IDMapping", lib.mapping)) == 0) {
+                if (
+                    length(grep("lumi.*\\.db", lib.mapping)) == 0 && length(grep("lumi.*IDMapping", lib.mapping)) == 0
+                ) {
                     warning(paste(lib.mapping, "does not include nuID conversion information!\n"))
                     lib.mapping <- NULL
                 }
@@ -336,7 +395,9 @@ if (probe.identifier == "Array_Address_ID") {
                         if (sepNum >= 2) {
                             sep <- ","
                         } else {
-                            stop("The seperator is not Tab or comma!\n Please sepecify the seperator used in the file!\n")
+                            stop(
+                                "The seperator is not Tab or comma!\n Please sepecify the seperator used in the file!\n"
+                            )
                         }
                     }
                 }
@@ -345,7 +406,9 @@ if (probe.identifier == "Array_Address_ID") {
                 quoteCount1 <- gregexpr('"', dataLine1[1])[[1]]
                 quoteCount2 <- gregexpr("'", dataLine1[1])[[1]]
                 quote <- ""
-                if (sep == ",") quote <- '"'
+                if (sep == ",") {
+                    quote <- '"'
+                }
                 if (length(quoteCount1) == 2) {
                     quote <- '"'
                 } else if (length(quoteCount2) == 2) {
@@ -353,9 +416,19 @@ if (probe.identifier == "Array_Address_ID") {
                 }
 
                 ## Read in annotation data
-                annotation <- read.table(annotationFile,
-                    sep = sep, colClasses = "character", header = TRUE, skip = nMetaDataLines,
-                    blank.lines.skip = TRUE, row.names = NULL, check.names = FALSE, quote = quote, comment.char = "", strip.white = TRUE, fill = TRUE
+                annotation <- read.table(
+                    annotationFile,
+                    sep = sep,
+                    colClasses = "character",
+                    header = TRUE,
+                    skip = nMetaDataLines,
+                    blank.lines.skip = TRUE,
+                    row.names = NULL,
+                    check.names = FALSE,
+                    quote = quote,
+                    comment.char = "",
+                    strip.white = TRUE,
+                    fill = TRUE
                 )
 
                 allColName <- toupper(colnames(annotation))
@@ -364,7 +437,9 @@ if (probe.identifier == "Array_Address_ID") {
                 if (toupper(annotationColName["sequence"]) %in% allColName) {
                     nuID <- sapply(annotation[, toupper(annotationColName["sequence"])], seq2id)
                 } else {
-                    stop('The "sequence" column cannot be found!\nPlease check the "annotationColName" of "sequence"!\n')
+                    stop(
+                        'The "sequence" column cannot be found!\nPlease check the "annotationColName" of "sequence"!\n'
+                    )
                 }
                 ## check the TargetID first
                 comm_target <- NULL
@@ -387,34 +462,81 @@ if (probe.identifier == "Array_Address_ID") {
                 }
                 if (length(comm_target) < length(id)) {
                     diffId.len <- length(id) - length(comm_target)
-                    warning(paste("The annotation file does not match the data.", diffId.len, "ids cannot be replaced!\n"))
+                    warning(paste(
+                        "The annotation file does not match the data.",
+                        diffId.len,
+                        "ids cannot be replaced!\n"
+                    ))
                 }
                 names(nuID) <- ann_target
 
                 newId <- id
                 newId[id %in% ann_target] <- nuID[comm_target]
             } else if (!is.null(lib.mapping)) {
-                if (!require(lib.mapping, character.only = TRUE)) stop(paste("Annotation library", lib.mapping, "is not installed!\n"))
+                if (!require(lib.mapping, character.only = TRUE)) {
+                    stop(paste("Annotation library", lib.mapping, "is not installed!\n"))
+                }
                 controlId <- c(
-                    "lysA", "pheA", "thrB", "trpF", "bla1", "bla2", "cat1", "cat2", "cre1", "cre2", "e1a1",
-                    "e1a2", "gfp1", "gfp2", "gst1", "gst2", "gus1", "gus2", "lux1", "lux2", "lysA", "neo1",
-                    "neo2", "pheA", "thrB", "trpF"
+                    "lysA",
+                    "pheA",
+                    "thrB",
+                    "trpF",
+                    "bla1",
+                    "bla2",
+                    "cat1",
+                    "cat2",
+                    "cre1",
+                    "cre2",
+                    "e1a1",
+                    "e1a2",
+                    "gfp1",
+                    "gfp2",
+                    "gst1",
+                    "gst2",
+                    "gus1",
+                    "gus2",
+                    "lux1",
+                    "lux2",
+                    "lysA",
+                    "neo1",
+                    "neo2",
+                    "pheA",
+                    "thrB",
+                    "trpF"
                 )
                 if (length(grep("IDMapping", lib.mapping)) == 0) {
                     ## check the TargetID first
-                    newId <- mget(id, get(paste(lib.mapping, "TARGETID2NUID", sep = ""), mode = "environment"), ifnotfound = NA)
+                    newId <- mget(
+                        id,
+                        get(paste(lib.mapping, "TARGETID2NUID", sep = ""), mode = "environment"),
+                        ifnotfound = NA
+                    )
                     newId <- unlist(newId)
                     if (length(which(!is.na(newId))) == 0) {
                         usingTargetID <- FALSE
                         ## check the ProbeID if id does not match the TargetID
-                        newId <- mget(id, get(paste(lib.mapping, "PROBEID2NUID", sep = ""), mode = "environment"), ifnotfound = NA)
+                        newId <- mget(
+                            id,
+                            get(paste(lib.mapping, "PROBEID2NUID", sep = ""), mode = "environment"),
+                            ifnotfound = NA
+                        )
                         if (length(which(!is.na(newId))) == 0) {
-                            width <- nchar(ls(envir = get(paste(lib.mapping, "PROBEID2NUID", sep = ""), mode = "environment"))[1])
+                            width <- nchar(ls(
+                                envir = get(paste(lib.mapping, "PROBEID2NUID", sep = ""), mode = "environment")
+                            )[1])
                             id <- formatC(as.numeric(id), width = width, flag = "0", format = "d")
-                            newId <- mget(id, get(paste(lib.mapping, "PROBEID2NUID", sep = ""), mode = "environment"), ifnotfound = NA)
+                            newId <- mget(
+                                id,
+                                get(paste(lib.mapping, "PROBEID2NUID", sep = ""), mode = "environment"),
+                                ifnotfound = NA
+                            )
                             if (length(which(!is.na(newId))) == 0) {
                                 targetID <- pData(featureData(x.lumi))$TargetID
-                                newId <- mget(targetID, get(paste(lib.mapping, "TARGETID2NUID", sep = ""), mode = "environment"), ifnotfound = NA)
+                                newId <- mget(
+                                    targetID,
+                                    get(paste(lib.mapping, "TARGETID2NUID", sep = ""), mode = "environment"),
+                                    ifnotfound = NA
+                                )
                                 if (length(which(!is.na(newId))) == 0) stop("The library does not match the data!\n")
                             }
                         }
@@ -429,34 +551,67 @@ if (probe.identifier == "Array_Address_ID") {
                         if (is.null(TargetID)) {
                             if (!all(TargetID[naInd] %in% controlId)) {
                                 if (length(naInd) < 10) {
-                                    warning(paste("Identifiers:", paste(TargetID[naInd], collapse = ","), " cannot be found in the ", lib.mapping, "!\n", sep = ""))
+                                    warning(paste(
+                                        "Identifiers:",
+                                        paste(TargetID[naInd], collapse = ","),
+                                        " cannot be found in the ",
+                                        lib.mapping,
+                                        "!\n",
+                                        sep = ""
+                                    ))
                                 } else {
-                                    warning(paste("Some identifiers cannot be found in the ", lib.mapping, "!\n", sep = ""))
+                                    warning(paste(
+                                        "Some identifiers cannot be found in the ",
+                                        lib.mapping,
+                                        "!\n",
+                                        sep = ""
+                                    ))
                                 }
                             }
                         }
                     } else if (!all(id[naInd] %in% controlId)) {
                         if (length(naInd) < 10) {
-                            warning(paste("Identifiers:", paste(id[naInd], collapse = ","), " cannot be found in the ", lib.mapping, "!\n", sep = ""))
+                            warning(paste(
+                                "Identifiers:",
+                                paste(id[naInd], collapse = ","),
+                                " cannot be found in the ",
+                                lib.mapping,
+                                "!\n",
+                                sep = ""
+                            ))
                         } else {
                             warning(paste("Some identifiers cannot be found in the ", lib.mapping, "!\n", sep = ""))
                         }
                     }
                     newId[naInd] <- id[naInd]
                 } else {
-                    chipInfo <- getChipInfo(featureNames(x.lumi), lib.mapping = lib.mapping, idMapping = TRUE, verbose = FALSE)
+                    chipInfo <- getChipInfo(
+                        featureNames(x.lumi),
+                        lib.mapping = lib.mapping,
+                        idMapping = TRUE,
+                        verbose = FALSE
+                    )
                     newId <- chipInfo$idMapping[, "nuID"]
                     naInd <- which(is.na(newId))
                     if (length(naInd) > 0) {
                         newId[naInd] <- id[naInd]
                         if (!all(id[naInd] %in% controlId)) {
                             if (length(naInd) > 500) {
-                                warning(paste("More than 500 identifiers cannot be found in the library:", lib.mapping,
+                                warning(paste(
+                                    "More than 500 identifiers cannot be found in the library:",
+                                    lib.mapping,
                                     "!\n The provided library might be wrong or outdated!\n",
                                     sep = ""
                                 ))
                             } else if (length(naInd) < 10) {
-                                warning(paste("Identifiers:", paste(id[naInd], collapse = ","), " cannot be found in the ", lib.mapping, "!\n", sep = ""))
+                                warning(paste(
+                                    "Identifiers:",
+                                    paste(id[naInd], collapse = ","),
+                                    " cannot be found in the ",
+                                    lib.mapping,
+                                    "!\n",
+                                    sep = ""
+                                ))
                             } else {
                                 warning(paste("Some identifiers cannot be found in the ", lib.mapping, "!\n", sep = ""))
                             }
@@ -467,7 +622,8 @@ if (probe.identifier == "Array_Address_ID") {
                     chipInfo.print <- paste(selInfoName, unlist(chipInfo[selInfoName]), sep = ": ")
                     notes(x.lumi) <- c(notes(x.lumi), list("Chip Information" = chipInfo.print))
 
-                    annotation(x.lumi) <- switch(chipInfo$species,
+                    annotation(x.lumi) <- switch(
+                        chipInfo$species,
                         "Human" = "lumiHumanAll.db",
                         "Mouse" = "lumiMouseAll.db",
                         "Rat" = "lumiRatAll.db"
@@ -483,7 +639,9 @@ if (probe.identifier == "Array_Address_ID") {
             }
 
             if (any(duplicated(newId))) {
-                if (verbose) cat("Duplicated IDs found and were merged!\n")
+                if (verbose) {
+                    cat("Duplicated IDs found and were merged!\n")
+                }
                 dupId <- unique(newId[duplicated(newId)])
                 ## determine whether the detection p-value close to 0 or 1 is significant
                 if (!is.null(detection(x.lumi))) {
@@ -504,9 +662,14 @@ if (probe.identifier == "Array_Address_ID") {
                             maxDetection <- apply(detection(x.lumi), 2, max)
                         }
 
-                        temp <- colSums(se.exprs(x.lumi)[dupIndex, , drop = FALSE]^2 * (beadNum(x.lumi)[dupIndex, , drop = FALSE] - 1))
+                        temp <- colSums(
+                            se.exprs(x.lumi)[dupIndex, , drop = FALSE]^2 *
+                                (beadNum(x.lumi)[dupIndex, , drop = FALSE] - 1)
+                        )
                         temp <- temp / (totalBeadNum - length(dupIndex))
-                        se.exprs(x.lumi)[dupIndex[1], ] <- sqrt(temp * (colSums(1 / beadNum(x.lumi)[dupIndex, , drop = FALSE])))
+                        se.exprs(x.lumi)[dupIndex[1], ] <- sqrt(
+                            temp * (colSums(1 / beadNum(x.lumi)[dupIndex, , drop = FALSE]))
+                        )
                         detection(x.lumi)[dupIndex[1], ] <- maxDetection
                         beadNum(x.lumi)[dupIndex[1], ] <- totalBeadNum
                     }
@@ -524,19 +687,28 @@ if (probe.identifier == "Array_Address_ID") {
                 ## update the feautre data
                 featureData <- featureData(x.lumi)
                 rownames(pData(featureData)) <- newId
-                if (!is.null(pData(featureData)$"PROBE_SEQUENCE")) pData(featureData)$"PROBE_SEQUENCE" <- NULL
+                if (!is.null(pData(featureData)$"PROBE_SEQUENCE")) {
+                    pData(featureData)$"PROBE_SEQUENCE" <- NULL
+                }
                 featureData(x.lumi) <- featureData
 
                 ## Add history tracking
                 if (is(x.lumi, "LumiBatch")) {
                     history.finished <- as.character(Sys.time())
                     history.command <- capture.output(print(match.call(addNuID2lumi)))
-                    if (is.null(x.lumi@history$lumiVersion)) x.lumi@history$lumiVersion <- rep(NA, nrow(x.lumi@history))
+                    if (is.null(x.lumi@history$lumiVersion)) {
+                        x.lumi@history$lumiVersion <- rep(NA, nrow(x.lumi@history))
+                    }
                     lumiVersion <- packageDescription("lumi")$Version
-                    x.lumi@history <- rbind(x.lumi@history, data.frame(
-                        submitted = history.submitted,
-                        finished = history.finished, command = history.command, lumiVersion = lumiVersion
-                    ))
+                    x.lumi@history <- rbind(
+                        x.lumi@history,
+                        data.frame(
+                            submitted = history.submitted,
+                            finished = history.finished,
+                            command = history.command,
+                            lumiVersion = lumiVersion
+                        )
+                    )
                 }
             }
 
@@ -544,7 +716,14 @@ if (probe.identifier == "Array_Address_ID") {
         }
 
     `addNuId2lumi` <-
-        function(x.lumi, annotationFile = NULL, sep = NULL, lib.mapping = NULL, annotationColName = c(sequence = "Probe_Sequence", target = "Target", probe = "Probe_Id"), verbose = TRUE) {
+        function(
+            x.lumi,
+            annotationFile = NULL,
+            sep = NULL,
+            lib.mapping = NULL,
+            annotationColName = c(sequence = "Probe_Sequence", target = "Target", probe = "Probe_Id"),
+            verbose = TRUE
+        ) {
             cat("Function addNuId2lumi is deprecated!\n Please use addNuID2lumi instead!\n")
             addNuID2lumi(x.lumi, annotationFile, sep, lib.mapping, annotationColName, verbose)
         }
@@ -600,7 +779,14 @@ colnames(dat2) <- sample.names
 # Write out a phenodata
 group <- c(rep("", ncol(dat2)))
 training <- c(rep("", ncol(dat2)))
-write.table(data.frame(sample = sample.names, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample.names, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 if (chiptype != "Illumina") {
     # Including gene names to data
@@ -613,7 +799,14 @@ if (chiptype != "Illumina") {
     genenames <- gsub("#", "", genenames)
     symbols <- gsub("'", "", symbols)
     genenames <- gsub("'", "", genenames)
-    write.table(data.frame(symbol = symbols, description = genenames, dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+    write.table(
+        data.frame(symbol = symbols, description = genenames, dat2),
+        file = "normalized.tsv",
+        col.names = T,
+        quote = F,
+        sep = "\t",
+        row.names = T
+    )
 } else {
     # Write out expression data
     write.table(data.frame(dat2), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)

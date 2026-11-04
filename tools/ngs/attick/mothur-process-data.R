@@ -66,43 +66,151 @@ unlink("batch.mth")
 write("summary.seqs(fasta=all.fasta)", "batch.mth", append = T)
 if (use.quality == "yes") {
     # write(paste("trim.seqs(fasta=all.fasta, qaverage=", qaverage, ", qfile=all.qual, maxambig=", maxambig, ", maxhomop=", maxhomop, ", minlength=", minlength, ", pdiffs=", pdiffs, ", bdiffs=", bdiffs, ")", sep=""), "batch.mth", append=T)
-    write(paste("trim.seqs(fasta=all.fasta, oligos=oligos, qaverage=", qaverage, ", qfile=all.qual, maxambig=", maxambig, ", maxhomop=", maxhomop, ", minlength=", minlength, ", pdiffs=", pdiffs, ", bdiffs=", bdiffs, ")", sep = ""), "batch.mth", append = T)
+    write(
+        paste(
+            "trim.seqs(fasta=all.fasta, oligos=oligos, qaverage=",
+            qaverage,
+            ", qfile=all.qual, maxambig=",
+            maxambig,
+            ", maxhomop=",
+            maxhomop,
+            ", minlength=",
+            minlength,
+            ", pdiffs=",
+            pdiffs,
+            ", bdiffs=",
+            bdiffs,
+            ")",
+            sep = ""
+        ),
+        "batch.mth",
+        append = T
+    )
 }
 if (use.quality == "no") {
-    write(paste("trim.seqs(fasta=all.fasta, oligos=oligos, maxambig=", maxambig, ", maxhomop=", maxhomop, ", minlength=", minlength, ", pdiffs=", pdiffs, ", bdiffs=", bdiffs, ")", sep = ""), "batch.mth", append = T)
+    write(
+        paste(
+            "trim.seqs(fasta=all.fasta, oligos=oligos, maxambig=",
+            maxambig,
+            ", maxhomop=",
+            maxhomop,
+            ", minlength=",
+            minlength,
+            ", pdiffs=",
+            pdiffs,
+            ", bdiffs=",
+            bdiffs,
+            ")",
+            sep = ""
+        ),
+        "batch.mth",
+        append = T
+    )
 }
 write("summary.seqs(fasta=all.trim.fasta)", "batch.mth", append = T)
 write("unique.seqs(fasta=all.trim.fasta)", "batch.mth", append = T)
 write("summary.seqs(fasta=all.trim.unique.fasta, name=all.trim.names)", "batch.mth", append = T)
 # Align sequences
-write(paste("align.seqs(candidate=all.trim.unique.fasta, template=", align.template.path, "/silva.bacteria.fasta)", sep = ""), "batch.mth", append = T)
+write(
+    paste(
+        "align.seqs(candidate=all.trim.unique.fasta, template=",
+        align.template.path,
+        "/silva.bacteria.fasta)",
+        sep = ""
+    ),
+    "batch.mth",
+    append = T
+)
 write("summary.seqs(fasta=all.trim.unique.align, name=all.trim.names)", "batch.mth", append = T)
-write(paste("screen.seqs(fasta=all.trim.unique.align, name=all.trim.names, group=all.groups, minlength=", minlength.screen, ", maxlength=", maxlength.screen, ")", sep = ""), "batch.mth", append = T)
+write(
+    paste(
+        "screen.seqs(fasta=all.trim.unique.align, name=all.trim.names, group=all.groups, minlength=",
+        minlength.screen,
+        ", maxlength=",
+        maxlength.screen,
+        ")",
+        sep = ""
+    ),
+    "batch.mth",
+    append = T
+)
 write("summary.seqs(fasta=all.trim.unique.good.align, name=all.trim.good.names)", "batch.mth", append = T)
 
 # Filter and precluster
 write("filter.seqs(fasta=all.trim.unique.good.align, vertical=T, trump=.)", "batch.mth", append = T)
 write("unique.seqs(fasta=all.trim.unique.good.filter.fasta, name=all.trim.good.names)", "batch.mth", append = T)
 write("summary.seqs(fasta=current, name=current)", "batch.mth", append = T)
-write("pre.cluster(fasta=all.trim.unique.good.filter.unique.fasta, name=all.trim.unique.good.filter.names, diffs=1)", "batch.mth", append = T)
+write(
+    "pre.cluster(fasta=all.trim.unique.good.filter.unique.fasta, name=all.trim.unique.good.filter.names, diffs=1)",
+    "batch.mth",
+    append = T
+)
 write("summary.seqs(fasta=current, name=current)", "batch.mth", append = T)
 
 # Remove chimeric sequences
 if (chimera.method == "slayer") {
-    write(paste("chimera.slayer(fasta=all.trim.unique.good.filter.unique.precluster.fasta, template=", align.template.path, "/silva.gold.align, blastlocation=", mothur.path, "\\blast\\bin\\", ")", sep = ""), "batch.mth", append = T)
-    write("remove.seqs(accnos=all.trim.unique.good.filter.unique.precluster.slayer.accnos, fasta=all.trim.unique.good.filter.unique.precluster.fasta, name=all.trim.unique.good.filter.unique.precluster.names)", "batch.mth", append = T)
+    write(
+        paste(
+            "chimera.slayer(fasta=all.trim.unique.good.filter.unique.precluster.fasta, template=",
+            align.template.path,
+            "/silva.gold.align, blastlocation=",
+            mothur.path,
+            "\\blast\\bin\\",
+            ")",
+            sep = ""
+        ),
+        "batch.mth",
+        append = T
+    )
+    write(
+        "remove.seqs(accnos=all.trim.unique.good.filter.unique.precluster.slayer.accnos, fasta=all.trim.unique.good.filter.unique.precluster.fasta, name=all.trim.unique.good.filter.unique.precluster.names)",
+        "batch.mth",
+        append = T
+    )
 }
 if (chimera.method == "perseus") {
-    write(paste("chimera.perseus(fasta=all.trim.unique.good.filter.unique.precluster.fasta)", sep = ""), "batch.mth", append = T)
-    write("remove.seqs(accnos=all.trim.unique.good.filter.unique.precluster.perseus.accnos, fasta=all.trim.unique.good.filter.unique.precluster.fasta, name=all.trim.unique.good.filter.unique.precluster.names)", "batch.mth", append = T)
+    write(
+        paste("chimera.perseus(fasta=all.trim.unique.good.filter.unique.precluster.fasta)", sep = ""),
+        "batch.mth",
+        append = T
+    )
+    write(
+        "remove.seqs(accnos=all.trim.unique.good.filter.unique.precluster.perseus.accnos, fasta=all.trim.unique.good.filter.unique.precluster.fasta, name=all.trim.unique.good.filter.unique.precluster.names)",
+        "batch.mth",
+        append = T
+    )
 }
 if (chimera.method == "uchime") {
-    write(paste("chimera.uchime(fasta=all.trim.unique.good.filter.unique.precluster.fasta, template=", align.template.path, "/silva.gold.align)", sep = ""), "batch.mth", append = T)
+    write(
+        paste(
+            "chimera.uchime(fasta=all.trim.unique.good.filter.unique.precluster.fasta, template=",
+            align.template.path,
+            "/silva.gold.align)",
+            sep = ""
+        ),
+        "batch.mth",
+        append = T
+    )
 }
-write("summary.seqs(fasta=all.trim.unique.good.filter.unique.precluster.pick.fasta, name=all.trim.unique.good.filter.unique.precluster.pick.names)", "batch.mth", append = T)
+write(
+    "summary.seqs(fasta=all.trim.unique.good.filter.unique.precluster.pick.fasta, name=all.trim.unique.good.filter.unique.precluster.pick.names)",
+    "batch.mth",
+    append = T
+)
 
 # Classifying sequences
-write(paste("classify.seqs(fasta=all.trim.unique.good.filter.unique.precluster.pick.fasta, template=", align.template.path, "/silva.bacteria.fasta, taxonomy=", align.template.path, "/silva.bacteria.silva.tax, iters=1000)", sep = ""), "batch.mth", append = T)
+write(
+    paste(
+        "classify.seqs(fasta=all.trim.unique.good.filter.unique.precluster.pick.fasta, template=",
+        align.template.path,
+        "/silva.bacteria.fasta, taxonomy=",
+        align.template.path,
+        "/silva.bacteria.silva.tax, iters=1000)",
+        sep = ""
+    ),
+    "batch.mth",
+    append = T
+)
 # remove.lineage(fasta=stool.trim.unique.good.filter.unique.precluster.pick.fasta, name=stool.trim.unique.good.filter.unique.precluster.pick.names, group=stool.good.pick.groups, taxonomy=stool.trim.unique.good.filter.unique.precluster.pick.rdp.taxonomy, taxon=Cyanobacteria)
 
 # Ensure that mothur quits when the run is done

@@ -2,7 +2,6 @@
 # INPUT normalized.tsv: normalized.tsv TYPE GENE_EXPRS
 # OUTPUT na-omitted.tsv: na-omitted.tsv
 
-
 # JTT 22.6.2006: Removal of missing values
 
 # Loads the file

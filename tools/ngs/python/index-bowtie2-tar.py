@@ -6,6 +6,7 @@
 
 import tool_utils
 import subprocess
+import shlex
 from typing import Iterable
 import os
 
@@ -25,7 +26,10 @@ def main():
 
     print("inspect index")
     inspect_output = "inspect_output.txt"
-    run_bash(bowtie2_inspect + " -n " + fasta_basename + " > " + inspect_output)
+    # fasta_basename comes from the dataset name and may contain spaces or parentheses
+    run_bash(
+        bowtie2_inspect + " -n " + shlex.quote(fasta_basename) + " > " + inspect_output
+    )
 
     fasta_chr = 0
     index_chr = 0
@@ -61,17 +65,15 @@ def main():
     for file in os.listdir("."):
         if file.endswith(".bt2"):
             index_files.append(file)
-            
+
     run_process(["tar", "-cf", "output.tar"] + index_files)
 
-    tool_utils.write_output_definitions({
-        "output.tar": fasta_basename + ".tar"
-    })
-    
+    tool_utils.write_output_definitions({"output.tar": fasta_basename + ".tar"})
+
     # save version information
     version = subprocess.check_output([bowtie2_build, "--version"])
     version_number = str(version).split("\\n")[0].split(" ")[2]
-    
+
     version_utils.document_version("Bowtie2", version_number)
 
 

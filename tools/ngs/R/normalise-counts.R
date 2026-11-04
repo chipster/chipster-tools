@@ -6,7 +6,6 @@
 # RUNTIME R-4.5.1-edger
 # TOOLS_BIN ""
 
-
 # 25.04.2014 MK, created
 
 # Loads the normalized data and phenodata files
@@ -19,9 +18,9 @@ cds <- calcNormFactors(cds, method = method.value)
 
 # Normalization
 if (method.value == "none") {
-  data2 <- cpm(cds, normalized.lib.sizes = FALSE, log = log.value)
+    data2 <- cpm(cds, normalized.lib.sizes = FALSE, log = log.value)
 } else {
-  data2 <- cpm(cds, normalized.lib.sizes = TRUE, log = log.value)
+    data2 <- cpm(cds, normalized.lib.sizes = TRUE, log = log.value)
 }
 
 # Write out results

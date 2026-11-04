@@ -28,10 +28,12 @@ if (howmany == "two") {
     res <- results(diagdds)
 }
 if (howmany == "abovetwo") {
-    res <- results(diagdds,
+    res <- results(
+        diagdds,
         contrast = c(
             group_column1, # Phenodata variable (from "Transform OTU..." tool)
-            group1, group2
+            group1,
+            group2
         )
     ) # Groups under selected phenodata variable
 }
@@ -48,14 +50,22 @@ sigtab <- cbind(
 
 # Tidier result table for tool output
 sigtab_tidy <- sigtab[, c(
-    "baseMean", "log2FoldChange", "lfcSE", "padj",
-    "Phylum", "Class", "Order", "Family", "Genus"
+    "baseMean",
+    "log2FoldChange",
+    "lfcSE",
+    "padj",
+    "Phylum",
+    "Class",
+    "Order",
+    "Family",
+    "Genus"
 )]
 
 # Differential abundance plot
 sigtab_plot <- subset(
     sigtab,
-    yaxtax != "NA", !is.na(yaxtax)
+    yaxtax != "NA",
+    !is.na(yaxtax)
 ) # Filter out NA OTUs at lower taxonomic level
 # Higher-level taxonomic groupings
 x <- tapply(sigtab_plot$log2FoldChange, sigtab_plot[, legtax], function(x) max(x))
@@ -79,10 +89,13 @@ ggplot(
 ) +
     geom_vline(xintercept = 0.0, color = "gray", size = 0.5) +
     geom_point(size = 6) +
-    theme(axis.text.x = element_text(
-        angle = -90,
-        hjust = 0, vjust = 0.5
-    )) +
+    theme(
+        axis.text.x = element_text(
+            angle = -90,
+            hjust = 0,
+            vjust = 0.5
+        )
+    ) +
     xlab(expression(Log[2] * " fold change")) +
     ylab(yaxtax) +
     scale_colour_discrete(name = legtax)
@@ -91,7 +104,4 @@ ggplot(
 dev.off()
 
 # Write DESeq2 result table as TSV
-write.table(sigtab_tidy,
-    file = "deseq2_otutable.tsv",
-    sep = "\t", row.names = T, col.names = T, quote = F
-)
+write.table(sigtab_tidy, file = "deseq2_otutable.tsv", sep = "\t", row.names = T, col.names = T, quote = F)

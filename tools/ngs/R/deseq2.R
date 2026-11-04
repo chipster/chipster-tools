@@ -14,8 +14,6 @@
 # PARAMETER OPTIONAL size.factor.estimation.type: "Method for estimating size factors" TYPE [ratio:"ratio", poscounts:"poscounts"] DEFAULT ratio (Which size estimation method to use. Default option "ratio" uses the standard median ratio method introduced in DESeq. "poscounts" offers alternative estimator, which can be used even when all genes contain a sample with a zero.)
 # RUNTIME R-4.4.3-phyloseq
 
-
-
 ## OLD:  RUNTIME R-3.6.1-phyloseq
 # For testing:
 # OUTPUT OPTIONAL dds.Robj
@@ -39,7 +37,6 @@
 # column <-"group"
 # ad_factor<-"EMPTY"
 # p.value.cutoff<-0.05
-
 
 # Load the library
 source(file.path(chipster.common.lib.path, "bed-utils.R"))
@@ -76,7 +73,6 @@ dds <- DESeq(dds, sfType = size.factor.estimation.type)
 
 # save(dds, file="dds.Robj")
 
-
 # Calculate statistic for differential expression, merge with original data table, keep significant DEGs, remove NAs and sort by FDR.
 # If there are more than 2 groups, get pairwise results for each comparison.
 
@@ -101,7 +97,12 @@ if (length(unique(groups)) == 2) {
     # plotMA(dds, alpha=p.value.cutoff, main=c("DESeq2 MA-plot, FDR =", p.value.cutoff), ylim=c(-2,2))
 
     # MA plot after lfcShrink:
-    plotMA(resLFC, alpha = p.value.cutoff, main = c("DESeq2 MA-plot with LFC shrink (used in result table), FDR =", p.value.cutoff), ylim = c(-2, 2))
+    plotMA(
+        resLFC,
+        alpha = p.value.cutoff,
+        main = c("DESeq2 MA-plot with LFC shrink (used in result table), FDR =", p.value.cutoff),
+        ylim = c(-2, 2)
+    )
 
     # Summary into a txt file
     sink("summary.txt")
@@ -112,11 +113,21 @@ if (length(unique(groups)) == 2) {
     if (dim(sig)[1] > 0) {
         ndat <- ncol(dat)
         nmax <- ncol(sig)
-        write.table(cbind(sig[, 1:ndat], round(sig[, (ndat + 1):(nmax - 2)], digits = round_pvals), format(sig[, (nmax - 1):nmax], digits = round_others, scientific = T)), file = "de-list-deseq2.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+        write.table(
+            cbind(
+                sig[, 1:ndat],
+                round(sig[, (ndat + 1):(nmax - 2)], digits = round_pvals),
+                format(sig[, (nmax - 1):nmax], digits = round_others, scientific = T)
+            ),
+            file = "de-list-deseq2.tsv",
+            sep = "\t",
+            row.names = T,
+            col.names = T,
+            quote = F
+        )
     }
 
     # write.table(sig, file = "output_table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-
 
     # More than 2 groups:
 } else if (length(unique(groups)) > 2) {
@@ -134,10 +145,9 @@ if (length(unique(groups)) == 2) {
     # i goes from the first group to the one before last:
     for (i in 1:(nlevels(conditions) - 1)) {
         # j goes through all groups starting from i:
-        for  (j in (i + 1):nlevels(conditions)) {
+        for (j in (i + 1):nlevels(conditions)) {
             i_label <- levels(conditions)[i]
             j_label <- levels(conditions)[j]
-
 
             # Old version, 1/2023:
             # pairwise_results <- as.data.frame(results(test_results, contrast=c("condition",j_label,i_label))) # note: j,i => j-i
@@ -156,12 +166,26 @@ if (length(unique(groups)) == 2) {
             pairwise_results <- as.data.frame(res2)
 
             # building the table:
-            if (is.null(res)) res <- pairwise_results else res <- cbind(res, pairwise_results)
+            if (is.null(res)) {
+                res <- pairwise_results
+            } else {
+                res <- cbind(res, pairwise_results)
+            }
 
             results_name <- c(results_name, paste(i_label, "_vs_", j_label, sep = ""))
 
             # MA plot after LFC shrink:
-            plotMA(resLFC, alpha = p.value.cutoff, main = c("DESeq2 MA-plot with LFC shrink, FDR =", p.value.cutoff, " comparison = ", results_name[length(results_name)]), ylim = c(-2, 2)) # , cex = 3
+            plotMA(
+                resLFC,
+                alpha = p.value.cutoff,
+                main = c(
+                    "DESeq2 MA-plot with LFC shrink, FDR =",
+                    p.value.cutoff,
+                    " comparison = ",
+                    results_name[length(results_name)]
+                ),
+                ylim = c(-2, 2)
+            ) # , cex = 3
         }
     }
 
@@ -174,7 +198,6 @@ if (length(unique(groups)) == 2) {
     sig <- sig[!(is.na(sig$min_padj)), ]
     sig <- sig[order(sig$min_padj), ]
     sig <- sig[, -grep("min_padj", colnames(sig))]
-
 
     # Output significant DEGs
     if (dim(sig)[1] > 0) {
@@ -211,7 +234,6 @@ output_table <- as.data.frame(output_table)
 #  write.table(output_table, file="output_table.tsv", sep="\t", row.names=T, col.names=T, quote=F)
 #  save(output_table, file = "res.Robj")
 
-
 # If genomic coordinates are present, output a sorted BED file for region matching tools
 if (bed == "yes") {
     if ("chr" %in% colnames(dat)) {
@@ -237,14 +259,28 @@ if (bed == "yes") {
 if (length(unique(groups)) > 2) {
     # Define function for making MA-plot.
     plotDE <- function(res) {
-        plot(res$baseMean, res$log2FoldChange,
-            log = "x", ylim = c(-2, 2), pch = 20, cex = .25, col = ifelse(res$padj < p.value.cutoff, "blue", "black"),
-            main = "MA plot with LFC shrink, all comparisons", xlab = "mean counts", ylab = "log2(fold change)"
+        plot(
+            res$baseMean,
+            res$log2FoldChange,
+            log = "x",
+            ylim = c(-2, 2),
+            pch = 20,
+            cex = .25,
+            col = ifelse(res$padj < p.value.cutoff, "blue", "black"),
+            main = "MA plot with LFC shrink, all comparisons",
+            xlab = "mean counts",
+            ylab = "log2(fold change)"
         )
     }
     # Make MA-plot
     plotDE(unique(output_table))
-    legend(x = "topleft", legend = c("significant based on adj. p-val", "not significant"), col = c("blue", "black"), cex = 1, pch = 19)
+    legend(
+        x = "topleft",
+        legend = c("significant based on adj. p-val", "not significant"),
+        col = c("blue", "black"),
+        cex = 1,
+        pch = 19
+    )
     abline(h = 0, col = "darkgreen", lwd = 2)
     # abline(h = c(-1, 0, 1), col = c("dodgerblue", "darkgreen", "dodgerblue"), lwd = 2) #
 }
@@ -255,10 +291,25 @@ legend(x = "topright", legend = "fitted dispersion", col = "red", cex = 1, pch =
 
 
 ## Make histogram of p-values with overlaid significance cutoff. When more than two groups, min.pvalue is taken over all comparisons for genes
-hist(output_table$pval, breaks = 100, col = "blue", border = "slateblue", freq = FALSE, main = "P-value distribution", xlab = "p-value", ylab = "proportion (%)")
+hist(
+    output_table$pval,
+    breaks = 100,
+    col = "blue",
+    border = "slateblue",
+    freq = FALSE,
+    main = "P-value distribution",
+    xlab = "p-value",
+    ylab = "proportion (%)"
+)
 hist(output_table$padj, breaks = 100, col = "red", border = "slateblue", add = TRUE, freq = FALSE)
 abline(v = p.value.cutoff, lwd = 2, lty = 2, col = "black")
-legend(x = "topright", legend = c("p-values", "adjusted p-values", "significance cutoff"), col = c("blue", "red", "black"), cex = 1, pch = 15)
+legend(
+    x = "topright",
+    legend = c("p-values", "adjusted p-values", "significance cutoff"),
+    col = c("blue", "red", "black"),
+    cex = 1,
+    pch = 15
+)
 
 
 # Close pdf

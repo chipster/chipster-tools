@@ -6,7 +6,6 @@
 # PARAMETER unaligned: "Output unaligned reads" TYPE [no: "No", yes: "Yes"] DEFAULT no (Output unaligned reads along with aligned reads)
 # PARAMETER primary: "Output only primary alignments" TYPE [no: "No", yes: "Yes"] DEFAULT no ( Output only primary alignments)
 
-
 # KM 8.11. 2014
 
 dump.par <- (" ")
@@ -19,7 +18,6 @@ if (unaligned == "yes") {
 if (primary == "yes") {
     dump.par <- paste(dump.par, "--primary")
 }
-
 
 
 sra.path <- file.path(chipster.tools.path, "sratoolkit", "bin")
@@ -43,7 +41,6 @@ system("cat srafetch2.tmp >> srafetch.log")
 if (sam.numrows == "0") {
     stop(paste("CHIPSTER-NOTE: The entry ID: ", entry_id, "retuned no hits from the SRA database"))
 }
-
 
 
 # samtools binary

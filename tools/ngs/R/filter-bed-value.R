@@ -16,7 +16,7 @@ file <- c("regions.bed")
 dat <- read.table(file, header = FALSE, sep = "\t", row.names = NULL)
 
 # Extract the data to a vector
-column <- as.numeric(gsub("column", "", column)) 
+column <- as.numeric(gsub("column", "", column))
 f <- dat[, column]
 
 # Filters the data

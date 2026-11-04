@@ -70,7 +70,12 @@ smart.install.bioconductor.repo <- function(repo.index, mirror = NA, update = 0)
     current.bioc.version <- biocVersion()
 
     # Install available annotation packages
-    current.bioc.url <- paste("http://www.bioconductor.org/packages/", current.bioc.version, "/data/annotation", sep = "")
+    current.bioc.url <- paste(
+        "http://www.bioconductor.org/packages/",
+        current.bioc.version,
+        "/data/annotation",
+        sep = ""
+    )
     for (package in available.packages(contrib.url(current.bioc.url))[, "Package"]) {
         smart.install.packages(bioconductor.package = package, mirror = mirror, update = update)
     }
@@ -149,7 +154,12 @@ smart.install.packages <- function(package = NA, bioconductor.package = NA, url.
 is.installed <- function(package) {
     if (package %in% rownames(installed.packages()) == FALSE) {
         sink("/dev/null") # the only way to get rid of all output (some packages don't behave)
-        is.installed <- suppressPackageStartupMessages(suppressWarnings(suppressMessages(require(package, character.only = TRUE, warn.conflicts = FALSE, quietly = TRUE))))
+        is.installed <- suppressPackageStartupMessages(suppressWarnings(suppressMessages(require(
+            package,
+            character.only = TRUE,
+            warn.conflicts = FALSE,
+            quietly = TRUE
+        ))))
         sink()
         return(is.installed)
     } else {
@@ -216,7 +226,13 @@ check.affy.customnames <- function(script.basename, db.custom.packages) {
                     }
                 }
             } else {
-                cat(paste("\tPackage", supported.custom.packages[j], "in", affy.r.script[i], "has not matches in current custom-CDF database\n"))
+                cat(paste(
+                    "\tPackage",
+                    supported.custom.packages[j],
+                    "in",
+                    affy.r.script[i],
+                    "has not matches in current custom-CDF database\n"
+                ))
             }
         }
     }

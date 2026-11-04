@@ -26,7 +26,9 @@ filter.params <- paste("")
 
 if (!is.na(lc.dust)) {
     if (!is.na(lc.entropy)) {
-        stop(paste("CHIPSTER-NOTE: Please give threshold value only for one complexity filtering method, not both of them"))
+        stop(paste(
+            "CHIPSTER-NOTE: Please give threshold value only for one complexity filtering method, not both of them"
+        ))
     }
 }
 

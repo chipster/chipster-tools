@@ -19,11 +19,16 @@ input2 <- readData("aberrations.tsv")
 cgh <- toCgh(input2, level = "calls")
 
 if (!identical(sampleNames(regions), sampleNames(cgh))) {
-  if (length(setdiff(sampleNames(regions), sampleNames(cgh))) == 0) {
-    cgh <- cgh[, sampleNames(regions)]
-  } else {
-    stop("CHIPSTER-NOTE: Sample names do not match.\nregions.tsv: ", paste(sampleNames(regions), collapse = ", "), "\naberrations.tsv: ", paste(sampleNames(cgh), collapse = ", "))
-  }
+    if (length(setdiff(sampleNames(regions), sampleNames(cgh))) == 0) {
+        cgh <- cgh[, sampleNames(regions)]
+    } else {
+        stop(
+            "CHIPSTER-NOTE: Sample names do not match.\nregions.tsv: ",
+            paste(sampleNames(regions), collapse = ", "),
+            "\naberrations.tsv: ",
+            paste(sampleNames(cgh), collapse = ", ")
+        )
+    }
 }
 
 # parse coordinates
@@ -43,15 +48,13 @@ next.condition <- c(condition[-1], FALSE)
 # 1. condition does not match
 # 2. previous condition did not match
 # 3. previous region was in a different chromosome
-starts <- !condition | !prev.condition |
-  input1$chromosome != c(0, input1$chromosome[-nrow(input1)])
+starts <- !condition | !prev.condition | input1$chromosome != c(0, input1$chromosome[-nrow(input1)])
 
 # new regions end where either:
 # 1. condition does not match
 # 2. next condition does not match
 # 3. next region is in a different chromosome
-ends <- !condition | !next.condition |
-  input1$chromosome != c(input1$chromosome[-1], 0)
+ends <- !condition | !next.condition | input1$chromosome != c(input1$chromosome[-1], 0)
 
 newreg <- input1[starts, c("chromosome", "start", "end")]
 newreg$end <- input1$end[ends]

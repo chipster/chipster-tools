@@ -7,7 +7,6 @@
 # PARAMETER OPTIONAL inptype: "Input sequence type" TYPE [prot: Protein, nuc: Nucloetide] DEFAULT prot (Define wether the input sequences are proteins or nucleotides.)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-
 # KM 25.8. 2015
 options(scipen = 999)
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")

@@ -28,7 +28,10 @@ if ("sequence" %in% colnames(mirna_data) && (length(grep(mirna_data$sequence[1],
     mirna_id <- NULL
     for (i in 1:length(mirna_id_list)) {
         # remove last three sections of the id
-        mirna_id <- c(mirna_id, paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_"))
+        mirna_id <- c(
+            mirna_id,
+            paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_")
+        )
     }
 }
 
@@ -55,7 +58,13 @@ if (species == "human") {
             if (class(mirna.targets) != "try-error") {
                 mirna.targets <- unique(unlist(mirna.targets))
                 if (!(is.na(mirna.targets))) {
-                    target_genes <- rbind(target_genes, as.data.frame(cbind(mature_miRNA = rep(mirna_id[i], length(mirna.targets)), gene_id = mirna.targets)))
+                    target_genes <- rbind(
+                        target_genes,
+                        as.data.frame(cbind(
+                            mature_miRNA = rep(mirna_id[i], length(mirna.targets)),
+                            gene_id = mirna.targets
+                        ))
+                    )
                 }
             }
         }
@@ -67,8 +76,14 @@ if (species == "human") {
     library(org.Rn.eg.db)
     ensembl.to.entrez <- as.list(org.Rn.egENSEMBLTRANS2EG)
 
-    targets <- read.table(file.path(chipster.tools.path, "miRNA_mappings", "mirna_mappings_rnorvegicus.txt"), sep = "\t")
-    targets2 <- as.data.frame(cbind(gene_id = as.numeric(as.character(ensembl.to.entrez[c(as.vector(targets$tran))])), mature_miRNA = as.character(targets[, 2])))
+    targets <- read.table(
+        file.path(chipster.tools.path, "miRNA_mappings", "mirna_mappings_rnorvegicus.txt"),
+        sep = "\t"
+    )
+    targets2 <- as.data.frame(cbind(
+        gene_id = as.numeric(as.character(ensembl.to.entrez[c(as.vector(targets$tran))])),
+        mature_miRNA = as.character(targets[, 2])
+    ))
     targets2 <- targets2[which(!is.na(targets2$gene_id)), ]
     target_genes <- targets2[tolower(targets2$mature_miRNA) %in% mirna_id, ]
 }
@@ -77,11 +92,18 @@ gene_id <- target_genes$gene_id
 mirna_id_2 <- target_genes$mature_miRNA
 
 if (length(gene_id) < 1) {
-    stop("CHIPSTER-NOTE: Your analysis was terminated, because no matches were found between your and RmiR database miRNA identifiers")
+    stop(
+        "CHIPSTER-NOTE: Your analysis was terminated, because no matches were found between your and RmiR database miRNA identifiers"
+    )
 }
 
 ensembl <- useMart("ensembl", dataset = dataset)
-annotated_genes <- getBM(mart = ensembl, attributes = c("entrezgene_id", "hgnc_symbol", "description"), filters = "entrezgene_id", values = gene_id)
+annotated_genes <- getBM(
+    mart = ensembl,
+    attributes = c("entrezgene_id", "hgnc_symbol", "description"),
+    filters = "entrezgene_id",
+    values = gene_id
+)
 
 # Match the list of transcripts with the annotations
 gene_entrezid <- character(length(gene_id))

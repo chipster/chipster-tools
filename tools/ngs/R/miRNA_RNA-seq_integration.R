@@ -40,13 +40,19 @@ phenodata_1 <- read.table("phenodata_mirna.tsv", header = T, sep = "\t")
 phenodata_2 <- read.table("phenodata_gene.tsv", header = T, sep = "\t")
 
 # Figure out which is the miRNA data
-if ((("chiptype" %in% colnames(phenodata_1)) && (phenodata_1$chiptype[1] == "miRNA")) || (("experiment" %in% colnames(phenodata_1)) && (phenodata_1$experiment[1] == "mirna_seq"))) {
+if (
+    (("chiptype" %in% colnames(phenodata_1)) && (phenodata_1$chiptype[1] == "miRNA")) ||
+        (("experiment" %in% colnames(phenodata_1)) && (phenodata_1$experiment[1] == "mirna_seq"))
+) {
     mirna.phenodata <- phenodata_1
     mirna.data <- data_1
     gene.phenodata <- phenodata_2
     gene.data <- data_2
 }
-if ((("chiptype" %in% colnames(phenodata_2)) && (phenodata_2$chiptype[1] == "miRNA")) || (("experiment" %in% colnames(phenodata_2)) && (phenodata_2$experiment[1] == "mirna_seq"))) {
+if (
+    (("chiptype" %in% colnames(phenodata_2)) && (phenodata_2$chiptype[1] == "miRNA")) ||
+        (("experiment" %in% colnames(phenodata_2)) && (phenodata_2$experiment[1] == "mirna_seq"))
+) {
     mirna.phenodata <- phenodata_2
     mirna.data <- data_2
     gene.phenodata <- phenodata_1
@@ -59,7 +65,10 @@ if (length(grep("[0-9]+_[0-9]+_[acgt]{5,}", rownames(mirna.data)[1], ignore.case
     mirna_id <- NULL
     for (i in 1:length(mirna_id_list)) {
         # remove last three sections of the id
-        mirna_id <- c(mirna_id, paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_"))
+        mirna_id <- c(
+            mirna_id,
+            paste(unlist(mirna_id_list[i])[1:((length(unlist(mirna_id_list[i]))) - 3)], collapse = "_")
+        )
     }
 } else {
     mirna_id <- as.character(rownames(mirna.data))
@@ -154,11 +163,20 @@ gc()
 
 # Keep only miRNAs that are expressed in at least one sample and have target gene annotation
 mirna.ind <- unique(which(as.character(rownames(mirna.data)) %in% as.character(mid$mature_miRNA)))
-gene.ind <- which(as.character(m$gene) %in% unique(mid$gene_id[which(as.character(mid$mature_miRNA) %in% as.character(rownames(mirna.data.3)))]))
+gene.ind <- which(
+    as.character(m$gene) %in%
+        unique(mid$gene_id[which(as.character(mid$mature_miRNA) %in% as.character(rownames(mirna.data.3)))])
+)
 if (length(mirna.ind) >= 1 & length(gene.ind) >= 1) {
-    df <- list(cor = d$cor[gene.ind, mirna.ind, drop = F], p = d$p[gene.ind, mirna.ind, drop = F], nObs = d$nObs[gene.ind, mirna.ind, drop = F])
+    df <- list(
+        cor = d$cor[gene.ind, mirna.ind, drop = F],
+        p = d$p[gene.ind, mirna.ind, drop = F],
+        nObs = d$nObs[gene.ind, mirna.ind, drop = F]
+    )
 } else {
-    stop("CHIPSTER-NOTE: There are either no annotated miRNAs/mRNAs or any expressed miRNAs in your dataset! Aborting computations.")
+    stop(
+        "CHIPSTER-NOTE: There are either no annotated miRNAs/mRNAs or any expressed miRNAs in your dataset! Aborting computations."
+    )
 }
 col.ind <- colSums(df$cor, na.rm = TRUE) != 0
 pval <- df$p[, col.ind, drop = F]
@@ -200,7 +218,10 @@ gc()
 
 # Filter the results on correlation or p-value
 if (filtering.method == "correlation") {
-    res2 <- na.omit(res[res$pearson.correlation.coefficient >= filter.threshold | res$pearson.correlation.coefficient <= -filter.threshold, ])
+    res2 <- na.omit(res[
+        res$pearson.correlation.coefficient >= filter.threshold |
+            res$pearson.correlation.coefficient <= -filter.threshold,
+    ])
 }
 
 if (filtering.method == "p.value") {

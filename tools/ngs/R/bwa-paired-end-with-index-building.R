@@ -56,6 +56,10 @@ check.command <- paste(bwa.index.binary, "genome.txt| tail -1 ")
 # genome.dir <- system(check.command, intern = TRUE)
 # bwa.genome <- file.path( genome.dir , "genome.txt")
 bwa.genome <- system(check.command, intern = TRUE)
+if (bwa.genome == "wrong_tar_content") {
+    stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")
+}
+safe_name(basename(bwa.genome))
 
 
 ###
@@ -67,7 +71,36 @@ if (total.edit >= 1) {
 }
 command.start <- paste("bash -c '", bwa.binary)
 quality.parameter <- ifelse(quality.format == "solexa1_3", "-I", "")
-mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e", num.extensions, "-d", disallow.gaps, "-i", disallow.indel, "-l", seed.length, "-k", seed.edit, "-O", gap.opening, "-E", gap.extension, "-q", trim.threshold, "-B", barcode.length, "-M", mismatch.penalty, "-n", total.edit, quality.parameter)
+mode.parameters <- paste(
+    "aln",
+    "-t",
+    chipster.threads.max,
+    "-o",
+    num.gaps,
+    "-e",
+    num.extensions,
+    "-d",
+    disallow.gaps,
+    "-i",
+    disallow.indel,
+    "-l",
+    seed.length,
+    "-k",
+    seed.edit,
+    "-O",
+    gap.opening,
+    "-E",
+    gap.extension,
+    "-q",
+    trim.threshold,
+    "-B",
+    barcode.length,
+    "-M",
+    mismatch.penalty,
+    "-n",
+    total.edit,
+    quality.parameter
+)
 
 # Check input files
 if (fileOk("reads1.txt")) {
@@ -89,7 +122,10 @@ if (fileOk("reads1.txt")) {
         reads1.list <- reads[1]
         reads2.list <- reads[2]
     } else {
-        stop(paste("CHIPSTER-NOTE: ", "When providing more than two FASTQ files, you must also provide a list file for both directions."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "When providing more than two FASTQ files, you must also provide a list file for both directions."
+        ))
     }
 }
 

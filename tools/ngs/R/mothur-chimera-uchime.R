@@ -37,7 +37,7 @@ unzipIfGZipFile("a.fasta")
 # binary
 
 # mothur 1.48.2 is installed in container image in /opt/chipster/tools
-binary <- c(file.path("/opt/chipster/tools","mothur","mothur"))
+binary <- c(file.path("/opt/chipster/tools", "mothur", "mothur"))
 version <- system(paste(binary, "--version"), intern = TRUE)
 documentVersion("Mothur", version)
 
@@ -47,33 +47,35 @@ documentVersion("Mothur", version)
 
 # start building the command for the Mothur chimera.uchime and chimera.vsearch tools based on the method chosen.
 if (method == "vsearch") {
-  chimera.options <- paste("chimera.vsearch(fasta=a.fasta, processors=", chipster.threads.max, ",", sep = "")
+    chimera.options <- paste("chimera.vsearch(fasta=a.fasta, processors=", chipster.threads.max, ",", sep = "")
 }
 if (method == "uchime") {
-  chimera.options <- paste("chimera.uchime(fasta=a.fasta, processors=", chipster.threads.max, ",", sep = "")
+    chimera.options <- paste("chimera.uchime(fasta=a.fasta, processors=", chipster.threads.max, ",", sep = "")
 }
 
 if (reference == "bacterial") {
-  # bacterial reference in fasta format
-  data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva-gold"))
-  reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
-  chimera.options <- paste(chimera.options, "reference=", reference.path, sep = "")
+    # bacterial reference in fasta format
+    data.path <- c(file.path(chipster.tools.path, "mothur-silva-reference", "silva-gold"))
+    reference.path <- c(file.path(data.path, "silva.gold.ng.fasta"))
+    chimera.options <- paste(chimera.options, "reference=", reference.path, sep = "")
 }
 
 # count_table is required when reference=none. Note that chimera.vsearch doesn't work if you give it both the reference and the count_table.
 if (reference == "none") {
-  if (file.exists("a.count_table")) {
-    chimera.options <- paste(chimera.options, " count=a.count_table", sep = "")
-  } else {
-    stop("CHIPSTER-NOTE: Note that in order to use the denovo option, you have to give a count table as input!")
-  }
+    if (file.exists("a.count_table")) {
+        chimera.options <- paste(chimera.options, " count=a.count_table", sep = "")
+    } else {
+        stop("CHIPSTER-NOTE: Note that in order to use the denovo option, you have to give a count table as input!")
+    }
 }
 
 # chimera.vsearch doesn't work with a reference (bug in Mothur)
 if (reference == "bacterial") {
-  if (method == "vsearch") {
-    stop("CHIPSTER-NOTE: VSEARCH does not currently work with a reference. Instead, use either UCHIME with a reference or VSEARCH without reference (choose 'none, de novo').")
-  }
+    if (method == "vsearch") {
+        stop(
+            "CHIPSTER-NOTE: VSEARCH does not currently work with a reference. Instead, use either UCHIME with a reference or VSEARCH without reference (choose 'none, de novo')."
+        )
+    }
 }
 
 
@@ -85,10 +87,10 @@ if (reference == "bacterial") {
 # }
 
 if (dereplicate == "false") {
-  chimera.options <- paste(chimera.options, ", dereplicate=F", sep = "")
+    chimera.options <- paste(chimera.options, ", dereplicate=F", sep = "")
 }
 if (dereplicate == "true") {
-  chimera.options <- paste(chimera.options, ", dereplicate=T", sep = "")
+    chimera.options <- paste(chimera.options, ", dereplicate=T", sep = "")
 }
 
 chimera.options <- paste(chimera.options, ")", sep = "")
@@ -150,21 +152,21 @@ system(command)
 #system(command2)
 
 if (method == "vsearch") {
-  system("mv a.denovo.vsearch.fasta chimeras.removed.fasta")
-  system("mv a.ref.vsearch.fasta chimeras.removed.fasta")
+    system("mv a.denovo.vsearch.fasta chimeras.removed.fasta")
+    system("mv a.ref.vsearch.fasta chimeras.removed.fasta")
 }
 if (method == "uchime") {
-  system("mv a.denovo.uchime.fasta chimeras.removed.fasta")
-  system("mv a.ref.uchime.fasta chimeras.removed.fasta")
+    system("mv a.denovo.uchime.fasta chimeras.removed.fasta")
+    system("mv a.ref.uchime.fasta chimeras.removed.fasta")
 }
 
 if (reference == "bacterial") {
-  system("mv a.ref.vsearch.count_table chimeras.removed.count_table")
-  system("mv a.ref.uchime.count_table chimeras.removed.count_table")
+    system("mv a.ref.vsearch.count_table chimeras.removed.count_table")
+    system("mv a.ref.uchime.count_table chimeras.removed.count_table")
 }
 if (reference == "none") {
-  system("mv a.denovo.vsearch.count_table chimeras.removed.count_table")
-  system("mv a.denovo.uchime.count_table chimeras.removed.count_table")
+    system("mv a.denovo.vsearch.count_table chimeras.removed.count_table")
+    system("mv a.denovo.uchime.count_table chimeras.removed.count_table")
 }
 
 # Post process output, make Summary.seqs command
@@ -173,8 +175,8 @@ if (reference == "none") {
 summaryseqs.options <- paste("summary.seqs(fasta=chimeras.removed.fasta")
 
 if (file.exists("chimeras.removed.count_table")) {
-  #system("mv a.pick.count_table chimeras.removed.count_table")
-  summaryseqs.options <- paste(summaryseqs.options, ", count=chimeras.removed.count_table", sep = "")
+    #system("mv a.pick.count_table chimeras.removed.count_table")
+    summaryseqs.options <- paste(summaryseqs.options, ", count=chimeras.removed.count_table", sep = "")
 }
 summaryseqs.options <- paste(summaryseqs.options, ", processors=", chipster.threads.max, ")", sep = "")
 documentCommand(summaryseqs.options)

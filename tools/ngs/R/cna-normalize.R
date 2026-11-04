@@ -18,7 +18,7 @@ copyNumbers <- toQDNAseqCopyNumbers(input, chiptype = phenodata$chiptype, level 
 copyNumbers <- normalizeBins(copyNumbers, method = method)
 
 if (smoothOutliers == "TRUE") {
-  copyNumbers <- smoothOutlierBins(copyNumbers)
+    copyNumbers <- smoothOutlierBins(copyNumbers)
 }
 
 output <- fromQDNAseqCopyNumbers(copyNumbers)

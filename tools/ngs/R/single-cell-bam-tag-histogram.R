@@ -5,7 +5,6 @@
 # PARAMETER OPTIONAL select_cells: "Select only a number of top cell barcodes for plotting" TYPE [TRUE, FALSE] DEFAULT FALSE (Switch to TRUE if you want to select the number of the top cell barcodes, and set the number in the parameter below. You might want to do this if you suspect that there are lots of nonsense cell barcodes in your data.)
 # PARAMETER OPTIONAL number_cells: "Number of cell barcodes to use" TYPE INTEGER FROM 0 TO 500000 DEFAULT 0 (How many cell barcodes to use when drawing the knee plot. If you suspect that there are lots of nonsense cell barcodes in your data, you can try tuning this parameter to a number closer to expected number of actual beads in your data. NOTE that if you did not select TRUE in the parameter above, this parameter does nothing.)
 
-
 # OUTPUT OPTIONAL CumCellReadCount.pdf
 # OUTPUT OPTIONAL inflectionPoint.txt
 
@@ -30,7 +29,6 @@ system(command)
 # plot(1:length(x), x, type='l', col="blue", xlab="cell barcodes sorted by number of reads [descending]", ylab="cumulative fraction of reads", xlim=c(1,x_axis_max))
 # dev.off()
 
-
 # Using Dawit's script:
 library("inflection")
 
@@ -42,9 +40,15 @@ num_barcodes <- dim(a)[1]
 
 if (select_cells == TRUE) {
     if (number_cells < 10) {
-        stop(paste("CHIPSTER-NOTE: ", "You wanted to select the number of cells to use -please set a reasonable (bigger) number to the parameter."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You wanted to select the number of cells to use -please set a reasonable (bigger) number to the parameter."
+        ))
     } else if (number_cells > num_barcodes) {
-        stop(paste("CHIPSTER-NOTE: ", "You wanted to select the number of cells to use, but the number you chose exceeded the number of barcodes in the dataset."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You wanted to select the number of cells to use, but the number you chose exceeded the number of barcodes in the dataset."
+        ))
     } else {
         a2 <- a[1:number_cells, ]
         x <- cumsum(a2$V1)
@@ -66,13 +70,24 @@ per_reads <- round(x[infl[1, 2]], digits = 2) * 100
 
 pdf(file = "inflectionPoint.pdf")
 cellIds <- 1:length(x)
-plot(cellIds, x,
-    type = "l", col = "blue", xlab = "cell barcodes sorted by number of reads [descending]",
-    ylab = "cumulative fraction of reads", xlim = c(1, length(x)),
+plot(
+    cellIds,
+    x,
+    type = "l",
+    col = "blue",
+    xlab = "cell barcodes sorted by number of reads [descending]",
+    ylab = "cumulative fraction of reads",
+    xlim = c(1, length(x)),
     main = paste(
-        "Inflection point: ", infl[1, 2], ", covers ", per_reads, " % of reads.",
-        "\n  Number of barcodes used to compute the inflection point: ", x_axis_max,
-        "\n Total number of cell barcodes detected: ", num_barcodes
+        "Inflection point: ",
+        infl[1, 2],
+        ", covers ",
+        per_reads,
+        " % of reads.",
+        "\n  Number of barcodes used to compute the inflection point: ",
+        x_axis_max,
+        "\n Total number of cell barcodes detected: ",
+        num_barcodes
     )
 )
 #     sub=paste("Total number of cell barcodes detected: ", num_barcodes), cex.sub=1.5 )
@@ -87,8 +102,6 @@ dev.off()
 
 ## write inflectionPoint.txt
 # write.table(infl[1,2],"inflectionPoint.txt",col.names = c("InflectionPoint"),row.names=F)
-
-
 
 # stop(paste('CHIPSTER-NOTE: ', command))
 

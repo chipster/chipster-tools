@@ -57,7 +57,9 @@ if (k.no > length(dat2)) {
     stop("CHIPSTER-NOTE: The number of neighbors is larger than the number of chips!")
 }
 if (k.vote > k.no) {
-    stop("CHIPSTER-NOTE: The number of votes needed to give a definitive answer is larger than the number of neighbors!")
+    stop(
+        "CHIPSTER-NOTE: The number of votes needed to give a definitive answer is larger than the number of neighbors!"
+    )
 }
 
 if (validation.type == "predict") {
@@ -85,12 +87,26 @@ if (validation.type == "predict") {
 if (knn.type == "crossvalidate") {
     knn.cross <- knn.cv(train = train, cl = cl, k = k.no, l = k.vote)
     # Writes a table of known versus predicted classes
-    write.table(data.frame(sample = rownames(train), known.classes = cl, prediction = knn.cross), file = "knn-cross-validation.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+    write.table(
+        data.frame(sample = rownames(train), known.classes = cl, prediction = knn.cross),
+        file = "knn-cross-validation.tsv",
+        sep = "\t",
+        row.names = F,
+        col.names = T,
+        quote = F
+    )
 }
 
 if (knn.type == "predict") {
     cl_test <- phenodata_test[, groups]
     knn.predict <- knn(train = train, test = test, cl = cl, k = k.no, l = k.vote)
     # Writes a table of known versus predicted classes
-    write.table(data.frame(sample = rownames(test), known.classes = cl_test, prediction = knn.predict), file = "knn-cross-validation.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+    write.table(
+        data.frame(sample = rownames(test), known.classes = cl_test, prediction = knn.predict),
+        file = "knn-cross-validation.tsv",
+        sep = "\t",
+        row.names = F,
+        col.names = T,
+        quote = F
+    )
 }

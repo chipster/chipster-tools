@@ -11,7 +11,6 @@
 # PARAMETER OPTIONAL num.barcodes: "Number of barcodes to correct for bead synthesis error" TYPE INTEGER FROM 0 TO 50000 DEFAULT 2000 (Roughly 2x the expected number of cells. The number of barcodes on which to perform the correction. It is advisable to use roughly 2 times the anticipated number cells, as it was empirically found out that this allows to recover nearly every defective cell barcode that corresponds to a STAMP, rather than an empty bead cell barcode. Maximum value of this parameter is limited to 50000 to avoid excessive memory usage. Contact support if you need this limit to be raised.)
 # PARAMETER OPTIONAL primer.sequence: "Sequence" TYPE STRING DEFAULT AAGCAGTGGTATCAACGCAGAGTGAATGGG (Sequence to trim off. As a default, SMART adapter sequence.)
 
-
 # OUTPUT OPTIONAL log.txt
 # PARAMETER OPTIONAL num.core.barcodes: "Number of core barcodes" TYPE INTEGER DEFAULT 100 (How many reads per cell barcode required)
 # PARAMETER OPTIONAL num.genes: "Number of genes per cell" TYPE INTEGER DEFAULT 0 (How many genes per cell required)
@@ -25,19 +24,31 @@
 path.dropseq <- c(file.path(chipster.tools.path, "drop-seq_tools"))
 
 if (filter.param < 1) {
-  stop(paste("CHIPSTER-NOTE: ", "Please set a reasonable number to the filtering parameter."))
+    stop(paste("CHIPSTER-NOTE: ", "Please set a reasonable number to the filtering parameter."))
 }
 
 # STEP 1: Detect bead synthesis errors:
 # command
-command <- paste(path.dropseq, "/DetectBeadSynthesisErrors I=input.bam O=cleaned.bam OUTPUT_STATS=synthesis_stats.txt SUMMARY=synthesis_stats_summary.txt NUM_BARCODES=", num.barcodes, " PRIMER_SEQUENCE=", primer.sequence, " 2>>log.txt", sep = "")
+command <- paste(
+    path.dropseq,
+    "/DetectBeadSynthesisErrors I=input.bam O=cleaned.bam OUTPUT_STATS=synthesis_stats.txt SUMMARY=synthesis_stats_summary.txt NUM_BARCODES=",
+    num.barcodes,
+    " PRIMER_SEQUENCE=",
+    primer.sequence,
+    " 2>>log.txt",
+    sep = ""
+)
 # run the tool
 system(command)
 
 
 # STEP 2: Digital expression matrix:
 # command start
-command.start <- paste(path.dropseq, "/DigitalExpression I=cleaned.bam O=digital_expression.txt.gz SUMMARY=digital_expression_summary.txt", sep = "")
+command.start <- paste(
+    path.dropseq,
+    "/DigitalExpression I=cleaned.bam O=digital_expression.txt.gz SUMMARY=digital_expression_summary.txt",
+    sep = ""
+)
 # parameters
 command.parameters <- paste(filtering.type, "=", filter.param, sep = "")
 # command.parameters <- ""
@@ -60,6 +71,5 @@ system("mv digital_expression.txt digital_expression.tsv")
 # digital_expression.tsv
 
 # stop(paste('CHIPSTER-NOTE: ', command)
-
 
 # EOF

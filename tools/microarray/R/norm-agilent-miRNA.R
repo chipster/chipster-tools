@@ -30,13 +30,13 @@ dat <- read.maimages(files = files, columns = columns, annotation = annotation, 
 
 # Removes control probes
 if (remove.control.probes == "yes") {
-   if (length(setdiff(names(table(dat$other$annotation)), -1:1)) > 0) {
-      stop("CHIPSTER-NOTE: Your annotation data has other than -1, 0 and 1 values")
-   }
+    if (length(setdiff(names(table(dat$other$annotation)), -1:1)) > 0) {
+        stop("CHIPSTER-NOTE: Your annotation data has other than -1, 0 and 1 values")
+    }
 
-   if (is.null(dim(dat$other$annotation)) == FALSE) {
-      dat <- dat[rowSums(dat$other$annotation) == 0, ]
-   }
+    if (is.null(dim(dat$other$annotation)) == FALSE) {
+        dat <- dat[rowSums(dat$other$annotation) == 0, ]
+    }
 }
 
 # Background correction
@@ -44,17 +44,17 @@ dat2 <- backgroundCorrect(dat, bg, offset = as.numeric(background.offset))
 
 # Normalization across arrays
 if (normba == "scale-75") {
-   dat3 <- normalizeBetweenArrays(dat2$R, method = "none")
-   normfact <- apply(dat3, 2, quantile)["75%", ]
-   for (i in 1:ncol(dat3)) {
-      dat3[, i] <- dat3[, i] / normfact[i]
-   }
-   dat3 <- log2(dat3)
+    dat3 <- normalizeBetweenArrays(dat2$R, method = "none")
+    normfact <- apply(dat3, 2, quantile)["75%", ]
+    for (i in 1:ncol(dat3)) {
+        dat3[, i] <- dat3[, i] / normfact[i]
+    }
+    dat3 <- log2(dat3)
 } else if (normba == "vsn") {
-   dat3 <- normalizeVSN(dat2$R)
+    dat3 <- normalizeVSN(dat2$R)
 } else {
-   dat3 <- normalizeBetweenArrays(dat2$R, method = normba)
-   dat3 <- log2(dat3)
+    dat3 <- normalizeBetweenArrays(dat2$R, method = normba)
+    dat3 <- log2(dat3)
 }
 
 # Writes out a phenodata table
@@ -64,20 +64,27 @@ training <- c(rep("", length(sample)))
 time <- c(rep("", length(sample)))
 random <- c(rep("", length(sample)))
 if (chiptype == "empty") {
-   chiptype <- c("cDNA")
+    chiptype <- c("cDNA")
 }
 
 # Annotation package name conversions}
 if (chiptype == "Human") {
-   chiptype <- c("miRNA")
+    chiptype <- c("miRNA")
 }
 if (chiptype == "Mouse") {
-   chiptype <- c("miRNA")
+    chiptype <- c("miRNA")
 }
 if (chiptype == "Rat") {
-   chiptype <- c("miRNA")
+    chiptype <- c("miRNA")
 }
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 rownames(dat3) <- dat$genes$identifier
 
@@ -88,11 +95,11 @@ rownames(M) <- M$Group.1
 genes <- rownames(M)
 M <- M[, -1]
 if (length(dat$other$flag) != 0) {
-   flags <- as.data.frame(dat$other$flag)
-   names(flags) <- paste("flag.", names(flags), sep = "")
+    flags <- as.data.frame(dat$other$flag)
+    names(flags) <- paste("flag.", names(flags), sep = "")
 }
 if (length(dat$other$flag) == 0) {
-   flags <- matrix(nrow = 0, ncol = 0)
+    flags <- matrix(nrow = 0, ncol = 0)
 }
 names(M) <- paste("chip.", names(M), sep = "")
 names(M) <- paste(names(M), ".tsv", sep = "")
@@ -100,17 +107,45 @@ M <- data.frame(M)
 rownames(M) <- genes
 
 if (chiptype == "cDNA") {
-   if (nrow(flags) != nrow(M)) {
-      write.table(data.frame(round(M, digits = 2)), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
-   } else {
-      write.table(data.frame(round(M, digits = 2), flags), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
-   }
+    if (nrow(flags) != nrow(M)) {
+        write.table(
+            data.frame(round(M, digits = 2)),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
+    } else {
+        write.table(
+            data.frame(round(M, digits = 2), flags),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
+    }
 }
 
 if (chiptype == "miRNA") {
-   if (nrow(flags) != nrow(M)) {
-      write.table(data.frame(round(M, digits = 2)), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
-   } else {
-      write.table(data.frame(round(M, digits = 2), flags), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
-   }
+    if (nrow(flags) != nrow(M)) {
+        write.table(
+            data.frame(round(M, digits = 2)),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
+    } else {
+        write.table(
+            data.frame(round(M, digits = 2), flags),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
+    }
 }

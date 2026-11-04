@@ -74,14 +74,17 @@ if (file.exists("genome.txt")) {
 }
 
 
-
-
 print("Indexing the genome...")
 runExternal("echo Indexing the genome... > bwa.log")
 check.command <- paste(bwa.index.binary, "genome.txt| tail -1 ")
 # genome.dir <- system(check.command, intern = TRUE)
 # bwa.genome <- file.path( genome.dir , "genome.txt")
 bwa.genome <- system(check.command, intern = TRUE)
+if (bwa.genome == "wrong_tar_content") {
+    stop("CHIPSTER-NOTE: The selected genome file does not contain BWA indexes.")
+}
+# The index name comes from the file names in the user's tar package
+safe_name(basename(bwa.genome))
 
 
 # mode specific parameters
@@ -89,7 +92,36 @@ if (total.edit >= 1) {
     total.edit <- round(total.edit)
 }
 quality.parameter <- ifelse(quality.format == "solexa1_3", "-I", "")
-mode.parameters <- paste("aln", "-t", chipster.threads.max, "-o", num.gaps, "-e", num.extensions, "-d", disallow.gaps, "-i", disallow.indel, "-l", seed.length, "-k", seed.edit, "-O", gap.opening, "-E", gap.extension, "-q", trim.threshold, "-B", barcode.length, "-M", mismatch.penalty, "-n", total.edit, quality.parameter)
+mode.parameters <- paste(
+    "aln",
+    "-t",
+    chipster.threads.max,
+    "-o",
+    num.gaps,
+    "-e",
+    num.extensions,
+    "-d",
+    disallow.gaps,
+    "-i",
+    disallow.indel,
+    "-l",
+    seed.length,
+    "-k",
+    seed.edit,
+    "-O",
+    gap.opening,
+    "-E",
+    gap.extension,
+    "-q",
+    trim.threshold,
+    "-B",
+    barcode.length,
+    "-M",
+    mismatch.penalty,
+    "-n",
+    total.edit,
+    quality.parameter
+)
 
 
 # command ending

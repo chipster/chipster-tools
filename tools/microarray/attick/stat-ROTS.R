@@ -28,7 +28,7 @@ groups <- phenodata[, which(column == colnames(phenodata))]
 
 # Sanity checks
 if (length(unique(groups)) == 1 | length(unique(groups)) >= 3) {
-   stop("You need to have exactly two groups to run this analysis")
+    stop("You need to have exactly two groups to run this analysis")
 }
 
 # Testing
@@ -38,7 +38,14 @@ result <- ROTS(data, groups, B, K)
 d <- result$d
 FDR <- result$FDR
 FDR[FDR > fdr.threshold] <- NA
-write.table(na.omit(data.frame(dat, d = round(d, digits = 2), FDR = round(FDR, digits = 6))), file = "ROTS.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    na.omit(data.frame(dat, d = round(d, digits = 2), FDR = round(FDR, digits = 6))),
+    file = "ROTS.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 param <- round(c(result$a1, result$a2, result$k, result$R, result$Z, result$B), 2)
 names(param) <- c("a1", "a2", "Top list size", "Reproducibility value", "Z-score", "Number of resamplings")

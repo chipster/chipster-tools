@@ -5,7 +5,6 @@
 # OUTPUT OPTIONAL polyphen-predictions.tsv
 # PARAMETER genome: "Genome" TYPE [hg19: "Human (hg19\)", hg38: "Human (hg38\)"] DEFAULT hg38 (Reference sequence)
 
-
 # 31.8.2012 	JTT
 # 15.11.2012 	JTT,EK  	Uses VariantAnnotation package 1.4.3.
 # 01.06.2015 	ML 			Modifications to move the tool to new R version
@@ -15,7 +14,6 @@
 # 10.09.2015	ML			Polyphen predictions
 # 28.04.2017 	ML 			Update / fix (changes in readVcf output format)
 # 10.6.2018 	ML			Bug fix
-
 
 # Read data
 library(VariantAnnotation)
@@ -48,11 +46,66 @@ if (length(grep("chr", vcf@rowRanges@seqnames@values)) >= 1) {
 }
 
 
-
 # remove mitochonrial DNA (it is causing problems with genome versions)
 # vcf2 <- keepSeqlevels(vcf2, seqlevels(vcf2)[1:24])
-vcf2 <- keepSeqlevels(vcf2, c("chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"))
-txdb2 <- keepSeqlevels(txdb, c("chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", "chr16", "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chrX", "chrY"))
+vcf2 <- keepSeqlevels(
+    vcf2,
+    c(
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+    )
+)
+txdb2 <- keepSeqlevels(
+    txdb,
+    c(
+        "chr1",
+        "chr2",
+        "chr3",
+        "chr4",
+        "chr5",
+        "chr6",
+        "chr7",
+        "chr8",
+        "chr9",
+        "chr10",
+        "chr11",
+        "chr12",
+        "chr13",
+        "chr14",
+        "chr15",
+        "chr16",
+        "chr17",
+        "chr18",
+        "chr19",
+        "chr20",
+        "chr21",
+        "chr22",
+        "chrX",
+        "chrY"
+    )
+)
 
 # Test if the annotation was correct:
 if (all(seqlengths(vcf2) == seqlengths(txdb2)) == FALSE) {
@@ -77,9 +130,24 @@ colnames(allvar2) <- toupper(colnames(allvar2))
 ig <- allvar2[!is.na(allvar2$GENEID), ]
 nig <- allvar2[is.na(allvar2$GENEID), ]
 library(org.Hs.eg.db)
-symbol <- select(org.Hs.eg.db, keys = unique(ig[ig$LOCATION == "coding", ]$GENEID), keytype = "ENTREZID", columns = "SYMBOL")
-genename <- select(org.Hs.eg.db, keys = unique(ig[ig$LOCATION == "coding", ]$GENEID), keytype = "ENTREZID", columns = "GENENAME")
-ensg <- select(org.Hs.eg.db, keys = unique(ig[ig$LOCATION == "coding", ]$GENEID), keytype = "ENTREZID", columns = "ENSEMBL")
+symbol <- select(
+    org.Hs.eg.db,
+    keys = unique(ig[ig$LOCATION == "coding", ]$GENEID),
+    keytype = "ENTREZID",
+    columns = "SYMBOL"
+)
+genename <- select(
+    org.Hs.eg.db,
+    keys = unique(ig[ig$LOCATION == "coding", ]$GENEID),
+    keytype = "ENTREZID",
+    columns = "GENENAME"
+)
+ensg <- select(
+    org.Hs.eg.db,
+    keys = unique(ig[ig$LOCATION == "coding", ]$GENEID),
+    keytype = "ENTREZID",
+    columns = "ENSEMBL"
+)
 ig2 <- merge(ig, symbol, by.x = "GENEID", by.y = "ENTREZID", all.x = TRUE)
 ig3 <- merge(ig2, genename, by.x = "GENEID", by.y = "ENTREZID", all.x = TRUE)
 ig4 <- merge(ig3, ensg, by.x = "GENEID", by.y = "ENTREZID", all.x = TRUE)
@@ -113,7 +181,21 @@ if (length(pp) > 0) {
 }
 
 # cod3<-data.frame(geneID=cod2$GENEID, cdsID=sapply(cod2$CDSID, FUN=function(x) paste(x, collapse=", ")), txID=cod2$TXID, consequence=cod2$CONSEQUENCE, cdsStart=as.data.frame(cod2$CDSLOC)[,1], cdsEnd=as.data.frame(cod2$CDSLOC)[,2], width=as.data.frame(cod2$CDSLOC)[,3], varAllele=as.data.frame(cod2$VARALLELE)[,1], refCodon=as.data.frame(cod2$REFCODON)[,1], varCodon=as.data.frame(cod2$VARCODON)[,1], refAA=as.data.frame(cod2$REFAA)[,1], varAA=as.data.frame(cod2$VARAA)[,1])
-cod3 <- data.frame(geneID = cod2$GENEID, rsID = names(coding), cdsID = sapply(cod2$CDSID, FUN = function(x) paste(x, collapse = ", ")), txID = cod2$TXID, consequence = cod2$CONSEQUENCE, cdsStart = as.data.frame(cod2$CDSLOC)[, 1], cdsEnd = as.data.frame(cod2$CDSLOC)[, 2], width = as.data.frame(cod2$CDSLOC)[, 3], varAllele = as.data.frame(cod2$VARALLELE)[, 1], refCodon = as.data.frame(cod2$REFCODON)[, 1], varCodon = as.data.frame(cod2$VARCODON)[, 1], refAA = as.data.frame(cod2$REFAA)[, 1], varAA = as.data.frame(cod2$VARAA)[, 1])
+cod3 <- data.frame(
+    geneID = cod2$GENEID,
+    rsID = names(coding),
+    cdsID = sapply(cod2$CDSID, FUN = function(x) paste(x, collapse = ", ")),
+    txID = cod2$TXID,
+    consequence = cod2$CONSEQUENCE,
+    cdsStart = as.data.frame(cod2$CDSLOC)[, 1],
+    cdsEnd = as.data.frame(cod2$CDSLOC)[, 2],
+    width = as.data.frame(cod2$CDSLOC)[, 3],
+    varAllele = as.data.frame(cod2$VARALLELE)[, 1],
+    refCodon = as.data.frame(cod2$REFCODON)[, 1],
+    varCodon = as.data.frame(cod2$VARCODON)[, 1],
+    refAA = as.data.frame(cod2$REFAA)[, 1],
+    varAA = as.data.frame(cod2$VARAA)[, 1]
+)
 
 
 symbol <- select(org.Hs.eg.db, keys = as.character(unique(cod3$geneID)), keytype = "ENTREZID", columns = "SYMBOL")

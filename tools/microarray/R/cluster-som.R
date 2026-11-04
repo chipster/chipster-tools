@@ -8,7 +8,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the resampling image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the resampling image)
 
-
 # Self-organizing map
 # JTT 22.6.2006
 
@@ -40,10 +39,10 @@ dat2 <- dat[, grep("chip", names(dat))]
 
 # Sanity checks
 if (x * y >= nrow(dat2)) {
-   stop("The number of nodes is larger than the number of genes! Please use a smaller grid.")
+    stop("The number of nodes is larger than the number of genes! Please use a smaller grid.")
 }
 if (ncol(dat2) < 2) {
-   stop("You have have at least two chips to run this analysis!")
+    stop("You have have at least two chips to run this analysis!")
 }
 
 # Calculating the SOM-result
@@ -55,18 +54,18 @@ dists <- unit.distances(kohmap$grid, toroidal = F)
 # Makes colors for plotting purposes
 dif.dists <- unique(as.vector(names(table(dists[1, ]))))
 if (colpar == "Red-Green") {
-   heatcol <- colorRampPalette(c("Red", "Green"))(length(dif.dists))
+    heatcol <- colorRampPalette(c("Red", "Green"))(length(dif.dists))
 }
 if (colpar == "Blue-Yellow") {
-   heatcol <- colorRampPalette(c("Blue", "Yellow"))(length(dif.dists))
+    heatcol <- colorRampPalette(c("Blue", "Yellow"))(length(dif.dists))
 }
 if (colpar == "Black-White") {
-   heatcol <- colorRampPalette(c("Black", "LightGrey"))(length(dif.dists))
+    heatcol <- colorRampPalette(c("Black", "LightGrey"))(length(dif.dists))
 }
 
 heatcol2 <- dists[1, ]
 for (i in 1:length(dif.dists)) {
-   heatcol2[heatcol2 == dif.dists[i]] <- heatcol[i]
+    heatcol2[heatcol2 == dif.dists[i]] <- heatcol[i]
 }
 
 # Plotting the SOM map
@@ -83,4 +82,11 @@ dev.off()
 dists <- c(dists[1, ], rep(" ", (dim(dat)[[1]] - length(dists[1, ]))))
 cols <- c(heatcol2, rep(" ", (dim(dat)[[1]] - length(heatcol2))))
 griddim <- c(x, y, rep(" ", (dim(dat)[[1]] - 2)))
-write.table(data.frame(dat, cluster = kohmap$unit.classif, distance2first = dists, colours = cols, griddim = griddim), "som.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    data.frame(dat, cluster = kohmap$unit.classif, distance2first = dists, colours = cols, griddim = griddim),
+    "som.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)

@@ -43,10 +43,30 @@ if (phred.scale == "phred64") {
 
 if (file.exists("reads2.fq")) {
     # Paired end reads
-    command <- paste(bowtie.binary, bowtie.params, "--no-discordant --no-mixed -x transcriptome -1 reads1.fq -2 reads2.fq |", express.binary, "-m", fragmentlength, "-s", fragmentlengthstdev, "transcripts.fasta")
+    command <- paste(
+        bowtie.binary,
+        bowtie.params,
+        "--no-discordant --no-mixed -x transcriptome -1 reads1.fq -2 reads2.fq |",
+        express.binary,
+        "-m",
+        fragmentlength,
+        "-s",
+        fragmentlengthstdev,
+        "transcripts.fasta"
+    )
 } else {
     # Single end reads
-    command <- paste(bowtie.binary, bowtie.params, "-x transcriptome -U reads1.fq |", express.binary, "-m", fragmentlength, "-s", fragmentlengthstdev, "transcripts.fasta")
+    command <- paste(
+        bowtie.binary,
+        bowtie.params,
+        "-x transcriptome -U reads1.fq |",
+        express.binary,
+        "-m",
+        fragmentlength,
+        "-s",
+        fragmentlengthstdev,
+        "transcripts.fasta"
+    )
 }
 
 # for testing

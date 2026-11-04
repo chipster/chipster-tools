@@ -44,7 +44,10 @@ documentVersion("MACS", version)
 # Use user-specified genome size if given
 if (precalculated.size == "user_specified") {
     if (nchar(userspecifed.size) < 1) {
-        stop(paste("CHIPSTER-NOTE: ", "You need to provide a value for mappable genome size or select one of the precalculated values."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You need to provide a value for mappable genome size or select one of the precalculated values."
+        ))
     }
     genome.size <- userspecifed.size
 } else {

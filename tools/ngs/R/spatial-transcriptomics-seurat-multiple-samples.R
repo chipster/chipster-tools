@@ -43,23 +43,35 @@ if (method == "merge") {
     # Select variable features using SelectIntegrationFeatures() as explained in https://github.com/satijalab/seurat/issues/5761
     for (seurat_obj in seurat_objects) {
         if (number_of_var_feats > length(VariableFeatures(seurat_obj))) {
-            stop(paste("CHIPSTER-NOTE: ", "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform in the previous tool."))
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform in the previous tool."
+            ))
         }
     }
     variable_feats <- SelectIntegrationFeatures(seurat_objects, nfeatures = number_of_var_feats, verbose = FALSE)
 
     # Variable genes that are not in all data sets (scale.data) need to be removed from the list before downstream analyses.
     # This is done because PCA and FindSpatiallyVariableFeatures() exclude genes not in scale.data from analysis.
-    feats_in_all_objects <- intersect(rownames(seurat_objects[[1]]$SCT@scale.data), rownames(seurat_objects[[2]]$SCT@scale.data))  
+    feats_in_all_objects <- intersect(
+        rownames(seurat_objects[[1]]$SCT@scale.data),
+        rownames(seurat_objects[[2]]$SCT@scale.data)
+    )
     variable_feats_in_all_objects <- intersect(variable_feats, feats_in_all_objects)
     if (length(variable_feats_in_all_objects) < length(variable_feats)) {
         sink("logfile.txt")
-        warning_message <- paste("
+        warning_message <- paste(
+            "
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets. PCA in the next tool is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, 
+        all data sets. PCA in the next tool is only run with",
+            length(variable_feats_in_all_objects),
+            "variable genes. If you want to rerun the tool, 
         you can try to select a higher number of returned variable genes in SCTransform in the previous tool to see 
         if the number of deemed variable genes across all data sets increases. You can also run the tool again 
-        with less than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
+        with less than",
+            length(variable_feats_in_all_objects),
+            "selected variable genes for the combined object."
+        )
         cat(warning_message)
 
         # Close the log file
@@ -77,24 +89,36 @@ if (method == "integration") {
     # Select variable features using SelectIntegrationFeatures() as explained in https://github.com/satijalab/seurat/issues/5761
     for (seurat_obj in seurat_objects) {
         if (number_of_var_feats > length(VariableFeatures(seurat_obj))) {
-            stop(paste("CHIPSTER-NOTE: ", "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform in the previous tool."))
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "The selected number of variable genes in the combined object should be smaller than or equal to the selected number of returned variable genes in SCTransform in the previous tool."
+            ))
         }
     }
     variable_feats <- SelectIntegrationFeatures(seurat_objects, nfeatures = number_of_var_feats, verbose = FALSE)
 
     # Select features that are repeatedly variable across datasets for integration
     # Variable genes that are not in all data sets (scale.data) need to be removed from the list before downstream analyses.
-    # This is done because PCA and FindSpatiallyVariableFeatures() exclude genes not in scale.data from analysis. 
-    feats_in_all_objects <- intersect(rownames(seurat_objects[[1]]$SCT@scale.data), rownames(seurat_objects[[2]]$SCT@scale.data))
+    # This is done because PCA and FindSpatiallyVariableFeatures() exclude genes not in scale.data from analysis.
+    feats_in_all_objects <- intersect(
+        rownames(seurat_objects[[1]]$SCT@scale.data),
+        rownames(seurat_objects[[2]]$SCT@scale.data)
+    )
     variable_feats_in_all_objects <- intersect(variable_feats, feats_in_all_objects)
     if (length(variable_feats_in_all_objects) < length(variable_feats)) {
         sink("logfile.txt")
-        warning_message <- paste("
+        warning_message <- paste(
+            "
         You have selected more variable genes for the combined object than have been deemed variable across
-        all data sets. PCA in the next tool is only run with", length(variable_feats_in_all_objects), "variable genes. If you want to rerun the tool, 
+        all data sets. PCA in the next tool is only run with",
+            length(variable_feats_in_all_objects),
+            "variable genes. If you want to rerun the tool, 
         you can try to select a higher number of returned variable genes in SCTransform in the previous tool to see 
         if the number of deemed variable genes across all data sets increases. You can also run the tool again 
-        with less than", length(variable_feats_in_all_objects), "selected variable genes for the combined object.")
+        with less than",
+            length(variable_feats_in_all_objects),
+            "selected variable genes for the combined object."
+        )
         cat(warning_message)
 
         # Close the log file
@@ -103,17 +127,21 @@ if (method == "integration") {
 
     # Run PrepSCTIntegration to compute the sctransform residuals for all genes in the datasets
     seurat_objects <- PrepSCTIntegration(
-        object.list = seurat_objects, anchor.features = variable_feats_in_all_objects,
+        object.list = seurat_objects,
+        anchor.features = variable_feats_in_all_objects,
         verbose = FALSE
     )
     # Identify anchors
     int.anchors <- FindIntegrationAnchors(
-        object.list = seurat_objects, normalization.method = "SCT",
-        verbose = FALSE, anchor.features = variable_feats_in_all_objects
+        object.list = seurat_objects,
+        normalization.method = "SCT",
+        verbose = FALSE,
+        anchor.features = variable_feats_in_all_objects
     )
     # Integrate datasets with the found anchors
     objects_combined <- IntegrateData(
-        anchorset = int.anchors, normalization.method = "SCT",
+        anchorset = int.anchors,
+        normalization.method = "SCT",
         verbose = FALSE
     )
     # Remove objects and memory

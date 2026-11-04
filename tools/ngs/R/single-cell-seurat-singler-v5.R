@@ -11,11 +11,8 @@
 # SLOTS 5
 # TOOLS_BIN ""
 
-
-
 # HumanPrimaryCellAtlasData, BlueprintEncodeData, MouseRNAseqData, ImmGenData, DatabaseImmuneCellExpressionData, NovershternHematopoieticData, MonacoImmuneData
 # PARAMETER celldex.index "CellDex reference to use" TYPE [HumanPrimaryCellAtlasData: "Human primary cell atlas", BlueprintEncodeData: "Blueprint ENCODE", MouseRNAseqData: "Mouse RNA-seq", ImmGenData: "Immunological Genome Project", DatabaseImmuneCellExpressionData: "Database of Immune Cell Expression", NovershternHematopoieticData: "Novershtern hematopoietic data", MonacoImmuneData: "Monaco Immune data"] DEFAULT MonacoImmuneData (Which CellDex reference to use for annotations.)
-
 
 # 2022-01-11 ML
 # 2023-02-14 LG Add 5 slots
@@ -40,21 +37,20 @@ options(Seurat.object.assay.version = "v5")
 load("seurat_obj.Robj")
 
 if (exists("data.combined")) {
-  seurat_obj <- data.combined
+    seurat_obj <- data.combined
 }
 
 # Let’s convert our Seurat object to single cell experiment (SCE) for convenience
 # sce <- as.SingleCellExperiment(DietSeurat(seurat_obj)) # DietSeurat: only necessary parts
 if (seurat_obj@active.assay == "SCT") {
-  sce <- as.SingleCellExperiment(seurat_obj, assay = "SCT")
+    sce <- as.SingleCellExperiment(seurat_obj, assay = "SCT")
 } else {
-  sce <- as.SingleCellExperiment(seurat_obj)
+    sce <- as.SingleCellExperiment(seurat_obj)
 }
 
 
 # HumanPrimaryCellAtlasData, BlueprintEncodeData, MouseRNAseqData, ImmGenData, DatabaseImmuneCellExpressionData, NovershternHematopoieticData, MonacoImmuneData
 # HumanPrimaryCellAtlasData: "Human primary cell atlas", BlueprintEncodeData: "Blueprint/ENCODE", MouseRNAseqData: "Mouse RNA-seq", ImmGenData: "Immunological Genome Project", DatabaseImmuneCellExpressionData: "Database of Immune Cell Expression", NovershternHematopoieticData: "Novershtern hematopoietic data", MonacoImmuneData: "Monaco Immune data"
-
 
 # annotation.data parameter = which annotation data, e.g. MonacoImmuneData
 command <- paste("celldex::", celldex.index, "()", sep = "")
@@ -68,9 +64,22 @@ annotation.fine <- SingleR(test = sce, assay.type.test = 1, ref = ref, labels = 
 # write.table(annotations.main, file = "annotations_main.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 # write.table(annotations.fine, file = "annotations_fine.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
 
-write.table(table(annotation.main$pruned.labels), file = "annotations_main.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-write.table(table(annotation.fine$pruned.labels), file = "annotations_fine.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-
+write.table(
+    table(annotation.main$pruned.labels),
+    file = "annotations_main.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
+write.table(
+    table(annotation.fine$pruned.labels),
+    file = "annotations_fine.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 
 # Back to Seurat obj
@@ -83,24 +92,35 @@ seurat_obj@meta.data$annotation.fine <- annotation.fine$pruned.labels
 pdf(file = "singleR_annotation_plots.pdf")
 
 # Annotation based on clusters (not cell by cell):
-annotation.main.clusters <- SingleR(test = sce, assay.type.test = 1, ref = ref, labels = ref$label.main, clusters = Idents(seurat_obj))
+annotation.main.clusters <- SingleR(
+    test = sce,
+    assay.type.test = 1,
+    ref = ref,
+    labels = ref$label.main,
+    clusters = Idents(seurat_obj)
+)
 new.cluster.ids <- annotation.main.clusters$labels
 names(new.cluster.ids) <- levels(seurat_obj)
 seurat_obj_annotated_clusters <- seurat_obj
 seurat_obj_annotated_clusters <- RenameIdents(seurat_obj, new.cluster.ids)
 
 # Plot first just the clusters, to ease the comparison:
-DimPlot(seurat_obj, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) + ggtitle("Clusters in UMAP plot")
+DimPlot(seurat_obj, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) +
+    ggtitle("Clusters in UMAP plot")
 # DimPlot(seurat_obj_annotated_clusters, reduction = 'umap', label = T)
-DimPlot(seurat_obj_annotated_clusters, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) + ggtitle("Main annotations based on clusters")
+DimPlot(seurat_obj_annotated_clusters, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) +
+    ggtitle("Main annotations based on clusters")
 
 
 # Visualise:
 seurat_obj <- SetIdent(seurat_obj, value = "annotation.main")
-DimPlot(seurat_obj, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) + ggtitle("Main annotations, per cell") # + NoLegend()
+DimPlot(seurat_obj, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) +
+    ggtitle("Main annotations, per cell") # + NoLegend()
 
 seurat_obj <- SetIdent(seurat_obj, value = "annotation.fine")
-DimPlot(seurat_obj, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) + NoLegend() + ggtitle("Fine annotations, per cell") # NoLegend used because legends will take so much space.
+DimPlot(seurat_obj, reduction = "umap", label = T, repel = T, label.size = 3, pt.size = point.size) +
+    NoLegend() +
+    ggtitle("Fine annotations, per cell") # NoLegend used because legends will take so much space.
 
 plotScoreHeatmap(annotation.main) + NoLegend()
 plotDeltaDistribution(annotation.main, ncol = 3)

@@ -6,7 +6,6 @@
 # OUTPUT META phenodata-target-gene.tsv: phenodata-target-gene.tsv
 # PARAMETER common.column: common.column TYPE STRING DEFAULT empty (The name of the column that is common to the data tables.)
 
-
 # 25.6.2015 ML Moved the script to the "attick"
 
 # Setting up test parameter settings
@@ -39,7 +38,22 @@ detach(gene.data)
 gene.data.2 <- gene.data[match(mirna.symbols, gene.symbols, nomatch = 0), ]
 
 # write files
-write.table(gene.data.2, file = "target-gene-expression.tsv", quote = FALSE, sep = "\t", row.names = TRUE, col.names = TRUE)
-write.table(phenodata, file = "phenodata-target-gene.tsv", quote = FALSE, sep = "\t", na = "", row.names = FALSE, col.names = TRUE)
+write.table(
+    gene.data.2,
+    file = "target-gene-expression.tsv",
+    quote = FALSE,
+    sep = "\t",
+    row.names = TRUE,
+    col.names = TRUE
+)
+write.table(
+    phenodata,
+    file = "phenodata-target-gene.tsv",
+    quote = FALSE,
+    sep = "\t",
+    na = "",
+    row.names = FALSE,
+    col.names = TRUE
+)
 
 # EOF

@@ -7,7 +7,6 @@
 # PARAMETER p.value.threshold: "p-value threshold" TYPE DECIMAL FROM 0 TO 1 DEFAULT 0.05 (P-value cut-off for significant results)
 # PARAMETER assumed.mean: "Assumed mean" TYPE DECIMAL FROM -100000 TO 100000 DEFAULT 0 (Assumed mean of the data)
 
-
 # One-sample parametric and non-parametric tests
 # JTT 4.7.2006
 
@@ -104,4 +103,11 @@ dat <- dat[p.adjusted <= p.cut, ]
 p.adjusted <- p.adjusted[p.adjusted <= p.cut]
 
 # Writing out a table
-write.table(data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)), file = "one-sample.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    data.frame(dat, p.adjusted = round(p.adjusted, digits = 6)),
+    file = "one-sample.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)

@@ -37,16 +37,16 @@ dat <- read.table("normalized.tsv", header = TRUE, sep = "\t", row.names = 1)
 # Reading phenodata for chiptype
 phenodata <- read.table("phenodata.tsv", header = T, sep = "\t")
 if (phenodata$chiptype[1] != "cDNA" | phenodata$chiptype[1] != "Illumina") {
-  # Saves the chiptype into object lib
-  lib <- phenodata$chiptype[1]
-  lib <- as.character(lib)
+    # Saves the chiptype into object lib
+    lib <- phenodata$chiptype[1]
+    lib <- as.character(lib)
 }
 
 # Account for the fact that annotation packages are from version 2.3 of Bioconductor
 # named with an ".db" suffix. Add the suffix when missing to support data files
 # from Chipster 1.3 and earlier.
 if (length(grep(".db", lib)) == 0 & length(grep("pmcdf", lib)) == 0) {
-  lib <- paste(lib, ".db", sep = "")
+    lib <- paste(lib, ".db", sep = "")
 }
 
 # Loads the correct Affymetrix annotation library
@@ -67,92 +67,146 @@ annotpkg <- lib
 # Account for the fact that alternative CDF annotation packages for some Affymetrix
 # arrays are no longer supported and should be replaced with their Bioconductor counterpart
 if (annotpkg == "ath1121501hsentrezg.db") {
-  annotpkg <- "ath1121501.db"
+    annotpkg <- "ath1121501.db"
 }
 if (annotpkg == "aghsentrezg.db") {
-  annotpkg <- "ag.db"
+    annotpkg <- "ag.db"
 }
 if (annotpkg == "ygs98scentrezg.db") {
-  annotpkg <- "ygs98.db"
+    annotpkg <- "ygs98.db"
 }
 if (annotpkg == "yeast2scentrezg.db") {
-  annotpkg <- "yeast2.db"
+    annotpkg <- "yeast2.db"
 }
 
 # check for conditional testing and multiple testing correction
 if (conditional.testing == "no") {
-  conditional <- FALSE
+    conditional <- FALSE
 } else {
-  if (p.adjust.method != "none") {
-    stop("CHIPSTER-NOTE: Multiple testing correction can be applied only when performing unconditional testing. Please set conditional.testing to no, or p.adjust.method to none. Usually the preferred method is to use conditional testing.")
-  }
-  conditional <- TRUE
+    if (p.adjust.method != "none") {
+        stop(
+            "CHIPSTER-NOTE: Multiple testing correction can be applied only when performing unconditional testing. Please set conditional.testing to no, or p.adjust.method to none. Usually the preferred method is to use conditional testing."
+        )
+    }
+    conditional <- TRUE
 }
 
 # define the output variable
-output <- data.frame(total = integer(0), expected = numeric(0), observed = integer(0), p.value = numeric(0), description = character(0), ontology = character(0))
+output <- data.frame(
+    total = integer(0),
+    expected = numeric(0),
+    observed = integer(0),
+    p.value = numeric(0),
+    description = character(0),
+    ontology = character(0)
+)
 
 if (ontology == "biological_process" || ontology == "all") {
-  params <- new("GOHyperGParams", geneIds = myids, annotation = annotpkg, ontology = "BP", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
-  go <- hyperGTest(params)
-  go.table <- summary(go, pvalue = 2)
-  if (nrow(go.table) > 0) {
-    go.table$Pvalue <- p.adjust(go.table$Pvalue, method = p.adjust.method)
-    go.table <- go.table[go.table$Pvalue <= p.value.threshold & go.table$Size >= minimum.population, ]
+    params <- new(
+        "GOHyperGParams",
+        geneIds = myids,
+        annotation = annotpkg,
+        ontology = "BP",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
+    go <- hyperGTest(params)
+    go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
-      rownames(go.table) <- go.table[, 1]
-      go.table <- go.table[, c(6, 4, 5, 2, 7)]
-      go.table$ontology <- "biological process"
-      colnames(go.table) <- colnames(output)
-      output <- rbind(output, go.table)
-      go.table$description <- paste('<a href="http://amigo1.geneontology.org/cgi-bin/amigo/term_details?term=', rownames(go.table), '">', go.table$description, "</a>", sep = "")
-      HTML(go.table, file = "hypergeo.html", append = TRUE, Border = 0, innerBorder = 1)
+        go.table$Pvalue <- p.adjust(go.table$Pvalue, method = p.adjust.method)
+        go.table <- go.table[go.table$Pvalue <= p.value.threshold & go.table$Size >= minimum.population, ]
+        if (nrow(go.table) > 0) {
+            rownames(go.table) <- go.table[, 1]
+            go.table <- go.table[, c(6, 4, 5, 2, 7)]
+            go.table$ontology <- "biological process"
+            colnames(go.table) <- colnames(output)
+            output <- rbind(output, go.table)
+            go.table$description <- paste(
+                '<a href="http://amigo1.geneontology.org/cgi-bin/amigo/term_details?term=',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
+            HTML(go.table, file = "hypergeo.html", append = TRUE, Border = 0, innerBorder = 1)
+        }
     }
-  }
 }
 
 if (ontology == "molecular_function" || ontology == "all") {
-  params <- new("GOHyperGParams", geneIds = myids, annotation = annotpkg, ontology = "MF", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
-  go <- hyperGTest(params)
-  go.table <- summary(go, pvalue = 2)
-  if (nrow(go.table) > 0) {
-    go.table$Pvalue <- p.adjust(go.table$Pvalue, method = p.adjust.method)
-    go.table <- go.table[go.table$Pvalue <= p.value.threshold & go.table$Size >= minimum.population, ]
+    params <- new(
+        "GOHyperGParams",
+        geneIds = myids,
+        annotation = annotpkg,
+        ontology = "MF",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
+    go <- hyperGTest(params)
+    go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
-      rownames(go.table) <- go.table[, 1]
-      go.table <- go.table[, c(6, 4, 5, 2, 7)]
-      go.table$ontology <- "molecular function"
-      colnames(go.table) <- colnames(output)
-      output <- rbind(output, go.table)
-      go.table$description <- paste('<a href="http://amigo1.geneontology.org/cgi-bin/amigo/term_details?term=', rownames(go.table), '">', go.table$description, "</a>", sep = "")
-      HTML(go.table, file = "hypergeo.html", append = TRUE, Border = 0, innerBorder = 1)
+        go.table$Pvalue <- p.adjust(go.table$Pvalue, method = p.adjust.method)
+        go.table <- go.table[go.table$Pvalue <= p.value.threshold & go.table$Size >= minimum.population, ]
+        if (nrow(go.table) > 0) {
+            rownames(go.table) <- go.table[, 1]
+            go.table <- go.table[, c(6, 4, 5, 2, 7)]
+            go.table$ontology <- "molecular function"
+            colnames(go.table) <- colnames(output)
+            output <- rbind(output, go.table)
+            go.table$description <- paste(
+                '<a href="http://amigo1.geneontology.org/cgi-bin/amigo/term_details?term=',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
+            HTML(go.table, file = "hypergeo.html", append = TRUE, Border = 0, innerBorder = 1)
+        }
     }
-  }
 }
 
 if (ontology == "cellular_component" || ontology == "all") {
-  params <- new("GOHyperGParams", geneIds = myids, annotation = annotpkg, ontology = "CC", pvalueCutoff = p.value.threshold, conditional = conditional, testDirection = over.or.under.representation)
-  go <- hyperGTest(params)
-  go.table <- summary(go, pvalue = 2)
-  if (nrow(go.table) > 0) {
-    go.table$Pvalue <- p.adjust(go.table$Pvalue, method = p.adjust.method)
-    go.table <- go.table[go.table$Pvalue <= p.value.threshold & go.table$Size >= minimum.population, ]
+    params <- new(
+        "GOHyperGParams",
+        geneIds = myids,
+        annotation = annotpkg,
+        ontology = "CC",
+        pvalueCutoff = p.value.threshold,
+        conditional = conditional,
+        testDirection = over.or.under.representation
+    )
+    go <- hyperGTest(params)
+    go.table <- summary(go, pvalue = 2)
     if (nrow(go.table) > 0) {
-      rownames(go.table) <- go.table[, 1]
-      go.table <- go.table[, c(6, 4, 5, 2, 7)]
-      go.table$ontology <- "cellular component"
-      colnames(go.table) <- colnames(output)
-      output <- rbind(output, go.table)
-      go.table$description <- paste('<a href="http://amigo1.geneontology.org/cgi-bin/amigo/term_details?term=', rownames(go.table), '">', go.table$description, "</a>", sep = "")
-      HTML(go.table, file = "hypergeo.html", append = TRUE, Border = 0, innerBorder = 1)
+        go.table$Pvalue <- p.adjust(go.table$Pvalue, method = p.adjust.method)
+        go.table <- go.table[go.table$Pvalue <= p.value.threshold & go.table$Size >= minimum.population, ]
+        if (nrow(go.table) > 0) {
+            rownames(go.table) <- go.table[, 1]
+            go.table <- go.table[, c(6, 4, 5, 2, 7)]
+            go.table$ontology <- "cellular component"
+            colnames(go.table) <- colnames(output)
+            output <- rbind(output, go.table)
+            go.table$description <- paste(
+                '<a href="http://amigo1.geneontology.org/cgi-bin/amigo/term_details?term=',
+                rownames(go.table),
+                '">',
+                go.table$description,
+                "</a>",
+                sep = ""
+            )
+            HTML(go.table, file = "hypergeo.html", append = TRUE, Border = 0, innerBorder = 1)
+        }
     }
-  }
 }
 
 # write outputs
 write.table(output, file = "hypergeo.tsv", quote = FALSE, sep = "\t")
 if (nrow(output) == 0) {
-  write("<html>\n\t<body>\n\t\tNo significant results found!</br />\n\t</body>\n</html>", file = "hypergeo.html")
+    write("<html>\n\t<body>\n\t\tNo significant results found!</br />\n\t</body>\n</html>", file = "hypergeo.html")
 }
 
 # EOF

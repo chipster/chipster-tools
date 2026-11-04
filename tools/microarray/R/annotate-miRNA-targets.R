@@ -35,10 +35,18 @@ if (species == "rat") {
     dataset <- "rnorvegicus_gene_ensembl"
 }
 ensembl <- useMart("ensembl", dataset = dataset)
-annotated_genes <- getBM(mart = ensembl, attributes = c("entrezgene", "hgnc_symbol", "description"), filters = "entrezgene", values = gene_id)
+annotated_genes <- getBM(
+    mart = ensembl,
+    attributes = c("entrezgene", "hgnc_symbol", "description"),
+    filters = "entrezgene",
+    values = gene_id
+)
 
 # Match the list of genes with the annotations
-result_table <- data.frame(cbind(mirna_id_2, gene_id, matrix("", nrow = length(gene_id), ncol = 2)), stringsAsFactors = FALSE)
+result_table <- data.frame(
+    cbind(mirna_id_2, gene_id, matrix("", nrow = length(gene_id), ncol = 2)),
+    stringsAsFactors = FALSE
+)
 names(result_table) <- c("miRNA", "entrez_id", "symbol", "description")
 # match function reports the first match in annotated genes, not the last as done previously
 result_table[, c(3, 4)] <- annotated_genes[match(gene_id, annotated_genes[, 1]), 2:3]

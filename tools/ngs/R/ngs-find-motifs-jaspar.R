@@ -10,7 +10,6 @@
 # PARAMETER OPTIONAL e.value.cutoff: "E-value cutoff" TYPE DECIMAL FROM 0 TO 100 DEFAULT 0.01 (This parameter controls the alignment stringency, where a lower value means better alignment.)
 # PARAMETER OPTIONAL number.best.matches: "Number of matches" TYPE INTEGER FROM 1 TO 20 DEFAULT 5 (The number of best matching transcription factors for each consensus sequence found. This affects both the textual summary output and the logo plots.)
 
-
 # MG, 26.05.2010
 # MG, 06.10.2011, added parameter to control number of best matches per TF and updated to changes in R-2.12.1
 # EK, 06.02.2014, text changes
@@ -22,7 +21,11 @@ library(rGADEM)
 library(package = genome, character.only = TRUE)
 
 # Read in data from BED or tsv file and convert to BED format
-if (length(grep("^column\\d+$", chr_column)) == 1 && length(grep("^column\\d+$", start_column)) == 1 && length(grep("^column\\d+$", end_column)) == 1) {
+if (
+    length(grep("^column\\d+$", chr_column)) == 1 &&
+        length(grep("^column\\d+$", start_column)) == 1 &&
+        length(grep("^column\\d+$", end_column)) == 1
+) {
     results_file <- read.table(file = "results.tsv", sep = "\t", header = F)
     chr_column <- as.numeric(gsub("^column", "", chr_column)) + 1
     start_column <- as.numeric(gsub("^column", "", start_column)) + 1
@@ -37,7 +40,11 @@ if (length(grep("^column\\d+$", chr_column)) == 1 && length(grep("^column\\d+$",
 results_bed <- results_file[, c(chr_column, start_column, end_column)]
 results_bed[, 1] <- as.factor(results_bed[, 1])
 if (length(grep("chr", levels(results_bed[, 1]), invert = T)) > 0) {
-    levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)] <- paste("chr", levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)], sep = "")
+    levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)] <- paste(
+        "chr",
+        levels(results_bed[, 1])[grep("chr", levels(results_bed[, 1]), invert = T)],
+        sep = ""
+    )
 }
 results_bed[, 1] <- as.character(results_bed[, 1])
 
@@ -98,7 +105,9 @@ if (genome == "BSgenome.Dmelanogaster.UCSC.dm3") {
 # 	stop("CHIPSTER-NOTE: No common motifs were found among the query sequences! Retry with less stringent parameter settings or provide a longer list of query sequences.")
 # }
 if (length(nOccurrences(results_gadem)) < 1) {
-    stop("CHIPSTER-NOTE: No common motifs were found among the query sequences! Retry with less stringent parameter settings or provide a longer list of query sequences.")
+    stop(
+        "CHIPSTER-NOTE: No common motifs were found among the query sequences! Retry with less stringent parameter settings or provide a longer list of query sequences."
+    )
 }
 
 # Extract the PWM from the motif analysis
@@ -171,7 +180,12 @@ if (number.best.matches < 11) {
         file_name <- paste("logo-plot-", count, ".pdf", sep = "")
         pdf(file = file_name, height = 1400 / 72, width = 600 / 72)
         plot_name <- consensus(results_gadem)[count]
-        plot(results_alignment[count], top = number.best.matches, ncol = 1, main = paste("Top TF matches for motif\n", plot_name, sep = ""))
+        plot(
+            results_alignment[count],
+            top = number.best.matches,
+            ncol = 1,
+            main = paste("Top TF matches for motif\n", plot_name, sep = "")
+        )
         dev.off()
     }
 } else {
@@ -179,7 +193,12 @@ if (number.best.matches < 11) {
         file_name <- paste("logo-plot-", count, ".pdf", sep = "")
         pdf(file = file_name, height = 2000 / 72, width = 600 / 72)
         plot_name <- consensus(results_gadem)[count]
-        plot(results_alignment[count], top = number.best.matches, ncol = 1, main = paste("Top TF matches for motif\n", plot_name, sep = ""))
+        plot(
+            results_alignment[count],
+            top = number.best.matches,
+            ncol = 1,
+            main = paste("Top TF matches for motif\n", plot_name, sep = "")
+        )
         dev.off()
     }
 }

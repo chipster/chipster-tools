@@ -35,7 +35,11 @@ if (what.to.sample == "genes") {
 }
 
 if (what.to.sample == "chips") {
-    v <- sample(1:length(grep(matrices[1], datnames)), floor(length(grep(matrices[1], datnames)) * sample.size / 100), replace = replacement)
+    v <- sample(
+        1:length(grep(matrices[1], datnames)),
+        floor(length(grep(matrices[1], datnames)) * sample.size / 100),
+        replace = replacement
+    )
 
     annotations <- 1:ncol(dat)
     for (m in matrices) {

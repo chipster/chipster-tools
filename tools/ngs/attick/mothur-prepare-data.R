@@ -8,7 +8,6 @@
 
 # JTT 2012-11-01
 
-
 # Assessory function
 f <- function(x) {
     seq(x[2], x[3])
@@ -55,7 +54,14 @@ if (number.to.sample != 0) {
         e <- c((s - 1)[-1], length(d))
         h <- data.frame(h, s, e)
         if (nrow(h) < number.to.sample) {
-            stop(paste("There are less sequences than you specified for sampling! Sample ", fasta[i], " contains only ", nrow(h), " sequences. Please use rerun the tool using a smaller number of sequences.", sep = ""))
+            stop(paste(
+                "There are less sequences than you specified for sampling! Sample ",
+                fasta[i],
+                " contains only ",
+                nrow(h),
+                " sequences. Please use rerun the tool using a smaller number of sequences.",
+                sep = ""
+            ))
         }
         s <- sample(1:nrow(h), number.to.sample, replace = FALSE)
         hs <- h[s, ]
@@ -72,4 +78,11 @@ sample <- c(" ", " ", fasta)
 group <- c(rep("", length(sample)))
 oligo <- c("forward", "reverse", rep("barcode", length(fasta)))
 sequence <- rep("", length(sample))
-write.table(data.frame(sample = sample, oligo = oligo, sequence = sequence, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, oligo = oligo, sequence = sequence, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)

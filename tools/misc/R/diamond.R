@@ -44,7 +44,9 @@ sfcheck.command <- paste(sfcheck.binary, emboss.path, "sequence")
 str.filetype <- system(sfcheck.command, intern = TRUE)
 
 if (str.filetype == "Not an EMBOSS compatible sequence file") {
-    stop("CHIPSTER-NOTE: Your query sequence file is not a sequence file that is compatible with the tool you try to use")
+    stop(
+        "CHIPSTER-NOTE: Your query sequence file is not a sequence file that is compatible with the tool you try to use"
+    )
 }
 
 
@@ -64,17 +66,21 @@ if (file.exists("reference")) {
         str.filetype <- system(sfcheck.command, intern = TRUE)
 
         if (str.filetype == "Not an EMBOSS compatible sequence file") {
-            stop("CHIPSTER-NOTE: Your sequence file is not a sequence file that is compatible with the tool you try to use")
+            stop(
+                "CHIPSTER-NOTE: Your sequence file is not a sequence file that is compatible with the tool you try to use"
+            )
         }
         system("mv reference.dmnd reference.fasta ")
         # Check if the query is protein or nucleotode
-        infoseq.exe <- file.path(emboss.path, "infoseq -nowarning -noerror -nodie -only -type -nohead -filter | uniq | awk '{print $1}'| head -1")
+        infoseq.exe <- file.path(
+            emboss.path,
+            "infoseq -nowarning -noerror -nodie -only -type -nohead -filter | uniq | awk '{print $1}'| head -1"
+        )
         type.command <- paste("head -200 reference.fasta | ", infoseq.exe)
         seq.type <- system(type.command, intern = TRUE)
         if (seq.type != "P") {
             stop("CHIPSTER-NOTE: Your reference file is not a fasta fromatted PROTEIN sequence file")
         }
-
 
         index.command <- paste(diamond.binary, "makedb --in reference.fasta -d reference >> diamond.log")
         system(index.command)
@@ -152,7 +158,10 @@ if (str.filetype != "fasta") {
 }
 
 # Check if the query is protein or nucleotode
-infoseq.exe <- file.path(emboss.path, "infoseq -nowarning -noerror -nodie -only -type -nohead -filter | uniq | awk '{print $1}'| head -1")
+infoseq.exe <- file.path(
+    emboss.path,
+    "infoseq -nowarning -noerror -nodie -only -type -nohead -filter | uniq | awk '{print $1}'| head -1"
+)
 type.command <- paste("head -200 sequence | ", infoseq.exe)
 seq.type <- system(type.command, intern = TRUE)
 
@@ -180,7 +189,16 @@ if (outformat == "101") {
     outfile <- ("diamond.sam")
 }
 
-diamond.options <- paste(method, " --query sequence --out ", outfile, " --outfmt ", outformat, " -p 4 -d ", db, sep = "")
+diamond.options <- paste(
+    method,
+    " --query sequence --out ",
+    outfile,
+    " --outfmt ",
+    outformat,
+    " -p 4 -d ",
+    db,
+    sep = ""
+)
 if (use_remote_index == "yes") {
     diamond.options <- paste(diamond.options, " -d /tmp/diamond/", db, sep = "")
 } else {
@@ -198,8 +216,6 @@ if (smode == "sensitive") {
 if (smode == "moresensitive") {
     diamond.options <- paste(diamond.options, "--more-sensitive")
 }
-
-
 
 
 command.full <- paste(diamond.binary, diamond.options, " 2>>diamond.log")

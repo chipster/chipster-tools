@@ -21,7 +21,6 @@
 # PARAMETER OPTIONAL max.intron.length: "Maximum intron length" TYPE INTEGER FROM 1 TO 1000000 DEFAULT 500000 (TopHat2 will ignore donor-acceptor pairs farther than this many bases apart, except when such a pair is supported by a split segment alignment of a long read.)
 # PARAMETER OPTIONAL no.mixed: "Report only paired alignments" TYPE [yes, no] DEFAULT yes (Only report read alignments if both reads in a pair can be mapped.)
 
-
 # EK 17.4.2012 added -G and -g options
 # MG 24.4.2012 added ability to use gtf files from Chipster server
 # AMS 19.6.2012 added unzipping
@@ -47,7 +46,6 @@ for (i in 1:nrow(input.names)) {
 }
 
 
-
 options(scipen = 10)
 # max.intron.length <- formatC(max.intron.length, "f", digits = 0)
 
@@ -66,20 +64,22 @@ path.samtools <- c(file.path(chipster.tools.path, "samtools-0.1.19"))
 set.path <- paste(sep = "", "PATH=", path.bowtie, ":", path.samtools, ":$PATH")
 
 print("Extracting tar formatted gemome index file")
-runExternal("tar xf genome.tar")
+# Extract to a folder of its own, so that the files of the package can't replace the files of the job
+dir.create("genome_index")
+runExternal("tar xf genome.tar -C genome_index")
 
 # Check bowtie2 index base name
-if (length(Sys.glob("*.1.bt2")) != 0) {
-    f <- list.files(getwd(), pattern = "\\.1.bt2$")
-    bowtie2.genome <- substr(f[1], 1, nchar(f[1]) - 6)
+if (length(Sys.glob("genome_index/*.1.bt2")) != 0) {
+    f <- list.files("genome_index", pattern = "\\.1.bt2$")
+    bowtie2.genome <- file.path("genome_index", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
 } else {
     stop("CHIPSTER-NOTE: The .tar package does not seem to contain a valid TopHat2 index.")
 }
 
 # Check optional tophat2 index base name
-if (length(Sys.glob("tophat2/*.1.bt2")) != 0) {
-    f <- list.files(file.path(getwd(), "tophat2"), pattern = "\\.1.bt2$")
-    tophat2.genome <- file.path("tophat2", substr(f[1], 1, nchar(f[1]) - 6))
+if (length(Sys.glob("genome_index/tophat2/*.1.bt2")) != 0) {
+    f <- list.files(file.path("genome_index", "tophat2"), pattern = "\\.1.bt2$")
+    tophat2.genome <- file.path("genome_index", "tophat2", safe_name(substr(f[1], 1, nchar(f[1]) - 6)))
     print(paste("TopHat2 genome name:", tophat2.genome))
 } else {
     print("The .tar package does not contain TopHat2 transcriptome index.")
@@ -97,7 +97,28 @@ command.start <- paste("bash -c '", set.path, tophat.binary)
 # parameters
 # command.parameters <- paste("--bowtie1 -r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
 # command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type fr-unstranded")
-command.parameters <- paste("-p", chipster.threads.max, "-r", mate.inner.distance, "--mate-std-dev", mate.std.dev, "--read-mismatches", mismatches, "-a", min.anchor.length, "-m", splice.mismatches, "-i", min.intron.length, "-I", max.intron.length, "-g", max.multihits, "--library-type", library.type)
+command.parameters <- paste(
+    "-p",
+    chipster.threads.max,
+    "-r",
+    mate.inner.distance,
+    "--mate-std-dev",
+    mate.std.dev,
+    "--read-mismatches",
+    mismatches,
+    "-a",
+    min.anchor.length,
+    "-m",
+    splice.mismatches,
+    "-i",
+    min.intron.length,
+    "-I",
+    max.intron.length,
+    "-g",
+    max.multihits,
+    "--library-type",
+    library.type
+)
 
 if (mismatches > 2) {
     command.parameters <- paste(command.parameters, "--read-edit-dist", mismatches)
@@ -143,7 +164,10 @@ if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
     reads2 <- reads[2]
 } else {
     # Case: no list files, more than two fastq inputs
-    stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "List file is missing. You need to provide a list of read files for both directions."
+    ))
 }
 
 # command ending

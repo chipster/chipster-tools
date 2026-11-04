@@ -87,7 +87,10 @@ inputnames <- read_input_definitions()
 
 # Make a matrix of output names
 outputnames <- matrix(NA, nrow = 1, ncol = 2)
-outputnames[1, ] <- c("GetPileupSummaries.tsv", paste(strip_name(inputnames$reads.bam), "_getpileupsummaries.tsv", sep = ""))
+outputnames[1, ] <- c(
+    "GetPileupSummaries.tsv",
+    paste(strip_name(inputnames$reads.bam), "_getpileupsummaries.tsv", sep = "")
+)
 
 # Write output definitions file
 write_output_definitions(outputnames)

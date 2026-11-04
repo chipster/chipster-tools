@@ -57,7 +57,10 @@ if (is.text.operation) {
     tryCatch(
         suppressWarnings(grepl(sstring, "")),
         error = function(e) {
-            stop(paste("CHIPSTER-NOTE:", "Invalid regular expression:", sstring, "-", conditionMessage(e)), call. = FALSE)
+            stop(
+                paste("CHIPSTER-NOTE:", "Invalid regular expression:", sstring, "-", conditionMessage(e)),
+                call. = FALSE
+            )
         }
     )
 }

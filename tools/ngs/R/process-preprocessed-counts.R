@@ -40,7 +40,11 @@ dat <- read.maimages(files = files, columns = columns, annotation = annotation, 
 annotation.info <- NULL
 if (keep.annotations == "yes") {
     if (length(grep("^annotation", unlist(attributes(dat$other)), ignore.case = T)) > 0) {
-        annotation.col <- unlist(attributes(dat$other))[grep("^annotation", unlist(attributes(dat$other)), ignore.case = T)]
+        annotation.col <- unlist(attributes(dat$other))[grep(
+            "^annotation",
+            unlist(attributes(dat$other)),
+            ignore.case = T
+        )]
         annotation.info <- NULL
         for (i in 1:length(annotation.col)) {
             annotation.info <- cbind(annotation.info, (dat$other[[annotation.col[i]]])[, 1])
@@ -63,7 +67,21 @@ libsize <- c(rep("", length(sample)))
 
 # sample, original name, chiptype, experiment, group, library size, description
 
-write.table(data.frame(sample = sample, chiptype = chiptype, experiment = experiment, group = group, library_size = libsize, description = sample), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(
+        sample = sample,
+        chiptype = chiptype,
+        experiment = experiment,
+        group = group,
+        library_size = libsize,
+        description = sample
+    ),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Writes the results into a file
 if (keep.annotations == "yes" && (!is.null(annotation.info))) {

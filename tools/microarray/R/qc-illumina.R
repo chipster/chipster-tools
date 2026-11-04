@@ -8,8 +8,6 @@
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 # PARAMETER OPTIONAL image.type: "Boxplot image type" TYPE [PNG: PNG, PDF: PDF] DEFAULT PNG (Format of the boxplot output image. Please note that if you choose the PDF format, it will take a lot of time to draw it, and thus it is advisable to export the PDF for closer examination.)
 
-
-
 # Quality control of Illumina chips
 # 30.7.2007 JTT
 # 19.4.2011 MG, added legend to histogram
@@ -57,7 +55,18 @@ for (i in 1:ncol(dat2)) {
     x <- cbind(x, density(dat2[, i])$x)
     y <- cbind(y, density(dat2[, i])$y)
 }
-plot(x[, 1], y[, 1], col = 1, ylim = c(0, max(y)), main = "Intensities", type = "l", lwd = 2, lty = 1, xlab = "log2(I)", ylab = "Density")
+plot(
+    x[, 1],
+    y[, 1],
+    col = 1,
+    ylim = c(0, max(y)),
+    main = "Intensities",
+    type = "l",
+    lwd = 2,
+    lty = 1,
+    xlab = "log2(I)",
+    ylab = "Density"
+)
 for (i in 2:ncol(dat2)) {
     lines(x[, i], y[, i], col = i, lwd = 2, lty = 1)
 }

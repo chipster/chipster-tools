@@ -45,7 +45,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i, 1])
+    unzipIfGZipFile(input.names[i, 1])
 }
 
 # bowtie
@@ -59,44 +59,68 @@ rfg.value <- paste(rfg.open, rfg.ext, sep = ",")
 # common parameters
 # common.parameters <- paste("-q", "-m", multiread, "-k", alignment.no, "-I", min.insert.size, "-X", max.insert.size)
 
-parameters <- paste(strategy, "--mp", mp, "--np", np, "--rdg", rdg.value, "--rfg", rfg.value, "--minins", minins, "--maxins", maxins, pair.order, quality.format, "--no-unal", "-p", chipster.threads.max)
+parameters <- paste(
+    strategy,
+    "--mp",
+    mp,
+    "--np",
+    np,
+    "--rdg",
+    rdg.value,
+    "--rfg",
+    rfg.value,
+    "--minins",
+    minins,
+    "--maxins",
+    maxins,
+    pair.order,
+    quality.format,
+    "--no-unal",
+    "-p",
+    chipster.threads.max
+)
 
 if (alignment.no > 0) {
-  if (alignment.no == 6) {
-    parameters <- paste(parameters, "-a")
-  }
-  if (alignment.no < 6) {
-    parameters <- paste(parameters, "-k", alignment.no)
-  }
+    if (alignment.no == 6) {
+        parameters <- paste(parameters, "-a")
+    }
+    if (alignment.no < 6) {
+        parameters <- paste(parameters, "-k", alignment.no)
+    }
 }
 
 # Local alignment specific parameters
-if (strategy == "--very-fast-local" || strategy == "--fast-local" || strategy == "--sensitive-local" || strategy == "--very-sensitive-local") {
-  parameters <- paste(parameters, "--local --ma", ma)
+if (
+    strategy == "--very-fast-local" ||
+        strategy == "--fast-local" ||
+        strategy == "--sensitive-local" ||
+        strategy == "--very-sensitive-local"
+) {
+    parameters <- paste(parameters, "--local --ma", ma)
 }
 
 if (no.mixed == "yes") {
-  parameters <- paste(parameters, "--no-mixed")
+    parameters <- paste(parameters, "--no-mixed")
 }
 
 if (no.discordant == "yes") {
-  parameters <- paste(parameters, "--no-discordant")
+    parameters <- paste(parameters, "--no-discordant")
 }
 
 if (no.dovetail == "yes") {
-  parameters <- paste(parameters, "--no-dovetail")
+    parameters <- paste(parameters, "--no-dovetail")
 }
 
 if (no.contain == "yes") {
-  parameters <- paste(parameters, "--no-contain")
+    parameters <- paste(parameters, "--no-contain")
 }
 
 if (no.overlap == "yes") {
-  parameters <- paste(parameters, "--no-overlap")
+    parameters <- paste(parameters, "--no-overlap")
 }
 
 if (discordant.file == "yes") {
-  parameters <- paste(parameters, "--un-conc failed")
+    parameters <- paste(parameters, "--un-conc failed")
 }
 
 # Check if reads are in FASTA format
@@ -105,29 +129,32 @@ sfcheck.binary <- file.path(chipster.module.path, "../misc/shell/sfcheck.sh")
 sfcheck.command <- paste(sfcheck.binary, emboss.path, "reads001.fq")
 str.filetype <- system(sfcheck.command, intern = TRUE)
 if (str.filetype == "fasta") {
-  parameters <- paste(parameters, "-f")
+    parameters <- paste(parameters, "-f")
 }
 
 # Input files
 if (file.exists("reads1.txt") && file.exists("reads2.txt")) {
-  # Case: list files exist
-  reads1.list <- make_input_list("reads1.txt")
-  reads2.list <- make_input_list("reads2.txt")
-  if (identical(intersect(reads1.list, reads2.list), character(0))) {
-    reads1 <- paste(reads1.list, sep = "", collapse = ",")
-    reads2 <- paste(reads2.list, sep = "", collapse = ",")
-  } else {
-    stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
-  }
+    # Case: list files exist
+    reads1.list <- make_input_list("reads1.txt")
+    reads2.list <- make_input_list("reads2.txt")
+    if (identical(intersect(reads1.list, reads2.list), character(0))) {
+        reads1 <- paste(reads1.list, sep = "", collapse = ",")
+        reads2 <- paste(reads2.list, sep = "", collapse = ",")
+    } else {
+        stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
+    }
 } else if (file.exists("reads002.fq") && !file.exists("reads003.fq")) {
-  # Case: no list file, but only two fastq inputs
-  in.sorted <- input.names[order(input.names[, 2]), ]
-  reads <- grep("reads", in.sorted[, 1], value = TRUE)
-  reads1 <- reads[1]
-  reads2 <- reads[2]
+    # Case: no list file, but only two fastq inputs
+    in.sorted <- input.names[order(input.names[, 2]), ]
+    reads <- grep("reads", in.sorted[, 1], value = TRUE)
+    reads1 <- reads[1]
+    reads2 <- reads[2]
 } else {
-  # Case: no list files, more than two fastq inputs
-  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
+    # Case: no list files, more than two fastq inputs
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "List file is missing. You need to provide a list of read files for both directions."
+    ))
 }
 
 
@@ -165,12 +192,12 @@ runExternal(paste(samtools.binary, "index alignment.sorted.bam"))
 # rename result files according to the index parameter
 runExternal("mv alignment.sorted.bam bowtie2.bam")
 if (index.file == "index_file") {
-  runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
+    runExternal("mv alignment.sorted.bam.bai bowtie2.bam.bai")
 }
 
 if (discordant.file == "yes") {
-  runExternal("mv failed.1 failed_1.fq")
-  runExternal("mv failed.2 failed_2.fq")
+    runExternal("mv failed.1 failed_1.fq")
+    runExternal("mv failed.2 failed_2.fq")
 }
 
 # Substitute display names to log for clarity

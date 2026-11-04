@@ -23,7 +23,7 @@ version <- system("umi_tools --version | cut -d : -f 2-", intern = TRUE)
 documentVersion("UMI-tools", version)
 umi.command <- paste("umi_tools dedup -I input.bam -S deduplicated.bam --method", grouping.method)
 if (stats == "yes") {
-  umi.command <- paste(umi.command, "--output-stats=stats")
+    umi.command <- paste(umi.command, "--output-stats=stats")
 }
 documentCommand(umi.command)
 runExternal(umi.command)
@@ -37,6 +37,6 @@ outputnames <- matrix(NA, nrow = 4, ncol = 2)
 outputnames[1, ] <- c("deduplicated.bam", paste(basename, "_dedup.bam", sep = ""))
 outputnames[2, ] <- c("stats_edit_distance.tsv", paste(basename, "_edit_distance.tsv", sep = ""))
 outputnames[3, ] <- c("stats_per_umi.tsv", paste(basename, "_per_umi.tsv", sep = ""))
-outputnames[4, ] <- c("# OUTPUT stats_per_umi_per_position.tsv", paste(basename, "_per_umi_per_position.tsv", sep = ""))
+outputnames[4, ] <- c("stats_per_umi_per_position.tsv", paste(basename, "_per_umi_per_position.tsv", sep = ""))
 # Write output definitions file
 write_output_definitions(outputnames)

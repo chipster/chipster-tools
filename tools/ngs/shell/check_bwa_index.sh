@@ -58,10 +58,19 @@ then
   index_file_count=$(tar -tf $genome | grep -c -E ".amb$|.ann$|.bwt$|.pac$|.sa$")
   if [[ index_file_count -eq 5 ]]
   then
-    gen_name=$(tar -tf $genome | grep -E ".amb$")
-    gen_name=$(basename $gen_name .amb)
-    tar xvf $genome
-    index_path=$(pwd)
+    # Extract to a folder of its own, so that the files of the package can't replace the files of the job.
+    # Take the name from the extracted file, because tar -tf escapes e.g. ä in the C locale.
+    mkdir -p genome_index
+    tar xvf $genome -C genome_index
+    amb_files=( genome_index/*.amb )
+    if [[ ${#amb_files[@]} -ne 1 || ! -f ${amb_files[0]} ]]
+    then
+      echo "The tar file does not contain BWA index files"
+      echo "wrong_tar_content"
+      exit 1
+    fi
+    gen_name=$(basename "${amb_files[0]}" .amb)
+    index_path=$(pwd)/genome_index
     echo "The location of bwa_indexes:"
     echo "$index_path/$gen_name"
     exit 0

@@ -16,7 +16,6 @@
 # PARAMETER OPTIONAL h: "Plot height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted image)
 # PARAMETER OPTIONAL bed: "Create BED file" TYPE [yes,no] DEFAULT no (Create a BED file.)
 
-
 # MG 11.6.2011
 # MG 23.8.2011, included library size from phenodata file
 # MG 30.1.2012, allowed analysis without biological replicates
@@ -29,7 +28,6 @@
 # EK 19.11.2013, updated to edgeR 3.4.0. Filtering set to 2 by default.
 # EK 26.8.2014, added gene names to BED output.
 # EK 23.10.2015, moved to R3.2.0, changed to use estimateDisp function.
-
 
 # Loads the libraries
 library(edgeR)
@@ -49,7 +47,11 @@ number_samples <- length(groups)
 
 # If the library_size column contains data then use that as estimate
 lib_size <- as.numeric(phenodata$library_size)
-if (is.na(lib_size[1])) estimate_lib_size <- "TRUE" else estimate_lib_size <- "FALSE"
+if (is.na(lib_size[1])) {
+    estimate_lib_size <- "TRUE"
+} else {
+    estimate_lib_size <- "FALSE"
+}
 
 # Sanity checks
 # Only 2 group comparison is supported
@@ -57,7 +59,9 @@ if (length(unique(groups)) == 1 | length(unique(groups)) >= 3) {
     stop("CHIPSTER-NOTE: You need to have exactly two groups to run this analysis")
 }
 # If no biological replicates, force common dispersion
-if (number_samples == 2) dispersion_method <- "common"
+if (number_samples == 2) {
+    dispersion_method <- "common"
+}
 
 # Create a DGEList. If no library size exist in the phenodata file, it is calculated from column totals
 if (estimate_lib_size) {
@@ -99,7 +103,9 @@ if (dispersion_method == "common") {
     dge_list <- estimateCommonDisp(dge_list)
 
     # Statistical testing
-    if (number_samples != 2) stat_test <- exactTest(dge_list)
+    if (number_samples != 2) {
+        stat_test <- exactTest(dge_list)
+    }
     if (number_samples == 2) stat_test <- exactTest(dge_list, dispersion = dispersion_estimate)
 }
 
@@ -156,24 +162,35 @@ if (dim(significant_results)[1] > 0) {
     # significant_indices <- rownames (significant_results)
     plotSmear(dge_list, de.tags = significant_indices, main = "MA plot")
     abline(h = 0, col = "red", lwd = 2)
-    legend(x = "topleft", legend = c("significantly differentially expressed", "not significant"), col = c("red", "black"), cex = 1, pch = 19)
+    legend(
+        x = "topleft",
+        legend = c("significantly differentially expressed", "not significant"),
+        col = c("red", "black"),
+        cex = 1,
+        pch = 19
+    )
     dev.off()
 
     # Make a histogram of p-values with overlaid significance cutoff
     pdf(file = "04-p-value-plot-edger.pdf")
-    hist(results_table$PValue,
-        breaks = 100, col = "blue",
-        border = "slateblue", freq = FALSE,
-        main = "P-value distribution", xlab = "p-value", ylab = "proportion (%)"
+    hist(
+        results_table$PValue,
+        breaks = 100,
+        col = "blue",
+        border = "slateblue",
+        freq = FALSE,
+        main = "P-value distribution",
+        xlab = "p-value",
+        ylab = "proportion (%)"
     )
-    hist(results_table$FDR,
-        breaks = 100, col = "red",
-        border = "slateblue", add = TRUE, freq = FALSE
-    )
+    hist(results_table$FDR, breaks = 100, col = "red", border = "slateblue", add = TRUE, freq = FALSE)
     abline(v = p_value_threshold, lwd = 2, lty = 2, col = "black")
     legend(
-        x = "topright", legend = c("p-values", "adjusted p-values", "significance cutoff"), col = c("blue", "red", "black"),
-        cex = 1, pch = 15
+        x = "topright",
+        legend = c("p-values", "adjusted p-values", "significance cutoff"),
+        col = c("blue", "red", "black"),
+        cex = 1,
+        pch = 15
     )
     dev.off()
 }

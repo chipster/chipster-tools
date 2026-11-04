@@ -36,9 +36,9 @@ if (input.type == "FASTQ") {
 }
 if (input.type == "FASTA") {
     options <- paste(options, "-fasta reads")
- #   if (file.exists("qual")) {
- #       options <- paste(options, "-qual qual")
- #   }
+    #   if (file.exists("qual")) {
+    #       options <- paste(options, "-qual qual")
+    #   }
 }
 # options for parameters
 notags <- TRUE
@@ -53,11 +53,15 @@ if (tag5 != "-") {
     notags <- FALSE
 }
 if (notags) {
-    stop('CHIPSTER-NOTE: No tag sequence specified. If tags are unknown, you can first use the "Predict primers/adaptors" tool.')
+    stop(
+        'CHIPSTER-NOTE: No tag sequence specified. If tags are unknown, you can first use the "Predict primers/adaptors" tool.'
+    )
 }
 if (trimwithin > 0) {
     if (trimwithin < max(nchar(tag3), nchar(tag5))) {
-        stop('CHIPSTER-NOTE: Value for "Allowed variable bases" has to be at least the number of bases in the tag sequence.')
+        stop(
+            'CHIPSTER-NOTE: Value for "Allowed variable bases" has to be at least the number of bases in the tag sequence.'
+        )
     }
     options <- paste(options, "-trim_within", trimwithin)
 }
@@ -79,7 +83,6 @@ system(command)
 system("gzip *.fastq")
 system("gzip *.fasta")
 # system("gzip *.qual")
-
 
 # Handle output names
 source(file.path(chipster.common.lib.path, "tool-utils.R"))

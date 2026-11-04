@@ -28,7 +28,7 @@ dat2 <- data.frame(dat2)
 
 # Sanity checks
 if (ncol(dat2) == 1) {
-   stop("You need to have at least two chips to apply filtering by genes!")
+    stop("You need to have at least two chips to apply filtering by genes!")
 }
 
 # Filter

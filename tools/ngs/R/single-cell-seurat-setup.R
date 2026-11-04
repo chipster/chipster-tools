@@ -14,8 +14,6 @@
 # SLOTS 5
 # TOOLS_BIN ""
 
-
-
 # 2017-06-06 ML
 # 2017-07-05 ML split into separate tool
 # 2018-01-11 ML update Seurat version to 2.2.0
@@ -31,7 +29,6 @@
 # 2023-06-14 ML Allow 10X tar input files in gzipped format and with longer file names
 # 2023-07-12 ML Mitogenes with Mt-
 # 2023-08-28 IH add percent.rb to QC
-
 
 # Parameter removed from new R-version: "This functionality has been removed to simplify the initialization process/assumptions.
 # If you would still like to impose this threshold for your particular dataset, simply filter the input expression matrix before calling this function."
@@ -58,57 +55,63 @@ project.name <- gsub(" ", "_", project.name)
 
 # If using DropSeq data:
 if (file.exists("dropseq.tsv")) {
-  dat <- read.table("dropseq.tsv", header = TRUE, sep = "\t", row.names = 1)
+    dat <- read.table("dropseq.tsv", header = TRUE, sep = "\t", row.names = 1)
 
-  # If using 10X data:
+    # If using 10X data:
 } else if (file.exists("files.tar")) {
-  # Read the contents of the tar file into a list
-  system("tar tf files.tar > tar.contents 2>> log.txt")
-  file.list <- scan("tar.contents", what = "", sep = "\n")
+    # Read the contents of the tar file into a list
+    system("tar tf files.tar > tar.contents 2>> log.txt")
+    file.list <- scan("tar.contents", what = "", sep = "\n")
 
-  # Check that the input is a valid tar file
-  if (length(file.list) == 0) {
-    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
-  }
+    # Check that the input is a valid tar file
+    if (length(file.list) == 0) {
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "It seems your input file is not a valid Tar package. Please check your input file."
+        ))
+    }
 
-  # Open tar package. Make a folder called datadir, open the tar there so that each file
-  # will be on the root level (remove everything from the name until the last "/" with the --xform option)
-  system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
+    # Open tar package. Make a folder called datadir, open the tar there so that each file
+    # will be on the root level (remove everything from the name until the last "/" with the --xform option)
+    system("mkdir datadir; cd datadir; tar xf ../files.tar --xform='s#^.+/##x' 2>> log.txt")
 
-  # If the features.tsv, barcodes.tsv and matrix.mtx files are gzipped, open them:
-  if (length(list.files(path = "datadir/", pattern = "*matrix.mtx.gz")) >= 1) {
-    system("cd datadir; gzip -d *matrix.mtx.gz")
-  }
-  if (length(list.files(path = "datadir/", pattern = "*features.tsv.gz")) >= 1) {
-    system("cd datadir; gzip -d *features.tsv.gz")
-  }
-  if (length(list.files(path = "datadir/", pattern = "*genes.tsv.gz")) >= 1) {
-    system("cd datadir; gzip -d *genes.tsv.gz")
-  }
-  if (length(list.files(path = "datadir/", pattern = "*barcodes.tsv.gz")) >= 1) {
-    system("cd datadir; gzip -d *barcodes.tsv.gz")
-  }
+    # If the features.tsv, barcodes.tsv and matrix.mtx files are gzipped, open them:
+    if (length(list.files(path = "datadir/", pattern = "*matrix.mtx.gz")) >= 1) {
+        system("cd datadir; gzip -d *matrix.mtx.gz")
+    }
+    if (length(list.files(path = "datadir/", pattern = "*features.tsv.gz")) >= 1) {
+        system("cd datadir; gzip -d *features.tsv.gz")
+    }
+    if (length(list.files(path = "datadir/", pattern = "*genes.tsv.gz")) >= 1) {
+        system("cd datadir; gzip -d *genes.tsv.gz")
+    }
+    if (length(list.files(path = "datadir/", pattern = "*barcodes.tsv.gz")) >= 1) {
+        system("cd datadir; gzip -d *barcodes.tsv.gz")
+    }
 
-  # If features.tsv, barcodes.tsv and matrix.mtx files have something extra in the name, remove the extra:
-  system("cd datadir; mv *features.tsv features.tsv")
-  system("cd datadir; mv *genes.tsv genes.tsv")
-  system("cd datadir; mv *barcodes.tsv barcodes.tsv")
-  system("cd datadir; mv *matrix.mtx matrix.mtx")
+    # If features.tsv, barcodes.tsv and matrix.mtx files have something extra in the name, remove the extra:
+    system("cd datadir; mv *features.tsv features.tsv")
+    system("cd datadir; mv *genes.tsv genes.tsv")
+    system("cd datadir; mv *barcodes.tsv barcodes.tsv")
+    system("cd datadir; mv *matrix.mtx matrix.mtx")
 
-  # rename features.tsv as genes.tsv (Read10X SHOULD work with features.tsv as well, but it doesn't, yet at least)
-  if (file.exists("datadir/features.tsv")) {
-    system("mv datadir/features.tsv datadir/genes.tsv")
-  }
+    # rename features.tsv as genes.tsv (Read10X SHOULD work with features.tsv as well, but it doesn't, yet at least)
+    if (file.exists("datadir/features.tsv")) {
+        system("mv datadir/features.tsv datadir/genes.tsv")
+    }
 
-  # Load the data
-  dat <- Read10X("datadir/")
+    # Load the data
+    dat <- Read10X("datadir/")
 
-  # If using HDF5 data:
+    # If using HDF5 data:
 } else if (file.exists("hdf5.h5")) {
-  library(hdf5r)
-  dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
+    library(hdf5r)
+    dat <- Read10X_h5(filename = "hdf5.h5", use.names = T)
 } else {
-  stop(paste("CHIPSTER-NOTE: ", "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table OR a 10X h5 file. Please check your input file."))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "You need to provide either a 10X directory as a Tar package OR a DropSeq DGE as a tsv table OR a 10X h5 file. Please check your input file."
+    ))
 }
 
 # Initialize the Seurat object
@@ -116,10 +119,10 @@ if (file.exists("dropseq.tsv")) {
 # In case of multiomics data, "dat" object has a list of matrices.
 # We need to select the Gene Expression one from there.
 if (class(dat) == "list") {
-  seurat_obj <- CreateSeuratObject(counts = dat$`Gene Expression`, min.cells = mincells, project = project.name)
+    seurat_obj <- CreateSeuratObject(counts = dat$`Gene Expression`, min.cells = mincells, project = project.name)
 } else {
-  seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
-  # min.features = 200 => this is done in the next tool.
+    seurat_obj <- CreateSeuratObject(counts = dat, min.cells = mincells, project = project.name)
+    # min.features = 200 => this is done in the next tool.
 }
 
 # For sample detection later on
@@ -138,25 +141,30 @@ pdf(file = "QCplots.pdf", , width = 13, height = 7)
 
 # Violinplot
 if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) && (sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt", "percent.rb"), ncol = 4)
 } else if ((sum(is.na(seurat_obj@meta.data$percent.mt)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 } else if ((sum(is.na(seurat_obj@meta.data$percent.rb)) < 1)) {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.rb"), ncol = 3)
 } else {
-  VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+    VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 }
 
 # FeatureScatter (v3)
 # Add "Pearson correlation value" to the title to clarify the value FeatureScatter prints as the plot title.
-plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt") 
-  plot1B <- ggdraw(plot1) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
+plot1 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "percent.mt")
+plot1B <- ggdraw(plot1) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
 plot2 <- FeatureScatter(seurat_obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-  plot2B <- ggdraw(plot2) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
+plot2B <- ggdraw(plot2) + draw_label("(Pearson correlation value) ", x = 0.5, y = 0.95, size = 10)
 plot_grid(plot1B, plot2B)
 
 # Number of cells:
-textplot(paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))), halign = "center", valign = "center", cex = 2)
+textplot(
+    paste("\v \v Number of \n \v \v cells: \n \v \v", length(colnames(x = seurat_obj))),
+    halign = "center",
+    valign = "center",
+    cex = 2
+)
 
 dev.off() # close the pdf
 

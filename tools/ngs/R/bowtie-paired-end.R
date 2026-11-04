@@ -46,7 +46,20 @@ documentVersion("Bowtie", version)
 command.start <- paste("bash -c '", bowtie.binary)
 
 # common parameters
-common.parameters <- paste("-p", chipster.threads.max, "-S", "-q", "-m", multiread, "-k", alignment.no, "-I", min.insert.size, "-X", max.insert.size)
+common.parameters <- paste(
+    "-p",
+    chipster.threads.max,
+    "-S",
+    "-q",
+    "-m",
+    multiread,
+    "-k",
+    alignment.no,
+    "-I",
+    min.insert.size,
+    "-X",
+    max.insert.size
+)
 
 # mode specific parameters
 quality.parameter <- ifelse(quality.format == "solexa1_3", "--solexa1.3-quals", "")
@@ -64,7 +77,15 @@ output.parameters <- paste(unaligned.output, multiread.output)
 command.end <- paste("-x", bowtie.index, "-1 reads1.fq -2 reads2.fq 1> alignment.sam 2> bowtie.log'")
 
 # run bowtie
-bowtie.command <- paste(command.start, common.parameters, quality.parameter, orientation.parameter, mode.parameters, output.parameters, command.end)
+bowtie.command <- paste(
+    command.start,
+    common.parameters,
+    quality.parameter,
+    orientation.parameter,
+    mode.parameters,
+    output.parameters,
+    command.end
+)
 # stop(paste('CHIPSTER-NOTE: ', bowtie.command))
 runExternal(bowtie.command)
 

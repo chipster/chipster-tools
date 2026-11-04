@@ -75,7 +75,14 @@ if (analysis == "periodicity") {
 
     dat5 <- as.data.frame(t(dat4))
     names(dat5) <- names(dat2)
-    write.table(data.frame(dat5[p.adj <= p.cut, ], p.adjusted = round(p.adj[p.adj <= p.cut], digits = 6)), file = "timeseries.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        data.frame(dat5[p.adj <= p.cut, ], p.adjusted = round(p.adj[p.adj <= p.cut], digits = 6)),
+        file = "timeseries.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
     pdf(file = "profiles.pdf", width = w / 72, height = h / 72)
     plot(1, 1, col = 0)
     text(1, 1, "This is a dummy image.", col = 1)
@@ -112,7 +119,20 @@ if (analysis == "ica") {
     par(mar = c(0, 1, 1, 0) + 0.1)
     par(mfrow = c(ceiling(sqrt(ncol(a))), ceiling(sqrt(ncol(a)))))
     for (i in 2:ncol(a)) {
-        plot(a$time, a[, i], xaxt = "n", type = "l", xlab = NULL, ylab = NULL, main = paste("Chip", i - 1, sep = " "), cex.main = 0.75, cex.axis = 0.7, cex.lab = 0.75, tck = -0.01, mgp = c(3, 0.2, 0))
+        plot(
+            a$time,
+            a[, i],
+            xaxt = "n",
+            type = "l",
+            xlab = NULL,
+            ylab = NULL,
+            main = paste("Chip", i - 1, sep = " "),
+            cex.main = 0.75,
+            cex.axis = 0.7,
+            cex.lab = 0.75,
+            tck = -0.01,
+            mgp = c(3, 0.2, 0)
+        )
     }
     dev.off()
 }
@@ -181,13 +201,24 @@ if (analysis == "maSigPro") {
             print("running see.genes")
             cluster <- see.genes(
                 data = sig.genes,
-                cluster.data = cluster.data, k = k, cluster.method = cluster.method,
-                distance = distance, agglo.method = agglo.method,
-                show.fit = show.fit, dis = dis, step.method = step.method,
-                min.obs = min.obs, alfa = alfa, nvar.correction = nvar.correction,
-                summary.mode = summary.mode, color.mode = color.mode,
-                show.lines = show.lines, cexlab = cexlab,
-                legend = legend, newX11 = FALSE, main = main
+                cluster.data = cluster.data,
+                k = k,
+                cluster.method = cluster.method,
+                distance = distance,
+                agglo.method = agglo.method,
+                show.fit = show.fit,
+                dis = dis,
+                step.method = step.method,
+                min.obs = min.obs,
+                alfa = alfa,
+                nvar.correction = nvar.correction,
+                summary.mode = summary.mode,
+                color.mode = color.mode,
+                show.lines = show.lines,
+                cexlab = cexlab,
+                legend = legend,
+                newX11 = FALSE,
+                main = main
             )
             sig.genes[[1]] <- cbind(sig.genes[[1]], cluster$cut)
             cluster.algorithm <- cluster$cluster.algorithm.used
@@ -198,8 +229,46 @@ if (analysis == "maSigPro") {
 
     dev.off()
 
-    output <- list(summary, sig.genes, fit$dat, fit$G, edesign, dis, fit$min.obs, fit$p.vector, tstep$variables, tstep$g, fit$BH.alfa, step.method, Q, alfa, tstep$influ.info, vars, cluster.algorithm, groups)
-    names(output) <- c("summary", "sig.genes", "input.data", "G", "edesign", "dis", "min.obs", "p.vector", "variables", "g", "BH.alfa", "step.method", "Q", "step.alfa", "influ.info", "select.vars", "cluster.algorithm.used", "groups")
+    output <- list(
+        summary,
+        sig.genes,
+        fit$dat,
+        fit$G,
+        edesign,
+        dis,
+        fit$min.obs,
+        fit$p.vector,
+        tstep$variables,
+        tstep$g,
+        fit$BH.alfa,
+        step.method,
+        Q,
+        alfa,
+        tstep$influ.info,
+        vars,
+        cluster.algorithm,
+        groups
+    )
+    names(output) <- c(
+        "summary",
+        "sig.genes",
+        "input.data",
+        "G",
+        "edesign",
+        "dis",
+        "min.obs",
+        "p.vector",
+        "variables",
+        "g",
+        "BH.alfa",
+        "step.method",
+        "Q",
+        "step.alfa",
+        "influ.info",
+        "select.vars",
+        "cluster.algorithm.used",
+        "groups"
+    )
 
     result <- output$sig.genes$sig.profiles
     colnames(result)[1:length(orig.colnames)] <- orig.colnames

@@ -5,7 +5,6 @@
 # PARAMETER image.width: "Image width" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Width of the plotted network image)
 # PARAMETER image.height: "Image height" TYPE INTEGER FROM 200 TO 3200 DEFAULT 600 (Height of the plotted network image)
 
-
 # Quality control of Agilent chips
 # 15.1.2008 JTT
 # 19.4.2011, MG, modified legend in histogram
@@ -38,12 +37,23 @@ pdf(file = "densityplot.pdf", width = w / 72, height = h / 72)
 x <- c()
 y <- c()
 for (i in 1:ncol(dat2)) {
-   x <- cbind(x, density(dat2[, i])$x)
-   y <- cbind(y, density(dat2[, i])$y)
+    x <- cbind(x, density(dat2[, i])$x)
+    y <- cbind(y, density(dat2[, i])$y)
 }
-plot(x[, 1], y[, 1], col = 1, ylim = c(0, max(y)), main = "M intensities", type = "l", lwd = 2, lty = 1, xlab = "M", ylab = "Density")
+plot(
+    x[, 1],
+    y[, 1],
+    col = 1,
+    ylim = c(0, max(y)),
+    main = "M intensities",
+    type = "l",
+    lwd = 2,
+    lty = 1,
+    xlab = "M",
+    ylab = "Density"
+)
 for (i in 2:ncol(dat2)) {
-   lines(x[, i], y[, i], col = i, lwd = 2, lty = 1)
+    lines(x[, i], y[, i], col = i, lwd = 2, lty = 1)
 }
 legend(legend = colnames(dat2), x = "topright", lty = 1, cex = 0.75, col = c(1:ncol(dat2)))
 dev.off()

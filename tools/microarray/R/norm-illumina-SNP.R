@@ -18,9 +18,25 @@ if (method == "illumina") {
     # ELSE: if input = illumina
 
     # allel calls
-    firstfield <- scan(dir(), what = "", sep = ",", flush = TRUE, quiet = TRUE, blank.lines.skip = FALSE, multi.line = FALSE)
+    firstfield <- scan(
+        dir(),
+        what = "",
+        sep = ",",
+        flush = TRUE,
+        quiet = TRUE,
+        blank.lines.skip = FALSE,
+        multi.line = FALSE
+    )
     skip <- grep("[Data]", firstfield, fixed = TRUE)
-    samples <- read.table(dir(), skip = skip, header = TRUE, sep = "\t", as.is = TRUE, check.names = FALSE, colClasses = "character")
+    samples <- read.table(
+        dir(),
+        skip = skip,
+        header = TRUE,
+        sep = "\t",
+        as.is = TRUE,
+        check.names = FALSE,
+        colClasses = "character"
+    )
 
     # Transforming the data to a wide data frame
     ids <- unique(samples$"Sample ID")
@@ -36,7 +52,14 @@ if (method == "illumina") {
     chiptype <- "Illumina-SNP"
     sample <- colnames(dat2)
     group <- c(rep("", ncol(dat2)))
-    write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+    write.table(
+        data.frame(sample = sample, chiptype = chiptype, group = group),
+        file = "phenodata.tsv",
+        sep = "\t",
+        row.names = F,
+        col.names = T,
+        quote = F
+    )
 
     # if method = CRLMM
 } else {
@@ -67,11 +90,19 @@ if (method == "illumina") {
         colnames(zeroes) <- colnames(Y) <- colnames(X)
         rownames(X) <- rownames(Y) <- snps
 
-        XY <- new("NChannelSet",
+        XY <- new(
+            "NChannelSet",
             X = initializeBigMatrix(name = "X", nr = nrow(X), nc = ncol(X), vmode = "integer", initdata = as.matrix(X)),
             Y = initializeBigMatrix(name = "Y", nr = nrow(Y), nc = ncol(Y), vmode = "integer", initdata = as.matrix(Y)),
-            zero = initializeBigMatrix(name = "zero", nr = nrow(zeroes), nc = ncol(zeroes), vmode = "integer", initdata = as.matrix(zeroes)),
-            annotation = cdfName, storage.mode = "environment"
+            zero = initializeBigMatrix(
+                name = "zero",
+                nr = nrow(zeroes),
+                nc = ncol(zeroes),
+                vmode = "integer",
+                initdata = as.matrix(zeroes)
+            ),
+            annotation = cdfName,
+            storage.mode = "environment"
         )
         # if input = Illumina
     } else {
@@ -79,7 +110,12 @@ if (method == "illumina") {
         source(file.path(chipster.common.lib.path, "crlmm-utils.R"))
         assignInNamespace("getNumberOfSNPs", getNumberOfSNPs.chip, "crlmm")
 
-        XY <- readGenCallOutput(file = "chip.txt", cdfName = cdfName, colnames = list("SampleID" = "Sample ID", "SNPID" = "SNP Name", "XRaw" = "X Raw", "YRaw" = "Y Raw"), type = list("SampleID" = "character", "SNPID" = "character", "XRaw" = "integer", "YRaw" = "integer"))
+        XY <- readGenCallOutput(
+            file = "chip.txt",
+            cdfName = cdfName,
+            colnames = list("SampleID" = "Sample ID", "SNPID" = "SNP Name", "XRaw" = "X Raw", "YRaw" = "Y Raw"),
+            type = list("SampleID" = "character", "SNPID" = "character", "XRaw" = "integer", "YRaw" = "integer")
+        )
     }
 
     crlmmOut <- try(crlmm::crlmmIllumina(XY = XY, verbose = FALSE, SNRMin = SNRMin))
@@ -115,7 +151,14 @@ if (method == "illumina") {
     chiptype <- c(rep("Illumina-SNP", ncol(genotypes)))
     sample <- colnames(genotypes)
     group <- c(rep("", ncol(genotypes)))
-    write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+    write.table(
+        data.frame(sample = sample, chiptype = chiptype, group = group),
+        file = "phenodata.tsv",
+        sep = "\t",
+        row.names = F,
+        col.names = T,
+        quote = F
+    )
 }
 
 # Writing data to disk

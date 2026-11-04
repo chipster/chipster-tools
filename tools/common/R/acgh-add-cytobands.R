@@ -13,28 +13,41 @@ dat <- readData("normalized.tsv")
 # check we have necessary position information
 pos <- c("chromosome", "start", "end")
 if (length(setdiff(pos, colnames(dat))) != 0) {
-  stop("CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome, start, end.")
+    stop("CHIPSTER-NOTE: This script can only be run on files that have the following columns: chromosome, start, end.")
 }
 
 # change chromosome to character even if it contains only numbers
 dat$chromosome <- as.character(dat$chromosome)
 
 # load cytobands
-cytodir <- list.files(file.path(chipster.tools.path, "genomes", "genomebrowser", "Homo_sapiens"), pattern = paste0("^", genome.build, "\\..*$"), full.name = TRUE)
+cytodir <- list.files(
+    file.path(chipster.tools.path, "genomes", "genomebrowser", "Homo_sapiens"),
+    pattern = paste0("^", genome.build, "\\..*$"),
+    full.name = TRUE
+)
 if (length(cytodir) == 0) {
-  stop("CHIPSTER-NOTE: Cytoband directory not found.")
+    stop("CHIPSTER-NOTE: Cytoband directory not found.")
 }
 if (length(cytodir) > 1) {
-  cytodir <- sort(cytodir, decreasing = TRUE)[1]
+    cytodir <- sort(cytodir, decreasing = TRUE)[1]
 }
-cytofile <- list.files(cytodir, pattern = paste0("Homo_sapiens\\.", genome.build, "\\..*\\.cytoband-chr.txt"), full.names = TRUE)
+cytofile <- list.files(
+    cytodir,
+    pattern = paste0("Homo_sapiens\\.", genome.build, "\\..*\\.cytoband-chr.txt"),
+    full.names = TRUE
+)
 if (length(cytofile) == 0) {
-  stop("CHIPSTER-NOTE: Cytoband file not found.")
+    stop("CHIPSTER-NOTE: Cytoband file not found.")
 }
 if (length(cytofile) > 1) {
-  cytofile <- sort(cytofile, decreasing = TRUE)[1]
+    cytofile <- sort(cytofile, decreasing = TRUE)[1]
 }
-bands <- read.table(cytofile, sep = "\t", as.is = TRUE, col.names = c("chromosome", "index", "start", "end", "band", "dye"))
+bands <- read.table(
+    cytofile,
+    sep = "\t",
+    as.is = TRUE,
+    col.names = c("chromosome", "index", "start", "end", "band", "dye")
+)
 bands$chromosome <- sub("^chr", "", bands$chromosome)
 bands$band <- paste0(bands$chromosome, bands$band)
 rownames(bands) <- bands$band
@@ -52,20 +65,20 @@ dat2 <- NULL
 dat$startband <- "unknown"
 dat$endband <- "unknown"
 for (band in rownames(bands)) {
-  index <- !is.na(dat$chromosome) &
-    dat$chromosome == bands[band, "chromosome"] &
-    dat$start >= bands[band, "start"] &
-    dat$start <= bands[band, "end"]
-  if (length(index) > 0) {
-    dat[index, "startband"] <- bands[band, "band"]
-  }
-  index <- !is.na(dat$chromosome) &
-    dat$chromosome == bands[band, "chromosome"] &
-    dat$end >= bands[band, "start"] &
-    dat$end <= bands[band, "end"]
-  if (length(index) > 0) {
-    dat[index, "endband"] <- bands[band, "band"]
-  }
+    index <- !is.na(dat$chromosome) &
+        dat$chromosome == bands[band, "chromosome"] &
+        dat$start >= bands[band, "start"] &
+        dat$start <= bands[band, "end"]
+    if (length(index) > 0) {
+        dat[index, "startband"] <- bands[band, "band"]
+    }
+    index <- !is.na(dat$chromosome) &
+        dat$chromosome == bands[band, "chromosome"] &
+        dat$end >= bands[band, "start"] &
+        dat$end <= bands[band, "end"]
+    if (length(index) > 0) {
+        dat[index, "endband"] <- bands[band, "band"]
+    }
 }
 
 # format output as a range of bands or just a single band

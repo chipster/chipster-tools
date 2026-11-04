@@ -51,7 +51,10 @@ if (file.exists("reads2.fastaq")) {
     } else {
         trim.params <- paste(trim.params, "-phred64")
     }
-    trim.params <- paste(trim.params, "reads1.fastaq reads2.fastaq trimmed_reads1_paired.fq trimmed_reads1_unpaired.fq trimmed_reads2_paired.fq trimmed_reads2_unpaired.fq")
+    trim.params <- paste(
+        trim.params,
+        "reads1.fastaq reads2.fastaq trimmed_reads1_paired.fq trimmed_reads1_unpaired.fq trimmed_reads2_paired.fq trimmed_reads2_unpaired.fq"
+    )
 } else {
     # Single end reads
     trim.params <- paste(trim.params, "SE")

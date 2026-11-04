@@ -8,7 +8,6 @@
 
 # K.M 29.10.2013
 
-
 # settings
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
 
@@ -26,10 +25,17 @@ if (str.filetype == "Not an EMBOSS compatible sequence file") {
 }
 
 
-
-
 command.path <- file.path(chipster.module.path, "/shell/textsearch_fasta.sh")
-command.full <- paste(command.path, "-emboss_path ", emboss.path, " -sequence sequence -outfile matching.fasta -casesensitive", casesensitive, " -pattern ", pattern, " >> textsearch_log.txt  2>&1")
+command.full <- paste(
+    command.path,
+    "-emboss_path ",
+    emboss.path,
+    " -sequence sequence -outfile matching.fasta -casesensitive",
+    casesensitive,
+    " -pattern ",
+    pattern,
+    " >> textsearch_log.txt  2>&1"
+)
 echo.command <- paste("echo", command.full)
 system(echo.command)
 system(command.full)

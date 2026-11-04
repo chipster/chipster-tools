@@ -17,7 +17,11 @@ load("seurat_obj_subset1.Robj")
 
 sample_name <- Images(seurat_obj)
 
-seurat_obj@images[[sample_name]]@coordinates <- subset(seurat_obj@images[[sample_name]]@coordinates, imagerow > rows | imagecol < columns, invert = TRUE)
+seurat_obj@images[[sample_name]]@coordinates <- subset(
+    seurat_obj@images[[sample_name]]@coordinates,
+    imagerow > rows | imagecol < columns,
+    invert = TRUE
+)
 # cortex <- subset(cortex, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
 # cortex <- subset(cortex, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
 

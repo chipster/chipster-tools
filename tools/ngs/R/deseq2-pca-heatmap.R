@@ -113,7 +113,15 @@ hcvst <- hclust(distvst)
 # Make the colors and plot the heatmap as pdf
 hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)
 pdf(file = "02-heatmap-deseq2.pdf")
-heatmap.2(mdistvst, Rowv = as.dendrogram(hcvst), Colv = as.dendrogram(hcvst), symm = TRUE, trace = "none", col = rev(hmcol), margin = c(13, 13))
+heatmap.2(
+    mdistvst,
+    Rowv = as.dendrogram(hcvst),
+    Colv = as.dendrogram(hcvst),
+    symm = TRUE,
+    trace = "none",
+    col = rev(hmcol),
+    margin = c(13, 13)
+)
 dev.off()
 
 # To be added: rlog transformation

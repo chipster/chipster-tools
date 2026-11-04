@@ -45,7 +45,10 @@ dat3 <- dat2
 error.vec <- rep(0, nrow(dat3))
 for (i in 1:nrow(dat3)) {
     gene <- as.vector(as.numeric(dat3[i, ]))
-    residuals <- try(resid(lme(fixed = gene ~ groups, random = gene ~ 1 | random, control = list(maxIter = 10000), method = "REML")), silent = T)
+    residuals <- try(
+        resid(lme(fixed = gene ~ groups, random = gene ~ 1 | random, control = list(maxIter = 10000), method = "REML")),
+        silent = T
+    )
     if (class(residuals) == "try-error") {
         dat3[i, ] <- rep(NA, length(gene))
     } else {
@@ -68,14 +71,24 @@ if (error.handle == "add.noise") {
         while (residual.counter < 1000 & class(residuals) == "try-error") {
             gene <- as.vector(as.numeric(dat2[i, ]))
             gene <- gene + rnorm(length(gene), 0, random.noise)
-            residuals <- try(resid(lme(fixed = gene ~ groups, random = gene ~ 1 | random, control = list(maxIter = 10000), method = "REML")), silent = T)
+            residuals <- try(
+                resid(lme(
+                    fixed = gene ~ groups,
+                    random = gene ~ 1 | random,
+                    control = list(maxIter = 10000),
+                    method = "REML"
+                )),
+                silent = T
+            )
             residual.counter <- residual.counter + 1
             print(paste(i, residual.counter))
         }
 
         if (class(residuals) == "try-error") {
             print(i)
-            stop("LME failed to estimate random effects. Please choose another error handling method or increse noise-level")
+            stop(
+                "LME failed to estimate random effects. Please choose another error handling method or increse noise-level"
+            )
         } else {
             dat3[i, ] <- residuals
         }
@@ -84,4 +97,11 @@ if (error.handle == "add.noise") {
 }
 
 # Writes a table of results
-write.table(data.frame(round(dat3, digits = 2), calls), file = "normalized-lme.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    data.frame(round(dat3, digits = 2), calls),
+    file = "normalized-lme.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)

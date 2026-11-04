@@ -86,16 +86,37 @@ cmatrix$col.names <- paste("KEGG:", cmatrix$col.names, sep = "")
 
 # Runs the analysis
 if (num.or.cat == "factor" & length(unique(groups)) == 2) {
-    result <- safe(dat2, groups, cmatrix, alpha = p.value.threshold, min.size = minimum.category.size, local = "t.Student")
+    result <- safe(
+        dat2,
+        groups,
+        cmatrix,
+        alpha = p.value.threshold,
+        min.size = minimum.category.size,
+        local = "t.Student"
+    )
 } else if (num.or.cat == "factor" & length(unique(groups)) > 2) {
-    result <- safe(dat2, groups, cmatrix, alpha = p.value.threshold, min.size = minimum.category.size, local = "f.ANOVA")
+    result <- safe(
+        dat2,
+        groups,
+        cmatrix,
+        alpha = p.value.threshold,
+        min.size = minimum.category.size,
+        local = "f.ANOVA"
+    )
 } else if (num.or.cat == "continuous" & length(unique(groups)) >= 2) {
     for (i in 1:length(unique(groups))) {
         if (is.numeric(unique(groups)[i]) == FALSE) {
             stop("CHIPSTER-NOTE: Your phenodata type continuous, but one of your group variables is not a number")
         }
     }
-    result <- safe(as.matrix(dat2), groups, cmatrix, alpha = p.value.threshold, min.size = minimum.category.size, local = "t.LM")
+    result <- safe(
+        as.matrix(dat2),
+        groups,
+        cmatrix,
+        alpha = p.value.threshold,
+        min.size = minimum.category.size,
+        local = "t.LM"
+    )
 } else {
     stop("CHIPSTER-NOTE: You need to have at least two groups to run this analysis")
 }
@@ -107,7 +128,12 @@ if (length(which(result@global.pval <= p.value.threshold)) == 0) {
     text(1, 0.9, "This has been generated, because no significant results were found.", col = 1)
     text(1, 0.8, "These things happen.", col = 1)
     dev.off()
-    result.table <- data.frame(category = names(result@global.pval), size = rowSums(as.matrix(t(result@C.mat))), p.value = result@global.pval, p.adjusted = round(result@global.error, digits = 3))
+    result.table <- data.frame(
+        category = names(result@global.pval),
+        size = rowSums(as.matrix(t(result@C.mat))),
+        p.value = result@global.pval,
+        p.adjusted = round(result@global.error, digits = 3)
+    )
     result.table <- result.table[result.table$p.value < p.value.threshold, ]
     result.table <- result.table[order(result.table$p.value), ]
     write.table(result.table, file = "safe.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
@@ -118,7 +144,12 @@ if (length(which(result@global.pval <= p.value.threshold)) == 0) {
     safeplot(result, extreme = FALSE)
     dev.off()
     # Writing a result table
-    result.table <- data.frame(category = names(result@global.pval), size = rowSums(as.matrix(t(result@C.mat))), p.value = result@global.pval, p.adjusted = round(result@global.error, digits = 3))
+    result.table <- data.frame(
+        category = names(result@global.pval),
+        size = rowSums(as.matrix(t(result@C.mat))),
+        p.value = result@global.pval,
+        p.adjusted = round(result@global.error, digits = 3)
+    )
     result.table <- result.table[result.table$p.value < p.value.threshold, ]
     result.table <- result.table[order(result.table$p.value), ]
     write.table(result.table, file = "safe.tsv", sep = "\t", row.names = F, col.names = T, quote = F)

@@ -6,7 +6,6 @@
 # PARAMETER correlation.method: "Correlation method" TYPE [pearson: Pearson, spearman: Spearman] DEFAULT pearson (Correlation method)
 # PARAMETER column: "Column" TYPE METACOLUMN_SEL DEFAULT group (Phenodata column containing the data to correlate genes with)
 
-
 # Find genes that correlate with phenodata
 # JTT 19.7.2007
 
@@ -33,13 +32,13 @@ groups <- phenodata[, pmatch(column, colnames(phenodata))]
 
 # Sanity checks
 if (nrow(phenodata) != ncol(dat2)) {
-   stop("Dimensions of data and phenodata do not match! Can't execute the analysis.")
+    stop("Dimensions of data and phenodata do not match! Can't execute the analysis.")
 }
 
 # Calculating the correlations
 p <- rep(0, nrow(dat2))
 for (i in 1:nrow(dat2)) {
-   p[i] <- cor(groups, as.numeric(dat2[i, ]), method = meth)
+    p[i] <- cor(groups, as.numeric(dat2[i, ]), method = meth)
 }
 
 # Filtering the data on the correlation
@@ -47,4 +46,11 @@ dat <- dat[abs(p) >= cutoff, ]
 p <- p[abs(p) >= cutoff]
 
 # Saving the results
-write.table(data.frame(dat, corr = round(p, digits = 6)), file = "correlate-with-phenodata.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    data.frame(dat, corr = round(p, digits = 6)),
+    file = "correlate-with-phenodata.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)

@@ -32,82 +32,137 @@ library(future)
 plan("multisession", workers = as.integer(chipster.threads.max))
 
 if (multi_analysis) {
-  # Split obejct and analyze spatially variable features separately as shown in
-  # https://ucdavis-bioinformatics-training.github.io/2022-December-Spatial-Transcriptomics/data_analysis/spatial_analysis
-  # Samples are analyzed seperately also because of error 'please provide the same number of observations as spatial locations'
-  # in FindSpatiallyVariableFeatures() as explained by tingchiafelix in issue https://github.com/satijalab/seurat/issues/4611
-  # as well as issue raised in https://github.com/satijalab/seurat/issues/8754
+    # Split obejct and analyze spatially variable features separately as shown in
+    # https://ucdavis-bioinformatics-training.github.io/2022-December-Spatial-Transcriptomics/data_analysis/spatial_analysis
+    # Samples are analyzed seperately also because of error 'please provide the same number of observations as spatial locations'
+    # in FindSpatiallyVariableFeatures() as explained by tingchiafelix in issue https://github.com/satijalab/seurat/issues/4611
+    # as well as issue raised in https://github.com/satijalab/seurat/issues/8754
 
-  # Print warnings after SplitObject() but suppress them from Chipster note
-  experiment.slices <- tryCatch({
-    SplitObject(seurat_obj, split.by = "orig.ident")
-  }, warning=function(w) {
-    print(w) 
-    return(suppressWarnings(SplitObject(seurat_obj, split.by = "orig.ident")))
-  })
+    # Print warnings after SplitObject() but suppress them from Chipster note
+    experiment.slices <- tryCatch(
+        {
+            SplitObject(seurat_obj, split.by = "orig.ident")
+        },
+        warning = function(w) {
+            print(w)
+            return(suppressWarnings(SplitObject(seurat_obj, split.by = "orig.ident")))
+        }
+    )
 
-  # Remove extra images
-  experiment.slices <- lapply(experiment.slices, function(sce) {
-    sce@images[names(sce@images) != sce$orig.ident[1]] = NULL
-    sce
-  })
+    # Remove extra images
+    experiment.slices <- lapply(experiment.slices, function(sce) {
+        sce@images[names(sce@images) != sce$orig.ident[1]] <- NULL
+        sce
+    })
 
-  # Open the pdf file for plotting
-  pdf(file = "Markerplot2.pdf", width = 9, height = 12)
+    # Open the pdf file for plotting
+    pdf(file = "Markerplot2.pdf", width = 9, height = 12)
 
-  for (i in 1:length(experiment.slices)) {
+    for (i in 1:length(experiment.slices)) {
+        # Number of variable features in Seurat object
+        variable_feats <- VariableFeatures(experiment.slices[[i]])
+
+        # Use number of selected variable features
+        if (number_of_var_feats > length(variable_feats)) {
+            stop(paste(
+                "CHIPSTER-NOTE: ",
+                "You have selected",
+                number_of_var_feats,
+                "to use as the number of variable features, but there are only",
+                length(variable_feats),
+                "in the object. Please select less than or equal to",
+                length(variable_feats),
+                "variable genes."
+            ))
+        }
+        variable_feats <- variable_feats[1:number_of_var_feats]
+
+        seurat_obj <- FindSpatiallyVariableFeatures(
+            experiment.slices[[i]],
+            assay = "SCT",
+            features = variable_feats,
+            selection.method = method.to.use
+        )
+
+        # Visualise the identified top features
+        top.features <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
+        print(SpatialFeaturePlot(
+            seurat_obj,
+            features = top.features,
+            keep.scale = color.scale,
+            ncol = 3,
+            alpha = c(0.1, 1)
+        ))
+        # Print out markers into a table:
+        write.table(
+            as.matrix(top.features),
+            file = "spatially_variable_genes.tsv",
+            sep = "\t",
+            row.names = T,
+            col.names = T,
+            quote = F
+        )
+    }
+
+    # Return to normal
+    plan("default")
+
+    # Close the pdf
+    dev.off()
+} else {
     # Number of variable features in Seurat object
-    variable_feats <- VariableFeatures(experiment.slices[[i]])
+    variable_feats <- VariableFeatures(seurat_obj)
 
-    # Use number of selected variable features 
+    # Use number of selected variable features
     if (number_of_var_feats > length(variable_feats)) {
-      stop(paste("CHIPSTER-NOTE: ", "You have selected", number_of_var_feats, "to use as the number of variable features, but there are only", length(variable_feats), "in the object. Please select less than or equal to", length(variable_feats),"variable genes."))
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "You have selected",
+            number_of_var_feats,
+            "to use as the number of variable features, but there are only",
+            length(variable_feats),
+            "in the object. Please select less than or equal to",
+            length(variable_feats),
+            "variable genes."
+        ))
     }
     variable_feats <- variable_feats[1:number_of_var_feats]
-    
-    seurat_obj <- FindSpatiallyVariableFeatures(experiment.slices[[i]], assay = "SCT", features = variable_feats, selection.method = method.to.use)
+
+    seurat_obj <- FindSpatiallyVariableFeatures(
+        seurat_obj,
+        assay = "SCT",
+        features = variable_feats,
+        selection.method = method.to.use
+    )
+
+    plan("default") # return to normal
+
+    # Open the pdf file for plotting
+    pdf(file = "Markerplot2.pdf", width = 9, height = 12)
 
     # Visualise the identified top features
     top.features <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
-    print(SpatialFeaturePlot(seurat_obj, features = top.features, keep.scale = color.scale, ncol = 3, alpha = c(0.1, 1)))
+
+    print(SpatialFeaturePlot(
+        seurat_obj,
+        features = top.features,
+        keep.scale = color.scale,
+        ncol = 3,
+        alpha = c(0.1, 1)
+    ))
+
+    # Close the pdf
+    dev.off()
+
     # Print out markers into a table:
-    write.table(as.matrix(top.features), file = "spatially_variable_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-  }
-
-  # Return to normal
-  plan("default") 
-
-  # Close the pdf
-  dev.off()
-
-} else {
-  # Number of variable features in Seurat object
-  variable_feats <- VariableFeatures(seurat_obj)
-
-  # Use number of selected variable features 
-  if (number_of_var_feats > length(variable_feats)) {
-    stop(paste("CHIPSTER-NOTE: ", "You have selected", number_of_var_feats, "to use as the number of variable features, but there are only", length(variable_feats), "in the object. Please select less than or equal to", length(variable_feats),"variable genes."))
-  }
-  variable_feats <- variable_feats[1:number_of_var_feats]
-
-  seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = variable_feats, selection.method = method.to.use)
-
-  plan("default") # return to normal
-
-  # Open the pdf file for plotting
-  pdf(file = "Markerplot2.pdf", width = 9, height = 12)
-
-  # Visualise the identified top features
-  top.features <- head(SpatiallyVariableFeatures(seurat_obj, method = method.to.use), number.of.top.features)
-
-  print(SpatialFeaturePlot(seurat_obj, features = top.features, keep.scale = color.scale, ncol = 3, alpha = c(0.1, 1)))
-
-  # Close the pdf
-  dev.off()
-
-  # Print out markers into a table:
-  write.table(as.matrix(top.features), file = "spatially_variable_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-
+    write.table(
+        as.matrix(top.features),
+        file = "spatially_variable_genes.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 }
 
 # EOF

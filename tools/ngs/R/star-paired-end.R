@@ -24,7 +24,7 @@ source(file.path(chipster.common.lib.path, "zip-utils.R"))
 # check out if the file is compressed and if so unzip it
 input.names <- read.table("chipster-inputs.tsv", header = FALSE, sep = "\t")
 for (i in 1:nrow(input.names)) {
-  unzipIfGZipFile(input.names[i, 1])
+    unzipIfGZipFile(input.names[i, 1])
 }
 
 # setting up STAR
@@ -40,38 +40,57 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools", "bin", "samtools
 # INPUT OPTIONAL reads1.txt: "List of read 1 files" TYPE GENERIC
 # INPUT OPTIONAL reads2.txt: "List of read 2 files" TYPE GENERIC
 # if (fileOk("reads1.txt", 0) && fileOk("reads2.txt", 0)) {
-  # Case: list files exist
-  # reads1.list <- make_input_list("reads1.txt")
-  # reads2.list <- make_input_list("reads2.txt")
-  # if (identical(intersect(reads1.list, reads2.list), character(0))) {
-  #   reads1 <- paste(reads1.list, sep = "", collapse = ",")
-  #   reads2 <- paste(reads2.list, sep = "", collapse = ",")
-  #  } else {
-  #  stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
-  # }
+# Case: list files exist
+# reads1.list <- make_input_list("reads1.txt")
+# reads2.list <- make_input_list("reads2.txt")
+# if (identical(intersect(reads1.list, reads2.list), character(0))) {
+#   reads1 <- paste(reads1.list, sep = "", collapse = ",")
+#   reads2 <- paste(reads2.list, sep = "", collapse = ",")
+#  } else {
+#  stop(paste("CHIPSTER-NOTE: ", "One or more files is listed in both lists."))
+# }
 # } else if (fileOk("reads002.fq") && fileNotOk("reads003.fq")) {
-  # Case: no list file, but only two fastq inputs
+# Case: no list file, but only two fastq inputs
 
-  in.sorted <- input.names[order(input.names[, 2]), ]
-  reads <- grep("reads", in.sorted[, 1], value = TRUE)
-  reads1 <- reads[1]
-  reads2 <- reads[2]
+in.sorted <- input.names[order(input.names[, 2]), ]
+reads <- grep("reads", in.sorted[, 1], value = TRUE)
+reads1 <- reads[1]
+reads2 <- reads[2]
 # } else {
-  # Case: no list files, more than two fastq inputs
- #  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
+# Case: no list files, more than two fastq inputs
+#  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
 # }
 
 # command
-command <- paste(star.binary, "--genomeDir", path.star.index, "--readFilesIn", reads1, reads2, "--outSAMtype BAM SortedByCoordinate", "--twopassMode Basic", "--runThreadN", chipster.threads.max, "--alignSJoverhangMin 8", "--alignSJDBoverhangMin 1", "--outSAMstrandField intronMotif", "--outFilterType BySJout", "--outFilterMultimapNmax", alignments.per.read, "--outFilterMismatchNmax", mismatches.per.pair)
+command <- paste(
+    star.binary,
+    "--genomeDir",
+    path.star.index,
+    "--readFilesIn",
+    reads1,
+    reads2,
+    "--outSAMtype BAM SortedByCoordinate",
+    "--twopassMode Basic",
+    "--runThreadN",
+    chipster.threads.max,
+    "--alignSJoverhangMin 8",
+    "--alignSJDBoverhangMin 1",
+    "--outSAMstrandField intronMotif",
+    "--outFilterType BySJout",
+    "--outFilterMultimapNmax",
+    alignments.per.read,
+    "--outFilterMismatchNmax",
+    mismatches.per.pair
+)
 # Use GTF if provided
 if (fileOk("annotation.gtf")) {
-  command <- paste(command, "--sjdbGTFfile annotation.gtf")
+    command <- paste(command, "--sjdbGTFfile annotation.gtf")
 } else {
-  gtf.path <- c(file.path(chipster.tools.path, "genomes", "gtf"))
-  file.list <- list.files(gtf.path, pattern = "\\.gtf$")
-  gtf.file <- grep(organism, file.list, value = TRUE)
-  gtf.path <- c(file.path(gtf.path, gtf.file[1]))
-  command <- paste(command, "--sjdbGTFfile", gtf.path)
+    gtf.path <- c(file.path(chipster.tools.path, "genomes", "gtf"))
+    file.list <- list.files(gtf.path, pattern = "\\.gtf$")
+    gtf.file <- grep(organism, file.list, value = TRUE)
+    gtf.path <- c(file.path(gtf.path, gtf.file[1]))
+    command <- paste(command, "--sjdbGTFfile", gtf.path)
 }
 command <- paste(command, "--alignIntronMin", align.intron.min)
 command <- paste(command, "--alignIntronMax", align.intron.max)
@@ -85,10 +104,10 @@ runExternal(command)
 
 # rename result files according to the parameter
 if (log.files == "final_log") {
-  runExternal("mv Log.final.out Log_final.txt")
+    runExternal("mv Log.final.out Log_final.txt")
 } else if (log.files == "final_and_progress") {
-  runExternal("mv Log.progress.out Log_progress.txt")
-  runExternal("mv Log.final.out Log_final.txt")
+    runExternal("mv Log.progress.out Log_progress.txt")
+    runExternal("mv Log.final.out Log_final.txt")
 }
 runExternal("mv Aligned.sortedByCoord.out.bam alignment.bam")
 
@@ -97,7 +116,7 @@ displayNamesToBAM("alignment.bam", samtools.binary)
 
 # index bam
 if (index.file == "index_file") {
-  runExternal(paste(samtools.binary, "index alignment.bam"))
+    runExternal(paste(samtools.binary, "index alignment.bam"))
 }
 # Determine base name
 inputnames <- read_input_definitions()

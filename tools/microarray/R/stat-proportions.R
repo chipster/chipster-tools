@@ -45,7 +45,12 @@ for (group_count in 1:length(group_levels)) {
 # Perform test of equal proportions per row of data
 results <- matrix(nrow = nrow(dat_2), ncol = 2)
 for (row_number in 1:nrow(dat_2)) {
-    counts_table <- matrix(nrow = length(group_levels), ncol = 2, data = c(dat_0[row_number, ], dat_1[row_number, ]), byrow = FALSE)
+    counts_table <- matrix(
+        nrow = length(group_levels),
+        ncol = 2,
+        data = c(dat_0[row_number, ], dat_1[row_number, ]),
+        byrow = FALSE
+    )
     results[row_number, 1] <- prop.test(counts_table)$statistic
     results[row_number, 2] <- prop.test(counts_table)$p.value
 }

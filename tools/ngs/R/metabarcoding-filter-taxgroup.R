@@ -72,16 +72,15 @@ prevdf <- data.frame(
 
 # Tabulate average and total prevalences
 prevsummary <- ddply(
-    prevdf, "Phylum",
+    prevdf,
+    "Phylum",
     function(df1) {
         cbind(mean(df1$Prevalence), sum(df1$Prevalence))
     }
 )
 
 # Give the columns better titles
-prevsummary <- dplyr::rename(prevsummary,
-    Mean.prevalence = 2, Total.prevalence = 3
-) # Rename cols. 2 and 3
+prevsummary <- dplyr::rename(prevsummary, Mean.prevalence = 2, Total.prevalence = 3) # Rename cols. 2 and 3
 
 # Print out results
 

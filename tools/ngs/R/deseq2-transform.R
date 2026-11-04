@@ -7,7 +7,6 @@
 # EK 25.1.2016
 # ML 8.5.2019 Move content to a separate function: also used by the heatmap tool
 
-
 # Load the library
 library(DESeq2)
 
@@ -20,6 +19,5 @@ source(file.path(chipster.common.path, "deseq-transform.R"))
 transf.counts <- deseq_transform(dat2, method)
 
 write.table(transf.counts, file = "transformed_counts.tsv", sep = "\t", row.names = T, quote = F)
-
 
 # EOF

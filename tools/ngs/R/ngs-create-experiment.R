@@ -97,7 +97,8 @@ if (alignment_type == "genome") {
         }
 
         if (length(start_col) > 0 && length(end_col) > 0) {
-            length_info <- as.numeric(identifier_table[identifiers, end_col]) - as.numeric(identifier_table[identifiers, start_col])
+            length_info <- as.numeric(identifier_table[identifiers, end_col]) -
+                as.numeric(identifier_table[identifiers, start_col])
         }
         sequence_info <- rep(NA, length(identifiers))
     }
@@ -159,6 +160,19 @@ if (alignment_type == "other") {
 
 # Writes out the data and the phenodata table
 write.table(data_table, file = "ngs-data-table.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-write.table(data.frame(sample = samples, chiptype = "not applicable", experiment = experiment_type, group = groups, library_size = ""), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(
+        sample = samples,
+        chiptype = "not applicable",
+        experiment = experiment_type,
+        group = groups,
+        library_size = ""
+    ),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # EOF

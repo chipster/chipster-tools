@@ -33,7 +33,6 @@
 # PARAMETER OPTIONAL offset: "Offset to start numbering the sequence from" TYPE INTEGER DEFAULT 1 (Offset to start numbering the sequence from)
 # PARAMETER OPTIONAL save_log: "Collect a log file" TYPE [yes: Yes, no: No] DEFAULT no (Collect a log file about the analysis run.)
 
-
 # KM 8.11. 2013
 options(scipen = 999)
 emboss.path <- file.path(chipster.tools.path, "emboss", "bin")
@@ -106,7 +105,6 @@ emboss.parameters <- paste(emboss.parameters, "-margin", margin)
 emboss.parameters <- paste(emboss.parameters, "-name", name)
 emboss.parameters <- paste(emboss.parameters, "-description", description)
 emboss.parameters <- paste(emboss.parameters, "-offset", offset)
-
 
 
 command.full <- paste(emboss.binary, emboss.parameters, " >> remap.log 2>&1")

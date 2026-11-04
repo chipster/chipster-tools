@@ -8,7 +8,6 @@
 # RUNTIME R-4.3.2-single-cell
 # TOOLS_BIN ""
 
-
 # 2026-09-18 ML Split off from single-cell-seurat-clustering-v5.R for standalone use
 
 library(Seurat)
@@ -19,12 +18,14 @@ options(Seurat.object.assay.version = "v5")
 load("seurat_obj.Robj")
 
 if (exists("data.combined")) {
-  seurat_obj <- data.combined
+    seurat_obj <- data.combined
 }
 
 # Sanity check: clusters must exist
 if (is.null(Idents(seurat_obj)) || length(levels(Idents(seurat_obj))) == 0) {
-  stop("CHIPSTER-NOTE: The Seurat object does not appear to contain cluster assignments. Please run the clustering tool first.")
+    stop(
+        "CHIPSTER-NOTE: The Seurat object does not appear to contain cluster assignments. Please run the clustering tool first."
+    )
 }
 
 # Check which reductions are available
@@ -33,7 +34,9 @@ has_umap <- "umap" %in% available_reductions
 has_tsne <- "tsne" %in% available_reductions
 
 if (!has_umap && !has_tsne) {
-  stop("CHIPSTER-NOTE: The Seurat object contains neither a UMAP nor a tSNE reduction. Please run the clustering tool (which computes both) before using this visualisation tool.")
+    stop(
+        "CHIPSTER-NOTE: The Seurat object contains neither a UMAP nor a tSNE reduction. Please run the clustering tool (which computes both) before using this visualisation tool."
+    )
 }
 
 # Determine what to plot based on parameter and availability
@@ -41,34 +44,37 @@ plot_umap <- (reduction.to.plot %in% c("umap_and_tsne", "umap_only")) && has_uma
 plot_tsne <- (reduction.to.plot %in% c("umap_and_tsne", "tsne_only")) && has_tsne
 
 if (!plot_umap && !plot_tsne) {
-  stop(paste0("CHIPSTER-NOTE: None of the requested reductions are available in this object. ",
-              "Available reductions: ", paste(available_reductions, collapse = ", "), "."))
+    stop(paste0(
+        "CHIPSTER-NOTE: None of the requested reductions are available in this object. ",
+        "Available reductions: ",
+        paste(available_reductions, collapse = ", "),
+        "."
+    ))
 }
 
 # Warn if a requested reduction is missing (but still produce the available one)
 if ((reduction.to.plot %in% c("umap_and_tsne", "umap_only")) && !has_umap) {
-  message("Warning: UMAP reduction not found in the Seurat object — skipping UMAP plot.")
+    message("Warning: UMAP reduction not found in the Seurat object — skipping UMAP plot.")
 }
 if ((reduction.to.plot %in% c("umap_and_tsne", "tsne_only")) && !has_tsne) {
-  message("Warning: tSNE reduction not found in the Seurat object — skipping tSNE plot.")
+    message("Warning: tSNE reduction not found in the Seurat object — skipping tSNE plot.")
 }
 
 # Open PDF
 pdf(file = "clusterPlot.pdf")
 
 if (plot_umap) {
-  DimPlot(seurat_obj, reduction = "umap", pt.size = point.size, label = add.labels)
+    DimPlot(seurat_obj, reduction = "umap", pt.size = point.size, label = add.labels)
 }
 
 if (plot_tsne) {
-  DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size, label = add.labels)
+    DimPlot(seurat_obj, reduction = "tsne", pt.size = point.size, label = add.labels)
 }
 
 # Number of cells in each cluster
 cell_counts <- table(Idents(seurat_obj), seurat_obj$orig.ident)
 textplot(cell_counts, halign = "center", valign = "center", cex = 1)
-title(paste("Total number of cells:", length(colnames(x = seurat_obj)),
-            "\nNumber of cells in each cluster:"))
+title(paste("Total number of cells:", length(colnames(x = seurat_obj)), "\nNumber of cells in each cluster:"))
 
 dev.off()
 

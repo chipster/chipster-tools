@@ -30,7 +30,9 @@ if (annotate_with == "probe_id") {
     # Checks that the package actually exists
     is_package_available <- try(library(package = lib, character.only = T))
     if (length(grep("no package", is_package_available[1])) > 0) {
-        stop("CHIPSTER-NOTE: It appears that your data was not acquired using one of the array types supported in Chipster. If the input data already has a 'symbol' column, please rerun the tool with the 'annotate using' parameter set to 'gene symbols'.")
+        stop(
+            "CHIPSTER-NOTE: It appears that your data was not acquired using one of the array types supported in Chipster. If the input data already has a 'symbol' column, please rerun the tool with the 'annotate using' parameter set to 'gene symbols'."
+        )
     }
     # Loads the correct annotation library
     library(package = lib, character.only = T)
@@ -45,7 +47,9 @@ dat <- read.table(file, header = T, sep = "\t", row.names = 1)
 if (annotate_with == "gene_symbol") {
     gene_symbols <- dat[, grep("symbol", names(dat))]
     if (length(unique(gene_symbols)) < 1) {
-        stop("CHIPSTER-NOTE: You need to have at least one gene symbol in your data table to use that information for fetching chromosome location information. For supported array designs the user can opt to use the probe ID instead.")
+        stop(
+            "CHIPSTER-NOTE: You need to have at least one gene symbol in your data table to use that information for fetching chromosome location information. For supported array designs the user can opt to use the probe ID instead."
+        )
     }
 }
 
@@ -74,7 +78,12 @@ if (species == "rat") {
 }
 
 ensembl <- useMart("ensembl", dataset = dataset)
-annotated_genes <- getBM(mart = ensembl, attributes = c(filt, "chromosome_name", "start_position", "end_position"), filters = filt, values = gene_symbols)
+annotated_genes <- getBM(
+    mart = ensembl,
+    attributes = c(filt, "chromosome_name", "start_position", "end_position"),
+    filters = filt,
+    values = gene_symbols
+)
 
 # Remove chromosome entries containing the "_" character
 annotated_genes <- annotated_genes[-grep(pattern = "_", annotated_genes$chromosome_name), ]

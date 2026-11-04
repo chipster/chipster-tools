@@ -42,28 +42,52 @@ bitmap(file = "densityplot.png", width = w / 72, height = h / 72)
 x <- c()
 y <- c()
 for (i in 1:ncol(dat2)) {
-  x <- cbind(x, density(dat2[, i])$x)
-  y <- cbind(y, density(dat2[, i])$y)
+    x <- cbind(x, density(dat2[, i])$x)
+    y <- cbind(y, density(dat2[, i])$y)
 }
-plot(x[, 1], y[, 1], col = 1, ylim = c(0, max(y)), main = "M intensities", type = "l", lwd = 2, lty = 1, xlab = "M", ylab = "Density")
+plot(
+    x[, 1],
+    y[, 1],
+    col = 1,
+    ylim = c(0, max(y)),
+    main = "M intensities",
+    type = "l",
+    lwd = 2,
+    lty = 1,
+    xlab = "M",
+    ylab = "Density"
+)
 for (i in 2:ncol(dat2)) {
-  lines(x[, i], y[, i], col = i, lwd = 2, lty = 1)
+    lines(x[, i], y[, i], col = i, lwd = 2, lty = 1)
 }
 legend(legend = colnames(dat2), x = "topright", lty = 1, cex = 0.75, col = c(1:ncol(dat2)))
 dev.off()
 
 # MA plot
 if (ncol(A) > 0) {
-  bitmap(file = "MA-plot.png", width = w / 72, height = h / 72)
-  par(mfrow = c(ceiling(sqrt(ncol(dat2))), ceiling(sqrt(ncol(dat2)))))
-  ylim <- c(min(na.omit(dat2)), max(na.omit(dat2)))
-  for (i in 1:ncol(dat2)) {
-    par(mar = c(0, 1, 1, 0) + 0.1)
-    plot(A[, i], dat2[, i], xaxt = "n", xlab = NULL, ylab = NULL, main = phenodata$description[i], cex.main = 0.75, cex.axis = 0.7, cex.lab = 0.75, tck = -0.01, mgp = c(3, 0.2, 0), ylim = ylim)
-    d <- na.omit(data.frame(A = A[, i], dat = dat2[, i]))
-    lines(lowess(d$A, d$dat), col = "red")
-  }
-  dev.off()
+    bitmap(file = "MA-plot.png", width = w / 72, height = h / 72)
+    par(mfrow = c(ceiling(sqrt(ncol(dat2))), ceiling(sqrt(ncol(dat2)))))
+    ylim <- c(min(na.omit(dat2)), max(na.omit(dat2)))
+    for (i in 1:ncol(dat2)) {
+        par(mar = c(0, 1, 1, 0) + 0.1)
+        plot(
+            A[, i],
+            dat2[, i],
+            xaxt = "n",
+            xlab = NULL,
+            ylab = NULL,
+            main = phenodata$description[i],
+            cex.main = 0.75,
+            cex.axis = 0.7,
+            cex.lab = 0.75,
+            tck = -0.01,
+            mgp = c(3, 0.2, 0),
+            ylim = ylim
+        )
+        d <- na.omit(data.frame(A = A[, i], dat = dat2[, i]))
+        lines(lowess(d$A, d$dat), col = "red")
+    }
+    dev.off()
 }
 
 # EOF

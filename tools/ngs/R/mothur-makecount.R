@@ -31,11 +31,14 @@ file.list <- scan("tar.contents", what = "", sep = "\n")
 
 # Check that the input is a valid tar file
 if (length(file.list) == 0) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
+    stop(paste("CHIPSTER-NOTE: ", "It seems your input file is not a valid Tar package. Please check your input file."))
 }
 # Check if tar packa contains folders
-if (grepl("/", file.list[1])) {
-  stop(paste("CHIPSTER-NOTE: ", "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."))
+if (any(grepl("/", file.list))) {
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "It seems your Tar package contains folders. The FASTQ files need to be in the root of the package, not in subfolders."
+    ))
 }
 
 # Make input and output folders
@@ -47,21 +50,28 @@ untar("reads.tar", exdir = "input_folder")
 
 # list the full file names
 # filepaths <- list.files("input_folder", full.names=TRUE)
-filenames <- list.files("input_folder")
+filenames <- safe_name(list.files("input_folder"))
+# Mothur uses - to separate the files in the fasta= and groups= lists
+if (any(grepl("-", filenames, fixed = TRUE))) {
+    stop(paste(
+        "CHIPSTER-NOTE: File names can't contain - in this tool. Please rename these:",
+        paste(filenames[grepl("-", filenames, fixed = TRUE)], collapse = ", ")
+    ))
+}
 
 # Go through the files and gzip. Files that are already gzipped will be skipped
 for (file in filenames) {
-  file_path <- paste0("input_folder/", file)
-  unzipIfGZipFile(file_path)
+    file_path <- paste0("input_folder/", file)
+    unzipIfGZipFile(file_path)
 
-  basename <- paste(strip_name(paste(file)))
+    basename <- paste(strip_name(paste(file)))
 
-  fastaname <- paste("output_folder/", basename, ".fasta", sep = "")
+    fastaname <- paste("output_folder/", basename, ".fasta", sep = "")
 
-  command <- paste(emboss.binary, "-sequence", file_path, "-outseq", fastaname)
-  runExternal(command)
-  fasta_names <- paste(fasta_names, fastaname, sep = "-")
-  group_names <- paste(group_names, basename, sep = "-")
+    command <- paste(emboss.binary, "-sequence", shQuote(file_path), "-outseq", shQuote(fastaname))
+    runExternal(command)
+    fasta_names <- paste(fasta_names, fastaname, sep = "-")
+    group_names <- paste(group_names, basename, sep = "-")
 }
 
 

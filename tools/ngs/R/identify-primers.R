@@ -25,7 +25,6 @@ if (adapter3 == "" && adapter5 == "") {
 }
 # check out if the file is compressed and if so unzip it
 
-
 reverse_file <- ""
 
 # if tar package given, use that
@@ -51,7 +50,10 @@ if (fileOk("reads.tar")) {
         reverse_file <- "file2.fastq"
     }
 } else {
-    stop(paste("CHIPSTER-NOTE: ", "No input file recognized. Please give either a tar package or the forward fastq file as input"))
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "No input file recognized. Please give either a tar package or the forward fastq file as input"
+    ))
 }
 
 # to ensure we have the right primers, and the correct orientation of the primers
@@ -60,7 +62,9 @@ allOrients <- function(primer) {
     require(Biostrings)
     dna <- DNAString(primer) # The Biostrings works w/ DNAString objects rather than character vectors
     orients <- c(
-        Forward = dna, Complement = complement(dna), Reverse = reverse(dna),
+        Forward = dna,
+        Complement = complement(dna),
+        Reverse = reverse(dna),
         RevComp = reverseComplement(dna)
     )
     return(sapply(orients, toString)) # Convert back to character vector
@@ -119,7 +123,8 @@ if (reverse_file == "") {
             Forward_reads_3adapter = sapply(orients3, primerHits, fn = forward_file)
         )
     }
-} else { # paired reads, reverse and forward read to check
+} else {
+    # paired reads, reverse and forward read to check
 
     if (adapter5 == "") {
         matrix <- rbind(

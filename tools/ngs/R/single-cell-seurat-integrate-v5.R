@@ -21,7 +21,6 @@
 # add parameter if needed
 # PARAMETER OPTIONAL ref.sample.names: "Samples to use as references" TYPE STRING DEFAULT "No references selected" (Names of the sample or samples you wish to use as references in integration, separated by comma. If you are integrating several large datasets, the tool might run out of memory. Choosing to use only some of them as references makes the integration more memory efficient and faster. Please note that the sample names here are case sensitive, so check how you typed the names of the samples when running the setup tool.)
 
-
 # 2021-12-30 ML
 # 2022-02-17 EK increased slots to 4
 # 2022-04-19 ML increased slots to 5
@@ -62,9 +61,9 @@ seurat_obj <- RunUMAP(seurat_obj, dims = 1:num.dims, reduction = "pca", reductio
 # }
 
 if (anchor.identification.method == "CCAIntegration") {
-  new.reduction <- "integrated.cca"
+    new.reduction <- "integrated.cca"
 } else if (anchor.identification.method == "RPCAIntegration") {
-  new.reduction <- "integrated.rpca"
+    new.reduction <- "integrated.rpca"
 }
 
 # When using only the user listed samples as references:
@@ -85,27 +84,40 @@ if (anchor.identification.method == "CCAIntegration") {
 # }
 
 if (normalisation.method == "SCT") {
-  if (length(seurat_obj@assays$SCT) > 0) {
-    # seurat.objects.list <- PrepSCTIntegration(object.list = seurat_obj, anchor.features = features)
+    if (length(seurat_obj@assays$SCT) > 0) {
+        # seurat.objects.list <- PrepSCTIntegration(object.list = seurat_obj, anchor.features = features)
+        print(anchor.identification.method)
+        print(new.reduction)
+        data.combined <- IntegrateLayers(
+            object = seurat_obj,
+            method = anchor.identification.method,
+            normalization.method = "SCT",
+            orig.reduction = "pca",
+            new.reduction = new.reduction,
+            dims = 1:PCstocompute,
+            verbose = FALSE
+        )
+    } else {
+        stop(paste(
+            "CHIPSTER-NOTE: ",
+            "The data you provided hasn't been SCTransformed, please run SCTransform first or choose other parameter value."
+        ))
+    }
+} else {
+    # LogNormalize:"Global scaling normalization
     print(anchor.identification.method)
     print(new.reduction)
     data.combined <- IntegrateLayers(
-      object = seurat_obj, method = anchor.identification.method, normalization.method = "SCT", orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
-      verbose = FALSE
+        object = seurat_obj,
+        method = anchor.identification.method,
+        orig.reduction = "pca",
+        new.reduction = new.reduction,
+        dims = 1:PCstocompute,
+        verbose = FALSE
     )
-  } else {
-    stop(paste("CHIPSTER-NOTE: ", "The data you provided hasn't been SCTransformed, please run SCTransform first or choose other parameter value."))
-  }
-} else { # LogNormalize:"Global scaling normalization
-  print(anchor.identification.method)
-  print(new.reduction)
-  data.combined <- IntegrateLayers(
-    object = seurat_obj, method = anchor.identification.method, orig.reduction = "pca", new.reduction = new.reduction, dims = 1:PCstocompute,
-    verbose = FALSE
-  )
-  # Only needed when LogNormalized data?
-  data.combined[["RNA"]] <- JoinLayers(data.combined[["RNA"]])
-  print(data.combined)
+    # Only needed when LogNormalized data?
+    data.combined[["RNA"]] <- JoinLayers(data.combined[["RNA"]])
+    print(data.combined)
 }
 
 
@@ -122,18 +134,54 @@ data.combined <- RunTSNE(data.combined, dims = 1:num.dims, reduction = new.reduc
 pdf(file = "integrated_plot.pdf", width = 13, height = 7) # open pdf
 
 # Unintegrated:
-p1 <- DimPlot(seurat_obj, reduction = "umap.unintegrated", group.by = c("stim"), pt.size = point.size, label = add.labels) + labs(title = "UMAP unintegrated, color by sample")
-p2 <- DimPlot(seurat_obj, reduction = "umap.unintegrated", group.by = c("unintegrated_clusters"), pt.size = point.size, label = add.labels) + labs(title = "UMAP unintegrated, color by cluster")
+p1 <- DimPlot(
+    seurat_obj,
+    reduction = "umap.unintegrated",
+    group.by = c("stim"),
+    pt.size = point.size,
+    label = add.labels
+) +
+    labs(title = "UMAP unintegrated, color by sample")
+p2 <- DimPlot(
+    seurat_obj,
+    reduction = "umap.unintegrated",
+    group.by = c("unintegrated_clusters"),
+    pt.size = point.size,
+    label = add.labels
+) +
+    labs(title = "UMAP unintegrated, color by cluster")
 plot_grid(p1, p2)
 
 # Integrated:
-p3 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("stim"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by sample")
-p4 <- DimPlot(data.combined, reduction = reduction.method, group.by = c("seurat_clusters"), pt.size = point.size, label = add.labels) + labs(title = "Chosen reduction method, integrated, color by cluster")
+p3 <- DimPlot(
+    data.combined,
+    reduction = reduction.method,
+    group.by = c("stim"),
+    pt.size = point.size,
+    label = add.labels
+) +
+    labs(title = "Chosen reduction method, integrated, color by sample")
+p4 <- DimPlot(
+    data.combined,
+    reduction = reduction.method,
+    group.by = c("seurat_clusters"),
+    pt.size = point.size,
+    label = add.labels
+) +
+    labs(title = "Chosen reduction method, integrated, color by cluster")
 plot_grid(p3, p4)
 
 # Show both conditions in separate plots:
 # Split to multiple rows with ncol
-DimPlot(data.combined, reduction = reduction.method, split.by = "stim", pt.size = point.size, label = add.labels, ncol = 3) + labs(title = "Chosen reduction method, integrated, samples")
+DimPlot(
+    data.combined,
+    reduction = reduction.method,
+    split.by = "stim",
+    pt.size = point.size,
+    label = add.labels,
+    ncol = 3
+) +
+    labs(title = "Chosen reduction method, integrated, samples")
 
 
 cell_counts <- table(Idents(data.combined), data.combined$stim)
@@ -157,17 +205,24 @@ dev.off()
 # Average expression table
 # If requested, return expression for an 'average' single cell in each cluster.
 if (output_aver_expr == "T") {
-  aver_expr <- AverageExpression(object = data.combined)
-  if (normalisation.method == "SCT") {
-    aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
-  } else {
     aver_expr <- AverageExpression(object = data.combined)
-  }
+    if (normalisation.method == "SCT") {
+        aver_expr <- AverageExpression(object = data.combined, slot = "data", assay = "SCT")
+    } else {
+        aver_expr <- AverageExpression(object = data.combined)
+    }
 
-  aver_expr_in_clusters <- aver_expr[[1]]
-  # aver_expr_in_clusters <- aver_expr[["integrated"]]
-  # Write to table
-  write.table(aver_expr_in_clusters, file = "aver_expr_in_clusters.tsv", sep = "\t", row.names = TRUE, col.names = TRUE, quote = FALSE)
+    aver_expr_in_clusters <- aver_expr[[1]]
+    # aver_expr_in_clusters <- aver_expr[["integrated"]]
+    # Write to table
+    write.table(
+        aver_expr_in_clusters,
+        file = "aver_expr_in_clusters.tsv",
+        sep = "\t",
+        row.names = TRUE,
+        col.names = TRUE,
+        quote = FALSE
+    )
 }
 
 # Normalised data + cluster + sample information table

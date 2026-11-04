@@ -78,7 +78,6 @@ if (number_files == 2) {
     unique_1 <- setdiff(list_1, intersect_1_2)
     unique_2 <- setdiff(list_2, intersect_1_2)
 
-
     # Plot Venn-diagram:
 
     # set up plotting area
@@ -102,7 +101,6 @@ if (number_files == 2) {
 
     # shut down plotting device
     dev.off()
-
 
     # output the result table
     longest_list <- length(union_1_2)
@@ -135,7 +133,14 @@ if (number_files == 2) {
     result_operation_2 <- data_2[result_operation[, 1], ]
     result_operation_built <- cbind(result_operation_1, result_operation_2)
 
-    write.table(result_operation_built, file = "intersect-lists-operation.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        result_operation_built,
+        file = "intersect-lists-operation.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
     write.table(result_table, file = "intersect-lists-summary.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }
 
@@ -169,7 +174,6 @@ if (number_files == 3) {
     unique_1 <- setdiff(list_1, union(union(intersect_1_2, intersect_1_3), intersect_1_2_3))
     unique_2 <- setdiff(list_2, union(union(intersect_1_2, intersect_2_3), intersect_1_2_3))
     unique_3 <- setdiff(list_3, union(union(intersect_1_3, intersect_2_3), intersect_1_2_3))
-
 
     # Plot Venn-diagram:
 
@@ -205,7 +209,6 @@ if (number_files == 3) {
 
     # shut down plotting device
     dev.off()
-
 
     # output the result table
     longest_list <- length(union_1_2_3)
@@ -264,6 +267,13 @@ if (number_files == 3) {
     result_operation_2 <- data_2[result_operation[, 1], ]
     result_operation_built <- cbind(result_operation_1, result_operation_2)
 
-    write.table(result_operation_built, file = "intersect-lists-operation.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+    write.table(
+        result_operation_built,
+        file = "intersect-lists-operation.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
     write.table(result_table, file = "intersect-lists-summary.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
 }

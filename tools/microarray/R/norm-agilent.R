@@ -111,7 +111,14 @@ if (chiptype != "cDNA") {
 }
 # chiptype<-paste(chiptype, ".db", sep="")
 
-write.table(data.frame(sample = sample, chiptype = chiptype, group = group), file = "phenodata.tsv", sep = "\t", row.names = F, col.names = T, quote = F)
+write.table(
+    data.frame(sample = sample, chiptype = chiptype, group = group),
+    file = "phenodata.tsv",
+    sep = "\t",
+    row.names = F,
+    col.names = T,
+    quote = F
+)
 
 # Removes control probes
 if (remove.control.probes == "yes") {
@@ -134,7 +141,6 @@ average_flags <- function(flags.vector) {
         }
     }
 }
-
 
 
 # Constructs and writes out a table
@@ -200,16 +206,44 @@ if (chiptype != "cDNA") {
 if (chiptype != "cDNA") {
     # Conditional on whether flags are included or not, write the data to disk
     if (length(dat$other$flag) == 0) {
-        write.table(data.frame(symbol, description = genename, round(M, digits = 2), round(A, digits = 2)), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+        write.table(
+            data.frame(symbol, description = genename, round(M, digits = 2), round(A, digits = 2)),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
     } else {
-        write.table(data.frame(symbol, description = genename, round(M, digits = 2), round(A, digits = 2), flags4), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+        write.table(
+            data.frame(symbol, description = genename, round(M, digits = 2), round(A, digits = 2), flags4),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
     }
 }
 
 if (chiptype == "cDNA") {
     if (length(dat$other$flag) == 0) {
-        write.table(data.frame(round(M, digits = 2), round(A, digits = 2)), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+        write.table(
+            data.frame(round(M, digits = 2), round(A, digits = 2)),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
     } else {
-        write.table(data.frame(round(M, digits = 2), round(A, digits = 2), flags4), file = "normalized.tsv", col.names = T, quote = F, sep = "\t", row.names = T)
+        write.table(
+            data.frame(round(M, digits = 2), round(A, digits = 2), flags4),
+            file = "normalized.tsv",
+            col.names = T,
+            quote = F,
+            sep = "\t",
+            row.names = T
+        )
     }
 }

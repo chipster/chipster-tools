@@ -8,7 +8,6 @@
 # PARAMETER transcriptome: Transcriptome TYPE [humanrefseq: "Human RefSeq", mouserefseq: "Mouse RefSeq", ratrefseq: "Rat RefSeq", transcripts: transcripts] DEFAULT transcripts (Which transcriptome should be used for counting reads? Note that you should use the same set of transcripts as was used for the alignment.)
 # PARAMETER fragmentlength: "Mean fragment length" TYPE INTEGER FROM 10 TO 10000 DEFAULT 200 (While the empirical distribution is estimated from paired-end reads on-the-fly, this value paramaterizes the prior distribution. If only single-end reads are available, this prior distribution is also used to determine the effective length.)
 
-
 # check out if the fastq files are compressed and if so unzip them
 source(file.path(chipster.common.lib.path, "zip-utils.R"))
 unzipIfGZipFile("reads1.fq")
@@ -22,7 +21,14 @@ samtools.binary <- c(file.path(chipster.tools.path, "samtools-0.1.19", "samtools
 transcriptome <- file.path(chipster.tools.path, "express_files", transcriptome)
 
 # build the Bowtie2 command to align reads to the selected transcriptome (if starting from fastq files)
-bowtie.command <- paste(bowtie.binary, "-a -X 800 -x", transcriptome, "-1 reads1.fq -2 reads2.fq |", samtools.binary, "view -Sb - > transcriptome-alignment.bam")
+bowtie.command <- paste(
+    bowtie.binary,
+    "-a -X 800 -x",
+    transcriptome,
+    "-1 reads1.fq -2 reads2.fq |",
+    samtools.binary,
+    "view -Sb - > transcriptome-alignment.bam"
+)
 
 # run Bowtie2
 system(bowtie.command)

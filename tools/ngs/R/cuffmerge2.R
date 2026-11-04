@@ -19,7 +19,9 @@ setpathcommand <- paste("export PATH=$PATH:", cufflinkspath, ";", sep = "")
 # Remove duplicates
 if (exclude.duplicates == "yes") {
     # awk command to list duplicates
-    listduplicates.awk <- paste("| awk -F \'transcript_id\' \'{print $2}\' |awk -F\'\\\"\' \'{print $2}\' | sort | uniq -c | grep -v -w \"1\" |awk \'{print $2}\'")
+    listduplicates.awk <- paste(
+        "| awk -F \'transcript_id\' \'{print $2}\' |awk -F\'\\\"\' \'{print $2}\' | sort | uniq -c | grep -v -w \"1\" |awk \'{print $2}\'"
+    )
     system(paste("echo \"Excluded duplicate ids:\" >> exclude.tmp"))
     # Loop through the inputs
     input.names <- read.table("chipster-inputs.tsv", header = F, sep = "\t")

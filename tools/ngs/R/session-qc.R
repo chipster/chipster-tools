@@ -4,7 +4,9 @@ suppressMessages(require(Matrix))
 
 system("curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v2/pbmc_1k_v2_filtered_feature_bc_matrix.h5")
 system("curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_filtered_feature_bc_matrix.h5")
-system("curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_filtered_feature_bc_matrix.h5")
+system(
+    "curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_filtered_feature_bc_matrix.h5"
+)
 v3.1k <- Read10X_h5("pbmc_1k_v3_filtered_feature_bc_matrix.h5", use.names = T)
 v2.1k <- Read10X_h5("pbmc_1k_v2_filtered_feature_bc_matrix.h5", use.names = T)
 p3.1k <- Read10X_h5("pbmc_1k_protein_v3_filtered_feature_bc_matrix.h5", use.names = T)
@@ -45,8 +47,18 @@ VlnPlot(alldata, features = "percent.ribo", pt.size = 0.1) + NoLegend()
 FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 FeatureScatter(alldata, feature1 = "nFeature_RNA", feature2 = "percent.mito")
 FeatureScatter(alldata, feature1 = "percent.ribo", feature2 = "nFeature_RNA")
-FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = WhichCells(alldata, expression = orig.ident == "v3.1k"))
-FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", cells = WhichCells(alldata, expression = orig.ident == "v3.1k"))
+FeatureScatter(
+    alldata,
+    feature1 = "nCount_RNA",
+    feature2 = "nFeature_RNA",
+    cells = WhichCells(alldata, expression = orig.ident == "v3.1k")
+)
+FeatureScatter(
+    alldata,
+    feature1 = "nCount_RNA",
+    feature2 = "nFeature_RNA",
+    cells = WhichCells(alldata, expression = orig.ident == "v3.1k")
+)
 
 # Filtering
 # select cells with percent.mito < 25
@@ -85,9 +97,9 @@ table(Idents(data.filt))
 
 # Calculate cell-cycle scores
 data.filt <- CellCycleScoring(
-  object = data.filt,
-  g2m.features = cc.genes$g2m.genes,
-  s.features = cc.genes$s.genes
+    object = data.filt,
+    g2m.features = cc.genes$g2m.genes,
+    s.features = cc.genes$s.genes
 )
 VlnPlot(data.filt, features = c("S.Score", "G2M.Score"))
 
@@ -108,18 +120,9 @@ plotScater(sce, block1 = "ident", nfeatures = 1000)
 # plot gene stats
 plotRowData(sce, x = "n_cells_by_counts", y = "mean_counts")
 # plot cell stats
-p1 <- plotColData(sce,
-  x = "total_counts",
-  y = "total_features_by_counts", colour_by = "ident"
-)
-p2 <- plotColData(sce,
-  x = "pct_counts_feature_control",
-  y = "total_features_by_counts", colour_by = "ident"
-)
-p3 <- plotColData(sce,
-  x = "pct_counts_feature_control",
-  y = "pct_counts_in_top_50_features", colour_by = "ident"
-)
+p1 <- plotColData(sce, x = "total_counts", y = "total_features_by_counts", colour_by = "ident")
+p2 <- plotColData(sce, x = "pct_counts_feature_control", y = "total_features_by_counts", colour_by = "ident")
+p3 <- plotColData(sce, x = "pct_counts_feature_control", y = "pct_counts_in_top_50_features", colour_by = "ident")
 multiplot(p1, p2, p3, cols = 2)
 
 # identify outliers in qc-stats
@@ -154,7 +157,33 @@ sce <- runUMAP(sce)
 plotUMAP(object = sce, colour_by = "ident")
 
 # explanatory factors
-plotExplanatoryVariables(sce, variables = c("ident", "Chemistry", "pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "pct_counts_in_top_500_features", "total_counts", "S.Score", "G2M.Score"))
+plotExplanatoryVariables(
+    sce,
+    variables = c(
+        "ident",
+        "Chemistry",
+        "pct_counts_mito",
+        "total_features_by_counts",
+        "pct_counts_in_top_50_features",
+        "pct_counts_in_top_500_features",
+        "total_counts",
+        "S.Score",
+        "G2M.Score"
+    )
+)
 # for total features
-plotExplanatoryPCs(sce, variables = c("ident", "Chemistry", "pct_counts_mito", "total_features_by_counts", "pct_counts_in_top_50_features", "total_counts", "S.Score", "G2M.Score"), npcs_to_plot = 20)
+plotExplanatoryPCs(
+    sce,
+    variables = c(
+        "ident",
+        "Chemistry",
+        "pct_counts_mito",
+        "total_features_by_counts",
+        "pct_counts_in_top_50_features",
+        "total_counts",
+        "S.Score",
+        "G2M.Score"
+    ),
+    npcs_to_plot = 20
+)
 sessionInfo()

@@ -34,7 +34,31 @@ command.start <- paste("bash -c '", bwa.binary)
 
 
 # algorithm parameters
-mode.parameters <- paste("bwasw", "-t", chipster.threads.max, "-b", mismatch.penalty, "-q", gap.opening, "-r", gap.extension, "-a", match.score, "-w", band.width, "-T", min.score, "-c", threshold.coeff, "-z", z.best, "-s", sa.interval, "-N", min.support)
+mode.parameters <- paste(
+    "bwasw",
+    "-t",
+    chipster.threads.max,
+    "-b",
+    mismatch.penalty,
+    "-q",
+    gap.opening,
+    "-r",
+    gap.extension,
+    "-a",
+    match.score,
+    "-w",
+    band.width,
+    "-T",
+    min.score,
+    "-c",
+    threshold.coeff,
+    "-z",
+    z.best,
+    "-s",
+    sa.interval,
+    "-N",
+    min.support
+)
 
 # command ending
 echo.command <- paste("echo '", bwa.binary, mode.parameters, bwa.genome, "reads.txt ' > bwa.log")

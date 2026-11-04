@@ -22,8 +22,6 @@
 # PARAMETER OPTIONAL gapextend: "Gap extension penalty" TYPE STRING DEFAULT "default" (Gap extension penalty  Integer value from 1 to 3.The default value of this parameter depends on the selected scoring matrix. Note that if you assign this value, you must define also the gap opening penalty )
 # PARAMETER OPTIONAL save_log: "Output a log file" TYPE [yes: yes, no: no] DEFAULT no (Collect a log file for the BLAST run.)
 
-
-
 # KM 24.10.2013
 
 # check out if the file is compressed and if so unzip it
@@ -67,17 +65,38 @@ if (num.queryseq > 100000) {
 outfmt.is.table <- paste("no")
 
 if (outfmt == 6) {
-    outfmt.string <- paste('"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"')
+    outfmt.string <- paste(
+        '"6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore stitle"'
+    )
     outfmt.is.table <- paste("yes")
 }
 # These parameters have allways some value
-general.parameters <- paste("-chipster_path /opt/chipster -no_slurm -query query.fa -out blast_results -dbprot dbprot.fa -task", task, "-evalue ", evalue, "-matrix", matrix, "-word_size", word_size, "-seg", seg, "-outfmt", outfmt.string)
+general.parameters <- paste(
+    "-chipster_path /opt/chipster -no_slurm -query query.fa -out blast_results -dbprot dbprot.fa -task",
+    task,
+    "-evalue ",
+    evalue,
+    "-matrix",
+    matrix,
+    "-word_size",
+    word_size,
+    "-seg",
+    seg,
+    "-outfmt",
+    outfmt.string
+)
 general.parameters <- paste(general.parameters, "-num_threads", chipster.threads.max)
 optional.parameters <- paste(" ")
 
 
 if (outfmt < 5) {
-    optional.parameters <- paste(optional.parameters, " -html -num_descriptions ", num_hits, "-num_alignments", num_hits)
+    optional.parameters <- paste(
+        optional.parameters,
+        " -html -num_descriptions ",
+        num_hits,
+        "-num_alignments",
+        num_hits
+    )
 }
 
 if (outfmt > 5) {
@@ -126,7 +145,6 @@ if (query_loc != "full length") {
 }
 
 
-
 command.end <- (paste(" >>", "blast.log 2>&1"))
 
 # run the task
@@ -149,7 +167,9 @@ if (outfmt == 5) {
 }
 
 if (outfmt.is.table == "yes") {
-    system('printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv ')
+    system(
+        'printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "query id" "subject id" "identity percent" "alignment length" mismatches "gap opens" "query start" "query end" "subject start" "subject end" evalue "bit score" "subject description"> blast_results.tsv '
+    )
     system("cat blast_results >> blast_results.tsv")
 }
 

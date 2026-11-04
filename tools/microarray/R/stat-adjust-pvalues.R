@@ -37,4 +37,11 @@ adjp2df <- as.data.frame(adjp2)
 colnames(adjp2df) <- paste(colnames(dat)[grep(column, colnames(dat))], ".", adj.method, sep = "")
 
 # Writing out data
-write.table(data.frame(dat, adjp2df), file = "adjusted-p-values.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
+write.table(
+    data.frame(dat, adjp2df),
+    file = "adjusted-p-values.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)

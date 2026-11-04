@@ -12,7 +12,11 @@ install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRU
 
 
 # zinba and dependencies
-install.packages(repos = "http://ftp.sunet.se/pub/lang/CRAN", dependencies = TRUE, c("multicore", "doMC", "foreach", "quantreg", "R.utils"))
+install.packages(
+    repos = "http://ftp.sunet.se/pub/lang/CRAN",
+    dependencies = TRUE,
+    c("multicore", "doMC", "foreach", "quantreg", "R.utils")
+)
 system("wget http://zinba.googlecode.com/files/zinba_2.02.03.tar.gz")
 install.packages("zinba_2.02.03.tar.gz", repos = NULL)
 

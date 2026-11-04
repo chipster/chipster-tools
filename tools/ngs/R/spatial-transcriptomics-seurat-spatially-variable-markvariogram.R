@@ -9,7 +9,6 @@
 # SLOTS 3
 # TOOLS_BIN ""
 
-
 # 2022-08-01 IH
 # 2022-10-20 ML Add moransi option & output for spatially_variable_genes.tsv
 
@@ -29,14 +28,28 @@ plan("multisession", workers = as.integer(chipster.threads.max))
 # Number of variable features in Seurat object
 variable_feats <- VariableFeatures(seurat_obj)
 
-# Use number of selected variable features 
+# Use number of selected variable features
 if (number_of_var_feats > length(variable_feats)) {
-stop(paste("CHIPSTER-NOTE: ", "You have selected", number_of_var_feats, "to use as the number of variable features, but there are only", length(variable_feats), "in the object. Please select less than or equal to", length(variable_feats),"variable genes."))
-} 
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "You have selected",
+        number_of_var_feats,
+        "to use as the number of variable features, but there are only",
+        length(variable_feats),
+        "in the object. Please select less than or equal to",
+        length(variable_feats),
+        "variable genes."
+    ))
+}
 variable_feats <- variable_feats[1:number_of_var_feats]
 
 # Find spatially variable features using markvariogram
-seurat_obj <- FindSpatiallyVariableFeatures(seurat_obj, assay = "SCT", features = variable_feats, selection.method = method.to.use)
+seurat_obj <- FindSpatiallyVariableFeatures(
+    seurat_obj,
+    assay = "SCT",
+    features = variable_feats,
+    selection.method = method.to.use
+)
 
 plan("default") # return to normal
 
@@ -55,7 +68,13 @@ dev.off()
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")
-write.table(as.matrix(top.features), file = "spatially_variable_genes.tsv", sep = "\t", row.names = T, col.names = T, quote = F)
-
+write.table(
+    as.matrix(top.features),
+    file = "spatially_variable_genes.tsv",
+    sep = "\t",
+    row.names = T,
+    col.names = T,
+    quote = F
+)
 
 # EOF

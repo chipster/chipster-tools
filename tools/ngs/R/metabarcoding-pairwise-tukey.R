@@ -6,8 +6,6 @@
 # RUNTIME R-4.4.3-phyloseq
 # TOOLS_BIN ""
 
-
-
 # JH 2020
 
 # Load packages
@@ -17,97 +15,125 @@ library(vegan)
 load("ps.Rda")
 
 # Tukey HSD
-if (howmany == "1" &&
-    permutest_beta1$tab[1, 6] < 0.05) {
+if (
+    howmany == "1" &&
+        permutest_beta1$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
 }
-if (howmany == "1" &&
-    permutest_beta1$tab[1, 6] > 0.05) {
+if (
+    howmany == "1" &&
+        permutest_beta1$tab[1, 6] > 0.05
+) {
     stop("No significant PERMDISP result (analysis aborted)")
 }
-if (howmany == "2" &&
-    permutest_beta1$tab[1, 6] < 0.05 &&
-    permutest_beta2$tab[1, 6] < 0.05) {
+if (
+    howmany == "2" &&
+        permutest_beta1$tab[1, 6] < 0.05 &&
+        permutest_beta2$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
     tukey_beta2 <- TukeyHSD(beta2)
 }
-if (howmany == "2" &&
-    permutest_beta1$tab[1, 6] > 0.05 &&
-    permutest_beta2$tab[1, 6] < 0.05) {
+if (
+    howmany == "2" &&
+        permutest_beta1$tab[1, 6] > 0.05 &&
+        permutest_beta2$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta2 <- TukeyHSD(beta2)
 }
-if (howmany == "2" &&
-    permutest_beta1$tab[1, 6] < 0.05 &&
-    permutest_beta2$tab[1, 6] > 0.05) {
+if (
+    howmany == "2" &&
+        permutest_beta1$tab[1, 6] < 0.05 &&
+        permutest_beta2$tab[1, 6] > 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
     tukey_beta2 <- "PERMDISP p > 0.05; post-hoc test not performed"
 }
-if (howmany == "2" &&
-    permutest_beta1$tab[1, 6] > 0.05 &&
-    permutest_beta2$tab[1, 6] > 0.05) {
+if (
+    howmany == "2" &&
+        permutest_beta1$tab[1, 6] > 0.05 &&
+        permutest_beta2$tab[1, 6] > 0.05
+) {
     stop("No significant PERMDISP results (analysis aborted)")
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] < 0.05 &&
-    permutest_beta2$tab[1, 6] < 0.05 &&
-    permutest_beta3$tab[1, 6] < 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] < 0.05 &&
+        permutest_beta2$tab[1, 6] < 0.05 &&
+        permutest_beta3$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
     tukey_beta2 <- TukeyHSD(beta2)
     tukey_beta3 <- TukeyHSD(beta3)
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] > 0.05 &&
-    permutest_beta2$tab[1, 6] < 0.05 &&
-    permutest_beta3$tab[1, 6] < 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] > 0.05 &&
+        permutest_beta2$tab[1, 6] < 0.05 &&
+        permutest_beta3$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta2 <- TukeyHSD(beta2)
     tukey_beta3 <- TukeyHSD(beta3)
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] < 0.05 &&
-    permutest_beta2$tab[1, 6] > 0.05 &&
-    permutest_beta3$tab[1, 6] < 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] < 0.05 &&
+        permutest_beta2$tab[1, 6] > 0.05 &&
+        permutest_beta3$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
     tukey_beta2 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta3 <- TukeyHSD(beta3)
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] < 0.05 &&
-    permutest_beta2$tab[1, 6] < 0.05 &&
-    permutest_beta3$tab[1, 6] > 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] < 0.05 &&
+        permutest_beta2$tab[1, 6] < 0.05 &&
+        permutest_beta3$tab[1, 6] > 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
     tukey_beta2 <- TukeyHSD(beta2)
     tukey_beta3 <- "PERMDISP p > 0.05; post-hoc test not performed"
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] > 0.05 &&
-    permutest_beta2$tab[1, 6] > 0.05 &&
-    permutest_beta3$tab[1, 6] < 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] > 0.05 &&
+        permutest_beta2$tab[1, 6] > 0.05 &&
+        permutest_beta3$tab[1, 6] < 0.05
+) {
     tukey_beta1 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta2 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta3 <- TukeyHSD(beta3)
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] > 0.05 &&
-    permutest_beta2$tab[1, 6] < 0.05 &&
-    permutest_beta3$tab[1, 6] > 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] > 0.05 &&
+        permutest_beta2$tab[1, 6] < 0.05 &&
+        permutest_beta3$tab[1, 6] > 0.05
+) {
     tukey_beta1 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta2 <- TukeyHSD(beta2)
     tukey_beta3 <- "PERMDISP p > 0.05; post-hoc test not performed"
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] < 0.05 &&
-    permutest_beta2$tab[1, 6] > 0.05 &&
-    permutest_beta3$tab[1, 6] > 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] < 0.05 &&
+        permutest_beta2$tab[1, 6] > 0.05 &&
+        permutest_beta3$tab[1, 6] > 0.05
+) {
     tukey_beta1 <- TukeyHSD(beta1)
     tukey_beta2 <- "PERMDISP p > 0.05; post-hoc test not performed"
     tukey_beta3 <- "PERMDISP p > 0.05; post-hoc test not performed"
 }
-if (howmany == "3" &&
-    permutest_beta1$tab[1, 6] > 0.05 &&
-    permutest_beta2$tab[1, 6] > 0.05 &&
-    permutest_beta3$tab[1, 6] > 0.05) {
+if (
+    howmany == "3" &&
+        permutest_beta1$tab[1, 6] > 0.05 &&
+        permutest_beta2$tab[1, 6] > 0.05 &&
+        permutest_beta3$tab[1, 6] > 0.05
+) {
     stop("No significant PERMDISP results (analysis aborted)")
 }
 
@@ -116,71 +142,93 @@ if (howmany == "3" &&
 # Open a report PDF
 pdf("pairwise_tukey_plot.pdf")
 
-if (howmany == "1" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "1" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
 }
-if (howmany == "2" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "2" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
     plot(tukey_beta2, las = 1)
 }
-if (howmany == "2" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "2" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
 }
-if (howmany == "2" &&
-    tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "2" &&
+        tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta2, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
     plot(tukey_beta2, las = 1)
     plot(tukey_beta3, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta2, las = 1)
     plot(tukey_beta3, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
     plot(tukey_beta3, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 == "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 == "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
     plot(tukey_beta2, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 == "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 == "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta1, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 == "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 != "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 == "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta2, las = 1)
 }
-if (howmany == "3" &&
-    tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed" &&
-    tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed") {
+if (
+    howmany == "3" &&
+        tukey_beta1 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta2 == "PERMDISP p > 0.05; post-hoc test not performed" &&
+        tukey_beta3 != "PERMDISP p > 0.05; post-hoc test not performed"
+) {
     plot(tukey_beta3, las = 1)
 }
 

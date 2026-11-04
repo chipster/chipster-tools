@@ -19,29 +19,41 @@ copyNumbers <- toQDNAseqCopyNumbers(input, chiptype = phenodata$chiptype, level 
 organism <- "human"
 build <- sub("\\..*", "", phenodata$chiptype[1])
 if (substr(build, 1, 2) != "hg") {
-  organism <- "other"
+    organism <- "other"
 }
 
 if (column %in% colnames(phenodata)) {
-  cellularity <- phenodata[, column]
-  if (!is.numeric(cellularity)) {
-    stop("CHIPSTER-NOTE: The phenodata column for cellularity must be numeric.\n", column, ": ", paste(cellularity, collapse = ", "))
-  }
-  if (0 %in% cellularity) {
-    stop("CHIPSTER-NOTE: Cellularity cannot be zero.\n", column, ": ", paste(cellularity, collapse = ", "))
-  }
-  if (all(is.na(cellularity))) {
-    cellularity <- rep(1, ncol(copyNumbers))
-  }
-  if (max(cellularity, na.rm = TRUE) > 1) {
-    cellularity <- cellularity / 100
-  }
-  cellularity[is.na(cellularity)] <- mean(cellularity, na.rm = TRUE)
+    cellularity <- phenodata[, column]
+    if (!is.numeric(cellularity)) {
+        stop(
+            "CHIPSTER-NOTE: The phenodata column for cellularity must be numeric.\n",
+            column,
+            ": ",
+            paste(cellularity, collapse = ", ")
+        )
+    }
+    if (0 %in% cellularity) {
+        stop("CHIPSTER-NOTE: Cellularity cannot be zero.\n", column, ": ", paste(cellularity, collapse = ", "))
+    }
+    if (all(is.na(cellularity))) {
+        cellularity <- rep(1, ncol(copyNumbers))
+    }
+    if (max(cellularity, na.rm = TRUE) > 1) {
+        cellularity <- cellularity / 100
+    }
+    cellularity[is.na(cellularity)] <- mean(cellularity, na.rm = TRUE)
 } else {
-  cellularity <- rep(1, ncol(copyNumbers))
+    cellularity <- rep(1, ncol(copyNumbers))
 }
 
-copyNumbers <- callBins(copyNumbers, nclass = as.integer(number.of.copy.number.states), organism = organism, cellularity = cellularity, build = build, ncpus = 4)
+copyNumbers <- callBins(
+    copyNumbers,
+    nclass = as.integer(number.of.copy.number.states),
+    organism = organism,
+    cellularity = cellularity,
+    build = build,
+    ncpus = 4
+)
 
 output <- fromQDNAseqCopyNumbers(copyNumbers)
 output <- addAnnotationColumns(input, output)

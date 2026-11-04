@@ -19,7 +19,7 @@ library(ggplot2)
 # Load phyloseq object
 load("ps.Rda")
 
-if (colour == "dark") { 
+if (colour == "dark") {
     lowcol <- "#000033"
     highcol <- "#66CCFF"
     navalue <- "black"
@@ -35,58 +35,50 @@ if (colour == "dark") {
 }
 
 if (type == "otu") {
-    ps <- prune_taxa(names(sort(taxa_sums(ps),TRUE)[1:thresh]), ps)
+    ps <- prune_taxa(names(sort(taxa_sums(ps), TRUE)[1:thresh]), ps)
 } else {
-
-# Agglomerate data at the desired taxonomic level
-# Functions also include some (likely superfluous) data cleaning
-# Keep 'thresh' number of most abundant taxa
-if (type == "phylum") {
-    ps <- tax_glom(ps,
-        taxrank = rank_names(ps)[2],
-        NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
-    taxa_names(ps) <- tax_table(ps)[,2]
-    ps <- prune_taxa(names(sort(taxa_sums(ps),TRUE)[1:thresh]), ps)
-
-} else if (type == "class") {
-    ps <- tax_glom(ps,
-        taxrank = rank_names(ps)[3],
-        NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
-    taxa_names(ps) <- tax_table(ps)[,3]
-    ps <- prune_taxa(names(sort(taxa_sums(ps),TRUE)[1:thresh]), ps)
-
-} else if (type == "order") {
-    ps <- tax_glom(ps,
-        taxrank = rank_names(ps)[4],
-        NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
-    taxa_names(ps) <- tax_table(ps)[,4]
-    ps <- prune_taxa(names(sort(taxa_sums(ps),TRUE)[1:thresh]), ps)
-
-} else if (type == "family") {
-    ps <- tax_glom(ps,
-        taxrank = rank_names(ps)[5],
-        NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
-    taxa_names(ps) <- tax_table(ps)[,5]
-    ps <- prune_taxa(names(sort(taxa_sums(ps),TRUE)[1:thresh]), ps)
-
-} else if (type == "genus") {
-    ps <- tax_glom(ps,
-        taxrank = rank_names(ps)[6],
-        NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
-    taxa_names(ps) <- tax_table(ps)[,6]
-    ps <- prune_taxa(names(sort(taxa_sums(ps),TRUE)[1:thresh]), ps)
-
-}
+    # Agglomerate data at the desired taxonomic level
+    # Functions also include some (likely superfluous) data cleaning
+    # Keep 'thresh' number of most abundant taxa
+    if (type == "phylum") {
+        ps <- tax_glom(ps, taxrank = rank_names(ps)[2], NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
+        taxa_names(ps) <- tax_table(ps)[, 2]
+        ps <- prune_taxa(names(sort(taxa_sums(ps), TRUE)[1:thresh]), ps)
+    } else if (type == "class") {
+        ps <- tax_glom(ps, taxrank = rank_names(ps)[3], NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
+        taxa_names(ps) <- tax_table(ps)[, 3]
+        ps <- prune_taxa(names(sort(taxa_sums(ps), TRUE)[1:thresh]), ps)
+    } else if (type == "order") {
+        ps <- tax_glom(ps, taxrank = rank_names(ps)[4], NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
+        taxa_names(ps) <- tax_table(ps)[, 4]
+        ps <- prune_taxa(names(sort(taxa_sums(ps), TRUE)[1:thresh]), ps)
+    } else if (type == "family") {
+        ps <- tax_glom(ps, taxrank = rank_names(ps)[5], NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
+        taxa_names(ps) <- tax_table(ps)[, 5]
+        ps <- prune_taxa(names(sort(taxa_sums(ps), TRUE)[1:thresh]), ps)
+    } else if (type == "genus") {
+        ps <- tax_glom(ps, taxrank = rank_names(ps)[6], NArm = TRUE, bad_empty = c(NA, "", " ", "\t"))
+        taxa_names(ps) <- tax_table(ps)[, 6]
+        ps <- prune_taxa(names(sort(taxa_sums(ps), TRUE)[1:thresh]), ps)
+    }
 }
 
 # removing samples with no taxa after selecting thresh number of most abundance taxa
-ps <- prune_samples(sample_sums(ps)>0, ps)
+ps <- prune_samples(sample_sums(ps) > 0, ps)
 
-if (ordering == "EMPTY") { 
-psheatmap <- plot_heatmap(ps, "NMDS", "bray", low = lowcol, high = highcol, na.value = navalue)
-} else
-psheatmap <- plot_heatmap(ps, "NMDS", "bray", low = lowcol, high = highcol, na.value = navalue,
-    sample.order = ordering)
+if (ordering == "EMPTY") {
+    psheatmap <- plot_heatmap(ps, "NMDS", "bray", low = lowcol, high = highcol, na.value = navalue)
+} else {
+    psheatmap <- plot_heatmap(
+        ps,
+        "NMDS",
+        "bray",
+        low = lowcol,
+        high = highcol,
+        na.value = navalue,
+        sample.order = ordering
+    )
+}
 
 # Open a report PDF
 pdf("ps_heatmap.pdf", width = 12, height = 7)

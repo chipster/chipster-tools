@@ -76,9 +76,29 @@ if (fragment.size == -1) {
     if (nread < 50000) {
         stop(paste("CHIPSTER-NOTE: ", "F-seq needs at least 50000 aligned reads for fragment size estimation"))
     }
-    system(paste(fseq.binary, "-l", feature.size, " -t ", score.threshold, " -of bed -o alignment_fseq", bff_options, input.file))
+    system(paste(
+        fseq.binary,
+        "-l",
+        feature.size,
+        " -t ",
+        score.threshold,
+        " -of bed -o alignment_fseq",
+        bff_options,
+        input.file
+    ))
 } else {
-    system(paste(fseq.binary, "-f", fragment.size, " -l", feature.size, " -t ", score.threshold, " -of bed -o alignment_fseq", bff_options, input.file))
+    system(paste(
+        fseq.binary,
+        "-f",
+        fragment.size,
+        " -l",
+        feature.size,
+        " -t ",
+        score.threshold,
+        " -of bed -o alignment_fseq",
+        bff_options,
+        input.file
+    ))
 }
 
 # Output of F-seq is a bunch of files stored in folder -o.
