@@ -76,7 +76,7 @@ if (file.info("pairtobed.tmp")$size > 0) {
         system("mv pairtobed.tmp pairtobed.bed")
     }
     if (outputfiletype == "bedpe") {
-        system("mv pairtobed.tmp pairtobed.bedpe")
+        system("mv pairtobed.tmp pairtobed.bed")
     }
     if (outputfiletype == "bam") {
         system("mv pairtobed.tmp pairtobed.bam")
