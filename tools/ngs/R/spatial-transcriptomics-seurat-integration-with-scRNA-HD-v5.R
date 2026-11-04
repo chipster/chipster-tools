@@ -158,7 +158,7 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 
 print("Running RCTD")
 # run RCTD with min of 1 cell
-RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
+RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
 seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)

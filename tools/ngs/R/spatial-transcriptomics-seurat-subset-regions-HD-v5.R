@@ -11,12 +11,12 @@
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER OPTIONAL banksy: "Subset BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
-# PARAMETER coords: "Subset based on coordinates" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
+# PARAMETER coords: "Subset based on coordinates" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Applies to all clusters of your data)
 # PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
 # PARAMETER OPTIONAL x_coord_max: "Subset x max coordinate" TYPE INTEGER DEFAULT 9000
 # PARAMETER OPTIONAL y_coord_min: "Subset y min coordinate" TYPE INTEGER DEFAULT 0
 # PARAMETER OPTIONAL y_coord_max: "Subset y max coordinate" TYPE INTEGER DEFAULT 9000
-# PARAMETER OPTIONAL coords.file: "Use a csv file containing the coordinate information" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE ()
+# PARAMETER OPTIONAL coords.file: "Use a csv file containing the coordinate information" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Applies to all clusters of your seurat object)
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 6
@@ -56,7 +56,7 @@ if (assay == "Spatial.008um") {
     if (banksy) {
         seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$banksy_cluster)
     } else {
-        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.projected)
     }
 
     # Subset
@@ -115,7 +115,7 @@ if (assay == "Spatial.008um") {
     }
 
     if (coords.file) {
-        img_name <- Images(subset_obj)["slice.008um"]
+        img_name <- Images(seurat_obj)[1]
 
         coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
@@ -124,11 +124,13 @@ if (assay == "Spatial.008um") {
         segment <- CreateSegmentation(coordinates)
 
         # Overlay function wants an "sf" package
-        subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
-        segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
+        # Note that we use seurat_obj here since we want all clusters included with this file
+        seurat_obj[[img_name]] <- Overlay(seurat_obj[[img_name]], segment)
+        # Keep only the cells inside the segment, so that the saved object is this subset
+        subset_obj <- subset(seurat_obj, cells = Cells(seurat_obj[[img_name]]))
 
         pdf("spatial_plot_8um3.pdf")
-        p <- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend()
         print(p)
         dev.off()
     }
@@ -136,7 +138,7 @@ if (assay == "Spatial.008um") {
     # }
 }
 
-print("Starting 16um")
+#print("Starting 16um")
 
 ## Here 16um
 if (assay == "Spatial.016um") {
@@ -151,7 +153,7 @@ if (assay == "Spatial.016um") {
     if (banksy) {
         seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$banksy_cluster)
     } else {
-        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.008um)
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.projected)
     }
 
     # Subset
@@ -189,7 +191,7 @@ if (assay == "Spatial.016um") {
         y_coord_max
 
         # Original
-        img_name <- Images(subset_obj)["slice.016um"]
+        img_name <- Images(subset_obj)[2]
         img_name
 
         # subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
@@ -211,7 +213,7 @@ if (assay == "Spatial.016um") {
     }
 
     if (coords.file) {
-        img_name <- Images(subset_obj)[1]
+        img_name <- Images(seurat_obj)[2]
 
         coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
@@ -220,11 +222,12 @@ if (assay == "Spatial.016um") {
         segment <- CreateSegmentation(coordinates)
 
         # Overlay function wants an "sf" package
-        subset_obj[[img_name]] <- Overlay(subset_obj[[img_name]], segment)
-        segment <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
+        seurat_obj[[img_name]] <- Overlay(seurat_obj[[img_name]], segment)
+        # Keep only the cells inside the segment, so that the saved object is this subset
+        subset_obj <- subset(seurat_obj, cells = Cells(seurat_obj[[img_name]]))
 
         pdf("spatial_plot_16um3.pdf")
-        p <- SpatialDimPlot(segment, label = T, crop = T, label.size = 3) + NoLegend()
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend()
         print(p)
         dev.off()
     }
