@@ -164,7 +164,7 @@ if (type == "paired") {
         if (type == "IonTorrent") {
             setDadaOpt(HOMOPOLYMER_GAP_PENALTY = -1, BAND_SIZE = 32)
             cat("Data: IonTorrent\nHOMOPOLYMER_GAB_PENALTY= ", getDadaOpt("HOMOPOLYMER_GAP_PENALTY"), "\n")
-            dadaFs <- dada(filenames, err = errF, multithread = as.integer(chipster.threads.max))
+            dadaFs <- dada(filenames, err = errF, pool = "pseudo", multithread = as.integer(chipster.threads.max))
         } else {
             cat("Data: single end reads\n")
             dadaFs <- dada(filenames, err = errF, pool = "pseudo", multithread = as.integer(chipster.threads.max))
