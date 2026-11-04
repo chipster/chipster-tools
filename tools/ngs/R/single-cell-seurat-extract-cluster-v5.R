@@ -41,9 +41,9 @@ if (exists("data.combined")) {
 
     #  Violinplot
     if (sum(is.na(seurat_obj@meta.data$percent.mt)) < 1) {
-        VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+        print(VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3))
     } else {
-        VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+        print(VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2))
     }
 
     # FeatureScatter (v3)
