@@ -7,7 +7,7 @@ library(QDNAseq)
 
 toQDNAseqReadCounts <- function(df, chiptype) {
     if (length(unique(chiptype)) != 1) {
-        stop("CHIPSTER-NOTE: Umabiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
+        stop("CHIPSTER-NOTE: Ambiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
     }
     if (!file.exists(file.path(chipster.tools.path, "QDNAseq", paste0("QDNAseq.", chiptype[1], ".rds")))) {
         stop("CHIPSTER-NOTE: Unknown chiptype:\n", chiptype[1])
@@ -25,7 +25,7 @@ toQDNAseqReadCounts <- function(df, chiptype) {
 
 toQDNAseqCopyNumbers <- function(df, chiptype, level = "any") {
     if (length(unique(chiptype)) != 1) {
-        stop("CHIPSTER-NOTE: Umabiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
+        stop("CHIPSTER-NOTE: Ambiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
     }
     if (!file.exists(file.path(chipster.tools.path, "QDNAseq", paste0("QDNAseq.", chiptype[1], ".rds")))) {
         stop("CHIPSTER-NOTE: Unknown chiptype:\n", chiptype[1])
