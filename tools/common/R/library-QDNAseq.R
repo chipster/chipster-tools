@@ -7,7 +7,7 @@ library(QDNAseq)
 
 toQDNAseqReadCounts <- function(df, chiptype) {
     if (length(unique(chiptype)) != 1) {
-        stop("CHIPSTER-NOTE: Umabiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
+        stop("CHIPSTER-NOTE: Ambiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
     }
     if (!file.exists(file.path(chipster.tools.path, "QDNAseq", paste0("QDNAseq.", chiptype[1], ".rds")))) {
         stop("CHIPSTER-NOTE: Unknown chiptype:\n", chiptype[1])
@@ -16,7 +16,7 @@ toQDNAseqReadCounts <- function(df, chiptype) {
     chip <- as.matrix(df[, grep("^chip\\.", colnames(df)), drop = FALSE])
     samples <- sub("^chip\\.", "", colnames(chip))
     m <- matrix(nrow = nrow(bins), ncol = ncol(chip), dimnames = list(featureNames(bins), samples))
-    m[rownames(input), ] <- chip
+    m[rownames(df), ] <- chip
     bins@data$use <- FALSE
     bins@data[rownames(df), "use"] <- TRUE
     object <- new("QDNAseqReadCounts", bins = bins, counts = m, phenodata = data.frame(samples, row.names = samples))
@@ -25,7 +25,7 @@ toQDNAseqReadCounts <- function(df, chiptype) {
 
 toQDNAseqCopyNumbers <- function(df, chiptype, level = "any") {
     if (length(unique(chiptype)) != 1) {
-        stop("CHIPSTER-NOTE: Umabiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
+        stop("CHIPSTER-NOTE: Ambiguous chiptype definition:\n", paste(unique(chiptype), collapse = ", "))
     }
     if (!file.exists(file.path(chipster.tools.path, "QDNAseq", paste0("QDNAseq.", chiptype[1], ".rds")))) {
         stop("CHIPSTER-NOTE: Unknown chiptype:\n", chiptype[1])
@@ -34,7 +34,7 @@ toQDNAseqCopyNumbers <- function(df, chiptype, level = "any") {
     chip <- as.matrix(df[, grep("^chip\\.", colnames(df)), drop = FALSE])
     samples <- sub("^chip\\.", "", colnames(chip))
     m <- matrix(nrow = nrow(bins), ncol = ncol(chip), dimnames = list(featureNames(bins), samples))
-    m[rownames(input), ] <- chip
+    m[rownames(df), ] <- chip
     bins@data$use <- FALSE
     bins@data[rownames(df), "use"] <- TRUE
     object <- new(
@@ -54,7 +54,7 @@ toQDNAseqCopyNumbers <- function(df, chiptype, level = "any") {
             stop("CHIPSTER-NOTE: The input file does not contain segmented data. Please segment it first.")
         }
     }
-    m[rownames(input), ] <- segmented
+    m[rownames(df), ] <- segmented
     assayDataElement(object, "segmented") <- QDNAseq:::log2adhoc(m, inv = TRUE)
     if (level == "segmented") {
         return(object)
@@ -67,25 +67,25 @@ toQDNAseqCopyNumbers <- function(df, chiptype, level = "any") {
             stop("CHIPSTER-NOTE: The input file does not contain called data. Please call aberrations first.")
         }
     }
-    m[rownames(input), ] <- calls
+    m[rownames(df), ] <- calls
     assayDataElement(object, "calls") <- m
     probdel <- as.matrix(df[, grep("^probdel\\.", colnames(df)), drop = FALSE])
     if (ncol(probdel) > 0) {
-        m[rownames(input), ] <- probdel
+        m[rownames(df), ] <- probdel
         assayDataElement(object, "probdel") <- m
     }
     probloss <- as.matrix(df[, grep("^probloss\\.", colnames(df)), drop = FALSE])
-    m[rownames(input), ] <- probloss
+    m[rownames(df), ] <- probloss
     assayDataElement(object, "probloss") <- m
     probnorm <- as.matrix(df[, grep("^probnorm\\.", colnames(df)), drop = FALSE])
-    m[rownames(input), ] <- probnorm
+    m[rownames(df), ] <- probnorm
     assayDataElement(object, "probnorm") <- m
     probgain <- as.matrix(df[, grep("^probgain\\.", colnames(df)), drop = FALSE])
-    m[rownames(input), ] <- probgain
+    m[rownames(df), ] <- probgain
     assayDataElement(object, "probgain") <- m
     probamp <- as.matrix(df[, grep("^probamp\\.", colnames(df)), drop = FALSE])
     if (ncol(probamp) > 0) {
-        m[rownames(input), ] <- probamp
+        m[rownames(df), ] <- probamp
         assayDataElement(object, "probamp") <- m
     }
     object
