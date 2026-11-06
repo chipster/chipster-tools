@@ -60,48 +60,59 @@ ref <- readRDS("scRNAseq_ref.Rds")
 
 # # Seurat vignette
 
-# The clustering tool has sketched the 8um assay: the sketch is in the "sketch" assay, its PCA in
-# "pca.sketch" and the PCA of all bins in "full.pca.sketch"
+# CLAUDE CHANGE! Removed the outdated comment about reusing the clustering tool's sketch:
+# this tool now always makes its own sketch for RCTD (see below).
 # GetTissueCoordinates() below takes the image of the default assay, so set it
 DefaultAssay(seurat_obj) <- assay
 
-# Not needed anymore: the clustering tool always sketches the 8um assay, so the input always has
-# the "sketch" assay. Kept for reference, e.g. if this tool should accept objects that weren't sketched.
-# To use this again:
-# - the reduction names must match the ProjectData() call below ("pca.sketch", "full.pca.sketch"),
-#   or that call fails
-# - FindVariableFeatures() and ScaleData() are needed before SketchData(), otherwise
-#   LeverageScore aborts (see the clustering tool)
-# - dims should match dims.reduction in ProjectData()
-# if (!("sketch" %in% Assays(seurat_obj))) {
-#     # Sketch: pick a representative subset of bins (leverage score sampling) into the "sketch" assay
-
 print("Sketching the data")
 
-# Because the data is supposed to be a subset of the whole data
+# CLAUDE CHANGE!
+# The input already has a "sketch" assay from the clustering tool, possibly made before
+# the data was subset. Make a new sketch under new names, so that ProjectData() doesn't
+# reuse the old full.pca.sketch, umap.sketch or the neighbors it has cached in the object.
+# The clustering results (seurat_cluster.projected, full.umap.sketch) stay untouched.
+sketch.ncells <- 50000
+sketch_assay <- "sketch.rctd"
+pca_sketch <- "pca.rctd"
+umap_sketch <- "umap.rctd"
+full_pca <- "full.pca.rctd" # created by ProjectData()
+# ProjectData() names the projected UMAP paste0("full.", umap.model) -> "full.umap.rctd"
+dims <- 1:dims.reduction
 
-seurat_obj <- FindVariableFeatures(seurat_obj)
+DefaultAssay(seurat_obj) <- assay
+
+# A subset may have fewer bins than the target. Then use all of them.
+n_bins <- ncol(seurat_obj[[assay]])
+ncells_use <- min(sketch.ncells, n_bins)
+print(paste0("Sketching ", ncells_use, " of ", n_bins, " bins"))
+
+# Same steps as the clustering tool: LeverageScore needs the scaled data,
+# and it must be computed on the current variable features
+seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
+seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
 seurat_obj <- SketchData(
     object = seurat_obj,
-    ncells = 50000,
+    assay = assay,
+    ncells = ncells_use,
     method = "LeverageScore",
-    sketched.assay = "sketch",
+    sketched.assay = sketch_assay,
     features = VariableFeatures(seurat_obj)
 )
 
-# PCA, neighbors and UMAP of the sketched bins only
-DefaultAssay(seurat_obj) <- "sketch"
-seurat_obj <- ScaleData(seurat_obj)
-seurat_obj <- RunPCA(seurat_obj, assay = "sketch", reduction.name = "pca.sketch", verbose = T)
-seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca.sketch", dims = 1:30)
-# return.model = TRUE so that ProjectData() could project the UMAP to all bins
+# PCA and UMAP model of the sketched bins only
+DefaultAssay(seurat_obj) <- sketch_assay
+seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
+seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
+seurat_obj <- RunPCA(seurat_obj, assay = sketch_assay, reduction.name = pca_sketch, verbose = FALSE)
+# return.model = TRUE so that ProjectData() can project the UMAP to all bins
 seurat_obj <- RunUMAP(
     seurat_obj,
-    reduction = "pca.sketch",
-    reduction.name = "full.umap.sketch",
-    return.model = T,
-    dims = 1:30,
-    verbose = T
+    reduction = pca_sketch,
+    reduction.name = umap_sketch,
+    return.model = TRUE,
+    dims = dims,
+    verbose = FALSE
 )
 
 
@@ -135,8 +146,9 @@ cluster <- droplevels(cluster)
 # create the RCTD reference object
 reference <- Reference(counts, cluster, nUMI)
 
-counts_hd <- seurat_obj[["sketch"]]$counts
-seurat_obj_cells_hd <- colnames(seurat_obj[["sketch"]])
+# CLAUDE CHANGE! Use the new RCTD sketch assay
+counts_hd <- seurat_obj[[sketch_assay]]$counts
+seurat_obj_cells_hd <- colnames(seurat_obj[[sketch_assay]])
 coords_raw <- GetTissueCoordinates(seurat_obj)[seurat_obj_cells_hd, 1:2]
 
 
@@ -184,15 +196,20 @@ seurat_obj$first_type[is.na(seurat_obj$first_type)] <- 'Unknown'
 # )
 
 # If no resketch, then use this:
+# CLAUDE CHANGE! Project with the new RCTD sketch names. full.pca.rctd doesn't exist yet,
+# so all bins are projected to the new PCA. recompute.* makes sure that neighbors cached
+# by an earlier ProjectData() call are never reused.
 seurat_obj <- ProjectData(
     object = seurat_obj,
-    assay = "Spatial.008um",
-    full.reduction = "full.pca.sketch",
-    sketched.assay = "sketch",
-    sketched.reduction = "pca.sketch",
-    umap.model = "umap.sketch",
-    dims = 1:30,
-    refdata = list(full_first_type = "first_type")
+    assay = assay,
+    sketched.assay = sketch_assay,
+    sketched.reduction = pca_sketch,
+    full.reduction = full_pca,
+    umap.model = umap_sketch,
+    dims = dims,
+    refdata = list(full_first_type = "first_type"),
+    recompute.neighbors = TRUE,
+    recompute.weights = TRUE
 )
 
 DefaultAssay(seurat_obj) <- assay
@@ -280,7 +297,9 @@ p_highlight2 <- SpatialDimPlot(
 print(p_highlight2)
 
 # Seurat vignette code
-if ("BANKSY" %in% Assays(seurat_obj)) {
+
+if("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
+ {
     plot_cell_types <- function(data, label) {
         p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
             geom_bar(stat = "identity", position = "stack") +
@@ -303,6 +322,7 @@ if ("BANKSY" %in% Assays(seurat_obj)) {
 
     p_banksy <- plot_cell_types(cell_type_banksy_counts, "banksy_cluster")
     print(p_banksy)
+}
 }
 
 dev.off()
