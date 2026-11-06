@@ -119,7 +119,7 @@ if (nchar(gapextend) < 1) {
 }
 
 if (nchar(query_loc) < 3) {
-    penalty <- paste("full length")
+    query_loc <- paste("full length")
 }
 
 if (gapopen != "default") {
