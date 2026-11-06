@@ -32,8 +32,11 @@ allowed_protocols = ["http", "https", "ftp"]
 if url.scheme not in allowed_protocols:
     raise RuntimeError("CHIPSTER-NOTE: " + "Unsupported protocol: " + url.scheme)
 
-# seems to work even if the netloc is IP already
-netloc_ip_str = socket.gethostbyname(url.netloc)
+if not url.hostname:
+    raise RuntimeError("CHIPSTER-NOTE: " + "Invalid url: " + url_str)
+
+# seems to work even if the hostname is IP already
+netloc_ip_str = socket.gethostbyname(url.hostname)
 
 netloc_ip = ipaddress.ip_address(netloc_ip_str)
 
