@@ -58,9 +58,9 @@ if (num.queryseq > 100000) {
 
 emboss.binary <- file.path(emboss.path, "fdnaml")
 emboss.parameters <- paste("-auto")
-emboss.parameters <- paste(emboss.parameters, "-sequence", sequence)
+emboss.parameters <- paste(emboss.parameters, "-sequence sequence")
 emboss.parameters <- paste(emboss.parameters, "-outfile dnaml.txt")
-emboss.parameters <- paste(emboss.parameters, "-outtree treefile.txt")
+emboss.parameters <- paste(emboss.parameters, "-outtree outtree.txt")
 emboss.parameters <- paste(emboss.parameters, "-ncategories", ncategories)
 emboss.parameters <- paste(emboss.parameters, '-rate "', rate, '"')
 emboss.parameters <- paste(emboss.parameters, "-lengths", lengths)
