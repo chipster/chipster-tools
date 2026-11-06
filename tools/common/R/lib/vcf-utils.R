@@ -16,10 +16,16 @@ getVCFNames <- function(input) {
     return(vcf.names)
 }
 
-# Adds "chr" to the beginning of each line of a VCF file that starts with a number or with X, Y, Z, W or M
+# Adds "chr" to the chromosome names of a VCF file that start with a number or with X, Y, Z, W or M:
+# the CHROM column of the records and the IDs of the ##contig header lines, which GATK checks too.
 #
 addChrToVCF <- function(input, output) {
-    system(paste("sed /^.[0-9,X,Y,Z,W,M]/s/\">\"/\">chr\"/  <", input, ">", output))
+    system(paste(
+        "sed -e 's/^\\([0-9XYZWM]\\)/chr\\1/' -e 's/^\\(##contig=<ID=\\)\\([0-9XYZWM]\\)/\\1chr\\2/'",
+        input,
+        ">",
+        output
+    ))
 }
 
 # Removes "chr"  from each of a VCF file line that starts wirh "chr" (case insensitve).
