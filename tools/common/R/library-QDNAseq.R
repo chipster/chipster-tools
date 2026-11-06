@@ -72,7 +72,7 @@ toQDNAseqCopyNumbers <- function(df, chiptype, level = "any") {
     probdel <- as.matrix(df[, grep("^probdel\\.", colnames(df)), drop = FALSE])
     if (ncol(probdel) > 0) {
         m[rownames(df), ] <- probdel
-        assayDataElement(object, "probdel") <- m
+        assayDataElement(object, "probdloss") <- m
     }
     probloss <- as.matrix(df[, grep("^probloss\\.", colnames(df)), drop = FALSE])
     m[rownames(df), ] <- probloss
