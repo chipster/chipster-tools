@@ -61,7 +61,7 @@ if (datatype == "other") {
 
 if (datatype == "other") {
     cluster.options <- paste("cluster(column=file.dist, count=picked.count_table")
-    cluster.options <- paste(cluster.options, ", cutoff=", cutoff, ")", sep = "", "seed" = 1)
+    cluster.options <- paste(cluster.options, ", cutoff=", cutoff, ", seed=1)", sep = "")
     documentCommand(cluster.options)
     write(cluster.options, "cluster.mth", append = FALSE)
     command <- paste(binary, "cluster.mth", "> log_cluster.txt")
@@ -71,7 +71,7 @@ if (datatype == "other") {
 
 if (datatype == "its") {
     cluster.options <- paste("cluster(fasta=file.fasta, count=picked.count_table, method=agc")
-    cluster.options <- paste(cluster.options, ", cutoff=", cutoff, ")", sep = "", "seed" = 1)
+    cluster.options <- paste(cluster.options, ", cutoff=", cutoff, ", seed=1)", sep = "")
     documentCommand(cluster.options)
     write(cluster.options, "cluster.mth", append = FALSE)
     command <- paste(binary, "cluster.mth", "> log_cluster.txt")
