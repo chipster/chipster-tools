@@ -80,10 +80,12 @@ sample.names <- sapply(strsplit(basename(filenames), "_"), `[`, 1)
 #########################
 # if paired end reads, put the forward and reverse files to separate folders
 if (paired == "paired") {
-    # check if the lenght of files in the input_folder is even, else error
+    # check if the length of files in the input_folder is even, else error
     number <- length(filenames) %% 2
     if (number != 0) {
-        stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
+        stop(
+            "CHIPSTER-NOTE: Some of your FASTQ files don't have a pair. Each sample needs a forward (R1) and a reverse (R2) file."
+        )
     }
 
     # Use input_list if provided. Else use the sorted filenames from the tar package
