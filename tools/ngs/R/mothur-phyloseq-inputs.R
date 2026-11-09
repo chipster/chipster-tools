@@ -25,6 +25,7 @@
 # AMS JH EK 2020-2021
 # ES 28.12.2022 not possible to update to new mothur version because reshape library not in the RUNTIME R-4.1.1, use old until reshsape updated
 # EK 10.01.2023 updated to Mothur 1.48.0 using RUNTIME R-4.2.0-phyloseq which contains the reshape library
+# HJ 12.08.2025 updated to Mothur 1.48.2 using RUNTIME R-4.4.3-mothur, which has mothur in the image
 
 # reshape2 library
 library(reshape2)
@@ -88,7 +89,7 @@ if (datatype == "other") {
     documentCommand(makeshared.options)
     write(makeshared.options, "makeshared.mth", append = FALSE)
     command <- paste(binary, "makeshared.mth", "> log_makeshared.txt")
-    system(command)
+    runExternal(command, checkexit = TRUE)
 }
 
 if (datatype == "its") {
@@ -97,7 +98,7 @@ if (datatype == "its") {
     documentCommand(makeshared.options)
     write(makeshared.options, "makeshared.mth", append = FALSE)
     command <- paste(binary, "makeshared.mth", "> log_makeshared.txt")
-    system(command)
+    runExternal(command, checkexit = TRUE)
 }
 
 # mothur classify.otu
@@ -110,7 +111,7 @@ if (datatype == "other") {
     documentCommand(classifyotu.options)
     write(classifyotu.options, "classifyotu.mth", append = FALSE)
     command <- paste(binary, "classifyotu.mth", "> log_classifyotu.txt")
-    system(command)
+    runExternal(command, checkexit = TRUE)
 }
 
 if (datatype == "its") {
@@ -121,7 +122,7 @@ if (datatype == "its") {
     documentCommand(classifyotu.options)
     write(classifyotu.options, "classifyotu.mth", append = FALSE)
     command <- paste(binary, "classifyotu.mth", "> log_classifyotu.txt")
-    system(command)
+    runExternal(command, checkexit = TRUE)
 }
 
 # phenodata file
