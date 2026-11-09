@@ -6,17 +6,16 @@
 # PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um"] DEFAULT Spatial.008um
 # PARAMETER known_types: "Cell types to highlight in the plots" TYPE STRING DEFAULT "Astro,Oligo,Endo"
 # PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label"
-# PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 10
 # TOOLS_BIN ""
 
 assay <- as.character(assay)
-resolution <- 0.5
+#resolution <- 0.5
 dims.reduction <- 30
-label.size <- 2
+#label.size <- 2
 num_cores <- as.numeric(chipster.threads.max)
-parallel <- TRUE
+#parallel <- TRUE
 
 # 2026-07-15 JV
 
@@ -29,6 +28,8 @@ library("tidyverse")
 library("Matrix")
 library("SeuratWrappers")
 library("spacexr")
+library("ragg")
+library("magick")
 
 
 options(future.globals.maxSize = 3000 * 1024^2) # 3000 MiB
@@ -146,6 +147,12 @@ cluster <- droplevels(cluster)
 # create the RCTD reference object
 reference <- Reference(counts, cluster, nUMI)
 
+
+# Free up memorey : Claude
+
+rm(ref, counts, cluster, nUMI)
+gc()
+
 # CLAUDE CHANGE! Use the new RCTD sketch assay
 counts_hd <- seurat_obj[[sketch_assay]]$counts
 seurat_obj_cells_hd <- colnames(seurat_obj[[sketch_assay]])
@@ -169,11 +176,14 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 #SpatialDimPlot(seurat_obj)
 
 print("Running RCTD")
-# run RCTD with min of 1 cell
+# run RCTD with min of 25 cell
 RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
 seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)
+
+rm(RCTD, query, reference, counts_hd, coords_raw)
+
 
 gc()
 
@@ -222,10 +232,12 @@ Idents(seurat_obj) <- "full_first_type"
 
 print("Plotting")
 
-pdf(file = "spatialPlot.pdf", width = 12, height = 8)
+# Collect the plots in a list, save each as a PNG and combine the PNGs into one PDF.
+# Rasterizing keeps the PDF small and fast to open, even with hundreds of thousands of bins.
+plots <- list()
 
 p <- SpatialDimPlot(seurat_obj)
-print(p)
+plots[["spatial"]] <- p
 #, cells.highlight = cells[excitatory_names], cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T,
 
 # sanity check plot for cortical data (look that the right cells are in right spot physicall)
@@ -250,8 +262,25 @@ known_types <- known_types
 known_types <- strsplit(known_types, ",")[[1]]
 known_types <- trimws(known_types) # Remove leading/trailing whitespace
 
-print(known_types)
+#print(known_types)
 
+missing_types <- setdiff(known_types, names(cells))
+known_types <- intersect(known_types, names(cells))
+
+if (length(known_types) == 0) {
+    (paste0(
+        "None of the cell types to highlight were found in the RCTD results. ",
+        "Available cell types: ", paste(sort(names(cells)), collapse = ", ")
+    ))
+}
+
+if (length(missing_types) > 0) {
+    print(paste0(
+        "These cell types were not found in the RCTD results and are not highlighted: ",
+        paste(missing_types, collapse = ", ")
+    ))
+}
+print(known_types)
 
 p_highlight <- SpatialDimPlot(
     seurat_obj,
@@ -262,7 +291,7 @@ p_highlight <- SpatialDimPlot(
     ncol = 4,
     image.alpha = 0
 )
-print(p_highlight)
+plots[["highlight_known_types_no_image"]] <- p_highlight
 
 p_highlight3 <- SpatialDimPlot(
     seurat_obj,
@@ -273,7 +302,7 @@ p_highlight3 <- SpatialDimPlot(
     ncol = 4,
     image.alpha = 1
 )
-print(p_highlight3)
+plots[["highlight_known_types_image"]] <- p_highlight3
 
 # p_highlight2 <- SpatialDimPlot(
 #     seurat_obj,
@@ -294,12 +323,11 @@ p_highlight2 <- SpatialDimPlot(
     ncol = 8
 )
 
-print(p_highlight2)
+plots[["highlight_all_types"]] <- p_highlight2
 
 # Seurat vignette code
 
-if("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
- {
+if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
     plot_cell_types <- function(data, label) {
         p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
             geom_bar(stat = "identity", position = "stack") +
@@ -321,11 +349,30 @@ if("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat
     min_count_to_show_label <- 20
 
     p_banksy <- plot_cell_types(cell_type_banksy_counts, "banksy_cluster")
-    print(p_banksy)
-}
+    plots[["banksy_cell_types"]] <- p_banksy
 }
 
-dev.off()
+output_dir <- file.path(getwd(), "Integration_plots")
+dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+
+# Number the files so that the PDF pages keep the plotting order
+png_files <- file.path(output_dir, sprintf("%02d_%s.png", seq_along(plots), names(plots)))
+
+for (i in seq_along(plots)) {
+    agg_png(
+        filename = png_files[i],
+        width = 12,
+        height = 8,
+        res = 300,
+        bitsize = 16,
+        units = "in"
+    )
+    print(plots[[i]])
+    dev.off()
+}
+
+images <- image_read(png_files)
+image_write(images, format = "pdf", path = "spatialPlot.pdf")
 
 save(seurat_obj, file = "seurat_obj_integrated.Robj")
 
