@@ -36,6 +36,10 @@ condition <- as.character(phenodata[, pmatch("group", colnames(phenodata))])
 
 if (file.exists("genelist.tsv")) {
     genelist <- read.table("genelist.tsv", header = T, sep = "\t", row.names = 1)
+    # An empty "how many" field comes as NA: use the default 5 of the parameter
+    if (is.na(how.many)) {
+        how.many <- 5
+    }
     # Choose first how.many genes or max number of rows of the input table for plotting
     if (nrow(genelist) < how.many) {
         how.many <- nrow(genelist)
