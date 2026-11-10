@@ -6,13 +6,14 @@
 # PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um"] DEFAULT Spatial.008um
 # PARAMETER known_types: "Cell types to highlight in the plots" TYPE STRING DEFAULT "Astro,Oligo,Endo"
 # PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label"
+# PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 (This should match the number of dimensions used in the clustering tool)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 10
 # TOOLS_BIN ""
 
 assay <- as.character(assay)
 #resolution <- 0.5
-dims.reduction <- 30
+dims.reduction <- dims.reduction
 #label.size <- 2
 num_cores <- as.numeric(chipster.threads.max)
 #parallel <- TRUE
@@ -282,16 +283,16 @@ if (length(missing_types) > 0) {
 }
 print(known_types)
 
-p_highlight <- SpatialDimPlot(
-    seurat_obj,
-    cells.highlight = cells[known_types],
-    cols.highlight = c("#FFFF00", "black"),
-    facet.highlight = TRUE,
-    combine = TRUE,
-    ncol = 4,
-    image.alpha = 0
-)
-plots[["highlight_known_types_no_image"]] <- p_highlight
+# p_highlight <- SpatialDimPlot(
+#     seurat_obj,
+#     cells.highlight = cells[known_types],
+#     cols.highlight = c("#FFFF00", "black"),
+#     facet.highlight = TRUE,
+#     combine = TRUE,
+#     ncol = 4,
+#     image.alpha = 0
+# )
+# plots[["highlight_known_types_no_image"]] <- p_highlight
 
 p_highlight3 <- SpatialDimPlot(
     seurat_obj,
