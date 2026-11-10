@@ -210,7 +210,7 @@ then
      exit 1
   else
       nseq=$(wc -l outfile_"$$"_list |awk '{print $1}' )
-      echo "Sequences matching condition maxmass= $minmass : $nseq"
+      echo "Sequences matching condition maxmass= $maxmass : $nseq"
   fi
   rm -f infile_"$$"_list
   mv outfile_"$$"_list infile_"$$"_list
