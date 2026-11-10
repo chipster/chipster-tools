@@ -7,12 +7,14 @@
 
 <body>
 
-    <h2>Seurat v5 -Identify spatially variable genes based on clusters</h2>
+    <h2>Seurat v5 -Find differentially expressed genes between clusters</h2>
 
     <h3>Description</h3>
 
     <p>
         This tool finds differentially expressed genes (DEGs) between two clusters and visualizes them on top of the tissue histology.
+        To find genes whose expression follows the spatial location without clusters, use the tool
+        <i>"Seurat v5 -Identify spatially variable genes without pre-annotation"</i>.
     </p>
     <p>
         As an input, you can provide the Seurat object after the <i>"Seurat v5 -Clustering"</i> step.
@@ -26,6 +28,7 @@
         <li>Limit testing to genes which show at least this fold difference [0.1]</li>
         <li>Test for differential expression [wilcox]</li>
         <li>Report only positive marker genes [FALSE]</li>
+        <li>Number of differentially expressed genes to visualize [3]</li>
         <li>Determine color scale based on all genes [no]</li>
     </ul>
 
@@ -33,11 +36,24 @@
     <h3>Details</h3>
 
     <p>
-        The user can select the clusters where differentially expressed genes would like to be identified. The tool identifies positive 
+        The user can select the clusters where differentially expressed genes would like to be identified. The cluster
+        numbers are the ones in the plots of the <i>"Seurat v5 -Clustering"</i> tool, and the numbering starts from 0. The tool identifies positive 
         and negative marker genes for the clusters of interest, determined by the user. You can choose to return only positive marker 
         genes by selecting "TRUE" as the parameter value for "Report only positive marker genes". You can also select the test used for
         differential expression testing using the parameter "Test for differential expression" from two options: Wilcoxon Rank Sum Test
         (wilcox) or the hurdle model tailored to scRNA-seq analysis called MAST. 
+    </p>
+    <p>
+        The genes are ordered by p-value, and the plot shows the top genes of this list. With the default value "FALSE" of
+        "Report only positive marker genes", these can also be negative markers, i.e. genes with lower expression in the
+        first cluster than in the second one (a negative avg_log2FC in the result table). Set the parameter to "TRUE" to
+        plot only genes with higher expression in the first cluster.
+    </p>
+    <p>
+        If the samples have been combined with <i>"Seurat v5 -Combine multiple samples, normalization and PCA"</i>, the tool
+        first recorrects the normalized expression values of all samples to the same sequencing depth (the smallest of the
+        samples' median UMI counts), so that the samples can be compared. The plotted expression values may therefore
+        differ slightly from the ones in the earlier tools.
     </p>
     <p>
         The user can also filter out genes prior to statistical testing by requiring that a gene has to be expressed in at least a certain 
@@ -59,8 +75,9 @@
     <h3>Output</h3>
 
     <ul>
-        <li>Markerplot.pdf</li>
-        <li>spatially_variable_genes.tsv</li>
+        <li>Markerplot.pdf: The top differentially expressed genes plotted on top of the tissue image.</li>
+        <li>spatially_variable_genes.tsv: The differentially expressed genes between the two clusters with their p-values,
+            log2 fold changes and the fractions of spots where the gene is detected in each cluster (pct.1 and pct.2).</li>
     </ul>
 
 </body>
