@@ -145,10 +145,10 @@ if (!is.na(lc.entropy)) {
 
 if (derep > 0) {
     filter.params <- paste(filter.params, "-derep", derep)
-    if (derep == "1") {
+    if (derep == "1" && !is.na(derep.min)) {
         filter.params <- paste(filter.params, "-derep_min", derep.min)
     }
-    if (derep == "4") {
+    if (derep == "4" && !is.na(derep.min)) {
         filter.params <- paste(filter.params, "-derep_min", derep.min)
     }
 }
