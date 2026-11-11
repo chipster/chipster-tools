@@ -1,11 +1,11 @@
 # TOOL spatial-transcriptomics-seurat-integration-with-scRNA-HD-v5.R: "Seurat v5 HD -Integration with scRNA-seq data" (Predicts cell types for Visium HD bins with RCTD using an annotated scRNA-seq reference.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
-# OUTPUT spatialPlot.pdf
+# OUTPUT RCTD_cell_type_plots.pdf
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "Astro,Oligo,Endo"
 # PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label"
-# PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 (This should match the number of dimensions used in the clustering tool)
+# PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 ()
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 10
 # TOOLS_BIN ""
@@ -202,9 +202,11 @@ p_highlight3 <- SpatialDimPlot(
 )
 plots[["highlight_known_types_image"]] <- p_highlight3
 
+
+# In this maybe "Unknown" could also be "NA"
 p_highlight2 <- SpatialDimPlot(
     seurat_obj,
-    cells.highlight = cells[setdiff(names(cells), "NA")],
+    cells.highlight = cells[setdiff(names(cells), "Unknown")],
     cols.highlight = c("#FFFF00", "grey50"),
     facet.highlight = T,
     combine = T,
@@ -283,7 +285,7 @@ for (i in seq_along(plots)) {
 }
 
 images <- image_read(png_files)
-image_write(images, format = "pdf", path = "spatialPlot.pdf", density = 300)
+image_write(images, format = "pdf", path = "RCTD_cell_type_plots.pdf", density = 300)
 
 save(seurat_obj, file = "seurat_obj_integrated.Robj")
 
