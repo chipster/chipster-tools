@@ -4,7 +4,7 @@
 # OUTPUT RCTD_cell_type_plots.pdf
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "Astro,Oligo,Endo"
-# PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label"
+# PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label" (Can be e.g. "celltypes", "cell_type", "subclass_label")
 # PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 ()
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 10
