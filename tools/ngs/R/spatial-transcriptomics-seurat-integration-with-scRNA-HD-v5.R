@@ -4,7 +4,7 @@
 # OUTPUT spatialPlot.pdf
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
 # PARAMETER assay: "Assay to use for RCTD" TYPE [Spatial.008um: "Spatial.008um"] DEFAULT Spatial.008um
-# PARAMETER known_types: "Cell types to highlight in the plots" TYPE STRING DEFAULT "Astro,Oligo,Endo"
+# PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "Astro,Oligo,Endo"
 # PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label"
 # PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 (This should match the number of dimensions used in the clustering tool)
 # RUNTIME R-4.5.1-visium-hd
@@ -65,7 +65,7 @@ ref <- readRDS("scRNAseq_ref.Rds")
 # CLAUDE CHANGE! Removed the outdated comment about reusing the clustering tool's sketch:
 # this tool now always makes its own sketch for RCTD (see below).
 # GetTissueCoordinates() below takes the image of the default assay, so set it
-DefaultAssay(seurat_obj) <- assay
+#DefaultAssay(seurat_obj) <- assay
 
 print("Sketching the data")
 
@@ -260,10 +260,11 @@ cells <- CellsByIdentities(seurat_obj)
 #known_types <- setdiff(known_types, "Unknown")
 known_types <- known_types
 
-known_types <- strsplit(known_types, ",")[[1]]
-known_types <- trimws(known_types) # Remove leading/trailing whitespace
+#known_types <- strsplit(known_types, ",")[[1]]
+#known_types <- trimws(known_types) # Remove leading/trailing whitespace
 
 #print(known_types)
+known_types <- trimws(unlist(strsplit(known_types, ",")))
 
 missing_types <- setdiff(known_types, names(cells))
 known_types <- intersect(known_types, names(cells))
@@ -329,7 +330,7 @@ plots[["highlight_all_types"]] <- p_highlight2
 # Seurat vignette code
 
 if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
-    plot_cell_types <- function(data, label) {
+    plot_cell_types_banksy <- function(data, label) {
         p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
             geom_bar(stat = "identity", position = "stack") +
             geom_text(
@@ -349,8 +350,31 @@ if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seura
 
     min_count_to_show_label <- 20
 
-    p_banksy <- plot_cell_types(cell_type_banksy_counts, "banksy_cluster")
+    p_banksy <- plot_cell_types_banksy(cell_type_banksy_counts, "banksy_cluster")
     plots[["banksy_cell_types"]] <- p_banksy
+} else { # Our code
+    plot_cell_types_seurat <- function(data, label) {
+        p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
+            geom_bar(stat = "identity", position = "stack") +
+            geom_text(
+                aes(label = ifelse(n >= min_count_to_show_label, full_first_type, "")),
+                position = position_stack(vjust = 0.5),
+                size = 2
+            ) +
+            xlab(label) +
+            ylab("# of Spots") +
+            ggtitle(paste0("Distribution of Cell Types across ", label)) +
+            theme_minimal()
+    }
+
+    cell_type_seurat_counts <- seurat_obj[[]] %>%
+        dplyr::filter(full_first_type %in% known_types) %>%
+        dplyr::count(full_first_type, seurat_cluster.projected)
+
+    min_count_to_show_label <- 20
+
+    seurat_cell_types <- plot_cell_types_seurat(cell_type_seurat_counts, "seurat_cluster.projected")
+    plots[["seurat_cell_types"]] <- seurat_cell_types
 }
 
 output_dir <- file.path(getwd(), "Integration_plots")
@@ -373,7 +397,7 @@ for (i in seq_along(plots)) {
 }
 
 images <- image_read(png_files)
-image_write(images, format = "pdf", path = "spatialPlot.pdf")
+image_write(images, format = "pdf", path = "spatialPlot.pdf", density = 300)
 
 save(seurat_obj, file = "seurat_obj_integrated.Robj")
 
