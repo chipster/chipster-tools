@@ -5,7 +5,7 @@
 # OUTPUT OPTIONAL seurat_obj_clusters_renamed.Robj
 # PARAMETER wanted_cell_types: "Cell types to visualize" TYPE UNCHECKED_STRING DEFAULT "Sst,Pvalb,Vip,Lamp5" (Comma-separated list of the cell types you want to visualize)
 # RUNTIME R-4.5.1-visium-hd
-# SLOTS 10
+# SLOTS 4
 # TOOLS_BIN ""
 
 # 2026-07-15 JV

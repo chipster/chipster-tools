@@ -6,7 +6,7 @@
 # PARAMETER names: "New names for clusters" TYPE UNCHECKED_STRING DEFAULT "Layer 2/3,Layer 4,Layer 5,Layer 6,Unknown" (Comma-separated list of new names for the selected clusters. The order of the names should match the order of the selected clusters.)
 # PARAMETER banksy: "Use BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # RUNTIME R-4.5.1-visium-hd
-# SLOTS 10
+# SLOTS 4
 # TOOLS_BIN ""
 
 # 2026-07-15 JV
