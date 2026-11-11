@@ -17,8 +17,8 @@
 
 # In this tool Spatial.008um assay is always used by default, for now.
 assay <- as.character("Spatial.008um")
-dims.reduction <- dims.reduction
-num_cores <- as.numeric(chipster.threads.max)
+#dims.reduction <- dims.reduction
+#num_cores <- as.numeric(chipster.threads.max)
 
 library(Seurat)
 library(ggplot2)
@@ -131,7 +131,7 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 
 print("Running RCTD")
 # run RCTD with min of 25 cells per cell type
-# max_cores, the more you have, the more copies it has to keep and the more ram it uses. Currently 10 is ok, but maybe in the future go for 8, 6 or even 4.
+# max_cores, the more you have, the more copies it has to keep and the more ram it uses. Currently 8 is ok, but maybe in the future go for 8, 6 or even 4.
 RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
