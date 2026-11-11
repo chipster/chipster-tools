@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-rename-clusters-HD.R: "Seurat v5 HD -Integration with scRNA-seq data" (Predicts cell types for Visium HD bins with RCTD using an annotated scRNA-seq reference.)
+# TOOL spatial-transcriptomics-seurat-rename-clusters-HD.R: "Seurat v5 HD -Rename clusters" (Predicts cell types for Visium HD bins with RCTD using an annotated scRNA-seq reference.)
 # INPUT seurat_obj_integrated.Robj: "Seurat seurat_obj" TYPE GENERIC
 # INPUT OPTIONAL renamed_clusters.tsv: "Renamed clusters TSV" TYPE GENERIC (Optional TSV file with renamed clusters. If provided, the tool will use this file to rename the clusters instead of the default names. The tsv should contain 2 columns: cluster and new name)
 # OUTPUT  seurat_obj_clusters_renamed.Robj
