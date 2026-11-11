@@ -35,9 +35,6 @@ options(future.globals.maxSize = 3000 * 1024^2) # 3000 MiB
 
 load("seurat_obj_clustering.Robj")
 
-print("Loading reference object")
-ref <- readRDS("scRNAseq_ref.Rds")
-
 print("Sketching the data")
 
 # The input already has a "sketch" assay from the clustering tool, possibly made before
@@ -63,7 +60,9 @@ print(paste0("Sketching ", ncells_use, " of ", n_bins, " bins"))
 # Same steps as the clustering tool: LeverageScore needs the scaled data,
 # and it must be computed on the current variable features
 seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
-seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
+
+#This scaling likely not necessarily needed, claude. saves ram
+#seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
 seurat_obj <- SketchData(
     object = seurat_obj,
     assay = assay,
@@ -89,6 +88,10 @@ seurat_obj <- RunUMAP(
 )
 
 gc()
+
+print("Loading reference object")
+ref <- readRDS("scRNAseq_ref.Rds")
+
 
 # The exact column name of the cell types in the reference, e.g. "celltype"
 celltype_colnames <- as.character(celltype_colnames)
@@ -128,7 +131,8 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 
 print("Running RCTD")
 # run RCTD with min of 25 cells per cell type
-RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
+# max_cores, the more you have, the more copies it has to keep and the more ram it uses. Currently 10 is ok, but maybe in the future go for 8, 6 or even 4.
+RCTD <- create.RCTD(query, reference, max_cores = 10, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
 seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)
