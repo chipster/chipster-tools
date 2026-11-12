@@ -17,7 +17,7 @@
 # 2022-10-20 ML Add output for spatially_variable_genes.tsv
 # 2023-02-23 LG Add parameters min.pct, logfc.threshold, and only.pos
 # 2024-03-21 EP Update to Seurat v5
-# 2026-11-09 ML Explicit SCT assay, print the plot, no NA genes when there are fewer DE genes than requested
+# 2026-11-09 ML Explicit SCT assay, print the plot, no NA genes when there are fewer DE genes than requested, note when there are none
 
 library(Seurat)
 library(ggplot2)
@@ -46,6 +46,13 @@ de_markers <- FindMarkers(
     min.pct = min_pct,
     only.pos = only_pos
 )
+
+if (nrow(de_markers) == 0) {
+    stop(paste0(
+        "CHIPSTER-NOTE: No genes passed the thresholds between clusters ", cluster1, " and ", cluster2,
+        ". Try a lower fold change threshold or a lower fraction of spots."
+    ))
+}
 
 # Print out markers into a table:
 # name.for.file <- paste("spatially_variable_genes_cluster", cluster1, "_vs_cluster", cluster2, ".tsv", sep="")
