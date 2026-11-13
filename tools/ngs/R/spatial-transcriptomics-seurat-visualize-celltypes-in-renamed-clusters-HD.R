@@ -1,6 +1,6 @@
 # TOOL spatial-transcriptomics-seurat-visualize-celltypes-in-renamed-clusters-HD.R: "Seurat v5 HD -Visualize celltypes in renamed clusters" (Predicts cell types for Visium HD bins with RCTD using an annotated scRNA-seq reference.)
 # INPUT seurat_obj_clusters_renamed.Robj: "Seurat seurat_obj" TYPE GENERIC
-# OUTPUT Plots.pdf
+# OUTPUT celltypes_of_interest.pdf
 # PARAMETER wanted_cell_types: "Cell types to plot" TYPE UNCHECKED_STRING DEFAULT "Sst,Pvalb,Vip,Lamp5" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
@@ -96,6 +96,6 @@ for (i in seq_along(plots)) {
 }
 
 images <- image_read(png_files)
-image_write(images, format = "pdf", path = "Plots.pdf", density = 300)
+image_write(images, format = "pdf", path = "celltypes_of_interest.pdf", density = 300)
 
 # EOF
