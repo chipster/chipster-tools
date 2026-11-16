@@ -124,8 +124,8 @@ if (number.of.samples > 4) {
     i <- 1
     # Looping and printing pages until all samples are printed (rounding always up, last page can have only 1 sample.)
     for (j in 1:ceiling(number.of.samples / 4)) {
-        # If i is less than # of samples we have, keep subsetting and printing.
-        if (i < number.of.samples) {
+        # While i hasn't gone past the last sample, keep subsetting and printing.
+        if (i <= number.of.samples) {
             samples.of.this.round <- as.vector(sample.names[i:(i + 3)])
             samples.of.this.round <- samples.of.this.round[!is.na(samples.of.this.round)]
             subset.of.samples <- subset(data.combined, idents = samples.of.this.round)
