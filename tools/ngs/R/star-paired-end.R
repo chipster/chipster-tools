@@ -56,10 +56,15 @@ in.sorted <- input.names[order(input.names[, 2]), ]
 reads <- grep("reads", in.sorted[, 1], value = TRUE)
 reads1 <- reads[1]
 reads2 <- reads[2]
-# } else {
-# Case: no list files, more than two fastq inputs
-#  stop(paste("CHIPSTER-NOTE: ", "List file is missing. You need to provide a list of read files for both directions."))
-# }
+if (length(reads) != 2) {
+    stop(paste(
+        "CHIPSTER-NOTE: ",
+        "This tool aligns one sample, given as two FASTQ files (R1 and R2). Number of selected FASTQ files:",
+        paste0(length(reads), "."),
+        "To align several samples, define the samples and use Run for Each Sample.",
+        "If a sample has more than two FASTQ files, first merge its R1 files and its R2 files with the tool Utilities / Merge FASTQ."
+    ))
+}
 
 # command
 command <- paste(
