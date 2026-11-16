@@ -9,7 +9,7 @@
 # OUTPUT OPTIONAL spatial_plot_16um_coordinates_file.pdf
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER OPTIONAL banksy: "Subset BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
+# PARAMETER OPTIONAL banksy: "Type of clusters to subset" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT FALSE (Seurat or BANKSY clusters. Note that seurat clusters numbers start from 0 and banksy from 1)
 # PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
 # PARAMETER coords: "Subset based on coordinates" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Applies to all clusters of your data)
 # PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
@@ -29,7 +29,7 @@ library(SeuratObject)
 library(ggplot2)
 library("sf")
 
-# Yes/no parameters come as strings "TRUE"/"FALSE"
+# If user selects banksy clussters, then banksy var becomes TRUE.
 banksy <- as.logical(banksy)
 coords <- as.logical(coords)
 coords.file <- as.logical(coords.file)
@@ -70,8 +70,8 @@ if (assay == "Spatial.008um") {
     # The simplest way to do this
     pdf(file = "spatial_plot_8um_clusters.pdf")
     p <- SpatialDimPlot(subset_obj_clusters, label = T, crop = T, label.size = 3) +
-        NoLegend() +
-        SpatialDimPlot(subset_obj_clusters, label = T, crop = F, label.size = 3)
+        NoLegend() #+
+        #SpatialDimPlot(subset_obj_clusters, label = T, crop = F, label.size = 3)
 
     print(p)
     dev.off()
@@ -174,8 +174,8 @@ if (assay == "Spatial.016um") {
     # The simplest way to do this
     pdf(file = "spatial_plot_16um_clusters.pdf")
     p <- SpatialDimPlot(subset_obj_clusters, label = T, crop = T, label.size = 3) +
-        NoLegend() +
-        SpatialDimPlot(subset_obj_clusters, label = T, crop = F, label.size = 3)
+        NoLegend() #+
+        #SpatialDimPlot(subset_obj_clusters, label = T, crop = F, label.size = 3)
 
     print(p)
     dev.off()
