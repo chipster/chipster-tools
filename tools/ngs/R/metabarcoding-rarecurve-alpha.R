@@ -174,7 +174,7 @@ if (group_column != "empty") {
     if (length(groupnames) < 2) {
         cat("### You have only one group. You need at least 2 groups for Wilcoxon rank sum test ###")
     } else if (length(groupnames) == 2) {
-        names <- levels(groupnames)
+        names <- as.character(groupnames)
         cat("### Wilcoxon rank sum test between groups:", names[1], names[2], "###", sep = " ")
         cat("\n\n")
 
@@ -221,7 +221,7 @@ sink()
 ##### plot alpha diversity estimates
 if ((group_column != "empty")) {
     group <- richness[, group_column]
-    groups <- levels(group)
+    groups <- levels(factor(group))
     Pielou <- richness[, "pielou"]
     # if more than 2 groups need to specify group1 and group2
     print(test1)
