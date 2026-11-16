@@ -155,7 +155,14 @@ if (
         set.ident = TRUE
     )
 
-    # The scores are in the metadata. Regress them out in the RNA assay, which the final PCA and the next tools use.
+    # Return to the RNA assay and remove the temporary "joined" assay.
+    # - "joined" was needed only for CellCycleScoring(): it can't read the RNA assay's data, which merge() leaves
+    #   split into one layer per sample. The scores (S.Score, G2M.Score, Phase) are saved in the cell metadata,
+    #   which belongs to the whole object, so the RNA assay can use them too.
+    # - The actual cell cycle regression step below (ScaleData) must write to the RNA assay's scale.data, because
+    #   the final PCA, the saved object and the next tools use it. If it were done in "joined", it would have no
+    #   effect on them. ScaleData doesn't need the layers joined: it scales them together.
+    # - "joined" is a second copy of the data, so it's removed to keep the saved object small.
     if (normalisation.method == "LogNormalize") {
         DefaultAssay(seurat_obj) <- "RNA"
         seurat_obj[["joined"]] <- NULL
