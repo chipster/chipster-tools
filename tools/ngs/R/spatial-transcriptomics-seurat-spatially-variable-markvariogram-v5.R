@@ -58,6 +58,9 @@ if (multi_analysis) {
     # Open the pdf file for plotting
     pdf(file = "Markerplot2.pdf", width = 9, height = 12)
 
+    # Top features of all samples, written to the table after the loop
+    top.features.table <- NULL
+
     for (i in 1:length(experiment.slices)) {
         # Number of variable features in Seurat object
         variable_feats <- VariableFeatures(experiment.slices[[i]])
@@ -93,14 +96,9 @@ if (multi_analysis) {
             ncol = 3,
             alpha = c(0.1, 1)
         ))
-        # Print out markers into a table:
-        write.table(
-            as.matrix(top.features),
-            file = "spatially_variable_genes.tsv",
-            sep = "\t",
-            row.names = T,
-            col.names = T,
-            quote = F
+        top.features.table <- rbind(
+            top.features.table,
+            data.frame(sample = names(experiment.slices)[i], gene = top.features)
         )
     }
 
@@ -109,6 +107,16 @@ if (multi_analysis) {
 
     # Close the pdf
     dev.off()
+
+    # Print out markers into a table:
+    write.table(
+        top.features.table,
+        file = "spatially_variable_genes.tsv",
+        sep = "\t",
+        row.names = T,
+        col.names = T,
+        quote = F
+    )
 } else {
     # Number of variable features in Seurat object
     variable_feats <- VariableFeatures(seurat_obj)
