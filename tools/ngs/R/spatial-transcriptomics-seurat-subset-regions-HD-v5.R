@@ -153,7 +153,11 @@ if (assay == "Spatial.016um") {
     }
 }
 
-seurat_obj <- subset_obj
+if (!coords && !coords.file) {
+    seurat_obj <- subset_obj_clusters
+} else {
+    seurat_obj <- subset_obj
+}
 
 save(seurat_obj, file = "seurat_obj_subset.Robj")
 
