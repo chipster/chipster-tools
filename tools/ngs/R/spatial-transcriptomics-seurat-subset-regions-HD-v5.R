@@ -1,22 +1,15 @@
-# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 -Subset regions " (Given a Seurat object with clustering information, this tool subsets regions based on selected clusters. Alternatively, you can define the region by providing coordinates.)
+# TOOL spatial-transcriptomics-seurat-subset-regions-HD-v5.R: "Seurat v5 -Subset regions " (Given a Seurat object with clustering information, this tool subsets regions based on selected clusters. Alternatively, you can define the region with a CSV file of coordinates.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # INPUT OPTIONAL coords.file.csv: "Coordinates file" TYPE GENERIC
 # OUTPUT OPTIONAL spatial_plot_8um_clusters.pdf
-# OUTPUT OPTIONAL spatial_plot_8um_coordinates.pdf
 # OUTPUT OPTIONAL spatial_plot_8um_coordinates_file.pdf
 # OUTPUT OPTIONAL spatial_plot_16um_clusters.pdf
-# OUTPUT OPTIONAL spatial_plot_16um_coordinates.pdf
 # OUTPUT OPTIONAL spatial_plot_16um_coordinates_file.pdf
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
-# PARAMETER OPTIONAL banksy: "Type of clusters to subset" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT FALSE (Seurat or BANKSY clusters. Note that seurat clusters numbers start from 0 and banksy from 1)
-# PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
-# PARAMETER coords: "Subset based on coordinates" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Applies to all clusters of your data)
-# PARAMETER OPTIONAL x_coord_min: "Subset x min coordinate" TYPE INTEGER DEFAULT 0
-# PARAMETER OPTIONAL x_coord_max: "Subset x max coordinate" TYPE INTEGER DEFAULT 9000
-# PARAMETER OPTIONAL y_coord_min: "Subset y min coordinate" TYPE INTEGER DEFAULT 0
-# PARAMETER OPTIONAL y_coord_max: "Subset y max coordinate" TYPE INTEGER DEFAULT 9000
-# PARAMETER OPTIONAL coords.file: "Use a csv file containing the coordinate information" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Applies to all clusters of your seurat object)
+# PARAMETER subset_by: "Subset based on" TYPE [clusters: clusters, coords_file: "coordinates file"] DEFAULT clusters (Subset the chosen clusters, or the region defined in the coordinates CSV file. The coordinates file subset includes all clusters inside the region.)
+# PARAMETER OPTIONAL banksy: "Type of clusters" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT FALSE (Seurat or BANKSY clusters, used for subsetting and for the cluster labels in the plots. Note that seurat clusters numbers start from 0 and banksy from 1)
+# PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset when subsetting based on clusters. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 6
@@ -31,8 +24,11 @@ library("sf")
 
 # If user selects banksy clussters, then banksy var becomes TRUE.
 banksy <- as.logical(banksy)
-coords <- as.logical(coords)
-coords.file <- as.logical(coords.file)
+coords.file <- subset_by == "coords_file"
+
+if (coords.file && !file.exists("coords.file.csv")) {
+    stop("CHIPSTER-NOTE: You chose to subset based on a coordinates file, but no coordinates file was given. Please select the CSV file as an input, too.")
+}
 
 chosen_clusters <- as.character(chosen_clusters) # A parameter
 chosen_clusters <- trimws(unlist(strsplit(chosen_clusters, ",")))
@@ -64,65 +60,19 @@ if (assay == "Spatial.008um") {
         seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.projected)
     }
 
-    # Subset
-    subset_obj_clusters <- subset(seurat_obj, idents = chosen_clusters)
+    if (!coords.file) {
+        # Subset
+        subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
-    # The simplest way to do this
-    pdf(file = "spatial_plot_8um_clusters.pdf")
-    p <- SpatialDimPlot(subset_obj_clusters, label = T, crop = T, label.size = 3) +
-        NoLegend() #+
-        #SpatialDimPlot(subset_obj_clusters, label = T, crop = F, label.size = 3)
+        # The simplest way to do this
+        pdf(file = "spatial_plot_8um_clusters.pdf")
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+            NoLegend() #+
+            #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
-    print(p)
-    dev.off()
-
-    # If coordinates are given, then:
-    if (coords) {
-        subset_obj <- seurat_obj
-        # Adds x and y axis numbers for coordinate search
-        theme_axis_labels <- theme(
-            axis.text.x = element_text(size = 10),
-            axis.text.y = element_text(size = 10),
-            axis.title.x = element_text(size = 10),
-            axis.title.y = element_text(size = 10)
-        )
-
-        coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
-
-        # x_coord_min # a param that has range: start-end for x axis
-        # x_coord_max # a param that has range: start-end for y axis
-
-        # y_coord_min
-        # y_coord_max
-
-        # select 8um image
-        img_name <- Images(subset_obj)[1]
-        img_name
-
-        subset_obj[[img_name]] <- Crop(
-            subset_obj[[img_name]],
-            x = c(x_coord_min, x_coord_max),
-            y = c(y_coord_min, y_coord_max)
-        )
-        # Keep only the cells inside the coordinates, so that the saved object is this subset
-        subset_obj <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
-
-        # # For loop for image cropping, may not work
-        # for (img_name in Images(subset_obj)) {
-        #   subset_obj[[img_name]] <- Crop(
-        #     subset_obj[[img_name]],
-        #     x = c(x_coord_min, x_coord_max),
-        #     y = c(y_coord_min, y_coord_max)
-        #   )
-        # }
-
-        pdf(file = "spatial_plot_8um_coordinates.pdf")
-        p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
-        print(p1)
+        print(p)
         dev.off()
-    }
-
-    if (coords.file) {
+    } else {
         img_name <- Images(seurat_obj)[1]
 
         coordinates <- as.data.frame(read.csv("coords.file.csv"))
@@ -164,64 +114,23 @@ if (assay == "Spatial.016um") {
         seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.projected)
     }
 
-    # Subset
-    subset_obj_clusters <- subset(seurat_obj, idents = chosen_clusters)
+    if (!coords.file) {
+        # Subset
+        subset_obj <- subset(seurat_obj, idents = chosen_clusters)
 
-    # Check amount of images -> Message sent to Meilahti
-    print("Images of sobj")
-    print(names(subset_obj_clusters@images))
+        # Check amount of images -> Message sent to Meilahti
+        print("Images of sobj")
+        print(names(subset_obj@images))
 
-    # The simplest way to do this
-    pdf(file = "spatial_plot_16um_clusters.pdf")
-    p <- SpatialDimPlot(subset_obj_clusters, label = T, crop = T, label.size = 3) +
-        NoLegend() #+
-        #SpatialDimPlot(subset_obj_clusters, label = T, crop = F, label.size = 3)
+        # The simplest way to do this
+        pdf(file = "spatial_plot_16um_clusters.pdf")
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+            NoLegend() #+
+            #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
-    print(p)
-    dev.off()
-    # If coordinates are given, then:
-    if (coords) {
-        subset_obj <- seurat_obj
-
-        # Adds x and y axis numbers for coordinate search
-        theme_axis_labels <- theme(
-            axis.text.x = element_text(size = 10),
-            axis.text.y = element_text(size = 10),
-            axis.title.x = element_text(size = 10),
-            axis.title.y = element_text(size = 10)
-        )
-
-        coord_plot <- SpatialDimPlot(subset_obj, label = T, label.size = 3, crop = T) + theme_axis_labels
-
-        x_coord_min # a param that has range: start-end for x axis
-        x_coord_max # a param that has range: start-end for y axis
-
-        y_coord_min
-        y_coord_max
-
-        # Original
-        img_name <- Images(subset_obj)[2]
-        img_name
-
-        # subset_obj[[img_name]] <- Crop(subset_obj[[img_name]], x = c(x_coord_min, x_coord_max), y = c(y_coord_min, y_coord_max))
-        # }
-
-        # Crop only the 16um image
-        subset_obj[[img_name]] <- Crop(
-            subset_obj[[img_name]],
-            x = c(x_coord_min, x_coord_max),
-            y = c(y_coord_min, y_coord_max)
-        )
-        # Keep only the cells inside the coordinates, so that the saved object is this subset
-        subset_obj <- subset(subset_obj, cells = Cells(subset_obj[[img_name]]))
-
-        pdf(file = "spatial_plot_16um_coordinates.pdf")
-        p1 <- SpatialDimPlot(subset_obj, label = T) + theme_axis_labels
-        print(p1)
+        print(p)
         dev.off()
-    }
-
-    if (coords.file) {
+    } else {
         img_name <- Images(seurat_obj)[2]
 
         coordinates <- as.data.frame(read.csv("coords.file.csv"))
@@ -242,11 +151,7 @@ if (assay == "Spatial.016um") {
     }
 }
 
-if (!coords && !coords.file) {
-    seurat_obj <- subset_obj_clusters
-} else {
-    seurat_obj <- subset_obj
-}
+seurat_obj <- subset_obj
 
 save(seurat_obj, file = "seurat_obj_subset.Robj")
 
