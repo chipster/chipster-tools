@@ -12,7 +12,6 @@
 
 # 2026-07-15 JV
 
-
 # Pretty much Seurat Visium HD vignette code.
 
 # In this tool Spatial.008um assay is always used by default, for now.
@@ -80,7 +79,13 @@ seurat_obj <- SketchData(
 DefaultAssay(seurat_obj) <- sketch_assay
 seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
 seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
-seurat_obj <- RunPCA(seurat_obj, assay = sketch_assay, reduction.name = pca_sketch, verbose = FALSE, npcs = dims.reduction)
+seurat_obj <- RunPCA(
+    seurat_obj,
+    assay = sketch_assay,
+    reduction.name = pca_sketch,
+    verbose = FALSE,
+    npcs = dims.reduction
+)
 # return.model = TRUE so that ProjectData() can project the UMAP to all bins
 seurat_obj <- RunUMAP(
     seurat_obj,
@@ -184,7 +189,8 @@ known_types <- intersect(known_types, names(cells))
 if (length(known_types) == 0) {
     (paste0(
         "None of the cell types to highlight were found in the RCTD results. ",
-        "Available cell types: ", paste(sort(names(cells)), collapse = ", ")
+        "Available cell types: ",
+        paste(sort(names(cells)), collapse = ", ")
     ))
 }
 

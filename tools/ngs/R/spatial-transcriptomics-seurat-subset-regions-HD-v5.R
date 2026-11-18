@@ -27,7 +27,9 @@ banksy <- as.logical(banksy)
 coords.file <- subset_by == "coords_file"
 
 if (coords.file && !file.exists("coords.file.csv")) {
-    stop("CHIPSTER-NOTE: You chose to subset based on a coordinates file, but no coordinates file was given. Please select the CSV file as an input, too.")
+    stop(
+        "CHIPSTER-NOTE: You chose to subset based on a coordinates file, but no coordinates file was given. Please select the CSV file as an input, too."
+    )
 }
 
 chosen_clusters <- as.character(chosen_clusters) # A parameter
@@ -68,7 +70,7 @@ if (assay == "Spatial.008um") {
         pdf(file = "spatial_plot_8um_clusters.pdf")
         p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
             NoLegend() #+
-            #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
+        #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
         print(p)
         dev.off()
@@ -126,7 +128,7 @@ if (assay == "Spatial.016um") {
         pdf(file = "spatial_plot_16um_clusters.pdf")
         p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
             NoLegend() #+
-            #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
+        #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
         print(p)
         dev.off()
