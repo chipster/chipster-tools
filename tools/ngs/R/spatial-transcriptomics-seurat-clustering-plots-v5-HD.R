@@ -53,6 +53,33 @@ dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
 plots <- list()
 
+# If renamed object
+if ("layer_id" %in% colnames(seurat_obj@meta.data)) {
+    # Renamed clusters from the Rename clusters tool. The names are for the 8 µm bins.
+    DefaultAssay(seurat_obj) <- "Spatial.008um"
+    Idents(seurat_obj) <- "layer_id"
+
+    p0 <- SpatialDimPlot(seurat_obj, group.by = "layer_id", label = TRUE, repel = TRUE, label.size = 4) +
+        ggtitle("Spatial plot of renamed clusters")
+
+    cells <- CellsByIdentities(seurat_obj)
+    cells <- cells[setdiff(names(cells), "NA")]
+    # Unknown as the last panel
+    cells <- cells[c(setdiff(names(cells), "Unknown"), intersect("Unknown", names(cells)))]
+
+    p1 <- SpatialDimPlot(
+        seurat_obj,
+        cells.highlight = cells,
+        cols.highlight = c("#FFFF00", "grey50"),
+        facet.highlight = TRUE,
+        combine = TRUE
+    ) +
+        plot_annotation(title = "Renamed clusters highlighted on top of tissue image") &
+        NoLegend()
+
+    plots[["renamed_00_p0"]] <- p0
+    plots[["renamed_10_p1"]] <- p1
+}
 
 if (banksy) {
     # Check if banksy truly exists
@@ -177,6 +204,8 @@ if (banksy) {
         plots[[paste0(just.bin, "_p2")]] <- highlight.plot
     }
 }
+
+
 # Actually plot the pngs and knit into pdf
 
 for (i in names(plots)) {
