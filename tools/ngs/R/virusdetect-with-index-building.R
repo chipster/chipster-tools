@@ -272,7 +272,7 @@ if (blast_bam == "yes") {
         echo.command <- paste(
             "echo ",
             nprefix,
-            "blastnx_matches.bam and .bai. '\t'BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1",
+            "blastx_matches.bam and .bai. '\t'BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1",
             sep = ""
         )
         system(echo.command)
@@ -293,7 +293,7 @@ if (file.exists("result_inputseq/inputseq.blastn.xls")) {
 
 # blastx_matches.tsv
 if (file.exists("result_inputseq/inputseq.blastx.xls")) {
-    system("mv result_inputseq/inputseq.blastx.tsv blastx_matches.tsv")
+    system("mv result_inputseq/inputseq.blastx.xls blastx_matches.tsv")
     echo.command <- paste(
         "echo ",
         nprefix,

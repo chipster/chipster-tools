@@ -3,7 +3,7 @@
 # INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
 # OUTPUT RCTD_cell_type_plots.pdf
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
-# PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "Astro,Oligo,Endo"
+# PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "L2-3 IT CTX, L4-5 IT CTX, L5 IT CTX, L5 PT CTX, L5-6 NP CTX, L6 CT CTX, L6 IT CTX, L6b CTX"
 # PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label" (Can be e.g. "celltypes", "cell_type", "subclass_label")
 # PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 ()
 # RUNTIME R-4.5.1-visium-hd
@@ -12,13 +12,12 @@
 
 # 2026-07-15 JV
 
-
 # Pretty much Seurat Visium HD vignette code.
 
 # In this tool Spatial.008um assay is always used by default, for now.
 assay <- as.character("Spatial.008um")
-dims.reduction <- dims.reduction
-num_cores <- as.numeric(chipster.threads.max)
+#dims.reduction <- dims.reduction
+#num_cores <- as.numeric(chipster.threads.max)
 
 library(Seurat)
 library(ggplot2)
@@ -35,8 +34,9 @@ options(future.globals.maxSize = 3000 * 1024^2) # 3000 MiB
 
 load("seurat_obj_clustering.Robj")
 
-print("Loading reference object")
-ref <- readRDS("scRNAseq_ref.Rds")
+if (!assay %in% Assays(seurat_obj)) {
+    stop("CHIPSTER-NOTE: This tool needs the 8 µm assay (Spatial.008um). Please run the setup tool with bin size 8.")
+}
 
 print("Sketching the data")
 
@@ -63,7 +63,9 @@ print(paste0("Sketching ", ncells_use, " of ", n_bins, " bins"))
 # Same steps as the clustering tool: LeverageScore needs the scaled data,
 # and it must be computed on the current variable features
 seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
-seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
+
+#This scaling likely not necessarily needed, claude. saves ram
+#seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
 seurat_obj <- SketchData(
     object = seurat_obj,
     assay = assay,
@@ -77,7 +79,13 @@ seurat_obj <- SketchData(
 DefaultAssay(seurat_obj) <- sketch_assay
 seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
 seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
-seurat_obj <- RunPCA(seurat_obj, assay = sketch_assay, reduction.name = pca_sketch, verbose = FALSE)
+seurat_obj <- RunPCA(
+    seurat_obj,
+    assay = sketch_assay,
+    reduction.name = pca_sketch,
+    verbose = FALSE,
+    npcs = dims.reduction
+)
 # return.model = TRUE so that ProjectData() can project the UMAP to all bins
 seurat_obj <- RunUMAP(
     seurat_obj,
@@ -89,6 +97,10 @@ seurat_obj <- RunUMAP(
 )
 
 gc()
+
+print("Loading reference object")
+ref <- readRDS("scRNAseq_ref.Rds")
+
 
 # The exact column name of the cell types in the reference, e.g. "celltype"
 celltype_colnames <- as.character(celltype_colnames)
@@ -128,7 +140,8 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 
 print("Running RCTD")
 # run RCTD with min of 25 cells per cell type
-RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
+# max_cores, the more you have, the more copies it has to keep and the more ram it uses. Currently 8 is ok, but maybe in the future go for 8, 6 or even 4.
+RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
 seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)
@@ -165,9 +178,6 @@ print("Plotting")
 # Rasterizing keeps the PDF small and fast to open, even with hundreds of thousands of bins.
 plots <- list()
 
-p <- SpatialDimPlot(seurat_obj)
-plots[["spatial"]] <- p
-
 cells <- CellsByIdentities(seurat_obj)
 
 known_types <- known_types
@@ -179,7 +189,8 @@ known_types <- intersect(known_types, names(cells))
 if (length(known_types) == 0) {
     (paste0(
         "None of the cell types to highlight were found in the RCTD results. ",
-        "Available cell types: ", paste(sort(names(cells)), collapse = ", ")
+        "Available cell types: ",
+        paste(sort(names(cells)), collapse = ", ")
     ))
 }
 
@@ -264,6 +275,9 @@ if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seura
     seurat_cell_types <- plot_cell_types_seurat(cell_type_seurat_counts, "seurat_cluster.projected")
     plots[["seurat_cell_types"]] <- seurat_cell_types
 }
+
+p <- SpatialDimPlot(seurat_obj)
+plots[["spatial"]] <- p
 
 output_dir <- file.path(getwd(), "Integration_plots")
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)

@@ -29,7 +29,7 @@ annotations <- 1:ncol(dat)
 for (m in matrices) {
     annotations <- setdiff(annotations, grep(m, datnames))
 }
-dat2 <- dat[, annotations]
+dat2 <- dat[, annotations, drop = FALSE]
 
 # identify samples to be deleted
 del.cols <- phenodata[, column1]
@@ -60,17 +60,17 @@ for (m in matrices) {
                 ]
             } else {
                 dat.sub[, which(sample.groups == del.groups[i])] <- apply(
-                    da3t[, (del.cols %in% 1 & sample.groups %in% del.groups[i])],
+                    dat3[, (del.cols %in% 1 & sample.groups %in% del.groups[i])],
                     1,
                     mean
                 )
             }
         }
         dat4 <- dat3 - dat.sub
-        dat4 <- dat4[, -(which(del.cols == 1))]
+        dat4 <- dat4[, -(which(del.cols == 1)), drop = FALSE]
     } else {
         # handle flag information
-        dat4 <- dat3[, -(which(del.cols == 1))]
+        dat4 <- dat3[, -(which(del.cols == 1)), drop = FALSE]
     }
     colnames(dat4) <- paste(m, phenodata2$sample, sep = "")
     dat2 <- cbind(dat2, dat4)

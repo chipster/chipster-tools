@@ -89,10 +89,12 @@ if (paired == "paired") {
         txt_filenames <- list.files("input_folder")
     }
 
-    # check if the lenght of files in the input_folder is even, else error
+    # check if the length of files in the input_folder is even, else error
     number <- length(filenames) %% 2
     if (number != 0) {
-        stop(paste("CHIPSTER-NOTE: ", "It seems that some of your fastq files doesn`t have a pair"))
+        stop(
+            "CHIPSTER-NOTE: Some of your FASTQ files don't have a pair. Each sample needs a forward (R1) and a reverse (R2) file."
+        )
     }
 
     # put the forward files to fnFs, assume that forward reads have the same name but different tag than reverse reads
@@ -120,10 +122,10 @@ if (paired == "paired") {
 
     # if maxeer or maxeef not selected
     if (is.na(maxeef)) {
-        maxeef <- "inf"
+        maxeef <- Inf
     }
     if (is.na(maxeer)) {
-        maxeer <- "inf"
+        maxeer <- Inf
     }
     # run filterAndTrim
     out <- filterAndTrim(
@@ -132,6 +134,7 @@ if (paired == "paired") {
         fnRs,
         filtRs,
         truncLen = c(truncf, truncr),
+        trimLeft = triml,
         maxN = maxns,
         maxEE = c(maxeef, maxeer),
         truncQ = truncq,
@@ -202,7 +205,7 @@ if (paired == "paired") {
     filtreads <- file.path("output_folder", paste0(sample.names, "_filt.fastq.gz"))
     # if maxeer or maxeef not selected
     if (is.na(maxeef)) {
-        maxeef <- "inf"
+        maxeef <- Inf
     }
 
     # run filterAndTrim
@@ -210,6 +213,7 @@ if (paired == "paired") {
         filenames,
         filtreads,
         truncLen = truncf,
+        trimLeft = triml,
         maxN = maxns,
         maxEE = maxeef,
         truncQ = truncq,

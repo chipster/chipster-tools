@@ -271,7 +271,7 @@ if (blast_bam == "yes") {
         echo.command <- paste(
             "echo ",
             nprefix,
-            "blastnx_matches.bam and .bai. '\t'BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1",
+            "blastx_matches.bam and .bai. '\t'BAM file containing the BLASTX alignment of each contig to its corresponding virus reference sequence. >> vd.log 2>&1",
             sep = ""
         )
         system(echo.command)
