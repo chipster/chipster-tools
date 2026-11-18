@@ -173,9 +173,6 @@ print("Plotting")
 # Rasterizing keeps the PDF small and fast to open, even with hundreds of thousands of bins.
 plots <- list()
 
-p <- SpatialDimPlot(seurat_obj)
-plots[["spatial"]] <- p
-
 cells <- CellsByIdentities(seurat_obj)
 
 known_types <- known_types
@@ -272,6 +269,9 @@ if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seura
     seurat_cell_types <- plot_cell_types_seurat(cell_type_seurat_counts, "seurat_cluster.projected")
     plots[["seurat_cell_types"]] <- seurat_cell_types
 }
+
+p <- SpatialDimPlot(seurat_obj)
+plots[["spatial"]] <- p
 
 output_dir <- file.path(getwd(), "Integration_plots")
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
