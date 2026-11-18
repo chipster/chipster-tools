@@ -3,7 +3,7 @@
 # INPUT scRNAseq_ref.Rds: "Seurat scRNA data" TYPE GENERIC
 # OUTPUT RCTD_cell_type_plots.pdf
 # OUTPUT OPTIONAL seurat_obj_integrated.Robj
-# PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "Astro,Oligo,Endo"
+# PARAMETER known_types: "Cell types to highlight in the plots" TYPE UNCHECKED_STRING DEFAULT "L2-3 IT CTX, L4-5 IT CTX, L5 IT CTX, L5 PT CTX, L5-6 NP CTX, L6 CT CTX, L6 IT CTX, L6b CTX"
 # PARAMETER OPTIONAL celltype_colnames: "Column name of the cell type information in the scRNA-seq Seurat object" TYPE STRING DEFAULT "subclass_label" (Can be e.g. "celltypes", "cell_type", "subclass_label")
 # PARAMETER OPTIONAL dims.reduction: "Number of dimensions to use for PCA and UMAP" TYPE INTEGER FROM 1 TO 100 DEFAULT 30 ()
 # RUNTIME R-4.5.1-visium-hd
@@ -34,6 +34,10 @@ library("magick")
 options(future.globals.maxSize = 3000 * 1024^2) # 3000 MiB
 
 load("seurat_obj_clustering.Robj")
+
+if (!assay %in% Assays(seurat_obj)) {
+    stop("CHIPSTER-NOTE: This tool needs the 8 µm assay (Spatial.008um). Please run the setup tool with bin size 8.")
+}
 
 print("Sketching the data")
 
@@ -76,7 +80,7 @@ seurat_obj <- SketchData(
 DefaultAssay(seurat_obj) <- sketch_assay
 seurat_obj <- FindVariableFeatures(seurat_obj, verbose = FALSE)
 seurat_obj <- ScaleData(seurat_obj, verbose = FALSE)
-seurat_obj <- RunPCA(seurat_obj, assay = sketch_assay, reduction.name = pca_sketch, verbose = FALSE)
+seurat_obj <- RunPCA(seurat_obj, assay = sketch_assay, reduction.name = pca_sketch, verbose = FALSE, npcs = dims.reduction)
 # return.model = TRUE so that ProjectData() can project the UMAP to all bins
 seurat_obj <- RunUMAP(
     seurat_obj,
