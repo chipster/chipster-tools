@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-visualize-celltypes-in-renamed-clusters-HD.R: "Seurat v5 HD -Visualize celltypes in renamed clusters" (Shows where the selected RCTD cell types are on the tissue image, and plots the proportions of each cell type across the renamed clusters.)
+# TOOL spatial-transcriptomics-seurat-visualize-celltypes-in-renamed-clusters-HD.R: "Seurat v5 -Visualize celltypes in renamed clusters" (Shows where the selected RCTD cell types are on the tissue image, and plots the proportions of each cell type across the renamed clusters.)
 # INPUT seurat_obj_clusters_renamed.Robj: "Seurat seurat_obj" TYPE GENERIC
 # OUTPUT celltypes_of_interest.pdf
 # PARAMETER wanted_cell_types: "Cell types to plot" TYPE UNCHECKED_STRING DEFAULT "Sst,Pvalb,Vip,Lamp5" (If you list multiple cell types, please use comma\(s\) \(,\) as a separator, e.g., \"L2/3 IT\,L4\".)
@@ -7,7 +7,6 @@
 # TOOLS_BIN ""
 
 # 2026-07-15 JV
-
 
 # Pretty much Seurat Visium HD vignette code.
 
@@ -44,7 +43,8 @@ wanted_cell_types <- intersect(wanted_cell_types, available_types)
 if (length(wanted_cell_types) == 0) {
     stop(paste0(
         "None of the cell types to visualize were found in the RCTD results. ",
-        "Available cell types: ", paste(sort(available_types), collapse = ", ")
+        "Available cell types: ",
+        paste(sort(available_types), collapse = ", ")
     ))
 }
 
@@ -56,8 +56,14 @@ if (length(missing_types) > 0) {
 }
 
 cell_ids <- CellsByIdentities(seurat_obj, idents = wanted_cell_types)
-p <- SpatialDimPlot(seurat_obj, cells.highlight = cell_ids, cols.highlight = c("#FFFF00","grey50"), facet.highlight = T, combine=T, ncol=4)
-
+p <- SpatialDimPlot(
+    seurat_obj,
+    cells.highlight = cell_ids,
+    cols.highlight = c("#FFFF00", "grey50"),
+    facet.highlight = T,
+    combine = T,
+    ncol = 4
+)
 
 
 # drop = FALSE keeps the 2D table even when only one cell type is chosen
@@ -65,9 +71,9 @@ layer_table <- table(seurat_obj$full_first_type, seurat_obj$layer_id)[wanted_cel
 
 props <- reshape2::melt(prop.table(layer_table), margin = 1)
 p2 <- ggplot(props, aes(x = Var1, y = value, fill = Var2)) +
-  geom_bar(stat = "identity", position = "fill") +
-  labs(x = "Cell type", y = "Proportion", fill = "Layer") +
-  theme_classic()
+    geom_bar(stat = "identity", position = "fill") +
+    labs(x = "Cell type", y = "Proportion", fill = "Layer") +
+    theme_classic()
 
 # Save each plot as a PNG and combine the PNGs into one PDF.
 # Rasterizing keeps the PDF small and fast to open, even with hundreds of thousands of bins.
@@ -75,6 +81,11 @@ plots <- list(
     celltypes_spatial = p,
     celltype_layer_proportions = p2
 )
+
+# Reverse plot order for cleaner output
+
+plots <- rev(plots)
+
 
 output_dir <- file.path(getwd(), "Celltype_plots")
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)

@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-rename-clusters-HD.R: "Seurat v5 HD -Rename clusters" (Renames BANKSY or Seurat clusters, for example to cell type names, and plots the renamed clusters on the tissue image.)
+# TOOL spatial-transcriptomics-seurat-rename-clusters-HD.R: "Seurat v5 -Rename clusters" (Renames BANKSY or Seurat clusters, for example to cell type names, and plots the renamed clusters on the tissue image.)
 # INPUT seurat_obj_integrated.Robj: "Seurat seurat_obj" TYPE GENERIC
 # INPUT OPTIONAL renamed_clusters.tsv: "Renamed clusters TSV" TYPE GENERIC (Optional TSV file with renamed clusters. If provided, the tool will use this file to rename the clusters instead of the default names. The tsv should contain 2 columns: cluster and new name)
 # OUTPUT  seurat_obj_clusters_renamed.Robj
@@ -11,7 +11,6 @@
 # TOOLS_BIN ""
 
 # 2026-07-15 JV
-
 
 # Pretty much Seurat Visium HD vignette code.
 
@@ -38,8 +37,14 @@ cluster_col <- ifelse(banksy, "banksy_cluster", "seurat_cluster.projected")
 
 if (!cluster_col %in% colnames(seurat_obj@meta.data)) {
     stop(paste0(
-        "The column '", cluster_col, "' is not found in the Seurat object. ",
-        ifelse(banksy, "Run BANKSY clustering first, or select no for BANKSY clusters.", "Run the clustering tool first.")
+        "The column '",
+        cluster_col,
+        "' is not found in the Seurat object. ",
+        ifelse(
+            banksy,
+            "Run BANKSY clustering first, or select no for BANKSY clusters.",
+            "Run the clustering tool first."
+        )
     ))
 }
 
@@ -53,8 +58,12 @@ seurat_obj$layer_id <- 'Unknown'
 if (file.exists("renamed_clusters.tsv")) {
     clusternames <- read.table(
         "renamed_clusters.tsv",
-        sep = "\t", header = TRUE,
-        colClasses = "character", quote = "", comment.char = "", strip.white = TRUE
+        sep = "\t",
+        header = TRUE,
+        colClasses = "character",
+        quote = "",
+        comment.char = "",
+        strip.white = TRUE
     )
     if (ncol(clusternames) < 2) {
         stop("renamed_clusters.tsv must have two tab-separated columns: the cluster id and the new name.")
@@ -62,20 +71,22 @@ if (file.exists("renamed_clusters.tsv")) {
     # Use the first two columns whatever their header says
     clusternames <- clusternames[, 1:2]
     colnames(clusternames) <- c("cluster", "new_name")
-
 } else {
     clusters <- trimws(unlist(strsplit(clusters, ",")))
     names <- trimws(unlist(strsplit(names, ",")))
     if (length(clusters) != length(names)) {
         stop(paste0(
-            "The number of clusters (", length(clusters), ") and new names (", length(names),
+            "The number of clusters (",
+            length(clusters),
+            ") and new names (",
+            length(names),
             ") must be the same."
         ))
     }
     clusternames <- data.frame(cluster = clusters, new_name = names)
 }
 
-for(i in 1:nrow(clusternames)) {
+for (i in 1:nrow(clusternames)) {
     cluster <- clusternames$cluster[i]
     new_name <- clusternames$new_name[i]
     seurat_obj$layer_id[as.character(seurat_obj@meta.data[[cluster_col]]) == as.character(cluster)] <- new_name
@@ -89,9 +100,13 @@ p <- SpatialDimPlot(seurat_obj, group.by = "layer_id", label = TRUE)
 
 # Highlight each renamed cluster separately
 cells <- CellsByIdentities(seurat_obj)
+cells <- cells[setdiff(names(cells), "NA")]
+
+# CLAUDE: move Unknown to the end so that its panel is always the last one
+cells <- cells[c(setdiff(names(cells), "Unknown"), intersect("Unknown", names(cells)))]
 p1 <- SpatialDimPlot(
     seurat_obj,
-    cells.highlight = cells[setdiff(names(cells), "NA")],
+    cells.highlight = cells,
     cols.highlight = c("#FFFF00", "grey50"),
     facet.highlight = TRUE,
     combine = TRUE
@@ -104,6 +119,8 @@ output_dir <- paste0(getwd(), "/Renamed_clusters_plots")
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
 plots <- list(p0 = p, p1 = p1)
+
+#plots <- rev(plots)
 
 for (nm in names(plots)) {
     agg_png(
