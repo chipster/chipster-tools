@@ -5,7 +5,7 @@
 # OUTPUT spatial_plot_renamed_clusters.pdf
 # PARAMETER clusters: "Clusters to rename" TYPE UNCHECKED_STRING DEFAULT "1,2,3,4,5" (Comma-separated list of the clusters you want to rename)
 # PARAMETER names: "New names for clusters" TYPE UNCHECKED_STRING DEFAULT "Layer 2/3,Layer 4,Layer 5,Layer 6,Unknown" (Comma-separated list of new names for the selected clusters. The order of the names should match the order of the selected clusters.)
-# PARAMETER OPTIONAL banksy: "Type of clusters to subset" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT TRUE (Seurat or BANKSY clusters. Note that seurat clusters numbers start from 0 and banksy from 1)
+# PARAMETER OPTIONAL banksy: "Type of clusters to rename" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT TRUE (Seurat or BANKSY clusters. Note that seurat clusters numbers start from 0 and banksy from 1)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
