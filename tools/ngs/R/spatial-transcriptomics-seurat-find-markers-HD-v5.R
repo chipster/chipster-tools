@@ -52,9 +52,8 @@ load("seurat_obj_clustering.Robj")
 # Tämä pitäisi saada toimimaan sitten. joskus oli "banksy.pca" reductioni.
 
 if (banksy) {
-    assay <- "Spatial.008um"
     cluster_col <- "banksy_cluster"
-    reduction <- "BANKSY" # check with Reductions(seurat_obj)
+    reduction <- "BANKSY" # check with Reductions(seurat_obj)}
 } else if (assay == "Spatial.008um") {
     cluster_col <- "seurat_cluster.projected"
     reduction <- paste0("full.", reduction, ".sketch")
