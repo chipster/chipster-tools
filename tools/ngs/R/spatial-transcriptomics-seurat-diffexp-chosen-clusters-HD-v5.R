@@ -51,7 +51,7 @@ load("seurat_obj_clustering.Robj")
 #print(Reductions(seurat_obj))
 
 if (banksy) {
-    DefaultAssay(seurat_obj) <- "Spatial.008um"
+    DefaultAssay(seurat_obj) <- assay
     Idents(seurat_obj) <- "banksy_cluster"
 } else {
     if (assay == "Spatial.008um") {

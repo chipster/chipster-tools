@@ -1,6 +1,5 @@
 # TOOL spatial-transcriptomics-seurat-clustering-plots-v5-HD.R: "Seurat v5 -Plot clusters" (When provided with a Visium HD Seurat object with cluster information, this tool visualizes clusters on a UMAP plot and on their spatial location. This allows you to plot clusters with new names, if you have annotated the clusters.)
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL seurat_obj_clustering_plots.Robj
 # OUTPUT OPTIONAL clustering_plots.pdf
 # PARAMETER banksy: "Plot for BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # RUNTIME R-4.5.1-visium-hd
@@ -53,6 +52,33 @@ dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
 plots <- list()
 
+# If renamed object
+if ("layer_id" %in% colnames(seurat_obj@meta.data)) {
+    # Renamed clusters from the Rename clusters tool. The names are for the 8 µm bins.
+    DefaultAssay(seurat_obj) <- "Spatial.008um"
+    Idents(seurat_obj) <- "layer_id"
+
+    p0 <- SpatialDimPlot(seurat_obj, group.by = "layer_id", label = TRUE, repel = TRUE, label.size = 4) +
+        ggtitle("Spatial plot of renamed clusters")
+
+    cells <- CellsByIdentities(seurat_obj)
+    cells <- cells[setdiff(names(cells), "NA")]
+    # Unknown as the last panel
+    cells <- cells[c(setdiff(names(cells), "Unknown"), intersect("Unknown", names(cells)))]
+
+    p1 <- SpatialDimPlot(
+        seurat_obj,
+        cells.highlight = cells,
+        cols.highlight = c("#FFFF00", "grey50"),
+        facet.highlight = TRUE,
+        combine = TRUE
+    ) +
+        plot_annotation(title = "Renamed clusters highlighted on top of tissue image") &
+        NoLegend()
+
+    plots[["renamed_00_p0"]] <- p0
+    plots[["renamed_10_p1"]] <- p1
+}
 
 if (banksy) {
     # Check if banksy truly exists
@@ -120,8 +146,9 @@ if (banksy) {
         umap_bin <- paste0("umap.", just.bin)
         cluster_bin <- paste0("seurat_cluster.", just.bin)
 
-        # Skip sketch assay since it is not needed after projection (Which is done in clustering tool already)
-        if (DefaultAssay(seurat_obj) == "sketch") {
+        # Skip the sketch assays ("sketch" from Clustering, "sketch.rctd" from Integration),
+        # the clusters are already projected to all bins
+        if (grepl("sketch", DefaultAssay(seurat_obj))) {
             next
         }
 
@@ -138,7 +165,11 @@ if (banksy) {
             repel = T,
             alpha = 0.3
         ) +
-            ggtitle(paste0(assay_bin, " ", "Projected clustering (full dataset)"))
+            ggtitle(paste0(
+                assay_bin,
+                " ",
+                ifelse(assay_bin == "Spatial.008um", "Projected clustering (full dataset)", "Clustering")
+            ))
 
         cluster.plot <- SpatialDimPlot(
             seurat_obj,
@@ -177,6 +208,8 @@ if (banksy) {
         plots[[paste0(just.bin, "_p2")]] <- highlight.plot
     }
 }
+
+
 # Actually plot the pngs and knit into pdf
 
 for (i in names(plots)) {

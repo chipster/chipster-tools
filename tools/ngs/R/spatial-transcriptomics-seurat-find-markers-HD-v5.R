@@ -1,4 +1,4 @@
-# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find marker genes for all clusters" (Given a Seurat object of Visium HD data with cluster information, this tool identifies marker genes for all clusters. It compares each cluster to all the other spots. The top 5 marker genes for each cluster are visualized as a heatmap.)
+# TOOL spatial-transcriptomics-seurat-find-markers-HD-v5.R: "Seurat v5 -Find marker genes for all clusters" (Given a Seurat object of Visium HD data with cluster information, this tool identifies marker genes for all clusters. It compares each cluster to all the other bins. To keep the run time reasonable, at most 1000 randomly chosen bins of each cluster are used. The top 5 marker genes for each cluster are visualized as a heatmap.)
 # INPUT seurat_obj_clustering.Robj: "Seurat object" TYPE GENERIC
 # OUTPUT OPTIONAL markers_Spatial.008um.pdf
 # OUTPUT OPTIONAL markers_Spatial.016um.pdf
@@ -52,9 +52,8 @@ load("seurat_obj_clustering.Robj")
 # Tämä pitäisi saada toimimaan sitten. joskus oli "banksy.pca" reductioni.
 
 if (banksy) {
-    assay <- "Spatial.008um"
     cluster_col <- "banksy_cluster"
-    reduction <- "BANKSY" # check with Reductions(seurat_obj)
+    reduction <- "BANKSY" # check with Reductions(seurat_obj)}
 } else if (assay == "Spatial.008um") {
     cluster_col <- "seurat_cluster.projected"
     reduction <- paste0("full.", reduction, ".sketch")
@@ -137,9 +136,6 @@ dev.off()
 # print(p)
 
 # dev.off()
-
-save(markers, file = paste0("markers_", assay, ".tsv"))
-
 
 # For the tsv file, we want to filter the results table with the p_val_adj parameter
 markers <- markers[markers$p_val_adj < p_val_adj, ]
