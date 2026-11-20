@@ -63,6 +63,20 @@ sample_name <- gsub(" ", "_", sample_name)
 bin_sizes <- as.numeric(trimws(unlist(strsplit(bin_sizes, ","))))
 print(bin_sizes)
 
+# Load10X_Spatial() reads input_folder/binned_outputs/square_0NNum, so the tar must have the
+# binned_outputs folder at the top. Otherwise it fails with "File not found".
+matrix_files <- file.path("binned_outputs", sprintf("square_%03dum", bin_sizes), "filtered_feature_bc_matrix.h5")
+missing_files <- matrix_files[!file.exists(file.path("input_folder", matrix_files))]
+if (length(missing_files) > 0) {
+    stop(paste0(
+        "CHIPSTER-NOTE: The tar package doesn't have ",
+        paste(missing_files, collapse = " or "),
+        ". The tar package must have the binned_outputs folder at the top, with a folder for each bin size inside it, ",
+        "see the manual. The top of your tar package has: ",
+        paste(list.files("input_folder"), collapse = ", ")
+    ))
+}
+
 # Load spatial data, returns a Seurat object
 # slice = name for the stored image of the tissue slice later used in the analysis
 seurat_obj <- Load10X_Spatial(data.dir = "input_folder/", assay = "Spatial", slice = sample_name, bin.size = bin_sizes) # bin.size = c(8, 16)
