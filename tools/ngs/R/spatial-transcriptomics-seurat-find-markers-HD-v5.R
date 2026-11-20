@@ -137,7 +137,6 @@ dev.off()
 
 # dev.off()
 
-
 # For the tsv file, we want to filter the results table with the p_val_adj parameter
 markers <- markers[markers$p_val_adj < p_val_adj, ]
 
