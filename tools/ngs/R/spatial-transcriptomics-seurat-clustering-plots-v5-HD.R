@@ -1,6 +1,5 @@
 # TOOL spatial-transcriptomics-seurat-clustering-plots-v5-HD.R: "Seurat v5 -Plot clusters" (When provided with a Visium HD Seurat object with cluster information, this tool visualizes clusters on a UMAP plot and on their spatial location. This allows you to plot clusters with new names, if you have annotated the clusters.)
 # INPUT seurat_object.Robj: "Seurat object" TYPE GENERIC
-# OUTPUT OPTIONAL seurat_obj_clustering_plots.Robj
 # OUTPUT OPTIONAL clustering_plots.pdf
 # PARAMETER banksy: "Plot for BANKSY clusters" TYPE [TRUE: yes, FALSE: no] DEFAULT FALSE (Select yes if you identified spatially defined tissue domains with BANKSY.)
 # RUNTIME R-4.5.1-visium-hd
@@ -147,8 +146,9 @@ if (banksy) {
         umap_bin <- paste0("umap.", just.bin)
         cluster_bin <- paste0("seurat_cluster.", just.bin)
 
-        # Skip sketch assay since it is not needed after projection (Which is done in clustering tool already)
-        if (DefaultAssay(seurat_obj) == "sketch") {
+        # Skip the sketch assays ("sketch" from Clustering, "sketch.rctd" from Integration),
+        # the clusters are already projected to all bins
+        if (grepl("sketch", DefaultAssay(seurat_obj))) {
             next
         }
 
@@ -165,7 +165,11 @@ if (banksy) {
             repel = T,
             alpha = 0.3
         ) +
-            ggtitle(paste0(assay_bin, " ", "Projected clustering (full dataset)"))
+            ggtitle(paste0(
+                assay_bin,
+                " ",
+                ifelse(assay_bin == "Spatial.008um", "Projected clustering (full dataset)", "Clustering")
+            ))
 
         cluster.plot <- SpatialDimPlot(
             seurat_obj,

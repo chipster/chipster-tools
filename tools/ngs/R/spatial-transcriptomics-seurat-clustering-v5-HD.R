@@ -359,6 +359,13 @@ images <- image_read(png_files)
 
 image_write(images, format = "pdf", path = "clustering_plots.pdf")
 
+# Make this the default since this is the recommended assay for this type of analysis by Seurat
+
+if ("Spatial.008um" %in% assay_names) {
+    DefaultAssay(seurat_obj) <- "Spatial.008um"
+}
+
+
 save(seurat_obj, file = "seurat_obj_clustering.Robj")
 
 # EOF

@@ -8,7 +8,7 @@
 # OUTPUT OPTIONAL seurat_obj_subset.Robj
 # PARAMETER assay: "Assay to use" TYPE [Spatial.008um: Spatial.008um, Spatial.016um: Spatial.016um] DEFAULT Spatial.008um
 # PARAMETER subset_by: "Subset based on" TYPE [clusters: clusters, coords_file: "coordinates file"] DEFAULT clusters (Subset the chosen clusters, or the region defined in the coordinates CSV file. The coordinates file subset includes all clusters inside the region.)
-# PARAMETER OPTIONAL banksy: "Type of clusters" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT FALSE (Seurat or BANKSY clusters, used for subsetting and for the cluster labels in the plots. Note that seurat clusters numbers start from 0 and banksy from 1)
+# PARAMETER OPTIONAL banksy: "Type of clusters" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT FALSE (Seurat or BANKSY clusters, used for subsetting and for the cluster labels in the plots.)
 # PARAMETER OPTIONAL chosen_clusters: "Subset of clusters" TYPE STRING DEFAULT "1,2,3,4,5" (Clusters to subset when subsetting based on clusters. If you list multiple clusters, use comma \(,\) as separator, for example "1,2,3,4".)
 # PARAMETER OPTIONAL label.size: "Label size of the plots" TYPE INTEGER DEFAULT 3
 # RUNTIME R-4.5.1-visium-hd
@@ -75,7 +75,7 @@ if (assay == "Spatial.008um") {
         print(p)
         dev.off()
     } else {
-        img_name <- Images(seurat_obj)[1]
+        img_name <- Images(seurat_obj, assay = assay)[1]
 
         coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
@@ -113,7 +113,7 @@ if (assay == "Spatial.016um") {
     if (banksy) {
         seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$banksy_cluster)
     } else {
-        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.projected)
+        seurat_obj <- SetIdent(seurat_obj, value = seurat_obj$seurat_cluster.016um)
     }
 
     if (!coords.file) {
@@ -133,7 +133,7 @@ if (assay == "Spatial.016um") {
         print(p)
         dev.off()
     } else {
-        img_name <- Images(seurat_obj)[2]
+        img_name <- Images(seurat_obj, assay = assay)[1]
 
         coordinates <- as.data.frame(read.csv("coords.file.csv"))
 
@@ -153,11 +153,7 @@ if (assay == "Spatial.016um") {
     }
 }
 
-if (!coords && !coords.file) {
-    seurat_obj <- subset_obj_clusters
-} else {
-    seurat_obj <- subset_obj
-}
+seurat_obj <- subset_obj # Save exactly as seurat_obj because other tools expect it
 
 save(seurat_obj, file = "seurat_obj_subset.Robj")
 

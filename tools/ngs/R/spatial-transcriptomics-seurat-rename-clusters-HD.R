@@ -1,11 +1,11 @@
 # TOOL spatial-transcriptomics-seurat-rename-clusters-HD.R: "Seurat v5 -Rename clusters" (Renames BANKSY or Seurat clusters, for example to cell type names, and plots the renamed clusters on the tissue image.)
 # INPUT seurat_obj_integrated.Robj: "Seurat seurat_obj" TYPE GENERIC
-# INPUT OPTIONAL renamed_clusters.tsv: "Renamed clusters TSV" TYPE GENERIC (Optional TSV file with renamed clusters. If provided, the tool will use this file to rename the clusters instead of the default names. The tsv should contain 2 columns: cluster and new name)
+# INPUT OPTIONAL renamed_clusters.tsv: "Renamed clusters TSV" TYPE GENERIC (Optional TSV file with renamed clusters. If provided, the tool will use this file to rename the clusters instead of the default names. The tsv should contain 2 tab-separated columns: cluster and new name. The first row must be a header row, e.g. cluster and new_name, because it is not used as a cluster.)
 # OUTPUT  seurat_obj_clusters_renamed.Robj
 # OUTPUT spatial_plot_renamed_clusters.pdf
 # PARAMETER clusters: "Clusters to rename" TYPE UNCHECKED_STRING DEFAULT "1,2,3,4,5" (Comma-separated list of the clusters you want to rename)
 # PARAMETER names: "New names for clusters" TYPE UNCHECKED_STRING DEFAULT "Layer 2/3,Layer 4,Layer 5,Layer 6,Unknown" (Comma-separated list of new names for the selected clusters. The order of the names should match the order of the selected clusters.)
-# PARAMETER OPTIONAL banksy: "Type of clusters to rename" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT TRUE (Seurat or BANKSY clusters. Note that seurat clusters numbers start from 0 and banksy from 1)
+# PARAMETER OPTIONAL banksy: "Type of clusters to rename" TYPE [TRUE: BANKSY, FALSE: Seurat] DEFAULT TRUE (Seurat or BANKSY clusters. BANKSY clusters must be computed on the 8 µm assay.)
 # RUNTIME R-4.5.1-visium-hd
 # SLOTS 4
 # TOOLS_BIN ""
@@ -47,6 +47,9 @@ if (!cluster_col %in% colnames(seurat_obj@meta.data)) {
         )
     ))
 }
+
+# The renamed clusters are plotted on the 8 µm bins, whatever the default assay of the input is
+DefaultAssay(seurat_obj) <- "Spatial.008um"
 
 Idents(seurat_obj) <- cluster_col
 
