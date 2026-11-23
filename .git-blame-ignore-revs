@@ -1,0 +1,12 @@
+# Commits that git blame skips: formatting only, no changes in behaviour.
+# GitHub's blame view reads this file automatically. For git blame, run once:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Format the R scripts with Air
+c4ccb897818e8d3982353d5c9fd315a79e9485e3
+# Format the Python scripts with Ruff
+768a2c95441ea878f57f3f7273e80a282359dd07
+# Format spatial-transcriptomics-seurat-clustering-v5-HD.R with Air
+ccb836bd6f12125eae8e68474239627e162d7e43
+# Format the two spatial transcriptomics HD tools with Air
+f6098f5956375590c90ad4d345bac7c7172b69ef
