@@ -68,7 +68,7 @@ if (assay == "Spatial.008um") {
 
         # The simplest way to do this
         pdf(file = "spatial_plot_8um_clusters.pdf")
-        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = label.size) +
             NoLegend() #+
         #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
@@ -90,7 +90,7 @@ if (assay == "Spatial.008um") {
         subset_obj <- subset(seurat_obj, cells = Cells(seurat_obj[[img_name]]))
 
         pdf("spatial_plot_8um_coordinates_file.pdf")
-        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend()
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = label.size) + NoLegend()
         print(p)
         dev.off()
     }
@@ -126,7 +126,7 @@ if (assay == "Spatial.016um") {
 
         # The simplest way to do this
         pdf(file = "spatial_plot_16um_clusters.pdf")
-        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) +
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = label.size) +
             NoLegend() #+
         #SpatialDimPlot(subset_obj, label = T, crop = F, label.size = 3)
 
@@ -147,7 +147,7 @@ if (assay == "Spatial.016um") {
         subset_obj <- subset(seurat_obj, cells = Cells(seurat_obj[[img_name]]))
 
         pdf("spatial_plot_16um_coordinates_file.pdf")
-        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = 3) + NoLegend()
+        p <- SpatialDimPlot(subset_obj, label = T, crop = T, label.size = label.size) + NoLegend()
         print(p)
         dev.off()
     }
