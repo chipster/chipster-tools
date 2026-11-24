@@ -17,7 +17,10 @@
 # In this tool Spatial.008um assay is always used by default, for now.
 assay <- as.character("Spatial.008um")
 #dims.reduction <- dims.reduction
-#num_cores <- as.numeric(chipster.threads.max)
+
+# RCTD keeps a copy of the data in each worker, so its memory grows with the cores. Use the cores
+# of the job's slots, at most 8, which has been enough with the tool's default 10 slots.
+num_cores <- min(8, as.integer(chipster.threads.max))
 
 library(Seurat)
 library(ggplot2)
@@ -124,6 +127,16 @@ nUMI <- ref$nCount_RNA
 levels(cluster) <- gsub("/", "-", levels(cluster))
 cluster <- droplevels(cluster)
 
+# Check the cell types to highlight before the long RCTD run
+known_types <- trimws(unlist(strsplit(known_types, ",")))
+if (!any(known_types %in% levels(cluster))) {
+    stop(paste0(
+        "CHIPSTER-NOTE: None of the cell types to highlight is in the scRNA-seq reference. ",
+        "Its cell types (with / changed to -) are: ",
+        paste(sort(levels(cluster)), collapse = ", ")
+    ))
+}
+
 # create the RCTD reference object
 reference <- Reference(counts, cluster, nUMI)
 
@@ -140,8 +153,8 @@ query <- SpatialRNA(coords_raw, counts_hd, colSums(counts_hd))
 
 print("Running RCTD")
 # run RCTD with min of 25 cells per cell type
-# max_cores, the more you have, the more copies it has to keep and the more ram it uses. Currently 8 is ok, but maybe in the future go for 8, 6 or even 4.
-RCTD <- create.RCTD(query, reference, max_cores = 8, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
+print(paste0("RCTD cores: ", num_cores))
+RCTD <- create.RCTD(query, reference, max_cores = num_cores, CELL_MIN_INSTANCE = 25, test_mode = FALSE)
 RCTD <- run.RCTD(RCTD, doublet_mode = "doublet")
 # add results back to Seurat object
 seurat_obj <- AddMetaData(seurat_obj, metadata = RCTD@results$results_df)
@@ -180,16 +193,14 @@ plots <- list()
 
 cells <- CellsByIdentities(seurat_obj)
 
-known_types <- known_types
-known_types <- trimws(unlist(strsplit(known_types, ",")))
-
 missing_types <- setdiff(known_types, names(cells))
 known_types <- intersect(known_types, names(cells))
 
+# They are in the reference (checked before RCTD), but RCTD may have given them no bins
 if (length(known_types) == 0) {
-    (paste0(
-        "None of the cell types to highlight were found in the RCTD results. ",
-        "Available cell types: ",
+    print(paste0(
+        "None of the cell types to highlight were found in the RCTD results, ",
+        "so their highlight and distribution plots are left out. Available cell types: ",
         paste(sort(names(cells)), collapse = ", ")
     ))
 }
@@ -202,16 +213,18 @@ if (length(missing_types) > 0) {
 }
 print(known_types)
 
-p_highlight3 <- SpatialDimPlot(
-    seurat_obj,
-    cells.highlight = cells[known_types],
-    cols.highlight = c("#FFFF00", "black"),
-    facet.highlight = TRUE,
-    combine = TRUE,
-    ncol = 4,
-    image.alpha = 1
-)
-plots[["highlight_known_types_image"]] <- p_highlight3
+if (length(known_types) > 0) {
+    p_highlight3 <- SpatialDimPlot(
+        seurat_obj,
+        cells.highlight = cells[known_types],
+        cols.highlight = c("#FFFF00", "black"),
+        facet.highlight = TRUE,
+        combine = TRUE,
+        ncol = 4,
+        image.alpha = 1
+    )
+    plots[["highlight_known_types_image"]] <- p_highlight3
+}
 
 
 # In this maybe "Unknown" could also be "NA"
@@ -227,8 +240,10 @@ p_highlight2 <- SpatialDimPlot(
 plots[["highlight_all_types"]] <- p_highlight2
 
 # Distribution of the cell types across the BANKSY clusters (Seurat vignette code),
-# or across the Seurat clusters if BANKSY hasn't been run
-if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
+# or across the Seurat clusters if BANKSY hasn't been run. Only the cell types to highlight are counted.
+if (length(known_types) == 0) {
+    # No cell types to count
+} else if ("BANKSY" %in% Reductions(seurat_obj) && "banksy_cluster" %in% colnames(seurat_obj@meta.data)) {
     plot_cell_types_banksy <- function(data, label) {
         p <- ggplot(data, aes(x = get(label), y = n, fill = full_first_type)) +
             geom_bar(stat = "identity", position = "stack") +
