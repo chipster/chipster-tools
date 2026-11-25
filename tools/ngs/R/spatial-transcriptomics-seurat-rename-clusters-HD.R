@@ -37,7 +37,7 @@ cluster_col <- ifelse(banksy, "banksy_cluster", "seurat_cluster.projected")
 
 if (!cluster_col %in% colnames(seurat_obj@meta.data)) {
     stop(paste0(
-        "The column '",
+        "CHIPSTER-NOTE: The column '",
         cluster_col,
         "' is not found in the Seurat object. ",
         ifelse(
@@ -69,7 +69,9 @@ if (file.exists("renamed_clusters.tsv")) {
         strip.white = TRUE
     )
     if (ncol(clusternames) < 2) {
-        stop("renamed_clusters.tsv must have two tab-separated columns: the cluster id and the new name.")
+        stop(
+            "CHIPSTER-NOTE: renamed_clusters.tsv must have two tab-separated columns: the cluster id and the new name."
+        )
     }
     # Use the first two columns whatever their header says
     clusternames <- clusternames[, 1:2]
@@ -79,7 +81,7 @@ if (file.exists("renamed_clusters.tsv")) {
     names <- trimws(unlist(strsplit(names, ",")))
     if (length(clusters) != length(names)) {
         stop(paste0(
-            "The number of clusters (",
+            "CHIPSTER-NOTE: The number of clusters (",
             length(clusters),
             ") and new names (",
             length(names),
