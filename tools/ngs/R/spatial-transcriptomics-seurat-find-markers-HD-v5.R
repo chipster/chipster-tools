@@ -39,8 +39,23 @@ assay <- as.character(assay)
 reduction <- tolower(as.character(reduction))
 test.use <- as.character(test.use)
 only.pos <- as.logical(only.pos)
+banksy <- as.logical(banksy)
 
 load("seurat_obj_clustering.Robj")
+
+# Check that the chosen assay is in the input
+if (!(assay %in% Assays(seurat_obj))) {
+    stop(paste0(
+        "CHIPSTER-NOTE: Your data has no ",
+        assay,
+        " bins. It has: ",
+        paste(grep("^Spatial\\.", Assays(seurat_obj), value = TRUE), collapse = ", "),
+        ". Choose that in the Assay parameter."
+    ))
+}
+if (banksy && !("banksy_cluster" %in% colnames(seurat_obj@meta.data))) {
+    stop("CHIPSTER-NOTE: Your data has no BANKSY clusters. Run the BANKSY tool first, or choose Seurat clusters.")
+}
 
 #print(Reductions(seurat_obj))
 

@@ -50,6 +50,17 @@ library("magick")
 
 load("seurat_obj_clustering.Robj")
 
+# Check that the chosen assay is in the input
+if (!(assay %in% Assays(seurat_obj))) {
+    stop(paste0(
+        "CHIPSTER-NOTE: Your data has no ",
+        assay,
+        " bins. It has: ",
+        paste(grep("^Spatial\\.", Assays(seurat_obj), value = TRUE), collapse = ", "),
+        ". Choose that in the Assay parameter."
+    ))
+}
+
 # This might become a problem later
 # fixes as.graph error
 # for (g in Graphs(seurat_obj)) {
