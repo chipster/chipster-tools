@@ -42,7 +42,7 @@ wanted_cell_types <- intersect(wanted_cell_types, available_types)
 
 if (length(wanted_cell_types) == 0) {
     stop(paste0(
-        "None of the cell types to visualize were found in the RCTD results. ",
+        "CHIPSTER-NOTE: None of the cell types to visualize were found in the RCTD results. ",
         "Available cell types: ",
         paste(sort(available_types), collapse = ", ")
     ))
