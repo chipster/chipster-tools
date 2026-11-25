@@ -34,7 +34,10 @@ load("seurat_object.Robj")
 
 # Loop through the different bins = different assays (usually 008um and 016um)
 
-assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
+#assay_names <- Assays(seurat_obj) # [1] "Spatial.008um" "Spatial.016um"
+
+assay_names <- grep("^Spatial\\.", Assays(seurat_obj), value = TRUE) # [1] "Spatial.008um" "Spatial.016um"
+
 
 # Open pdf for plotting:
 pdf(file = "PCAplots.pdf", , width = 9, height = 12)

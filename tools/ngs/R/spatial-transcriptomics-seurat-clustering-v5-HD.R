@@ -35,7 +35,11 @@ source(file.path(chipster.common.lib.path, "tool-utils.R"))
 #print(package.version("Seurat"))
 #documentVersion("Seurat", package.version("Seurat"))
 
-assay_names <- Assays(seurat_obj) # e.g. "Spatial.008um" "Spatial.016um"
+#assay_names <- Assays(seurat_obj) # e.g. "Spatial.008um" "Spatial.016um"
+
+# Only actual Spatial assays (no sketch if someone wants to recluster)
+
+assay_names <- grep("^Spatial\\.", Assays(seurat_obj), value = TRUE)
 
 # pdf(file = "clustering_plots.pdf", width = 9, height = 12)
 
@@ -232,6 +236,9 @@ for (i in seq_along(assay_names)) {
         #   cluster labels  -> seurat_obj$seurat_cluster.projected  (all bins)
         #   full PCA        -> seurat_obj[["full.pca.sketch"]]
         #   full UMAP       -> seurat_obj[["full.umap.sketch"]]
+        # If these exist, NULL them
+        seurat_obj[["full.pca.sketch"]] <- NULL
+        seurat_obj[["full.umap.sketch"]] <- NULL
         seurat_obj <- ProjectData(
             object = seurat_obj,
             assay = assay_bin,
