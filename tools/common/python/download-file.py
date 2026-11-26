@@ -14,6 +14,8 @@ import socket
 import requests
 from http.client import responses
 import time
+import urllib.error
+import urllib.request
 
 
 check_certs = check_certs_str == "yes"
@@ -61,32 +63,51 @@ if len(filename) == 0:
 if file_extension != "current":
     filename = filename + "." + file_extension
 
-# TDOO allow downloads with unknown size
-
-response = requests.get(url_str, stream=True, verify=check_certs)
-
-if response.status_code >= 400:
-    status_name = responses[response.status_code]
-    raise RuntimeError(
-        "CHIPSTER-NOTE: HTTP error "
-        + str(response.status_code)
-        + " "
-        + status_name
-        + "\n\n"
-        + response.text
-    )
-
-# print(response.headers.keys())
-
-total_size_in_bytes = int(response.headers.get("Content-Length", -1))
-
-if total_size_in_bytes == -1:
-    print("size information is not available")
-
 # Doesn't seem to be very sensitive, at least with ping ~2 ms and speed ~300 MB/s.
 # Less than 10 kiB slows down the download, more than 100 MiB affects
 # reporting interval and memory consumption.
 block_size = 1024 * 1024  # 1 MiB
+
+if url.scheme == "ftp":
+    # requests supports only http and https
+    try:
+        response = urllib.request.urlopen(url_str, timeout=60)
+    except urllib.error.URLError as e:
+        # urllib wraps the ftplib error in URLErrors, show only the server's message
+        cause = e
+        while (cause.__cause__ or cause.__context__) is not None:
+            cause = cause.__cause__ or cause.__context__
+
+        if str(cause).startswith("550"):
+            # urllib tries the path as a directory after the file and reports that error
+            message = "File not found or not readable: " + url_str
+        else:
+            message = "FTP error: " + str(cause)
+
+        raise RuntimeError("CHIPSTER-NOTE: " + message) from None
+
+    total_size_in_bytes = int(response.headers.get("Content-Length", -1))
+    chunks = iter(lambda: response.read(block_size), b"")
+
+else:
+    response = requests.get(url_str, stream=True, verify=check_certs)
+
+    if response.status_code >= 400:
+        status_name = responses[response.status_code]
+        raise RuntimeError(
+            "CHIPSTER-NOTE: HTTP error "
+            + str(response.status_code)
+            + " "
+            + status_name
+            + "\n\n"
+            + response.text
+        )
+
+    total_size_in_bytes = int(response.headers.get("Content-Length", -1))
+    chunks = response.iter_content(block_size)
+
+if total_size_in_bytes == -1:
+    print("size information is not available")
 
 downloaded_size = 0
 t1 = time.perf_counter()
@@ -100,7 +121,7 @@ report_interval_multiplier = 1.2
 print("downloading...")
 
 with open("downloaded_file", "wb") as file:
-    for data in response.iter_content(block_size):
+    for data in chunks:
         downloaded_size += len(data)
 
         t2 = time.perf_counter()
